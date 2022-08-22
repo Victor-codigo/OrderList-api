@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping">
+    <entity name="App\Orm\Entity\Product" 
+            table="Products">
+
+        <id name="id"
+            type="string"
+            column-definition="CHAR(36) NOT NULL">
+
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="name"
+               type="string"
+               length="50"
+               unique="true"/>
+
+        <field name="description"
+               type="string"
+               column-definition="TEXT"
+               nullable="true"/>
+
+        <field name="createdOn"
+               columm="created_on"
+               type="datetime"/>
+
+        <unique-constraints>
+            <unique-constraint name="u_products_id" columns="id"/>
+            <unique-constraint name="u_products_name" columns="name"/>
+        </unique-constraints>
+    </entity>
+</doctrine-mapping>
