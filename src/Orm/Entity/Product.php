@@ -4,17 +4,17 @@ namespace App\Orm\Entity;
 
 use DateTime;
 
-final class Product
+final class Product implements IEntity
 {
-    protected string $id;
+    private string $id;
+    private string $name;
+    private string $description;
+    private DateTime $createdOn;
 
     public function getId(): string
     {
         return $this->id;
     }
-
-
-    protected string $name;
 
     public function getName(): string
     {
@@ -28,9 +28,6 @@ final class Product
         return $this;
     }
 
-
-    protected string $description;
-
     public function getDescription(): string
     {
         return $this->description;
@@ -42,9 +39,6 @@ final class Product
 
         return $this;
     }
-
-
-    protected DateTime $createdOn;
 
     public function getCreatedOn(): DateTime
     {
@@ -64,5 +58,15 @@ final class Product
         $this->name = $name;
         $this->description = $description;
         $this->createdOn = new DateTime();
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'createdOn' => $this->createdOn->format(DateTime::RFC3339),
+        ];
     }
 }

@@ -4,20 +4,19 @@ namespace App\Orm\Entity;
 
 use DateTime;
 
-final class Order
+final class Order implements IEntity
 {
-    protected string $id;
-    protected string $userId;
-    protected string $groupId;
-    protected string $productId;
-    protected bool $deleted;
-    protected float|null $price;
-    protected float|null $amount;
-    protected string|null $description;
-    protected DateTime $createdOn;
-    protected DateTime|null $bougthOn;
-    protected DateTime|null $buyOn;
-
+    private string $id;
+    private string $userId;
+    private string $groupId;
+    private string $productId;
+    private bool $deleted;
+    private float|null $price;
+    private float|null $amount;
+    private string|null $description;
+    private DateTime $createdOn;
+    private DateTime|null $bougthOn;
+    private DateTime|null $buyOn;
 
     public function getId(): string
     {
@@ -119,5 +118,22 @@ final class Order
         $this->productId = $productId;
         $this->deleted = $deleted;
         $this->createdOn = new DateTime();
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'userId' => $this->userId,
+            'groupId' => $this->groupId,
+            'productId' => $this->productId,
+            'deleted' => $this->deleted,
+            'price' => $this->price,
+            'amount' => $this->amount,
+            'description' => $this->description,
+            'createdOn' => $this->createdOn->format(DateTime::RFC3339),
+            'buyOn' => $this->buyOn->format(DateTime::RFC3339),
+            'bougthOn' => $this->bougthOn->format(DateTime::RFC3339),
+        ];
     }
 }

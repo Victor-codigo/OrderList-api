@@ -2,25 +2,21 @@
 
 namespace App\Orm\Entity;
 
+use App\Adaptater\IdentificatorAdapter;
+use App\User\Dao\UserCreateDao;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
-final class User
+final class User implements IEntity
 {
     private string $id;
     private string $email;
     private string $name;
     private string $password;
     private DateTime $createdOn;
-    private array $groups;
-
-    public function __construct(string $id, string $email, string $name, string $password)
-    {
-        $this->id = $id;
-        $this->email = $email;
-        $this->name = $name;
-        $this->password = $password;
-        $this->createdOn = new DateTime();
-    }
+    private Collection $groups;
+    private Profile $profile;
 
     public function getEmail(): string
     {
@@ -68,8 +64,42 @@ final class User
         return $this->id;
     }
 
-    public function getGroups(): array
+    public function getGroups(): Collection
     {
         return $this->groups;
+    }
+
+    public function getProfile(): Profile
+    {
+        return $this->profile;
+    }
+
+    public function setProfile($profile): self
+    {
+        $this->profile = $profile;
+
+        return $this;
+    }
+
+    public function __construct(UserCreateDao $user)
+    {
+        $this->id = IdentificatorAdapter::createId();
+        $this->email = $user->email;
+        $this->name = $user->name;
+        $this->password = $user->password;
+        $this->createdOn = new DateTime();
+        $this->groups = new ArrayCollection();
+        $this->profile = new Profile($this->getId());
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'email' => $this->email,
+            'name' => $this->name,
+            'password' => $this->password,
+            'createdOn' => $this->createdOn->format(DateTime::RFC3339),
+        ];
     }
 }

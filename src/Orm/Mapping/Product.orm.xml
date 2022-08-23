@@ -5,10 +5,7 @@
 
         <id name="id"
             type="string"
-            column-definition="CHAR(36) NOT NULL">
-
-            <generator strategy="AUTO"/>
-        </id>
+            column-definition="CHAR(36) NOT NULL"/>
 
         <field name="name"
                type="string"
