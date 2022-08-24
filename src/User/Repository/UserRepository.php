@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\Repository;
+namespace User\Repository;
 
 use App\Orm\Entity\IEntity;
 use App\Orm\Entity\User;

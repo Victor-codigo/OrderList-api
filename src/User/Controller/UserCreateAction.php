@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\User\Controller;
+namespace User\Controller;
 
-use App\User\Dao\UserCreateDao;
-use App\User\Service\UserCreateService;
 use Symfony\Component\HttpFoundation\Request;
+use User\Dao\UserCreateDao;
+use User\Service\UserCreateService;
 
 class UserCreateAction
 {

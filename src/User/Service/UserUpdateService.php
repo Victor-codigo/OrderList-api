@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\User\Service;
+namespace User\Service;
 
 use App\Orm\Entity\User;
-use App\User\Dao\UserUpdateDao;
-use App\User\Repository\UserRepository;
+use User\Dao\UserUpdateDao;
+use User\Repository\UserRepository;
 
 class UserUpdateService
 {

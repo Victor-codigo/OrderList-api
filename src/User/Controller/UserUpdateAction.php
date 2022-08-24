@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\User\Controller;
+namespace User\Controller;
 
-use App\User\Dao\UserUpdateDao;
-use App\User\Service\UserUpdateService;
 use Symfony\Component\HttpFoundation\Request;
+use User\Dao\UserUpdateDao;
+use User\Service\UserUpdateService;
 
 class UserUpdateAction
 {

@@ -3,10 +3,10 @@
 namespace App\Orm\Entity;
 
 use App\Adaptater\IdentificatorAdapter;
-use App\User\Dao\UserCreateDao;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use User\Dao\UserCreateDao;
 
 final class User implements IEntity
 {
@@ -100,6 +100,8 @@ final class User implements IEntity
             'name' => $this->name,
             'password' => $this->password,
             'createdOn' => $this->createdOn->format(DateTime::RFC3339),
+            'groups' => \array_map(fn (Group $e) => $e->toArray(), $this->groups),
+            'profile' => $this->profile->toArray(),
         ];
     }
 }

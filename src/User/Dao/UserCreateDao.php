@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\User\Dao;
+namespace User\Dao;
 
 final class UserCreateDao
 {
