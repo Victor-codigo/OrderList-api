@@ -2,6 +2,7 @@
 
 namespace App\Orm\Entity;
 
+use App\Adaptater\IdentificatorAdapter;
 use DateTime;
 
 final class Order implements IEntity
@@ -110,9 +111,9 @@ final class Order implements IEntity
         return $this;
     }
 
-    public function __construct(string $id, string $userId, string $groupId, string $productId, bool $deleted)
+    public function __construct(string $userId, string $groupId, string $productId, bool $deleted)
     {
-        $this->id = $id;
+        $this->id = IdentificatorAdapter::createId();
         $this->userId = $userId;
         $this->groupId = $groupId;
         $this->productId = $productId;

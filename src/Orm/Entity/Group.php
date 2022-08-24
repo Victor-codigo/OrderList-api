@@ -2,6 +2,7 @@
 
 namespace App\Orm\Entity;
 
+use App\Adaptater\IdentificatorAdapter;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,6 +14,8 @@ final class Group implements IEntity
     private string|null $description;
     private DateTime $createdOn;
     private Collection $users;
+    private Collection $shops;
+    private Collection $products;
 
     public function getId()
     {
@@ -46,13 +49,25 @@ final class Group implements IEntity
         return $this->createdOn;
     }
 
-    public function __construct(string $id, string $name, string|null $description)
+    public function getShops(): Collection
     {
-        $this->id = $id;
+        return $this->shops;
+    }
+
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function __construct(string $name, string|null $description)
+    {
+        $this->id = IdentificatorAdapter::createId();
         $this->name = $name;
         $this->description = $description;
         $this->createdOn = new DateTime();
         $this->users = new ArrayCollection();
+        $this->shops = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     public function toArray(): array

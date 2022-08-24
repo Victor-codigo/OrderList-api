@@ -21,9 +21,36 @@
                columm="created_on"
                type="datetime"/>
 
+        <!-- Products - Shops -->
+        <many-to-many field="shops" 
+                      target-entity="App\Orm\Entity\Shop">
+
+            <join-table name="Products_shops">
+                <join-columns>
+
+                    <join-column name="product_id" 
+                                 referenced-column-name="id" />
+                </join-columns>
+                <inverse-join-columns>
+
+                    <join-column name="shop_id" 
+                                 referenced-column-name="id" />
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+
+        <!-- Product - Group -->
+        <many-to-one field="group" target-entity="App\Orm\Entity\Group" inversed-by="products">
+            <join-column name="group_id" referenced-column-name="id" />
+        </many-to-one>
+        
         <unique-constraints>
-            <unique-constraint name="u_products_id" columns="id"/>
-            <unique-constraint name="u_products_name" columns="name"/>
+            
+            <unique-constraint name="u_products_id" 
+                               columns="id"/>
+
+            <unique-constraint name="u_products_name" 
+                               columns="name"/>
         </unique-constraints>
     </entity>
 </doctrine-mapping>

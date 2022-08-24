@@ -22,14 +22,26 @@
                column="created_on"
                type="datetime"/>
 
-
+        <!-- Groups - Users -->
         <many-to-many field="users" 
                       mapped-by="groups" 
                       target-entity="App\Orm\Entity\User"/>
+
+        <!-- Groups - Shops -->
+        <one-to-many field="shops" 
+                     target-entity="App\Orm\Entity\Shop" 
+                     mapped-by="group" />
+
+        <!-- Groups - Product -->
+        <one-to-many field="products" target-entity="App\Orm\Entity\Product" mapped-by="group" />
         
         <unique-constraints>
-            <unique-constraint name="u_groups_id" columns="id"/>
-            <unique-constraint name="u_groups_name" columns="name"/>
+
+            <unique-constraint name="u_groups_id" 
+                               columns="id"/>
+
+            <unique-constraint name="u_groups_name" 
+                               columns="name"/>
         </unique-constraints>
     </entity>
 </doctrine-mapping>

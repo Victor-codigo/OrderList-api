@@ -1,19 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Orm\Entity;
 
 use App\Adaptater\IdentificatorAdapter;
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 
-final class Product implements IEntity
+final class Shop implements IEntity
 {
     private string $id;
     private string $name;
-    private string $description;
+    private string|null $description = null;
     private DateTime $createdOn;
-    private Collection $shops;
     private Group $group;
 
     public function getId(): string
@@ -45,16 +44,9 @@ final class Product implements IEntity
         return $this;
     }
 
-    public function getCreatedOn(): DateTime
+    public function getGroup(): Group
     {
-        return $this->createdOn;
-    }
-
-    public function setCreatedOn($createdOn): self
-    {
-        $this->createdOn = $createdOn;
-
-        return $this;
+        return $this->group;
     }
 
     public function __construct(Group $group, string $name, string $description)
@@ -63,7 +55,6 @@ final class Product implements IEntity
         $this->name = $name;
         $this->description = $description;
         $this->createdOn = new DateTime();
-        $this->shops = new ArrayCollection();
         $this->group = $group;
     }
 
@@ -73,12 +64,7 @@ final class Product implements IEntity
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'createdOn' => $this->createdOn->format(DateTime::RFC3339),
+            'createdOn' => $this->createdOn,
         ];
-    }
-
-    public function getShops(): Collection
-    {
-        return $this->shops;
     }
 }
