@@ -65,6 +65,7 @@ final class Shop implements IEntity
             'name' => $this->name,
             'description' => $this->description,
             'createdOn' => $this->createdOn,
+            'group' => $this->group->toArray(),
         ];
     }
 }

@@ -57,6 +57,16 @@ final class Product implements IEntity
         return $this;
     }
 
+    public function getShops(): Collection
+    {
+        return $this->shops;
+    }
+
+    public function getGroups(): Group
+    {
+        return $this->group;
+    }
+
     public function __construct(Group $group, string $name, string $description)
     {
         $this->id = IdentificatorAdapter::createId();
@@ -74,11 +84,8 @@ final class Product implements IEntity
             'name' => $this->name,
             'description' => $this->description,
             'createdOn' => $this->createdOn->format(DateTime::RFC3339),
+            'shops' => \array_map(fn (Shop $e) => $e->toArray(), $this->shops),
+            'group' => $this->group->toArray(),
         ];
-    }
-
-    public function getShops(): Collection
-    {
-        return $this->shops;
     }
 }

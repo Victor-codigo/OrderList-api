@@ -29,6 +29,7 @@ class Profile implements IEntity
     public function toArray(): array
     {
         return [
+            'id' => $this->id,
             'image' => $this->image,
         ];
     }

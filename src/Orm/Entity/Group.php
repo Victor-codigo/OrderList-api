@@ -77,6 +77,9 @@ final class Group implements IEntity
             'name' => $this->name,
             'description' => $this->description,
             'createdOn' => $this->createdOn,
+            'users' => \array_map(fn (User $e) => $e->toArray(), $this->users),
+            'shops' => \array_map(fn (Shop $e) => $e->toArray(), $this->shops),
+            'products' => \array_map(fn (Product $e) => $e->toArray(), $this->products),
         ];
     }
 }
