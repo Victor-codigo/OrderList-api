@@ -2,7 +2,7 @@
 
 namespace App\Orm\Entity;
 
-use App\Adaptater\IdentificatorAdapter;
+use Adapter\Framework\IdAdapter;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -69,7 +69,7 @@ final class Product implements IEntity
 
     public function __construct(Group $group, string $name, string $description)
     {
-        $this->id = IdentificatorAdapter::createId();
+        $this->id = IdAdapter::createId();
         $this->name = $name;
         $this->description = $description;
         $this->createdOn = new DateTime();

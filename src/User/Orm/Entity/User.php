@@ -2,7 +2,7 @@
 
 namespace User\Orm\Entity;
 
-use App\Adaptater\IdentificatorAdapter;
+use Adapter\Framework\IdAdapter;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -83,7 +83,7 @@ final class User implements IUserEntity
 
     public function __construct(UserCreateDao $user)
     {
-        $this->id = IdentificatorAdapter::createId();
+        $this->id = IdAdapter::createId();
         $this->email = $user->email;
         $this->name = $user->name;
         $this->password = $user->password;

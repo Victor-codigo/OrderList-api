@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Adaptater;
+namespace Adapter\Framework;
 
 use Symfony\Component\Uid\Uuid;
 
-class IdentificatorAdapter
+class IdAdapter
 {
     public static function createId(): string
     {

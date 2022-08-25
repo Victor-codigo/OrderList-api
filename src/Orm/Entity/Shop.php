@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Orm\Entity;
 
-use App\Adaptater\IdentificatorAdapter;
+use Adapter\Framework\IdAdapter;
 use DateTime;
 
 final class Shop implements IEntity
@@ -51,7 +51,7 @@ final class Shop implements IEntity
 
     public function __construct(Group $group, string $name, string $description)
     {
-        $this->id = IdentificatorAdapter::createId();
+        $this->id = IdAdapter::createId();
         $this->name = $name;
         $this->description = $description;
         $this->createdOn = new DateTime();

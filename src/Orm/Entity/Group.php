@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Orm\Entity;
 
-use App\Adaptater\IdentificatorAdapter;
+use Adapter\Framework\IdAdapter;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -61,7 +63,7 @@ final class Group implements IEntity
 
     public function __construct(string $name, string|null $description)
     {
-        $this->id = IdentificatorAdapter::createId();
+        $this->id = IdAdapter::createId();
         $this->name = $name;
         $this->description = $description;
         $this->createdOn = new DateTime();
