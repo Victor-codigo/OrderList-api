@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Orm\Entity;
+namespace User\Orm\Entity;
 
-class Profile implements IEntity
+class Profile implements IUserEntity
 {
     protected string $id;
     protected string|null $image = null;

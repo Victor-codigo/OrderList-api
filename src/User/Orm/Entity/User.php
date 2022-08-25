@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Orm\Entity;
+namespace User\Orm\Entity;
 
 use App\Adaptater\IdentificatorAdapter;
 use DateTime;
@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use User\Dao\UserCreateDao;
 
-final class User implements IEntity
+final class User implements IUserEntity
 {
     private string $id;
     private string $email;
@@ -100,7 +100,7 @@ final class User implements IEntity
             'name' => $this->name,
             'password' => $this->password,
             'createdOn' => $this->createdOn->format(DateTime::RFC3339),
-            'groups' => \array_map(fn (Group $e) => $e->toArray(), $this->groups),
+            'groups' => $this->groups->toArray(),
             'profile' => $this->profile->toArray(),
         ];
     }

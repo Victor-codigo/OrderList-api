@@ -25,7 +25,7 @@
         <!-- Groups - Users -->
         <many-to-many field="users" 
                       mapped-by="groups" 
-                      target-entity="App\Orm\Entity\User"/>
+                      target-entity="User\Orm\Entity\User"/>
 
         <!-- Groups - Shops -->
         <one-to-many field="shops" 

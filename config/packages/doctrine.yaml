@@ -16,6 +16,13 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Orm/Mapping'
                 prefix: 'App\Orm\Entity'
                 alias: App
+            
+            User:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/src/User/Orm/Mapping'
+                prefix: 'User\Orm\Entity'
+                alias: App
 
 when@test:
     doctrine:

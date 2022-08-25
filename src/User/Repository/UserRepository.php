@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace User\Repository;
 
-use App\Orm\Entity\IEntity;
-use App\Orm\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
+use User\Orm\Entity\IUserEntity;
+use User\Orm\Entity\User;
 
-class UserRepository extends DoctrineRepositoryBase
+final class UserRepository extends UserRepositoryBase
 {
     public function __construct(ManagerRegistry $managerRegistry)
     {
@@ -20,13 +20,15 @@ class UserRepository extends DoctrineRepositoryBase
         return $this->objectRepository->findOneBy(['id' => $id]);
     }
 
-    public function save(IEntity $user): void
+    public function save(IUserEntity $user): void
     {
-        $this->entitySave($user);
+        $this->objectManager->persist($user);
+        $this->objectManager->flush();
     }
 
-    public function remove(IEntity $user): void
+    public function remove(IUserEntity $user): void
     {
-        $this->entityRemove($user);
+        $this->objectManager->remove($user);
+        $this->objectManager->flush();
     }
 }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace User\Service;
 
-use App\Orm\Entity\User;
 use User\Dao\UserCreateDao;
+use User\Orm\Entity\User;
 use User\Repository\UserRepository;
 
 class UserCreateService
