@@ -1,9 +1,3 @@
-app.user.create:
-    path: /user/create
-    controller: App\User\Controller\UserCreateAction
-    methods: POST
-
-app.user.update:
-    path: /user/update/{id}
-    controller: App\User\Controller\UserUpdateAction
-    methods: PUT    
+user:
+    resource: routes/user/routes.yaml
+    prefix: 'user'
