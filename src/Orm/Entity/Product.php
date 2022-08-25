@@ -84,7 +84,7 @@ final class Product implements IEntity
             'name' => $this->name,
             'description' => $this->description,
             'createdOn' => $this->createdOn->format(DateTime::RFC3339),
-            'shops' => \array_map(fn (Shop $e) => $e->toArray(), $this->shops),
+            'shops' => $this->shops->toArray(),
             'group' => $this->group->toArray(),
         ];
     }
