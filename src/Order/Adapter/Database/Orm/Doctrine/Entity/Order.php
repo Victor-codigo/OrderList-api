@@ -1,6 +1,6 @@
 <?php
 
-namespace Order\Domain\Model;
+namespace Order\Adapter\Database\Orm\Doctrine\Entity;
 
 use DateTime;
 use Global\Adapter\Framework\IdGenerator;
@@ -24,7 +24,7 @@ final class Order
         return $this->id;
     }
 
-    public function getUserId(): string
+    public function getUserId()
     {
         return $this->userId;
     }

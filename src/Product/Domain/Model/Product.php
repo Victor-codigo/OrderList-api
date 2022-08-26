@@ -3,7 +3,7 @@
 namespace Product\Domain\Model;
 
 use DateTime;
-use Global\Infrastructure\Framework\IdGenerator;
+use Global\Adapter\Framework\IdGenerator;
 use Group\Domain\Model\Group;
 use Shop\Domain\Model\Shop;
 

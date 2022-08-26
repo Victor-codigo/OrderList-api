@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Group\Domain\Model;
+namespace Group\Adapter\Database\Orm\Doctrine\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Global\Adapter\Framework\IdGenerator;
-use User\Domain\Model\User;
 
 final class Group
 {
@@ -14,9 +15,9 @@ final class Group
     private string $name;
     private string|null $description;
     private DateTime $createdOn;
-    private array $users;
-    private array $shops;
-    private array $products;
+    private Collection $users;
+    private Collection $shops;
+    private Collection $products;
 
     public function getId(): string
     {
@@ -35,6 +36,11 @@ final class Group
         return $this;
     }
 
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
     public function setDescription(string $description): self
     {
         $this->description = $description;
@@ -42,12 +48,7 @@ final class Group
         return $this;
     }
 
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    public function getUsers(): iterable
+    public function getUsers(): Collection
     {
         return $this->users;
     }
@@ -57,12 +58,12 @@ final class Group
         return $this->createdOn;
     }
 
-    public function getShops(): iterable
+    public function getShops(): Collection
     {
         return $this->shops;
     }
 
-    public function getProducts(): iterable
+    public function getProducts(): Collection
     {
         return $this->products;
     }
@@ -72,9 +73,9 @@ final class Group
         $this->id = IdGenerator::createId();
         $this->name = $name;
         $this->createdOn = new DateTime();
-        $this->users = [];
-        $this->shops = [];
-        $this->products = [];
+        $this->users = new ArrayCollection();
+        $this->shops = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     public function toArray(): array
@@ -84,9 +85,9 @@ final class Group
             'name' => $this->name,
             'description' => $this->description,
             'createdOn' => $this->createdOn,
-            'users' => array_map(fn (User $i) => $i->toArray(), $this->users),
-            'shops' => array_map(fn (User $i) => $i->toArray(), $this->users),
-            'products' => array_map(fn (User $i) => $i->toArray(), $this->users),
+            'users' => $this->users->toArray(),
+            'shops' => $this->users->toArray(),
+            'products' => $this->users->toArray(),
         ];
     }
 }
