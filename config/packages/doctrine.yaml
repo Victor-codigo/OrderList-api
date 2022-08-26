@@ -20,9 +20,37 @@ doctrine:
             User:
                 is_bundle: false
                 type: xml
-                dir: '%kernel.project_dir%/src/User/Orm/Mapping'
-                prefix: 'User\Orm\Entity'
-                alias: App
+                dir: '%kernel.project_dir%/src/User/Infrastructure/Database/Orm/Doctrine/Mapping'
+                prefix: 'User\Infrastructure\Database\Orm\Doctrine\Mapping'
+                alias: User
+
+            Group:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/src/Group/Infrastructure/Database/Orm/Doctrine/Mapping'
+                prefix: 'Group\Infrastructure\Database\Orm\Doctrine\Mapping'
+                alias: Group
+
+            Order:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/src/Order/Infrastructure/Database/Orm/Doctrine/Mapping'
+                prefix: 'Order\Infrastructure\Database\Orm\Doctrine\Mapping'
+                alias: Order
+
+            Product:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/src/Product/Infrastructure/Database/Orm/Doctrine/Mapping'
+                prefix: 'Product\Infrastructure\Database\Orm\Doctrine\Mapping'
+                alias: Product
+
+            Shop:
+                is_bundle: false
+                type: xml
+                dir: '%kernel.project_dir%/src/Shop/Infrastructure/Database/Orm/Doctrine/Mapping'
+                prefix: 'Shop\Infrastructure\Database\Orm\Doctrine\Mapping'
+                alias: Shop
 
 when@test:
     doctrine:

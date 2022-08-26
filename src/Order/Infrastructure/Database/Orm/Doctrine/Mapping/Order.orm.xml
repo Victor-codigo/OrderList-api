@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping">
+    <entity name="Order\Infrastructure\Database\Orm\Doctrine\Mapping\Order" 
+            table="Orders">
+        
+        <id name="id"
+            type="string"
+            column-definition="CHAR(36) NOT NULL"/>
+
+        <field name="deleted"
+               type="boolean"/>
+
+        <field name="price"
+               type="float"
+               nullable="true"/>
+
+        <field name="amount"
+               type="float"
+               nullable="true"/>
+
+        <field name="description"
+               type="string"
+               nullable="true"
+               column-definition="TEXT"/>
+
+        <field name="createdOn"
+               column="created_on"
+               type="datetime"/>
+
+        <field name="boughtOn"
+               columm="bought_on"
+               type="datetime"
+               nullable="true"/>
+
+        <field name="buyOn"
+               column="buy_on"
+               type="datetime"
+               nullable="true"/>
+
+       <indexes>
+              <index name="IDX_user_id" 
+                     columns="user_id"/>
+
+              <index name="IDX_user_group" 
+                     columns="group_id"/>
+       </indexes>
+
+       <many-to-one field="userId" 
+                    target-entity="User\Infrastructure\Database\Orm\Doctrine\Mapping\User">
+       
+              <join-column name="user_id" 
+                           referenced-column-name="id" />
+       </many-to-one>
+
+       <many-to-one field="productId" 
+                    target-entity="Product\Infrastructure\Database\Orm\Doctrine\Mapping\Product">
+       
+              <join-column name="product_id" 
+                           referenced-column-name="id" />
+       </many-to-one>
+
+       <many-to-one field="groupId" 
+                    target-entity="Group\Infrastructure\Database\Orm\Doctrine\Mapping\Group">
+       
+              <join-column name="group_id" 
+                           referenced-column-name="id" />
+       </many-to-one>
+    </entity>
+</doctrine-mapping>

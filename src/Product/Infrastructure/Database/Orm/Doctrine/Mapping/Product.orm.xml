@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping">
+    <entity name="Product\Infrastructure\Database\Orm\Doctrine\Mapping\Product" 
+            table="Products">
+
+        <id name="id"
+            type="string"
+            column-definition="CHAR(36) NOT NULL"/>
+
+        <field name="name"
+               type="string"
+               length="50"
+               unique="true"/>
+
+        <field name="description"
+               type="string"
+               column-definition="TEXT"
+               nullable="true"/>
+
+        <field name="createdOn"
+               columm="created_on"
+               type="datetime"/>
+
+        <!-- Products - Shops -->
+        <many-to-many field="shops" 
+                      target-entity="Shop\Infrastructure\Database\Orm\Doctrine\Mapping\Shop">
+
+            <join-table name="Products_shops">
+                <join-columns>
+
+                    <join-column name="product_id" 
+                                 referenced-column-name="id" />
+                </join-columns>
+                <inverse-join-columns>
+
+                    <join-column name="shop_id" 
+                                 referenced-column-name="id" />
+                </inverse-join-columns>
+            </join-table>
+        </many-to-many>
+
+        <!-- Product - Group -->
+        <many-to-one field="group" target-entity="Group\Infrastructure\Database\Orm\Doctrine\Mapping\Group" inversed-by="products">
+            <join-column name="group_id" referenced-column-name="id" />
+        </many-to-one>
+        
+        <unique-constraints>
+            
+            <unique-constraint name="u_products_id" 
+                               columns="id"/>
+
+            <unique-constraint name="u_products_name" 
+                               columns="name"/>
+        </unique-constraints>
+    </entity>
+</doctrine-mapping>

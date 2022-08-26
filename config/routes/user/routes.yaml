@@ -1,9 +1,0 @@
-create:
-    path: /create
-    controller: User\Controller\UserCreateAction
-    methods: POST
-
-update:
-    path: /update/{id}
-    controller: User\Controller\UserUpdateAction
-    methods: PUT    

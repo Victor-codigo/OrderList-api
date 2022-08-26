@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping>
+
+    <entity name="Shop\Infrastructure\Database\Orm\Doctrine\Mapping\Shop" 
+            table="Shops">
+
+        <id name="id"
+            type="string"
+            column-definition="CHAR(36) NOT NULL"/>
+
+        <field name="name"
+               type="string"
+               length="50"
+               unique="true"/>
+
+        <field name="description"
+               column-definition="TEXT"
+               nullable="true"/>
+
+        <field name="createdOn"
+               column="created_on"
+               type="datetime"/>
+
+        
+
+        <!-- Shops - Groups -->
+        <many-to-one field="group" 
+                     target-entity="Group\Infrastructure\Database\Orm\Doctrine\Mapping\Group" 
+                     inversed-by="shops">
+
+            <join-column name="group_id" 
+                         referenced-column-name="id" />
+        </many-to-one>
+
+        <indexes>
+            
+            <index name="idx_shop_group_id" 
+                   columns="group_id"/>
+        </indexes>
+        
+        <unique-constraints>
+
+            <unique-constraint name="u_shops_name" 
+                               columns="name"/>
+        </unique-constraints>
+    </entity>
+</doctrine-mapping>

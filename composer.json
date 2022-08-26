@@ -59,16 +59,23 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/",
+            "App\\": "src/Kernel.php",
+            "Group\\": "src/Group/",
+            "Order\\": "src/Order/",
+            "Product\\": "src/Product/",
+            "Shop\\": "src/Shop/",
             "User\\": "src/User/",
-            "Adapter\\": "src/Adapter/"
+            "Global\\": "src/Global/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\Tests\\": "tests/",
-            "User\\Tests\\": "test/",
-            "Adapter\\Test\\": "src/Adapter/"
+            "Group\\Test\\": "src/tests/Group/",
+            "Order\\Test\\": "src/tests/Order/",
+            "Product\\Test\\": "src/tests/Product/",
+            "Shop\\Test\\": "src/tests/Shop/",
+            "User\\Test\\": "src/tests/User/",
+            "Global\\Test\\": "src/tests/Global/"
         }
     },
     "replace": {
