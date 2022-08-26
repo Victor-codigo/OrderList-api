@@ -6,10 +6,10 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Global\Adapter\Framework\IdGenerator;
+use User\Adapter\Exception\InvalidArgumentException;
 use User\Domain\Model\EntityBase as EntityBaseDomain;
 use User\Domain\Model\Profile;
 use User\Domain\Model\User as UserDomain;
-use User\Exception\InvalidArgumentException;
 
 final class User extends EntityBase
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace User\Exception;
+namespace User\Adapter\Exception;
 
 class InvalidArgumentException extends \InvalidArgumentException
 {

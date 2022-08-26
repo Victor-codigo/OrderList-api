@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace User\Adapter\Database\Orm\Doctrine\Entity;
 
+use User\Adapter\Exception\InvalidArgumentException;
 use User\Domain\Model\EntityBase as EntityBaseDomain;
 use User\Domain\Model\Profile as ProfileDomain;
-use User\Exception\InvalidArgumentException;
 
 final class Profile extends EntityBase
 {
