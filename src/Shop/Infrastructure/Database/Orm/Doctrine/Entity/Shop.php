@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Shop\Infrastructure\Database\Orm\Doctrine\Entity;
 
 use DateTime;
-use Global\Infrastructure\Framework\IdAdapter;
+use Global\Infrastructure\Framework\IdGenerator;
 use Group\Infrastructure\Database\Orm\Doctrine\Entity\Group;
 
 final class Shop
@@ -52,7 +52,7 @@ final class Shop
 
     public function __construct(Group $group, string $name, string $description)
     {
-        $this->id = IdAdapter::createId();
+        $this->id = IdGenerator::createId();
         $this->name = $name;
         $this->description = $description;
         $this->createdOn = new DateTime();

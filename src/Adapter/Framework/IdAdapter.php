@@ -6,7 +6,7 @@ namespace Adapter\Framework;
 
 use Symfony\Component\Uid\Uuid;
 
-class IdAdapter
+class IdGenerator
 {
     public static function createId(): string
     {

@@ -3,7 +3,7 @@
 namespace Product\Domain\Model;
 
 use DateTime;
-use Global\Infrastructure\Framework\IdAdapter;
+use Global\Infrastructure\Framework\IdGenerator;
 use Group\Domain\Model\Group;
 use Shop\Domain\Model\Shop;
 
@@ -69,7 +69,7 @@ final class Product
 
     public function __construct(Group $group, string $name, string $description)
     {
-        $this->id = IdAdapter::createId();
+        $this->id = IdGenerator::createId();
         $this->name = $name;
         $this->description = $description;
         $this->createdOn = new DateTime();

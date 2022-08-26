@@ -5,7 +5,7 @@ namespace Product\Infrastructure\Database\Orm\Doctrine\Entity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Global\Infrastructure\Framework\IdAdapter;
+use Global\Infrastructure\Framework\IdGenerator;
 use Group\Infrastructure\Database\Orm\Doctrine\Entity\Group;
 
 final class Product
@@ -70,7 +70,7 @@ final class Product
 
     public function __construct(Group $group, string $name, string $description)
     {
-        $this->id = IdAdapter::createId();
+        $this->id = IdGenerator::createId();
         $this->name = $name;
         $this->description = $description;
         $this->createdOn = new DateTime();

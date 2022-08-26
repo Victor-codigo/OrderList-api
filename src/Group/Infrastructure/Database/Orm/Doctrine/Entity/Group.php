@@ -7,7 +7,7 @@ namespace Group\Infrastructure\Database\Orm\Doctrine\Entity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Global\Infrastructure\Framework\IdAdapter;
+use Global\Infrastructure\Framework\IdGenerator;
 
 final class Group
 {
@@ -70,7 +70,7 @@ final class Group
 
     public function __construct(string $name)
     {
-        $this->id = IdAdapter::createId();
+        $this->id = IdGenerator::createId();
         $this->name = $name;
         $this->createdOn = new DateTime();
         $this->users = new ArrayCollection();

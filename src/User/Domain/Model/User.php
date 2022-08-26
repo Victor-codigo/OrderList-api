@@ -3,7 +3,7 @@
 namespace User\Domain\Model;
 
 use DateTime;
-use Global\Infrastructure\Framework\IdAdapter;
+use Global\Infrastructure\Framework\IdGenerator;
 use Group\Domain\Model\Group;
 
 final class User extends EntityBase implements IEntity
@@ -81,7 +81,7 @@ final class User extends EntityBase implements IEntity
 
     public function __construct(string $email, string $password, string $name)
     {
-        $this->id = IdAdapter::createId();
+        $this->id = IdGenerator::createId();
         $this->email = $email;
         $this->name = $name;
         $this->password = $password;

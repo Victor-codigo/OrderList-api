@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Group\Domain\Model;
 
 use DateTime;
-use Global\Infrastructure\Framework\IdAdapter;
+use Global\Infrastructure\Framework\IdGenerator;
 use User\Domain\Model\User;
 
 final class Group
@@ -69,7 +69,7 @@ final class Group
 
     public function __construct(string $name)
     {
-        $this->id = IdAdapter::createId();
+        $this->id = IdGenerator::createId();
         $this->name = $name;
         $this->createdOn = new DateTime();
         $this->users = [];

@@ -5,10 +5,10 @@ namespace User\Infrastructure\Database\Orm\Doctrine\Entity;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Global\Infrastructure\Framework\IdAdapter;
+use Global\Infrastructure\Framework\IdGenerator;
 use User\Domain\Model\EntityBase as EntityBaseDomain;
 use User\Domain\Model\Profile;
-use User\Domain\Model\User as Userdomain;
+use User\Domain\Model\User as UserDomain;
 use User\Exception\InvalidArgumentException;
 use User\Infrastructure\Database\Orm\Doctrine\Entity\Profile as profileInfrastructure;
 
@@ -95,7 +95,7 @@ final class User extends EntityBase
 
     public function __construct(string $email, string $name, string $password)
     {
-        $this->id = IdAdapter::createId();
+        $this->id = IdGenerator::createId();
         $this->email = $email;
         $this->name = $name;
         $this->password = $password;

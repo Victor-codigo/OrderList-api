@@ -3,7 +3,7 @@
 namespace Order\Infrastructure\Database\Orm\Doctrine\Entity;
 
 use DateTime;
-use Global\Infrastructure\Framework\IdAdapter;
+use Global\Infrastructure\Framework\IdGenerator;
 
 final class Order
 {
@@ -113,7 +113,7 @@ final class Order
 
     public function __construct(string $userId, string $groupId, string $productId, bool $deleted)
     {
-        $this->id = IdAdapter::createId();
+        $this->id = IdGenerator::createId();
         $this->userId = $userId;
         $this->groupId = $groupId;
         $this->productId = $productId;
