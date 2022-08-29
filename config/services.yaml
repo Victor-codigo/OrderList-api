@@ -6,4 +6,4 @@
 parameters:
 
 imports:
-    - { resource: 'services/user/user.yaml' }    
+    - { resource: '../src/User/Adapter/Framework/Config/services/user.yaml' }    

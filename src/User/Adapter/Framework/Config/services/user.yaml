@@ -3,9 +3,9 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-    User\:
-        resource: '%kernel.project_dir%/User/Domain'
+    # User\:
+    #     resource: '%kernel.project_dir%/User/Domain/Service/'
 
-    User\Adapter\Controller\:
-        resource: '%kernel.project_dir%/User/Adapter/Controller/'
-        tags: ['controller.service_arguments']
+    # User\Adapter\Controller\:
+    #     resource: '%kernel.project_dir%/User/Adapter/Http/Controller/UserCreate'
+    #     tags: ['controller.service_arguments']
