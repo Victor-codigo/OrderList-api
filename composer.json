@@ -70,12 +70,12 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Group\\Test\\": "src/tests/Group/",
-            "Order\\Test\\": "src/tests/Order/",
-            "Product\\Test\\": "src/tests/Product/",
-            "Shop\\Test\\": "src/tests/Shop/",
-            "User\\Test\\": "src/tests/User/",
-            "Global\\Test\\": "src/tests/Global/"
+            "Group\\Test\\Unit\\": "src/tests/Unit/Group/",
+            "Order\\Test\\Unit\\": "src/tests/Unit/Order/",
+            "Product\\Test\\Unit\\": "src/tests/Unit/Product/",
+            "Shop\\Test\\Unit\\": "src/tests/Unit/Shop/",
+            "User\\Test\\Unit\\": "src/tests/Unit/User/",
+            "Common\\Test\\Unit\\": "src/tests/Unit/Common/"
         }
     },
     "replace": {
