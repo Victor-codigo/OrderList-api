@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <doctrine-mapping>
-    <entity name="User\Orm\Entity\Profile" table="Profile">
+    <entity name="User\Domain\Model\Profile" table="Profile">
         
         <id name="id" 
             type="string" 

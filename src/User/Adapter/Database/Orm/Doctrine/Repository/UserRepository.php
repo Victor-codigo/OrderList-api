@@ -17,17 +17,13 @@ final class UserRepository extends UserRepositoryBase
 
     public function save(EntityBaseDomain $user): void
     {
-        $doctrineUser = User::createFromDomain($user);
-
-        $this->objectManager->persist($doctrineUser);
+        $this->objectManager->persist($user);
         $this->objectManager->flush();
     }
 
     public function remove(EntityBaseDomain $user): void
     {
-        $doctrineUser = User::createFromDomain($user);
-
-        $this->objectManager->remove($doctrineUser);
+        $this->objectManager->remove($user);
         $this->objectManager->flush();
     }
 }

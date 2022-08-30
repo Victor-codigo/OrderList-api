@@ -17,17 +17,13 @@ class ProfileRepository extends UserRepositoryBase
 
     public function save(EntityBaseDomain $profile): void
     {
-        $doctrineProfile = Profile::createFromDomain($profile);
-
-        $this->objectManager->persist($doctrineProfile);
+        $this->objectManager->persist($profile);
         $this->objectManager->flush();
     }
 
     public function remove(EntityBaseDomain $profile): void
     {
-        $doctrineProfile = Profile::createFromDomain($profile);
-
-        $this->objectManager->persist($doctrineProfile);
+        $this->objectManager->persist($profile);
         $this->objectManager->flush();
     }
 }

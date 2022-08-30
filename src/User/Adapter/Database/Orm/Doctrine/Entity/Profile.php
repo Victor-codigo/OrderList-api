@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace User\Adapter\Database\Orm\Doctrine\Entity;
 
-use User\Adapter\Exception\InvalidArgumentException;
-use User\Domain\Model\EntityBase as EntityBaseDomain;
-use User\Domain\Model\Profile as ProfileDomain;
-
 final class Profile extends EntityBase
 {
     private string $id;
@@ -28,15 +24,6 @@ final class Profile extends EntityBase
     public function __construct(string $id)
     {
         $this->id = $id;
-    }
-
-    public static function createFromDomain(EntityBaseDomain $profile): static
-    {
-        if (!$profile instanceof ProfileDomain) {
-            throw InvalidArgumentException::createFromMessage(sprintf('EntityBase is not an instance of [%s]', ProfileDomain::class));
-        }
-
-        return new self($profile->getId());
     }
 
     public function toArray(): array
