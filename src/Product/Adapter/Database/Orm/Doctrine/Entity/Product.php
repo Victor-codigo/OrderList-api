@@ -2,10 +2,10 @@
 
 namespace Product\Adapter\Database\Orm\Doctrine\Entity;
 
+use Common\Adapter\Framework\IdGenerator;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Global\Adapter\Framework\IdGenerator;
 use Group\Adapter\Database\Orm\Doctrine\Entity\Group;
 
 final class Product

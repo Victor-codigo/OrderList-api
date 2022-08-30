@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Group\Adapter\Database\Orm\Doctrine\Entity;
 
+use Common\Adapter\Framework\IdGenerator;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Global\Adapter\Framework\IdGenerator;
 
 final class Group
 {

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Shop\Adapter\Database\Orm\Doctrine\Entity;
 
+use Common\Adapter\Framework\IdGenerator;
 use DateTime;
-use Global\Adapter\Framework\IdGenerator;
 use Group\Adapter\Database\Orm\Doctrine\Entity\Group;
 
 final class Shop

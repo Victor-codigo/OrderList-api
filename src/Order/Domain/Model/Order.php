@@ -2,8 +2,8 @@
 
 namespace Order\Domain\Model;
 
+use Common\Adapter\Framework\IdGenerator;
 use DateTime;
-use Global\Adapter\Framework\IdGenerator;
 
 final class Order
 {

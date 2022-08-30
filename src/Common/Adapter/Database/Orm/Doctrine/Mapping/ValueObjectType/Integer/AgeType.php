@@ -1,19 +1,19 @@
 <?php
 
-declare(strict_types=1);
+// declare(strict_types=1);
 
-namespace Common\Adapter\Database\Orm\Doctrine\Mapping\ValueObjectType\Integer;
+// namespace Common\Adapter\Database\Orm\Doctrine\Mapping\ValueObjectType\Integer;
 
-use Common\Adapter\Database\Orm\Doctrine\Mapping\ValueObjectType\ValueObjectTypeConverterTrait;
-use Common\Domain\ValueObject\Integer\Age;
-use Doctrine\DBAL\Types\IntegerType;
+// use Common\Adapter\Database\Orm\Doctrine\Mapping\ValueObjectType\ValueObjectTypeConverterTrait;
+// use Common\Domain\ValueObject\Integer\Age;
+// use Doctrine\DBAL\Types\IntegerType;
 
-final class AgeType extends IntegerType
-{
-    use ValueObjectTypeConverterTrait;
+// final class AgeType extends IntegerType
+// {
+//     use ValueObjectTypeConverterTrait;
 
-    public function getDomainValueObjectClass(): string
-    {
-        return Age::class;
-    }
-}
+//     public function getDomainValueObjectClass(): string
+//     {
+//         return Age::class;
+//     }
+// }

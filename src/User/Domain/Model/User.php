@@ -2,11 +2,11 @@
 
 namespace User\Domain\Model;
 
+use Common\Adapter\Framework\IdGenerator;
 use DateTime;
-use Global\Adapter\Framework\IdGenerator;
 use Group\Domain\Model\Group;
 
-final class User extends EntityBase implements IEntity
+final class User extends EntityBase
 {
     private string $id;
     private string $email;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Adapter\Framework;
+namespace Common\Adapter\Framework;
 
 use Symfony\Component\Uid\Uuid;
 

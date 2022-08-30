@@ -2,14 +2,11 @@
 
 namespace User\Adapter\Database\Orm\Doctrine\Entity;
 
+use Common\Adapter\Framework\IdGenerator;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Global\Adapter\Framework\IdGenerator;
-use User\Adapter\Exception\InvalidArgumentException;
-use User\Domain\Model\EntityBase as EntityBaseDomain;
 use User\Domain\Model\Profile;
-use User\Domain\Model\User as UserDomain;
 
 final class User extends EntityBase
 {
@@ -86,8 +83,7 @@ final class User extends EntityBase
 
     public function setProfile(Profile $profile): self
     {
-        $this->profile = new profileAdapter($this->getId());
-        $this->profile->setImage($profile->getImage());
+        $this->profile = $profile;
 
         return $this;
     }
@@ -101,19 +97,6 @@ final class User extends EntityBase
         $this->createdOn = new DateTime();
         $this->groups = new ArrayCollection();
         $this->profile = new Profile($this->getId());
-    }
-
-    public static function createFromDomain(EntityBaseDomain $user): static
-    {
-        if (!$user instanceof UserDomain) {
-            throw InvalidArgumentException::createFromMessage(\sprintf('EntityBase is not an instance of [%s]', UserDomain::class));
-        }
-
-        return new self(
-            $user->getEmail(),
-            $user->getPassword(),
-            $user->getName()
-        );
     }
 
     public function toArray(): array

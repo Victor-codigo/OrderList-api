@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Adapter\Domain\User\Request\Dto;
+namespace Common\Adapter\Framework\Http\Dto;
 
-use Adapter\Framework\Http\Dto\IRequestDto;
 use Symfony\Component\HttpFoundation\Request;
 
-final class UserCreateInputDto implements IRequestDto
+class UserCreateRequestDto implements IRequestDto
 {
     public readonly string|null $email;
     public readonly string|null $password;
@@ -15,7 +14,7 @@ final class UserCreateInputDto implements IRequestDto
 
     public function __construct(Request $request)
     {
-        $this->email = $request->get('name');
+        $this->email = $request->get('email');
         $this->password = $request->get('password');
         $this->name = $request->get('name');
     }

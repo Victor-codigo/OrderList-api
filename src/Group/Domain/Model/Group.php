@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Group\Domain\Model;
 
+use Common\Adapter\Framework\IdGenerator;
 use DateTime;
-use Global\Adapter\Framework\IdGenerator;
 use User\Domain\Model\User;
 
 final class Group

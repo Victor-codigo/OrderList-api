@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Shop\Domain\Model;
 
+use Common\Adapter\Framework\IdGenerator;
 use DateTime;
-use Global\Adapter\Framework\IdGenerator;
 use Group\Domain\Model\Group;
 
 final class Shop
