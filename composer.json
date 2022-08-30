@@ -65,7 +65,7 @@
             "Product\\": "src/Product/",
             "Shop\\": "src/Shop/",
             "User\\": "src/User/",
-            "Global\\": "src/Global/"
+            "Common\\": "src/Common/"
         }
     },
     "autoload-dev": {

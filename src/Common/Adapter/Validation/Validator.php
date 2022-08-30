@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Validation;
 
-use App\Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\VALIDATION_ERRORS;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validation;

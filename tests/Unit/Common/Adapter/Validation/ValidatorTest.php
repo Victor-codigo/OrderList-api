@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation;
 
-use App\Common\Adapter\Validation\Validator;
-use App\Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Adapter\Validation\Validator;
+use Common\Domain\Validation\VALIDATION_ERRORS;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
