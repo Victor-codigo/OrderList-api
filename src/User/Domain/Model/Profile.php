@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace User\Domain\Model;
 
-class Profile extends EntityBase implements IEntity
+class Profile extends EntityBase
 {
     protected string $id;
     protected string|null $image = null;
