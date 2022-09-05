@@ -68,4 +68,8 @@ enum VALIDATION_ERRORS
     case FILE_NOT_READABLE;
     case FILE_TOO_LARGE;
     case FILE_EMPTY;
+
+    case CHOICE_NOT_SUCH;
+    case CHOICE_TOO_FEW;
+    case CHOICE_TOO_MUCH;
 }

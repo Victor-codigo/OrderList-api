@@ -33,7 +33,9 @@ class ValidationConstraintTest extends TestCase
             Range::TOO_LOW_ERROR => VALIDATION_ERRORS::RANGE_TOO_LOW,
         ];
 
-        $this->object = new ValidationConstraint($this->constraint, $idErrors);
+        if ($this->constraint instanceof Constraint) {
+            $this->object = new ValidationConstraint($this->constraint, $idErrors);
+        }
     }
 
     public function testHasErrorErrorDoesntExists(): void

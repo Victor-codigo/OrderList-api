@@ -60,6 +60,7 @@
     "autoload": {
         "psr-4": {
             "App\\": "src/",
+            "Test\\": "tests/",
             "Group\\": "src/Group/",
             "Order\\": "src/Order/",
             "Product\\": "src/Product/",

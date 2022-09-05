@@ -13,5 +13,7 @@ abstract class StringValueObject extends ValueObjectBase
     public function __construct(string $value)
     {
         $this->value = $value;
+
+        $this->defineConstraints();
     }
 }

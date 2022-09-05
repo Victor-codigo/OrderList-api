@@ -8,5 +8,5 @@ enum EMAIL_TYPES: string
 {
     case LOOSE = 'loose';
     case HTML5 = 'html5';
-    case STRICT = 'strinct';
+    case STRICT = 'strict';
 }

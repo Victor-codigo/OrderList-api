@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Common\Adapter\Validation\Validations;
+namespace Common\Domain\Validation;
 
 enum TYPES: string
 {

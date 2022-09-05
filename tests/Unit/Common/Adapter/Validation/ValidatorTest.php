@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation;
 
-use Common\Adapter\Validation\Validations\TYPES;
+use Common\Adapter\Validation\ConstraintsChain;
 use Common\Adapter\Validation\Validator;
 use Common\Domain\Validation\EMAIL_TYPES;
+use Common\Domain\Validation\TYPES;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use DateTimeZone;
 use PHPUnit\Framework\TestCase;
+use Test\Unit\Common\Adapter\Validation\Fixtures\ValueObjectForTesting;
 
 class ValidatorTest extends TestCase
 {
@@ -33,11 +35,29 @@ class ValidatorTest extends TestCase
         $value = 33;
         $return = $this->object->setValue($value);
 
-        $this->assertEquals($return, $this->object,
-            'setValue: It was expected to return same object');
+        $this->assertInstanceOf(ConstraintsChain::class, $return,
+            'setValue: It was expected to return an instance of '.ConstraintsChain::class);
 
         $this->assertEquals($value, $this->object->getValue(),
             'setValue: The value passed is not the value set');
+    }
+
+    public function testValidateValueObject()
+    {
+        $valueObject = new ValueObjectForTesting(18);
+        $return = $this->object->validateValueObject($valueObject);
+
+        $this->assertEmpty($return,
+            'validateValueObject: It was expected that return value is array empty');
+    }
+
+    public function testValidateValueObjectError()
+    {
+        $valueObject = new ValueObjectForTesting(17);
+        $return = $this->object->validateValueObject($valueObject);
+
+        $this->assertEquals([VALIDATION_ERRORS::EQUAL_TO], $return,
+            'validateValueObject: It was expected that return value is '.VALIDATION_ERRORS::EQUAL_TO->name);
     }
 
     public function testValidateNotBlankOk(): void
@@ -561,7 +581,7 @@ class ValidatorTest extends TestCase
     public function testValidateFileOk(): void
     {
         $return = $this->object
-            ->setValue('tests/Unit/Common/Adapter/Validation/Validations/fixtures/file.js')
+            ->setValue('tests/Unit/Common/Adapter/Validation/Validations/Fixtures/file.js')
             ->file('2M', false, null)
             ->validate();
 
@@ -575,7 +595,7 @@ class ValidatorTest extends TestCase
     public function testValidateFileError(): void
     {
         $return = $this->object
-            ->setValue('tests/Unit/Common/Adapter/Validation/Validations/fixtures/file.js')
+            ->setValue('tests/Unit/Common/Adapter/Validation/Validations/Fixtures/file.js')
             ->file('2M', false, 'image/png')
             ->validate();
 
@@ -807,6 +827,34 @@ class ValidatorTest extends TestCase
             'validate: It was expected to be an array');
 
         $this->assertEquals([VALIDATION_ERRORS::STRING_TOO_SHORT], $return,
+            'validate: It was expected to return an empty array');
+    }
+
+    public function testValidateChoiceOk(): void
+    {
+        $return = $this->object
+            ->setValue('b')
+            ->choice(['a', 'b', 'c'], false, true, 1, 1)
+            ->validate();
+
+        $this->assertIsArray($return,
+            'validate: It was expected to be an array');
+
+        $this->assertEquals([], $return,
+            'validate: It was expected to return an empty array');
+    }
+
+    public function testValidateChoiceError(): void
+    {
+        $return = $this->object
+            ->setValue('d')
+            ->choice(['a', 'b', 'c'], false, true, 1, 1)
+            ->validate();
+
+        $this->assertIsArray($return,
+            'validate: It was expected to be an array');
+
+        $this->assertEquals([VALIDATION_ERRORS::CHOICE_NOT_SUCH], $return,
             'validate: It was expected to return an empty array');
     }
 }

@@ -1,0 +1,245 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Common\Adapter\Validation;
+
+use Common\Adapter\Validation\Validations\ValidationChoice;
+use Common\Adapter\Validation\Validations\ValidationComparison;
+use Common\Adapter\Validation\Validations\ValidationDateTime;
+use Common\Adapter\Validation\Validations\ValidationFile;
+use Common\Adapter\Validation\Validations\ValidationGeneral;
+use Common\Adapter\Validation\Validations\ValidationPositiveNegative;
+use Common\Adapter\Validation\Validations\ValidationString;
+use Common\Domain\Validation\EMAIL_TYPES;
+use Common\Domain\Validation\TYPES;
+use DateTime;
+
+class ConstraintsChain
+{
+    private ValidationComparison $comparison;
+    private ValidationDateTime $datetime;
+    private ValidationFile $file;
+    private ValidationGeneral $general;
+    private ValidationPositiveNegative $positiveNegative;
+    private ValidationString $string;
+    private ValidationChoice $choice;
+    private Validator $validator;
+
+    public function __construct(Validator $validator)
+    {
+        $this->validator = $validator;
+
+        $this->comparison = new ValidationComparison();
+        $this->datetime = new ValidationDateTime();
+        $this->file = new ValidationFile();
+        $this->general = new ValidationGeneral();
+        $this->positiveNegative = new ValidationPositiveNegative();
+        $this->string = new ValidationString();
+        $this->choice = new ValidationChoice();
+    }
+
+    public function validate(): array
+    {
+        return $this->validator->validate();
+    }
+
+    public function notBlank(): self
+    {
+        $this->validator->setConstraint($this->general->notBlank());
+
+        return $this;
+    }
+
+    public function notNull(): self
+    {
+        $this->validator->setConstraint($this->general->notNull());
+
+        return $this;
+    }
+
+    public function type(TYPES $type): self
+    {
+        $this->validator->setConstraint($this->general->type($type));
+
+        return $this;
+    }
+
+    public function email(EMAIL_TYPES $mode): self
+    {
+        $this->validator->setConstraint($this->general->email($mode));
+
+        return $this;
+    }
+
+    public function stringLength(int $length): self
+    {
+        $this->validator->setConstraint($this->string->stringLength($length));
+
+        return $this;
+    }
+
+    public function stringMin(int $min): self
+    {
+        $this->validator->setConstraint($this->string->stringMin($min));
+
+        return $this;
+    }
+
+    public function stringMax(int $max): self
+    {
+        $this->validator->setConstraint($this->string->stringMax($max));
+
+        return $this;
+    }
+
+    public function stringRange(int $min, int $max): self
+    {
+        $this->validator->setConstraint($this->string->stringRange($min, $max));
+
+        return $this;
+    }
+
+    public function equalTo(mixed $value): self
+    {
+        $this->validator->setConstraint($this->comparison->equalTo($value));
+
+        return $this;
+    }
+
+    public function notEqualTo(mixed $value): self
+    {
+        $this->validator->setConstraint($this->comparison->notEqualTo($value));
+
+        return $this;
+    }
+
+    public function identicalTo(mixed $value): self
+    {
+        $this->validator->setConstraint($this->comparison->identicalTo($value));
+
+        return $this;
+    }
+
+    public function notIdenticalTo(mixed $value): self
+    {
+        $this->validator->setConstraint($this->comparison->notIdenticalTo($value));
+
+        return $this;
+    }
+
+    public function lessThan(int|DateTime $value): self
+    {
+        $this->validator->setConstraint($this->comparison->lessThan($value));
+
+        return $this;
+    }
+
+    public function lessThanOrEqual(int|DateTime $value): self
+    {
+        $this->validator->setConstraint($this->comparison->lessThanOrEqual($value));
+
+        return $this;
+    }
+
+    public function greaterThan(int|DateTime $value): self
+    {
+        $this->validator->setConstraint($this->comparison->greaterThan($value));
+
+        return $this;
+    }
+
+    public function greaterThanOrEqual(int|DateTime $value): self
+    {
+        $this->validator->setConstraint($this->comparison->greaterThanOrEqual($value));
+
+        return $this;
+    }
+
+    public function range(int|DateTime $min, int|DateTime $max): self
+    {
+        $this->validator->setConstraint($this->comparison->range($min, $max));
+
+        return $this;
+    }
+
+    public function unique(): self
+    {
+        $this->validator->setConstraint($this->general->unique());
+
+        return $this;
+    }
+
+    public function positive(): self
+    {
+        $this->validator->setConstraint($this->positiveNegative->positive());
+
+        return $this;
+    }
+
+    public function positiveOrZero(): self
+    {
+        $this->validator->setConstraint($this->positiveNegative->positiveOrZero());
+
+        return $this;
+    }
+
+    public function negative(): self
+    {
+        $this->validator->setConstraint($this->positiveNegative->negative());
+
+        return $this;
+    }
+
+    public function negativeOrZero(): self
+    {
+        $this->validator->setConstraint($this->positiveNegative->negativeOrZero());
+
+        return $this;
+    }
+
+    public function date(): self
+    {
+        $this->validator->setConstraint($this->datetime->date());
+
+        return $this;
+    }
+
+    public function dateTime(): self
+    {
+        $this->validator->setConstraint($this->datetime->dateTime());
+
+        return $this;
+    }
+
+    public function time(): self
+    {
+        $this->validator->setConstraint($this->datetime->time());
+
+        return $this;
+    }
+
+    /**
+     * @param DateTimeZone|null $timeZone
+     */
+    public function timeZone(int|null $timeZone): self
+    {
+        $this->validator->setConstraint($this->datetime->timeZone($timeZone));
+
+        return $this;
+    }
+
+    public function file(mixed $maxSize, bool|null $binaryFormat, array|string|null $mimeTypes): self
+    {
+        $this->validator->setConstraint($this->file->file($maxSize, $binaryFormat, $mimeTypes));
+
+        return $this;
+    }
+
+    public function choice(array|null $choices, bool|null $multiple, bool|null $strict, int|null $min, int|null $max): self
+    {
+        $this->validator->setConstraint($this->choice->choice($choices, $multiple, $strict, $min, $max));
+
+        return $this;
+    }
+}

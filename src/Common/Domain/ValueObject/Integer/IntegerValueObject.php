@@ -6,13 +6,15 @@ namespace Common\Domain\ValueObject\Integer;
 
 use Common\Domain\ValueObject\ValueObjectBase;
 
-class IntegerValueObject extends ValueObjectBase
+abstract class IntegerValueObject extends ValueObjectBase
 {
     protected readonly int $value;
 
     public function __construct(int $value)
     {
         $this->value = $value;
+
+        $this->defineConstraints();
     }
 
     public function getValue(): int
