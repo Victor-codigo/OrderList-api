@@ -32,6 +32,7 @@ enum CONSTRAINTS_NAMES: string
     case STRING_MIN = 'stringMin';
     case STRING_MAX = 'stringMax';
     case STRING_RANGE = 'stringRange';
+    case UUID = 'uuId';
 
     case DATE = 'date';
     case DATETIME = 'dateTime';

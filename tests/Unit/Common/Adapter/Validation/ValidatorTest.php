@@ -830,6 +830,34 @@ class ValidatorTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
+    public function testValidateUuIdOk(): void
+    {
+        $return = $this->object
+            ->setValue('ea693dd6-670b-4b5e-b9fa-d324b7470afa')
+            ->uuId()
+            ->validate();
+
+        $this->assertIsArray($return,
+            'validate: It was expected to be an array');
+
+        $this->assertEquals([], $return,
+            'validate: It was expected to return an empty array');
+    }
+
+    public function testValidateUuIdError(): void
+    {
+        $return = $this->object
+            ->setValue('1234')
+            ->uuId()
+            ->validate();
+
+        $this->assertIsArray($return,
+            'validate: It was expected to be an array');
+
+        $this->assertEquals([VALIDATION_ERRORS::UUID_TOO_SHORT], $return,
+            'validate: It was expected to return an empty array');
+    }
+
     public function testValidateChoiceOk(): void
     {
         $return = $this->object

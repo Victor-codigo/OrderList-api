@@ -100,6 +100,13 @@ class ConstraintsChain
         return $this;
     }
 
+    public function uuId(array $versions = [4], bool $strict = true): self
+    {
+        $this->validator->setConstraint($this->string->uuId($versions, $strict));
+
+        return $this;
+    }
+
     public function equalTo(mixed $value): self
     {
         $this->validator->setConstraint($this->comparison->equalTo($value));

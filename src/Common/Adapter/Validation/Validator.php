@@ -109,7 +109,7 @@ class Validator
 
     private function getValidationsCallBacks()
     {
-        $constraintCallbacks = [
+        return [
             CONSTRAINTS_NAMES::NOT_BLANK->value => $this->constraintsChain->notBlank(...),
             CONSTRAINTS_NAMES::NOT_NULL->value => $this->constraintsChain->notNull(...),
             CONSTRAINTS_NAMES::TYPE->value => $this->constraintsChain->type(...),
@@ -132,6 +132,7 @@ class Validator
             CONSTRAINTS_NAMES::STRING_MIN->value => $this->constraintsChain->stringMin(...),
             CONSTRAINTS_NAMES::STRING_MAX->value => $this->constraintsChain->stringMax(...),
             CONSTRAINTS_NAMES::STRING_RANGE->value => $this->constraintsChain->stringRange(...),
+            CONSTRAINTS_NAMES::UUID->value => $this->constraintsChain->uuId(...),
             CONSTRAINTS_NAMES::DATE->value => $this->constraintsChain->date(...),
             CONSTRAINTS_NAMES::DATETIME->value => $this->constraintsChain->dateTime(...),
             CONSTRAINTS_NAMES::TIME->value => $this->constraintsChain->time(...),
@@ -139,7 +140,5 @@ class Validator
             CONSTRAINTS_NAMES::FILE->value => $this->constraintsChain->file(...),
             CONSTRAINTS_NAMES::CHOICE->value => $this->constraintsChain->choice(...),
         ];
-
-        return $constraintCallbacks;
     }
 }

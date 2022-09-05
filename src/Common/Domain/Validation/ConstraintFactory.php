@@ -61,6 +61,17 @@ class ConstraintFactory
         ]);
     }
 
+    /**
+     * @param array $versions Uuid::V...
+     */
+    public static function uuId(array $versions = [4], bool $strict = true): ConstraintDto
+    {
+        return new ConstraintDto(CONSTRAINTS_NAMES::UUID, [
+            'versions' => $versions,
+            'strict' => $strict,
+        ]);
+    }
+
     public static function equalTo(mixed $value): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::EQUAL_TO, [
