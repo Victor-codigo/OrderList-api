@@ -6,16 +6,19 @@ namespace Common\Adapter\Validation;
 
 use Common\Adapter\Validation\Validations\ValidationChoice;
 use Common\Adapter\Validation\Validations\ValidationComparison;
+use Common\Adapter\Validation\Validations\ValidationConstraint;
 use Common\Adapter\Validation\Validations\ValidationDateTime;
 use Common\Adapter\Validation\Validations\ValidationFile;
 use Common\Adapter\Validation\Validations\ValidationGeneral;
 use Common\Adapter\Validation\Validations\ValidationPositiveNegative;
 use Common\Adapter\Validation\Validations\ValidationString;
 use Common\Domain\Validation\EMAIL_TYPES;
+use Common\Domain\Validation\IValidation;
+use Common\Domain\Validation\IValueObjectValidation;
 use Common\Domain\Validation\TYPES;
 use DateTime;
 
-class ConstraintsChain
+class ValidationChain implements IValidation
 {
     private ValidationComparison $comparison;
     private ValidationDateTime $datetime;
@@ -26,10 +29,9 @@ class ConstraintsChain
     private ValidationChoice $choice;
     private Validator $validator;
 
-    public function __construct(Validator $validator)
+    public function __construct()
     {
-        $this->validator = $validator;
-
+        $this->validator = new Validator($this);
         $this->comparison = new ValidationComparison();
         $this->datetime = new ValidationDateTime();
         $this->file = new ValidationFile();
@@ -39,9 +41,32 @@ class ConstraintsChain
         $this->choice = new ValidationChoice();
     }
 
+    public function getValue(): mixed
+    {
+        return $this->validator->getValue();
+    }
+
+    public function setValue(mixed $value): IValidation
+    {
+        return $this->validator->setValue($value);
+    }
+
+    public function setConstraint(ValidationConstraint $constraint): void
+    {
+        $this->validator->setConstraint($constraint);
+    }
+
     public function validate(): array
     {
         return $this->validator->validate();
+    }
+
+    /**
+     * @return VALIDATION_ERRORS[]
+     */
+    public function validateValueObject(IValueObjectValidation $valueObject): array
+    {
+        return $this->validator->validateValueObject($valueObject);
     }
 
     public function notBlank(): self

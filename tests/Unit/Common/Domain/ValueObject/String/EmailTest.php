@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\ValueObject\String;
 
-use Common\Adapter\Validation\Validator;
+use Common\Adapter\Validation\ValidationChain;
+use Common\Domain\Validation\IValidation;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use Common\Domain\ValueObject\String\Email;
 use PHPUnit\Framework\TestCase;
 
 class EmailTest extends TestCase
 {
-    private Validator $validator;
-    private string $validEmail = 'un.email.valido@host.com';
+    private IValidation $validator;
+    private string $validEmail = 'a.valid.email@host.com';
     private string $invalidEmail = 'this is an invalid email';
 
     public function setUp(): void
     {
-        $this->validator = new Validator();
+        $this->validator = new ValidationChain();
     }
 
     private function createEmail(string $email): Email

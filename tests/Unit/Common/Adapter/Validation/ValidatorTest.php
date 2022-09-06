@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation;
 
-use Common\Adapter\Validation\ConstraintsChain;
-use Common\Adapter\Validation\Validator;
+use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\EMAIL_TYPES;
+use Common\Domain\Validation\IValidation;
 use Common\Domain\Validation\TYPES;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use DateTimeZone;
@@ -15,11 +15,11 @@ use Test\Unit\Common\Adapter\Validation\Fixtures\ValueObjectForTesting;
 
 class ValidatorTest extends TestCase
 {
-    private Validator $object;
+    private IValidation $object;
 
     public function setUp(): void
     {
-        $this->object = new Validator();
+        $this->object = new ValidationChain();
     }
 
     public function testGetValue()
@@ -35,8 +35,8 @@ class ValidatorTest extends TestCase
         $value = 33;
         $return = $this->object->setValue($value);
 
-        $this->assertInstanceOf(ConstraintsChain::class, $return,
-            'setValue: It was expected to return an instance of '.ConstraintsChain::class);
+        $this->assertInstanceOf(ValidationChain::class, $return,
+            'setValue: It was expected to return an instance of '.ValidationChain::class);
 
         $this->assertEquals($value, $this->object->getValue(),
             'setValue: The value passed is not the value set');

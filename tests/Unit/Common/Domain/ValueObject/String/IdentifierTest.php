@@ -4,26 +4,26 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\ValueObject\String;
 
-use Common\Adapter\Validation\Validator;
+use Common\Adapter\Validation\ValidationChain;
+use Common\Domain\Validation\IValidation;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use Common\Domain\ValueObject\String\Identifier;
 use PHPUnit\Framework\TestCase;
 
 class IdentifierTest extends TestCase
 {
-    private Identifier $object;
-    private Validator $validator;
+    private IValidation $validator;
     private string $validId = '77020b89-fb7b-416c-9987-bffbeb3af6f8';
     private string $notValidId = 'not valid id';
 
     public function setUp(): void
     {
-        $this->validator = new Validator();
+        $this->validator = new ValidationChain();
     }
 
-    private function createIdentifier(string $id)
+    private function createIdentifier(string $id): Identifier
     {
-        return $this->object = new Identifier($id);
+        return new Identifier($id);
     }
 
     public function testValidUuId(): void

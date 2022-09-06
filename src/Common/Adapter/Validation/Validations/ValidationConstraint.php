@@ -22,7 +22,7 @@ class ValidationConstraint
         $this->idErrors = $idErrors;
     }
 
-    public function hasError(string $idError)
+    public function hasError(string $idError): bool
     {
         return array_key_exists($idError, $this->idErrors);
     }
