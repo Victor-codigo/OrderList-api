@@ -41,7 +41,7 @@ class IdentifierTest extends TestCase
         $return = $this->validator->validateValueObject($object);
 
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK], $return,
-            'It was expected that validation fail on notNull');
+            'It was expected that validation fail on notBlank');
     }
 
     public function testUuIdError(): void
