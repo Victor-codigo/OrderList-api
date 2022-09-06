@@ -8,8 +8,8 @@ use Common\Domain\Validation\ConstraintFactory;
 
 class Name extends StringValueObject
 {
-    private const NAME_MIN_LENGTH = 4;
-    private const NAME_MAX_LENGTH = 50;
+    public const NAME_MIN_LENGTH = 4;
+    public const NAME_MAX_LENGTH = 50;
 
     public function __construct(string $name)
     {
