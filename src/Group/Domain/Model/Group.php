@@ -5,25 +5,27 @@ declare(strict_types=1);
 namespace Group\Domain\Model;
 
 use Common\Adapter\Framework\IdGenerator;
+use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\Name;
 use DateTime;
 use User\Domain\Model\User;
 
 final class Group
 {
-    private string $id;
-    private string $name;
+    private Identifier $id;
+    private Name $name;
     private string|null $description;
     private DateTime $createdOn;
     private array $users;
     private array $shops;
     private array $products;
 
-    public function getId(): string
+    public function getId(): Identifier
     {
         return $this->id;
     }
 
-    public function getName(): string
+    public function getName(): Name
     {
         return $this->name;
     }
@@ -80,8 +82,8 @@ final class Group
     public function toArray(): array
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
+            'id' => $this->id->getValue(),
+            'name' => $this->name->getValue(),
             'description' => $this->description,
             'createdOn' => $this->createdOn,
             'users' => array_map(fn (User $i) => $i->toArray(), $this->users),
