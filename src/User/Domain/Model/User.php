@@ -3,20 +3,24 @@
 namespace User\Domain\Model;
 
 use Common\Adapter\Framework\IdGenerator;
+use Common\Domain\Model\ValueObject\String\Email;
+use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\Password;
 use DateTime;
 use Group\Domain\Model\Group;
 
 final class User extends EntityBase
 {
-    private string $id;
-    private string $email;
-    private string $name;
-    private string $password;
+    private Identifier $id;
+    private Email $email;
+    private Name $name;
+    private Password $password;
     private DateTime $createdOn;
     private array $groups;
     private Profile $profile;
 
-    public function getEmail(): string
+    public function getEmail(): Email
     {
         return $this->email;
     }
@@ -28,7 +32,7 @@ final class User extends EntityBase
         return $this;
     }
 
-    public function getName(): string
+    public function getName(): Name
     {
         return $this->name;
     }
@@ -40,7 +44,7 @@ final class User extends EntityBase
         return $this;
     }
 
-    public function getPassword(): string
+    public function getPassword(): Password
     {
         return $this->password;
     }
@@ -57,7 +61,7 @@ final class User extends EntityBase
         return $this->createdOn;
     }
 
-    public function getId(): string
+    public function getId(): Identifier
     {
         return $this->id;
     }
@@ -93,10 +97,10 @@ final class User extends EntityBase
     public function toArray(): array
     {
         return [
-            'id' => $this->id,
-            'email' => $this->email,
-            'name' => $this->name,
-            'password' => $this->password,
+            'id' => $this->id->getValue(),
+            'email' => $this->email->getValue(),
+            'name' => $this->name->getValue(),
+            'password' => $this->password->getValue(),
             'createdOn' => $this->createdOn->format(DateTime::RFC3339),
             'groups' => array_map(fn (Group $i) => $i->toArray(), $this->groups),
             'profile' => $this->profile->toArray(),

@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace User\Domain\Model;
 
+use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\Path;
+
 class Profile extends EntityBase
 {
-    protected string $id;
-    protected string|null $image = null;
+    protected Identifier $id;
+    protected Path|null $image = null;
 
-    public function getId(): string
+    public function getId(): Identifier
     {
         return $this->id;
     }
@@ -26,7 +29,7 @@ class Profile extends EntityBase
         return $this;
     }
 
-    public function __construct(string $id)
+    public function __construct(Identifier $id)
     {
         $this->id = $id;
     }
@@ -34,8 +37,8 @@ class Profile extends EntityBase
     public function toArray(): array
     {
         return [
-            'id' => $this->id,
-            'image' => $this->image,
+            'id' => $this->id->getValue(),
+            'image' => $this->image->getValue(),
         ];
     }
 }
