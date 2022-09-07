@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping">
-    <entity name="Product\Adapter\Database\Orm\Doctrine\Mapping\Product" 
+    <entity name="Product\Domain\Model\Product" 
             table="Products">
 
         <id name="id"
@@ -23,7 +23,7 @@
 
         <!-- Products - Shops -->
         <many-to-many field="shops" 
-                      target-entity="Shop\Adapter\Database\Orm\Doctrine\Mapping\Shop">
+                      target-entity="Shop\Domain\Model\Shop">
 
             <join-table name="Products_shops">
                 <join-columns>
@@ -40,7 +40,7 @@
         </many-to-many>
 
         <!-- Product - Group -->
-        <many-to-one field="group" target-entity="Group\Adapter\Database\Orm\Doctrine\Mapping\Group" inversed-by="products">
+        <many-to-one field="group" target-entity="Group\Domain\Model\Group" inversed-by="products">
             <join-column name="group_id" referenced-column-name="id" />
         </many-to-one>
         

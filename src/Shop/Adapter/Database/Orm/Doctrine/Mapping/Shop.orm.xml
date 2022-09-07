@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <doctrine-mapping>
 
-    <entity name="Shop\Adapter\Database\Orm\Doctrine\Mapping\Shop" 
+    <entity name="Shop\Domain\Model\Shop" 
             table="Shops">
 
         <id name="id"
@@ -25,7 +25,7 @@
 
         <!-- Shops - Groups -->
         <many-to-one field="group" 
-                     target-entity="Group\Adapter\Database\Orm\Doctrine\Mapping\Group" 
+                     target-entity="Group\Domain\Model\Group" 
                      inversed-by="shops">
 
             <join-column name="group_id" 

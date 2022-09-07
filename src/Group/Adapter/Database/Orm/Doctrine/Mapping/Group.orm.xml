@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping">
     
-    <entity name="Group\Adapter\Database\Orm\Doctrine\Mapping\Group" 
+    <entity name="Group\Domain\Model\Group" 
         table="Groups">
         
         <id name="id"
@@ -25,15 +25,15 @@
         <!-- Groups - Users -->
         <many-to-many field="users" 
                       mapped-by="groups" 
-                      target-entity="User\Adapter\Database\Orm\Doctrine\Mapping\User"/>
+                      target-entity="User\Domain\Model\User"/>
 
         <!-- Groups - Shops -->
         <one-to-many field="shops" 
-                     target-entity="Shop\Adapter\Database\Orm\Doctrine\Mapping\Shop" 
+                     target-entity="Shop\Domain\Model\Shop" 
                      mapped-by="group" />
 
         <!-- Groups - Product -->
-        <one-to-many field="products" target-entity="Product\Adapter\Database\Orm\Doctrine\Mapping\Product" mapped-by="group" />
+        <one-to-many field="products" target-entity="Product\Domain\Model\Product" mapped-by="group" />
         
         <unique-constraints>
 
