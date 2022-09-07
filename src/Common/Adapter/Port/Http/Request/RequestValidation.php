@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Common\Adapter\Framework\Http\Request;
+namespace Common\Adapter\Port\Http\Request;
 
-use Common\Adapter\Exception\InvalidArgumentException;
+use Common\Domain\Exception\InvalidArgumentException;
 use JsonException;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;

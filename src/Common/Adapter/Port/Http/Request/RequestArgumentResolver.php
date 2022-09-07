@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Common\Adapter\Framework\Http\Request;
+namespace Common\Adapter\Port\Http\Request;
 
-use Common\Adapter\Framework\Http\Dto\IRequestDto;
+use Common\Adapter\Port\Http\Dto\IRequestDto;
 use Generator;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
