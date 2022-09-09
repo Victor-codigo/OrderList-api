@@ -581,7 +581,7 @@ class ValidatorTest extends TestCase
     public function testValidateFileOk(): void
     {
         $return = $this->object
-            ->setValue('tests/Unit/Common/Adapter/Port/Validation/Validations/Fixtures/file.js')
+            ->setValue('tests/Unit/Common/Adapter/Validation/Validations/Fixtures/file.js')
             ->file('2M', false, null)
             ->validate();
 
@@ -595,7 +595,7 @@ class ValidatorTest extends TestCase
     public function testValidateFileError(): void
     {
         $return = $this->object
-            ->setValue('tests/Unit/Common/Adapter/Port/Validation/Validations/Fixtures/file.js')
+            ->setValue('tests/Unit/Common/Adapter/Validation/Validations/Fixtures/file.js')
             ->file('2M', false, 'image/png')
             ->validate();
 
