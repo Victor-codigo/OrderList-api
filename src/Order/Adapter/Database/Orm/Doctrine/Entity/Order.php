@@ -2,7 +2,7 @@
 
 namespace Order\Adapter\Database\Orm\Doctrine\Entity;
 
-use Common\Adapter\Framework\IdGenerator;
+use Common\Adapter\IdGenerator\IdGenerator;
 use DateTime;
 
 final class Order

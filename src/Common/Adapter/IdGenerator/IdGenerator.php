@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Common\Adapter\Framework;
+namespace Common\Adapter\IdGenerator;
 
 use Symfony\Component\Uid\Uuid;
 

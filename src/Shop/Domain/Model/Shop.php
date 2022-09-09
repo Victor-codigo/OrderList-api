@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Shop\Domain\Model;
 
-use Common\Adapter\Framework\IdGenerator;
+use Common\Adapter\IdGenerator\IdGenerator;
 use DateTime;
 use Group\Domain\Model\Group;
 

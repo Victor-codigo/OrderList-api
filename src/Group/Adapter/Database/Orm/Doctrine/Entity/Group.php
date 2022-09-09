@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Adapter\Database\Orm\Doctrine\Entity;
 
-use Common\Adapter\Framework\IdGenerator;
+use Common\Adapter\IdGenerator\IdGenerator;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

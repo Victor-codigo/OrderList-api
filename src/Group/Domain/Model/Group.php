@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Domain\Model;
 
-use Common\Adapter\Framework\IdGenerator;
+use Common\Adapter\IdGenerator\IdGenerator;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
 use DateTime;

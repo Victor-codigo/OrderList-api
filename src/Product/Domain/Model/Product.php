@@ -2,7 +2,7 @@
 
 namespace Product\Domain\Model;
 
-use Common\Adapter\Framework\IdGenerator;
+use Common\Adapter\IdGenerator\IdGenerator;
 use DateTime;
 use Group\Domain\Model\Group;
 use Shop\Domain\Model\Shop;

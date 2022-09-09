@@ -2,7 +2,7 @@
 
 namespace Order\Domain\Model;
 
-use Common\Adapter\Framework\IdGenerator;
+use Common\Adapter\IdGenerator\IdGenerator;
 use DateTime;
 
 final class Order
