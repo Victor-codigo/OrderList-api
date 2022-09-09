@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Common\Adapter\Port\Validation\Validations;
+namespace Common\Adapter\Validation\Validations;
 
 use Common\Domain\Validation\EMAIL_TYPES;
 use Common\Domain\Validation\TYPES;

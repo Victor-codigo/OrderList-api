@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Domain\Validation;
 
-use Common\Adapter\Port\Validation\Validations\ValidationConstraint;
+use Common\Adapter\Validation\Validations\ValidationConstraint;
 use DateTime;
 
 interface IValidation

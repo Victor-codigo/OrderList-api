@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Common\Adapter\Port\Validation;
+namespace Common\Adapter\Validation;
 
-use Common\Adapter\Port\Validation\Validations\ValidationConstraint;
+use Common\Adapter\Validation\Validations\ValidationConstraint;
 use Common\Domain\Validation\CONSTRAINTS_NAMES;
 use Common\Domain\Validation\IValidation;
 use Common\Domain\Validation\IValueObjectValidation;

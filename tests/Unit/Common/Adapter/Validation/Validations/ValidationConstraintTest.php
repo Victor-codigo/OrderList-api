@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Common\Adapter\Port\Validation\Validations;
+namespace Test\Unit\Common\Adapter\Validation\Validations;
 
-use Common\Adapter\Port\Validation\Validations\ValidationConstraint;
+use Common\Adapter\Validation\Validations\ValidationConstraint;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

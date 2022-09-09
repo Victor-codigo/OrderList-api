@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Common\Adapter\Port\Validation;
+namespace Common\Adapter\Validation;
 
-use Common\Adapter\Port\Validation\Validations\ValidationChoice;
-use Common\Adapter\Port\Validation\Validations\ValidationComparison;
-use Common\Adapter\Port\Validation\Validations\ValidationConstraint;
-use Common\Adapter\Port\Validation\Validations\ValidationDateTime;
-use Common\Adapter\Port\Validation\Validations\ValidationFile;
-use Common\Adapter\Port\Validation\Validations\ValidationGeneral;
-use Common\Adapter\Port\Validation\Validations\ValidationPositiveNegative;
-use Common\Adapter\Port\Validation\Validations\ValidationString;
+use Common\Adapter\Validation\Validations\ValidationChoice;
+use Common\Adapter\Validation\Validations\ValidationComparison;
+use Common\Adapter\Validation\Validations\ValidationConstraint;
+use Common\Adapter\Validation\Validations\ValidationDateTime;
+use Common\Adapter\Validation\Validations\ValidationFile;
+use Common\Adapter\Validation\Validations\ValidationGeneral;
+use Common\Adapter\Validation\Validations\ValidationPositiveNegative;
+use Common\Adapter\Validation\Validations\ValidationString;
 use Common\Domain\Validation\EMAIL_TYPES;
 use Common\Domain\Validation\IValidation;
 use Common\Domain\Validation\IValueObjectValidation;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Common\Adapter\Port\Validation\Fixtures;
+namespace Test\Unit\Common\Adapter\Validation\Fixtures;
 
 use Common\Domain\Model\ValueObject\Integer\IntegerValueObject;
 use Common\Domain\Validation\ConstraintFactory;

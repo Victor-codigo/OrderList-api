@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Common\Adapter\Port\Validation;
+namespace Test\Unit\Common\Adapter\Validation;
 
-use Common\Adapter\Port\Validation\ValidationChain;
+use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\EMAIL_TYPES;
 use Common\Domain\Validation\IValidation;
 use Common\Domain\Validation\TYPES;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use DateTimeZone;
 use PHPUnit\Framework\TestCase;
-use Test\Unit\Common\Adapter\Port\Validation\Fixtures\ValueObjectForTesting;
+use Test\Unit\Common\Adapter\Validation\Fixtures\ValueObjectForTesting;
 
 class ValidatorTest extends TestCase
 {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
-use Common\Adapter\Port\Validation\ValidationChain;
+use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Validation\IValidation;
 use Common\Domain\Validation\VALIDATION_ERRORS;
