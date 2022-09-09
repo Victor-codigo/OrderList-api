@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Common\Adapter\Port\Http\Request;
+namespace Common\Adapter\Http\Request;
 
 use Common\Domain\Exception\InvalidArgumentException;
 use JsonException;

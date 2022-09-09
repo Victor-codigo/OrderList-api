@@ -1,0 +1,4 @@
+services:
+
+imports:
+    - { resource: '../../../../../User/Adapter/Framework/Config/services/user.yaml' }    

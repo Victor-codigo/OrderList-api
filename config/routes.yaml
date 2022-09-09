@@ -1,3 +1,2 @@
-user:
-    resource: '../src/User/Adapter/Framework/Config/routes/routes.yaml'
-    prefix: 'user'
+routes:
+    resource: '../src/Common/Adapter/Framework/Config/Routes/routes.yaml'

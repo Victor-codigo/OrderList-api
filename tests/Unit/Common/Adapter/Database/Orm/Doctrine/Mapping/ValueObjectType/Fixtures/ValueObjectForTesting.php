@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\ValueObjectType\Fixtures;
 
-use Common\Adapter\Database\Orm\Doctrine\Mapping\ValueObjectType\ValueObjectTypeConverterTrait;
+use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\ValueObjectTypeConverterTrait;
 use Common\Domain\Model\ValueObject\ValueObjectBase;
 
 class ValueObjectForTesting extends ValueObjectBase

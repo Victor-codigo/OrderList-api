@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Common\Adapter\Database\Orm\Doctrine\Mapping\ValueObjectType;
+namespace Common\Adapter\Database\Orm\Doctrine\Mapping\Type;
 
 use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\ValueObjectBase;
