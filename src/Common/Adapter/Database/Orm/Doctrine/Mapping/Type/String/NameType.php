@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Common\Adapter\Database\Orm\Doctrine\Mapping\ValueObjectType\String;
+namespace Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String;
 
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\ValueObjectTypeConverterTrait;
 use Doctrine\DBAL\Types\StringType;
