@@ -5,3 +5,5 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 imports:
     - { resource: '../src/Common/Adapter/Framework/Config/Services/services.yaml' }    
+    - { resource: '../src/User/Adapter/Framework/Config/packages/doctrine.yaml' }
+    - { resource: '../src/User/Adapter/Framework/Config/packages/security.yaml' }

@@ -1,4 +1,15 @@
-services:
-
 imports:
     - { resource: '../../../../../User/Adapter/Framework/Config/services/user.yaml' }    
+
+services:
+
+    _defaults:
+        autowire: true    
+        autoconfigure: true 
+
+    Common\Adapter\Http\ArgumentResolver\ArgumentResolver:
+        tags:
+            - { name: controller.argument_value_resolver, priority: 50 }
+
+    Common\Adapter\Http\ArgumentResolver\:
+        resource: '../../../Http/ArgumentResolver/'
