@@ -1,10 +1,21 @@
 services:
 
     _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        autowire: true    
+        autoconfigure: true 
 
 
+    # Controllers
     User\Adapter\Controller\:
-        resource: '../../../../../User/Adapter/Controller/'
-        # tags: ['controller.service_arguments']
+        resource: '../../../Controller/'
+
+    # Services
+    User\Domain\Service\:
+        resource: '../../../../Domain/Service/'
+
+    # Models
+    User\Domain\Model\:
+        resource: '../../../../Domain/Model/'
+
+    User\Adapter\Database\Orm\Doctrine\Repository\UserRepository: ~
+    User\Domain\Repository\IUserRepository: '@User\Adapter\Database\Orm\Doctrine\Repository\UserRepository'
