@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Common\Adapter\Http\Request;
+namespace Common\Adapter\Http\ArgumentResolver;
 
 use Common\Domain\Exception\InvalidArgumentException;
 use JsonException;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class RequestValidation
 {
-    public function execute(Request $request): void
+    public function __invoke(Request $request): void
     {
         $this->validateContentType($request);
 
@@ -36,8 +36,8 @@ class RequestValidation
 
     private function validateContentType(Request $request): void
     {
-        if (!REQUEST_ALLOWED_CONTENT::has($request->getContentType())) {
-            throw InvalidArgumentException::createFromMessage(sprintf('Content-Type [%s] is not allowed. Only [$s] are allowed.', $request->getContentType(), implode(',', REQUEST_ALLOWED_CONTENT::cases())));
+        if (!REQUEST_ALLOWED_CONTENT::allowed($request->headers->get('Content-Type'))) {
+            throw InvalidArgumentException::createFromMessage(sprintf('Content-Type [%s] is not allowed. Only [%s] are allowed.', $request->getContentType(), implode(', ', array_column(REQUEST_ALLOWED_CONTENT::cases(), 'value'))));
         }
     }
 }

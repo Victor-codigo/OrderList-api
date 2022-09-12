@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Common\Adapter\Http\Request;
+namespace Common\Adapter\Http\ArgumentResolver;
 
 use Common\Adapter\Http\Dto\IRequestDto;
 use Generator;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 
-class RequestArgumentResolver implements ArgumentValueResolverInterface
+class ArgumentResolver implements ArgumentValueResolverInterface
 {
     private RequestValidation $requestValidation;
 
@@ -29,7 +29,7 @@ class RequestArgumentResolver implements ArgumentValueResolverInterface
 
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
     {
-        $this->requestValidation->execute($request);
+        $this->requestValidation->__invoke($request);
         $requestDto = $argument->getType();
 
         yield new $requestDto($request);
