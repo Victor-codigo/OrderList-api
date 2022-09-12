@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace User\Adapter\Database\Orm\Doctrine\Repository;
+namespace Common\Adapter\Database\Orm\Doctrine\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 
-abstract class UserRepositoryBase implements IUserRepository
+abstract class RepositoryBase
 {
     protected ServiceEntityRepository $serviceEntityRepository;
     protected ManagerRegistry $managerRegistry;
