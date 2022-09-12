@@ -21,6 +21,10 @@
                type="string" 
                length="50" 
                unique="true"/>
+        
+        <field name="roles" 
+               type="json"
+               nullable="true"/>
 
         <field name="createdOn"
                type="datetime"/>

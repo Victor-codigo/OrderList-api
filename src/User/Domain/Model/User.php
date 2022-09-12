@@ -16,6 +16,7 @@ final class User extends EntityBase
     private Email $email;
     private Name $name;
     private Password $password;
+    private array $roles;
     private DateTime $createdOn;
     private array $groups;
     private Profile $profile;
@@ -83,6 +84,21 @@ final class User extends EntityBase
         return $this;
     }
 
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($this->roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
     public function __construct(string $email, string $password, string $name)
     {
         $this->id = IdGenerator::createId();
@@ -101,6 +117,7 @@ final class User extends EntityBase
             'email' => $this->email->getValue(),
             'name' => $this->name->getValue(),
             'password' => $this->password->getValue(),
+            'roles' => $this->roles,
             'createdOn' => $this->createdOn->format(DateTime::RFC3339),
             'groups' => array_map(fn (Group $i) => $i->toArray(), $this->groups),
             'profile' => $this->profile->toArray(),
