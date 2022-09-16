@@ -10,15 +10,16 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220912110439 extends AbstractMigration
+final class Version20220914083854 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Data base creation';
+        return '';
     }
 
     public function up(Schema $schema): void
     {
+        // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE `Groups` (id CHAR(36) NOT NULL, name VARCHAR(50) NOT NULL, description TEXT, created_on DATETIME NOT NULL, UNIQUE INDEX u_groups_id (id), UNIQUE INDEX u_groups_name (name), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE Orders (id CHAR(36) NOT NULL, user_id CHAR(36) NOT NULL, product_id CHAR(36) NOT NULL, group_id CHAR(36) NOT NULL, deleted TINYINT(1) NOT NULL, price DOUBLE PRECISION DEFAULT NULL, amount DOUBLE PRECISION DEFAULT NULL, description TEXT, created_on DATETIME NOT NULL, bought_on DATETIME DEFAULT NULL, buy_on DATETIME DEFAULT NULL, INDEX IDX_E283F8D84584665A (product_id), INDEX IDX_user_id (user_id), INDEX IDX_user_group (group_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE Products (id CHAR(36) NOT NULL, group_id CHAR(36) NOT NULL, name VARCHAR(50) NOT NULL, description TEXT, created_on DATETIME NOT NULL, INDEX IDX_4ACC380CFE54D947 (group_id), UNIQUE INDEX u_products_id (id), UNIQUE INDEX u_products_name (name), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -42,6 +43,7 @@ final class Version20220912110439 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
+        // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE Orders DROP FOREIGN KEY FK_E283F8D8A76ED395');
         $this->addSql('ALTER TABLE Orders DROP FOREIGN KEY FK_E283F8D84584665A');
         $this->addSql('ALTER TABLE Orders DROP FOREIGN KEY FK_E283F8D8FE54D947');
