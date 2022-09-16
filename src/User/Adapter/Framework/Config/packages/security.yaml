@@ -7,15 +7,16 @@ security:
         # users_in_memory: { memory: null }
         user_provider:
             entity:
-                class: User\Domain\Model
+                class: User\Adapter\Security\User\UserSymfonyAdapter
                 property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            pattern: ^/en/user/create
             lazy: true
-            provider: users_in_memory
+            provider: user_provider
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -28,3 +29,4 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^api/en/user/create, roles: ROLE_ADMIN }
