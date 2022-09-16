@@ -8,6 +8,7 @@ use Common\Adapter\Validation\Validations\ValidationChoice;
 use Common\Adapter\Validation\Validations\ValidationComparison;
 use Common\Adapter\Validation\Validations\ValidationConstraint;
 use Common\Adapter\Validation\Validations\ValidationDateTime;
+use Common\Adapter\Validation\Validations\ValidationFactory;
 use Common\Adapter\Validation\Validations\ValidationFile;
 use Common\Adapter\Validation\Validations\ValidationGeneral;
 use Common\Adapter\Validation\Validations\ValidationPositiveNegative;
@@ -32,13 +33,13 @@ class ValidationChain implements ValidationInterface
     public function __construct()
     {
         $this->validator = new Validator($this);
-        $this->comparison = new ValidationComparison();
-        $this->datetime = new ValidationDateTime();
-        $this->file = new ValidationFile();
-        $this->general = new ValidationGeneral();
-        $this->positiveNegative = new ValidationPositiveNegative();
-        $this->string = new ValidationString();
-        $this->choice = new ValidationChoice();
+        $this->comparison = ValidationFactory::createValidationComparison();
+        $this->datetime = ValidationFactory::createValidationDateTime();
+        $this->file = ValidationFactory::createValidationFile();
+        $this->general = ValidationFactory::createValidationGeneral();
+        $this->positiveNegative = ValidationFactory::createValidationPositiveNegative();
+        $this->string = ValidationFactory::createValidationString();
+        $this->choice = ValidationFactory::createValidationChoice();
     }
 
     public function getValue(): mixed
