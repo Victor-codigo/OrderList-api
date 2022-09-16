@@ -198,8 +198,8 @@ class ConstraintFactory
             'choices' => $choices,
             'multiple' => $multiple,
             'strict' => $strict,
-            'strict' => $min,
-            'strict' => $max,
+            'min' => $min,
+            'max' => $max,
         ]);
     }
 }
