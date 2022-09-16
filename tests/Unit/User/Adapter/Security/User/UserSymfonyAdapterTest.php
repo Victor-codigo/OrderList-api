@@ -12,6 +12,7 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
 use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
 
+/** @covers UserSymfonyAdapter */
 class UserSymfonyAdapterTest extends TestCase
 {
     private UserSymfonyAdapter $object;
