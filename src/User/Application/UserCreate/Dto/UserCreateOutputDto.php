@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace User\Domain\Service\Create\Dto;
+namespace User\Application\UserCreate\Dto;
 
 class UserCreateOutputDto
 {
