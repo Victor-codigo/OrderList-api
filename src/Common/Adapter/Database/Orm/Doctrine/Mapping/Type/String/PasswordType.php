@@ -2,11 +2,21 @@
 
 declare(strict_types=1);
 
-namespace App\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String;
+namespace Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String;
 
-use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\ValueObjectTypeConverterTrait;
+use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\TypeBase;
+use Common\Domain\Model\ValueObject\String\Password;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 
-class PasswordType
+class PasswordType extends TypeBase
 {
-    use ValueObjectTypeConverterTrait;
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
+    {
+        return sprintf('VARCHAR(%d)', $column['length']);
+    }
+
+    public function getClassImplementationName(): string
+    {
+        return Password::class;
+    }
 }
