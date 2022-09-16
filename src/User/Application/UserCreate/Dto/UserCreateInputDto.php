@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace User\Application\UserCreate\Dto;
 
+use Common\Domain\Model\ValueObject\array\Roles;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Common\Domain\Model\ValueObject\array\Roles;
 use Common\Domain\Service\ServiceInputDtoInterface;
-use Common\Domain\Validation\IValidation;
+use Common\Domain\Validation\ValidationInterface;
 
 final class UserCreateInputDto implements ServiceInputDtoInterface
 {
@@ -43,7 +43,7 @@ final class UserCreateInputDto implements ServiceInputDtoInterface
         return new self($email, $password, $name, $roles, $profile);
     }
 
-    public function validate(IValidation $validator): array
+    public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([
             $this->email,

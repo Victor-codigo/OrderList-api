@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Test\Unit\Common\Adapter\Validation;
 
 use Common\Adapter\Validation\ValidationChain;
-use Common\Domain\Validation\IValidation;
 use Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\ValidationInterface;
 use PHPUnit\Framework\TestCase;
 use Test\Unit\Common\Adapter\Validation\Fixtures\ValueObjectForTesting;
 
-/** @covers Validator */
 class ValidatorTest extends TestCase
 {
-    private IValidation $object;
+    private ValidationInterface $object;
 
     public function setUp(): void
     {

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Common\Domain\Service;
 
-use Common\Domain\Validation\IValidation;
+use Common\Domain\Validation\ValidationInterface;
 
 interface ServiceInputDtoInterface
 {
-    public function validate(IValidation $validator): array;
+    public function validate(ValidationInterface $validator): array;
 }

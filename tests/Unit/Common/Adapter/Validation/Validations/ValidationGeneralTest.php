@@ -6,14 +6,14 @@ namespace Test\Unit\Common\Adapter\Validation\Validations;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\EMAIL_TYPES;
-use Common\Domain\Validation\IValidation;
 use Common\Domain\Validation\TYPES;
 use Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\ValidationInterface;
 use PHPUnit\Framework\TestCase;
 
 class ValidationGeneralTest extends TestCase
 {
-    private IValidation $object;
+    private ValidationInterface $object;
 
     public function setUp(): void
     {

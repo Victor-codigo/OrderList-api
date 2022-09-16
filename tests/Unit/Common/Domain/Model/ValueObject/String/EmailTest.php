@@ -6,13 +6,13 @@ namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Email;
-use Common\Domain\Validation\IValidation;
 use Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\ValidationInterface;
 use PHPUnit\Framework\TestCase;
 
 class EmailTest extends TestCase
 {
-    private IValidation $validator;
+    private ValidationInterface $validator;
     private string $validEmail = 'a.valid.email@host.com';
     private string $invalidEmail = 'this is an invalid email';
 

@@ -6,13 +6,13 @@ namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Name;
-use Common\Domain\Validation\IValidation;
 use Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\ValidationInterface;
 use PHPUnit\Framework\TestCase;
 
 class NameTest extends TestCase
 {
-    private IValidation $validation;
+    private ValidationInterface $validation;
 
     private const VALID_NAME = 'Juan';
 

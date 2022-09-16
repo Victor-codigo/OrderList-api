@@ -6,8 +6,8 @@ namespace Common\Adapter\Validation;
 
 use Common\Adapter\Validation\Validations\ValidationConstraint;
 use Common\Domain\Validation\CONSTRAINTS_NAMES;
-use Common\Domain\Validation\IValidation;
 use Common\Domain\Validation\IValueObjectValidation;
+use Common\Domain\Validation\ValidationInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class Validator
 {
     private ValidatorInterface $validator;
-    private readonly IValidation $validationChain;
+    private readonly ValidationInterface $validationChain;
 
     /**
      * @var ValidationConstraint[]
@@ -29,7 +29,7 @@ class Validator
         return $this->value;
     }
 
-    public function setValue(mixed $value): IValidation
+    public function setValue(mixed $value): ValidationInterface
     {
         $this->value = $value;
 

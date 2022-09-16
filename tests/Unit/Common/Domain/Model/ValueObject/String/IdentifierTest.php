@@ -6,13 +6,13 @@ namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Validation\IValidation;
 use Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\ValidationInterface;
 use PHPUnit\Framework\TestCase;
 
 class IdentifierTest extends TestCase
 {
-    private IValidation $validator;
+    private ValidationInterface $validator;
     private string $validId = '77020b89-fb7b-416c-9987-bffbeb3af6f8';
     private string $notValidId = 'not valid id';
 

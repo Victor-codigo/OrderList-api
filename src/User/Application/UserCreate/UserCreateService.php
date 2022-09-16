@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace User\Application\UserCreate;
 
 use Common\Domain\Exception\ValueObjectValidationException;
-use Common\Domain\Validation\IValidation;
+use Common\Domain\Validation\ValidationInterface;
 use User\Application\UserCreate\Dto\UserCreateInputDto;
 use User\Domain\Model\User;
 use User\Domain\Port\User\UserInterface;
@@ -14,9 +14,9 @@ use User\Domain\Repository\IUserRepository;
 class UserCreateService
 {
     private IUserRepository $repository;
-    private IValidation $validation;
+    private ValidationInterface $validation;
 
-    public function __construct(IUserRepository $repository, IValidation $validation)
+    public function __construct(IUserRepository $repository, ValidationInterface $validation)
     {
         $this->repository = $repository;
         $this->validation = $validation;

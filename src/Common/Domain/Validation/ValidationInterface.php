@@ -7,11 +7,11 @@ namespace Common\Domain\Validation;
 use Common\Adapter\Validation\Validations\ValidationConstraint;
 use DateTime;
 
-interface IValidation
+interface ValidationInterface
 {
     public function getValue(): mixed;
 
-    public function setValue(mixed $value): IValidation;
+    public function setValue(mixed $value): ValidationInterface;
 
     public function setConstraint(ValidationConstraint $constraint): void;
 

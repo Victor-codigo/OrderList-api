@@ -13,12 +13,12 @@ use Common\Adapter\Validation\Validations\ValidationGeneral;
 use Common\Adapter\Validation\Validations\ValidationPositiveNegative;
 use Common\Adapter\Validation\Validations\ValidationString;
 use Common\Domain\Validation\EMAIL_TYPES;
-use Common\Domain\Validation\IValidation;
 use Common\Domain\Validation\IValueObjectValidation;
 use Common\Domain\Validation\TYPES;
+use Common\Domain\Validation\ValidationInterface;
 use DateTime;
 
-class ValidationChain implements IValidation
+class ValidationChain implements ValidationInterface
 {
     private ValidationComparison $comparison;
     private ValidationDateTime $datetime;
@@ -46,7 +46,7 @@ class ValidationChain implements IValidation
         return $this->validator->getValue();
     }
 
-    public function setValue(mixed $value): IValidation
+    public function setValue(mixed $value): ValidationInterface
     {
         return $this->validator->setValue($value);
     }
