@@ -56,9 +56,9 @@ class ValidationChain implements IValidation
         $this->validator->setConstraint($constraint);
     }
 
-    public function validate(bool $removeConstraints = true): array
+    public function validate(): array
     {
-        return $this->validator->validate($removeConstraints);
+        return $this->validator->validate();
     }
 
     /**
@@ -67,16 +67,6 @@ class ValidationChain implements IValidation
     public function validateValueObject(IValueObjectValidation $valueObject): array
     {
         return $this->validator->validateValueObject($valueObject);
-    }
-
-    /**
-     * @param IValueObjectValidation[] $valueObjects
-     *
-     * @return VALIDATION_ERRORS[]
-     */
-    public function validateValueObjectArray(array $valueObjects): array
-    {
-        return $this->validator->validateValueObjectArray($valueObjects);
     }
 
     public function notBlank(): self

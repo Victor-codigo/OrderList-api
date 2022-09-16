@@ -51,25 +51,20 @@ class Validator
     /**
      * @return VALIDATION_ERRORS[]
      */
-    public function validate(bool $removeConstraints = true): array
+    public function validate(): array
     {
-        $errors = [];
         $constraints = array_map(
             fn (ValidationConstraint $v) => $v->constraint,
             $this->constraints
         );
 
-        $constraintErrors = $this->validator->validate($this->value, $constraints);
+        $errors = $this->validator->validate($this->value, $constraints);
 
-        if (0 !== count($constraintErrors)) {
-            $errors = $this->getListDomainErrors($constraintErrors);
+        if (0 === count($errors)) {
+            return [];
         }
 
-        if ($removeConstraints) {
-            $this->constraints = [];
-        }
-
-        return $errors;
+        return $this->getListDomainErrors($errors);
     }
 
     private function getListDomainErrors(ConstraintViolationList $errors): array
@@ -84,24 +79,19 @@ class Validator
             }
 
             $constraint = $this->findDomainError($errorCode);
-
-            if (null !== $constraint) {
-                $errorList[] = $constraint->idErrors[$errorCode];
-            }
+            $errorList[] = $constraint->idErrors[$errorCode];
         }
 
         return $errorList;
     }
 
-    private function findDomainError(string $errorCode): ValidationConstraint|null
+    private function findDomainError(string $errorCode): ValidationConstraint
     {
         foreach ($this->constraints as $constraint) {
             if ($constraint->hasError($errorCode)) {
                 return $constraint;
             }
         }
-
-        return null;
     }
 
     /**
@@ -115,21 +105,7 @@ class Validator
 
         return $this
             ->setValue($valueObject->getValue())
-            ->validate(true);
-    }
-
-    /**
-     * @param IValueObjectValidation $valueObjects
-     */
-    public function validateValueObjectArray(array $valueObjects): array
-    {
-        $errors = [];
-
-        foreach ($valueObjects as $valueObject) {
-            $errors = array_merge($errors, $this->validateValueObject($valueObject));
-        }
-
-        return $errors;
+            ->validate();
     }
 
     private function getValidationsCallBacks()

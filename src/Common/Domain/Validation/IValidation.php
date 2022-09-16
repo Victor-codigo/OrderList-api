@@ -15,12 +15,17 @@ interface IValidation
 
     public function setConstraint(ValidationConstraint $constraint): void;
 
-    public function validate(): array;
+    public function validate(bool $removeConstraints = true): array;
 
     /**
      * @return VALIDATION_ERRORS[]
      */
     public function validateValueObject(IValueObjectValidation $valueObject): array;
+
+    /**
+     * @param IValueObjectValidation[] $valueObjects
+     */
+    public function validateValueObjectArray(array $valueObjects): array;
 
     public function notBlank(): self;
 

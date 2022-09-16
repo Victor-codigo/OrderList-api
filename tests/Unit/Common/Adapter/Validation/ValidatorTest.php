@@ -60,38 +60,6 @@ class ValidatorTest extends TestCase
             'validateValueObject: It was expected that return value is '.VALIDATION_ERRORS::EQUAL_TO->name);
     }
 
-    public function testValidateCheckIfRemovesConstraints(): void
-    {
-        $return = $this->object
-            ->setValue('lola')
-            ->notBlank()
-            ->validate(true);
-
-        $return = $this->object
-            ->setValue('lola')
-            ->equalTo('lola')
-            ->validate(true);
-
-        $this->assertEmpty($return,
-            'validate: It was expected not errors');
-    }
-
-    public function testValidateCheckIfNotRemovesConstraints(): void
-    {
-        $return = $this->object
-            ->setValue('Marcos')
-            ->equalTo('Marcos')
-            ->validate(false);
-
-        $return = $this->object
-            ->setValue('lola')
-            ->notBlank()
-            ->validate(false);
-
-        $this->assertNotEmpty($return,
-            'validate: It should return errors');
-    }
-
     public function testValidateNotBlankOk(): void
     {
         $return = $this->object
