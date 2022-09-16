@@ -1,5 +1,5 @@
 user_create:
     path: /create
     controller: User\Adapter\Controller\UserCreate\UserCreateController
-    methods: GET
+    methods: POST
 
