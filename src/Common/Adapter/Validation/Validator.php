@@ -51,8 +51,9 @@ class Validator
     /**
      * @return VALIDATION_ERRORS[]
      */
-    public function validate(): array
+    public function validate(bool $removeConstraints = true): array
     {
+        $errorList = [];
         $constraints = array_map(
             fn (ValidationConstraint $v) => $v->constraint,
             $this->constraints
@@ -60,11 +61,15 @@ class Validator
 
         $errors = $this->validator->validate($this->value, $constraints);
 
-        if (0 === count($errors)) {
-            return [];
+        if (count($errors) > 0) {
+            $errorList = $this->getListDomainErrors($errors);
         }
 
-        return $this->getListDomainErrors($errors);
+        if ($removeConstraints) {
+            $this->constraints = [];
+        }
+
+        return $errorList;
     }
 
     private function getListDomainErrors(ConstraintViolationList $errors): array
@@ -105,7 +110,23 @@ class Validator
 
         return $this
             ->setValue($valueObject->getValue())
-            ->validate();
+            ->validate(true);
+    }
+
+    /**
+     * @param IValueObjectValidation $valueObjects
+     *
+     * @return @return VALIDATION_ERRORS[]
+     */
+    public function validateValueObjectArray(array $valueObjects): array
+    {
+        $errorList = [];
+
+        foreach ($valueObjects as $valueObject) {
+            $errorList = array_merge($errorList, $this->validateValueObject($valueObject));
+        }
+
+        return $errorList;
     }
 
     private function getValidationsCallBacks()
