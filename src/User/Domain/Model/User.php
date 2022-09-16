@@ -3,22 +3,26 @@
 namespace User\Domain\Model;
 
 use Common\Adapter\IdGenerator\IdGenerator;
+use Common\Domain\Exception\DtoInvalidPropertyException;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Model\ValueObject\String\Password;
+use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Model\ValueObject\array\Roles;
 use DateTime;
-use Group\Domain\Model\Group;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
-final class User extends EntityBase
+class User extends EntityBase
 {
     private Identifier $id;
     private Email $email;
     private Name $name;
     private Password $password;
-    private array $roles;
+    private Roles $roles;
     private DateTime $createdOn;
-    private array $groups;
+    private Collection $groups;
     private Profile $profile;
 
     public function getEmail(): Email
@@ -26,7 +30,7 @@ final class User extends EntityBase
         return $this->email;
     }
 
-    public function setEmail($email): self
+    public function setEmail(Email $email): self
     {
         $this->email = $email;
 
@@ -38,7 +42,7 @@ final class User extends EntityBase
         return $this->name;
     }
 
-    public function setName($name): self
+    public function setName(Name $name): self
     {
         $this->name = $name;
 
@@ -50,7 +54,7 @@ final class User extends EntityBase
         return $this->password;
     }
 
-     public function setPassword($password): self
+     public function setPassword(Password $password): self
      {
          $this->password = $password;
 
@@ -67,7 +71,7 @@ final class User extends EntityBase
         return $this->id;
     }
 
-    public function getGroups(): iterable
+    public function getGroups(): Collection
     {
         return $this->groups;
     }
@@ -77,37 +81,53 @@ final class User extends EntityBase
         return $this->profile;
     }
 
-    public function setProfile($profile): self
+    public function setProfile(Profile $profile): self
     {
         $this->profile = $profile;
 
         return $this;
     }
 
-    public function getRoles(): array
+    public function getRoles(): Roles
     {
-        $roles = $this->roles;
-        $roles[] = 'ROLE_USER';
+        $roles = $this->roles->getValue();
 
-        return array_unique($this->roles);
+        if (!in_array(USER_ROLES::USER, $roles)) {
+            $roles[] = USER_ROLES::USER;
+        }
+
+        return ValueObjectFactory::createRoles($roles);
     }
 
-    public function setRoles(array $roles): self
+    public function setRoles(Roles $roles): self
     {
         $this->roles = $roles;
 
         return $this;
     }
 
-    public function __construct(string $email, string $password, string $name)
+    public function __construct(Email $email, Password $password, Name $name, Roles $roles)
     {
-        $this->id = IdGenerator::createId();
+        $this->id = ValueObjectFactory::createIdentifier(IdGenerator::createId());
         $this->email = $email;
         $this->name = $name;
+        $this->roles = $roles;
         $this->password = $password;
         $this->createdOn = new DateTime();
-        $this->groups = [];
+        $this->groups = new ArrayCollection([]);
         $this->profile = new Profile($this->getId());
+    }
+
+    /**
+     * @throws DtoInvalidPropertyException
+     */
+    public static function createFromDto(object $dto): self
+    {
+        if (!isset($dto->email) || !isset($dto->password) || !isset($dto->name) || !isset($dto->roles)) {
+            throw new DtoInvalidPropertyException();
+        }
+
+        return new self($dto->email, $dto->password, $dto->name, $dto->roles);
     }
 
     public function toArray(): array
@@ -119,7 +139,7 @@ final class User extends EntityBase
             'password' => $this->password->getValue(),
             'roles' => $this->roles,
             'createdOn' => $this->createdOn->format(DateTime::RFC3339),
-            'groups' => array_map(fn (Group $i) => $i->toArray(), $this->groups),
+            'groups' => $this->groups->toArray(),
             'profile' => $this->profile->toArray(),
         ];
     }
