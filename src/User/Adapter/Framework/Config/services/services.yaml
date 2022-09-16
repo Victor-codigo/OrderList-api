@@ -6,16 +6,16 @@ services:
 
 
     # Controllers
-    User\Adapter\Controller\:
-        resource: '../../../Controller/'
+    User\Adapter\:
+        resource: '../../../'
+        exclude: '../../../Framework/'
 
     # Services
-    User\Domain\Service\:
-        resource: '../../../../Domain/Service/'
-
-    # Models
-    User\Domain\Model\:
-        resource: '../../../../Domain/Model/'
+    User\Domain\:
+        resource: '../../../../Domain/'
+    
+    User\Application\:
+        resource: '../../../../Application/'
 
     User\Adapter\Database\Orm\Doctrine\Repository\UserRepository: ~
     User\Domain\Repository\IUserRepository: '@User\Adapter\Database\Orm\Doctrine\Repository\UserRepository'
