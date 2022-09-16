@@ -8,7 +8,7 @@ use Common\Domain\Validation\ConstraintFactory;
 
 class Identifier extends StringValueObject
 {
-    public function __construct(string $id)
+    public function __construct(string|null $id)
     {
         parent::__construct($id);
     }
@@ -17,6 +17,12 @@ class Identifier extends StringValueObject
     {
         $this
             ->setConstraint(ConstraintFactory::notBlank())
+            ->setConstraint(ConstraintFactory::notNull())
             ->setConstraint(ConstraintFactory::uuId());
+    }
+
+    public function __toString()
+    {
+        return $this->getValue();
     }
 }

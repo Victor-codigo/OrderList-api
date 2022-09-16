@@ -8,7 +8,7 @@ use Common\Domain\Model\ValueObject\ValueObjectBase;
 
 abstract class IntegerValueObject extends ValueObjectBase
 {
-    protected readonly int $value;
+    protected readonly int|null $value;
 
     public function __construct(int $value)
     {
@@ -17,7 +17,7 @@ abstract class IntegerValueObject extends ValueObjectBase
         $this->defineConstraints();
     }
 
-    public function getValue(): int
+    public function getValue(): int|null
     {
         return $this->value;
     }

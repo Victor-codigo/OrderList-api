@@ -9,7 +9,7 @@ use Common\Domain\Validation\EMAIL_TYPES;
 
 class Email extends StringValueObject
 {
-    public function __construct(string $email)
+    public function __construct(string|null $email)
     {
         parent::__construct($email);
     }
@@ -18,6 +18,7 @@ class Email extends StringValueObject
     {
         $this
             ->setConstraint(ConstraintFactory::notBlank())
+            ->setConstraint(ConstraintFactory::notNull())
             ->setConstraint(ConstraintFactory::email(EMAIL_TYPES::HTML5));
     }
 }

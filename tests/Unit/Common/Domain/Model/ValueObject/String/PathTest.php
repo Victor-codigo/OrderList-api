@@ -9,6 +9,7 @@ use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Validation\IValidation;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use PHPUnit\Framework\TestCase;
+use User\Domain\Model\UserEntityConstraints;
 
 class PathTest extends TestCase
 {
@@ -30,7 +31,7 @@ class PathTest extends TestCase
         $return = $this->validation->validateValueObject($path);
 
         $this->assertEmpty($return,
-            'It was expected that does\'nt return errors');
+            'It was expected that doesn\'t return errors');
     }
 
     public function testPathNotBlankAndShort(): void
@@ -44,7 +45,7 @@ class PathTest extends TestCase
 
     public function testPathNotTooLong(): void
     {
-        $path = $this->createPath(str_repeat('-', Path::PATH_MAX_LENGTH + 1));
+        $path = $this->createPath(str_repeat('-', UserEntityConstraints::PASSWORD_MAX_LENGTH + 1));
         $return = $this->validation->validateValueObject($path);
 
         $this->assertEquals([VALIDATION_ERRORS::STRING_TOO_LONG], $return,
