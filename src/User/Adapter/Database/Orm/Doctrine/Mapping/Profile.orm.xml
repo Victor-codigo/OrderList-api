@@ -3,11 +3,11 @@
     <entity name="User\Domain\Model\Profile" table="Profile">
         
         <id name="id" 
-            type="string" 
+            type="IdentifierType" 
             column-definition="CHAR(36) NOT NULL"/>
 
         <field name="image"
-               type="string"
+               type="PathType"
                length="256"
                nullable="true"/>
     </entity>

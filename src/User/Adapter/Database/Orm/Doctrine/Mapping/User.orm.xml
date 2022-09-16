@@ -5,26 +5,25 @@
             table="Users">
 
         <id name="id" 
-            type="string" 
+            type="IdentifierType" 
             column-definition="CHAR(36) NOT NULL"/>
 
         <field name="email" 
-               type="string" 
+               type="EmailType" 
                length="50" 
                unique="true"/>
 
         <field name="password" 
-               type="string" 
+               type="PasswordType" 
                length="256"/>
             
         <field name="name" 
-               type="string" 
+               type="NameType" 
                length="50" 
                unique="true"/>
         
         <field name="roles" 
-               type="json"
-               nullable="true"/>
+               type="RolesType"/>
 
         <field name="createdOn"
                type="datetime"/>
