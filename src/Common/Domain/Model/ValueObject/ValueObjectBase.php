@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject;
 
-use Common\Domain\Validation\CONSTRAINTS_NAMES;
 use Common\Domain\Validation\ConstraintDto;
-use Common\Domain\Validation\IValueObjectValidation;
+use Common\Domain\Validation\CONSTRAINTS_NAMES;
+use Common\Domain\Validation\ValueObjectValidationInterface;
 
-abstract class ValueObjectBase implements IValueObjectValidation, ValueObjectInterface
+abstract class ValueObjectBase implements ValueObjectValidationInterface, ValueObjectInterface
 {
     /**
      * @var ConstraintDto[]

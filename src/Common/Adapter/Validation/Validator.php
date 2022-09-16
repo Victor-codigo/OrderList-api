@@ -6,8 +6,8 @@ namespace Common\Adapter\Validation;
 
 use Common\Adapter\Validation\Validations\ValidationConstraint;
 use Common\Domain\Validation\CONSTRAINTS_NAMES;
-use Common\Domain\Validation\IValueObjectValidation;
 use Common\Domain\Validation\ValidationInterface;
+use Common\Domain\Validation\ValueObjectValidationInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -102,7 +102,7 @@ class Validator
     /**
      * @return VALIDATION_ERRORS[]
      */
-    public function validateValueObject(IValueObjectValidation $valueObject): array
+    public function validateValueObject(ValueObjectValidationInterface $valueObject): array
     {
         foreach ($valueObject->getConstraints() as $valueObjectConstraint) {
             $this->validationCallbacks[$valueObjectConstraint->type->value](...$valueObjectConstraint->params);
@@ -114,7 +114,7 @@ class Validator
     }
 
     /**
-     * @param IValueObjectValidation $valueObjects
+     * @param ValueObjectValidationInterface $valueObjects
      *
      * @return @return VALIDATION_ERRORS[]
      */

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Domain\Validation;
 
-interface IValueObjectValidation
+interface ValueObjectValidationInterface
 {
     /**
      * @return ConstraintDto[]

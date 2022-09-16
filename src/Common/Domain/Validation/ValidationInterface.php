@@ -20,10 +20,10 @@ interface ValidationInterface
     /**
      * @return VALIDATION_ERRORS[]
      */
-    public function validateValueObject(IValueObjectValidation $valueObject): array;
+    public function validateValueObject(ValueObjectValidationInterface $valueObject): array;
 
     /**
-     * @param IValueObjectValidation[] $valueObjects
+     * @param ValueObjectValidationInterface[] $valueObjects
      */
     public function validateValueObjectArray(array $valueObjects): array;
 

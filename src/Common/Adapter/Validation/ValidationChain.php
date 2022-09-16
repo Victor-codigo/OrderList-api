@@ -13,9 +13,9 @@ use Common\Adapter\Validation\Validations\ValidationGeneral;
 use Common\Adapter\Validation\Validations\ValidationPositiveNegative;
 use Common\Adapter\Validation\Validations\ValidationString;
 use Common\Domain\Validation\EMAIL_TYPES;
-use Common\Domain\Validation\IValueObjectValidation;
 use Common\Domain\Validation\TYPES;
 use Common\Domain\Validation\ValidationInterface;
+use Common\Domain\Validation\ValueObjectValidationInterface;
 use DateTime;
 
 class ValidationChain implements ValidationInterface
@@ -64,13 +64,13 @@ class ValidationChain implements ValidationInterface
     /**
      * @return VALIDATION_ERRORS[]
      */
-    public function validateValueObject(IValueObjectValidation $valueObject): array
+    public function validateValueObject(ValueObjectValidationInterface $valueObject): array
     {
         return $this->validator->validateValueObject($valueObject);
     }
 
     /**
-     * @param IValueObjectValidation[] $name
+     * @param ValueObjectValidationInterface[] $name
      *
      * @return VALIDATION_ERRORS[]
      */
