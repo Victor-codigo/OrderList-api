@@ -6,7 +6,7 @@ namespace User\Domain\Repository;
 
 use User\Domain\Model\User;
 
-interface IUserRepository
+interface UserRepositoryInterface
 {
     public function save(User $user): self;
 

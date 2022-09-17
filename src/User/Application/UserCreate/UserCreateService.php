@@ -9,14 +9,14 @@ use Common\Domain\Validation\ValidationInterface;
 use User\Application\UserCreate\Dto\UserCreateInputDto;
 use User\Domain\Model\User;
 use User\Domain\Port\User\UserInterface;
-use User\Domain\Repository\IUserRepository;
+use User\Domain\Repository\UserRepositoryInterface;
 
 class UserCreateService
 {
-    private IUserRepository $repository;
+    private UserRepositoryInterface $repository;
     private ValidationInterface $validation;
 
-    public function __construct(IUserRepository $repository, ValidationInterface $validation)
+    public function __construct(UserRepositoryInterface $repository, ValidationInterface $validation)
     {
         $this->repository = $repository;
         $this->validation = $validation;
