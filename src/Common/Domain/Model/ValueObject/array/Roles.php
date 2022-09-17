@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Common\Domain\Model\ValueObject\array;
 
 use Common\Domain\Validation\ConstraintFactory;
+use User\Domain\Model\USER_ENTITY_CONSTRAINTS;
 use User\Domain\Model\USER_ROLES;
-use User\Domain\Model\UserEntityConstraints;
 
 class Roles extends ArrayValueObject
 {
@@ -14,7 +14,7 @@ class Roles extends ArrayValueObject
     {
         $roles = array_map(
             fn (USER_ROLES $rol) => [$rol],
-            UserEntityConstraints::ROLES_VALUES
+            USER_ENTITY_CONSTRAINTS::ROLES_VALUES
         );
 
         $this

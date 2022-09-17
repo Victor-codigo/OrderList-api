@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace User\Domain\Model;
 
-final class UserEntityConstraints
+final class USER_ENTITY_CONSTRAINTS
 {
     public const ID_LENGTH = 36;
     public const ID_NOT_NULL = true;
