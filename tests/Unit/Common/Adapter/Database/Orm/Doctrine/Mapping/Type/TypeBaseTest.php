@@ -9,6 +9,7 @@ use Common\Domain\Exception\InvalidArgumentException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Fixtures\CustomType;
 use Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Fixtures\CustomValueObject;
 use stdClass;
@@ -64,7 +65,8 @@ class TypeBaseTest extends TestCase
         $this->object->convertToDatabaseValue($value, $this->platform);
     }
 
-    public function convertToPHPValueValueIsNull()
+    /** @test */
+    public function convertToPHPValueValueIsNull(): void
     {
         $value = null;
         $return = $this->object->convertToPHPValue($value, $this->platform);
@@ -73,7 +75,8 @@ class TypeBaseTest extends TestCase
             'convertToPHPValue: It was expected to return null');
     }
 
-    public function convertToPHPValueValueIsValueObject()
+    /** @test */
+    public function convertToPHPValueValueIsValueObject(): void
     {
         $this->object
             ->expects($this->once())
@@ -85,5 +88,15 @@ class TypeBaseTest extends TestCase
 
         $this->assertInstanceOf(CustomValueObject::class, $return,
             'convertToPHPValue: ValueObject class is wrong');
+    }
+
+    /** @test */
+    public function getNameReturnValue(): void
+    {
+        $return = $this->object->getName();
+        $objectReflection = new ReflectionClass($this->object);
+
+        $this->assertEquals($objectReflection->getName(), $return,
+            'getName: The name returned is wrong');
     }
 }

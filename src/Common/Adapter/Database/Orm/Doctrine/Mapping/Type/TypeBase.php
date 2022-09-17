@@ -14,9 +14,7 @@ abstract class TypeBase extends Type
 
     public function getName(): string
     {
-        return end(
-            explode('\\', get_class($this))
-        );
+        return get_class($this);
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
