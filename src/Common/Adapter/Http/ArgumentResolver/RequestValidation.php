@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class RequestValidation
 {
+    /**
+     * @throws InvalidArgumentException
+     */
     public function __invoke(Request $request): void
     {
         $this->validateContentType($request);
@@ -22,6 +25,9 @@ class RequestValidation
         }
     }
 
+    /**
+     * @throws JsonException
+     */
     private function createParams(Request $request): ParameterBag
     {
         $params = (array) json_decode(
@@ -34,6 +40,9 @@ class RequestValidation
         return new ParameterBag($params);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     private function validateContentType(Request $request): void
     {
         if (!REQUEST_ALLOWED_CONTENT::allowed($request->headers->get('Content-Type'))) {

@@ -10,6 +10,10 @@ enum REQUEST_ALLOWED_CONTENT: string
 
     public static function allowed(string|null $type): bool
     {
+        if (null === $type) {
+            return false;
+        }
+
         return null !== static::tryFrom($type);
     }
 }
