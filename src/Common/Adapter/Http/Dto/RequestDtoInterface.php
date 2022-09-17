@@ -6,7 +6,7 @@ namespace Common\Adapter\Http\Dto;
 
 use Symfony\Component\HttpFoundation\Request;
 
-interface IRequestDto
+interface RequestDtoInterface
 {
     public function __construct(Request $request);
 }

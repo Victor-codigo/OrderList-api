@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Http\ArgumentResolver;
 
-use Common\Adapter\Http\Dto\IRequestDto;
+use Common\Adapter\Http\Dto\RequestDtoInterface;
 use Generator;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
+use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
 class ArgumentResolver implements ArgumentValueResolverInterface
 {
@@ -24,7 +24,7 @@ class ArgumentResolver implements ArgumentValueResolverInterface
     {
         $requestReflection = new ReflectionClass($argument->getType());
 
-        return $requestReflection->implementsInterface(IRequestDto::class);
+        return $requestReflection->implementsInterface(RequestDtoInterface::class);
     }
 
     public function resolve(Request $request, ArgumentMetadata $argument): Generator
