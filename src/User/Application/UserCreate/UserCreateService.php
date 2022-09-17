@@ -9,7 +9,7 @@ use Common\Domain\Validation\ValidationInterface;
 use User\Application\UserCreate\Dto\UserCreateInputDto;
 use User\Domain\Model\User;
 use User\Domain\Port\User\UserInterface;
-use User\Domain\Repository\UserRepositoryInterface;
+use User\Domain\Repository\Port\UserRepositoryInterface;
 
 class UserCreateService
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace User\Domain\Repository;
+namespace User\Domain\Repository\Port;
 
 use User\Domain\Model\User;
 

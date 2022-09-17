@@ -18,4 +18,4 @@ services:
         resource: '../../../../Application/'
 
     User\Adapter\Database\Orm\Doctrine\Repository\UserRepository: ~
-    User\Domain\Repository\UserRepositoryInterface: '@User\Adapter\Database\Orm\Doctrine\Repository\UserRepository'
+    User\Domain\Repository\Port\UserRepositoryInterface: '@User\Adapter\Database\Orm\Doctrine\Repository\UserRepository'

@@ -7,7 +7,7 @@ namespace User\Adapter\Database\Orm\Doctrine\Repository;
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Doctrine\Persistence\ManagerRegistry;
 use User\Domain\Model\User;
-use User\Domain\Repository\UserRepositoryInterface;
+use User\Domain\Repository\Port\UserRepositoryInterface;
 
 final class UserRepository extends RepositoryBase implements UserRepositoryInterface
 {
