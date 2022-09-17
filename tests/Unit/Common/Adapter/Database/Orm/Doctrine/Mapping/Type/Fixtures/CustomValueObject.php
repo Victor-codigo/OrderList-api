@@ -2,15 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\ValueObjectType\Fixtures;
+namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Fixtures;
 
-use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\ValueObjectTypeConverterTrait;
 use Common\Domain\Model\ValueObject\ValueObjectBase;
 
-class ValueObjectForTesting extends ValueObjectBase
+class CustomValueObject extends ValueObjectBase
 {
-    use ValueObjectTypeConverterTrait;
-
     private readonly int|null $value;
 
     public function __construct(int|null $value)
