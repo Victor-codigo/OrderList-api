@@ -17,6 +17,8 @@ class PathTest extends TestCase
 
     public function setUp(): void
     {
+        parent::setUp();
+
         $this->validation = new ValidationChain();
     }
 

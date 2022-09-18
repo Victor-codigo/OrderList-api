@@ -18,6 +18,8 @@ class IdentifierTest extends TestCase
 
     public function setUp(): void
     {
+        parent::setUp();
+
         $this->validator = new ValidationChain();
     }
 
