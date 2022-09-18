@@ -10,11 +10,6 @@ use User\Domain\Model\USER_ENTITY_CONSTRAINTS;
 
 class Name extends StringValueObject
 {
-    public function __construct(string|null $name)
-    {
-        parent::__construct($name);
-    }
-
     protected function defineConstraints(): void
     {
         $this

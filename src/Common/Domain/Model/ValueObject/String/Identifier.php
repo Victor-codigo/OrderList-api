@@ -9,11 +9,6 @@ use Common\Domain\Validation\TYPES;
 
 class Identifier extends StringValueObject
 {
-    public function __construct(string|null $id)
-    {
-        parent::__construct($id);
-    }
-
     protected function defineConstraints(): void
     {
         $this

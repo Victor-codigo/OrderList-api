@@ -10,11 +10,6 @@ use User\Domain\Model\PROFILE_ENTITY_CONSTRAINTS;
 
 class Path extends StringValueObject
 {
-    public function __construct(string $path)
-    {
-        parent::__construct($path);
-    }
-
     public function defineConstraints(): void
     {
         $this

@@ -10,11 +10,6 @@ use User\Domain\Model\USER_ENTITY_CONSTRAINTS;
 
 class Password extends StringValueObject
 {
-    public function __construct(string|null $value)
-    {
-        parent::__construct($value);
-    }
-
     public function defineConstraints(): void
     {
         $this

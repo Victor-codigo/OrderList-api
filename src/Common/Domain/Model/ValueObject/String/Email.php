@@ -10,11 +10,6 @@ use Common\Domain\Validation\TYPES;
 
 class Email extends StringValueObject
 {
-    public function __construct(string|null $email)
-    {
-        parent::__construct($email);
-    }
-
     protected function defineConstraints(): void
     {
         $this
