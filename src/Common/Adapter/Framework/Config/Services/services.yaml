@@ -20,7 +20,4 @@ services:
     Common\Domain\:
         resource: '../../../../Domain/'
 
-    Common\Application\:
-        resource: '../../../../Application/'
-
     
