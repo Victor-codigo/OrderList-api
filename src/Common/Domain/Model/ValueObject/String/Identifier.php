@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Common\Domain\Model\ValueObject\String;
 
 use Common\Domain\Validation\ConstraintFactory;
+use Common\Domain\Validation\TYPES;
 
 class Identifier extends StringValueObject
 {
@@ -18,6 +19,7 @@ class Identifier extends StringValueObject
         $this
             ->setConstraint(ConstraintFactory::notBlank())
             ->setConstraint(ConstraintFactory::notNull())
+            ->setConstraint(ConstraintFactory::type(TYPES::STRING))
             ->setConstraint(ConstraintFactory::uuId());
     }
 

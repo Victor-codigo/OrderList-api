@@ -6,6 +6,7 @@ namespace Common\Domain\Model\ValueObject\String;
 
 use Common\Domain\Validation\ConstraintFactory;
 use Common\Domain\Validation\EMAIL_TYPES;
+use Common\Domain\Validation\TYPES;
 
 class Email extends StringValueObject
 {
@@ -19,6 +20,7 @@ class Email extends StringValueObject
         $this
             ->setConstraint(ConstraintFactory::notBlank())
             ->setConstraint(ConstraintFactory::notNull())
+            ->setConstraint(ConstraintFactory::type(TYPES::STRING))
             ->setConstraint(ConstraintFactory::email(EMAIL_TYPES::HTML5));
     }
 }

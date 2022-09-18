@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Common\Domain\Model\ValueObject\array;
 
 use Common\Domain\Validation\ConstraintFactory;
+use Common\Domain\Validation\TYPES;
 use User\Domain\Model\USER_ENTITY_CONSTRAINTS;
 use User\Domain\Model\USER_ROLES;
 
@@ -20,6 +21,7 @@ class Roles extends ArrayValueObject
         $this
             ->setConstraint(ConstraintFactory::notBlank())
             ->setConstraint(ConstraintFactory::notNull())
+            ->setConstraint(ConstraintFactory::type(TYPES::ARRAY))
             ->setConstraint(ConstraintFactory::choice($roles, false, null, null, null));
     }
 }
