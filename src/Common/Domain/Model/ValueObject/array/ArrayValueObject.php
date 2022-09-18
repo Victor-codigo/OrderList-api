@@ -21,4 +21,17 @@ abstract class ArrayValueObject extends ValueObjectBase
 
         $this->defineConstraints();
     }
+
+    public function getValueObjects(): array
+    {
+        $valueObjects = [];
+
+        foreach ($this->getValue() as $value) {
+            if ($value instanceof ValueObjectBase) {
+                $valueObjects[] = $value;
+            }
+        }
+
+        return $valueObjects;
+    }
 }
