@@ -108,9 +108,15 @@ class Validator
             $this->validationCallbacks[$valueObjectConstraint->type->value](...$valueObjectConstraint->params);
         }
 
-        return $this
+        $errorList = $this
             ->setValue($valueObject->getValue())
             ->validate(true);
+
+        foreach ($valueObject->getValueObjects() as $childValueObject) {
+            $errorList = array_merge($errorList, $this->validateValueObject($childValueObject));
+        }
+
+        return $errorList;
     }
 
     /**

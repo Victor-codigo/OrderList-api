@@ -24,14 +24,6 @@ abstract class ArrayValueObject extends ValueObjectBase
 
     public function getValueObjects(): array
     {
-        $valueObjects = [];
-
-        foreach ($this->getValue() as $value) {
-            if ($value instanceof ValueObjectBase) {
-                $valueObjects[] = $value;
-            }
-        }
-
-        return $valueObjects;
+        return $this->getValue();
     }
 }

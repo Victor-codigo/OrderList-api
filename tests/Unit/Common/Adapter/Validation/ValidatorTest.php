@@ -8,6 +8,7 @@ use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use PHPUnit\Framework\TestCase;
+use Test\Unit\Common\Adapter\Validation\Fixtures\ValueObjectChildValueObjects;
 use Test\Unit\Common\Adapter\Validation\Fixtures\ValueObjectForTesting;
 
 class ValidatorTest extends TestCase
@@ -99,16 +100,6 @@ class ValidatorTest extends TestCase
     }
 
     /** @test */
-    public function validateValueObjectError()
-    {
-        $valueObject = new ValueObjectForTesting(17);
-        $return = $this->object->validateValueObject($valueObject);
-
-        $this->assertEquals([VALIDATION_ERRORS::EQUAL_TO], $return,
-            'validateValueObject: It was expected that return value is '.VALIDATION_ERRORS::EQUAL_TO->name);
-    }
-
-    /** @test */
     public function validateErrorAndNotRemoveConstraints()
     {
         $return = $this->object
@@ -150,6 +141,43 @@ class ValidatorTest extends TestCase
 
         $this->assertEmpty($return,
             'validateValueObject: It was expected that return value is array empty');
+    }
+
+    /** @test */
+    public function validateValueObjectError()
+    {
+        $valueObject = new ValueObjectForTesting(17);
+        $return = $this->object->validateValueObject($valueObject);
+
+        $this->assertEquals([VALIDATION_ERRORS::EQUAL_TO], $return,
+            'validateValueObject: It was expected that return value is '.VALIDATION_ERRORS::EQUAL_TO->name);
+    }
+
+    /** @test */
+    public function validateValueObjectChildValueObjectsOk()
+    {
+        $valueObject = new ValueObjectChildValueObjects([
+            new ValueObjectForTesting(18),
+            new ValueObjectForTesting(18),
+        ]);
+
+        $return = $this->object->validateValueObject($valueObject);
+
+        $this->assertEmpty($return,
+            'validateValueObject: It was expected that return value is array empty');
+    }
+
+    /** @test */
+    public function validateValueObjectChildValueObjectsError()
+    {
+        $valueObject = new ValueObjectChildValueObjects([
+            new ValueObjectForTesting(10),
+            new ValueObjectForTesting(11),
+        ]);
+
+        $return = $this->object->validateValueObject($valueObject);
+
+        $this->assertEquals([VALIDATION_ERRORS::EQUAL_TO, VALIDATION_ERRORS::EQUAL_TO], $return);
     }
 
     /** @test */

@@ -12,4 +12,6 @@ interface ValueObjectValidationInterface
     public function getConstraints(): array;
 
     public function getValue(): mixed;
+
+    public function getValueObjects(): array;
 }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject;
 
-use Common\Domain\Validation\ConstraintDto;
 use Common\Domain\Validation\CONSTRAINTS_NAMES;
+use Common\Domain\Validation\ConstraintDto;
 use Common\Domain\Validation\ValueObjectValidationInterface;
 
 abstract class ValueObjectBase implements ValueObjectValidationInterface, ValueObjectInterface
@@ -35,5 +35,10 @@ abstract class ValueObjectBase implements ValueObjectValidationInterface, ValueO
     public function getConstraints(): array
     {
         return $this->constraints;
+    }
+
+    public function getValueObjects(): array
+    {
+        return [];
     }
 }

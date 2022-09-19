@@ -28,4 +28,9 @@ class CustomValueObject extends ValueObjectBase
     protected function defineConstraints(): void
     {
     }
+
+    public function getValueObjects(): array
+    {
+        return [];
+    }
 }

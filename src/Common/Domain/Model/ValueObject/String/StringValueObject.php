@@ -21,4 +21,9 @@ abstract class StringValueObject extends ValueObjectBase
 
         $this->defineConstraints();
     }
+
+    public function getValueObjects(): array
+    {
+        return [];
+    }
 }

@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Common\Domain\Model\ValueObject\array;
+namespace Test\Unit\Common\Adapter\Validation\Fixtures;
 
+use Common\Domain\Model\ValueObject\array\ArrayValueObject;
 use Common\Domain\Validation\ConstraintFactory;
 use Common\Domain\Validation\TYPES;
 
-class Roles extends ArrayValueObject
+class ValueObjectChildValueObjects extends ArrayValueObject
 {
     public function defineConstraints(): void
     {
@@ -15,10 +16,5 @@ class Roles extends ArrayValueObject
             ->setConstraint(ConstraintFactory::notNull())
             ->setConstraint(ConstraintFactory::notBlank())
             ->setConstraint(ConstraintFactory::type(TYPES::ARRAY));
-    }
-
-    public function getValueObjects(): array
-    {
-        return $this->getValue();
     }
 }
