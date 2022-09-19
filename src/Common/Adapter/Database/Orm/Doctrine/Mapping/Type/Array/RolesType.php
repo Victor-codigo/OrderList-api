@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Common\Adapter\Database\Orm\Doctrine\Mapping\Type\array;
+namespace Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array;
 
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\TypeBase;
 use Common\Domain\Model\ValueObject\array\Roles;

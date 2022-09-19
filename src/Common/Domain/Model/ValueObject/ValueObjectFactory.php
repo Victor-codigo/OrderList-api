@@ -17,6 +17,9 @@ use Common\Domain\Model\ValueObject\array\valueObjectArrayFactory;
 
 final class ValueObjectFactory implements ValueObjectStringFactoryInterface, ValueObjectArrayFactoryInterface
 {
+    /**
+     * @param Rol[]|null $roles
+     */
     public static function createRoles(array|null $roles): Roles
     {
         return valueObjectArrayFactory::createRoles($roles);

@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
 use Common\Adapter\Validation\ValidationChain;
-use Common\Domain\Model\ValueObject\String\Rol;
+use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use PHPUnit\Framework\TestCase;
 use User\Domain\Model\USER_ROLES;
+use stdClass;
 
 class RolTest extends TestCase
 {
@@ -25,7 +26,7 @@ class RolTest extends TestCase
     /** @test */
     public function validationOk()
     {
-        $this->object = $this->createRol(USER_ROLES::ADMIN->value);
+        $this->object = $this->createRol(USER_ROLES::ADMIN);
         $return = $this->validator->validateValueObject($this->object);
 
         $this->assertEmpty($return);
@@ -43,13 +44,13 @@ class RolTest extends TestCase
     /** @test */
     public function checkRolNotValid()
     {
-        $this->object = $this->createRol('Not valid rol');
+        $this->object = $this->createRol(new stdClass());
         $return = $this->validator->validateValueObject($this->object);
 
         $this->assertEquals([VALIDATION_ERRORS::CHOICE_NOT_SUCH], $return);
     }
 
-    private function createRol(string|null $rol): Rol
+    private function createRol(object|null $rol): Rol
     {
         return new Rol($rol);
     }

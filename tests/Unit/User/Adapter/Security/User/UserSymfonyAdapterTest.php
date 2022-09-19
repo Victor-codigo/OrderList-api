@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Security\User;
 
+use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -51,11 +52,11 @@ class UserSymfonyAdapterTest extends TestCase
     /** @test */
     public function getRoles(): void
     {
-        $roles = ValueObjectFactory::createRoles([USER_ROLES::USER]);
+        $roles = ValueObjectFactory::createRoles([new Rol(USER_ROLES::USER)]);
         $this->object->getUser()->setRoles($roles);
         $return = $this->object->getRoles();
 
-        $this->assertEquals($return, $roles->getValue(),
+        $this->assertEquals($return, [USER_ROLES::USER->value],
             'getRoles: The roles returned is not the expected');
     }
 

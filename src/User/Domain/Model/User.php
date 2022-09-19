@@ -4,12 +4,13 @@ namespace User\Domain\Model;
 
 use Common\Adapter\IdGenerator\IdGenerator;
 use Common\Domain\Exception\DtoInvalidPropertyException;
+use Common\Domain\Model\ValueObject\array\Roles;
+use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Common\Domain\Model\ValueObject\array\Roles;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -92,8 +93,8 @@ class User extends EntityBase
     {
         $roles = $this->roles->getValue();
 
-        if (!in_array(USER_ROLES::USER, $roles)) {
-            $roles[] = USER_ROLES::USER;
+        if (!in_array(new Rol(USER_ROLES::USER), $roles)) {
+            $roles[] = new Rol(USER_ROLES::USER);
         }
 
         return ValueObjectFactory::createRoles($roles);
@@ -128,19 +129,5 @@ class User extends EntityBase
         }
 
         return new self($dto->email, $dto->password, $dto->name, $dto->roles);
-    }
-
-    public function toArray(): array
-    {
-        return [
-            'id' => $this->id->getValue(),
-            'email' => $this->email->getValue(),
-            'name' => $this->name->getValue(),
-            'password' => $this->password->getValue(),
-            'roles' => $this->roles,
-            'createdOn' => $this->createdOn->format(DateTime::RFC3339),
-            'groups' => $this->groups->toArray(),
-            'profile' => $this->profile->toArray(),
-        ];
     }
 }

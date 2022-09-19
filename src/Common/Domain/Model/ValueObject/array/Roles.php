@@ -19,6 +19,10 @@ class Roles extends ArrayValueObject
 
     public function getValueObjects(): array
     {
+        if (null === $this->getValue()) {
+            return [];
+        }
+
         return $this->getValue();
     }
 }

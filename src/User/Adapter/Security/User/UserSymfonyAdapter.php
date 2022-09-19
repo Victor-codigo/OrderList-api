@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace User\Adapter\Security\User;
 
+use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -36,9 +37,14 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
 
     public function getRoles(): array
     {
-        return $this->user
+        $roles = $this->user
             ->getRoles()
             ->getValue();
+
+        return array_map(
+            fn (Rol $rol) => $rol->getValue()->value,
+            $roles
+        );
     }
 
     public function eraseCredentials()
