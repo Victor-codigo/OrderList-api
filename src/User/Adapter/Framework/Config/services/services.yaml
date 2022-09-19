@@ -13,6 +13,9 @@ services:
     # Services
     User\Domain\:
         resource: '../../../../Domain/'
+
+    User\Domain\Service\UserRegisterKeyValidationService:
+        arguments: ['%env(string:USER_REGISTER_KEY)%']
     
     User\Application\:
         resource: '../../../../Application/'
