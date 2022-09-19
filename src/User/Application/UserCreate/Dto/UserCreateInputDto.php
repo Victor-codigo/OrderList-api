@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace User\Application\UserCreate\Dto;
 
+use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Model\ValueObject\String\Password;
-use Common\Domain\Model\ValueObject\String\Rol;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Model\ValueObject\array\Roles;
 use Common\Domain\Service\ServiceInputDtoInterface;
 use Common\Domain\Validation\ValidationInterface;
-use User\Domain\Model\USER_ROLES;
 
 final class UserCreateInputDto implements ServiceInputDtoInterface
 {
@@ -22,15 +21,15 @@ final class UserCreateInputDto implements ServiceInputDtoInterface
     public readonly Roles|null $roles;
     public readonly ProfileCreateInputDto|null $profile;
 
+    /**
+     * @param Rol[]|null $roles
+     */
     private function __construct(string|null $email, string|null $password, string|null $name, array|null $roles, ProfileCreateInputDto|null $profile)
     {
         $this->email = ValueObjectFactory::createEmail($email);
         $this->password = ValueObjectFactory::createPassword($password);
         $this->name = ValueObjectFactory::createName($name);
-        $this->roles = ValueObjectFactory::createRoles(array_map(
-            fn (USER_ROLES $rol) => new Rol($rol->value),
-            $roles
-        ));
+        $this->roles = ValueObjectFactory::createRoles($roles);
         $this->profile = $profile;
     }
 
