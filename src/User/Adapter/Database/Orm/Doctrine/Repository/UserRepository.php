@@ -16,19 +16,15 @@ final class UserRepository extends RepositoryBase implements UserRepositoryInter
         parent::__construct($managerRegistry, User::class);
     }
 
-    public function save(User $user): self
+    public function save(User $user): void
     {
         $this->objectManager->persist($user);
         $this->objectManager->flush();
-
-        return $this;
     }
 
-    public function remove(User $user): self
+    public function remove(User $user): void
     {
         $this->objectManager->remove($user);
         $this->objectManager->flush();
-
-        return $this;
     }
 }

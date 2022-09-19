@@ -8,7 +8,7 @@ use User\Domain\Model\User;
 
 interface UserRepositoryInterface
 {
-    public function save(User $user): self;
+    public function save(User $user): void;
 
-    public function remove(User $user): self;
+    public function remove(User $user): void;
 }
