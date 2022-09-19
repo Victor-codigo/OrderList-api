@@ -4,18 +4,18 @@ namespace User\Domain\Model;
 
 use Common\Adapter\IdGenerator\IdGenerator;
 use Common\Domain\Exception\DtoInvalidPropertyException;
-use Common\Domain\Model\ValueObject\array\Roles;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Model\ValueObject\array\Roles;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-class User extends EntityBase
+class User
 {
     private Identifier $id;
     private Email $email;

@@ -7,7 +7,7 @@ namespace User\Domain\Model;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Path;
 
-class Profile extends EntityBase
+class Profile
 {
     protected Identifier $id;
     protected Path|null $image = null;
@@ -32,13 +32,5 @@ class Profile extends EntityBase
     public function __construct(Identifier $id)
     {
         $this->id = $id;
-    }
-
-    public function toArray(): array
-    {
-        return [
-            'id' => $this->id->getValue(),
-            'image' => $this->image->getValue(),
-        ];
     }
 }
