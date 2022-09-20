@@ -6,6 +6,7 @@ namespace Common\Adapter\Validation\Validations;
 
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\Uuid;
 
 class ValidationString extends ValidationConstraintBase
@@ -45,6 +46,32 @@ class ValidationString extends ValidationConstraintBase
                 Uuid::TOO_LONG_ERROR => VALIDATION_ERRORS::UUID_TOO_LONG,
                 Uuid::TOO_SHORT_ERROR => VALIDATION_ERRORS::UUID_TOO_SHORT,
             ]
+        );
+    }
+
+    public function regEx(string $pattern, bool $patternMatch = true): ValidationConstraint
+    {
+        return $this->createRegexConstraint(
+            $pattern,
+            $patternMatch,
+            [Regex::REGEX_FAILED_ERROR => VALIDATION_ERRORS::REGEX_FAIL]
+        );
+    }
+
+    public function alphanumeric(): ValidationConstraint
+    {
+        return $this->createRegexConstraint(
+            '/^[a-zA-Z0-9_]+$/i',
+            true,
+            [Regex::REGEX_FAILED_ERROR => VALIDATION_ERRORS::ALPHANUMERIC]
+        );
+    }
+
+    private function createRegexConstraint(string $pattern, bool $patternMatch = true, array $errors = []): ValidationConstraint
+    {
+        return $this->createConstraint(
+            new Regex($pattern, null, null, $patternMatch, null, null, null, []),
+            $errors
         );
     }
 

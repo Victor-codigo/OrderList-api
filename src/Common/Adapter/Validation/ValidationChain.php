@@ -143,6 +143,20 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    public function regEx(string $pattern, bool $patternMatch = true): self
+    {
+        $this->validator->setConstraint($this->string->regEx($pattern, $patternMatch));
+
+        return $this;
+    }
+
+    public function alphanumeric(): self
+    {
+        $this->validator->setConstraint($this->string->alphanumeric());
+
+        return $this;
+    }
+
     public function equalTo(mixed $value): self
     {
         $this->validator->setConstraint($this->comparison->equalTo($value));

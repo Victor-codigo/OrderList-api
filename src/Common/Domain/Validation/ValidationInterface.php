@@ -45,6 +45,10 @@ interface ValidationInterface
 
     public function uuId(array $versions = [4], bool $strict = true): self;
 
+    public function regEx(string $pattern, bool $patternMatch = true): self;
+
+    public function alphanumeric(): self;
+
     public function equalTo(mixed $value): self;
 
     public function notEqualTo(mixed $value): self;

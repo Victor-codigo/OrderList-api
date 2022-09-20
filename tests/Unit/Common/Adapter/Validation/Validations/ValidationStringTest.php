@@ -167,4 +167,64 @@ class ValidationStringTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::UUID_TOO_SHORT], $return,
             'validate: It was expected to return an empty array');
     }
+
+    /** @test */
+    public function validateRegExOk(): void
+    {
+        $return = $this->object
+            ->setValue('123')
+            ->regEx('/^[0-9]{3}$/i')
+            ->validate();
+
+        $this->assertIsArray($return);
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function validateRegExFail(): void
+    {
+        $return = $this->object
+            ->setValue('1234')
+            ->regEx('/^[0-9]{3}$/i')
+            ->validate();
+
+        $this->assertIsArray($return);
+        $this->assertEquals([VALIDATION_ERRORS::REGEX_FAIL], $return);
+    }
+
+    /** @test */
+    public function validateRegExOkWhenFailPattern(): void
+    {
+        $return = $this->object
+            ->setValue('1234')
+            ->regEx('/^[0-9]{3}$/i', false)
+            ->validate();
+
+        $this->assertIsArray($return);
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function validateAlphanumericOk(): void
+    {
+        $return = $this->object
+            ->setValue('1234_ab')
+            ->alphanumeric()
+            ->validate();
+
+        $this->assertIsArray($return);
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function validateAlphanumericFail(): void
+    {
+        $return = $this->object
+            ->setValue('1234_ab-')
+            ->alphanumeric()
+            ->validate();
+
+        $this->assertIsArray($return);
+        $this->assertEquals([VALIDATION_ERRORS::ALPHANUMERIC], $return);
+    }
 }

@@ -78,4 +78,8 @@ enum VALIDATION_ERRORS
     case UUID_INVALID_VERSION;
     case UUID_TOO_LONG;
     case UUID_TOO_SHORT;
+
+    case REGEX_FAIL;
+
+    case ALPHANUMERIC;
 }
