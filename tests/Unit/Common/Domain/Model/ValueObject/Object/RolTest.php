@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Common\Domain\Model\ValueObject\String;
+namespace Test\Unit\Common\Domain\Model\ValueObject\Object;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\Rol;
