@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Validation\Validations;
 
+use Common\Adapter\Validation\Constraints\Alphanumeric\Alphanumeric;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
@@ -51,27 +52,17 @@ class ValidationString extends ValidationConstraintBase
 
     public function regEx(string $pattern, bool $patternMatch = true): ValidationConstraint
     {
-        return $this->createRegexConstraint(
-            $pattern,
-            $patternMatch,
+        return $this->createConstraint(
+            new Regex($pattern, null, null, $patternMatch, null, null, null, []),
             [Regex::REGEX_FAILED_ERROR => VALIDATION_ERRORS::REGEX_FAIL]
         );
     }
 
     public function alphanumeric(): ValidationConstraint
     {
-        return $this->createRegexConstraint(
-            '/^[a-zA-Z0-9_]+$/i',
-            true,
-            [Regex::REGEX_FAILED_ERROR => VALIDATION_ERRORS::ALPHANUMERIC]
-        );
-    }
-
-    private function createRegexConstraint(string $pattern, bool $patternMatch = true, array $errors = []): ValidationConstraint
-    {
         return $this->createConstraint(
-            new Regex($pattern, null, null, $patternMatch, null, null, null, []),
-            $errors
+            new Alphanumeric(),
+            [Alphanumeric::ALPHANUMERIC_FAILED_ERROR => VALIDATION_ERRORS::ALPHANUMERIC]
         );
     }
 

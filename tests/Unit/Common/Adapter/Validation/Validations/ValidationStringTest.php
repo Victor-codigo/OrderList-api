@@ -227,4 +227,17 @@ class ValidationStringTest extends TestCase
         $this->assertIsArray($return);
         $this->assertEquals([VALIDATION_ERRORS::ALPHANUMERIC], $return);
     }
+
+    /** @test */
+    public function validateAlphanumericANdRegex(): void
+    {
+        $return = $this->object
+            ->setValue('1234_ab-')
+            ->regEx('/^[0-9]$/')
+            ->alphanumeric()
+            ->validate();
+
+        $this->assertIsArray($return);
+        $this->assertEquals([VALIDATION_ERRORS::REGEX_FAIL, VALIDATION_ERRORS::ALPHANUMERIC], $return);
+    }
 }
