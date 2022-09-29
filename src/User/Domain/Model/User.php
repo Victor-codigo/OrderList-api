@@ -3,6 +3,7 @@
 namespace User\Domain\Model;
 
 use Common\Adapter\IdGenerator\IdGenerator;
+use Common\Domain\Event\EventRegisterTrait;
 use Common\Domain\Exception\DtoInvalidPropertyException;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Email;
@@ -14,9 +15,12 @@ use Common\Domain\Model\ValueObject\array\Roles;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use User\Domain\Event\UserPreRegistered\UserPreRegisteredEvent;
 
 class User
 {
+    use EventRegisterTrait;
+
     private Identifier $id;
     private Email $email;
     private Name $name;
@@ -25,6 +29,7 @@ class User
     private DateTime $createdOn;
     private Collection $groups;
     private Profile $profile;
+    private Identifier|null $activationToken;
 
     public function getEmail(): Email
     {
@@ -107,7 +112,12 @@ class User
         return $this;
     }
 
-    public function __construct(Email $email, Password $password, Name $name, Roles $roles)
+    public function getActivationToken()
+    {
+        return $this->activationToken;
+    }
+
+    public function __construct(Email $email, Password $password, Name $name, Roles $roles, Identifier|null $activationToken = null)
     {
         $this->id = ValueObjectFactory::createIdentifier(IdGenerator::createId());
         $this->email = $email;
@@ -117,6 +127,7 @@ class User
         $this->createdOn = new DateTime();
         $this->groups = new ArrayCollection([]);
         $this->profile = new Profile($this->getId());
+        $this->activationToken = $activationToken;
     }
 
     /**
@@ -128,6 +139,13 @@ class User
             throw new DtoInvalidPropertyException();
         }
 
-        return new self($dto->email, $dto->password, $dto->name, $dto->roles);
+        $activationToken = $dto->activationToken ?? null;
+
+        return new self($dto->email, $dto->password, $dto->name, $dto->roles, $activationToken);
+    }
+
+    public function onCreated(): void
+    {
+        $this->eventDispatchRegister(new UserPreRegisteredEvent($this));
     }
 }

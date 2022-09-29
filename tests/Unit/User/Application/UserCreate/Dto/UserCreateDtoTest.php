@@ -13,6 +13,12 @@ use User\Domain\Model\USER_ROLES;
 
 class UserCreateDtoTest extends TestCase
 {
+    private const ACTIVATION_TOKEN = '95852be1-7df7-4e9f-82a9-ef4db6296050';
+    private const REGISTRATION_KEY = '23db9ca1-1568-473e-8c23-c4613205cf36';
+    private const ADMIN_EMAIL = 'admin@email.com';
+    private const APP_NAME = 'App Name';
+    private const URL_EMAIL_CONFIRMATION = 'www.domain.com/confirmation';
+
     private UserCreateInputDto $object;
     private ValidationChain $validator;
 
@@ -30,7 +36,12 @@ class UserCreateDtoTest extends TestCase
             'email@host.com',
             'password',
             'John',
-            [new Rol(USER_ROLES::USER)]
+            [new Rol(USER_ROLES::USER)],
+            self::ACTIVATION_TOKEN,
+            self::REGISTRATION_KEY,
+            self::ADMIN_EMAIL,
+            self::APP_NAME,
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
@@ -45,7 +56,12 @@ class UserCreateDtoTest extends TestCase
             'email@host',
             'password',
             'John',
-            [new Rol(USER_ROLES::USER)]
+            [new Rol(USER_ROLES::USER)],
+            self::ACTIVATION_TOKEN,
+            self::REGISTRATION_KEY,
+            self::ADMIN_EMAIL,
+            self::APP_NAME,
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
@@ -60,7 +76,12 @@ class UserCreateDtoTest extends TestCase
             'email@host.com',
             'short',
             'John',
-            [new Rol(USER_ROLES::USER)]
+            [new Rol(USER_ROLES::USER)],
+            self::ACTIVATION_TOKEN,
+            self::REGISTRATION_KEY,
+            self::ADMIN_EMAIL,
+            self::APP_NAME,
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
@@ -75,7 +96,12 @@ class UserCreateDtoTest extends TestCase
             'email@host.com',
             'password',
             'Ana',
-            [new Rol(USER_ROLES::USER)]
+            [new Rol(USER_ROLES::USER)],
+            self::ACTIVATION_TOKEN,
+            self::REGISTRATION_KEY,
+            self::ADMIN_EMAIL,
+            self::APP_NAME,
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
@@ -90,7 +116,12 @@ class UserCreateDtoTest extends TestCase
             'email@host.com',
             'password',
             'John',
-            []
+            [],
+            self::ACTIVATION_TOKEN,
+            self::REGISTRATION_KEY,
+            self::ADMIN_EMAIL,
+            self::APP_NAME,
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
