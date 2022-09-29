@@ -32,7 +32,7 @@ final class USER_ENTITY_CONSTRAINTS
     public const ROLES_NOT_NULL = true;
     public const ROLES_UNIQUE = true;
     public const ROLES_TYPE = 'json';
-    public const ROLES_VALUES = [USER_ROLES::ADMIN, USER_ROLES::USER];
+    public const ROLES_VALUES = [USER_ROLES::ADMIN, USER_ROLES::USER, USER_ROLES::NOT_ACTIVE];
 
     public const CREATED_ON_LENGTH = 50;
     public const CREATED_ON_NOT_NULL = true;
