@@ -10,9 +10,9 @@ use Common\Domain\Event\EventRegisterTrait;
 class TraitClass
 {
     use EventRegisterTrait{
-        eventRegister as public;
+        eventDispatchRegister as public;
     }
     use EventDispatcherTrait{
-        eventsDispatch as public;
+        eventsRegisteredDispatch as public;
     }
 }

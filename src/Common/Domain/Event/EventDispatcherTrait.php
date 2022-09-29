@@ -9,9 +9,9 @@ use Common\Domain\Ports\Event\EventDispatcherInterface;
 trait EventDispatcherTrait
 {
     /**
-     * @param EventDomain[] $eventsRegistered
+     * @param EventDomainInterface[] $eventsRegistered
      */
-    protected function eventsDispatch(EventDispatcherInterface $eventDispatcher, array ...$eventsRegistered): void
+    protected function eventsRegisteredDispatch(EventDispatcherInterface $eventDispatcher, array ...$eventsRegistered): void
     {
         foreach (array_merge(...$eventsRegistered) as $eventData) {
             $eventDispatcher->dispatch($eventData);

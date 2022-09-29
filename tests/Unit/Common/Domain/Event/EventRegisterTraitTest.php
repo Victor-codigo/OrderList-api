@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Event;
 
-use Common\Domain\Event\EventDomain;
 use PHPUnit\Framework\TestCase;
 use Test\Unit\Common\Domain\Event\Fixtures\CustomEvent;
 use Test\Unit\Common\Domain\Event\Fixtures\TraitClass;
@@ -33,10 +32,10 @@ class EventRegisterTraitTest extends TestCase
     /** @test */
     public function registerNewEvent(): void
     {
-        $eventDomain1 = new EventDomain($this->event);
-        $eventDomain2 = new EventDomain($this->event);
-        $this->object->eventRegister($eventDomain1);
-        $this->object->eventRegister($eventDomain2);
+        $eventDomain1 = $this->event;
+        $eventDomain2 = $this->event;
+        $this->object->eventDispatchRegister($eventDomain1);
+        $this->object->eventDispatchRegister($eventDomain2);
 
         $this->assertEquals([$eventDomain1, $eventDomain2], $this->object->getEventsRegistered());
     }

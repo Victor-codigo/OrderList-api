@@ -7,11 +7,11 @@ namespace Common\Domain\Event;
 trait EventRegisterTrait
 {
     /**
-     * @var EventDomain[]
+     * @var EventDomainInterface[]
      */
     private array $eventsRegistered = [];
 
-    protected function eventRegister(EventDomain $event): void
+    protected function eventDispatchRegister(EventDomainInterface $event): void
     {
         $this->eventsRegistered[] = $event;
     }

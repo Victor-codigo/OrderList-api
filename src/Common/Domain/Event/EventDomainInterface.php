@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Common\Domain\Event;
 
+use DateTimeImmutable;
+
 interface EventDomainInterface
 {
-    public function __invoke(): void;
+    public function getOccurreddOn(): DateTimeImmutable;
 }
