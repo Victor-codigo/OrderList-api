@@ -28,7 +28,7 @@ class UserSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function getUserReturnsTheUser(): void
+    public function returnsTheUser(): void
     {
         $return = $this->object->getUser();
 
@@ -37,7 +37,7 @@ class UserSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function setUserSetTheUser(): void
+    public function setsTheUser(): void
     {
         $userNew = $this->createMock(User::class);
         $return = $this->object->setUser($userNew);
@@ -70,7 +70,7 @@ class UserSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function getUserIdentifierGetTheIdentifier(): void
+    public function getTheIdentifier(): void
     {
         $email = ValueObjectFactory::createEmail('test@email.com');
         $this->object->getUser()->setEmail($email);
@@ -81,7 +81,7 @@ class UserSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function getPasswordGetThePassword(): void
+    public function getThePassword(): void
     {
         $password = ValueObjectFactory::createPassword('pass');
         $this->object->getUser()->setPassword($password);
@@ -89,143 +89,5 @@ class UserSymfonyAdapterTest extends TestCase
 
         $this->assertEquals($return, $password->getValue(),
             'getPassword: The password returned is not the expected');
-    }
-
-    /** @test */
-    public function passwordHashThePasswordIsHashed(): void
-    {
-        $password = ValueObjectFactory::createPassword('pass');
-        $passwordHashed = 'hashed password';
-
-        $this->passwordHAsher
-            ->expects($this->once())
-            ->method('hashPassword')
-            ->with($this->object, $password->getValue())
-            ->willReturn($passwordHashed);
-
-        $this->object->getUser()->setPassword($password);
-        $return = $this->object->passwordHash();
-
-        $this->assertEquals($return, $this->object,
-            'passwordHash: Doesn\'t return and instance of the class');
-
-        $this->assertEquals($this->object->getUser()->getPassword()->getValue(), $passwordHashed,
-            'passwordIsValid: Hashed password is not correct');
-    }
-
-    /** @test */
-    public function passwordIsValidPasswordNeedRehashAndValidPassword(): void
-    {
-        $password = ValueObjectFactory::createPassword('pass');
-        $passwordHashed = 'hashed password';
-
-        $this->passwordHAsher
-            ->expects($this->once())
-            ->method('needsRehash')
-            ->with($this->object)
-            ->willReturn(true);
-
-        $this->passwordHAsher
-            ->expects($this->once())
-            ->method('isPasswordValid')
-            ->with($this->object, $password->getValue())
-            ->willReturn(true);
-
-        $this->passwordHAsher
-            ->expects($this->once())
-            ->method('hashPassword')
-            ->with($this->object, $password->getValue())
-            ->willReturn($passwordHashed);
-
-        $this->object->getUser()->setPassword($password);
-        $return = $this->object->passwordIsValid($password->getValue());
-
-        $this->assertTrue($return,
-            'passwordIsValid: Password is not correct');
-
-        $this->assertEquals($this->object->getUser()->getPassword()->getValue(), $passwordHashed,
-            'passwordIsValid: Hashed password is not correct');
-    }
-
-    /** @test */
-    public function passwordIsValidPasswordNeedRehashAndInvalidPassword(): void
-    {
-        $password = ValueObjectFactory::createPassword('pass');
-        $passwordHashed = 'hashed password';
-
-        $this->passwordHAsher
-            ->expects($this->once())
-            ->method('needsRehash')
-            ->with($this->object)
-            ->willReturn(true);
-
-        $this->passwordHAsher
-            ->expects($this->once())
-            ->method('isPasswordValid')
-            ->with($this->object, $password->getValue())
-            ->willReturn(false);
-
-        $this->passwordHAsher
-            ->expects($this->once())
-            ->method('hashPassword')
-            ->with($this->object, $password->getValue())
-            ->willReturn($passwordHashed);
-
-        $this->object->getUser()->setPassword($password);
-        $return = $this->object->passwordIsValid($password->getValue());
-
-        $this->assertFalse($return,
-            'passwordIsValid: Password is not correct');
-
-        $this->assertEquals($this->object->getUser()->getPassword()->getValue(), $passwordHashed,
-            'passwordIsValid: Hashed password is not correct');
-    }
-
-    /** @test */
-    public function passwordIsValidPasswordIsValid(): void
-    {
-        $password = ValueObjectFactory::createPassword('pass');
-
-        $this->passwordHAsher
-            ->expects($this->once())
-            ->method('needsRehash')
-            ->with($this->object)
-            ->willReturn(false);
-
-        $this->passwordHAsher
-            ->expects($this->once())
-            ->method('isPasswordValid')
-            ->with($this->object, $password->getValue())
-            ->willReturn(true);
-
-        $this->object->getUser()->setPassword($password);
-        $return = $this->object->passwordIsValid($password->getValue());
-
-        $this->assertTrue($return,
-            'passwordIsValid: Password is not correct');
-    }
-
-    /** @test */
-    public function passwordIsValidPasswordNotValid(): void
-    {
-        $password = ValueObjectFactory::createPassword('pass');
-
-        $this->passwordHAsher
-            ->expects($this->once())
-            ->method('needsRehash')
-            ->with($this->object)
-            ->willReturn(false);
-
-        $this->passwordHAsher
-            ->expects($this->once())
-            ->method('isPasswordValid')
-            ->with($this->object, $password->getValue())
-            ->willReturn(false);
-
-        $this->object->getUser()->setPassword($password);
-        $return = $this->object->passwordIsValid($password->getValue());
-
-        $this->assertFalse($return,
-            'passwordIsValid: Password is not incorrect');
     }
 }
