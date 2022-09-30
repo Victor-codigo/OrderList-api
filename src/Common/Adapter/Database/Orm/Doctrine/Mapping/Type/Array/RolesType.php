@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array;
 
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\TypeBase;
+use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Model\ValueObject\array\Roles;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use JsonException;
 
 class RolesType extends TypeBase
 {
@@ -20,11 +22,22 @@ class RolesType extends TypeBase
         return Roles::class;
     }
 
+    /**
+     * @throws JsonException
+     * @throws InvalidArgumentException
+     */
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
-        return json_encode(
-            parent::convertToDatabaseValue($value, $platform),
-            JSON_THROW_ON_ERROR
-        );
+        if (!$value instanceof Roles) {
+            throw InvalidArgumentException::createFromMessage('convertToDatabaseValue - value: is not a '.Roles::class);
+        }
+
+        $roles = [];
+
+        foreach (parent::convertToDatabaseValue($value, $platform) as $rol) {
+            $roles[] = $rol->getValue()->value;
+        }
+
+        return json_encode($roles, JSON_THROW_ON_ERROR);
     }
 }
