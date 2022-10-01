@@ -83,4 +83,14 @@ class ArgumentResolverTest extends TestCase
         foreach ($this->object->resolve($this->request, $this->argumentMetaData) as $dto) {
         }
     }
+
+    /** @test */
+    public function resolveValidationAllowedContentNull(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $this->request->headers->set('Content-Type', null);
+        foreach ($this->object->resolve($this->request, $this->argumentMetaData) as $dto) {
+        }
+    }
 }
