@@ -7,14 +7,14 @@ namespace Common\Adapter\Translator;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Ports\Translator\TranslatorInterface;
 use Symfony\Component\Translation\LocaleSwitcher;
-use Symfony\Contracts\Translation\TranslatorInterface as SymfonyTranslator;
+use Symfony\Contracts\Translation\TranslatorInterface as SymfonyTranslatorInterface;
 
 class TranslatorSymfonyAdapter implements TranslatorInterface
 {
-    private SymfonyTranslator $translator;
+    private SymfonyTranslatorInterface $translator;
     private LocaleSwitcher $localeSwitcher;
 
-    public function __construct(SymfonyTranslator $translator, LocaleSwitcher $localeSwitcher)
+    public function __construct(SymfonyTranslatorInterface $translator, LocaleSwitcher $localeSwitcher)
     {
         $this->translator = $translator;
         $this->localeSwitcher = $localeSwitcher;
