@@ -1,0 +1,2 @@
+imports:
+    - { resource: '../../../../../User/Adapter/Framework/Config/packages/twig.yaml' }
