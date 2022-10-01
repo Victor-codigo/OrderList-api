@@ -23,7 +23,8 @@
                unique="true"/>
         
         <field name="roles" 
-               type="RolesType"/>
+               type="RolesType"
+               nullable="true"/>
 
         <field name="createdOn"
                type="datetime"/>

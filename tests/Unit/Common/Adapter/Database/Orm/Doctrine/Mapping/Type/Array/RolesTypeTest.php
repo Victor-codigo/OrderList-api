@@ -36,6 +36,16 @@ class RolesTypeTest extends TestCase
     }
 
     /** @test */
+    public function convertToDatabaseValueEmptyValuesToNull(): void
+    {
+        $roles = new Roles([]);
+
+        $return = $this->object->convertToDatabaseValue($roles, $this->abstractPlatform);
+
+        $this->assertNull($return);
+    }
+
+    /** @test */
     public function convertToDatabaseValueThrowExceptionInvalidArgument(): void
     {
         $this->expectException(InvalidArgumentException::class);

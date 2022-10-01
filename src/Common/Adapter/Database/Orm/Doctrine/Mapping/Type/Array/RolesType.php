@@ -38,6 +38,6 @@ class RolesType extends TypeBase
             $roles[] = $rol->getValue()->value;
         }
 
-        return json_encode($roles, JSON_THROW_ON_ERROR);
+        return empty($roles) ? null : json_encode($roles, JSON_THROW_ON_ERROR);
     }
 }
