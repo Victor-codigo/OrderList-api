@@ -30,10 +30,6 @@ class AlphanumericValidator extends RegexValidator
 
         $value = (string) $value;
 
-        if (null !== $constraint->normalizer) {
-            $value = ($constraint->normalizer)($value);
-        }
-
         if ($constraint->match xor preg_match($constraint->pattern, $value)) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ value }}', $this->formatValue($value))
