@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Test\Unit\Common\Domain\Model\ValueObject\Array;
 
 use Common\Adapter\Validation\ValidationChain;
-use Common\Domain\Model\ValueObject\array\Roles;
 use Common\Domain\Model\ValueObject\Object\Rol;
+use Common\Domain\Model\ValueObject\array\Roles;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use PHPUnit\Framework\TestCase;
 use User\Domain\Model\USER_ROLES;
@@ -48,6 +48,24 @@ class RolesTest extends TestCase
         $return = $this->validator->validateValueObject($this->object);
 
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK], $return);
+    }
+
+    /** @test */
+    public function checkIfRolesHasRol(): void
+    {
+        $this->object = $this->createRoles([USER_ROLES::ADMIN, USER_ROLES::USER]);
+        $return = $this->object->has(new rol(USER_ROLES::USER));
+
+        $this->assertTrue($return);
+    }
+
+    /** @test */
+    public function checkIfRolesHasNotRol(): void
+    {
+        $this->object = $this->createRoles([USER_ROLES::ADMIN, USER_ROLES::USER]);
+        $return = $this->object->has(new rol(USER_ROLES::NOT_ACTIVE));
+
+        $this->assertFalse($return);
     }
 
     private function createRoles(array|null $roles): Roles
