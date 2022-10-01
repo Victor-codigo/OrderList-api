@@ -97,9 +97,10 @@ class User
     public function getRoles(): Roles
     {
         $roles = $this->roles->getValue();
+        $rolSearched = new Rol(USER_ROLES::USER);
 
-        if (!in_array(new Rol(USER_ROLES::USER), $roles)) {
-            $roles[] = new Rol(USER_ROLES::USER);
+        if (!$this->roles->has($rolSearched)) {
+            $roles[] = $rolSearched;
         }
 
         return ValueObjectFactory::createRoles($roles);
