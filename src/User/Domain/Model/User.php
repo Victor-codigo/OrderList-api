@@ -29,7 +29,6 @@ class User
     private DateTime $createdOn;
     private Collection $groups;
     private Profile $profile;
-    private Identifier|null $activationToken;
 
     public function getEmail(): Email
     {
@@ -113,12 +112,7 @@ class User
         return $this;
     }
 
-    public function getActivationToken()
-    {
-        return $this->activationToken;
-    }
-
-    public function __construct(Email $email, Password $password, Name $name, Roles $roles, Identifier|null $activationToken = null)
+    public function __construct(Email $email, Password $password, Name $name, Roles $roles)
     {
         $this->id = ValueObjectFactory::createIdentifier(IdGenerator::createId());
         $this->email = $email;
@@ -128,7 +122,6 @@ class User
         $this->createdOn = new DateTime();
         $this->groups = new ArrayCollection([]);
         $this->profile = new Profile($this->getId());
-        $this->activationToken = $activationToken;
     }
 
     /**
@@ -140,13 +133,11 @@ class User
             throw new DtoInvalidPropertyException();
         }
 
-        $activationToken = $dto->activationToken ?? null;
-
-        return new self($dto->email, $dto->password, $dto->name, $dto->roles, $activationToken);
+        return new self($dto->email, $dto->password, $dto->name, $dto->roles);
     }
 
     public function onCreated(): void
     {
-        $this->eventDispatchRegister(new UserPreRegisteredEvent($this));
+        $this->eventDispatchRegister(new UserPreRegisteredEvent($this->email->getValue()));
     }
 }

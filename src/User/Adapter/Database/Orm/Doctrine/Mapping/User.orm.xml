@@ -28,12 +28,6 @@
 
         <field name="createdOn"
                type="datetime"/>
-            
-        <field name="activationToken"
-               column="activation_token"
-               type="IdentifierType"
-               length="36"
-               nullable="true"/>
 
         <!-- User - Group -->
         <many-to-many field="groups" 
