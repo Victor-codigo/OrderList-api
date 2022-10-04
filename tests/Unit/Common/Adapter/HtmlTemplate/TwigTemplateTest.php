@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Test\Unit\Common\Adapter\HtmlTemplate;
 
 use Common\Adapter\HtmlTemplate\TwigTemplate;
-use Common\Domain\Exception\TemplateCantBeFoundException;
-use Common\Domain\Exception\TemplateRenderingException;
-use Common\Domain\Exception\TemplateSyntaxErrorException;
+use Common\Domain\HtmlTemplate\TemplateCantBeFoundException;
+use Common\Domain\HtmlTemplate\TemplateRenderingException;
+use Common\Domain\HtmlTemplate\TemplateSyntaxErrorException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Test\Unit\Common\Adapter\HtmlTemplate\Fixtures\TemplateParams;

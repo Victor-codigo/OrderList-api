@@ -1,6 +1,6 @@
 <?php
 
-namespace Common\Domain\Exception;
+namespace Common\Domain\HtmlTemplate;
 
 use Error;
 

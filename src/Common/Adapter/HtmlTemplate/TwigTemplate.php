@@ -2,9 +2,9 @@
 
 namespace Common\Adapter\HtmlTemplate;
 
-use Common\Domain\Exception\TemplateCantBeFoundException;
-use Common\Domain\Exception\TemplateRenderingException;
-use Common\Domain\Exception\TemplateSyntaxErrorException;
+use Common\Domain\HtmlTemplate\TemplateCantBeFoundException;
+use Common\Domain\HtmlTemplate\TemplateRenderingException;
+use Common\Domain\HtmlTemplate\TemplateSyntaxErrorException;
 use Common\Domain\Ports\HtmlTemplate\HtmlTemplateInterface;
 use Common\Domain\Ports\HtmlTemplate\TemplateDtoInterface;
 use Twig\Environment;
