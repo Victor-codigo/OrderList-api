@@ -1,23 +1,26 @@
 imports:
-    - { resource: '../../../../../User/Adapter/Framework/Config/services/services.yaml' }    
+    - {
+          resource: "../../../../../User/Adapter/Framework/Config/services/services.yaml",
+      }
 
 services:
-
     _defaults:
-        autowire: true    
-        autoconfigure: true 
+        autowire: true
+        autoconfigure: true
 
+    # Adapter
+    Common\Adapter\:
+        resource: "../../../../Adapter/"
+        exclude: "../../../../Adapter/Framework/"
+
+    # Domain
+    Common\Domain\:
+        resource: "../../../../Domain/"
+
+    Common\Adapter\Jwt\JwtFirebaseHS256Adapter:
+        arguments:
+            $secretKey: "%env(file:resolve:JWT_KEY_FILE)%"
 
     Common\Adapter\Http\ArgumentResolver\ArgumentResolver:
         tags:
             - { name: controller.argument_value_resolver, priority: 50 }
-
-    # Services
-    Common\Adapter\:
-        resource: '../../../'
-        exclude: '../../../Framework/'
-
-    Common\Domain\:
-        resource: '../../../../Domain/'
-
-    

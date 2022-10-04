@@ -1,24 +1,20 @@
 services:
-
     _defaults:
-        autowire: true    
-        autoconfigure: true 
+        autowire: true
+        autoconfigure: true
 
-
-    # Controllers
+    # Adapter
     User\Adapter\:
-        resource: '../../../'
-        exclude: '../../../Framework/'
+        resource: "../../../../../User/Adapter/"
 
-    # Services
-    User\Domain\:
-        resource: '../../../../Domain/'
-
-    User\Domain\Service\UserRegisterKeyValidationService:
-        arguments: ['%env(string:USER_REGISTER_KEY)%']
-    
+    # Application
     User\Application\:
-        resource: '../../../../Application/'
+        resource: "../../../../../User/Application/"
 
-    User\Adapter\Database\Orm\Doctrine\Repository\UserRepository: ~
-    User\Domain\Port\Repository\UserRepositoryInterface: '@User\Adapter\Database\Orm\Doctrine\Repository\UserRepository'
+    # Domain
+    User\Domain\:
+        resource: "../../../../../User/Domain/"
+
+    User\Domain\Service\UserRegisterKeyValidation\UserRegisterKeyValidationService:
+        arguments:
+            $registerKey: "%env(string:USER_REGISTER_KEY)%"
