@@ -172,12 +172,51 @@ class ValidatorTest extends TestCase
     {
         $valueObject = new ValueObjectChildValueObjects([
             new ValueObjectForTesting(10),
+            new ValueObjectForTesting(18),
             new ValueObjectForTesting(11),
         ]);
 
         $return = $this->object->validateValueObject($valueObject);
 
-        $this->assertEquals([VALIDATION_ERRORS::EQUAL_TO, VALIDATION_ERRORS::EQUAL_TO], $return);
+        $expected = [
+            'ValueObjectForTesting-1' => [VALIDATION_ERRORS::EQUAL_TO],
+            'ValueObjectForTesting-3' => [VALIDATION_ERRORS::EQUAL_TO],
+        ];
+
+        $this->assertSame($expected, $return);
+    }
+
+    /** @test */
+    public function validateValueObjectChildValueObjectsNestedError()
+    {
+        $valueObject = new ValueObjectChildValueObjects([
+            new ValueObjectForTesting(10),
+            new ValueObjectChildValueObjects([
+                new ValueObjectForTesting(10),
+                new ValueObjectForTesting(11),
+                new ValueObjectForTesting(18),
+            ]),
+            new ValueObjectChildValueObjects([
+                new ValueObjectForTesting(10),
+                new ValueObjectForTesting(11),
+            ]),
+        ]);
+
+        $return = $this->object->validateValueObject($valueObject);
+
+        $expected = [
+            'ValueObjectForTesting-1' => [VALIDATION_ERRORS::EQUAL_TO],
+            'ValueObjectChildValueObjects-2' => [
+                'ValueObjectForTesting-1' => [VALIDATION_ERRORS::EQUAL_TO],
+                'ValueObjectForTesting-2' => [VALIDATION_ERRORS::EQUAL_TO],
+            ],
+            'ValueObjectChildValueObjects-3' => [
+                'ValueObjectForTesting-1' => [VALIDATION_ERRORS::EQUAL_TO],
+                'ValueObjectForTesting-2' => [VALIDATION_ERRORS::EQUAL_TO],
+            ],
+        ];
+
+        $this->assertSame($expected, $return);
     }
 
     /** @test */

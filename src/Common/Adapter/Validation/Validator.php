@@ -112,8 +112,14 @@ class Validator
             ->setValue($valueObject->getValue())
             ->validate(true);
 
-        foreach ($valueObject->getValueObjects() as $childValueObject) {
-            $errorList = array_merge($errorList, $this->validateValueObject($childValueObject));
+        foreach ($valueObject->getValueObjects() as $index => $childValueObject) {
+            $childErrorList = $this->validateValueObject($childValueObject);
+
+            if (empty($childErrorList)) {
+                continue;
+            }
+
+            $errorList[$this->getNameClass($childValueObject::class, $index + 1)] = $childErrorList;
         }
 
         return $errorList;
@@ -133,6 +139,13 @@ class Validator
         }
 
         return $errorList;
+    }
+
+    private function getNameClass(string $class, int $index): string
+    {
+        $classInArray = explode('\\', $class);
+
+        return end($classInArray).'-'.$index;
     }
 
     private function getValidationsCallBacks()
