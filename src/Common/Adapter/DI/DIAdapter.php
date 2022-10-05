@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\DI;
 
-use Common\Domain\Ports\DIInterface;
+use Common\Domain\Ports\DI\DIInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;

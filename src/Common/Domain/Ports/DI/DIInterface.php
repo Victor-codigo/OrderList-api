@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Common\Domain\Ports;
+namespace Common\Domain\Ports\DI;
 
 interface DIInterface
 {
