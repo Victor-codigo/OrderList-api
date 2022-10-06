@@ -19,8 +19,7 @@
             
         <field name="name" 
                type="NameType" 
-               length="50" 
-               unique="true"/>
+               length="50"/>
         
         <field name="roles" 
                type="RolesType"
@@ -59,7 +58,6 @@
 
         <unique-constraints>
             <unique-constraint name="u_users_id" columns="id"/>
-            <unique-constraint name="u_users_name" columns="name"/>
             <unique-constraint name="u_users_email" columns="email"/>
         </unique-constraints>
 
