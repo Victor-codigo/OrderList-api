@@ -23,8 +23,16 @@ class RequestValidationTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $request = Request::create('');
-        $request->headers->set('Content-Type', 'application/html');
+        $request = Request::create(
+            '',
+            '',
+            [],
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json'],
+            '{wrong JSON}'
+        );
+
         $this->requestValidation->__invoke($request);
     }
 
@@ -33,16 +41,50 @@ class RequestValidationTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $request = Request::create('', 'GET', [], [], [], [], '{wrong JSON}');
-        $request->headers->set('Content-Type', 'application/json');
+        $request = Request::create(
+            '',
+            'GET',
+            [],
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json'],
+            '{wrong JSON}'
+        );
+
+        $this->requestValidation->__invoke($request);
+    }
+
+    /** @test */
+    public function responseErrorContentTypeNameWrong(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $request = Request::create(
+            '',
+            'GET',
+            [],
+            [],
+            [],
+            ['Content-Type' => 'application/json'],
+            '{"key":"param"}'
+        );
+
         $this->requestValidation->__invoke($request);
     }
 
     /** @test */
     public function responseOk(): void
     {
-        $request = Request::create('', 'GET', [], [], [], [], '{"key":"param"}');
-        $request->headers->set('Content-Type', 'application/json');
+        $request = Request::create(
+            '',
+            'GET',
+            [],
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json'],
+            '{"key":"param"}'
+        );
+
         $this->requestValidation->__invoke($request);
 
         $this->assertEquals('param', $request->get('key'),
