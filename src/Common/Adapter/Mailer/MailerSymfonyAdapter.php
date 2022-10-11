@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Mailer;
 
-use Common\Domain\Mailer\MailerSentException;
+use Common\Domain\Mailer\Exception\MailerSentException;
 use Common\Domain\Ports\HtmlTemplate\TemplateDtoInterface;
 use Common\Domain\Ports\Mailer\MailerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -30,7 +30,7 @@ class MailerSymfonyAdapter implements MailerInterface
         try {
             $this->mailer->send($this->email);
         } catch (TransportExceptionInterface $e) {
-            throw MailerSentException::create($e->getMessage(), $e->getCode());
+            throw MailerSentException::fromMessage($e->getMessage(), $e->getCode());
         }
     }
 

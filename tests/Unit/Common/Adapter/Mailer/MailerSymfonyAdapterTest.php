@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\Common\Adapter\Mailer;
 
 use Common\Adapter\Mailer\MailerSymfonyAdapter;
-use Common\Domain\Mailer\MailerSentException;
+use Common\Domain\Mailer\Exception\MailerSentException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
