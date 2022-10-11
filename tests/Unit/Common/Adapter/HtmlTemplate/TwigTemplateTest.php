@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\Common\Adapter\HtmlTemplate;
 
 use Common\Adapter\HtmlTemplate\TwigTemplate;
-use Common\Domain\HtmlTemplate\TemplateCantBeFoundException;
+use Common\Domain\HtmlTemplate\Exception\TemplateCantBeFoundException;
 use Common\Domain\HtmlTemplate\TemplateRenderingException;
 use Common\Domain\HtmlTemplate\TemplateSyntaxErrorException;
 use PHPUnit\Framework\MockObject\MockObject;
