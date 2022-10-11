@@ -2,9 +2,9 @@
 
 namespace Common\Adapter\HtmlTemplate;
 
-use Common\Domain\HtmlTemplate\TemplateCantBeFoundException;
-use Common\Domain\HtmlTemplate\TemplateRenderingException;
-use Common\Domain\HtmlTemplate\TemplateSyntaxErrorException;
+use Common\Domain\HtmlTemplate\Exception\TemplateCantBeFoundException;
+use Common\Domain\HtmlTemplate\Exception\TemplateRenderingException;
+use Common\Domain\HtmlTemplate\Exception\TemplateSyntaxErrorException;
 use Common\Domain\Ports\HtmlTemplate\HtmlTemplateInterface;
 use Common\Domain\Ports\HtmlTemplate\TemplateDtoInterface;
 use Twig\Environment;
@@ -40,11 +40,11 @@ class TwigTemplate implements HtmlTemplateInterface
 
             return $this->twig->render($templatePath, $templateData);
         } catch (SyntaxError $e) {
-            throw TemplateSyntaxErrorException::create($e->getMessage(), $e->getCode());
+            throw TemplateSyntaxErrorException::fromMessage($e->getMessage(), $e->getCode());
         } catch (LoaderError $e) {
-            throw TemplateCantBeFoundException::create($e->getMessage(), $e->getCode());
+            throw TemplateCantBeFoundException::fromMessage($e->getMessage(), $e->getCode());
         } catch (RuntimeError $e) {
-            throw TemplateRenderingException::create($e->getMessage(), $e->getCode());
+            throw TemplateRenderingException::fromMessage($e->getMessage(), $e->getCode());
         }
     }
 }
