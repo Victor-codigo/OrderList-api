@@ -7,7 +7,7 @@ namespace Common\Domain\Validation\Exception;
 use Common\Domain\Exception\DomainException;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 
-class ValueObjectValidationException extends DomainException
+class ValueObjectValidationException extends DomainException implements ValidationExceptionInterface
 {
     /**
      * @param VALIDATION_ERRORS[] $errors
