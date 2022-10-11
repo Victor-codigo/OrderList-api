@@ -28,7 +28,7 @@ class TranslatorSymfonyAdapter implements TranslatorInterface
         try {
             return $this->translator->trans($id, $params, $domain, $locale);
         } catch (\InvalidArgumentException $e) {
-            throw InvalidArgumentException::createFromMessage($e->getMessage());
+            throw InvalidArgumentException::fromMessage($e->getMessage());
         }
     }
 

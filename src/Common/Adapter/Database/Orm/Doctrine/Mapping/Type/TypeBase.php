@@ -24,7 +24,7 @@ abstract class TypeBase extends Type
         }
 
         if (!$value instanceof ($this->getClassImplementationName())) {
-            throw InvalidArgumentException::createFromMessage('convertToDatabaseValue: Passed data type is wrong');
+            throw InvalidArgumentException::fromMessage('convertToDatabaseValue: Passed data type is wrong');
         }
 
         return $value->getValue();

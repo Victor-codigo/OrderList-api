@@ -50,7 +50,7 @@ abstract class TemplateDtoBase implements TemplateDtoInterface
                 $this->translator->getLocale()
             );
         } catch (InvalidArgumentException $e) {
-            throw InvalidArgumentDomainException::createFromMessage($e->getMessage());
+            throw InvalidArgumentDomainException::fromMessage($e->getMessage());
         }
     }
 }

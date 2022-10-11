@@ -21,7 +21,7 @@ class RequestValidation
         try {
             $request->request = $this->createParams($request);
         } catch (JsonException) {
-            throw InvalidArgumentException::createFromMessage('Invalid JSON');
+            throw InvalidArgumentException::fromMessage('Invalid JSON');
         }
     }
 
@@ -46,7 +46,7 @@ class RequestValidation
     private function validateContentType(Request $request): void
     {
         if (!REQUEST_ALLOWED_CONTENT::allowed($request->headers->get('CONTENT_TYPE'))) {
-            throw InvalidArgumentException::createFromMessage(sprintf('Content-Type [%s] is not allowed. Only [%s] are allowed.', $request->getContentType(), implode(', ', array_column(REQUEST_ALLOWED_CONTENT::cases(), 'value'))));
+            throw InvalidArgumentException::fromMessage(sprintf('Content-Type [%s] is not allowed. Only [%s] are allowed.', $request->getContentType(), implode(', ', array_column(REQUEST_ALLOWED_CONTENT::cases(), 'value'))));
         }
     }
 }

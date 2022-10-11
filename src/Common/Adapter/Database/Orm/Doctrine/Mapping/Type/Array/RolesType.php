@@ -29,7 +29,7 @@ class RolesType extends TypeBase
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         if (!$value instanceof Roles) {
-            throw InvalidArgumentException::createFromMessage('convertToDatabaseValue - value: is not a '.Roles::class);
+            throw InvalidArgumentException::fromMessage('convertToDatabaseValue - value: is not a '.Roles::class);
         }
 
         $roles = [];
