@@ -2,9 +2,7 @@
 
 namespace User\Domain\Model;
 
-use Common\Adapter\IdGenerator\IdGenerator;
 use Common\Domain\Event\EventRegisterTrait;
-use Common\Domain\Exception\DtoInvalidPropertyException;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -112,9 +110,9 @@ class User
         return $this;
     }
 
-    public function __construct(Email $email, Password $password, Name $name, Roles $roles)
+    public function __construct(Identifier $id, Email $email, Password $password, Name $name, Roles $roles)
     {
-        $this->id = ValueObjectFactory::createIdentifier(IdGenerator::createId());
+        $this->id = $id;
         $this->email = $email;
         $this->name = $name;
         $this->roles = $roles;
@@ -122,18 +120,6 @@ class User
         $this->createdOn = new DateTime();
         $this->groups = new ArrayCollection([]);
         $this->profile = new Profile($this->getId());
-    }
-
-    /**
-     * @throws DtoInvalidPropertyException
-     */
-    public static function createFromDto(object $dto): self
-    {
-        if (!isset($dto->email) || !isset($dto->password) || !isset($dto->name) || !isset($dto->roles)) {
-            throw DtoInvalidPropertyException::fromMessage('Can\'t create the user, not DTO poperties needed');
-        }
-
-        return new self($dto->email, $dto->password, $dto->name, $dto->roles);
     }
 
     public function onCreated(): void

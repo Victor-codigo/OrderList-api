@@ -48,6 +48,7 @@ class PasswordHashSymfonyAdapter implements PasswordHasherInterface
     private function createUserNull(): UserSymfonyAdapter
     {
         $user = new User(
+            ValueObjectFactory::createIdentifier(null),
             ValueObjectFactory::createEmail(null),
             ValueObjectFactory::createPassword(null),
             ValueObjectFactory::createName(null),
