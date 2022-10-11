@@ -28,7 +28,7 @@ class EventSubscriberLoader extends EventDispatcherSymfonyAdapter implements Eve
         $this->eventDispatcher = $eventDispatcherSubscriberLoader;
     }
 
-    public function addListener(string $eventSubscriberName, mixed $listener, int $priority = 0): void
+    public function addListener(string $eventSubscriberName, array|callable $listener, int $priority = 0): void
     {
         $this->listeners[] = [$eventSubscriberName, $listener[1], $priority];
     }

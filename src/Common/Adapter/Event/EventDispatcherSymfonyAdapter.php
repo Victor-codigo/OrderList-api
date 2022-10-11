@@ -43,7 +43,7 @@ class EventDispatcherSymfonyAdapter implements EventDispatcherInterface
         }
     }
 
-    public function addListener(string $eventName, callable $listener, int $priority = 0): void
+    public function addListener(string $eventName, array|callable $listener, int $priority = 0): void
     {
         $this->eventDispatcher->addListener($eventName, $listener, $priority);
     }
