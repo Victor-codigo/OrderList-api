@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject;
 
+use Common\Domain\Model\ValueObject\Array\ValueObjectArrayFactoryInterface;
+use Common\Domain\Model\ValueObject\Array\valueObjectArrayFactory;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
@@ -12,8 +14,6 @@ use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\String\ValueObjectStringFactory;
 use Common\Domain\Model\ValueObject\String\ValueObjectStringFactoryInterface;
 use Common\Domain\Model\ValueObject\array\Roles;
-use Common\Domain\Model\ValueObject\array\ValueObjectArrayFactoryInterface;
-use Common\Domain\Model\ValueObject\array\valueObjectArrayFactory;
 
 final class ValueObjectFactory implements ValueObjectStringFactoryInterface, ValueObjectArrayFactoryInterface
 {

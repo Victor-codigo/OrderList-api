@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Common\Domain\Model\ValueObject\array;
+namespace Common\Domain\Model\ValueObject\Array;
 
 interface ValueObjectArrayFactoryInterface
 {

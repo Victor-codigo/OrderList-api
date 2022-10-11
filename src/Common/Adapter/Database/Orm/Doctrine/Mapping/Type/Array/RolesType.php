@@ -6,7 +6,7 @@ namespace Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array;
 
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\TypeBase;
 use Common\Domain\Exception\InvalidArgumentException;
-use Common\Domain\Model\ValueObject\array\Roles;
+use Common\Domain\Model\ValueObject\Array\Roles;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use JsonException;
 
