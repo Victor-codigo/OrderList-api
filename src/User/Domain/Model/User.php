@@ -130,7 +130,7 @@ class User
     public static function createFromDto(object $dto): self
     {
         if (!isset($dto->email) || !isset($dto->password) || !isset($dto->name) || !isset($dto->roles)) {
-            throw new DtoInvalidPropertyException();
+            throw DtoInvalidPropertyException::fromMessage('Can\'t create the user, not DTO poperties needed');
         }
 
         return new self($dto->email, $dto->password, $dto->name, $dto->roles);
@@ -138,6 +138,6 @@ class User
 
     public function onCreated(): void
     {
-        $this->eventDispatchRegister(new UserPreRegisteredEvent($this->email->getValue()));
+        $this->eventDispatchRegister(new UserPreRegisteredEvent($this->id->getValue(), $this->email->getValue()));
     }
 }
