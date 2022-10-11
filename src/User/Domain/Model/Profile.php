@@ -17,20 +17,21 @@ class Profile
         return $this->id;
     }
 
-    public function getImage(): string|null
+    public function getImage(): Path|null
     {
         return $this->image;
     }
 
-    public function setImage($image): self
+    public function setImage(Path $image): self
     {
         $this->image = $image;
 
         return $this;
     }
 
-    public function __construct(Identifier $id)
+    public function __construct(Identifier $id, Path|null $image = null)
     {
         $this->id = $id;
+        $this->image = $image;
     }
 }
