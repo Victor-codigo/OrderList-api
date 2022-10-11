@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace User\Adapter\Database\Orm\Doctrine\Repository;
 
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
-use Common\Domain\Database\Orm\Doctrine\Repository\DBConnectionException;
-use Common\Domain\Database\Orm\Doctrine\Repository\DBUniqueConstraintException;
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
