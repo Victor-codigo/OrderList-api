@@ -8,7 +8,6 @@ use Common\Adapter\IdGenerator\IdGenerator;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
 use DateTime;
-use User\Domain\Model\User;
 
 final class Group
 {
@@ -77,18 +76,5 @@ final class Group
         $this->users = [];
         $this->shops = [];
         $this->products = [];
-    }
-
-    public function toArray(): array
-    {
-        return [
-            'id' => $this->id->getValue(),
-            'name' => $this->name->getValue(),
-            'description' => $this->description,
-            'createdOn' => $this->createdOn,
-            'users' => array_map(fn (User $i) => $i->toArray(), $this->users),
-            'shops' => array_map(fn (User $i) => $i->toArray(), $this->users),
-            'products' => array_map(fn (User $i) => $i->toArray(), $this->users),
-        ];
     }
 }
