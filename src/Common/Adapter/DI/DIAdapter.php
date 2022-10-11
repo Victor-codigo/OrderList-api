@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Common\Adapter\DI;
 
+use Common\Adapter\DI\Exception\RouteInvalidParameterException;
+use Common\Adapter\DI\Exception\RouteNotFoundException;
+use Common\Adapter\DI\Exception\RouteParametersMissingException;
 use Common\Domain\Ports\DI\DIInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
@@ -60,11 +63,11 @@ class DIAdapter implements DIInterface, ServiceSubscriberInterface
         try {
             return $this->getRouter()->generate($route, $params, $type);
         } catch (SymfonyRouteNotFoundException $e) {
-            throw RouteNotFoundException::create($e->getMessage(), $e->getCode());
+            throw RouteNotFoundException::fromMessage($e->getMessage(), $e->getCode());
         } catch (MissingMandatoryParametersException $e) {
-            throw RouteParametersMissingException::create($e->getMessage(), $e->getCode());
+            throw RouteParametersMissingException::fromMessage($e->getMessage(), $e->getCode());
         } catch (InvalidParameterException $e) {
-            throw RouteInvalidParameterException::create($e->getMessage(), $e->getCode());
+            throw RouteInvalidParameterException::fromMessage($e->getMessage(), $e->getCode());
         }
     }
 

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Common\Domain\Exception;
 
-use LogicException as NativeLogicException;
+use DomainException;
 use Throwable;
 
-class LogicException extends NativeLogicException
+class DomainInternalErrorException extends DomainException
 {
     public static function fromMessage(string $message = '', int $code = 0, Throwable|null $previous = null): static
     {

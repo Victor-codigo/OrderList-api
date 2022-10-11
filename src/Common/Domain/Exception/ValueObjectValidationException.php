@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Common\Domain\Exception;
 
 use Common\Domain\Validation\VALIDATION_ERRORS;
-use DomainException;
 
 class ValueObjectValidationException extends DomainException
 {
