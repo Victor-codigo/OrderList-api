@@ -126,16 +126,20 @@ class Validator
     }
 
     /**
-     * @param ValueObjectValidationInterface $valueObjects
+     * @param array<string, ValueObjectValidationInterface> $valueObject
      *
-     * @return @return VALIDATION_ERRORS[]
+     * @return array<string, VALIDATION_ERRORS[]>
      */
     public function validateValueObjectArray(array $valueObjects): array
     {
         $errorList = [];
 
-        foreach ($valueObjects as $valueObject) {
-            $errorList = array_merge($errorList, $this->validateValueObject($valueObject));
+        foreach ($valueObjects as $name => $valueObject) {
+            $errors = $this->validateValueObject($valueObject);
+
+            if (!empty($errors)) {
+                $errorList = array_merge($errorList, [$name => $errors]);
+            }
         }
 
         return $errorList;
@@ -174,6 +178,8 @@ class Validator
             CONSTRAINTS_NAMES::STRING_MAX->value => $this->validationChain->stringMax(...),
             CONSTRAINTS_NAMES::STRING_RANGE->value => $this->validationChain->stringRange(...),
             CONSTRAINTS_NAMES::UUID->value => $this->validationChain->uuId(...),
+            CONSTRAINTS_NAMES::REGEX->value => $this->validationChain->regEx(...),
+            CONSTRAINTS_NAMES::ALPHANUMERIC->value => $this->validationChain->alphanumeric(...),
             CONSTRAINTS_NAMES::DATE->value => $this->validationChain->date(...),
             CONSTRAINTS_NAMES::DATETIME->value => $this->validationChain->dateTime(...),
             CONSTRAINTS_NAMES::TIME->value => $this->validationChain->time(...),

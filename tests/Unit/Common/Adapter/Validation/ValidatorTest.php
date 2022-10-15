@@ -241,9 +241,23 @@ class ValidatorTest extends TestCase
             new ValueObjectForTesting(50),
             new ValueObjectForTesting(18),
         ];
+
         $return = $this->object->validateValueObjectArray($valueObjects);
 
-        $this->assertEquals([VALIDATION_ERRORS::EQUAL_TO], $return,
-            'validateValueObjectArray: It was expected that return value is '.VALIDATION_ERRORS::EQUAL_TO->name);
+        $this->assertEquals([[VALIDATION_ERRORS::EQUAL_TO]], $return);
+    }
+
+    /** @test */
+    public function validateValueObjectArrayAssociativeError()
+    {
+        $valueObjects = [
+            'valueObject-1' => new ValueObjectForTesting(18),
+            'valueObject-2' => new ValueObjectForTesting(50),
+            'valueObject-3' => new ValueObjectForTesting(18),
+        ];
+
+        $return = $this->object->validateValueObjectArray($valueObjects);
+
+        $this->assertEquals(['valueObject-2' => [VALIDATION_ERRORS::EQUAL_TO]], $return);
     }
 }

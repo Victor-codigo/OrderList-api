@@ -23,7 +23,9 @@ interface ValidationInterface
     public function validateValueObject(ValueObjectValidationInterface $valueObject): array;
 
     /**
-     * @param ValueObjectValidationInterface[] $valueObjects
+     * @param array<string, ValueObjectValidationInterface> $valueObject
+     *
+     * @return array<string, VALIDATION_ERRORS[]>
      */
     public function validateValueObjectArray(array $valueObjects): array;
 

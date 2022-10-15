@@ -72,6 +72,19 @@ class ConstraintFactory
         ]);
     }
 
+    public static function regEx(string $pattern, bool $patternMatch = true): ConstraintDto
+    {
+        return new ConstraintDto(CONSTRAINTS_NAMES::REGEX, [
+            'pattern' => $pattern,
+            'patternMatch' => $patternMatch,
+        ]);
+    }
+
+    public static function alphanumeric(): ConstraintDto
+    {
+        return new ConstraintDto(CONSTRAINTS_NAMES::ALPHANUMERIC, null);
+    }
+
     public static function equalTo(mixed $value): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::EQUAL_TO, [

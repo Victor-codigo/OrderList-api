@@ -34,6 +34,9 @@ enum CONSTRAINTS_NAMES: string
     case STRING_RANGE = 'stringRange';
     case UUID = 'uuId';
 
+    case REGEX = 'regEx';
+    case ALPHANUMERIC = 'alphanumeric';
+
     case DATE = 'date';
     case DATETIME = 'dateTime';
     case TIME = 'time';

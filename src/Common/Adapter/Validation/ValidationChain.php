@@ -71,9 +71,9 @@ class ValidationChain implements ValidationInterface
     }
 
     /**
-     * @param ValueObjectValidationInterface[] $name
+     * @param array<string, ValueObjectValidationInterface> $valueObject
      *
-     * @return VALIDATION_ERRORS[]
+     * @return array<string, VALIDATION_ERRORS[]>
      */
     public function validateValueObjectArray(array $valueObjects): array
     {
