@@ -6,6 +6,8 @@ namespace Common\Domain\Model\ValueObject;
 
 use Common\Domain\Model\ValueObject\Array\ValueObjectArrayFactoryInterface;
 use Common\Domain\Model\ValueObject\Array\valueObjectArrayFactory;
+use Common\Domain\Model\ValueObject\Object\Rol;
+use Common\Domain\Model\ValueObject\Object\ValueObjectObjectFactory;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
@@ -14,6 +16,7 @@ use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\String\ValueObjectStringFactory;
 use Common\Domain\Model\ValueObject\String\ValueObjectStringFactoryInterface;
 use Common\Domain\Model\ValueObject\array\Roles;
+use User\Domain\Model\USER_ROLES;
 
 final class ValueObjectFactory implements ValueObjectStringFactoryInterface, ValueObjectArrayFactoryInterface
 {
@@ -23,6 +26,11 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
     public static function createRoles(array|null $roles): Roles
     {
         return valueObjectArrayFactory::createRoles($roles);
+    }
+
+    public static function createRol(USER_ROLES|null $roles): Rol
+    {
+        return ValueObjectObjectFactory::createRol($roles);
     }
 
     public static function createEmail(string|null $email): Email
