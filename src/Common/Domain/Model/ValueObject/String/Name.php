@@ -16,6 +16,7 @@ class Name extends StringValueObject
             ->setConstraint(ConstraintFactory::notBlank())
             ->setConstraint(ConstraintFactory::notNull())
             ->setConstraint(ConstraintFactory::type(TYPES::STRING))
+            ->setConstraint(ConstraintFactory::alphanumeric())
             ->setConstraint(ConstraintFactory::stringRange(USER_ENTITY_CONSTRAINTS::NAME_MIN_LENGTH, USER_ENTITY_CONSTRAINTS::NAME_MAX_LENGTH));
     }
 }

@@ -14,7 +14,7 @@ class NameTest extends TestCase
 {
     private ValidationInterface $validation;
 
-    private const VALID_NAME = 'Juan';
+    private const VALID_NAME = 'Juan_6';
 
     public function setUp(): void
     {
@@ -48,10 +48,18 @@ class NameTest extends TestCase
 
     public function testValidNameNotTooLong(): void
     {
-        $name = $this->createName(str_repeat('-', 51));
+        $name = $this->createName(str_repeat('f', 51));
         $return = $this->validation->validateValueObject($name);
 
         $this->assertEquals([VALIDATION_ERRORS::STRING_TOO_LONG], $return,
             'It was expected that return contains [VALIDATION_ERRORS::STRING_TOO_SHORT]');
+    }
+
+    public function testValidNameisAlphanumeric(): void
+    {
+        $name = $this->createName('anastasia-');
+        $return = $this->validation->validateValueObject($name);
+
+        $this->assertEquals([VALIDATION_ERRORS::ALPHANUMERIC], $return);
     }
 }
