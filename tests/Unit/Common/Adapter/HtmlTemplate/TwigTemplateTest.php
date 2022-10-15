@@ -6,8 +6,8 @@ namespace Test\Unit\Common\Adapter\HtmlTemplate;
 
 use Common\Adapter\HtmlTemplate\TwigTemplate;
 use Common\Domain\HtmlTemplate\Exception\TemplateCantBeFoundException;
-use Common\Domain\HtmlTemplate\TemplateRenderingException;
-use Common\Domain\HtmlTemplate\TemplateSyntaxErrorException;
+use Common\Domain\HtmlTemplate\Exception\TemplateRenderingException;
+use Common\Domain\HtmlTemplate\Exception\TemplateSyntaxErrorException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Test\Unit\Common\Adapter\HtmlTemplate\Fixtures\TemplateParams;
