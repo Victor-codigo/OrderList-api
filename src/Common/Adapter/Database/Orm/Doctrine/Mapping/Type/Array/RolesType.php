@@ -6,9 +6,13 @@ namespace Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array;
 
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\TypeBase;
 use Common\Domain\Exception\InvalidArgumentException;
+use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\Array\Roles;
+use Common\Domain\Model\ValueObject\Object\Rol;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Exception;
 use JsonException;
+use User\Domain\Model\USER_ROLES;
 
 class RolesType extends TypeBase
 {
@@ -23,6 +27,8 @@ class RolesType extends TypeBase
     }
 
     /**
+     * @return string|null
+     *
      * @throws JsonException
      * @throws InvalidArgumentException
      */
@@ -39,5 +45,33 @@ class RolesType extends TypeBase
         }
 
         return empty($roles) ? null : json_encode($roles, JSON_THROW_ON_ERROR);
+    }
+
+    /**
+     * @return Roles|null
+     *
+     * @throws LogicException
+     * @throws InvalidArgumentException
+     */
+    public function convertToPHPValue($value, AbstractPlatform $platform): mixed
+    {
+        if (null === $value) {
+            return null;
+        }
+
+        try {
+            $roles = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+            $rolesObject = [];
+
+            foreach ($roles as $rol) {
+                $rolesObject[] = new Rol(USER_ROLES::from($rol));
+            }
+
+            return new Roles($rolesObject);
+        } catch (JsonException) {
+            throw InvalidArgumentException::fromMessage('convertToPHPValue: data base roles, is not a valid json string');
+        } catch (Exception) {
+            throw LogicException::fromMessage('convertToPHPValue: data base roles, can\'t be converted to a rol');
+        }
     }
 }
