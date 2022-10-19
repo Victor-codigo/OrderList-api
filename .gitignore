@@ -1,4 +1,3 @@
-
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -23,6 +22,8 @@
 
 .vscode/
 coverage.xml
+public/code-coverage
+src/User/Adapter/Framework/Config/JwtKeys/JwtFirebaseHS256/key.pem
 ###> friendsofphp/php-cs-fixer ###
 /.php-cs-fixer.php
 /.php-cs-fixer.cache

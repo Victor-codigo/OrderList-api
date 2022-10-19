@@ -9,17 +9,15 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Uid\Uuid;
 
-abstract class RepositoryBase
+abstract class RepositoryBase extends ServiceEntityRepository
 {
-    protected ServiceEntityRepository $serviceEntityRepository;
-    protected ManagerRegistry $managerRegistry;
     protected ObjectManager $objectManager;
 
     public function __construct(ManagerRegistry $managerRegistry, string $entity)
     {
-        $this->managerRegistry = $managerRegistry;
-        $this->serviceEntityRepository = new ServiceEntityRepository($this->managerRegistry, $entity);
-        $this->objectManager = $this->managerRegistry->getManager();
+        parent::__construct($managerRegistry, $entity);
+
+        $this->objectManager = $managerRegistry->getManager();
     }
 
     public function generateId(): string

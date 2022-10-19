@@ -7,6 +7,6 @@ namespace Common\Domain\Response;
 enum RESPONSE_STATUS: string
 {
     case OK = 'ok';
-    case ERRORM = 'error';
+    case ERROR = 'error';
     case FAIL = 'fail';
 }

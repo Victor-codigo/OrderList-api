@@ -1,0 +1,4 @@
+imports:
+    - {
+          resource: "../../src/Common/Adapter/Framework/Config/Packages/hautelook_alice.yaml",
+      }

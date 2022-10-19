@@ -1,2 +1,4 @@
 imports:
-    - { resource: '../../src/Common/Adapter/Framework/Config/Packages/mailer.yaml' } 
+    - {
+          resource: "../../src/Common/Adapter/Framework/Config/Packages/mailer.yaml",
+      }

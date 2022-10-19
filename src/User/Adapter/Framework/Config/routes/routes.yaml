@@ -1,5 +1,11 @@
-user_create:
-    path: /create
-    controller: User\Adapter\Controller\UserCreate\UserCreateController
+user_register:
+    path: /api/v{api_version}/{_locale}/user/register
     methods: POST
+    controller: User\Adapter\Http\Controller\UserRegister\UserRegisterController
+    requirements:
+        api_version: '\d+[.\d]?'
+        _locale: en|es
 
+user_email_confirmation:
+    path: /email/confirmation/{token}
+    methods: GET

@@ -1,0 +1,8 @@
+subject: "{appName} Registration confirmation"
+title: Registration confirmation
+welcome: |
+  Welcome,
+  You are receiving this message, because you have signed up recently in {appName}.
+  Confirm your email address by clicking in the button below.
+urlRegistrationConfirmationText: Confirm email
+farewell: Registration will expire in 24 hours

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping">
 
-    <entity name="User\Domain\Model\User" 
-            table="Users">
+    <entity table="Users"
+            name="User\Domain\Model\User" 
+            repository-class="User\Adapter\Database\Orm\Doctrine\Repository\UserRepository">
 
         <id name="id" 
             type="IdentifierType" 

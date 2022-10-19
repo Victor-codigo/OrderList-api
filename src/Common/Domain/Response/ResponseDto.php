@@ -70,7 +70,7 @@ class ResponseDto
     public function toArray(): array
     {
         return [
-            'status' => $this->status,
+            'status' => $this->status->value,
             'message' => $this->message,
             'data' => $this->data,
             'errors' => $this->errors,

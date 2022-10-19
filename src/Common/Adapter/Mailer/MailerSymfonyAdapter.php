@@ -30,7 +30,7 @@ class MailerSymfonyAdapter implements MailerInterface
         try {
             $this->mailer->send($this->email);
         } catch (TransportExceptionInterface $e) {
-            throw MailerSentException::fromMessage($e->getMessage(), $e->getCode());
+            throw MailerSentException::fromMessage($e->getMessage());
         }
     }
 

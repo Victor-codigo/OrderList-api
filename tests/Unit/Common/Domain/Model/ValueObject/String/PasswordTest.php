@@ -9,7 +9,7 @@ use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\USER_ENTITY_CONSTRAINTS;
+use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 
 class PasswordTest extends TestCase
 {
@@ -48,7 +48,7 @@ class PasswordTest extends TestCase
 
     public function testPasswordNotTooLong()
     {
-        $password = $this->createPassword(str_repeat('-', USER_ENTITY_CONSTRAINTS::PASSWORD_MAX_LENGTH + 1));
+        $password = $this->createPassword(str_repeat('-', VALUE_OBJECTS_CONSTRAINTS::PASSWORD_MAX_LENGTH + 1));
         $return = $this->validation->validateValueObject($password);
 
         $this->assertEquals([VALIDATION_ERRORS::STRING_TOO_LONG], $return,

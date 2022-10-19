@@ -1,0 +1,61 @@
+Common\Domain\Model\ValueObject\String\Identifier:
+  id_random-{1..5}:
+    __construct:
+      value: <uuid()>
+
+  id_random-0:
+    __construct:
+      value: "1befdbe2-9c14-42f0-850f-63e061e33b8f"
+
+Common\Domain\Model\ValueObject\String\Email:
+  email_random-{1..5}:
+    __construct:
+      value: <email()>
+
+  email_random-0:
+    __construct:
+      value: "email.already.exists@host.com"
+
+Common\Domain\Model\ValueObject\String\Password:
+  password_random-{1..5}:
+    __construct:
+      value: <word()>
+
+  password_random-0:
+    __construct:
+      value: "qwerty"
+
+Common\Domain\Model\ValueObject\String\Name:
+  name_random-{1..5}:
+    __construct:
+      value: <name()>
+
+  name_random-0:
+    __construct:
+      value: "Juanito"
+
+Common\Domain\Model\ValueObject\Object\Rol:
+  rol_random:
+    __construct:
+      value: <(User\Domain\Model\USER_ROLES::NOT_ACTIVE)>
+
+Common\Domain\Model\ValueObject\Array\Roles:
+  roles_random:
+    __construct: [["@rol_random"]]
+
+User\Domain\Model\User:
+  User-{1..5}:
+    __construct:
+      id: "@id_random-<current()>"
+      email: "@email_random-<current()>"
+      password: "@password_random-<current()>"
+      name: "@name_random-<current()>"
+      roles: "@roles_random"
+
+  User-0:
+    __construct:
+      id: "@id_random-0"
+      email: "@email_random-0"
+      password: "@password_random-0"
+      name: "@name_random-0"
+      roles: "@roles_random"

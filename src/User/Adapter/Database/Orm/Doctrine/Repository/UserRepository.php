@@ -6,14 +6,16 @@ namespace User\Adapter\Database\Orm\Doctrine\Repository;
 
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
-use Doctrine\DBAL\Exception\ConnectionException;
+use Common\Domain\Model\ValueObject\String\Identifier;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use User\Domain\Model\User;
 use User\Domain\Port\Repository\UserRepositoryInterface;
 
-final class UserRepository extends RepositoryBase implements UserRepositoryInterface
+class UserRepository extends RepositoryBase implements UserRepositoryInterface
 {
     public function __construct(ManagerRegistry $managerRegistry)
     {
@@ -27,20 +29,22 @@ final class UserRepository extends RepositoryBase implements UserRepositoryInter
             $this->objectManager->flush();
         } catch (UniqueConstraintViolationException $e) {
             throw DBUniqueConstraintException::fromEmail($user->getEmail()->getValue(), $e->getCode());
-        } catch (ConnectionException $e) {
+        } catch (Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
     }
 
-    public function remove(User $user): void
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findByIdOrFail(Identifier $id): User
     {
-        try {
-            $this->objectManager->remove($user);
-            $this->objectManager->flush();
-        } catch (UniqueConstraintViolationException $e) {
-            throw DBUniqueConstraintException::fromEmail($user->getEmail()->getValue(), $e->getCode());
-        } catch (ConnectionException $e) {
-            throw DBConnectionException::fromConnection($e->getCode());
+        $user = $this->objectManager->find(User::class, $id->getValue());
+
+        if (null === $user) {
+            throw DBNotFoundException::fromMessage(sprintf('User with id:"%s". Not found', $id->getValue()));
         }
+
+        return $user;
     }
 }

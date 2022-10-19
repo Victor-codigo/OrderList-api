@@ -2,6 +2,11 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+        bind:
+            $appName: "%common.app_name%"
+            $adminEmail: "%common.admin_email%"
+            $registrationKey: "%common.user_register_key%"
+            $emailUserRegistrationConfirmationExpire: "%common.email_user_registration_confirmation_expire%"
 
     # Adapter
     User\Adapter\:
@@ -18,3 +23,7 @@ services:
     User\Domain\Service\UserRegisterKeyValidation\UserRegisterKeyValidationService:
         arguments:
             $registerKey: "%env(string:USER_REGISTER_KEY)%"
+
+    # Event subscriber loader
+    Common\Domain\Ports\Event\EventDispatcherInterface $eventDispatcherSubscriberLoader: '@Common\Adapter\Compiler\RegisterEventDomain\EventSubscriberLoader'
+    Common\Domain\Ports\Event\EventDispatcherInterface: '@Common\Adapter\Event\EventDispatcherSymfonyAdapter'

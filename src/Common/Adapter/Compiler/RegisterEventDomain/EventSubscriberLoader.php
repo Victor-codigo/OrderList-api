@@ -23,8 +23,9 @@ class EventSubscriberLoader extends EventDispatcherSymfonyAdapter implements Eve
         static::$subscriber = $subscriber;
     }
 
-    public function __construct(EventDispatcherInterface $eventDispatcherSubscriberLoader)
-    {
+    public function __construct(
+        EventDispatcherInterface $eventDispatcherSubscriberLoader
+    ) {
         $this->eventDispatcher = $eventDispatcherSubscriberLoader;
     }
 

@@ -122,6 +122,25 @@ class User
         $this->profile = new Profile($this->getId());
     }
 
+    /**
+     * @param USER_ROLES[] $roles
+     */
+    public static function fromPrimitives(string $id, string $email, string $password, string $name, array $roles): User
+    {
+        $roles = array_map(
+            fn (USER_ROLES $rol) => ValueObjectFactory::createRol($rol),
+            $roles
+        );
+
+        return new static(
+            ValueObjectFactory::createIdentifier($id),
+            ValueObjectFactory::createEmail($email),
+            ValueObjectFactory::createPassword($password),
+            ValueObjectFactory::createName($name),
+            ValueObjectFactory::createRoles($roles)
+        );
+    }
+
     public function onCreated(): void
     {
         $this->eventDispatchRegister(new UserPreRegisteredEvent($this->id->getValue(), $this->email->getValue()));

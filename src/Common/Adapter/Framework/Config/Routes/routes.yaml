@@ -1,5 +1,2 @@
 User:
-  resource: '../../../../../User/Adapter/Framework/Config/routes/routes.yaml'
-  prefix: /api/{_locale}/user
-  requirements:
-    _locale: en|es
+  resource: "../../../../../User/Adapter/Framework/Config/routes/routes.yaml"
