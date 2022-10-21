@@ -26,4 +26,13 @@ abstract class ObjectValueObject extends ValueObjectBase
     {
         return [];
     }
+
+    public function equalTo(ObjectValueObject $value, bool $strict = true): bool
+    {
+        if ($strict) {
+            return $this->value === $value->getValue();
+        }
+
+        return $this->value == $value->getValue();
+    }
 }

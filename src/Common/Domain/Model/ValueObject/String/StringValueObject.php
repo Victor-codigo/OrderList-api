@@ -26,4 +26,9 @@ abstract class StringValueObject extends ValueObjectBase
     {
         return [];
     }
+
+    public function equalTo(StringValueObject $value): bool
+    {
+        return $this->value === $value->getValue();
+    }
 }

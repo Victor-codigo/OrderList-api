@@ -26,4 +26,9 @@ abstract class IntegerValueObject extends ValueObjectBase
     {
         return [];
     }
+
+    public function equalTo(IntegerValueObject $value): bool
+    {
+        return $this->value === $value->getValue();
+    }
 }

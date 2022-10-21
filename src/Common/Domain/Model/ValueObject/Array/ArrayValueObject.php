@@ -26,4 +26,13 @@ abstract class ArrayValueObject extends ValueObjectBase
     {
         return $this->getValue();
     }
+
+    public function equalTo(ArrayValueObject $value, bool $strict = true): bool
+    {
+        if ($strict) {
+            return $this->value === $value->getValue();
+        }
+
+        return $this->value == $value->getValue();
+    }
 }
