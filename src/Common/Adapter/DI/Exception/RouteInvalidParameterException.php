@@ -6,6 +6,6 @@ namespace Common\Adapter\DI\Exception;
 
 use Common\Domain\Exception\InvalidArgumentException;
 
-class RouteInvalidParameterException extends InvalidArgumentException implements RouterException
+class RouteInvalidParameterException extends InvalidArgumentException implements RouterExceptionInterface
 {
 }
