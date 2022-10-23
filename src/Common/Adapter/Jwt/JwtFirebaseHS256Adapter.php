@@ -4,11 +4,21 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Jwt;
 
+use Common\Adapter\Jwt\Exception\JwtException;
+use Common\Adapter\Jwt\Exception\JwtTokenExpiredException;
+use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Ports\JwtToken\JwtHS256Interface;
 use DateInterval;
 use DateTime;
+use DomainException as NativeDomainException;
+use Firebase\JWT\BeforeValidException;
+use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Firebase\JWT\SignatureInvalidException;
+use InvalidArgumentException as NativeInvalidArgumentException;
+use UnexpectedValueException as NativeUnexpectedValueException;
+use stdClass;
 
 class JwtFirebaseHS256Adapter implements JwtHS256Interface
 {
@@ -33,9 +43,30 @@ class JwtFirebaseHS256Adapter implements JwtHS256Interface
         return JWT::encode($data, $this->secretKey->getKeyMaterial(), self::ALGORITM);
     }
 
-    public function decode(string $token): object
+    /**
+     * @throws InvalidArgumentException
+     * @throws JwtException
+     * @throws JwtTokenExpiredException
+     */
+    public function decode(string $token): stdClass
     {
-        return JWT::decode($token, $this->secretKey);
+        try {
+            return JWT::decode($token, $this->secretKey);
+        } catch (NativeInvalidArgumentException) {
+            throw InvalidArgumentException::fromMessage('Provided key/key-array was empty');
+        } catch (NativeDomainException) {
+            throw JwtException::fromMessage('Provided JWT is malformed');
+        } catch (NativeUnexpectedValueException) {
+            throw JwtException::fromMessage('Provided JWT was invalid');
+        } catch (SignatureInvalidException) {
+            throw JwtException::fromMessage('Provided JWT was invalid because the signature verification failed');
+        } catch (BeforeValidException) {
+            throw JwtException::fromMessage('Provided JWT is trying to be used before it\'s eligible as defined by \'nbf\'');
+        } catch (BeforeValidException) {
+            throw JwtException::fromMessage('Provided JWT is trying to be used before it\'s been created as defined by \'iat\'');
+        } catch (ExpiredException) {
+            throw JwtTokenExpiredException::fromMessage('Provided JWT has since expired, as defined by the \'exp\' claim');
+        }
     }
 
     public function hasExpired(object $tokenDecoded): bool
