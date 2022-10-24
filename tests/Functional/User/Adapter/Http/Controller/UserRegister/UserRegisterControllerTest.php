@@ -97,7 +97,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             $clientData['password'],
             $clientData['email'],
             $clientData['name'],
-            [USER_ROLES::NOT_ACTIVE, USER_ROLES::USER]
+            [USER_ROLES::NOT_ACTIVE]
         );
 
         $this->assertEmailIsSent($clientData['email']);
@@ -123,8 +123,6 @@ class UserRegisterControllerTest extends WebClientTestCase
             json_encode($clientData)
         );
 
-        $request = $this->client->getRequest();
-
         $response = $this->client->getResponse();
         $content = json_decode($response->getContent());
 
@@ -143,7 +141,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             $clientData['password'],
             $clientData['email'],
             $clientData['name'],
-            [USER_ROLES::NOT_ACTIVE, USER_ROLES::USER]
+            [USER_ROLES::NOT_ACTIVE]
         );
 
         $this->assertEmailIsSent($clientData['email']);
@@ -374,7 +372,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             $clientData['password'],
             $clientData['email'],
             $clientData['name'],
-            [USER_ROLES::NOT_ACTIVE, USER_ROLES::USER]
+            [USER_ROLES::NOT_ACTIVE]
         );
 
         $this->assertEmailIsSent($clientData['email']);
@@ -415,7 +413,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             $clientData['password'],
             $clientData['email'],
             $clientData['name'],
-            [USER_ROLES::NOT_ACTIVE, USER_ROLES::USER]
+            [USER_ROLES::NOT_ACTIVE]
         );
 
         $this->assertEmailIsSent($clientData['email']);

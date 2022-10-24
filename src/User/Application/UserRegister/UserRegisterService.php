@@ -70,7 +70,7 @@ class UserRegisterService extends ServiceBase
         $errorList = $userDto->validate($this->validation);
 
         if (!empty($errorList)) {
-            throw ValueObjectValidationException::fromArray($errorList);
+            throw ValueObjectValidationException::fromArray('Error', $errorList);
         }
 
         if (!$this->registerKeyValidation->__invoke(new UserRegisterKeyValidationInputDto($userDto->registrationKey))) {

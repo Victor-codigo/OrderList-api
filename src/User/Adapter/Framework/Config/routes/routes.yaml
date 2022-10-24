@@ -7,5 +7,9 @@ user_register:
         _locale: en|es
 
 user_email_confirmation:
-    path: /email/confirmation/{token}
+    path: /api/v{api_version}/{_locale}/user/email/confirmation/{token}
     methods: GET
+    controller: User\Adapter\Http\Controller\UserEmailConfirmation\UserEmailConfirmationController
+    requirements:
+        api_version: '\d+[.\d]?'
+        _locale: en|es

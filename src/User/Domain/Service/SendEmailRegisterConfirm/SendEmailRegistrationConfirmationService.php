@@ -85,6 +85,9 @@ class SendEmailRegistrationConfirmationService
     {
         $token = $this->jwt->encode(['id' => $id], $emailUserRegistrationConfirmationExpire);
 
-        return $this->DI->getUrlRouteAbsolute('user_email_confirmation', ['token' => $token]);
+        return $this->DI->getUrlRouteAbsolute('user_email_confirmation', [
+            'api_version' => 1,
+            'token' => $token,
+        ]);
     }
 }
