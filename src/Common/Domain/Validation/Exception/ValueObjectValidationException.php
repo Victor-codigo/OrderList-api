@@ -14,14 +14,17 @@ class ValueObjectValidationException extends DomainExceptionOutput implements Va
     /**
      * @param array<string, VALIDATION_ERRORS[]> $errors
      */
-    public static function fromArray(array $errors): self
+    public static function fromArray(string $message, array $errors): self
     {
         $errorValueObject = [];
 
         foreach ($errors as $valueObjectName => $errorList) {
-            $errorValueObject[$valueObjectName] = array_map(fn (VALIDATION_ERRORS $error) => mb_strtolower($error->name), $errorList);
+            $errorValueObject[$valueObjectName] = array_map(
+                fn (VALIDATION_ERRORS $error) => mb_strtolower($error->name),
+                $errorList
+            );
         }
 
-        return new static('Error', $errorValueObject, RESPONSE_STATUS::ERROR, RESPONSE_STATUS_HTTP::BAD_REQUEST);
+        return new static($message, $errorValueObject, RESPONSE_STATUS::ERROR, RESPONSE_STATUS_HTTP::BAD_REQUEST);
     }
 }
