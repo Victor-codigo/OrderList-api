@@ -15,5 +15,5 @@ interface UserRepositoryInterface extends RepositoryInterface
     /**
      * @throws DBNotFoundException
      */
-    public function findUserByIdOrFail(Identifier $id): object;
+    public function findUserByIdOrFail(Identifier $id): User;
 }

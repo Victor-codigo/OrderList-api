@@ -37,7 +37,7 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
     /**
      * @throws DBNotFoundException
      */
-    public function findUserByIdOrFail(Identifier $id): object
+    public function findUserByIdOrFail(Identifier $id): User
     {
         $user = $this->findOneBy(['id' => $id]);
 
