@@ -30,4 +30,9 @@ class ValueObjectStringFactory
     {
         return new Path($path);
     }
+
+    public static function createJwtToken(string|null $path): JwtToken
+    {
+        return new JwtToken($path);
+    }
 }

@@ -32,4 +32,6 @@ final class VALUE_OBJECTS_CONSTRAINTS
     public const IMAGE_MIN_LENGTH = 1;
     public const IMAGE_MAX_LENGTH = 256;
     public const IMAGE_TYPE = 'string';
+
+    public const JWT_TOKEN_MIN_LENGTH = 36;
 }

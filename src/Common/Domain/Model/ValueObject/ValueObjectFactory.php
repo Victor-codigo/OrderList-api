@@ -10,6 +10,7 @@ use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\Object\ValueObjectObjectFactory;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\JwtToken;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\String\Path;
@@ -56,5 +57,10 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
     public static function createPath(string|null $path): Path
     {
         return ValueObjectStringFactory::createPath($path);
+    }
+
+    public static function createJwtToken(string|null $path): JwtToken
+    {
+        return ValueObjectStringFactory::createJwtToken($path);
     }
 }
