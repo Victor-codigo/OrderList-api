@@ -8,6 +8,7 @@ parameters:
     common.admin_email: "%env(string:ADMIN_EMAIL)%"
     common.user_register_key: "%env(string:USER_REGISTER_KEY)%"
     common.email_user_registration_confirmation_expire: "%env(int:EMAIL_REGISTRATION_CONFIRM_EXPIRE)%"
+    user.jwt_key: "%env(file:resolve:JWT_KEY_FILE)%"
 
 services:
     _defaults:
@@ -28,7 +29,7 @@ services:
 
     Common\Adapter\Jwt\JwtFirebaseHS256Adapter:
         arguments:
-            $secretKey: "%env(file:resolve:JWT_KEY_FILE)%"
+            $secretKey: "%user.jwt_key%"
 
     Common\Adapter\Http\ArgumentResolver\ArgumentResolver:
         tags:
