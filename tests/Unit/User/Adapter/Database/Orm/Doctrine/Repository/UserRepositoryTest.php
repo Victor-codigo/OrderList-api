@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Test\Unit\User\Adapter\Database\Orm\Doctrine\Repository;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
@@ -19,6 +21,8 @@ use User\Domain\Model\User;
 class UserRepositoryTest extends DataBaseTestCase
 {
     use RefreshDatabaseTrait;
+
+    private const USER_ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
 
     private UserRepository $userRepository;
     private MockObject|ManagerRegistry $managerRegistry;
@@ -62,6 +66,24 @@ class UserRepositoryTest extends DataBaseTestCase
 
         $this->mockObjectManager($this->userRepository, $objectManagerMock);
         $this->userRepository->save($this->getNewUser());
+    }
+
+    /** @test */
+    public function itShouldFindAUserById(): void
+    {
+        $userId = new Identifier(self::USER_ID);
+        $return = $this->userRepository->findUserByIdOrFail($userId);
+
+        $this->assertEquals($userId, $return->getId());
+    }
+
+    /** @test */
+    public function itShouldFailFindingAUser(): void
+    {
+        $this->expectException(DBNotFoundException::class);
+
+        $userId = new Identifier(self::USER_ID.'-Not valid id');
+        $this->userRepository->findUserByIdOrFail($userId);
     }
 
     private function getNewUser(): User

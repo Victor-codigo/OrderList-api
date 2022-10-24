@@ -37,12 +37,12 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
     /**
      * @throws DBNotFoundException
      */
-    public function findByIdOrFail(Identifier $id): User
+    public function findUserByIdOrFail(Identifier $id): object
     {
-        $user = $this->objectManager->find(User::class, $id->getValue());
+        $user = $this->findOneBy(['id' => $id]);
 
         if (null === $user) {
-            throw DBNotFoundException::fromMessage(sprintf('User with id:"%s". Not found', $id->getValue()));
+            throw DBNotFoundException::fromMessage(sprintf('User with id:"%s". Not found: ', $id->getValue()));
         }
 
         return $user;
