@@ -7,6 +7,10 @@ Common\Domain\Model\ValueObject\String\Identifier:
     __construct:
       value: "1befdbe2-9c14-42f0-850f-63e061e33b8f"
 
+  id_user_active:
+    __construct:
+      value: "2606508b-4516-45d6-93a6-c7cb416b7f3f"
+
 Common\Domain\Model\ValueObject\String\Email:
   email_random-{1..5}:
     __construct:
@@ -15,6 +19,10 @@ Common\Domain\Model\ValueObject\String\Email:
   email_random-0:
     __construct:
       value: "email.already.exists@host.com"
+
+  email_user_active:
+    __construct:
+      value: "email.already.active@host.com"
 
 Common\Domain\Model\ValueObject\String\Password:
   password_random-{1..5}:
@@ -25,6 +33,10 @@ Common\Domain\Model\ValueObject\String\Password:
     __construct:
       value: "qwerty"
 
+  password_user_active:
+    __construct:
+      value: "lolailo"
+
 Common\Domain\Model\ValueObject\String\Name:
   name_random-{1..5}:
     __construct:
@@ -34,14 +46,25 @@ Common\Domain\Model\ValueObject\String\Name:
     __construct:
       value: "Juanito"
 
+  name_user_active:
+    __construct:
+      value: "María"
+
 Common\Domain\Model\ValueObject\Object\Rol:
   rol_random:
     __construct:
       value: <(User\Domain\Model\USER_ROLES::NOT_ACTIVE)>
 
+  rol_active:
+    __construct:
+      value: <(User\Domain\Model\USER_ROLES::USER)>
+
 Common\Domain\Model\ValueObject\Array\Roles:
   roles_random:
     __construct: [["@rol_random"]]
+
+  roles_user_active:
+    __construct: [["@rol_active"]]
 
 User\Domain\Model\User:
   User-{1..5}:
@@ -59,3 +82,11 @@ User\Domain\Model\User:
       password: "@password_random-0"
       name: "@name_random-0"
       roles: "@roles_random"
+
+  User-active:
+    __construct:
+      id: "@id_user_active"
+      email: "@email_user_active"
+      password: "@password_user_active"
+      name: "@name_user_active"
+      roles: "@roles_user_active"
