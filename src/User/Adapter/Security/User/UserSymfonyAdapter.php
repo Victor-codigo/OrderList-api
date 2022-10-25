@@ -5,15 +5,20 @@ declare(strict_types=1);
 namespace User\Adapter\Security\User;
 
 use Common\Domain\Model\ValueObject\Object\Rol;
+use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
 use User\Domain\Model\User;
+use User\Domain\Port\PasswordHasher\PasswordHasherInterface;
 use User\Domain\Port\User\UserInterface;
 
-class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedUserInterface, UserInterface
+class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedUserInterface, PasswordHasherInterface, UserInterface
 {
     private User $user;
+    private UserPasswordHasherInterface $passwordHasher;
 
     public function getUser(): User
     {
@@ -27,9 +32,14 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
         return $this;
     }
 
-    public function __construct(User $user)
-    {
-        $this->user = $user;
+    public function __construct(
+        UserPasswordHasherInterface $passwordHasher,
+
+        #[Autowire(expression: 'null')]
+        User|null $user = null
+    ) {
+        $this->passwordHasher = $passwordHasher;
+        $this->user = $user ?? $this->createUserNull();
     }
 
     public function getRoles(): array
@@ -61,5 +71,38 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
         return $this->user
             ->getPassword()
             ->getValue();
+    }
+
+    public function passwordHash(string $plainPassword): Password
+    {
+        return ValueObjectFactory::createPassword(
+            $this->passwordHasher->hashPassword($this, $plainPassword)
+        );
+    }
+
+    public function passwordIsValid(string $plainPassword): bool
+    {
+        if ($this->passwordNeedsRehash($this->user->getPassword())) {
+            $this->user->setPassword($this->passwordHash($plainPassword));
+        }
+
+        return $this->passwordHasher->isPasswordValid($this, $plainPassword);
+    }
+
+    public function passwordNeedsRehash(): bool
+    {
+        return $this->passwordHasher->needsRehash($this);
+    }
+
+    private function createUserNull(): User
+    {
+        return new User(
+            ValueObjectFactory::createIdentifier(null),
+            ValueObjectFactory::createEmail(null),
+            ValueObjectFactory::createPassword(null),
+            ValueObjectFactory::createName(null),
+            ValueObjectFactory::createRoles(null),
+            ValueObjectFactory::createIdentifier(null),
+        );
     }
 }

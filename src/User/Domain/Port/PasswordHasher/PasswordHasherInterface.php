@@ -12,5 +12,5 @@ interface PasswordHasherInterface
 
     public function passwordIsValid(string $plainPassword): bool;
 
-    public function passwordNeedsRehash(Password $passowrd): bool;
+    public function passwordNeedsRehash(): bool;
 }

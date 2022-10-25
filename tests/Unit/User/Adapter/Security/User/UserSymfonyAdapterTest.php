@@ -21,10 +21,10 @@ class UserSymfonyAdapterTest extends TestCase
 
     public function setup(): void
     {
-        $this->user = $this->createPartialMock(User::class, []);
+        $this->user = $this->createPartialMock(User::class, ['getPassword']);
         $this->passwordHAsher = $this->createMock(UserPasswordHasherInterface::class);
 
-        $this->object = new UserSymfonyAdapter($this->user, $this->passwordHAsher);
+        $this->object = new UserSymfonyAdapter($this->passwordHAsher, $this->user);
     }
 
     /** @test */
@@ -84,10 +84,113 @@ class UserSymfonyAdapterTest extends TestCase
     public function getThePassword(): void
     {
         $password = ValueObjectFactory::createPassword('pass');
+
+        $this->user
+            ->expects($this->once())
+            ->method('getPassword')
+            ->willReturn($password);
+
         $this->object->getUser()->setPassword($password);
         $return = $this->object->getPassword();
 
         $this->assertEquals($return, $password->getValue(),
             'getPassword: The password returned is not the expected');
+    }
+
+    /** @test */
+    public function itShouldHashTheUserPassword()
+    {
+        $plainPassword = 'my password';
+        $hashedPassword = $plainPassword.'-hashed';
+
+        $this->passwordHAsher
+            ->expects($this->once())
+            ->method('hashPassword')
+            ->with($this->object, $plainPassword)
+            ->willReturn($hashedPassword);
+
+        $resturn = $this->object->passwordHash($plainPassword);
+
+        $this->assertSame($hashedPassword, $resturn->getValue());
+    }
+
+    /** @test */
+    public function itShouldCheckIfThePasswordNeedRehash()
+    {
+        $this->passwordHAsher
+            ->expects($this->once())
+            ->method('needsRehash')
+            ->with($this->object)
+            ->willReturn(true);
+
+        $resturn = $this->object->passwordNeedsRehash();
+
+        $this->assertTrue($resturn);
+    }
+
+    /** @test */
+    public function itShouldCheckIfAPasswordIsValidAndNeedRehash()
+    {
+        $plainPassword = 'my password';
+        $hashedPassword = $plainPassword.'-hashed';
+
+        $this->passwordHAsher
+            ->expects($this->once())
+            ->method('hashPassword')
+            ->with($this->object, $plainPassword)
+            ->willReturn($hashedPassword);
+
+        $this->passwordHAsher
+            ->expects($this->once())
+            ->method('needsRehash')
+            ->with($this->object)
+            ->willReturn(true);
+
+        $this->passwordHAsher
+            ->expects($this->once())
+            ->method('isPasswordValid')
+            ->with($this->object, $plainPassword)
+            ->willReturn(true);
+
+        $this->user
+            ->expects($this->once())
+            ->method('getPassword')
+            ->willReturn(ValueObjectFactory::createPassword($hashedPassword));
+
+        $resturn = $this->object->passwordIsValid($plainPassword);
+
+        $this->assertTrue($resturn);
+    }
+
+    /** @test */
+    public function itShouldCheckIfAPasswordIsValidAndNotNeedRehash()
+    {
+        $plainPassword = 'my password';
+        $hashedPassword = $plainPassword.'-hashed';
+
+        $this->passwordHAsher
+            ->expects($this->never())
+            ->method('hashPassword');
+
+        $this->passwordHAsher
+            ->expects($this->once())
+            ->method('needsRehash')
+            ->with($this->object)
+            ->willReturn(false);
+
+        $this->passwordHAsher
+            ->expects($this->once())
+            ->method('isPasswordValid')
+            ->with($this->object, $plainPassword)
+            ->willReturn(true);
+
+        $this->user
+            ->expects($this->once())
+            ->method('getPassword')
+            ->willReturn(ValueObjectFactory::createPassword($hashedPassword));
+
+        $resturn = $this->object->passwordIsValid($plainPassword);
+
+        $this->assertTrue($resturn);
     }
 }

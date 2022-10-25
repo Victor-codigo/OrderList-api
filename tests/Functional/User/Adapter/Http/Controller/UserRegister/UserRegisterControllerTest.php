@@ -14,7 +14,6 @@ use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
-use User\Adapter\Security\PasswordHash\PasswordHashSymfonyAdapter;
 use User\Domain\Model\Profile;
 use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
@@ -24,8 +23,6 @@ class UserRegisterControllerTest extends WebClientTestCase
     use RefreshDatabaseTrait;
 
     private const ENDPOINT = '/api/v1/es/user/register';
-
-    private PasswordHashSymfonyAdapter $passwordHasher;
 
     public function setUp(): void
     {
