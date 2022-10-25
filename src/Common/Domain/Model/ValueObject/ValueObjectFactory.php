@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject;
 
+use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Array\ValueObjectArrayFactoryInterface;
 use Common\Domain\Model\ValueObject\Array\valueObjectArrayFactory;
 use Common\Domain\Model\ValueObject\Object\Rol;
@@ -16,7 +17,6 @@ use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\String\ValueObjectStringFactory;
 use Common\Domain\Model\ValueObject\String\ValueObjectStringFactoryInterface;
-use Common\Domain\Model\ValueObject\array\Roles;
 use User\Domain\Model\USER_ROLES;
 
 final class ValueObjectFactory implements ValueObjectStringFactoryInterface, ValueObjectArrayFactoryInterface
