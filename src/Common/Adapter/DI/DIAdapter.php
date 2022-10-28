@@ -9,6 +9,8 @@ use Common\Adapter\DI\Exception\RouteNotFoundException;
 use Common\Adapter\DI\Exception\RouteParametersMissingException;
 use Common\Domain\Ports\DI\DIInterface;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException as SymfonyRouteNotFoundException;
@@ -25,6 +27,7 @@ class DIAdapter implements DIInterface, ServiceSubscriberInterface
     {
         return [
             RouterInterface::class,
+            RequestStack::class,
         ];
     }
 
@@ -74,5 +77,15 @@ class DIAdapter implements DIInterface, ServiceSubscriberInterface
     private function getRouter(): Router
     {
         return $this->DI->get(RouterInterface::class);
+    }
+
+    private function getRequest(): Request
+    {
+        return $this->DI->get(RequestStack::class)->getCurrentRequest();
+    }
+
+    public function getLocale(): string
+    {
+        return $this->getRequest()->getLocale();
     }
 }
