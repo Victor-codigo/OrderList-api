@@ -69,10 +69,6 @@ class MailerSymfonyAdapter implements MailerInterface
         return $this;
     }
 
-    /**
-     * @param array $params key - name
-     *                      value - value
-     */
     public function template(TemplateDtoInterface $data): self
     {
         $this->email

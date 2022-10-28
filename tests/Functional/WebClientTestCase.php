@@ -89,4 +89,9 @@ class WebClientTestCase extends WebTestCase
         $this->assertNotNull($email);
         $this->assertEmailHeaderSame($email, 'To', $to);
     }
+
+    protected function assertEmailIsNotSent(): void
+    {
+        $this->assertQueuedEmailCount(0);
+    }
 }

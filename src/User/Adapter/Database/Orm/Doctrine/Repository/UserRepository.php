@@ -8,6 +8,7 @@ use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
+use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
@@ -42,7 +43,18 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
         $user = $this->findOneBy(['id' => $id]);
 
         if (null === $user) {
-            throw DBNotFoundException::fromMessage(sprintf('User with id:"%s". Not found: ', $id->getValue()));
+            throw DBNotFoundException::fromMessage(sprintf('User with id:"%s". Not found', $id->getValue()));
+        }
+
+        return $user;
+    }
+
+    public function findUserByEmailOrFail(Email $email): User
+    {
+        $user = $this->findOneBy(['email' => $email]);
+
+        if (null === $user) {
+            throw DBNotFoundException::fromMessage(sprintf('User with email:"%s". Not found', $email->getValue()));
         }
 
         return $user;

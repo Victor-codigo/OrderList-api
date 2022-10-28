@@ -8,7 +8,10 @@ parameters:
     common.admin_email: "%env(string:ADMIN_EMAIL)%"
     common.user_register_key: "%env(string:USER_REGISTER_KEY)%"
     common.email_user_registration_confirmation_expire: "%env(int:EMAIL_REGISTRATION_CONFIRM_EXPIRE)%"
+    common.email_user_password_remember_expire: "%env(int:EMAIL_PASSWORD_REMEMBER_EXPIRE)%"
     user.jwt_key: "%env(file:resolve:JWT_KEY_FILE)%"
+    user.passwordRememberUrl: "%env(string:EMAIL_PASSWORD_REMEMBER_URL)%"
+    user.registrationConfirmUrl: "%env(string:EMAIL_REGISTRATION_CONFIRM_URL)%"
 
 services:
     _defaults:

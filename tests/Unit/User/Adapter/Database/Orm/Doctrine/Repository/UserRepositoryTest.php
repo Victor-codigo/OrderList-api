@@ -7,6 +7,7 @@ namespace Test\Unit\User\Adapter\Database\Orm\Doctrine\Repository;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
+use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -23,6 +24,7 @@ class UserRepositoryTest extends DataBaseTestCase
     use RefreshDatabaseTrait;
 
     private const USER_ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
+    private const USER_EMAIL = 'email.already.exists@host.com';
 
     private UserRepository $userRepository;
     private MockObject|ManagerRegistry $managerRegistry;
@@ -78,12 +80,30 @@ class UserRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldFailFindingAUser(): void
+    public function itShouldFailFindingAUserById(): void
     {
         $this->expectException(DBNotFoundException::class);
 
         $userId = new Identifier(self::USER_ID.'-Not valid id');
         $this->userRepository->findUserByIdOrFail($userId);
+    }
+
+    /** @test */
+    public function itShouldFindAUserByEmail(): void
+    {
+        $userEmail = new Email(self::USER_EMAIL);
+        $return = $this->userRepository->findUserByEmailOrFail($userEmail);
+
+        $this->assertEquals($userEmail, $return->getEmail());
+    }
+
+    /** @test */
+    public function itShouldFailFindingAUserByEmail(): void
+    {
+        $this->expectException(DBNotFoundException::class);
+
+        $userEmail = new Email(self::USER_EMAIL.'-Not valid email');
+        $this->userRepository->findUserByEmailOrFail($userEmail);
     }
 
     private function getNewUser(): User

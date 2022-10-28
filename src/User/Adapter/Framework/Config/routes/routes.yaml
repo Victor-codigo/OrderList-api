@@ -13,3 +13,19 @@ user_email_confirmation:
     requirements:
         api_version: '\d+[.\d]?'
         _locale: en|es
+
+user_remember_password:
+    path: /api/v{api_version}/{_locale}/user/password/remember
+    methods: PATCH
+    controller: User\Adapter\Http\Controller\UserPasswordRemember\UserPasswordRememberController
+    requirements:
+        api_version: '\d+[.\d]?'
+        _locale: en|es
+
+user_password_remember_confirm:
+    path: /api/v{api_version}/{_locale}/user/password/remember/confirm
+    methods: PATCH
+    controller: User\Adapter\Http\Controller\UserPasswordRemember\UserPasswordRememberController
+    requirements:
+        api_version: '\d+[.\d]?'
+        _locale: en|es
