@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace User\Domain\Service\UserRegisterKeyValidation\Exception;
+namespace User\Application\UserRegister\Dto;
 
 use Common\Domain\Exception\DomainExceptionOutput;
 use Common\Domain\Response\RESPONSE_STATUS;

@@ -13,6 +13,7 @@ use Common\Domain\Service\ServiceBase;
 use Common\Domain\Service\ServiceInputDtoInterface;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
+use User\Application\UserRegister\Dto\RegistrationKeyValidationFailException;
 use User\Application\UserRegister\Dto\UserRegisterInputDto;
 use User\Application\UserRegister\Dto\UserRegisterOutputDto;
 use User\Application\UserRegister\Exception\EmailAlreadyExistsException;
@@ -21,7 +22,6 @@ use User\Domain\Port\PasswordHasher\PasswordHasherInterface;
 use User\Domain\Port\Repository\UserRepositoryInterface;
 use User\Domain\Port\User\UserInterface;
 use User\Domain\Service\UserRegisterKeyValidation\Dto\UserRegisterKeyValidationInputDto;
-use User\Domain\Service\UserRegisterKeyValidation\Exception\RegistrationKeyValidationFailException;
 use User\Domain\Service\UserRegisterKeyValidation\UserRegisterKeyValidationService;
 
 class UserRegisterService extends ServiceBase
