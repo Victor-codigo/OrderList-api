@@ -31,11 +31,11 @@ Common\Domain\Model\ValueObject\String\Password:
 
   password_random-0:
     __construct:
-      value: "qwerty"
+      value: "\\$2y\\$04\\$A5XxYKU/w5tpX6BY9Kpf9uDrXY3seHrYwmx70qZ0DWyp0Lmvfo29q"
 
   password_user_active:
     __construct:
-      value: "lolailo"
+      value: "\\$2y\\$13\\$/Bu6Y2ggoPUQNi1gCIqZyeapz0wWXTQEFsTRHggTR72u31Af6X2Du" #123456
 
 Common\Domain\Model\ValueObject\String\Name:
   name_random-{1..5}:

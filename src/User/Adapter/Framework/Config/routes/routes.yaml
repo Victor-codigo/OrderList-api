@@ -29,3 +29,19 @@ user_password_remember_confirm:
     requirements:
         api_version: '\d+[.\d]?'
         _locale: en|es
+
+# user_password_remember_change:
+#     path: /api/v{api_version}/{_locale}/user/password/remember/change
+#     methods: PATCH
+#     controller: User\Adapter\Http\Controller\UserPasswordRemember\UserPasswordRememberController
+#     requirements:
+#         api_version: '\d+[.\d]?'
+#         _locale: en|es
+
+user_password_change:
+    path: /api/v{api_version}/{_locale}/user/password/change
+    methods: PATCH
+    controller: User\Adapter\Http\Controller\UserPasswordChange\UserPasswordChangeController
+    requirements:
+        api_version: '\d+[.\d]?'
+        _locale: en|es

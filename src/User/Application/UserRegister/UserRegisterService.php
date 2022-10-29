@@ -19,6 +19,7 @@ use User\Application\UserRegister\Exception\EmailAlreadyExistsException;
 use User\Domain\Model\User;
 use User\Domain\Port\PasswordHasher\PasswordHasherInterface;
 use User\Domain\Port\Repository\UserRepositoryInterface;
+use User\Domain\Port\User\UserInterface;
 use User\Domain\Service\UserRegisterKeyValidation\Dto\UserRegisterKeyValidationInputDto;
 use User\Domain\Service\UserRegisterKeyValidation\Exception\RegistrationKeyValidationFailException;
 use User\Domain\Service\UserRegisterKeyValidation\UserRegisterKeyValidationService;
@@ -29,7 +30,7 @@ class UserRegisterService extends ServiceBase
     private UserRegisterKeyValidationService $registerKeyValidation;
     private EventDispatcherInterface $eventDispatcher;
     private ValidationInterface $validation;
-    private PasswordHasherInterface $passwordHasher;
+    private PasswordHasherInterface&UserInterface $passwordHasher;
 
     public function __construct(
         UserRepositoryInterface $repository,
@@ -88,7 +89,8 @@ class UserRegisterService extends ServiceBase
             $userDto->roles
         );
 
-        $user->setPassword($this->passwordHasher->passwordHash($user->getPassword()->getValue()));
+        $this->passwordHasher->setUser($user);
+        $this->passwordHasher->passwordHash($userDto->password->getValue());
 
         return $user;
     }
