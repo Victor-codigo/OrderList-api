@@ -21,7 +21,12 @@ class UserSymfonyAdapterTest extends TestCase
 
     public function setup(): void
     {
-        $this->user = $this->createPartialMock(User::class, ['getPassword']);
+        $this->loadUserSymfonyAdapter();
+    }
+
+    private function loadUserSymfonyAdapter(array $userMethodMock = [])
+    {
+        $this->user = $this->createPartialMock(User::class, $userMethodMock);
         $this->passwordHAsher = $this->createMock(UserPasswordHasherInterface::class);
 
         $this->object = new UserSymfonyAdapter($this->passwordHAsher, $this->user);
@@ -84,6 +89,7 @@ class UserSymfonyAdapterTest extends TestCase
     public function getThePassword(): void
     {
         $password = ValueObjectFactory::createPassword('pass');
+        $this->loadUserSymfonyAdapter(['getPassword']);
 
         $this->user
             ->expects($this->once())
@@ -102,6 +108,7 @@ class UserSymfonyAdapterTest extends TestCase
     {
         $plainPassword = 'my password';
         $hashedPassword = $plainPassword.'-hashed';
+        $this->loadUserSymfonyAdapter();
 
         $this->passwordHAsher
             ->expects($this->once())
@@ -109,9 +116,9 @@ class UserSymfonyAdapterTest extends TestCase
             ->with($this->object, $plainPassword)
             ->willReturn($hashedPassword);
 
-        $resturn = $this->object->passwordHash($plainPassword);
+        $this->object->passwordHash($plainPassword);
 
-        $this->assertSame($hashedPassword, $resturn->getValue());
+        $this->assertSame($hashedPassword, $this->object->getPassword());
     }
 
     /** @test */
@@ -152,11 +159,6 @@ class UserSymfonyAdapterTest extends TestCase
             ->with($this->object, $plainPassword)
             ->willReturn(true);
 
-        $this->user
-            ->expects($this->once())
-            ->method('getPassword')
-            ->willReturn(ValueObjectFactory::createPassword($hashedPassword));
-
         $resturn = $this->object->passwordIsValid($plainPassword);
 
         $this->assertTrue($resturn);
@@ -166,7 +168,6 @@ class UserSymfonyAdapterTest extends TestCase
     public function itShouldCheckIfAPasswordIsValidAndNotNeedRehash()
     {
         $plainPassword = 'my password';
-        $hashedPassword = $plainPassword.'-hashed';
 
         $this->passwordHAsher
             ->expects($this->never())
@@ -184,13 +185,32 @@ class UserSymfonyAdapterTest extends TestCase
             ->with($this->object, $plainPassword)
             ->willReturn(true);
 
-        $this->user
-            ->expects($this->once())
-            ->method('getPassword')
-            ->willReturn(ValueObjectFactory::createPassword($hashedPassword));
-
         $resturn = $this->object->passwordIsValid($plainPassword);
 
         $this->assertTrue($resturn);
+    }
+
+    /** @test */
+    public function itShouldCheckIfAPasswordIsValidAndItIsNot()
+    {
+        $plainPassword = 'my password';
+
+        $this->passwordHAsher
+            ->expects($this->never())
+            ->method('hashPassword');
+
+        $this->passwordHAsher
+            ->expects($this->never())
+            ->method('needsRehash');
+
+        $this->passwordHAsher
+            ->expects($this->once())
+            ->method('isPasswordValid')
+            ->with($this->object, $plainPassword)
+            ->willReturn(false);
+
+        $resturn = $this->object->passwordIsValid($plainPassword);
+
+        $this->assertFalse($resturn);
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace User\Adapter\Security\User;
 
 use Common\Domain\Model\ValueObject\Object\Rol;
-use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -73,20 +72,24 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
             ->getValue();
     }
 
-    public function passwordHash(string $plainPassword): Password
+    public function passwordHash(string $plainPassword): void
     {
-        return ValueObjectFactory::createPassword(
+        $this->user->setPassword(ValueObjectFactory::createPassword(
             $this->passwordHasher->hashPassword($this, $plainPassword)
-        );
+        ));
     }
 
     public function passwordIsValid(string $plainPassword): bool
     {
-        if ($this->passwordNeedsRehash($this->user->getPassword())) {
-            $this->user->setPassword($this->passwordHash($plainPassword));
+        if (!$this->passwordHasher->isPasswordValid($this, $plainPassword)) {
+            return false;
         }
 
-        return $this->passwordHasher->isPasswordValid($this, $plainPassword);
+        if ($this->passwordNeedsRehash()) {
+            $this->passwordHash($plainPassword);
+        }
+
+        return true;
     }
 
     public function passwordNeedsRehash(): bool
