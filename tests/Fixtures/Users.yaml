@@ -31,7 +31,7 @@ Common\Domain\Model\ValueObject\String\Password:
 
   password_random-0:
     __construct:
-      value: "\\$2y\\$04\\$A5XxYKU/w5tpX6BY9Kpf9uDrXY3seHrYwmx70qZ0DWyp0Lmvfo29q"
+      value: "\\$2y\\$04\\$A5XxYKU/w5tpX6BY9Kpf9uDrXY3seHrYwmx70qZ0DWyp0Lmvfo29q" #qwerty
 
   password_user_active:
     __construct:

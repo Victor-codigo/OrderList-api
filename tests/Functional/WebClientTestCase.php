@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional;
 
+use Common\Adapter\Jwt\JwtFirebaseHS256Adapter;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -33,6 +34,14 @@ class WebClientTestCase extends WebTestCase
             ->getContainer()
             ->get('doctrine')
             ->getManager();
+    }
+
+    protected function generateToken(string $userId, float $expire = 0): string
+    {
+        $jwtKey = $this->client->getContainer()->getParameter('user.jwt_key');
+        $jwt = new JwtFirebaseHS256Adapter($jwtKey);
+
+        return $jwt->encode(['id' => $userId], $expire);
     }
 
     protected function assertResponseStructureIsOk(Response $response, array $data = [], array $errors = [], int $responseCode = Response::HTTP_OK, string $contentType = self::CONTENT_TYPE_ALLOWED)

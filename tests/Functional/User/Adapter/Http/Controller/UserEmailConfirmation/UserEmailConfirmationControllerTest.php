@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserEmailConfirmation;
 
-use Common\Adapter\Jwt\JwtFirebaseHS256Adapter;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
@@ -138,13 +137,5 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
         $userSaved = $entityManager->find(User::class, new Identifier(self::USER_ID_NOT_EXISTS));
 
         $this->assertNull($userSaved);
-    }
-
-    private function generateToken(string $userId, float $expire = 0): string
-    {
-        $jwtKey = $this->client->getContainer()->getParameter('user.jwt_key');
-        $jwt = new JwtFirebaseHS256Adapter($jwtKey);
-
-        return $jwt->encode(['id' => $userId], $expire);
     }
 }
