@@ -47,6 +47,10 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
             ->getRoles()
             ->getValue();
 
+        if (null === $roles) {
+            return [];
+        }
+
         return array_map(
             fn (Rol $rol) => $rol->getValue()->value,
             $roles
@@ -60,16 +64,20 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
 
     public function getUserIdentifier(): string
     {
-        return $this->user
+        $identifier = $this->user
             ->getEmail()
             ->getValue();
+
+        return $identifier ?? '';
     }
 
     public function getPassword(): string
     {
-        return $this->user
+        $password = $this->user
             ->getPassword()
             ->getValue();
+
+        return $password ?? '';
     }
 
     public function passwordHash(string $plainPassword): void

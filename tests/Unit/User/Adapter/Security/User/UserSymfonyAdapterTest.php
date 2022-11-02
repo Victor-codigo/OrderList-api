@@ -86,6 +86,16 @@ class UserSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
+    public function getTheIdentifierWhenItsNullShouldReturnEmptyString(): void
+    {
+        $email = ValueObjectFactory::createEmail(null);
+        $this->object->getUser()->setEmail($email);
+        $return = $this->object->getUserIdentifier();
+
+        $this->assertEquals($return, '');
+    }
+
+    /** @test */
     public function getThePassword(): void
     {
         $password = ValueObjectFactory::createPassword('pass');
@@ -101,6 +111,23 @@ class UserSymfonyAdapterTest extends TestCase
 
         $this->assertEquals($return, $password->getValue(),
             'getPassword: The password returned is not the expected');
+    }
+
+    /** @test */
+    public function getThePasswordWhenItsNullShouldReturnEmptyString(): void
+    {
+        $password = ValueObjectFactory::createPassword(null);
+        $this->loadUserSymfonyAdapter(['getPassword']);
+
+        $this->user
+            ->expects($this->once())
+            ->method('getPassword')
+            ->willReturn($password);
+
+        $this->object->getUser()->setPassword($password);
+        $return = $this->object->getPassword();
+
+        $this->assertEquals($return, '');
     }
 
     /** @test */
