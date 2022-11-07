@@ -11,13 +11,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use User\Adapter\Http\Controller\UserPasswordRememberChange\Dto\UserPasswordRememberChangeRequestDto;
 use User\Application\UserPasswordRememberChange\Dto\UserPasswordRememberChangeInputDto;
-use User\Application\UserPasswordRememberChange\UserPasswordRememberChangeService as ApplicationUserPasswordRememberChangeService;
+use User\Application\UserPasswordRememberChange\UserPasswordRememberChangeService;
 
-class UserPasswordRememberChangeService extends AbstractController
+class UserPasswordRememberChangeController extends AbstractController
 {
-    private ApplicationUserPasswordRememberChangeService $userPasswordRememberChangeService;
+    private UserPasswordRememberChangeService $userPasswordRememberChangeService;
 
-    public function __construct(ApplicationUserPasswordRememberChangeService $userPasswordRememberChangeService)
+    public function __construct(UserPasswordRememberChangeService $userPasswordRememberChangeService)
     {
         $this->userPasswordRememberChangeService = $userPasswordRememberChangeService;
     }
