@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace User\Application\UserRegister\Dto;
+namespace User\Application\UserRegister\Exception;
 
 use Common\Domain\Exception\DomainExceptionOutput;
 use Common\Domain\Response\RESPONSE_STATUS;
