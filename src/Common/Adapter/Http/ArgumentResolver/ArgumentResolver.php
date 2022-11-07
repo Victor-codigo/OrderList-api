@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace Common\Adapter\Http\ArgumentResolver;
 
 use Common\Adapter\Http\Dto\RequestDtoInterface;
-use Generator;
-use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 
 class ArgumentResolver implements ArgumentValueResolverInterface
 {
@@ -22,12 +20,12 @@ class ArgumentResolver implements ArgumentValueResolverInterface
 
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
-        $requestReflection = new ReflectionClass($argument->getType());
+        $requestReflection = new \ReflectionClass($argument->getType());
 
         return $requestReflection->implementsInterface(RequestDtoInterface::class);
     }
 
-    public function resolve(Request $request, ArgumentMetadata $argument): Generator
+    public function resolve(Request $request, ArgumentMetadata $argument): \Generator
     {
         $this->requestValidation->__invoke($request);
         $requestDto = $argument->getType();

@@ -30,3 +30,4 @@ services:
     # Event subscriber loader
     Common\Domain\Ports\Event\EventDispatcherInterface $eventDispatcherSubscriberLoader: '@Common\Adapter\Compiler\RegisterEventDomain\EventSubscriberLoader'
     Common\Domain\Ports\Event\EventDispatcherInterface: '@Common\Adapter\Event\EventDispatcherSymfonyAdapter'
+
