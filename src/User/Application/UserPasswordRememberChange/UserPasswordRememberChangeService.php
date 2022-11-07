@@ -4,36 +4,35 @@ declare(strict_types=1);
 
 namespace User\Application\UserPasswordRememberChange;
 
-use App\User\Application\UserPasswordRememberChange\Exception\UserPasswordRememberChangePasswordNewAndPasswrodNewRememberAreNotEqualsException;
 use Common\Adapter\Jwt\Exception\JwtException;
 use Common\Adapter\Jwt\Exception\JwtTokenExpiredException;
-use Common\Adapter\Jwt\JwtFirebaseHS256Adapter;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\JwtToken;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Ports\JwtToken\JwtHS256Interface;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use InvalidArgumentException;
 use User\Application\UserPasswordRememberChange\Dto\UserPasswordRememberChangeInputDto;
+use User\Application\UserPasswordRememberChange\Exception\UserPasswordRememberChangePasswordNewAndPasswrodNewRepeatAreNotEqualsException;
 use User\Application\UserPasswordRememberChange\Exception\UserPasswordRememberChangeTokenExpiredException;
 use User\Application\UserPasswordRememberChange\Exception\UserPasswordRememberChangeTokenWrongException;
 use User\Application\UserPasswordRememberChange\Exception\UserPasswordRememberChangeUserNotFoundException;
 use User\Domain\Service\UserPasswordChange\Dto\UserPasswordChangeDto;
 use User\Domain\Service\UserPasswordChange\Exception\PasswordNewAndRepeatAreNotTheSameException;
 use User\Domain\Service\UserPasswordChange\UserPasswordChangeService;
-use stdClass;
 
 class UserPasswordRememberChangeService extends ServiceBase
 {
     private UserPasswordChangeService $userPasswordChangeService;
-    private JwtFirebaseHS256Adapter  $jwt;
+    private JwtHS256Interface  $jwt;
     private ValidationInterface  $validator;
 
     public function __construct(
         UserPasswordChangeService $userPasswordChangeService,
-        JwtFirebaseHS256Adapter $jwt,
+        JwtHS256Interface $jwt,
         ValidationInterface $validator
     ) {
         $this->userPasswordChangeService = $userPasswordChangeService;
@@ -49,7 +48,7 @@ class UserPasswordRememberChangeService extends ServiceBase
             $tokenDecoded = $this->getToken($passwordChangeDto->token);
 
             $this->userPasswordChangeService->__invoke(
-                $this->createUserPasswordChangeDto($tokenDecoded->id, $passwordChangeDto->passwordNew, $passwordChangeDto->passwordNewRepeat)
+                $this->createUserPasswordChangeDto($tokenDecoded->username, $passwordChangeDto->passwordNew, $passwordChangeDto->passwordNewRepeat)
             );
         } catch (InvalidArgumentException) {
             throw UserPasswordRememberChangeTokenWrongException::fromMessage('Wrong token');
@@ -60,7 +59,7 @@ class UserPasswordRememberChangeService extends ServiceBase
         } catch (DBNotFoundException) {
             throw UserPasswordRememberChangeUserNotFoundException::fromMessage('It could not change password');
         } catch (PasswordNewAndRepeatAreNotTheSameException) {
-            throw UserPasswordRememberChangePasswordNewAndPasswrodNewRememberAreNotEqualsException::fromMessage('Password new and Repeat new are not equals');
+            throw UserPasswordRememberChangePasswordNewAndPasswrodNewRepeatAreNotEqualsException::fromMessage('Password new and Repeat new are not equals');
         }
     }
 
@@ -84,7 +83,7 @@ class UserPasswordRememberChangeService extends ServiceBase
         }
     }
 
-    private function getToken(JwtToken $token): stdClass
+    private function getToken(JwtToken $token): \stdClass
     {
         $tokenDecoded = $this->jwt->decode($token->getValue());
 

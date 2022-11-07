@@ -9,6 +9,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
@@ -86,6 +87,17 @@ class UserRepositoryTest extends DataBaseTestCase
 
         $userId = new Identifier(self::USER_ID.'-Not valid id');
         $this->userRepository->findUserByIdOrFail($userId);
+    }
+
+    /** @test */
+    public function itShouldFindAUserByIdNoCache(): void
+    {
+        $userId = new Identifier(self::USER_ID);
+        $return = $this->userRepository->findUserByIdOrFail($userId);
+        $return->setEmail(ValueObjectFactory::createEmail('other.email@host.com'));
+        $returnNoCache = $this->userRepository->findUserByIdNoCacheOrFail($userId);
+
+        $this->assertEquals($return->getEmail(), $returnNoCache->getEmail());
     }
 
     /** @test */

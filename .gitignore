@@ -28,3 +28,7 @@ src/User/Adapter/Framework/Config/JwtKeys/JwtFirebaseHS256/key.pem
 /.php-cs-fixer.php
 /.php-cs-fixer.cache
 ###< friendsofphp/php-cs-fixer ###
+
+###> lexik/jwt-authentication-bundle ###
+/src/Common/Adapter/Framework/Config/JwtKeys/Lexik/*.pem
+###< lexik/jwt-authentication-bundle ###

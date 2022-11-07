@@ -27,4 +27,9 @@ abstract class RepositoryBase extends ServiceEntityRepository
     {
         return Uuid::v4()->toRfc4122();
     }
+
+    public function isValidUuid(string $id)
+    {
+        return Uuid::isValid($id);
+    }
 }

@@ -83,7 +83,7 @@ class SendEmailRegistrationConfirmationService
 
     private function getUrlRegistrationConfirmation(string $id, int $emailUserRegistrationConfirmationExpire, string $registrationConfirmUrl): string
     {
-        $token = $this->jwt->encode(['id' => $id], $emailUserRegistrationConfirmationExpire);
+        $token = $this->jwt->encode(['username' => $id], $emailUserRegistrationConfirmationExpire);
 
         return $registrationConfirmUrl.'/'.$token;
     }

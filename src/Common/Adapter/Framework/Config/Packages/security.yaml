@@ -1,35 +1,42 @@
 security:
-    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+
+    enable_authenticator_manager: true
+
     providers:
-        # users_in_memory: { memory: null }
         user_provider:
-            entity:
-                class: User\Adapter\Security\User\UserSymfonyAdapter
-                property: email
+            id: User\Adapter\Security\Jwt\UserSymfonyProviderAdapter
+
     firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-        main:
-            pattern: ^/en/user/create
-            lazy: true
-            provider: user_provider
+        
+        login:
+            pattern: ^/api/v1/en/user/login
+            stateless: true
+            json_login:
+                check_path: /api/v1/en/user/login
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#the-firewall
+        api:
+            pattern: ^/api
+            stateless: true
+            jwt: ~
 
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
-
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^api/en/user/create, roles: ROLE_ADMIN }
+        # User register
+        - { path: ^/api/v1/en/user/register, roles: PUBLIC_ACCESS }
+        - { path: ^/api/v1/es/user/register, roles: PUBLIC_ACCESS }
+
+        # User register email confirmation
+        - { path: ^/api/v1/en/user/email/confirmation, roles: PUBLIC_ACCESS }
+        - { path: ^/api/v1/es/user/email/confirmation, roles: PUBLIC_ACCESS }
+        
+        # User password remember
+        - { path: ^/api/v1/en/user/password/remember, roles: PUBLIC_ACCESS }
+        - { path: ^/api/v1/es/user/password/remember, roles: PUBLIC_ACCESS }
+
+        - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:
     security:

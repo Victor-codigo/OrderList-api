@@ -30,7 +30,7 @@ class EmailConfirmationJwtTokenValidationService
     public function __invoke(EmailConfirmationJwtTokenValidationDto $tokenDto): Identifier
     {
         $tokenDecoded = $this->getToken($tokenDto->token);
-        $userIdentifier = new Identifier($tokenDecoded->id);
+        $userIdentifier = new Identifier($tokenDecoded->username);
         $user = $this->getUser($userIdentifier);
         $this->setUserActive($user);
 

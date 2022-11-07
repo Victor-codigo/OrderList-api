@@ -25,15 +25,15 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     public function itShouldActivateTheUser(): void
     {
         $this->client = $this->getNewClient();
-        $token = $this->generateToken(self::USER_ID, 86_400); // 24H
+        $token = $this->generateToken(['username' => self::USER_ID], 86_400); // 24H
         $this->client->request(method: 'GET', uri: self::ENDPOINT.'/'.$token, content: '{}');
 
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_CREATED);
+        $this->assertResponseStructureIsOk($response, ['username'], [], Response::HTTP_CREATED);
         $this->assertSame('User activated', $responseContent->message);
-        $this->assertSame(self::USER_ID, $responseContent->data->id);
+        $this->assertSame(self::USER_ID, $responseContent->data->username);
 
         $entityManager = $this->getEntityManager();
         $userSaved = $entityManager->find(User::class, self::USER_ID);
@@ -46,7 +46,7 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     public function itShouldFailWrongToken(): void
     {
         $this->client = $this->getNewClient();
-        $token = $this->generateToken(self::USER_ID, 86_400); // 24H
+        $token = $this->generateToken(['username' => self::USER_ID], 86_400); // 24H
         $this->client->request(method: 'GET', uri: self::ENDPOINT.'/'.$token.'-Wrong token', content: '{}');
 
         $response = $this->client->getResponse();
@@ -65,7 +65,7 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     public function itShouldFailTokenHasExpired(): void
     {
         $this->client = $this->getNewClient();
-        $token = $this->generateToken(self::USER_ID, 0);
+        $token = $this->generateToken(['username' => self::USER_ID], 0);
         $this->client->request(method: 'GET', uri: self::ENDPOINT.'/'.$token, content: '{}');
 
         $response = $this->client->getResponse();
@@ -84,7 +84,7 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     public function itShouldFailUserIsAlreadyActive(): void
     {
         $this->client = $this->getNewClient();
-        $token = $this->generateToken(self::USER_ID_ALREADY_REGISTERED, 86_400); // 24H
+        $token = $this->generateToken(['username' => self::USER_ID_ALREADY_REGISTERED], 86_400); // 24H
         $this->client->request(method: 'GET', uri: self::ENDPOINT.'/'.$token, content: '{}');
 
         $response = $this->client->getResponse();
@@ -103,7 +103,7 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     public function itShouldFailUserDoesntExists(): void
     {
         $this->client = $this->getNewClient();
-        $token = $this->generateToken(self::USER_ID_NOT_EXISTS, 86_400); // 24H
+        $token = $this->generateToken(['username' => self::USER_ID_NOT_EXISTS], 86_400); // 24H
         $this->client->request(method: 'GET', uri: self::ENDPOINT.'/'.$token, content: '{}');
 
         $response = $this->client->getResponse();

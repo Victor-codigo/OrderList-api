@@ -7,4 +7,6 @@ namespace Common\Domain\Ports\Repository;
 interface RepositoryInterface
 {
     public function generateId(): string;
+
+    public function isValidUuid(string $id);
 }

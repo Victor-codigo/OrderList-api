@@ -22,4 +22,11 @@ interface UserRepositoryInterface extends RepositoryInterface
      * @throws DBNotFoundException
      */
     public function findUserByEmailOrFail(Email $email): User;
+
+    /**
+     * WARNING! this method will override User entity with data base info, any changes in user, will be lost.
+     *
+     * @throws DBNotFoundException
+     */
+    public function findUserByIdNoCacheOrFail(Identifier $id): User;
 }

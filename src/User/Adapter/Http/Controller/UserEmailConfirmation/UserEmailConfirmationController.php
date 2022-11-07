@@ -24,7 +24,7 @@ class UserEmailConfirmationController extends AbstractController
     public function __invoke(UserEmailConfirmationRequestDto $request): JsonResponse
     {
         $user = $this->emailConfirmationService->__invoke(new UserEmailConfirmationInputDto($request->token));
-        $response = new ResponseDto(message: 'User activated', data: ['id' => $user->id->getValue()]);
+        $response = new ResponseDto(message: 'User activated', data: ['username' => $user->id->getValue()]);
 
         return $this->json($response, Response::HTTP_CREATED);
     }

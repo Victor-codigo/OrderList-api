@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional;
 
-use Common\Adapter\Jwt\JwtFirebaseHS256Adapter;
+use Common\Adapter\Jwt\JwtLexikAdapter;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -14,18 +14,39 @@ use Symfony\Component\HttpFoundation\Response;
 class WebClientTestCase extends WebTestCase
 {
     protected const CONTENT_TYPE_ALLOWED = 'application/json';
+    protected const LOGIN_URL = '/api/v1/en/user/login';
+    private const PATH_PRIVATE_KEY = 'tests/Fixtures/JwtKey/private.pem';
 
     protected KernelBrowser|null $client = null;
 
     protected function getNewClient(): KernelBrowser
     {
-        $client = static::createClient();
-        $client->setServerParameters([
+        $this->client = static::createClient();
+        $this->client->setServerParameters([
             'CONTENT_TYPE' => static::CONTENT_TYPE_ALLOWED,
             'HTTP_ACCEPT' => static::CONTENT_TYPE_ALLOWED,
         ]);
 
-        return $client;
+        return $this->client;
+    }
+
+    protected function getNewClientAuthenticated(string $userName, string $password): KernelBrowser
+    {
+        if (null !== $this->client) {
+            return $this->client;
+        }
+
+        $this->client = $this->getNewClient();
+        $this->client->request(
+            method: 'POST',
+            uri: self::LOGIN_URL,
+            content: json_encode([
+              'username' => $userName,
+              'password' => $password,
+            ])
+        );
+
+        return $this->client;
     }
 
     protected function getEntityManager(): EntityManager
@@ -36,12 +57,11 @@ class WebClientTestCase extends WebTestCase
             ->getManager();
     }
 
-    protected function generateToken(string $userId, float $expire = 0): string
+    protected function generateToken(array $data, float $expire = 3600): string
     {
-        $jwtKey = $this->client->getContainer()->getParameter('user.jwt_key');
-        $jwt = new JwtFirebaseHS256Adapter($jwtKey);
+        $encoder = new JwtLexikAdapter(file_get_contents(self::PATH_PRIVATE_KEY));
 
-        return $jwt->encode(['id' => $userId], $expire);
+        return $encoder->encode($data, $expire);
     }
 
     protected function assertResponseStructureIsOk(Response $response, array $data = [], array $errors = [], int $responseCode = Response::HTTP_OK, string $contentType = self::CONTENT_TYPE_ALLOWED)

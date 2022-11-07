@@ -88,7 +88,7 @@ class SendEmailPasswordRememberService
 
     private function getUrlPaswordRestoration(Identifier $id, int $emailUserPasswordRememberExpire, string $passwordRememberUrl): string
     {
-        $token = $this->jwt->encode(['id' => $id->getValue()], $emailUserPasswordRememberExpire);
+        $token = $this->jwt->encode(['username' => $id->getValue()], $emailUserPasswordRememberExpire);
 
         return $passwordRememberUrl.'/'.$token;
     }

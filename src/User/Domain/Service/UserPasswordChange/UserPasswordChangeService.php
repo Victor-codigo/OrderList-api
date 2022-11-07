@@ -53,7 +53,7 @@ class UserPasswordChangeService
      */
     private function getUser(UserPasswordChangeDto $passwordDto): void
     {
-        $user = $this->userRepository->findUserByIdOrFail($passwordDto->id);
+        $user = $this->userRepository->findUserByIdNoCacheOrFail($passwordDto->id);
         $this->userPasswordHasher->setUser($user);
 
         if (!$passwordDto->checkOldPassword) {

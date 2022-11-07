@@ -6,38 +6,34 @@ namespace Test\Functional\User\Adapter\Http\Controller\UserPasswordChange;
 
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Response\RESPONSE_STATUS;
-use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
+use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 use User\Adapter\Security\User\UserSymfonyAdapter;
 use User\Domain\Model\User;
-use stdClass;
 
 class UserPasswordChangeControllerTest extends WebClientTestCase
 {
-    use RefreshDatabaseTrait;
+    use ReloadDatabaseTrait;
 
     private const ENDPOINT = '/api/v1/en/user/password/change';
     private const METHOD = 'PATCH';
     private const ID_USER = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
     private const ID_USER_NOT_ACTIVE = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
+    private const USER_EMAIL = 'email.already.active@host.com';
+    private const USER_PASSWORD = '123456';
 
     /** @test */
     public function itShouldChangeTheUserPassword(): void
     {
         $clientData = [
             'id' => self::ID_USER,
-            'passwordOld' => '123456',
+            'passwordOld' => self::USER_PASSWORD,
             'passwordNew' => 'newPassword',
             'passwordNewRepeat' => 'newPassword',
         ];
 
-        $this->client = $this->getNewClient();
+        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -59,7 +55,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
     {
         $clientData = [];
 
-        $this->client = $this->getNewClient();
+        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -71,7 +67,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         );
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Wrong password', $responseContent->message);
-        $errorExpected = new stdClass();
+        $errorExpected = new \stdClass();
         $errorExpected->id = ['not_blank', 'not_null'];
         $errorExpected->passwordOld = ['not_blank', 'not_null'];
         $errorExpected->passwordNew = ['not_blank', 'not_null'];
@@ -89,7 +85,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
             'passwordNewRepeat' => 'newPassword',
         ];
 
-        $this->client = $this->getNewClient();
+        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -101,7 +97,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         );
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Wrong password', $responseContent->message);
-        $errorExpected = new stdClass();
+        $errorExpected = new \stdClass();
         $errorExpected->id = ['uuid_invalid_characters'];
         $this->assertEquals($errorExpected, $responseContent->errors);
     }
@@ -116,7 +112,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
             'passwordNewRepeat' => 'newPassword',
         ];
 
-        $this->client = $this->getNewClient();
+        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -128,7 +124,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         );
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Wrong password', $responseContent->message);
-        $errorExpected = new stdClass();
+        $errorExpected = new \stdClass();
         $errorExpected->passwordOld = ['string_too_short'];
         $this->assertEquals($errorExpected, $responseContent->errors);
     }
@@ -143,7 +139,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
             'passwordNewRepeat' => 'newPassword',
         ];
 
-        $this->client = $this->getNewClient();
+        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -155,7 +151,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         );
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Wrong password', $responseContent->message);
-        $errorExpected = new stdClass();
+        $errorExpected = new \stdClass();
         $errorExpected->passwordNew = ['string_too_short'];
         $this->assertEquals($errorExpected, $responseContent->errors);
     }
@@ -170,7 +166,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
             'passwordNewRepeat' => 'newpa',
         ];
 
-        $this->client = $this->getNewClient();
+        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -182,7 +178,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         );
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Wrong password', $responseContent->message);
-        $errorExpected = new stdClass();
+        $errorExpected = new \stdClass();
         $errorExpected->passwordNewRepeat = ['string_too_short'];
         $this->assertEquals($errorExpected, $responseContent->errors);
     }
@@ -197,7 +193,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
             'passwordNewRepeat' => 'newPassword',
         ];
 
-        $this->client = $this->getNewClient();
+        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -220,7 +216,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
             'passwordNewRepeat' => 'newPassword',
         ];
 
-        $this->client = $this->getNewClient();
+        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -243,7 +239,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
             'passwordNewRepeat' => 'newPassword',
         ];
 
-        $this->client = $this->getNewClient();
+        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -266,7 +262,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
             'passwordNewRepeat' => 'newPassword',
         ];
 
-        $this->client = $this->getNewClient();
+        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());

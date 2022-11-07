@@ -12,6 +12,7 @@ use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 use User\Domain\Model\User;
 use User\Domain\Port\Repository\UserRepositoryInterface;
@@ -40,7 +41,35 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
      */
     public function findUserByIdOrFail(Identifier $id): User
     {
-        $user = $this->findOneBy(['id' => $id]);
+        return $this->findUserByIdCacheOrFail($id, true);
+    }
+
+    /**
+     * WARNING! this method will override User entity with data base info, any changes in user, will be lost.
+     *
+     * @throws DBNotFoundException
+     */
+    public function findUserByIdNoCacheOrFail(Identifier $id): User
+    {
+        return $this->findUserByIdCacheOrFail($id, false);
+    }
+
+    /**
+     * WARNING! this method will override User entity with data base info, any changes in user, will be lost.
+     *
+     * @throws DBNotFoundException
+     */
+    private function findUserByIdCacheOrFail(Identifier $id, bool $cache = true): User
+    {
+        $query = $this->entityManager
+            ->createQuery('SELECT u FROM '.User::class.' u WHERE u.id=:id')
+            ->setParameter('id', $id->getValue());
+
+        if (!$cache) {
+            $query->setHint(Query::HINT_REFRESH, true);
+        }
+
+        $user = $query->getOneOrNullResult();
 
         if (null === $user) {
             throw DBNotFoundException::fromMessage(sprintf('User with id:"%s". Not found', $id->getValue()));

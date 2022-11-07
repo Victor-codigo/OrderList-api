@@ -1,0 +1,4 @@
+imports:
+    - {
+          resource: "../../src/Common/Adapter/Framework/Config/Packages/lexik_jwt_authentication.yaml",
+      }
