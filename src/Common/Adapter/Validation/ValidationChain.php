@@ -17,7 +17,6 @@ use Common\Domain\Validation\EMAIL_TYPES;
 use Common\Domain\Validation\TYPES;
 use Common\Domain\Validation\ValidationInterface;
 use Common\Domain\Validation\ValueObjectValidationInterface;
-use DateTime;
 
 class ValidationChain implements ValidationInterface
 {
@@ -157,6 +156,16 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    /**
+     * @param PROTOCOLS[] $protocols
+     */
+    public function url(array $protocols = []): self
+    {
+        $this->validator->setConstraint($this->string->url($protocols));
+
+        return $this;
+    }
+
     public function equalTo(mixed $value): self
     {
         $this->validator->setConstraint($this->comparison->equalTo($value));
@@ -185,35 +194,35 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
-    public function lessThan(int|DateTime $value): self
+    public function lessThan(int|\DateTime $value): self
     {
         $this->validator->setConstraint($this->comparison->lessThan($value));
 
         return $this;
     }
 
-    public function lessThanOrEqual(int|DateTime $value): self
+    public function lessThanOrEqual(int|\DateTime $value): self
     {
         $this->validator->setConstraint($this->comparison->lessThanOrEqual($value));
 
         return $this;
     }
 
-    public function greaterThan(int|DateTime $value): self
+    public function greaterThan(int|\DateTime $value): self
     {
         $this->validator->setConstraint($this->comparison->greaterThan($value));
 
         return $this;
     }
 
-    public function greaterThanOrEqual(int|DateTime $value): self
+    public function greaterThanOrEqual(int|\DateTime $value): self
     {
         $this->validator->setConstraint($this->comparison->greaterThanOrEqual($value));
 
         return $this;
     }
 
-    public function range(int|DateTime $min, int|DateTime $max): self
+    public function range(int|\DateTime $min, int|\DateTime $max): self
     {
         $this->validator->setConstraint($this->comparison->range($min, $max));
 

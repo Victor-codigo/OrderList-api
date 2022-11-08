@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Common\Adapter\Validation\Validations;
 
 use Common\Adapter\Validation\Constraints\Alphanumeric\Alphanumeric;
+use Common\Domain\Validation\PROTOCOLS;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\Url;
 use Symfony\Component\Validator\Constraints\Uuid;
 
 class ValidationString extends ValidationConstraintBase
@@ -63,6 +65,28 @@ class ValidationString extends ValidationConstraintBase
         return $this->createConstraint(
             new Alphanumeric(),
             [Alphanumeric::ALPHANUMERIC_FAILED_ERROR => VALIDATION_ERRORS::ALPHANUMERIC]
+        );
+    }
+
+    /**
+     * @param PROTOCOLS[] $protocols
+     */
+    public function url(array $protocols = []): ValidationConstraint
+    {
+        $relativeProtocol = true;
+        $protocolsString = null;
+
+        if (!empty($protocols)) {
+            $relativeProtocol = false;
+            $protocolsString = array_map(
+                fn (PROTOCOLS $protocol) => $protocol->value,
+                $protocols
+            );
+        }
+
+        return $this->createConstraint(
+            new Url(protocols: $protocolsString, relativeProtocol: $relativeProtocol),
+            [Url::INVALID_URL_ERROR => VALIDATION_ERRORS::URL]
         );
     }
 

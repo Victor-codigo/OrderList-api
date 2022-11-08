@@ -82,4 +82,6 @@ enum VALIDATION_ERRORS
     case REGEX_FAIL;
 
     case ALPHANUMERIC;
+
+    case URL;
 }

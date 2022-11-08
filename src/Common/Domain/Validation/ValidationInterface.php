@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Common\Domain\Validation;
 
 use Common\Adapter\Validation\Validations\ValidationConstraint;
-use DateTime;
 
 interface ValidationInterface
 {
@@ -51,6 +50,11 @@ interface ValidationInterface
 
     public function alphanumeric(): self;
 
+    /**
+     * @param PROTOCOLS[] $protocols
+     */
+    public function url(array $protocols = []): self;
+
     public function equalTo(mixed $value): self;
 
     public function notEqualTo(mixed $value): self;
@@ -59,15 +63,15 @@ interface ValidationInterface
 
     public function notIdenticalTo(mixed $value): self;
 
-    public function lessThan(int|DateTime $value): self;
+    public function lessThan(int|\DateTime $value): self;
 
-    public function lessThanOrEqual(int|DateTime $value): self;
+    public function lessThanOrEqual(int|\DateTime $value): self;
 
-    public function greaterThan(int|DateTime $value): self;
+    public function greaterThan(int|\DateTime $value): self;
 
-    public function greaterThanOrEqual(int|DateTime $value): self;
+    public function greaterThanOrEqual(int|\DateTime $value): self;
 
-    public function range(int|DateTime $min, int|DateTime $max): self;
+    public function range(int|\DateTime $min, int|\DateTime $max): self;
 
     public function unique(): self;
 

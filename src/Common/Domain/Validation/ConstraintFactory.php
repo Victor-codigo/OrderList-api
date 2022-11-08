@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Domain\Validation;
 
-use DateTime;
-
 class ConstraintFactory
 {
     public static function notBlank(): ConstraintDto
@@ -85,6 +83,16 @@ class ConstraintFactory
         return new ConstraintDto(CONSTRAINTS_NAMES::ALPHANUMERIC, null);
     }
 
+    /**
+     * @param PROTOCOLS[] $protocols
+     */
+    public static function url(array $protocols = []): ConstraintDto
+    {
+        return new ConstraintDto(CONSTRAINTS_NAMES::URL, [
+            'protocols' => $protocols,
+        ]);
+    }
+
     public static function equalTo(mixed $value): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::EQUAL_TO, [
@@ -113,35 +121,35 @@ class ConstraintFactory
         ]);
     }
 
-    public static function lessThan(int|DateTime $value): ConstraintDto
+    public static function lessThan(int|\DateTime $value): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::LESS_THAN, [
             'value' => $value,
         ]);
     }
 
-    public static function lessThanOrEqual(int|DateTime $value): ConstraintDto
+    public static function lessThanOrEqual(int|\DateTime $value): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::LESS_THAN_OR_EQUAL, [
             'value' => $value,
         ]);
     }
 
-    public static function greaterThan(int|DateTime $value): ConstraintDto
+    public static function greaterThan(int|\DateTime $value): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::GREATER_THAN, [
             'value' => $value,
         ]);
     }
 
-    public static function greaterThanOrEqual(int|DateTime $value): ConstraintDto
+    public static function greaterThanOrEqual(int|\DateTime $value): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::GREATER_THAN_OR_EQUAL, [
             'value' => $value,
         ]);
     }
 
-    public static function range(int|DateTime $min, int|DateTime $max): ConstraintDto
+    public static function range(int|\DateTime $min, int|\DateTime $max): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::RANGE, [
             'min' => $min,

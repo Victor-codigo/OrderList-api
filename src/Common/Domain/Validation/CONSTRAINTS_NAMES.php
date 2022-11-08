@@ -45,4 +45,6 @@ enum CONSTRAINTS_NAMES: string
     case FILE = 'file';
 
     case CHOICE = 'choice';
+
+    case URL = 'url';
 }
