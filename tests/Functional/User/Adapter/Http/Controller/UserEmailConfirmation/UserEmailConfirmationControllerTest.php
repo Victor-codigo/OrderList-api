@@ -16,7 +16,8 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
 {
     use RefreshDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/en/user/email/confirmation';
+    private const ENDPOINT = '/api/v1/users/confirm';
+    private const METHOD = 'PATCH';
     private const USER_ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
     private const USER_ID_ALREADY_REGISTERED = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
     private const USER_ID_NOT_EXISTS = 'NO-EXISTS-4516-45d6-93a6-c7cb416b7f3f';
@@ -26,7 +27,7 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     {
         $this->client = $this->getNewClient();
         $token = $this->generateToken(['username' => self::USER_ID], 86_400); // 24H
-        $this->client->request(method: 'GET', uri: self::ENDPOINT.'/'.$token, content: '{}');
+        $this->client->request(method: self::METHOD, uri: self::ENDPOINT.'/'.$token, content: '{}');
 
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -47,7 +48,7 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     {
         $this->client = $this->getNewClient();
         $token = $this->generateToken(['username' => self::USER_ID], 86_400); // 24H
-        $this->client->request(method: 'GET', uri: self::ENDPOINT.'/'.$token.'-Wrong token', content: '{}');
+        $this->client->request(method: self::METHOD, uri: self::ENDPOINT.'/'.$token.'-Wrong token', content: '{}');
 
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -66,7 +67,7 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     {
         $this->client = $this->getNewClient();
         $token = $this->generateToken(['username' => self::USER_ID], 0);
-        $this->client->request(method: 'GET', uri: self::ENDPOINT.'/'.$token, content: '{}');
+        $this->client->request(method: self::METHOD, uri: self::ENDPOINT.'/'.$token, content: '{}');
 
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -85,7 +86,7 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     {
         $this->client = $this->getNewClient();
         $token = $this->generateToken(['username' => self::USER_ID_ALREADY_REGISTERED], 86_400); // 24H
-        $this->client->request(method: 'GET', uri: self::ENDPOINT.'/'.$token, content: '{}');
+        $this->client->request(method: self::METHOD, uri: self::ENDPOINT.'/'.$token, content: '{}');
 
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -104,7 +105,7 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     {
         $this->client = $this->getNewClient();
         $token = $this->generateToken(['username' => self::USER_ID_NOT_EXISTS], 86_400); // 24H
-        $this->client->request(method: 'GET', uri: self::ENDPOINT.'/'.$token, content: '{}');
+        $this->client->request(method: self::METHOD, uri: self::ENDPOINT.'/'.$token, content: '{}');
 
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -123,7 +124,7 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     {
         $this->client = $this->getNewClient();
         $token = 'is.not.valid-token';
-        $this->client->request(method: 'GET', uri: self::ENDPOINT.'/'.$token, content: '{}');
+        $this->client->request(method: self::METHOD, uri: self::ENDPOINT.'/'.$token, content: '{}');
 
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());

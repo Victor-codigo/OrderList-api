@@ -16,7 +16,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/en/user/password/change';
+    private const ENDPOINT = '/api/v1/users/password';
     private const METHOD = 'PATCH';
     private const ID_USER = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
     private const ID_USER_NOT_ACTIVE = '1befdbe2-9c14-42f0-850f-63e061e33b8f';

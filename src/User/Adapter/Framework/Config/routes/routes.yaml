@@ -1,53 +1,42 @@
 # -------------------------------------------------------------
 # USER REGISTRATION
 user_register:
-  path: /api/v{api_version}/{_locale}/user/register
+  path: /api/v{api_version}/users
   methods: POST
   controller: User\Adapter\Http\Controller\UserRegister\UserRegisterController
   requirements:
     api_version: '\d+[.\d]?'
-    _locale: en|es
 
 user_email_confirmation:
-  path: /api/v{api_version}/{_locale}/user/email/confirmation/{token}
-  methods: GET
+  path: /api/v{api_version}/users/confirm/{token}
+  methods: PATCH
   controller: User\Adapter\Http\Controller\UserEmailConfirmation\UserEmailConfirmationController
   requirements:
     api_version: '\d+[.\d]?'
-    _locale: en|es
 
 # -------------------------------------------------------------
-# USER REMEMBER
+# USER PASSWORD REMEMBER
 # -------------------------------------------------------------
-user_remember_password:
-  path: /api/v{api_version}/{_locale}/user/password/remember
-  methods: PATCH
-  controller: User\Adapter\Http\Controller\UserPasswordRemember\UserPasswordRememberController
-  requirements:
-    api_version: '\d+[.\d]?'
-    _locale: en|es
-
-user_password_remember_confirm:
-  path: /api/v{api_version}/{_locale}/user/password/remember/confirm/{token}
-  methods: GET
+user_password_rememeber:
+  path: /api/v{api_version}/users/remember
+  methods: POST
   controller: User\Adapter\Http\Controller\UserPasswordRemember\UserPasswordRememberController
   requirements:
     api_version: '\d+[.\d]?'
     _locale: en|es
 
 user_password_remember_change:
-  path: /api/v{api_version}/{_locale}/user/password/remember/change
+  path: /api/v{api_version}/users/password-remember
   methods: PATCH
   controller: User\Adapter\Http\Controller\UserPasswordRememberChange\UserPasswordRememberChangeController
   requirements:
     api_version: '\d+[.\d]?'
-    _locale: en|es
 
 # -------------------------------------------------------------
 # USER PASSWORD CHANGE
 # -------------------------------------------------------------
 user_password_change:
-  path: /api/v{api_version}/{_locale}/user/password/change
+  path: /api/v{api_version}/users/password
   methods: PATCH
   controller: User\Adapter\Http\Controller\UserPasswordChange\UserPasswordChangeController
   requirements:
@@ -58,8 +47,8 @@ user_password_change:
 # USER LOGIN
 # -------------------------------------------------------------
 user_login:
-  path: /api/v{api_version}/{_locale}/user/login
+  # path: /api/v{api_version}/{_locale}/user/login
+  path: /api/v{api_version}/users/login
   methods: POST
   requirements:
     api_version: '\d+[.\d]?'
-    _locale: en|es

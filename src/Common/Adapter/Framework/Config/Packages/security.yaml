@@ -11,10 +11,10 @@ security:
     firewalls:
         
         login:
-            pattern: ^/api/v1/en/user/login
+            pattern: ^/api/v1/users/login
             stateless: true
             json_login:
-                check_path: /api/v1/en/user/login
+                check_path: /api/v1/users/login
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
@@ -25,17 +25,12 @@ security:
 
     access_control:
         # User register
-        - { path: ^/api/v1/en/user/register, roles: PUBLIC_ACCESS }
-        - { path: ^/api/v1/es/user/register, roles: PUBLIC_ACCESS }
-
-        # User register email confirmation
-        - { path: ^/api/v1/en/user/email/confirmation, roles: PUBLIC_ACCESS }
-        - { path: ^/api/v1/es/user/email/confirmation, roles: PUBLIC_ACCESS }
+        - { path: ^/api/v1/users, roles: PUBLIC_ACCESS }
         
         # User password remember
-        - { path: ^/api/v1/en/user/password/remember, roles: PUBLIC_ACCESS }
-        - { path: ^/api/v1/es/user/password/remember, roles: PUBLIC_ACCESS }
+        - { path: ^/api/v1/users/password-remember, roles: PUBLIC_ACCESS }
 
+        # Api general
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:

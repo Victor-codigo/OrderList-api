@@ -9,9 +9,7 @@ use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Response\RESPONSE_STATUS;
-use DateTime;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 use User\Domain\Model\Profile;
@@ -22,7 +20,8 @@ class UserRegisterControllerTest extends WebClientTestCase
 {
     use RefreshDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/es/user/register';
+    private const ENDPOINT = '/api/v1/users';
+    private const METHOD = 'POST';
 
     public function setUp(): void
     {
@@ -41,7 +40,7 @@ class UserRegisterControllerTest extends WebClientTestCase
 
         $this->client = $this->getNewClient();
         $this->client->request(
-            Request::METHOD_POST,
+            self::METHOD,
             self::ENDPOINT,
             [],
             [],
@@ -71,7 +70,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->client = $this->getNewClient();
         $this->client->disableReboot();
         $this->client->request(
-            Request::METHOD_POST,
+            self::METHOD,
             self::ENDPOINT,
             [],
             [],
@@ -112,7 +111,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         ];
 
         $this->client->request(
-            Request::METHOD_POST,
+            self::METHOD,
             self::ENDPOINT,
             [],
             [],
@@ -156,7 +155,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         ];
 
         $this->client->request(
-            Request::METHOD_POST,
+            self::METHOD,
             self::ENDPOINT,
             [],
             [],
@@ -188,7 +187,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         ];
 
         $this->client->request(
-            Request::METHOD_POST,
+            self::METHOD,
             self::ENDPOINT,
             [],
             [],
@@ -220,7 +219,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         ];
 
         $this->client->request(
-            Request::METHOD_POST,
+            self::METHOD,
             self::ENDPOINT,
             [],
             [],
@@ -251,7 +250,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         ];
 
         $this->client->request(
-            Request::METHOD_POST,
+            self::METHOD,
             self::ENDPOINT,
             [],
             [],
@@ -283,7 +282,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         ];
 
         $this->client->request(
-            Request::METHOD_POST,
+            self::METHOD,
             self::ENDPOINT,
             [],
             [],
@@ -314,7 +313,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         ];
 
         $this->client->request(
-            Request::METHOD_POST,
+            self::METHOD,
             self::ENDPOINT,
             [],
             [],
@@ -346,7 +345,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         ];
 
         $this->client->request(
-            Request::METHOD_POST,
+            self::METHOD,
             self::ENDPOINT,
             [],
             [],
@@ -387,7 +386,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         ];
 
         $this->client->request(
-            Request::METHOD_POST,
+            self::METHOD,
             self::ENDPOINT,
             [],
             [],
@@ -428,7 +427,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         ];
 
         $this->client->request(
-            Request::METHOD_POST,
+            self::METHOD,
             self::ENDPOINT,
             [],
             [],
@@ -460,7 +459,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         ];
 
         $this->client->request(
-            Request::METHOD_POST,
+            self::METHOD,
             self::ENDPOINT,
             [],
             [],
@@ -491,7 +490,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         ];
 
         $this->client->request(
-            Request::METHOD_POST,
+            self::METHOD,
             self::ENDPOINT,
             [],
             [],
@@ -523,7 +522,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         ];
 
         $this->client->request(
-            Request::METHOD_POST,
+            self::METHOD,
             self::ENDPOINT,
             [],
             [],
@@ -551,7 +550,7 @@ class UserRegisterControllerTest extends WebClientTestCase
 
         $this->assertSame($name, $userSaved->getName()->getValue());
         $this->assertSame($email, $userSaved->getEmail()->getValue());
-        $this->assertEquals((new DateTime())->format('Y-m-d H:m'), $userSaved->getCreatedOn()->format('Y-m-d H:m'));
+        $this->assertEquals((new \DateTime())->format('Y-m-d H:m'), $userSaved->getCreatedOn()->format('Y-m-d H:m'));
         $this->assertNotEmpty($password);
 
         $rolesSaved = array_map(fn (Rol $rol) => $rol->getValue(), $userSaved->getRoles()->getValue());

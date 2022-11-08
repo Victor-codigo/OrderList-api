@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 class WebClientTestCase extends WebTestCase
 {
     protected const CONTENT_TYPE_ALLOWED = 'application/json';
-    protected const LOGIN_URL = '/api/v1/en/user/login';
+    protected const LOGIN_URL = '/api/v1/users/login';
     private const PATH_PRIVATE_KEY = 'tests/Fixtures/JwtKey/private.pem';
 
     protected KernelBrowser|null $client = null;
