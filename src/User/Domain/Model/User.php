@@ -10,7 +10,6 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use User\Domain\Event\UserPreRegistered\UserPreRegisteredEvent;
@@ -24,9 +23,11 @@ class User
     private Name $name;
     private Password $password;
     private Roles $roles;
-    private DateTime $createdOn;
+    private \DateTime $createdOn;
     private Collection $groups;
     private Profile $profile;
+
+    private UserPreRegisteredEvent $userPreRegisteredEventData;
 
     public function getEmail(): Email
     {
@@ -64,7 +65,7 @@ class User
          return $this;
      }
 
-    public function getCreatedOn(): DateTime
+    public function getCreatedOn(): \DateTime
     {
         return $this->createdOn;
     }
@@ -118,7 +119,7 @@ class User
         $this->name = $name;
         $this->roles = $roles;
         $this->password = $password;
-        $this->createdOn = new DateTime();
+        $this->createdOn = new \DateTime();
         $this->groups = new ArrayCollection([]);
         $this->profile = new Profile($this->getId());
     }
@@ -142,8 +143,21 @@ class User
         );
     }
 
+    public function setUserPreRegisteredEventData(UserPreRegisteredEvent $data)
+    {
+        $this->userPreRegisteredEventData = $data;
+    }
+
     public function onCreated(): void
     {
-        $this->eventDispatchRegister(new UserPreRegisteredEvent($this->id->getValue(), $this->email->getValue()));
+        if (!isset($this->userPreRegisteredEventData)) {
+            $this->userPreRegisteredEventData = new UserPreRegisteredEvent(
+                $this->id,
+                $this->email,
+                ValueObjectFactory::createUrl(null)
+            );
+        }
+
+        $this->eventDispatchRegister($this->userPreRegisteredEventData);
     }
 }

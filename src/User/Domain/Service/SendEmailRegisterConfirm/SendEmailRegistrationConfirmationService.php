@@ -6,6 +6,9 @@ namespace User\Domain\Service\SendEmailRegisterConfirm;
 
 use Common\Domain\HtmlTemplate\TemplateId;
 use Common\Domain\Mailer\EmailDto;
+use Common\Domain\Model\ValueObject\String\Email;
+use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\Url;
 use Common\Domain\Ports\JwtToken\JwtHS256Interface;
 use Common\Domain\Ports\Mailer\MailerInterface;
 use Common\Domain\Ports\Translator\TranslatorInterface;
@@ -20,7 +23,6 @@ class SendEmailRegistrationConfirmationService
     private string $adminEmail;
     private string $appName;
     private int $emailUserRegistrationConfirmationExpire;
-    private string $registrationConfirmUrl;
 
     public function __construct(
         MailerInterface $mailer,
@@ -28,8 +30,7 @@ class SendEmailRegistrationConfirmationService
         JwtHS256Interface $jwt,
         string $adminEmail,
         string $appName,
-        int $emailUserRegistrationConfirmationExpire,
-        string $registrationConfirmUrl
+        int $emailUserRegistrationConfirmationExpire
         ) {
         $this->mailer = $mailer;
         $this->translator = $translator;
@@ -37,7 +38,6 @@ class SendEmailRegistrationConfirmationService
         $this->adminEmail = $adminEmail;
         $this->appName = $appName;
         $this->emailUserRegistrationConfirmationExpire = $emailUserRegistrationConfirmationExpire;
-        $this->registrationConfirmUrl = $registrationConfirmUrl;
     }
 
     public function __invoke(SendEmailRegistrationConfirmInputDto $emailInfo): void
@@ -47,7 +47,7 @@ class SendEmailRegistrationConfirmationService
             $emailInfo->emailTo,
             $this->appName,
             $this->emailUserRegistrationConfirmationExpire,
-            $this->registrationConfirmUrl
+            $emailInfo->userRegisterEmailConfirmationUrl
         );
 
         $this->mailer
@@ -59,17 +59,17 @@ class SendEmailRegistrationConfirmationService
         $this->mailer->send();
     }
 
-    private function createEmailDto(string $id, string $emailTo, string $appName, int $emailUserRegistrationConfirmationExpire, string $registrationConfirmUrl): EmailDto
+    private function createEmailDto(Identifier $id, Email $emailTo, string $appName, int $emailUserRegistrationConfirmationExpire, Url $registrationConfirmUrl): EmailDto
     {
         return new EmailDto(
             $this->translator->translate('subject', ['appName' => $appName], EmailRegistrationConfirmationDto::TRANSLATOR_DOMAIN),
             $this->adminEmail,
-            $emailTo,
+            $emailTo->getValue(),
             $this->createEmailTemplateData($id, $appName, $emailUserRegistrationConfirmationExpire, $registrationConfirmUrl)
         );
     }
 
-    private function createEmailTemplateData(string $id, string $appName, int $emailUserRegistrationConfirmationExpire, string $registrationConfirmUrl): EmailRegistrationConfirmationDto
+    private function createEmailTemplateData(Identifier $id, string $appName, int $emailUserRegistrationConfirmationExpire, Url $registrationConfirmUrl): EmailRegistrationConfirmationDto
     {
         return (new EmailRegistrationConfirmationDto($this->translator))(
             $appName,
@@ -77,14 +77,14 @@ class SendEmailRegistrationConfirmationService
             TemplateId::create('welcome', ['appName' => $appName]),
             $this->getUrlRegistrationConfirmation($id, $emailUserRegistrationConfirmationExpire, $registrationConfirmUrl),
             TemplateId::create('urlRegistrationConfirmationText'),
-            TemplateId::create('farewell'),
+            TemplateId::create('farewell', ['hoursToExpire' => $emailUserRegistrationConfirmationExpire / 60 / 60]),
         );
     }
 
-    private function getUrlRegistrationConfirmation(string $id, int $emailUserRegistrationConfirmationExpire, string $registrationConfirmUrl): string
+    private function getUrlRegistrationConfirmation(Identifier $id, int $emailUserRegistrationConfirmationExpire, Url $registrationConfirmUrl): string
     {
-        $token = $this->jwt->encode(['username' => $id], $emailUserRegistrationConfirmationExpire);
+        $token = $this->jwt->encode(['username' => $id->getValue()], $emailUserRegistrationConfirmationExpire);
 
-        return $registrationConfirmUrl.'/'.$token;
+        return $registrationConfirmUrl->getValue().'/'.$token;
     }
 }

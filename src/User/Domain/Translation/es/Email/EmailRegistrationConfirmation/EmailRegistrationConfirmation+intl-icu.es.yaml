@@ -5,4 +5,4 @@ welcome: |
   Has recibido este mensaje, porque te has registrado recientemente  en {appName}
   Confirma tú dirección de email, haciendo click en el botón de abajo.
 urlRegistrationConfirmationText: Confirmación del email
-farewell: El registro expirará en 24 horas
+farewell: El registro expirará en {hoursToExpire} horas

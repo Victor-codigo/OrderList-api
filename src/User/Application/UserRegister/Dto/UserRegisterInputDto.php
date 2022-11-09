@@ -9,6 +9,7 @@ use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Model\ValueObject\String\Password;
+use Common\Domain\Model\ValueObject\String\Url;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\ServiceInputDtoInterface;
 use Common\Domain\Validation\ValidationInterface;
@@ -20,6 +21,7 @@ final class UserRegisterInputDto implements ServiceInputDtoInterface
     public readonly Name|null $name;
     public readonly Roles|null $roles;
     public readonly ProfileCreateInputDto|null $profile;
+    public readonly Url|null $userRegisterEmailConfirmationUrl;
 
     public readonly string $registrationKey;
 
@@ -32,6 +34,7 @@ final class UserRegisterInputDto implements ServiceInputDtoInterface
         string|null $name,
         array|null $roles,
         ProfileCreateInputDto|null $profile,
+        string|null $userRegisterEmailConfirmationUrl,
         string|null $registrationKey
     ) {
         $this->email = ValueObjectFactory::createEmail($email);
@@ -40,6 +43,7 @@ final class UserRegisterInputDto implements ServiceInputDtoInterface
         $this->roles = ValueObjectFactory::createRoles($roles);
         $this->profile = $profile;
 
+        $this->userRegisterEmailConfirmationUrl = ValueObjectFactory::createUrl($userRegisterEmailConfirmationUrl);
         $this->registrationKey = $registrationKey;
     }
 
@@ -48,7 +52,8 @@ final class UserRegisterInputDto implements ServiceInputDtoInterface
         string|null $password,
         string|null $name,
         array|null $roles,
-        string $registrationKey
+        string|null $userRegisterEmailConfirmationUrl,
+        string|null $registrationKey
     ): self {
         $profile = ProfileCreateInputDto::create(null);
 
@@ -58,6 +63,7 @@ final class UserRegisterInputDto implements ServiceInputDtoInterface
             $name,
             $roles,
             $profile,
+            $userRegisterEmailConfirmationUrl,
             $registrationKey
         );
     }
@@ -69,6 +75,7 @@ final class UserRegisterInputDto implements ServiceInputDtoInterface
             'password' => $this->password,
             'name' => $this->name,
             'roles' => $this->roles,
+            'email_confirmation_url' => $this->userRegisterEmailConfirmationUrl,
         ]);
     }
 }

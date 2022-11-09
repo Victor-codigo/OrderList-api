@@ -23,7 +23,6 @@ user_password_rememeber:
   controller: User\Adapter\Http\Controller\UserPasswordRemember\UserPasswordRememberController
   requirements:
     api_version: '\d+[.\d]?'
-    _locale: en|es
 
 user_password_remember_change:
   path: /api/v{api_version}/users/password-remember
@@ -41,7 +40,6 @@ user_password_change:
   controller: User\Adapter\Http\Controller\UserPasswordChange\UserPasswordChangeController
   requirements:
     api_version: '\d+[.\d]?'
-    _locale: en|es
 
 # -------------------------------------------------------------
 # USER LOGIN

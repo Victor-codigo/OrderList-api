@@ -27,7 +27,8 @@ class UserPreRegisteredSubscriber implements EventDomainSubscriberInterface
         $this->sendEmailRegistrationConfirmationService->__invoke(
             new SendEmailRegistrationConfirmInputDto(
                 $event->id,
-                $event->emailTo
+                $event->emailTo,
+                $event->userRegisterEmailConfirmationUrl
             )
         );
     }

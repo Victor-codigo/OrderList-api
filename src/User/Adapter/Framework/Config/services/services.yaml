@@ -8,8 +8,7 @@ services:
             $registrationKey: "%common.user_register_key%"
             $emailUserRegistrationConfirmationExpire: "%common.email_user_registration_confirmation_expire%"
             $emailUserPasswordRememberExpire: "%common.email_user_password_remember_expire%"
-            $passwordRememberUrl: "%user.passwordRememberUrl%"
-            $registrationConfirmUrl: "%user.registrationConfirmUrl%"
+            
 
     # Adapter
     User\Adapter\:

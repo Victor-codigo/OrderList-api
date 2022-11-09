@@ -112,8 +112,7 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
             ValueObjectFactory::createEmail(null),
             ValueObjectFactory::createPassword(null),
             ValueObjectFactory::createName(null),
-            ValueObjectFactory::createRoles(null),
-            ValueObjectFactory::createIdentifier(null),
+            ValueObjectFactory::createRoles(null)
         );
     }
 }

@@ -17,6 +17,7 @@ use User\Application\UserRegister\Dto\UserRegisterInputDto;
 use User\Application\UserRegister\Dto\UserRegisterOutputDto;
 use User\Application\UserRegister\Exception\EmailAlreadyExistsException;
 use User\Application\UserRegister\Exception\RegistrationKeyValidationFailException;
+use User\Domain\Event\UserPreRegistered\UserPreRegisteredEvent;
 use User\Domain\Model\User;
 use User\Domain\Port\PasswordHasher\PasswordHasherInterface;
 use User\Domain\Port\Repository\UserRepositoryInterface;
@@ -81,12 +82,16 @@ class UserRegisterService extends ServiceBase
 
     private function createUser(UserRegisterInputDto $userDto): User
     {
+        $id = ValueObjectFactory::createIdentifier($this->repository->generateId());
         $user = new User(
-            ValueObjectFactory::createIdentifier($this->repository->generateId()),
+            $id,
             $userDto->email,
             $userDto->password,
             $userDto->name,
             $userDto->roles
+        );
+        $user->setUserPreRegisteredEventData(
+            new UserPreRegisteredEvent($id, $userDto->email, $userDto->userRegisterEmailConfirmationUrl)
         );
 
         $this->passwordHasher->setUser($user);

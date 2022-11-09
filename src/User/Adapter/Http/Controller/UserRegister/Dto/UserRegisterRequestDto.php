@@ -13,6 +13,7 @@ class UserRegisterRequestDto implements RequestDtoInterface
     public readonly string|null $password;
     public readonly string|null $name;
     public readonly string|null $registrationKey;
+    public readonly string|null $userRegisterEmailConfirmationUrl;
 
     public function __construct(Request $request)
     {
@@ -20,5 +21,6 @@ class UserRegisterRequestDto implements RequestDtoInterface
         $this->password = $request->request->get('password');
         $this->name = $request->request->get('name');
         $this->registrationKey = $request->get('key');
+        $this->userRegisterEmailConfirmationUrl = $request->get('email_confirmation_url');
     }
 }
