@@ -1,0 +1,73 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Test\Unit\Common\Domain\Model\ValueObject\String;
+
+use Common\Adapter\Validation\ValidationChain;
+use Common\Domain\Model\ValueObject\String\Url;
+use Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\ValidationInterface;
+use PHPUnit\Framework\TestCase;
+
+class UrlTest extends TestCase
+{
+    private ValidationInterface $validator;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->validator = new ValidationChain();
+    }
+
+    private function createUrl(string|null $url): Url
+    {
+        return new Url($url);
+    }
+
+    /** @test */
+    public function urlWithHttpOk()
+    {
+        $url = $this->createUrl('http://www.domain.com');
+        $return = $this->validator->validateValueObject($url);
+
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function urlWithHttpsOk()
+    {
+        $url = $this->createUrl('https://www.domain.com');
+        $return = $this->validator->validateValueObject($url);
+
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function urlNotBlank()
+    {
+        $email = $this->createUrl('');
+        $return = $this->validator->validateValueObject($email);
+
+        $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK], $return);
+    }
+
+    /** @test */
+    public function urlNotNull()
+    {
+        $url = $this->createUrl(null);
+        $return = $this->validator->validateValueObject($url);
+
+        $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL], $return);
+    }
+
+    /** @test */
+    public function urlNotValid()
+    {
+        $url = $this->createUrl('www.domain.com');
+        $return = $this->validator->validateValueObject($url);
+
+        $this->assertEquals([VALIDATION_ERRORS::URL], $return);
+    }
+}
