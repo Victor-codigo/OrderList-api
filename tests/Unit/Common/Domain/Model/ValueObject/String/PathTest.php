@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
 use Common\Adapter\Validation\ValidationChain;
+use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use PHPUnit\Framework\TestCase;
-use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 
 class PathTest extends TestCase
 {
@@ -22,7 +22,7 @@ class PathTest extends TestCase
         $this->validation = new ValidationChain();
     }
 
-    private function createPath(string $path): Path
+    private function createPath(string|null $path): Path
     {
         return new Path($path);
     }
@@ -43,6 +43,14 @@ class PathTest extends TestCase
 
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::STRING_TOO_SHORT], $return,
             'It was expected that doesn\'t return errors');
+    }
+
+    public function testPathNotNull(): void
+    {
+        $path = $this->createPath(null);
+        $return = $this->validation->validateValueObject($path);
+
+        $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL], $return);
     }
 
     public function testPathNotTooLong(): void

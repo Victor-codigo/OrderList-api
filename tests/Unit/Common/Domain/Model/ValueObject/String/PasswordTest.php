@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
 use Common\Adapter\Validation\ValidationChain;
+use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use PHPUnit\Framework\TestCase;
-use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 
 class PasswordTest extends TestCase
 {
@@ -23,7 +23,7 @@ class PasswordTest extends TestCase
         $this->validation = new ValidationChain();
     }
 
-    private function createPassword($password)
+    private function createPassword(string|null $password)
     {
         return new Password($password);
     }
@@ -35,6 +35,14 @@ class PasswordTest extends TestCase
 
         $this->assertEmpty($return,
             'It was expected that doesnt return errors');
+    }
+
+    public function testPasswordNotNull()
+    {
+        $password = $this->createPassword(null);
+        $return = $this->validation->validateValueObject($password);
+
+        $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL], $return);
     }
 
     public function testPasswordNotBlankAndShort()

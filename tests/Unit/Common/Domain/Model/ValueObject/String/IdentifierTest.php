@@ -23,7 +23,7 @@ class IdentifierTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    private function createIdentifier(string $id): Identifier
+    private function createIdentifier(string|null $id): Identifier
     {
         return new Identifier($id);
     }
@@ -44,6 +44,14 @@ class IdentifierTest extends TestCase
 
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK], $return,
             'It was expected that validation fail on notBlank');
+    }
+
+    public function testUuIdNotNull(): void
+    {
+        $id = $this->createIdentifier(null);
+        $return = $this->validator->validateValueObject($id);
+
+        $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL], $return);
     }
 
     public function testUuIdError(): void

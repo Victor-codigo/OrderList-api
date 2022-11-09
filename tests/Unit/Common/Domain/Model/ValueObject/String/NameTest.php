@@ -23,7 +23,7 @@ class NameTest extends TestCase
         $this->validation = new ValidationChain();
     }
 
-    private function createName(string $name): Name
+    private function createName(string|null $name): Name
     {
         return new Name($name);
     }
@@ -44,6 +44,14 @@ class NameTest extends TestCase
 
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::STRING_TOO_SHORT], $return,
             'It was expected that return contains [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::STRING_TOO_SHORT]');
+    }
+
+    public function testValidNameNull(): void
+    {
+        $name = $this->createName(null);
+        $return = $this->validation->validateValueObject($name);
+
+        $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL], $return);
     }
 
     public function testValidNameNotTooLong(): void

@@ -23,7 +23,7 @@ class EmailTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    private function createEmail(string $email): Email
+    private function createEmail(string|null $email): Email
     {
         return new Email($email);
     }
@@ -44,6 +44,14 @@ class EmailTest extends TestCase
 
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK], $return,
             'It was expected that validation fail on notBlank');
+    }
+
+    public function testEmailNotNull()
+    {
+        $email = $this->createEmail(null);
+        $return = $this->validator->validateValueObject($email);
+
+        $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL], $return);
     }
 
     public function testEmailNotValidEmail()
