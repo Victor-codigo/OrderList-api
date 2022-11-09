@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\Common\Adapter\Validation\Validations;
 
 use Common\Adapter\Validation\ValidationChain;
+use Common\Domain\Validation\PROTOCOLS;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use PHPUnit\Framework\TestCase;
@@ -229,7 +230,7 @@ class ValidationStringTest extends TestCase
     }
 
     /** @test */
-    public function validateAlphanumericANdRegex(): void
+    public function validateAlphanumericAndRegex(): void
     {
         $return = $this->object
             ->setValue('1234_ab-')
@@ -239,5 +240,101 @@ class ValidationStringTest extends TestCase
 
         $this->assertIsArray($return);
         $this->assertEquals([VALIDATION_ERRORS::REGEX_FAIL, VALIDATION_ERRORS::ALPHANUMERIC], $return);
+    }
+
+    /** @test */
+    public function validateUrlProtocolHttpOk(): void
+    {
+        $return = $this->object
+            ->setValue('http://subdomain.domain.com')
+            ->url()
+            ->validate();
+
+        $this->assertIsArray($return);
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function validateUrlProtocolHttpsOk(): void
+    {
+        $return = $this->object
+            ->setValue('https://subdomain.domain.com')
+            ->url()
+            ->validate();
+
+        $this->assertIsArray($return);
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function validateUrlNoProtocolOk(): void
+    {
+        $return = $this->object
+            ->setValue('//subdomain.domain.com')
+            ->url()
+            ->validate();
+
+        $this->assertIsArray($return);
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function validateUrlProtocolFtoNotValidByDefault(): void
+    {
+        $return = $this->object
+            ->setValue('ftp://subdomain.domain.com')
+            ->url()
+            ->validate();
+
+        $this->assertIsArray($return);
+        $this->assertSame([VALIDATION_ERRORS::URL], $return);
+    }
+
+    /** @test */
+    public function validateUrlProtocolWrong(): void
+    {
+        $return = $this->object
+            ->setValue('htt://subdomain.domain.com')
+            ->url([PROTOCOLS::HTTP, PROTOCOLS::HTTPS])
+            ->validate();
+
+        $this->assertIsArray($return);
+        $this->assertSame([VALIDATION_ERRORS::URL], $return);
+    }
+
+    /** @test */
+    public function validateUrlNoProtocol(): void
+    {
+        $return = $this->object
+            ->setValue('subdomain.domain.com')
+            ->url([PROTOCOLS::HTTP, PROTOCOLS::HTTPS])
+            ->validate();
+
+        $this->assertIsArray($return);
+        $this->assertSame([VALIDATION_ERRORS::URL], $return);
+    }
+
+    /** @test */
+    public function validateLanguageOk(): void
+    {
+        $return = $this->object
+            ->setValue('en')
+            ->language()
+            ->validate();
+
+        $this->assertIsArray($return);
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function validateLanguageFail(): void
+    {
+        $return = $this->object
+            ->setValue('esp')
+            ->language()
+            ->validate();
+
+        $this->assertIsArray($return);
+        $this->assertSame([VALIDATION_ERRORS::LANGUAGE], $return);
     }
 }
