@@ -15,4 +15,10 @@ interface ValueObjectStringFactoryInterface
     public static function createPassword(string|null $password): Password;
 
     public static function createPath(string|null $path): Path;
+
+    public static function createJwtToken(string|null $path): JwtToken;
+
+    public static function createUrl(string|null $url): Url;
+
+    public static function createLanguage(string|null $lang): Language;
 }

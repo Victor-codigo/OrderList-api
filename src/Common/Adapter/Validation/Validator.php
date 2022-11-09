@@ -180,6 +180,8 @@ class Validator
             CONSTRAINTS_NAMES::UUID->value => $this->validationChain->uuId(...),
             CONSTRAINTS_NAMES::REGEX->value => $this->validationChain->regEx(...),
             CONSTRAINTS_NAMES::ALPHANUMERIC->value => $this->validationChain->alphanumeric(...),
+            CONSTRAINTS_NAMES::URL->value => $this->validationChain->url(...),
+            CONSTRAINTS_NAMES::LANGUAGE->value => $this->validationChain->language(...),
             CONSTRAINTS_NAMES::DATE->value => $this->validationChain->date(...),
             CONSTRAINTS_NAMES::DATETIME->value => $this->validationChain->dateTime(...),
             CONSTRAINTS_NAMES::TIME->value => $this->validationChain->time(...),

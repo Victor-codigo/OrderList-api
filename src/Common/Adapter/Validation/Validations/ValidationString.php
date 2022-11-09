@@ -7,6 +7,7 @@ namespace Common\Adapter\Validation\Validations;
 use Common\Adapter\Validation\Constraints\Alphanumeric\Alphanumeric;
 use Common\Domain\Validation\PROTOCOLS;
 use Common\Domain\Validation\VALIDATION_ERRORS;
+use Symfony\Component\Validator\Constraints\Language;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\Url;
@@ -87,6 +88,14 @@ class ValidationString extends ValidationConstraintBase
         return $this->createConstraint(
             new Url(protocols: $protocolsString, relativeProtocol: $relativeProtocol),
             [Url::INVALID_URL_ERROR => VALIDATION_ERRORS::URL]
+        );
+    }
+
+    public function language(): ValidationConstraint
+    {
+        return $this->createConstraint(
+            new Language(),
+            [Language::NO_SUCH_LANGUAGE_ERROR => VALIDATION_ERRORS::LANGUAGE]
         );
     }
 

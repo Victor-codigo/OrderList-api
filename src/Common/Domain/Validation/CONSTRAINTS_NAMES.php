@@ -47,4 +47,6 @@ enum CONSTRAINTS_NAMES: string
     case CHOICE = 'choice';
 
     case URL = 'url';
+
+    case LANGUAGE = 'language';
 }

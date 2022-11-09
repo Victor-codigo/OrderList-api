@@ -166,6 +166,13 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    public function language(): self
+    {
+        $this->validator->setConstraint($this->string->language());
+
+        return $this;
+    }
+
     public function equalTo(mixed $value): self
     {
         $this->validator->setConstraint($this->comparison->equalTo($value));

@@ -84,4 +84,6 @@ enum VALIDATION_ERRORS
     case ALPHANUMERIC;
 
     case URL;
+
+    case LANGUAGE;
 }

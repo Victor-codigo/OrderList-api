@@ -93,6 +93,11 @@ class ConstraintFactory
         ]);
     }
 
+    public static function language(): ConstraintDto
+    {
+        return new ConstraintDto(CONSTRAINTS_NAMES::LANGUAGE, null);
+    }
+
     public static function equalTo(mixed $value): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::EQUAL_TO, [

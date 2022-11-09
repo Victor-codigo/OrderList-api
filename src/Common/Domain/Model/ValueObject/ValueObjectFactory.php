@@ -9,17 +9,20 @@ use Common\Domain\Model\ValueObject\Array\ValueObjectArrayFactoryInterface;
 use Common\Domain\Model\ValueObject\Array\valueObjectArrayFactory;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\Object\ValueObjectObjectFactory;
+use Common\Domain\Model\ValueObject\Object\ValueObjectObjectFactoryInterface;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\JwtToken;
+use Common\Domain\Model\ValueObject\String\Language;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\String\Path;
+use Common\Domain\Model\ValueObject\String\Url;
 use Common\Domain\Model\ValueObject\String\ValueObjectStringFactory;
 use Common\Domain\Model\ValueObject\String\ValueObjectStringFactoryInterface;
 use User\Domain\Model\USER_ROLES;
 
-final class ValueObjectFactory implements ValueObjectStringFactoryInterface, ValueObjectArrayFactoryInterface
+final class ValueObjectFactory implements ValueObjectStringFactoryInterface, ValueObjectArrayFactoryInterface, ValueObjectObjectFactoryInterface
 {
     /**
      * @param Rol[]|null $roles
@@ -62,5 +65,15 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
     public static function createJwtToken(string|null $path): JwtToken
     {
         return ValueObjectStringFactory::createJwtToken($path);
+    }
+
+    public static function createUrl(string|null $url): Url
+    {
+        return ValueObjectStringFactory::createUrl($url);
+    }
+
+    public static function createLanguage(string|null $language): Language
+    {
+        return ValueObjectStringFactory::createLanguage($language);
     }
 }

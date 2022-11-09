@@ -55,6 +55,8 @@ interface ValidationInterface
      */
     public function url(array $protocols = []): self;
 
+    public function language(): self;
+
     public function equalTo(mixed $value): self;
 
     public function notEqualTo(mixed $value): self;

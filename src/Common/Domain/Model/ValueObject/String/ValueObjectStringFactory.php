@@ -35,4 +35,14 @@ class ValueObjectStringFactory
     {
         return new JwtToken($path);
     }
+
+    public static function createUrl(string|null $url): Url
+    {
+        return new Url($url);
+    }
+
+    public static function createLanguage(string|null $lang): Language
+    {
+        return new Language($lang);
+    }
 }
