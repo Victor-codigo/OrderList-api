@@ -10,9 +10,11 @@ use Symfony\Component\HttpFoundation\Request;
 class UserPasswordRememberRequestDto implements RequestDtoInterface
 {
     public readonly string|null $email;
+    public readonly string|null $passwordRememberUrl;
 
     public function __construct(Request $request)
     {
         $this->email = $request->request->get('email');
+        $this->passwordRememberUrl = $request->request->get('email_password_remember_url');
     }
 }

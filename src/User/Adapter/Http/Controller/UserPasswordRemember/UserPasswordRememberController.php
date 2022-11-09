@@ -25,15 +25,15 @@ class UserPasswordRememberController extends AbstractController
     public function __invoke(UserPasswordRememberRequestDto $passwordRememberDto): JsonResponse
     {
         $this->userPasswordRememberService->__invoke(
-            $this->createUserPasswordRememberInputDto($passwordRememberDto->email)
+            $this->createUserPasswordRememberInputDto($passwordRememberDto->email, $passwordRememberDto->passwordRememberUrl)
         );
 
         return $this->json($this->createResponseDto(), Response::HTTP_OK);
     }
 
-    private function createUserPasswordRememberInputDto(string|null $email): UserPasswordRememberInputDto
+    private function createUserPasswordRememberInputDto(string|null $email, string|null $passwordRememberUrl): UserPasswordRememberInputDto
     {
-        return new UserPasswordRememberInputDto($email);
+        return new UserPasswordRememberInputDto($email, $passwordRememberUrl);
     }
 
     private function createResponseDto(): ResponseDto

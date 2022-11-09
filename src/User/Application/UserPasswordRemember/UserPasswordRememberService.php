@@ -8,6 +8,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Exception\DomainException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Email;
+use Common\Domain\Model\ValueObject\String\Url;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
@@ -34,7 +35,7 @@ class UserPasswordRememberService extends ServiceBase
 
         try {
             $this->userPasswordRememberService->__invoke(
-                $this->createPasswordRememberDto($passwordDto->email)
+                $this->createPasswordRememberDto($passwordDto->email, $passwordDto->passwordRememberUrl)
             );
 
             return new UserPasswordRememberOutputDto(true);
@@ -50,12 +51,12 @@ class UserPasswordRememberService extends ServiceBase
         $errorList = $passwordDto->validate($this->validator);
 
         if (!empty($errorList)) {
-            throw ValueObjectValidationException::fromArray('Invalid email', $errorList);
+            throw ValueObjectValidationException::fromArray('Invalid parameters', $errorList);
         }
     }
 
-    private function createPasswordRememberDto(Email $email): UserPasswordRememberDto
+    private function createPasswordRememberDto(Email $email, Url $passwordRememberUrl): UserPasswordRememberDto
     {
-        return new UserPasswordRememberDto($email);
+        return new UserPasswordRememberDto($email, $passwordRememberUrl);
     }
 }
