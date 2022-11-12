@@ -22,7 +22,7 @@ class UserPasswordRememberService
         $this->sendEmailPasswordRememberService = $sendEmailPasswordRememberService;
     }
 
-    public function __invoke(UserPasswordRememberDto $passwordRememberDto)
+    public function __invoke(UserPasswordRememberDto $passwordRememberDto): void
     {
         $user = $this->userRepository->findUserByEmailOrFail($passwordRememberDto->email);
 

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<doctrine-mapping>
-    <entity name="User\Domain\Model\Profile" table="Profile">
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping">
+
+    <entity table="Profile"
+            name="User\Domain\Model\Profile" 
+            repository-class="User\Adapter\Database\Orm\Doctrine\Repository\ProfileRepository">
         
         <id name="id" 
             type="IdentifierType" 

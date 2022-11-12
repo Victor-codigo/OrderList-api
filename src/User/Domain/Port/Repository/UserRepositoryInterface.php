@@ -29,4 +29,13 @@ interface UserRepositoryInterface extends RepositoryInterface
      * @throws DBNotFoundException
      */
     public function findUserByIdNoCacheOrFail(Identifier $id): User;
+
+    /**
+     * @param Identifier[] $id
+     *
+     * @return Users[]
+     *
+     * @throws DBNotFoundException
+     */
+    public function findUsersByIdOrFail(array $id): array;
 }

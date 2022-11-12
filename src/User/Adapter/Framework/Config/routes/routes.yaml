@@ -45,8 +45,17 @@ user_password_change:
 # USER LOGIN
 # -------------------------------------------------------------
 user_login:
-  # path: /api/v{api_version}/{_locale}/user/login
   path: /api/v{api_version}/users/login
   methods: POST
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# GET USERS
+# -------------------------------------------------------------
+user_get:
+  path: /api/v{api_version}/users/{users_id}
+  methods: GET
+  controller: User\Adapter\Http\Controller\GetUsers\GetUsersController
   requirements:
     api_version: '\d+[.\d]?'

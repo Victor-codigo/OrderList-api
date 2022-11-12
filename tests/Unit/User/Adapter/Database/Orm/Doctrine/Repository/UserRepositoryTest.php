@@ -11,7 +11,6 @@ use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Doctrine\DBAL\Exception\ConnectionException;
-use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -28,7 +27,6 @@ class UserRepositoryTest extends DataBaseTestCase
     private const USER_EMAIL = 'email.already.exists@host.com';
 
     private UserRepository $userRepository;
-    private MockObject|ManagerRegistry $managerRegistry;
 
     protected function setUp(): void
     {
@@ -116,6 +114,46 @@ class UserRepositoryTest extends DataBaseTestCase
 
         $userEmail = new Email(self::USER_EMAIL.'-Not valid email');
         $this->userRepository->findUserByEmailOrFail($userEmail);
+    }
+
+    /** @test */
+    public function itShouldReturnManyUsersById(): void
+    {
+        $usersId = [
+            ValueObjectFactory::createIdentifier('0b13e52d-b058-32fb-8507-10dec634a07c'),
+            ValueObjectFactory::createIdentifier('0b17ca3e-490b-3ddb-aa78-35b4ce668dc0'),
+            ValueObjectFactory::createIdentifier('1befdbe2-9c14-42f0-850f-63e061e33b8f'),
+        ];
+        $return = $this->userRepository->findUsersByIdOrFail($usersId);
+        $dbUsersIds = array_map(
+            fn (User $user) => $user->getId()->getValue(),
+            $return
+        );
+
+        $this->assertContainsOnlyInstancesOf(User::class, $return);
+        $this->assertCount(count($usersId), $return);
+        $this->assertEquals($dbUsersIds, $usersId);
+    }
+
+    /** @test */
+    public function itShouldFailNoIds(): void
+    {
+        $this->expectException(DBNotFoundException::class);
+
+        $this->userRepository->findUsersByIdOrFail([]);
+    }
+
+    /** @test */
+    public function itShouldFailIdsDoesNotExistsInDataBase(): void
+    {
+        $this->expectException(DBNotFoundException::class);
+
+        $usersId = [
+            ValueObjectFactory::createIdentifier('0b13e52d-b058-32fb-8507-10dec634a07A'),
+            ValueObjectFactory::createIdentifier('0b17ca3e-490b-3ddb-aa78-35b4ce668dcA'),
+            ValueObjectFactory::createIdentifier('1befdbe2-9c14-42f0-850f-63e061e33b8A'),
+        ];
+        $this->userRepository->findUsersByIdOrFail($usersId);
     }
 
     private function getNewUser(): User

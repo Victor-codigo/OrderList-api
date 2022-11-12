@@ -88,4 +88,22 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
 
         return $user;
     }
+
+    /**
+     * @param Identifier[] $usersId
+     *
+     * @return Users[]
+     *
+     * @throws DBNotFoundException
+     */
+    public function findUsersByIdOrFail(array $id): array
+    {
+        $users = $this->findBy(['id' => $id]);
+
+        if (empty($users)) {
+            throw DBNotFoundException::fromMessage('Users not found');
+        }
+
+        return $users;
+    }
 }

@@ -9,10 +9,8 @@ use Common\Domain\Exception\InvalidArgumentException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 use Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Fixtures\CustomType;
 use Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Fixtures\CustomValueObject;
-use stdClass;
 
 class TypeBaseTest extends TestCase
 {
@@ -57,7 +55,7 @@ class TypeBaseTest extends TestCase
         $this->object
             ->expects($this->once())
             ->method('getClassImplementationName')
-            ->willReturn(stdClass::class);
+            ->willReturn(\stdClass::class);
 
         $this->expectException(InvalidArgumentException::class);
 
@@ -68,11 +66,16 @@ class TypeBaseTest extends TestCase
     /** @test */
     public function convertToPHPValueValueIsNull(): void
     {
+        $this->object
+            ->expects($this->once())
+            ->method('getClassImplementationName')
+            ->willReturn(CustomValueObject::class);
+
         $value = null;
         $return = $this->object->convertToPHPValue($value, $this->platform);
 
-        $this->assertNull($return,
-            'convertToPHPValue: It was expected to return null');
+        $this->assertInstanceOf(CustomValueObject::class, $return);
+        $this->assertNull($return->getValue());
     }
 
     /** @test */
@@ -88,13 +91,14 @@ class TypeBaseTest extends TestCase
 
         $this->assertInstanceOf(CustomValueObject::class, $return,
             'convertToPHPValue: ValueObject class is wrong');
+        $this->assertEquals($value, $return->getValue());
     }
 
     /** @test */
     public function getNameReturnValue(): void
     {
         $return = $this->object->getName();
-        $objectReflection = new ReflectionClass($this->object);
+        $objectReflection = new \ReflectionClass($this->object);
 
         $this->assertEquals($objectReflection->getName(), $return,
             'getName: The name returned is wrong');

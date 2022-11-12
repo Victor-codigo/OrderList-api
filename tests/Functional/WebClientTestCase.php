@@ -82,23 +82,49 @@ class WebClientTestCase extends WebTestCase
         }
 
         if (!empty($data)) {
-            $this->assertIsObject($content->data);
+            if (is_array($content->data)) {
+                $this->assertIsArray($content->data);
+                $this->assertCount(count($data), $content->data);
+            }
+
+            if (is_object($content->data)) {
+                $this->assertIsObject($content->data);
+            }
         }
 
         if (empty($errors)) {
             $this->assertEmpty($content->errors);
+            $this->assertCount(count($errors), $content->errors);
         }
 
         if (!empty($errors)) {
-            $this->assertIsObject($content->errors);
+            if (is_array($content->errors)) {
+                $this->assertIsArray($content->errors);
+            }
+
+            if (is_object($content->errors)) {
+                $this->assertIsObject($content->errors);
+            }
         }
 
         foreach ($data as $item) {
-            $this->assertObjectHasAttribute($item, $content->data);
+            if (is_array($content->data) && is_string($item)) {
+                $this->assertArrayHasKey($item, $content->data);
+            }
+
+            if (is_object($content->data)) {
+                $this->assertObjectHasAttribute($item, $content->data);
+            }
         }
 
         foreach ($errors as $item) {
-            $this->assertObjectHasAttribute($item, $content->errors);
+            if (is_array($content->errors) && is_string($item)) {
+                $this->assertArrayHasKey($item, $content->errors);
+            }
+
+            if (is_object($content->errors)) {
+                $this->assertObjectHasAttribute($item, $content->errors);
+            }
         }
     }
 

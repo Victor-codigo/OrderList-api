@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace User\Adapter\Database\Orm\Doctrine\Repository;
 
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Doctrine\Persistence\ManagerRegistry;
 use User\Domain\Model\Profile;
 use User\Domain\Port\Repository\ProfileRepositoryInterface;
@@ -16,15 +18,19 @@ class ProfileRepository extends RepositoryBase implements ProfileRepositoryInter
         parent::__construct($managerRegistry, Profile::class);
     }
 
-    public function save(Profile $profile): void
+    /**
+     * @param Identifier $id
+     *
+     * @return Profile[]
+     */
+    public function findProfilesOrFail(array $id): array
     {
-        $this->objectManager->persist($profile);
-        $this->objectManager->flush();
-    }
+        $profiles = $this->findBy(['id' => $id]);
 
-    public function remove(Profile $profile): void
-    {
-        $this->objectManager->persist($profile);
-        $this->objectManager->flush();
+        if (empty($profiles)) {
+            throw DBNotFoundException::fromMessage('Not profiles were found');
+        }
+
+        return $profiles;
     }
 }

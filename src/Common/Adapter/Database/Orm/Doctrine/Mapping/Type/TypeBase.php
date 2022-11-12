@@ -32,10 +32,6 @@ abstract class TypeBase extends Type
 
     public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
-        if (null === $value) {
-            return null;
-        }
-
         return new ($this->getClassImplementationName())($value);
     }
 }
