@@ -1,5 +1,5 @@
 Common\Domain\Model\ValueObject\String\Identifier:
-  id_random-{1..5}:
+  id_random-{1..60}:
     __construct:
       value: <uuid()>
 
@@ -12,7 +12,7 @@ Common\Domain\Model\ValueObject\String\Identifier:
       value: "2606508b-4516-45d6-93a6-c7cb416b7f3f"
 
 Common\Domain\Model\ValueObject\String\Email:
-  email_random-{1..5}:
+  email_random-{1..60}:
     __construct:
       value: <email()>
 
@@ -25,7 +25,7 @@ Common\Domain\Model\ValueObject\String\Email:
       value: "email.already.active@host.com"
 
 Common\Domain\Model\ValueObject\String\Password:
-  password_random-{1..5}:
+  password_random-{1..60}:
     __construct:
       value: <word()>
 
@@ -38,7 +38,7 @@ Common\Domain\Model\ValueObject\String\Password:
       value: "\\$2y\\$13\\$/Bu6Y2ggoPUQNi1gCIqZyeapz0wWXTQEFsTRHggTR72u31Af6X2Du" #123456
 
 Common\Domain\Model\ValueObject\String\Name:
-  name_random-{1..5}:
+  name_random-{1..60}:
     __construct:
       value: <name()>
 
@@ -67,7 +67,7 @@ Common\Domain\Model\ValueObject\Array\Roles:
     __construct: [["@rol_active"]]
 
 User\Domain\Model\User:
-  User-{1..5}:
+  User-{1..60}:
     __construct:
       id: "@id_random-<current()>"
       email: "@email_random-<current()>"
