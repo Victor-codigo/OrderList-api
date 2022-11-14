@@ -27,7 +27,7 @@ class GetUsersInputDtoTest extends TestCase
 
     private function createGetUsersInputDto(array|null $usersId): GetUsersInputDto
     {
-        return new GetUsersInputDto(self::NUM_MAX_USERS, $usersId);
+        return new GetUsersInputDto($usersId);
     }
 
     private function getIds(int $numIds): array
@@ -121,30 +121,6 @@ class GetUsersInputDtoTest extends TestCase
         $return = $this->object->validate($this->validator);
 
         $this->assertCount(self::NUM_MAX_USERS - 1, $this->object->usersId);
-        $this->assertContainsOnlyInstancesOf(Identifier::class, $this->object->usersId);
-        $this->assertEmpty($return);
-    }
-
-    /** @test */
-    public function itShouldValidateTheIdentifiersLessThanMaximum()
-    {
-        $usersId = $this->getIds(5);
-        $this->object = $this->createGetUsersInputDto($usersId);
-        $return = $this->object->validate($this->validator);
-
-        $this->assertCount(5, $this->object->usersId);
-        $this->assertContainsOnlyInstancesOf(Identifier::class, $this->object->usersId);
-        $this->assertEmpty($return);
-    }
-
-    /** @test */
-    public function itShouldValidateTheIdentifiersMoreThanMaximum()
-    {
-        $usersId = $this->getIds(self::NUM_MAX_USERS + 1);
-        $this->object = $this->createGetUsersInputDto($usersId);
-        $return = $this->object->validate($this->validator);
-
-        $this->assertCount(self::NUM_MAX_USERS, $this->object->usersId);
         $this->assertContainsOnlyInstancesOf(Identifier::class, $this->object->usersId);
         $this->assertEmpty($return);
     }

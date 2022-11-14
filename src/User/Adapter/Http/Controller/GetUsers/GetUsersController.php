@@ -15,12 +15,10 @@ use User\Application\GetUsers\GetUsersService;
 class GetUsersController extends AbstractController
 {
     private GetUsersService $getUsersService;
-    private int $getUsersMaxNumberUsersReturned;
 
-    public function __construct(GetUsersService $getUsersService, int $getUsersMaxNumberUsersReturned)
+    public function __construct(GetUsersService $getUsersService)
     {
         $this->getUsersService = $getUsersService;
-        $this->getUsersMaxNumberUsersReturned = $getUsersMaxNumberUsersReturned;
     }
 
     public function __invoke(GetUsersRequestDto $request): JsonResponse
@@ -34,7 +32,7 @@ class GetUsersController extends AbstractController
 
     private function createGetUsersInputDto(array|null $usersId): GetUsersInputDto
     {
-        return new GetUsersInputDto($this->getUsersMaxNumberUsersReturned, $usersId);
+        return new GetUsersInputDto($usersId);
     }
 
     private function createResponse(array $users): JsonResponse
