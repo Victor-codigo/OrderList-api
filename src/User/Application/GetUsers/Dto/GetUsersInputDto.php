@@ -16,30 +16,17 @@ class GetUsersInputDto implements ServiceInputDtoInterface
      */
     public readonly array|null $usersId;
 
-    private int $numMaxIds;
-
-    public function getNumMaxIds(): int
-    {
-        return $this->numMaxIds;
-    }
-
-    public function __construct(int $numMaxIds, array|null $usersId)
-    {
-        $this->numMaxIds = $numMaxIds;
-        $this->usersId = $this->getUsersIdentifiers($usersId);
-    }
-
-    private function getUsersIdentifiers(array|null $usersId): array|null
+    public function __construct(array|null $usersId)
     {
         if (null === $usersId) {
-            return null;
+            $this->usersId = null;
+
+            return;
         }
 
-        $usersIdValid = array_slice($usersId, 0, $this->numMaxIds);
-
-        return array_map(
+        $this->usersId = array_map(
             fn (string $id) => ValueObjectFactory::createIdentifier($id),
-            $usersIdValid
+            $usersId
         );
     }
 
