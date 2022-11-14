@@ -10,29 +10,32 @@ final class EmailRegistrationConfirmationDto extends TemplateDtoBase
     public const TEMPLATE_PATH = 'Email/EmailRegistrationConfirmation/EmailRegistrationConfirmation.html.twig';
     public const TRANSLATOR_DOMAIN = 'EmailRegistrationConfirmation';
 
-    public readonly string $appName;
-    public readonly TemplateId $title;
-    public readonly TemplateId $welcome;
-    public readonly string $urlRegistrationConfirmation;
-    public readonly TemplateId $urlRegistrationConfirmationText;
-    public readonly TemplateId $farewell;
+    private string $appName;
+    private string $urlRegistrationConfirmation;
+    private string $emailUserRegistrationConfirmationExpire;
 
-    public function __invoke(
-        string $appName,
-        TemplateId $title,
-        TemplateId $welcome,
-        string $urlRegistrationConfirmation,
-        TemplateId $urlRegistrationConfirmationText,
-        TemplateId $farewell
-    ): self {
+    private TemplateId $title;
+    private TemplateId $welcome;
+    private TemplateId $urlRegistrationConfirmationText;
+    private TemplateId $farewell;
+
+    public function setData(string $appName, string $urlRegistrationConfirmation, int $emailUserRegistrationConfirmationExpire): static
+    {
         $this->appName = $appName;
-        $this->title = $title;
-        $this->welcome = $welcome;
         $this->urlRegistrationConfirmation = $urlRegistrationConfirmation;
-        $this->urlRegistrationConfirmationText = $urlRegistrationConfirmationText;
-        $this->farewell = $farewell;
+        $this->emailUserRegistrationConfirmationExpire = $emailUserRegistrationConfirmationExpire;
+
+        $this->setStaticData();
 
         return $this;
+    }
+
+    protected function setStaticData(): void
+    {
+        $this->title = TemplateId::create('title');
+        $this->welcome = TemplateId::create('welcome', ['appName' => $this->appName]);
+        $this->urlRegistrationConfirmationText = TemplateId::create('urlRegistrationConfirmationText');
+        $this->farewell = TemplateId::create('farewell', ['hoursToExpire' => $this->emailUserRegistrationConfirmationExpire / 60 / 60]);
     }
 
     public function toArray(): array

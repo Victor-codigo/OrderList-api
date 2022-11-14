@@ -5,7 +5,6 @@ namespace Common\Domain\HtmlTemplate;
 use Common\Domain\Exception\InvalidArgumentException as InvalidArgumentDomainException;
 use Common\Domain\Ports\HtmlTemplate\TemplateDtoInterface;
 use Common\Domain\Ports\Translator\TranslatorInterface;
-use InvalidArgumentException;
 
 abstract class TemplateDtoBase implements TemplateDtoInterface
 {
@@ -14,6 +13,8 @@ abstract class TemplateDtoBase implements TemplateDtoInterface
 
     protected readonly TranslatorInterface $translator;
     protected readonly string $path;
+
+    abstract protected function setStaticData(): void;
 
     public function getLocale(): string
     {
@@ -49,7 +50,7 @@ abstract class TemplateDtoBase implements TemplateDtoInterface
                 static::TRANSLATOR_DOMAIN,
                 $this->translator->getLocale()
             );
-        } catch (InvalidArgumentException $e) {
+        } catch (\InvalidArgumentException $e) {
             throw InvalidArgumentDomainException::fromMessage($e->getMessage());
         }
     }

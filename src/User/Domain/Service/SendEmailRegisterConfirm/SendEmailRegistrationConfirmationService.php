@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace User\Domain\Service\SendEmailRegisterConfirm;
 
-use Common\Domain\HtmlTemplate\TemplateId;
 use Common\Domain\Mailer\EmailDto;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -20,6 +19,7 @@ class SendEmailRegistrationConfirmationService
     private MailerInterface $mailer;
     private TranslatorInterface $translator;
     private JwtHS256Interface $jwt;
+    private EmailRegistrationConfirmationDto $emailRegistrationConfirmationDto;
     private string $adminEmail;
     private string $appName;
     private int $emailUserRegistrationConfirmationExpire;
@@ -28,6 +28,7 @@ class SendEmailRegistrationConfirmationService
         MailerInterface $mailer,
         TranslatorInterface $translator,
         JwtHS256Interface $jwt,
+        EmailRegistrationConfirmationDto $emailRegistrationConfirmationDto,
         string $adminEmail,
         string $appName,
         int $emailUserRegistrationConfirmationExpire
@@ -35,6 +36,7 @@ class SendEmailRegistrationConfirmationService
         $this->mailer = $mailer;
         $this->translator = $translator;
         $this->jwt = $jwt;
+        $this->emailRegistrationConfirmationDto = $emailRegistrationConfirmationDto;
         $this->adminEmail = $adminEmail;
         $this->appName = $appName;
         $this->emailUserRegistrationConfirmationExpire = $emailUserRegistrationConfirmationExpire;
@@ -71,13 +73,10 @@ class SendEmailRegistrationConfirmationService
 
     private function createEmailTemplateData(Identifier $id, string $appName, int $emailUserRegistrationConfirmationExpire, Url $registrationConfirmUrl): EmailRegistrationConfirmationDto
     {
-        return (new EmailRegistrationConfirmationDto($this->translator))(
+        return $this->emailRegistrationConfirmationDto->setData(
             $appName,
-            TemplateId::create('title'),
-            TemplateId::create('welcome', ['appName' => $appName]),
             $this->getUrlRegistrationConfirmation($id, $emailUserRegistrationConfirmationExpire, $registrationConfirmUrl),
-            TemplateId::create('urlRegistrationConfirmationText'),
-            TemplateId::create('farewell', ['hoursToExpire' => $emailUserRegistrationConfirmationExpire / 60 / 60]),
+            $emailUserRegistrationConfirmationExpire
         );
     }
 

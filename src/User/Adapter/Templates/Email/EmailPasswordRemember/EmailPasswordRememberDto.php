@@ -10,32 +10,34 @@ final class EmailPasswordRememberDto extends TemplateDtoBase
     public const TEMPLATE_PATH = 'Email/EmailPasswordRemember/EmailPasswordRemember.html.twig';
     public const TRANSLATOR_DOMAIN = 'EmailPasswordRemember';
 
-    public readonly string $appName;
-    public readonly string $userName;
-    public readonly TemplateId $title;
-    public readonly TemplateId $welcome;
-    public readonly string $urlPasswordRememberConfirm;
-    public readonly TemplateId $buttonRestorationText;
-    public readonly TemplateId $farewell;
+    private string $appName;
+    private string $userName;
+    private string $urlPasswordRememberConfirm;
+    private int $emailUserPasswordRememberExpireInSeconds;
 
-    public function __invoke(
-        string $appName,
-        string $userName,
-        TemplateId $title,
-        TemplateId $welcome,
-        string $urlPasswordRememberConfirm,
-        TemplateId $buttonRestorationText,
-        TemplateId $farewell
-    ): self {
+    private TemplateId $title;
+    private TemplateId $welcome;
+    private TemplateId $buttonRestorationText;
+    private TemplateId $farewell;
+
+    public function setData(string $appName, string $userName, string $urlPasswordRememberConfirm, int $emailUserPasswordRememberExpireInSeconds): static
+    {
         $this->appName = $appName;
         $this->userName = $userName;
-        $this->title = $title;
-        $this->welcome = $welcome;
         $this->urlPasswordRememberConfirm = $urlPasswordRememberConfirm;
-        $this->buttonRestorationText = $buttonRestorationText;
-        $this->farewell = $farewell;
+        $this->emailUserPasswordRememberExpireInSeconds = $emailUserPasswordRememberExpireInSeconds;
+
+        $this->setStaticData();
 
         return $this;
+    }
+
+    protected function setStaticData(): void
+    {
+        $this->title = TemplateId::create('title');
+        $this->welcome = TemplateId::create('welcome', ['userName' => $this->userName]);
+        $this->buttonRestorationText = TemplateId::create('buttonRestorationText');
+        $this->farewell = TemplateId::create('farewell', ['hoursToExpire' => $this->emailUserPasswordRememberExpireInSeconds / 60 / 60]);
     }
 
     public function toArray(): array

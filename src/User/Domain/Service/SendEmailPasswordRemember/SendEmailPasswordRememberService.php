@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace User\Domain\Service\SendEmailPasswordRemember;
 
-use Common\Domain\HtmlTemplate\TemplateId;
 use Common\Domain\Mailer\EmailDto;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -21,6 +20,7 @@ class SendEmailPasswordRememberService
     private MailerInterface $mailer;
     private TranslatorInterface $translator;
     private JwtHS256Interface $jwt;
+    private EmailPasswordRememberDto $emailPasswordRememberDto;
     private string $adminEmail;
     private string $appName;
     private int $emailUserPasswordRememberExpire;
@@ -29,6 +29,7 @@ class SendEmailPasswordRememberService
         MailerInterface $mailer,
         TranslatorInterface $translator,
         JwtHS256Interface $jwt,
+        EmailPasswordRememberDto $emailPasswordRememberDto,
         string $adminEmail,
         string $appName,
         int $emailUserPasswordRememberExpire
@@ -36,6 +37,7 @@ class SendEmailPasswordRememberService
         $this->mailer = $mailer;
         $this->translator = $translator;
         $this->jwt = $jwt;
+        $this->emailPasswordRememberDto = $emailPasswordRememberDto;
         $this->adminEmail = $adminEmail;
         $this->appName = $appName;
         $this->emailUserPasswordRememberExpire = $emailUserPasswordRememberExpire;
@@ -73,14 +75,11 @@ class SendEmailPasswordRememberService
 
     private function createEmailTemplateData(Identifier $id, Name $userName, string $appName, int $emailUserPasswordRememberExpire, Url $passwordRememberUrl): EmailPasswordRememberDto
     {
-        return (new EmailPasswordRememberDto($this->translator))(
+        return $this->emailPasswordRememberDto->setData(
             $appName,
             $userName->getValue(),
-            TemplateId::create('title'),
-            TemplateId::create('welcome', ['userName' => $userName->getValue()]),
             $this->getUrlPaswordRestoration($id, $emailUserPasswordRememberExpire, $passwordRememberUrl),
-            TemplateId::create('buttonRestorationText'),
-            TemplateId::create('farewell', ['hoursToExpire' => $emailUserPasswordRememberExpire / 60 / 60]),
+            $emailUserPasswordRememberExpire,
         );
     }
 
