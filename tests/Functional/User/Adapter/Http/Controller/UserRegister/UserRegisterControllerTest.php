@@ -35,7 +35,6 @@ class UserRegisterControllerTest extends WebClientTestCase
             'name' => 'Juanito',
             'email' => 'email.already.exists@host.com',
             'password' => 'qwerty',
-            'key' => '23db9ca1-1568-473e-8c23-c4613205cf36',
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
@@ -52,7 +51,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $response = $this->client->getResponse();
         $content = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['email_exists' => 'email_exists'], Response::HTTP_BAD_REQUEST);
 
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $content->status);
         $this->assertSame('The email already exists', $content->message);
@@ -65,7 +64,6 @@ class UserRegisterControllerTest extends WebClientTestCase
             'name' => 'Anas',
             'email' => 'anastasia@host.com',
             'password' => '123456',
-            'key' => '23db9ca1-1568-473e-8c23-c4613205cf36',
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
@@ -109,7 +107,6 @@ class UserRegisterControllerTest extends WebClientTestCase
             'name' => str_pad('', 50, 's'),
             'email' => 'anastasia@host.com',
             'password' => '123456',
-            'key' => '23db9ca1-1568-473e-8c23-c4613205cf36',
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
@@ -154,7 +151,6 @@ class UserRegisterControllerTest extends WebClientTestCase
             'name' => 'Ana',
             'email' => 'anastasia@host.com',
             'password' => '123456',
-            'key' => '23db9ca1-1568-473e-8c23-c4613205cf36',
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
@@ -187,7 +183,6 @@ class UserRegisterControllerTest extends WebClientTestCase
             'name' => str_pad('', 51, 's'),
             'email' => 'anastasia@host.com',
             'password' => '123456',
-            'key' => '23db9ca1-1568-473e-8c23-c4613205cf36',
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
@@ -220,7 +215,6 @@ class UserRegisterControllerTest extends WebClientTestCase
             'name' => 'sdfg*',
             'email' => 'anastasia@host.com',
             'password' => '123456',
-            'key' => '23db9ca1-1568-473e-8c23-c4613205cf36',
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
@@ -252,7 +246,6 @@ class UserRegisterControllerTest extends WebClientTestCase
         $clientData = [
             'email' => 'anastasia@host.com',
             'password' => '123456',
-            'key' => '23db9ca1-1568-473e-8c23-c4613205cf36',
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
@@ -285,7 +278,6 @@ class UserRegisterControllerTest extends WebClientTestCase
             'name' => 'Anastasia',
             'email' => 'Email wrong',
             'password' => '123456',
-            'key' => '23db9ca1-1568-473e-8c23-c4613205cf36',
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
@@ -317,7 +309,6 @@ class UserRegisterControllerTest extends WebClientTestCase
         $clientData = [
             'name' => 'Anastasia',
             'password' => '123456',
-            'key' => '23db9ca1-1568-473e-8c23-c4613205cf36',
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
@@ -350,7 +341,6 @@ class UserRegisterControllerTest extends WebClientTestCase
             'name' => 'Anastasia',
             'email' => 'anastasia@host.com',
             'password' => '123456',
-            'key' => '23db9ca1-1568-473e-8c23-c4613205cf36',
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
@@ -392,7 +382,6 @@ class UserRegisterControllerTest extends WebClientTestCase
             'name' => 'Anastasia',
             'email' => 'anastasia@host.com',
             'password' => str_pad('', 50, '-'),
-            'key' => '23db9ca1-1568-473e-8c23-c4613205cf36',
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
@@ -434,7 +423,6 @@ class UserRegisterControllerTest extends WebClientTestCase
             'name' => 'Anastasia',
             'email' => 'anastasia@host.com',
             'password' => '12345',
-            'key' => '23db9ca1-1568-473e-8c23-c4613205cf36',
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
@@ -467,7 +455,6 @@ class UserRegisterControllerTest extends WebClientTestCase
             'name' => 'Anastasia',
             'email' => 'anastasia@host.com',
             'password' => str_pad('', 51, '-'),
-            'key' => '23db9ca1-1568-473e-8c23-c4613205cf36',
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
@@ -525,38 +512,6 @@ class UserRegisterControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShoulFailKeyNotValid(): void
-    {
-        $this->client = $this->getNewClient();
-        $clientData = [
-            'name' => 'Anastasia',
-            'email' => 'anastasia@host.com',
-            'password' => '123456',
-            'key' => 'not_valid_key',
-            'email_confirmation_url' => 'http://www.domain.com/users/confirm',
-        ];
-
-        $this->client->request(
-            self::METHOD,
-            self::ENDPOINT,
-            [],
-            [],
-            [],
-            json_encode($clientData)
-        );
-
-        $response = $this->client->getResponse();
-        $content = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_BAD_REQUEST);
-        $this->assertSame(RESPONSE_STATUS::ERROR->value, $content->status);
-
-        $this->assertSame('Invalid registration key', $content->message);
-
-        $this->assertRowDoesntExistInDataBase('email', new Email($clientData['email']), User::class);
-    }
-
-    /** @test */
     public function itShoulFailUrlConfirmEmailNotSet(): void
     {
         $this->client = $this->getNewClient();
@@ -564,7 +519,6 @@ class UserRegisterControllerTest extends WebClientTestCase
             'name' => 'Anastasia',
             'email' => 'anastasia@host.com',
             'password' => '123456',
-            'key' => 'not_valid_key',
         ];
 
         $this->client->request(
@@ -596,7 +550,6 @@ class UserRegisterControllerTest extends WebClientTestCase
             'name' => 'Anastasia',
             'email' => 'anastasia@host.com',
             'password' => '123456',
-            'key' => 'not_valid_key',
             'email_confirmation_url' => 'htt://www.domain.com/users/confirm',
         ];
 
