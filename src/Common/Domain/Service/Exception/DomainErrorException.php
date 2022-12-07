@@ -12,6 +12,6 @@ class DomainErrorException extends DomainExceptionOutput
 {
     public static function fromMessage(string $message): static
     {
-        return new static($message,[],RESPONSE_STATUS::ERROR, RESPONSE_STATUS_HTTP::INTERNAL_SERVER_ERROR);
+        return new static($message, ['internal' => 'internal'], RESPONSE_STATUS::ERROR, RESPONSE_STATUS_HTTP::INTERNAL_SERVER_ERROR);
     }
 }
