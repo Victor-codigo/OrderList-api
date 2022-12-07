@@ -16,32 +16,26 @@ use Common\Domain\Validation\ValidationInterface;
 use User\Application\UserRegister\Dto\UserRegisterInputDto;
 use User\Application\UserRegister\Dto\UserRegisterOutputDto;
 use User\Application\UserRegister\Exception\EmailAlreadyExistsException;
-use User\Application\UserRegister\Exception\RegistrationKeyValidationFailException;
 use User\Domain\Event\UserPreRegistered\UserPreRegisteredEvent;
 use User\Domain\Model\User;
 use User\Domain\Port\PasswordHasher\PasswordHasherInterface;
 use User\Domain\Port\Repository\UserRepositoryInterface;
 use User\Domain\Port\User\UserInterface;
-use User\Domain\Service\UserRegisterKeyValidation\Dto\UserRegisterKeyValidationInputDto;
-use User\Domain\Service\UserRegisterKeyValidation\UserRegisterKeyValidationService;
 
 class UserRegisterService extends ServiceBase
 {
     private UserRepositoryInterface $repository;
-    private UserRegisterKeyValidationService $registerKeyValidation;
     private EventDispatcherInterface $eventDispatcher;
     private ValidationInterface $validation;
     private PasswordHasherInterface&UserInterface $passwordHasher;
 
     public function __construct(
         UserRepositoryInterface $repository,
-        UserRegisterKeyValidationService $registerKeyValidation,
         EventDispatcherInterface $eventDispatcher,
         ValidationInterface $validation,
         PasswordHasherInterface $passwordHasher
     ) {
         $this->repository = $repository;
-        $this->registerKeyValidation = $registerKeyValidation;
         $this->eventDispatcher = $eventDispatcher;
         $this->validation = $validation;
         $this->passwordHasher = $passwordHasher;
@@ -73,10 +67,6 @@ class UserRegisterService extends ServiceBase
 
         if (!empty($errorList)) {
             throw ValueObjectValidationException::fromArray('Error', $errorList);
-        }
-
-        if (!$this->registerKeyValidation->__invoke(new UserRegisterKeyValidationInputDto($userDto->registrationKey))) {
-            throw RegistrationKeyValidationFailException::fromMessage('Invalid registration key');
         }
     }
 

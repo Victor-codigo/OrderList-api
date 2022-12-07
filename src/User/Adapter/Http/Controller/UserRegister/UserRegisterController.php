@@ -43,8 +43,7 @@ class UserRegisterController extends AbstractController
             $requestDto->password,
             $requestDto->name,
             [new Rol(USER_ROLES::NOT_ACTIVE)],
-            $requestDto->userRegisterEmailConfirmationUrl,
-            $requestDto->registrationKey
+            $requestDto->userRegisterEmailConfirmationUrl
         );
     }
 }

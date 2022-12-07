@@ -23,8 +23,6 @@ final class UserRegisterInputDto implements ServiceInputDtoInterface
     public readonly ProfileCreateInputDto|null $profile;
     public readonly Url|null $userRegisterEmailConfirmationUrl;
 
-    public readonly string $registrationKey;
-
     /**
      * @param Rol[]|null $roles
      */
@@ -34,8 +32,7 @@ final class UserRegisterInputDto implements ServiceInputDtoInterface
         string|null $name,
         array|null $roles,
         ProfileCreateInputDto|null $profile,
-        string|null $userRegisterEmailConfirmationUrl,
-        string|null $registrationKey
+        string|null $userRegisterEmailConfirmationUrl
     ) {
         $this->email = ValueObjectFactory::createEmail($email);
         $this->password = ValueObjectFactory::createPassword($password);
@@ -44,7 +41,6 @@ final class UserRegisterInputDto implements ServiceInputDtoInterface
         $this->profile = $profile;
 
         $this->userRegisterEmailConfirmationUrl = ValueObjectFactory::createUrl($userRegisterEmailConfirmationUrl);
-        $this->registrationKey = $registrationKey;
     }
 
     public static function create(
@@ -52,8 +48,7 @@ final class UserRegisterInputDto implements ServiceInputDtoInterface
         string|null $password,
         string|null $name,
         array|null $roles,
-        string|null $userRegisterEmailConfirmationUrl,
-        string|null $registrationKey
+        string|null $userRegisterEmailConfirmationUrl
     ): self {
         $profile = ProfileCreateInputDto::create(null);
 
@@ -63,8 +58,7 @@ final class UserRegisterInputDto implements ServiceInputDtoInterface
             $name,
             $roles,
             $profile,
-            $userRegisterEmailConfirmationUrl,
-            $registrationKey
+            $userRegisterEmailConfirmationUrl
         );
     }
 

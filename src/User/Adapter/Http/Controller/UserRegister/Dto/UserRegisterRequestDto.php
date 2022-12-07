@@ -20,7 +20,6 @@ class UserRegisterRequestDto implements RequestDtoInterface
         $this->email = $request->request->get('email');
         $this->password = $request->request->get('password');
         $this->name = $request->request->get('name');
-        $this->registrationKey = $request->get('key');
         $this->userRegisterEmailConfirmationUrl = $request->get('email_confirmation_url');
     }
 }
