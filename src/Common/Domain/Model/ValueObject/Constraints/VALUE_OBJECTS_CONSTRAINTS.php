@@ -18,7 +18,7 @@ final class VALUE_OBJECTS_CONSTRAINTS
     public const PASSWORD_MAX_LENGTH = 50;
     public const PASSWORD_TYPE = 'string';
 
-    public const NAME_MIN_LENGTH = 4;
+    public const NAME_MIN_LENGTH = 1;
     public const NAME_MAX_LENGTH = 50;
     public const NAME_TYPE = 'string';
 
