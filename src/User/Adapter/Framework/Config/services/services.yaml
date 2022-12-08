@@ -5,7 +5,6 @@ services:
         bind:
             $appName: "%common.app_name%"
             $adminEmail: "%common.admin_email%"
-            $registrationKey: "%common.user_register_key%"
             $emailUserRegistrationConfirmationExpire: "%common.email_user_registration_confirmation_expire%"
             $emailUserPasswordRememberExpire: "%common.email_user_password_remember_expire%"
 
@@ -20,10 +19,6 @@ services:
     # Domain
     User\Domain\:
         resource: "../../../../../User/Domain/"
-
-    User\Domain\Service\UserRegisterKeyValidation\UserRegisterKeyValidationService:
-        arguments:
-            $registerKey: "%env(string:USER_REGISTER_KEY)%"
 
     # Event subscriber loader
     Common\Domain\Ports\Event\EventDispatcherInterface $eventDispatcherSubscriberLoader: '@Common\Adapter\Compiler\RegisterEventDomain\EventSubscriberLoader'
