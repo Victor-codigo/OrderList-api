@@ -13,6 +13,6 @@ final class UserEmailConfirmationRequestDto implements RequestDtoInterface
 
     public function __construct(Request $request)
     {
-        $this->token = $request->attributes->get('token');
+        $this->token = $request->request->get('token');
     }
 }
