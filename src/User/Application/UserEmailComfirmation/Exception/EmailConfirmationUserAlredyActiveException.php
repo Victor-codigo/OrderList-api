@@ -13,6 +13,6 @@ class EmailConfirmationUserAlredyActiveException extends DomainExceptionOutput i
 {
     public static function fromMessage(string $message): static
     {
-        return new static($message, [],RESPONSE_STATUS::ERROR, RESPONSE_STATUS_HTTP::BAD_REQUEST);
+        return new static($message, ['email_verified' => 'The email is already verified'],RESPONSE_STATUS::ERROR, RESPONSE_STATUS_HTTP::BAD_REQUEST);
     }
 }
