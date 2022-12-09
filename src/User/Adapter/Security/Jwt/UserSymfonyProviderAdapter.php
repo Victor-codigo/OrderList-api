@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace User\Adapter\Security\Jwt;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\UserNotFoundException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -14,6 +15,7 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use User\Adapter\Security\User\UserSymfonyAdapter;
+use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
 use User\Domain\Port\Repository\UserRepositoryInterface;
 use User\Domain\Port\User\UserInterface as UserUserInterface;
@@ -54,10 +56,16 @@ class UserSymfonyProviderAdapter implements UserProviderInterface, PasswordUpgra
     {
         try {
             if ($this->userRepository->isValidUuid($identifier)) {
-                return $this->createUserSymfonyAdapter($this->loadUserFromId($identifier));
+                $user = $this->loadUserFromId($identifier);
+            } else {
+                $user = $this->loadUserFromEmail($identifier);
             }
 
-            return $this->createUserSymfonyAdapter($this->loadUserFromEmail($identifier));
+            if (!$this->isValidUser($user)) {
+                throw new DBNotFoundException();
+            }
+
+            return $this->createUserSymfonyAdapter($user);
         } catch (DBNotFoundException) {
             throw new UserNotFoundException('email or identifier: ', $identifier);
         }
@@ -86,6 +94,11 @@ class UserSymfonyProviderAdapter implements UserProviderInterface, PasswordUpgra
         return $this->userRepository->findUserByEmailOrFail(
             ValueObjectFactory::createEmail($email)
         );
+    }
+
+    private function isValidUser(User $user): bool
+    {
+        return !$user->getRoles()->has(new Rol(USER_ROLES::NOT_ACTIVE));
     }
 
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void

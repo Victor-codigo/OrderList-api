@@ -150,6 +150,33 @@ class UserSymfonyProviderAdapterTest extends TestCase
     }
 
     /** @test */
+    public function itShouldFailUserIsNotActive(): void
+    {
+        $email = 'user@email.com';
+        $expectedUser = User::fromPrimitives('', $email, 'password', 'name', [USER_ROLES::NOT_ACTIVE]);
+
+        $this->userRepository
+            ->expects($this->once())
+            ->method('isValidUuid')
+            ->with($email)
+            ->willReturn(false);
+
+        $this->userRepository
+            ->expects($this->once())
+            ->method('findUserByEmailOrFail')
+            ->with(ValueObjectFactory::createEmail($email))
+            ->willReturn($expectedUser);
+
+        $this->userRepository
+            ->expects($this->never())
+            ->method('findUserByIdOrFail');
+
+        $this->expectException(UserNotFoundException::class);
+
+        $this->object->loadUserByIdentifier($email);
+    }
+
+    /** @test */
     public function itShouldUpdateTheUserPassword(): void
     {
         $passwordNew = 'new password';
@@ -221,7 +248,6 @@ class UserSymfonyProviderAdapterTest extends TestCase
     public function itShouldFailUserEmailNotFound(): void
     {
         $email = 'user@email.com';
-        $expectedUser = User::fromPrimitives('', $email, 'password', 'name', [USER_ROLES::USER]);
 
         $this->userRepository
             ->expects($this->once())
