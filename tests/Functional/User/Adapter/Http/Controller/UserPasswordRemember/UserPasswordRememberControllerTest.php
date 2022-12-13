@@ -115,7 +115,7 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['email_not_found'], Response::HTTP_BAD_REQUEST);
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Email not found', $responseContent->message);
         $this->assertEmailIsNotSent();
