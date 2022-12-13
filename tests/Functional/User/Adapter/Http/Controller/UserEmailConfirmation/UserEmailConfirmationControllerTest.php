@@ -27,7 +27,7 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     {
         $this->client = $this->getNewClient();
         $token = $this->generateToken(['username' => self::USER_ID], 86_400); // 24H
-        $this->client->request(method: self::METHOD, uri: self::ENDPOINT.'/'.$token, content: '{}');
+        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode(['token' => $token]));
 
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -48,12 +48,12 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     {
         $this->client = $this->getNewClient();
         $token = $this->generateToken(['username' => self::USER_ID], 86_400); // 24H
-        $this->client->request(method: self::METHOD, uri: self::ENDPOINT.'/'.$token.'-Wrong token', content: '{}');
+        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode(['token' => $token.'-Wrong token']));
 
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['token_error'], Response::HTTP_BAD_REQUEST);
         $this->assertSame('Wrong token', $responseContent->message);
 
         $entityManager = $this->getEntityManager();
@@ -67,12 +67,12 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     {
         $this->client = $this->getNewClient();
         $token = $this->generateToken(['username' => self::USER_ID], 0);
-        $this->client->request(method: self::METHOD, uri: self::ENDPOINT.'/'.$token, content: '{}');
+        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode(['token' => $token]));
 
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['token_expired'], Response::HTTP_BAD_REQUEST);
         $this->assertSame('Token has expired', $responseContent->message);
 
         $entityManager = $this->getEntityManager();
@@ -86,12 +86,12 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     {
         $this->client = $this->getNewClient();
         $token = $this->generateToken(['username' => self::USER_ID_ALREADY_REGISTERED], 86_400); // 24H
-        $this->client->request(method: self::METHOD, uri: self::ENDPOINT.'/'.$token, content: '{}');
+        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode(['token' => $token]));
 
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['email_verified'], Response::HTTP_BAD_REQUEST);
         $this->assertSame('User already active', $responseContent->message);
 
         $entityManager = $this->getEntityManager();
@@ -105,12 +105,12 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     {
         $this->client = $this->getNewClient();
         $token = $this->generateToken(['username' => self::USER_ID_NOT_EXISTS], 86_400); // 24H
-        $this->client->request(method: self::METHOD, uri: self::ENDPOINT.'/'.$token, content: '{}');
+        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode(['token' => $token]));
 
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['token_error'], Response::HTTP_BAD_REQUEST);
         $this->assertSame('Wrong token', $responseContent->message);
 
         $entityManager = $this->getEntityManager();
@@ -124,7 +124,7 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     {
         $this->client = $this->getNewClient();
         $token = 'is.not.valid-token';
-        $this->client->request(method: self::METHOD, uri: self::ENDPOINT.'/'.$token, content: '{}');
+        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode(['token' => $token]));
 
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
