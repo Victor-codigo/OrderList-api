@@ -72,7 +72,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk(response: $response, responseCode: Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk(response: $response, errors: ['token_wrong'], responseCode: Response::HTTP_BAD_REQUEST);
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Wrong token', $responseContent->message);
     }
@@ -91,7 +91,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk(response: $response, responseCode: Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk(response: $response, errors: ['token_wrong'], responseCode: Response::HTTP_BAD_REQUEST);
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Wrong token', $responseContent->message);
     }
@@ -110,7 +110,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk(response: $response, responseCode: Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk(response: $response, errors: ['token_expired'], responseCode: Response::HTTP_BAD_REQUEST);
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Token has expired', $responseContent->message);
     }
@@ -213,7 +213,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk(response: $response, responseCode: Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk(response: $response, errors: ['password_change'], responseCode: Response::HTTP_BAD_REQUEST);
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('It could not change password', $responseContent->message);
     }
@@ -232,7 +232,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk(response: $response, responseCode: Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk(response: $response, errors: ['passwoord_repeat'], responseCode: Response::HTTP_BAD_REQUEST);
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Password new and Repeat new are not equals', $responseContent->message);
     }
