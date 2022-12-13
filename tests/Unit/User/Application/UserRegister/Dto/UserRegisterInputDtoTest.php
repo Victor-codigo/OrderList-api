@@ -134,7 +134,7 @@ class UserRegisterInputDtoTest extends TestCase
         $this->object = UserRegisterInputDto::create(
             'email@host.com',
             'password',
-            'Ana',
+            '',
             [new rol(USER_ROLES::USER)],
             self::URL_EMAIL_CONFIRMATION,
             self::REGISTRATION_KEY
@@ -142,7 +142,7 @@ class UserRegisterInputDtoTest extends TestCase
 
         $return = $this->object->validate($this->validator);
 
-        $this->assertEquals(['name' => [VALIDATION_ERRORS::STRING_TOO_SHORT]], $return);
+        $this->assertEquals(['name' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::STRING_TOO_SHORT]], $return);
     }
 
     /** @test */
