@@ -148,7 +148,7 @@ class UserRegisterControllerTest extends WebClientTestCase
     {
         $this->client = $this->getNewClient();
         $clientData = [
-            'name' => 'Ana',
+            'name' => '',
             'email' => 'anastasia@host.com',
             'password' => '123456',
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
@@ -170,7 +170,7 @@ class UserRegisterControllerTest extends WebClientTestCase
 
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $content->status);
         $this->assertSame('Error', $content->message);
-        $this->assertSame(['string_too_short'], $content->errors->name);
+        $this->assertSame(['not_blank', 'string_too_short'], $content->errors->name);
 
         $this->assertRowDoesntExistInDataBase('email', new Email($clientData['email']), User::class);
     }
