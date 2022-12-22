@@ -5,21 +5,25 @@ declare(strict_types=1);
 namespace Test\Functional\User\Adapter\Http\Controller\GetUsers;
 
 use Common\Domain\Response\RESPONSE_STATUS;
+use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 use User\Domain\Model\User;
 
 class GetUsersControllerTest extends WebClientTestCase
 {
+    use RefreshDatabaseTrait;
+
     private const ENDPOINT = '/api/v1/users';
     private const METHOD = 'GET';
-    private const USER_NAME = 'email.already.exists@host.com';
-    private const USER_PASSWORD = '$2y$04$A5XxYKU/w5tpX6BY9Kpf9uDrXY3seHrYwmx70qZ0DWyp0Lmvfo29q';
-    private const USERS_NUM_MAX = 50;
+    private const USER_NAME = 'email.already.active@host.com';
+    private const USER_PASSWORD = '123456';
 
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
     }
 
     private function getUsersIds(): array
@@ -43,7 +47,6 @@ class GetUsersControllerTest extends WebClientTestCase
     public function itShouldReturnTwoUsers(): void
     {
         $usersIds = $this->getUsersIds();
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.'/'.implode(',', $usersIds),
@@ -76,7 +79,6 @@ class GetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailNoUsersSent(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -92,7 +94,6 @@ class GetUsersControllerTest extends WebClientTestCase
     public function itShouldFailUsersIdWrong(): void
     {
         $usersIds = $this->getUsersIds();
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.'/'.implode('AAA,', $usersIds),
@@ -113,7 +114,6 @@ class GetUsersControllerTest extends WebClientTestCase
     public function itShouldFailUsersIdNotFound(): void
     {
         $usersIds = $this->getUsersIdsWrong();
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.'/'.implode(',', $usersIds),
