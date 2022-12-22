@@ -15,6 +15,11 @@ abstract class ObjectValueObject extends ValueObjectBase
         return $this->value;
     }
 
+    public function getValidationValue(): mixed
+    {
+        return $this->value;
+    }
+
     public function __construct(object|null $value)
     {
         $this->value = $value;

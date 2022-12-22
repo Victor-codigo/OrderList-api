@@ -22,6 +22,11 @@ abstract class IntegerValueObject extends ValueObjectBase
         return $this->value;
     }
 
+    public function getValidationValue(): mixed
+    {
+        return $this->value;
+    }
+
     public function getValueObjects(): array
     {
         return [];

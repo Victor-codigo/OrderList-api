@@ -15,6 +15,11 @@ abstract class ArrayValueObject extends ValueObjectBase
         return $this->value;
     }
 
+    public function getValidationValue(): mixed
+    {
+        return $this->value;
+    }
+
     public function __construct(array|null $value)
     {
         $this->value = $value;

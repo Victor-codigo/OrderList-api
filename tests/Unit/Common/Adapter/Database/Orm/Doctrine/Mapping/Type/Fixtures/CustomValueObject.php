@@ -25,6 +25,11 @@ class CustomValueObject extends ValueObjectBase
         return $this->value;
     }
 
+    public function getValidationValue(): mixed
+    {
+        return $this->value;
+    }
+
     protected function defineConstraints(): void
     {
     }

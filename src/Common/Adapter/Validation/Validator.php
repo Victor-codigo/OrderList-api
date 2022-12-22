@@ -109,7 +109,7 @@ class Validator
         }
 
         $errorList = $this
-            ->setValue($valueObject->getValue())
+            ->setValue($valueObject->getValidationValue())
             ->validate(true);
 
         foreach ($valueObject->getValueObjects() as $index => $childValueObject) {
@@ -187,6 +187,7 @@ class Validator
             CONSTRAINTS_NAMES::TIME->value => $this->validationChain->time(...),
             CONSTRAINTS_NAMES::DATETIME->value => $this->validationChain->timeZone(...),
             CONSTRAINTS_NAMES::FILE->value => $this->validationChain->file(...),
+            CONSTRAINTS_NAMES::FILE_IMAGE->value => $this->validationChain->image(...),
             CONSTRAINTS_NAMES::CHOICE->value => $this->validationChain->choice(...),
         ];
     }

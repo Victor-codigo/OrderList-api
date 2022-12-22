@@ -15,6 +15,11 @@ abstract class StringValueObject extends ValueObjectBase
         return $this->value;
     }
 
+    public function getValidationValue(): mixed
+    {
+        return $this->value;
+    }
+
     public function __construct(string|null $value)
     {
         $this->value = $value;
