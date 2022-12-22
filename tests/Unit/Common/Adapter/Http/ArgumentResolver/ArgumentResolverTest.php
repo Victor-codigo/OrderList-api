@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Test\Unit\Common\Adapter\Http\ArgumentResolver\Fixtures\CustomRequestDto;
-use stdClass;
 
 class ArgumentResolverTest extends TestCase
 {
@@ -49,7 +48,7 @@ class ArgumentResolverTest extends TestCase
         $this->argumentMetaData
             ->expects($this->once())
             ->method('getType')
-            ->willReturn(stdClass::class);
+            ->willReturn(\stdClass::class);
 
         $return = $this->object->supports($this->request, $this->argumentMetaData);
 

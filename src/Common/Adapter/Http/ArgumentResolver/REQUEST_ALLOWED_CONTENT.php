@@ -7,6 +7,7 @@ namespace Common\Adapter\Http\ArgumentResolver;
 enum REQUEST_ALLOWED_CONTENT: string
 {
     case JSON = 'application/json';
+    case FORM_DATA = 'multipart/form-data';
 
     public static function allowed(string|null $type): bool
     {

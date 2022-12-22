@@ -26,9 +26,17 @@ class RequestValidation
     }
 
     /**
-     * @throws JsonException
+     * @throws \JsonException
      */
     private function createParams(Request $request): ParameterBag
+    {
+        return match ($this->getContentType($request)) {
+            REQUEST_ALLOWED_CONTENT::JSON->value => $this->applicationJson($request),
+            REQUEST_ALLOWED_CONTENT::FORM_DATA->value => $request->request
+        };
+    }
+
+    private function applicationJson(Request $request): ParameterBag
     {
         $params = (array) json_decode(
             $request->getContent(),
@@ -40,12 +48,27 @@ class RequestValidation
         return new ParameterBag($params);
     }
 
+    private function getContentType(Request $request): string
+    {
+        $contentType = $request->headers->get('CONTENT_TYPE');
+
+        if (null === $contentType) {
+            return '';
+        }
+
+        $contentType = explode(';', $contentType);
+
+        return $contentType[0];
+    }
+
     /**
      * @throws InvalidArgumentException
      */
     private function validateContentType(Request $request): void
     {
-        if (!REQUEST_ALLOWED_CONTENT::allowed($request->headers->get('CONTENT_TYPE'))) {
+        $contentType = $this->getContentType($request);
+
+        if (!REQUEST_ALLOWED_CONTENT::allowed($contentType)) {
             throw InvalidArgumentException::fromMessage(sprintf('Content-Type [%s] is not allowed. Only [%s] are allowed.', $request->getContentType(), implode(', ', array_column(REQUEST_ALLOWED_CONTENT::cases(), 'value'))));
         }
     }
