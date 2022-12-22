@@ -7,6 +7,7 @@ services:
             $adminEmail: "%common.admin_email%"
             $emailUserRegistrationConfirmationExpire: "%common.email_user_registration_confirmation_expire%"
             $emailUserPasswordRememberExpire: "%common.email_user_password_remember_expire%"
+            $userPublicImagePath: "%user.public.image.path%"
 
     # Adapter
     User\Adapter\:

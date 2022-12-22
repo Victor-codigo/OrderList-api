@@ -9,6 +9,7 @@ parameters:
     common.email_user_registration_confirmation_expire: "%env(int:EMAIL_REGISTRATION_CONFIRM_EXPIRE)%"
     common.email_user_password_remember_expire: "%env(int:EMAIL_PASSWORD_REMEMBER_EXPIRE)%"
     user.jwt_key: "%env(file:resolve:JWT_SECRET_KEY)%"
+    user.public.image.path: "%env(string:USER_IMAGE_PATH)%"
 
 services:
     _defaults:

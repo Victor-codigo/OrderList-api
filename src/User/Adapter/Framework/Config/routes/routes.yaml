@@ -59,3 +59,13 @@ user_get:
   controller: User\Adapter\Http\Controller\GetUsers\GetUsersController
   requirements:
     api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# PROFILE
+# -------------------------------------------------------------
+user_modify:
+  path: /api/v{api_version}/users/modify
+  methods: PUT
+  controller: User\Adapter\Http\Controller\UserModify\UserModifyController
+  requirements:
+    api_version: '\d+[.\d]?'

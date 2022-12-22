@@ -46,6 +46,10 @@ class WebClientTestCase extends WebTestCase
             ])
         );
 
+        $this->client
+            ->getCookieJar()
+            ->updateFromSetCookie([$this->client->getInternalResponse()->getHeader('set-cookie')]);
+
         return $this->client;
     }
 
@@ -148,5 +152,15 @@ class WebClientTestCase extends WebTestCase
     protected function assertEmailIsNotSent(): void
     {
         $this->assertQueuedEmailCount(0);
+    }
+
+    protected function removeFolderFiles(string $path): void
+    {
+        $files = glob($path.'/*');
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                unlink($file);
+            }
+        }
     }
 }
