@@ -59,7 +59,6 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
 
     public function eraseCredentials()
     {
-        $this->user->setPassword(ValueObjectFactory::createPassword(null));
     }
 
     public function getUserIdentifier(): string

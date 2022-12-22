@@ -66,15 +66,6 @@ class UserSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function eraseCredentialsRemoveData(): void
-    {
-        $this->object->eraseCredentials();
-
-        $this->assertNull($this->object->getUser()->getPassword()->getValue(),
-            'eraseCredentials: Doesn\'t remove the data');
-    }
-
-    /** @test */
     public function getTheIdentifier(): void
     {
         $email = ValueObjectFactory::createEmail('test@email.com');
