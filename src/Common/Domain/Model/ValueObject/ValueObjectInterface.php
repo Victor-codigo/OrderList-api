@@ -6,5 +6,5 @@ namespace Common\Domain\Model\ValueObject;
 
 interface ValueObjectInterface
 {
-    public function getValue();
+    public function getValue(): mixed;
 }

@@ -209,12 +209,46 @@ class ConstraintFactory
         ]);
     }
 
-    public static function file(mixed $maxSize, bool|null $binaryFormat, array|string|null $mimeTypes): ConstraintDto
+    public static function file(mixed $maxSize, array|string|null $mimeTypes): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::FILE, [
             'maxSize' => $maxSize,
-            'binaryFormat' => $binaryFormat,
             'mimeTypes' => $mimeTypes,
+        ]);
+    }
+
+    public static function image(
+        mixed $maxSize,
+        array|string|null $mimeTypes,
+        int|null $minWith = null,
+        int|null $maxWith = null,
+        int|null $minHeigth = null,
+        int|null $maxHeigth = null,
+        int|null $minPixels = null,
+        int|null $maxPixels = null,
+        float|null $minAspectRatio = null,
+        float|null $maxAspectRatio = null,
+        bool $allowLandscape = true,
+        bool $allowPortrait = true,
+        bool $allowSquareImage = true,
+        bool $detectCorrupted = false
+    ): ConstraintDto {
+        return new ConstraintDto(CONSTRAINTS_NAMES::FILE_IMAGE, [
+            'maxSize' => $maxSize,
+            'mimeTypes' => $mimeTypes,
+            'maxSize' => $maxSize,
+            'minWith' => $minWith,
+            'maxWith' => $maxWith,
+            'minHeigth' => $minHeigth,
+            'maxHeigth' => $maxHeigth,
+            'minPixels' => $minPixels,
+            'maxPixels' => $maxPixels,
+            'minAspectRatio' => $minAspectRatio,
+            'maxAspectRatio' => $maxAspectRatio,
+            'allowLandscape' => $allowLandscape,
+            'allowPortrait' => $allowPortrait,
+            'allowSquareImage' => $allowSquareImage,
+            'detectCorrupted' => $detectCorrupted,
         ]);
     }
 

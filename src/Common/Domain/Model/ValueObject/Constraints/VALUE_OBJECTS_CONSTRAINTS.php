@@ -29,9 +29,36 @@ final class VALUE_OBJECTS_CONSTRAINTS
     public const CREATED_ON_LENGTH = 50;
     public const CREATED_ON_TYPE = 'json';
 
-    public const IMAGE_MIN_LENGTH = 1;
-    public const IMAGE_MAX_LENGTH = 256;
-    public const IMAGE_TYPE = 'string';
+    public const PATH_MIN_LENGTH = 1;
+    public const PATH_MAX_LENGTH = 256;
 
     public const JWT_TOKEN_MIN_LENGTH = 36;
+
+    /**
+     * File size in Bytes.
+     */
+    public const FILE_MAX_FILE_SIZE = 2 * 1_000_000;
+    public const FILE_MIME_TIPES = [];
+
+    /**
+     * File size in Bytes.
+     */
+    public const FILE_USER_IMAGE_MAX_FILE_SIZE = 2 * 1_000_000;
+    public const FILE_USER_IMAGE_MIN_WITH = null;
+    public const FILE_USER_IMAGE_MAX_WITH = null;
+    public const FILE_USER_IMAGE_MIN_HEIGTH = null;
+    public const FILE_USER_IMAGE_MAX_HEIGTH = null;
+    public const FILE_USER_IMAGE_MIN_PIXELS = null;
+    public const FILE_USER_IMAGE_MAX_PIXELS = null;
+    public const FILE_USER_IMAGE_MIN_ASPECT_RATIO = null;
+    public const FILE_USER_IMAGE_MAX_ASPECT_RATIO = null;
+    public const FILE_USER_IMAGE_ALLOW_LANDSCAPE = false;
+    public const FILE_USER_IMAGE_ALLOW_PORTRAIT = true;
+    public const FILE_USER_IMAGE_ALLOW_SQUARE_IMAGE = true;
+    public const FILE_USER_IMAGE_DETECT_CORRUPTED = false;
+    public const FILE_USER_IMAGE_MIME_TIPES = [
+        'image/jpeg',
+        'image/png',
+        'image/bmp',
+    ];
 }

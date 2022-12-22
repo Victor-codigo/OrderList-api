@@ -55,7 +55,7 @@ class PathTest extends TestCase
 
     public function testPathNotTooLong(): void
     {
-        $path = $this->createPath(str_repeat('-', VALUE_OBJECTS_CONSTRAINTS::IMAGE_MAX_LENGTH + 1));
+        $path = $this->createPath(str_repeat('-', VALUE_OBJECTS_CONSTRAINTS::PATH_MAX_LENGTH + 1));
         $return = $this->validation->validateValueObject($path);
 
         $this->assertEquals([VALIDATION_ERRORS::STRING_TOO_LONG], $return);

@@ -43,6 +43,7 @@ enum CONSTRAINTS_NAMES: string
     case TIMEZONE = 'timeZone';
 
     case FILE = 'file';
+    case FILE_IMAGE = 'file_image';
 
     case CHOICE = 'choice';
 

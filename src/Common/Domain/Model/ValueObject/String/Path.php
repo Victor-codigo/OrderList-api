@@ -16,6 +16,6 @@ class Path extends StringValueObject
             ->setConstraint(ConstraintFactory::notBlank())
             ->setConstraint(ConstraintFactory::notNull())
             ->setConstraint(ConstraintFactory::type(TYPES::STRING))
-            ->setConstraint(ConstraintFactory::stringRange(VALUE_OBJECTS_CONSTRAINTS::IMAGE_MIN_LENGTH, VALUE_OBJECTS_CONSTRAINTS::IMAGE_MAX_LENGTH));
+            ->setConstraint(ConstraintFactory::stringRange(VALUE_OBJECTS_CONSTRAINTS::PATH_MIN_LENGTH, VALUE_OBJECTS_CONSTRAINTS::PATH_MAX_LENGTH));
     }
 }

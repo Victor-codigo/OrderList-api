@@ -7,7 +7,9 @@ namespace Common\Domain\Model\ValueObject;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Array\ValueObjectArrayFactoryInterface;
 use Common\Domain\Model\ValueObject\Array\valueObjectArrayFactory;
+use Common\Domain\Model\ValueObject\Object\File;
 use Common\Domain\Model\ValueObject\Object\Rol;
+use Common\Domain\Model\ValueObject\Object\UserImage;
 use Common\Domain\Model\ValueObject\Object\ValueObjectObjectFactory;
 use Common\Domain\Model\ValueObject\Object\ValueObjectObjectFactoryInterface;
 use Common\Domain\Model\ValueObject\String\Email;
@@ -20,6 +22,7 @@ use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\String\Url;
 use Common\Domain\Model\ValueObject\String\ValueObjectStringFactory;
 use Common\Domain\Model\ValueObject\String\ValueObjectStringFactoryInterface;
+use Common\Domain\Ports\FileUpload\FileInterface;
 use User\Domain\Model\USER_ROLES;
 
 final class ValueObjectFactory implements ValueObjectStringFactoryInterface, ValueObjectArrayFactoryInterface, ValueObjectObjectFactoryInterface
@@ -75,5 +78,15 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
     public static function createLanguage(string|null $language): Language
     {
         return ValueObjectStringFactory::createLanguage($language);
+    }
+
+    public static function createFile(FileInterface $file): File
+    {
+        return ValueObjectObjectFactory::createFile($file);
+    }
+
+    public static function createUserImage(FileInterface $file): UserImage
+    {
+        return ValueObjectObjectFactory::createUserImage($file);
     }
 }

@@ -302,9 +302,45 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
-    public function file(mixed $maxSize, bool|null $binaryFormat, array|string|null $mimeTypes): self
+    public function file(mixed $maxSize, array|string|null $mimeTypes): self
     {
-        $this->validator->setConstraint($this->file->file($maxSize, $binaryFormat, $mimeTypes));
+        $this->validator->setConstraint($this->file->file($maxSize, $mimeTypes));
+
+        return $this;
+    }
+
+    public function image(
+        mixed $maxSize,
+        array|string|null $mimeTypes,
+        int|null $minWith = null,
+        int|null $maxWith = null,
+        int|null $minHeigth = null,
+        int|null $maxHeigth = null,
+        int|null $minPixels = null,
+        int|null $maxPixels = null,
+        float|null $minAspectRatio = null,
+        float|null $maxAspectRatio = null,
+        bool $allowLandscape = true,
+        bool $allowPortrait = true,
+        bool $allowSquareImage = true,
+        bool $detectCorrupted = false
+    ): self {
+        $this->validator->setConstraint($this->file->image(
+            $maxSize,
+            $mimeTypes,
+            $minWith,
+            $maxWith,
+            $minHeigth,
+            $maxHeigth,
+            $minPixels,
+            $maxPixels,
+            $minAspectRatio,
+            $maxAspectRatio,
+            $allowLandscape,
+            $allowPortrait,
+            $allowSquareImage,
+            $detectCorrupted
+        ));
 
         return $this;
     }

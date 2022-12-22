@@ -96,7 +96,9 @@ interface ValidationInterface
      */
     public function timeZone(int|null $timeZone): self;
 
-    public function file(mixed $maxSize, bool|null $binaryFormat, array|string|null $mimeTypes): self;
+    public function file(mixed $maxSize, array|string|null $mimeTypes): self;
+
+    public function image(mixed $maxSize, array|string|null $mimeTypes, int|null $minWith = null, int|null $maxWith = null, int|null $minHeigth = null, int|null $maxHeigth = null, int|null $minPixels = null, int|null $maxPixels = null, float|null $minAspectRatio = null, float|null $maxAspectRatio = null, bool $allowLandscape = true, bool $allowPortrait = true, bool $allowSquareImage = true, bool $detectCorrupted = false): self;
 
     public function choice(array|null $choices, bool|null $multiple, bool|null $strict, int|null $min, int|null $max): self;
 }
