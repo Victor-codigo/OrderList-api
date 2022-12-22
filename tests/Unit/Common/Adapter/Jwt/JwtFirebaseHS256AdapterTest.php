@@ -76,7 +76,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
         $this->assertEquals(self::PAYLOAD['param3'], $tokenDecoded->param3);
     }
 
-    /* @test */
+    /** @test */
     public function itShouldDecodedTheToken(): void
     {
         $token = JWT::encode(self::PAYLOAD, self::SECRET_KEY, JwtFirebaseHS256Adapter::ALGORITM);
