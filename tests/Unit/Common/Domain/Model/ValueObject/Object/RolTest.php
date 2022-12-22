@@ -9,7 +9,6 @@ use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use PHPUnit\Framework\TestCase;
 use User\Domain\Model\USER_ROLES;
-use stdClass;
 
 class RolTest extends TestCase
 {
@@ -44,7 +43,7 @@ class RolTest extends TestCase
     /** @test */
     public function checkRolNotValid()
     {
-        $this->object = $this->createRol(new stdClass());
+        $this->object = $this->createRol(new \stdClass());
         $return = $this->validator->validateValueObject($this->object);
 
         $this->assertEquals([VALIDATION_ERRORS::CHOICE_NOT_SUCH], $return);
