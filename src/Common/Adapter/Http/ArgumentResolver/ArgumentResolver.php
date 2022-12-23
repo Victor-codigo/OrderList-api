@@ -20,6 +20,10 @@ class ArgumentResolver implements ArgumentValueResolverInterface
 
     public function supports(Request $request, ArgumentMetadata $argument): bool
     {
+        if (null === $argument->getType()) {
+            return false;
+        }
+
         $requestReflection = new \ReflectionClass($argument->getType());
 
         return $requestReflection->implementsInterface(RequestDtoInterface::class);
