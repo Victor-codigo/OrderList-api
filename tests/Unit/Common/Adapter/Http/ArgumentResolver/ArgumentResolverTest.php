@@ -32,7 +32,7 @@ class ArgumentResolverTest extends TestCase
     public function supportsRequestOk(): void
     {
         $this->argumentMetaData
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getType')
             ->willReturn(CustomRequestDto::class);
 
@@ -46,7 +46,7 @@ class ArgumentResolverTest extends TestCase
     public function supportsRequestError(): void
     {
         $this->argumentMetaData
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getType')
             ->willReturn(\stdClass::class);
 
