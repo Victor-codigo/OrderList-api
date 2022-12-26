@@ -22,10 +22,16 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     private const USER_ID_ALREADY_REGISTERED = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
     private const USER_ID_NOT_EXISTS = 'NO-EXISTS-4516-45d6-93a6-c7cb416b7f3f';
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->client = $this->getNewClient();
+    }
+
     /** @test */
     public function itShouldActivateTheUser(): void
     {
-        $this->client = $this->getNewClient();
         $token = $this->generateToken(['username' => self::USER_ID], 86_400); // 24H
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode(['token' => $token]));
 
@@ -46,7 +52,6 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailWrongToken(): void
     {
-        $this->client = $this->getNewClient();
         $token = $this->generateToken(['username' => self::USER_ID], 86_400); // 24H
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode(['token' => $token.'-Wrong token']));
 
@@ -65,7 +70,6 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailTokenHasExpired(): void
     {
-        $this->client = $this->getNewClient();
         $token = $this->generateToken(['username' => self::USER_ID], 0);
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode(['token' => $token]));
 
@@ -84,7 +88,6 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUserIsAlreadyActive(): void
     {
-        $this->client = $this->getNewClient();
         $token = $this->generateToken(['username' => self::USER_ID_ALREADY_REGISTERED], 86_400); // 24H
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode(['token' => $token]));
 
@@ -103,7 +106,6 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUserDoesntExists(): void
     {
-        $this->client = $this->getNewClient();
         $token = $this->generateToken(['username' => self::USER_ID_NOT_EXISTS], 86_400); // 24H
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode(['token' => $token]));
 
@@ -122,7 +124,6 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailTokenValidation(): void
     {
-        $this->client = $this->getNewClient();
         $token = 'is.not.valid-token';
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode(['token' => $token]));
 

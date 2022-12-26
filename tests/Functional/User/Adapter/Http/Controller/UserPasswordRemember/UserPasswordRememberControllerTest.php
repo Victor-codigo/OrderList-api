@@ -21,6 +21,8 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->client = $this->getNewClient();
     }
 
     /** @test */
@@ -31,9 +33,8 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
             'email_password_remember_url' => 'http://www.domain.com',
         ];
 
-        $client = $this->getNewClient();
-        $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
-        $response = $client->getResponse();
+        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
+        $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_OK);
@@ -51,9 +52,8 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
             'email_password_remember_url' => 'http://www.domain.com',
         ];
 
-        $client = $this->getNewClient();
-        $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
-        $response = $client->getResponse();
+        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
+        $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['email'], Response::HTTP_BAD_REQUEST);
@@ -71,9 +71,8 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
             'email_password_remember_url' => 'http://www.domain.com',
         ];
 
-        $client = $this->getNewClient();
-        $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
-        $response = $client->getResponse();
+        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
+        $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['email'], Response::HTTP_BAD_REQUEST);
@@ -90,9 +89,8 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
             'email_password_remember_url' => 'http://www.domain.com',
         ];
 
-        $client = $this->getNewClient();
-        $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
-        $response = $client->getResponse();
+        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
+        $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['email'], Response::HTTP_BAD_REQUEST);
@@ -110,9 +108,8 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
             'email_password_remember_url' => 'http://www.domain.com',
         ];
 
-        $client = $this->getNewClient();
-        $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
-        $response = $client->getResponse();
+        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
+        $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['email_not_found'], Response::HTTP_BAD_REQUEST);
@@ -129,9 +126,8 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
             'email_password_remember_url' => null,
         ];
 
-        $client = $this->getNewClient();
-        $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
-        $response = $client->getResponse();
+        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
+        $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['passwordRememberUrl'], Response::HTTP_BAD_REQUEST);
@@ -149,9 +145,8 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
             'email_password_remember_url' => '',
         ];
 
-        $client = $this->getNewClient();
-        $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
-        $response = $client->getResponse();
+        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
+        $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['passwordRememberUrl'], Response::HTTP_BAD_REQUEST);
@@ -169,9 +164,8 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
             'email_password_remember_url' => 'www.domain.com',
         ];
 
-        $client = $this->getNewClient();
-        $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
-        $response = $client->getResponse();
+        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
+        $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['passwordRememberUrl'], Response::HTTP_BAD_REQUEST);
