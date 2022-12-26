@@ -11,11 +11,13 @@ use Symfony\Component\HttpFoundation\Request;
 class UserModifyRequestDto implements RequestDtoInterface
 {
     public readonly string|null $name;
+    public readonly bool|null $imageRemove;
     public readonly UploadedFile|null $image;
 
     public function __construct(Request $request)
     {
         $this->name = $request->request->get('name');
+        $this->imageRemove = $request->request->get('image_remove');
         $this->image = $request->files->get('image');
     }
 }

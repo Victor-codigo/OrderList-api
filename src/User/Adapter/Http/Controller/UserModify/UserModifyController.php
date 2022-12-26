@@ -44,7 +44,8 @@ class UserModifyController extends AbstractController
         return UserModifyInputDto::create(
             $this->security->getUser()->getUserIdentifier(),
             $requestDto->name,
-            new UploadedFileSymfonyAdapter($requestDto->image),
+            $requestDto->imageRemove,
+            null === $requestDto->image ? null : new UploadedFileSymfonyAdapter($requestDto->image),
             $user->getUser()
         );
     }

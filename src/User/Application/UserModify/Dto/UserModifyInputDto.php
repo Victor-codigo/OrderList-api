@@ -17,17 +17,20 @@ class UserModifyInputDto implements ServiceInputDtoInterface
 {
     public readonly Email $email;
     public readonly Name $name;
+    public readonly bool $imageRemove;
     public readonly UserImage|null $image;
     public readonly User $user;
 
     private function __construct(
         string|null $email,
         string|null $name,
+        bool|null $imageRemove,
         UploadedFileInterface|null $image,
         User $user
     ) {
         $this->email = ValueObjectFactory::createEmail($email);
         $this->name = ValueObjectFactory::createName($name);
+        $this->imageRemove = $imageRemove ?? false;
         $this->image = ValueObjectFactory::createUserImage($image);
         $this->user = $user;
     }
@@ -35,12 +38,14 @@ class UserModifyInputDto implements ServiceInputDtoInterface
     public static function create(
         string|null $email,
         string|null $name,
+        bool|null $imageRemove,
         UploadedFileInterface|null $image,
         User $user
     ): self {
         return new self(
             $email,
             $name,
+            $imageRemove,
             $image,
             $user
         );

@@ -14,12 +14,12 @@ class ValueObjectObjectFactory
         return new Rol($rol);
     }
 
-    public static function createFile(FileInterface $file): File
+    public static function createFile(FileInterface|null $file): File
     {
         return new File($file);
     }
 
-    public static function createUserImage(FileInterface $file): UserImage
+    public static function createUserImage(FileInterface|null $file): UserImage
     {
         return new UserImage($file);
     }

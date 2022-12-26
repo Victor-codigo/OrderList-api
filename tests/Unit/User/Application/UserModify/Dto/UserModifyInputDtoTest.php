@@ -45,7 +45,56 @@ class UserModifyInputDtoTest extends TestCase
         $object = UserModifyInputDto::create(
             'anastasia@hotmail.com',
             'Anastasia',
+            false,
             new UploadedFileSymfonyAdapter(new UploadedFile(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK, true)),
+            User::fromPrimitives('id', 'Anastasia@hotmail.com', 'password', 'Anastasia', [USER_ROLES::USER])
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function itShouldBeValidImageRemoveIsNull(): void
+    {
+        $object = UserModifyInputDto::create(
+            'anastasia@hotmail.com',
+            'Anastasia',
+            null,
+            new UploadedFileSymfonyAdapter(new UploadedFile(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK, true)),
+            User::fromPrimitives('id', 'Anastasia@hotmail.com', 'password', 'Anastasia', [USER_ROLES::USER])
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function itShouldBeValidImageRemoveIsTrue(): void
+    {
+        $object = UserModifyInputDto::create(
+            'anastasia@hotmail.com',
+            'Anastasia',
+            true,
+            new UploadedFileSymfonyAdapter(new UploadedFile(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK, true)),
+            User::fromPrimitives('id', 'Anastasia@hotmail.com', 'password', 'Anastasia', [USER_ROLES::USER])
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function itShouldBeValidImageIsNull(): void
+    {
+        $object = UserModifyInputDto::create(
+            'anastasia@hotmail.com',
+            'Anastasia',
+            true,
+            null,
             User::fromPrimitives('id', 'Anastasia@hotmail.com', 'password', 'Anastasia', [USER_ROLES::USER])
         );
 
@@ -60,6 +109,7 @@ class UserModifyInputDtoTest extends TestCase
         $object = UserModifyInputDto::create(
             'anastasia@hotmail.com',
             null,
+            false,
             new UploadedFileSymfonyAdapter(new UploadedFile(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK, true)),
             User::fromPrimitives('id', 'Anastasia@hotmail.com', 'password', 'Anastasia', [USER_ROLES::USER])
         );
@@ -75,6 +125,7 @@ class UserModifyInputDtoTest extends TestCase
         $object = UserModifyInputDto::create(
             'anastasia@hotmail.com',
             '',
+            false,
             new UploadedFileSymfonyAdapter(new UploadedFile(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK, true)),
             User::fromPrimitives('id', 'Anastasia@hotmail.com', 'password', 'Anastasia', [USER_ROLES::USER])
         );
@@ -90,6 +141,7 @@ class UserModifyInputDtoTest extends TestCase
         $object = UserModifyInputDto::create(
             'anastasia@hotmail.com',
             str_pad('', 51, 'o'),
+            false,
             new UploadedFileSymfonyAdapter(new UploadedFile(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK, true)),
             User::fromPrimitives('id', 'Anastasia@hotmail.com', 'password', 'Anastasia', [USER_ROLES::USER])
         );
@@ -105,6 +157,7 @@ class UserModifyInputDtoTest extends TestCase
         $object = UserModifyInputDto::create(
             'anastasia@hotmail.com',
             'Anastasia-',
+            false,
             new UploadedFileSymfonyAdapter(new UploadedFile(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK, true)),
             User::fromPrimitives('id', 'Anastasia@hotmail.com', 'password', 'Anastasia', [USER_ROLES::USER])
         );
@@ -120,6 +173,7 @@ class UserModifyInputDtoTest extends TestCase
         $object = UserModifyInputDto::create(
             'anastasia@hotmail.com',
             'Anastasia',
+            false,
             new UploadedFileSymfonyAdapter(new UploadedFile(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_OK, true)),
             User::fromPrimitives('id', 'Anastasia@hotmail.com', 'password', 'Anastasia', [USER_ROLES::USER])
         );
@@ -135,6 +189,7 @@ class UserModifyInputDtoTest extends TestCase
         $object = UserModifyInputDto::create(
             'anastasia@hotmail.com',
             'Anastasia',
+            false,
             new UploadedFileSymfonyAdapter(new UploadedFile(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_OK, true)),
             User::fromPrimitives('id', 'Anastasia@hotmail.com', 'password', 'Anastasia', [USER_ROLES::USER])
         );
@@ -151,6 +206,7 @@ class UserModifyInputDtoTest extends TestCase
         $object = UserModifyInputDto::create(
             'anastasia@hotmail.com',
             'Anastasia',
+            false,
             new UploadedFileSymfonyAdapter(new UploadedFile(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_INI_SIZE, true)),
             User::fromPrimitives('id', 'Anastasia@hotmail.com', 'password', 'Anastasia', [USER_ROLES::USER])
         );
@@ -167,6 +223,7 @@ class UserModifyInputDtoTest extends TestCase
         $object = UserModifyInputDto::create(
             'anastasia@hotmail.com',
             'Anastasia',
+            false,
             new UploadedFileSymfonyAdapter(new UploadedFile(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_NO_FILE, true)),
             User::fromPrimitives('id', 'Anastasia@hotmail.com', 'password', 'Anastasia', [USER_ROLES::USER])
         );
@@ -182,6 +239,7 @@ class UserModifyInputDtoTest extends TestCase
         $object = UserModifyInputDto::create(
             'anastasia@hotmail.com',
             'Anastasia',
+            false,
             new UploadedFileSymfonyAdapter(new UploadedFile(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_PARTIAL, true)),
             User::fromPrimitives('id', 'Anastasia@hotmail.com', 'password', 'Anastasia', [USER_ROLES::USER])
         );
@@ -197,6 +255,7 @@ class UserModifyInputDtoTest extends TestCase
         $object = UserModifyInputDto::create(
             'anastasia@hotmail.com',
             'Anastasia',
+            false,
             new UploadedFileSymfonyAdapter(new UploadedFile(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_CANT_WRITE, true)),
             User::fromPrimitives('id', 'Anastasia@hotmail.com', 'password', 'Anastasia', [USER_ROLES::USER])
         );
@@ -212,6 +271,7 @@ class UserModifyInputDtoTest extends TestCase
         $object = UserModifyInputDto::create(
             'anastasia@hotmail.com',
             'Anastasia',
+            false,
             new UploadedFileSymfonyAdapter(new UploadedFile(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_EXTENSION, true)),
             User::fromPrimitives('id', 'Anastasia@hotmail.com', 'password', 'Anastasia', [USER_ROLES::USER])
         );
@@ -227,6 +287,7 @@ class UserModifyInputDtoTest extends TestCase
         $object = UserModifyInputDto::create(
             'anastasia@hotmail.com',
             'Anastasia',
+            false,
             new UploadedFileSymfonyAdapter(new UploadedFile(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_NO_TMP_DIR, true)),
             User::fromPrimitives('id', 'Anastasia@hotmail.com', 'password', 'Anastasia', [USER_ROLES::USER])
         );
@@ -242,6 +303,7 @@ class UserModifyInputDtoTest extends TestCase
         $object = UserModifyInputDto::create(
             'anastasia@hotmail.com',
             'Anastasia',
+            false,
             new UploadedFileSymfonyAdapter(new UploadedFile(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK, true)),
             User::fromPrimitives('id', 'Anastasia@hotmail.com', 'password', 'Anastasia', [USER_ROLES::USER])
         );

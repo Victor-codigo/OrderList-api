@@ -21,8 +21,6 @@ class UserImage extends ObjectValueObject
     public function defineConstraints(): void
     {
         $this
-            ->setConstraint(ConstraintFactory::notNull())
-            ->setConstraint(ConstraintFactory::notBlank())
             ->setConstraint(ConstraintFactory::image(
                 VALUE_OBJECTS_CONSTRAINTS::FILE_USER_IMAGE_MAX_FILE_SIZE,
                 VALUE_OBJECTS_CONSTRAINTS::FILE_USER_IMAGE_MIME_TIPES,

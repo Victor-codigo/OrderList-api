@@ -89,12 +89,12 @@ class UserImageTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailFileCanNotBeNull(): void
+    public function itShouldValidateImageIsNull(): void
     {
         $this->object = new UserImage(null);
         $return = $this->validator->validateValueObject($this->object);
 
-        $this->assertEquals([VALIDATION_ERRORS::NOT_NULL, VALIDATION_ERRORS::NOT_BLANK], $return);
+        $this->assertEmpty($return);
     }
 
     /** @test */

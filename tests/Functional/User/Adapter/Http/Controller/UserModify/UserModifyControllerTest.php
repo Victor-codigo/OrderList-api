@@ -70,6 +70,7 @@ class UserModifyControllerTest extends WebClientTestCase
             ],
             content: json_encode([
                 'name' => $name,
+                'image_remove' => false,
             ]),
             files: [
                 'image' => new UploadedFile(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK, true),
@@ -91,6 +92,100 @@ class UserModifyControllerTest extends WebClientTestCase
     }
 
     /** @test */
+    public function itShouldModifyTheUserImageIsNull(): void
+    {
+        $name = 'MariaMod';
+        $this->client->request(
+            method: self::METHOD_FORM,
+            uri: self::ENDPOINT,
+            parameters: [
+                '_method' => self::METHOD,
+            ],
+            content: json_encode([
+                'name' => $name,
+                'image_remove' => false,
+            ])
+        );
+
+        $response = $this->client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_OK);
+        $this->assertSame(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('User modified', $responseContent->message);
+
+        $userRepository = $this->getEntityManager()->getRepository(User::class);
+        $user = $userRepository->findOneBy(['email' => ValueObjectFactory::createEmail(self::USER_NAME)]);
+
+        $this->assertEquals($name, $user->getName()->getValue());
+    }
+
+    /** @test */
+    public function itShouldModifyTheUserImageRemoveIsNull(): void
+    {
+        $name = 'MariaMod';
+        $this->client->request(
+            method: self::METHOD_FORM,
+            uri: self::ENDPOINT,
+            parameters: [
+                '_method' => self::METHOD,
+            ],
+            content: json_encode([
+                'name' => $name,
+            ]),
+            files: [
+                'image' => new UploadedFile(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK, true),
+            ]
+        );
+
+        $response = $this->client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_OK);
+        $this->assertSame(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('User modified', $responseContent->message);
+
+        $userRepository = $this->getEntityManager()->getRepository(User::class);
+        $user = $userRepository->findOneBy(['email' => ValueObjectFactory::createEmail(self::USER_NAME)]);
+
+        $this->assertEquals($name, $user->getName()->getValue());
+        $this->assertNotNull($user->getProfile()->getImage()->getValue());
+    }
+
+    /** @test */
+    public function itShouldModifyTheUserImageRemoveIsTrue(): void
+    {
+        $name = 'MariaMod';
+        $this->client->request(
+            method: self::METHOD_FORM,
+            uri: self::ENDPOINT,
+            parameters: [
+                '_method' => self::METHOD,
+            ],
+            content: json_encode([
+                'name' => $name,
+                'image_remove' => true,
+            ]),
+            files: [
+                'image' => new UploadedFile(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK, true),
+            ]
+        );
+
+        $response = $this->client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_OK);
+        $this->assertSame(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('User modified', $responseContent->message);
+
+        $userRepository = $this->getEntityManager()->getRepository(User::class);
+        $user = $userRepository->findOneBy(['email' => ValueObjectFactory::createEmail(self::USER_NAME)]);
+
+        $this->assertEquals($name, $user->getName()->getValue());
+        $this->assertNull($user->getProfile()->getImage()->getValue());
+    }
+
+    /** @test */
     public function itShouldFailNameIsTooShort(): void
     {
         $name = '';
@@ -102,6 +197,7 @@ class UserModifyControllerTest extends WebClientTestCase
             ],
             content: json_encode([
                 'name' => $name,
+                'image_remove' => false,
             ]),
             files: [
                 'image' => new UploadedFile(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK, true),
@@ -128,6 +224,7 @@ class UserModifyControllerTest extends WebClientTestCase
             ],
             content: json_encode([
                 'name' => $name,
+                'image_remove' => false,
             ]),
             files: [
                 'image' => new UploadedFile(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK, true),
@@ -154,6 +251,7 @@ class UserModifyControllerTest extends WebClientTestCase
             ],
             content: json_encode([
                 'name' => $name,
+                'image_remove' => false,
             ]),
             files: [
                 'image' => new UploadedFile(self::PATH_IMAGE_NOT_ALLOWED, 'MimeTypeNotAllowed.txt', 'text/plain', UPLOAD_ERR_OK, true),
@@ -188,6 +286,7 @@ class UserModifyControllerTest extends WebClientTestCase
             ],
             content: json_encode([
                 'name' => $name,
+                'image_remove' => false,
             ]),
             files: [
                 'image' => new UploadedFile(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK, true),
@@ -215,6 +314,7 @@ class UserModifyControllerTest extends WebClientTestCase
             ],
             content: json_encode([
                 'name' => $name,
+                'image_remove' => false,
             ]),
             files: [
                 'image' => new UploadedFile(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_FORM_SIZE, true),
@@ -242,6 +342,7 @@ class UserModifyControllerTest extends WebClientTestCase
             ],
             content: json_encode([
                 'name' => $name,
+                'image_remove' => false,
             ]),
             files: [
                 'image' => new UploadedFile(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_INI_SIZE, true),
@@ -269,6 +370,7 @@ class UserModifyControllerTest extends WebClientTestCase
             ],
             content: json_encode([
                 'name' => $name,
+                'image_remove' => false,
             ]),
             files: [
                 'image' => new UploadedFile(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_NO_FILE, true),
@@ -296,6 +398,7 @@ class UserModifyControllerTest extends WebClientTestCase
             ],
             content: json_encode([
                 'name' => $name,
+                'image_remove' => false,
             ]),
             files: [
                 'image' => new UploadedFile(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_PARTIAL, true),
@@ -323,6 +426,7 @@ class UserModifyControllerTest extends WebClientTestCase
             ],
             content: json_encode([
                 'name' => $name,
+                'image_remove' => false,
             ]),
             files: [
                 'image' => new UploadedFile(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_CANT_WRITE, true),
@@ -350,6 +454,7 @@ class UserModifyControllerTest extends WebClientTestCase
             ],
             content: json_encode([
                 'name' => $name,
+                'image_remove' => false,
             ]),
             files: [
                 'image' => new UploadedFile(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_EXTENSION, true),
@@ -377,6 +482,7 @@ class UserModifyControllerTest extends WebClientTestCase
             ],
             content: json_encode([
                 'name' => $name,
+                'image_remove' => false,
             ]),
             files: [
                 'image' => new UploadedFile(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_NO_TMP_DIR, true),

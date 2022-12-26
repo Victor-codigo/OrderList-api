@@ -11,7 +11,7 @@ interface ValueObjectObjectFactoryInterface
 {
     public static function createRol(USER_ROLES|null $rol): Rol;
 
-    public static function createFile(FileInterface $file): File;
+    public static function createFile(FileInterface|null $file): File;
 
-    public static function createUserImage(FileInterface $file): UserImage;
+    public static function createUserImage(FileInterface|null $file): UserImage;
 }

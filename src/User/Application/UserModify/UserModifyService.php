@@ -15,6 +15,7 @@ use Common\Domain\FileUpload\Exception\FileUploadPartialFileException;
 use Common\Domain\FileUpload\Exception\FileUploadTmpDirFileException;
 use Common\Domain\Model\ValueObject\Object\UserImage;
 use Common\Domain\Model\ValueObject\String\Path;
+use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
 use Common\Domain\Service\Exception\DomainErrorException;
 use Common\Domain\Service\ServiceBase;
@@ -74,10 +75,16 @@ class UserModifyService extends ServiceBase
      */
     private function userModify(UserModifyInputDto $userModifyDto): void
     {
-        $profile = $userModifyDto->user->getProfile();
-        $fileName = $this->uploadUserImage($userModifyDto->image, $profile->getImage()->getValue());
-        $profile->setImage($fileName);
         $userModifyDto->user->setName($userModifyDto->name);
+        $profile = $userModifyDto->user->getProfile();
+
+        if ($userModifyDto->imageRemove) {
+            $this->removeUserImage($profile->getImage());
+            $profile->setImage(ValueObjectFactory::createPath(null));
+        } elseif (!$userModifyDto->image->isNull()) {
+            $fileName = $this->uploadUserImage($userModifyDto->image, $profile->getImage());
+            $profile->setImage($fileName);
+        }
 
         $this->userRepository->save($userModifyDto->user);
     }
@@ -94,7 +101,7 @@ class UserModifyService extends ServiceBase
      * @throws FileException
      * @throws DomainFileNotDeletedException
      */
-    private function uploadUserImage(UserImage $image, string|null $userCurrentFileName): Path
+    private function uploadUserImage(UserImage $image, Path $userCurrentFileName): Path
     {
         $uploadedFile = $image->getValue();
         $this->fileUpload->__invoke($uploadedFile, $this->userPublicImagePath);
@@ -106,20 +113,20 @@ class UserModifyService extends ServiceBase
     /**
      * @throws DomainFileNotDeletedException
      */
-    private function removeUserImage(string|null $fileName): void
+    private function removeUserImage(Path $fileName): void
     {
-        if (null === $fileName) {
+        if ($fileName->isNull()) {
             return;
         }
 
-        $file = $this->userPublicImagePath.'/'.$fileName;
+        $file = $this->userPublicImagePath.'/'.$fileName->getValue();
 
         if (!file_exists($file)) {
             return;
         }
 
         if (!unlink($file)) {
-            throw DomainFileNotDeletedException::fromMessage(sprintf('File [%s] could not be deleted', $this->userPublicImagePath.'/'.$fileName));
+            throw DomainFileNotDeletedException::fromMessage(sprintf('File [%s] could not be deleted', $this->userPublicImagePath.'/'.$fileName->getValue()));
         }
     }
 }

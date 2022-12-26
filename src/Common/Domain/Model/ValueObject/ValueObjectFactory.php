@@ -80,12 +80,12 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
         return ValueObjectStringFactory::createLanguage($language);
     }
 
-    public static function createFile(FileInterface $file): File
+    public static function createFile(FileInterface|null $file): File
     {
         return ValueObjectObjectFactory::createFile($file);
     }
 
-    public static function createUserImage(FileInterface $file): UserImage
+    public static function createUserImage(FileInterface|null $file): UserImage
     {
         return ValueObjectObjectFactory::createUserImage($file);
     }
