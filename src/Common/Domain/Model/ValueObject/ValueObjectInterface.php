@@ -7,4 +7,6 @@ namespace Common\Domain\Model\ValueObject;
 interface ValueObjectInterface
 {
     public function getValue(): mixed;
+
+    public function isNull(): bool;
 }

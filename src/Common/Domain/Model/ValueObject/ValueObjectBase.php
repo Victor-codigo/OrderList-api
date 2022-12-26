@@ -41,4 +41,9 @@ abstract class ValueObjectBase implements ValueObjectValidationInterface, ValueO
     {
         return [];
     }
+
+    public function isNull(): bool
+    {
+        return null === $this->value;
+    }
 }
