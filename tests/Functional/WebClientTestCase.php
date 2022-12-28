@@ -46,10 +46,6 @@ class WebClientTestCase extends WebTestCase
             ])
         );
 
-        $this->client
-            ->getCookieJar()
-            ->updateFromSetCookie([$this->client->getInternalResponse()->getHeader('set-cookie')]);
-
         return $this->client;
     }
 
