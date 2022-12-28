@@ -17,7 +17,7 @@ class UserModifyRequestDto implements RequestDtoInterface
     public function __construct(Request $request)
     {
         $this->name = $request->request->get('name');
-        $this->imageRemove = $request->request->get('image_remove');
+        $this->imageRemove = $request->request->getBoolean('image_remove');
         $this->image = $request->files->get('image');
     }
 }
