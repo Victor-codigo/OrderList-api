@@ -75,7 +75,7 @@ user_get:
 # -------------------------------------------------------------
 user_modify:
   path: /api/v{api_version}/users/modify
-  methods: [PUT]
+  methods: [PUT, POST]
   controller: User\Adapter\Http\Controller\UserModify\UserModifyController
   requirements:
     api_version: '\d+[.\d]?'
