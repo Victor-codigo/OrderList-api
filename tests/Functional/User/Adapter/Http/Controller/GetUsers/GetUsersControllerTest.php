@@ -123,7 +123,7 @@ class GetUsersControllerTest extends WebClientTestCase
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_NOT_FOUND);
         $this->assertSame(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Users not found', $responseContent->message);
     }
