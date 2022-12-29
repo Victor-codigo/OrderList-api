@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use User\Adapter\Http\Controller\UserModify\Dto\UserModifyRequestDto;
 use User\Application\UserModify\Dto\UserModifyInputDto;
-use User\Application\UserModify\UserModifyService;
+use User\Application\UserModify\UserModifyUseCase;
 use User\Domain\Port\User\UserInterface;
 
 #[OA\Tag('User')]
@@ -73,14 +73,14 @@ use User\Domain\Port\User\UserInterface;
 class UserModifyController extends AbstractController
 {
     public function __construct(
-        private UserModifyService $userModifyService,
+        private UserModifyUseCase $userModifyUseCase,
         private Security $security
     ) {
     }
 
     public function __invoke(UserModifyRequestDto $request): JsonResponse
     {
-        $this->userModifyService->__invoke(
+        $this->userModifyUseCase->__invoke(
             $this->createUserModifyInputDto($request)
         );
 

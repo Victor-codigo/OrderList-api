@@ -26,7 +26,7 @@ use User\Application\UserModify\Exception\UserModifyCanNotUploadFile;
 use User\Domain\Port\Repository\UserRepositoryInterface;
 use User\Domain\Port\User\UserInterface;
 
-class UserModifyService extends ServiceBase
+class UserModifyUseCase extends ServiceBase
 {
     public function __construct(
         private UserInterface $userAdapter,
