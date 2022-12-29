@@ -24,7 +24,7 @@ use User\Domain\Service\UserPasswordChange\Dto\UserPasswordChangeDto;
 use User\Domain\Service\UserPasswordChange\Exception\PasswordNewAndRepeatAreNotTheSameException;
 use User\Domain\Service\UserPasswordChange\UserPasswordChangeService;
 
-class UserPasswordRememberChangeService extends ServiceBase
+class UserPasswordRememberChangeUseCase extends ServiceBase
 {
     private UserPasswordChangeService $userPasswordChangeService;
     private JwtHS256Interface  $jwt;

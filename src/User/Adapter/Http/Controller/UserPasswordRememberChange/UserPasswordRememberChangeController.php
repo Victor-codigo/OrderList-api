@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use User\Adapter\Http\Controller\UserPasswordRememberChange\Dto\UserPasswordRememberChangeRequestDto;
 use User\Application\UserPasswordRememberChange\Dto\UserPasswordRememberChangeInputDto;
-use User\Application\UserPasswordRememberChange\UserPasswordRememberChangeService;
+use User\Application\UserPasswordRememberChange\UserPasswordRememberChangeUseCase;
 
 #[OA\Tag('User')]
 #[OA\Patch(
@@ -65,16 +65,16 @@ use User\Application\UserPasswordRememberChange\UserPasswordRememberChangeServic
 )]
 class UserPasswordRememberChangeController extends AbstractController
 {
-    private UserPasswordRememberChangeService $userPasswordRememberChangeService;
+    private UserPasswordRememberChangeUseCase $userPasswordRememberChangeUseCase;
 
-    public function __construct(UserPasswordRememberChangeService $userPasswordRememberChangeService)
+    public function __construct(UserPasswordRememberChangeUseCase $userPasswordRememberChangeUseCase)
     {
-        $this->userPasswordRememberChangeService = $userPasswordRememberChangeService;
+        $this->userPasswordRememberChangeUseCase = $userPasswordRememberChangeUseCase;
     }
 
     public function __invoke(UserPasswordRememberChangeRequestDto $request): JsonResponse
     {
-        $this->userPasswordRememberChangeService->__invoke(
+        $this->userPasswordRememberChangeUseCase->__invoke(
             $this->createUserPasswordRememberChangeInputDto($request->token, $request->passwordNew, $request->passwordNewRepeat)
         );
 
