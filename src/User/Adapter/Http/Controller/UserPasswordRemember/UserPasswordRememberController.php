@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use User\Adapter\Http\Controller\UserPasswordRemember\Dto\UserPasswordRememberRequestDto;
 use User\Application\UserPasswordRemember\Dto\UserPasswordRememberInputDto;
-use User\Application\UserPasswordRemember\UserPasswordRememberService;
+use User\Application\UserPasswordRemember\UserPasswordRememberUseCase;
 
 #[OA\Tag('User')]
 #[OA\Post(
@@ -64,16 +64,16 @@ use User\Application\UserPasswordRemember\UserPasswordRememberService;
 )]
 class UserPasswordRememberController extends AbstractController
 {
-    private UserPasswordRememberService $userPasswordRememberService;
+    private UserPasswordRememberUseCase $userPasswordRememberUseCase;
 
-    public function __construct(UserPasswordRememberService $userPasswordRememberService)
+    public function __construct(UserPasswordRememberUseCase $userPasswordRememberUseCase)
     {
-        $this->userPasswordRememberService = $userPasswordRememberService;
+        $this->userPasswordRememberUseCase = $userPasswordRememberUseCase;
     }
 
     public function __invoke(UserPasswordRememberRequestDto $passwordRememberDto): JsonResponse
     {
-        $this->userPasswordRememberService->__invoke(
+        $this->userPasswordRememberUseCase->__invoke(
             $this->createUserPasswordRememberInputDto($passwordRememberDto->email, $passwordRememberDto->passwordRememberUrl)
         );
 

@@ -18,7 +18,7 @@ use User\Application\UserPasswordRemember\Exception\UserPasswordRememberUserNotf
 use User\Domain\Service\UserPasswordRemember\Dto\UserPasswordRememberDto;
 use User\Domain\Service\UserPasswordRemember\UserPasswordRememberService as DomainUserPasswordRememberService;
 
-class UserPasswordRememberService extends ServiceBase
+class UserPasswordRememberUseCase extends ServiceBase
 {
     private DomainUserPasswordRememberService $userPasswordRememberService;
     private ValidationInterface $validator;
