@@ -70,7 +70,7 @@ class UserPasswordChangeController extends AbstractController
 
     public function __construct(UserPasswordChangeUseCase $userPasswordChangeUseCase)
     {
-        $this->userPasswordChangeUseCase = $userPasswordChangeUseCase;
+        $this->userPasswordChangeUseCase = $UserPasswordChangeUseCase;
     }
 
     public function __invoke(UserPasswordChangeRequestDto $passwordChangeRequestDto): JsonResponse

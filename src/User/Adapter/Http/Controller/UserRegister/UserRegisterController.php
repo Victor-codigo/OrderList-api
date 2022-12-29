@@ -79,13 +79,13 @@ class UserRegisterController extends AbstractController
 
     public function __invoke(UserRegisterRequestDto $requestDto): JsonResponse
     {
-        $UserRegisterOutputDto = $this->userRegisterUseCase->__invoke(
+        $userRegisterOutputDto = $this->userRegisterUseCase->__invoke(
             $this->createUserRegisterInputDto($requestDto)
         );
 
         $response = (new ResponseDto())
             ->setMessage('User created')
-            ->setData(['id' => $UserRegisterOutputDto->id->getValue()]);
+            ->setData(['id' => $userRegisterOutputDto->id->getValue()]);
 
         return $this->json($response->toArray(), Response::HTTP_CREATED);
     }

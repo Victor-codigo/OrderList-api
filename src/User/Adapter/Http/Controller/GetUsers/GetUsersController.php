@@ -100,7 +100,7 @@ class GetUsersController extends AbstractController
 
     public function __invoke(GetUsersRequestDto $request): JsonResponse
     {
-        $response = $this->GetUsersUserCase->__invoke(
+        $response = $this->getUsersUserCase->__invoke(
             $this->createGetUsersInputDto($request->usersId)
         );
 

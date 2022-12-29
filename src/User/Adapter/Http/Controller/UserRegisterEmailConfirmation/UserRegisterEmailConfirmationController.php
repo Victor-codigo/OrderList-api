@@ -62,16 +62,16 @@ use User\Application\UserRegisterEmailConfirmation\UserRegisterEmailConfirmation
 )]
 class UserRegisterEmailConfirmationController extends AbstractController
 {
-    private UserRegisterEmailConfirmationUseCase $emailConfirmationService;
+    private UserRegisterEmailConfirmationUseCase $userRegisterEmailConfirmationUseCase;
 
     public function __construct(UserRegisterEmailConfirmationUseCase $userRegisterEmailConfirmationUseCase)
     {
-        $this->emailConfirmationService = $userRegisterEmailConfirmationUseCase;
+        $this->userRegisterEmailConfirmationUseCase = $userRegisterEmailConfirmationUseCase;
     }
 
     public function __invoke(UserEmailConfirmationRequestDto $request): JsonResponse
     {
-        $user = $this->emailConfirmationService->__invoke(new UserEmailConfirmationInputDto($request->token));
+        $user = $this->userRegisterEmailConfirmationUseCase->__invoke(new UserEmailConfirmationInputDto($request->token));
         $response = new ResponseDto(message: 'User activated', data: ['username' => $user->id->getValue()]);
 
         return $this->json($response, Response::HTTP_OK);
