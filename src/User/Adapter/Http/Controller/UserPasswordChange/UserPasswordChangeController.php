@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use User\Adapter\Http\Controller\UserPasswordChange\Dto\UserPasswordChangeRequestDto;
 use User\Application\UserPasswordChange\Dto\UserPasswordChangeInputDto;
-use User\Application\UserPasswordChange\UserPasswordChangeService;
+use User\Application\UserPasswordChange\UserPasswordChangeUseCase;
 
 #[OA\Tag('User')]
 #[OA\Patch(
@@ -66,16 +66,16 @@ use User\Application\UserPasswordChange\UserPasswordChangeService;
 )]
 class UserPasswordChangeController extends AbstractController
 {
-    private UserPasswordChangeService $userPasswordChangeService;
+    private UserPasswordChangeUseCase $userPasswordChangeUseCase;
 
-    public function __construct(UserPasswordChangeService $userPasswordChangeService)
+    public function __construct(UserPasswordChangeUseCase $userPasswordChangeUseCase)
     {
-        $this->userPasswordChangeService = $userPasswordChangeService;
+        $this->userPasswordChangeUseCase = $userPasswordChangeUseCase;
     }
 
     public function __invoke(UserPasswordChangeRequestDto $passwordChangeRequestDto): JsonResponse
     {
-        $this->userPasswordChangeService->__invoke(
+        $this->userPasswordChangeUseCase->__invoke(
             $this->createUserPasswordChangeInputDto($passwordChangeRequestDto)
         );
 

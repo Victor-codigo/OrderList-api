@@ -13,14 +13,14 @@ use User\Application\UserPasswordChange\Dto\UserPasswordChangeInputDto;
 use User\Application\UserPasswordChange\Dto\UserPasswordChangeOutputDto;
 use User\Application\UserPasswordChange\Exception\UserPasswordChangePasswordNewAndRepeatNewAreNotEqualException;
 use User\Application\UserPasswordChange\Exception\UserPasswordChangePasswordOldWrongException;
-use User\Application\UserPasswordChange\Exception\UserPasswordChangeUserNotFoundException;
 use User\Application\UserPasswordChange\Exception\UserpasswordChangePermissionException;
+use User\Application\UserPasswordChange\Exception\UserPasswordChangeUserNotFoundException;
 use User\Domain\Service\UserPasswordChange\Dto\UserPasswordChangeDto;
 use User\Domain\Service\UserPasswordChange\Exception\PasswordNewAndRepeatAreNotTheSameException;
 use User\Domain\Service\UserPasswordChange\Exception\PasswordOldIsWrongException;
 use User\Domain\Service\UserPasswordChange\UserPasswordChangeService as DomainUserPasswordChangeService;
 
-class UserPasswordChangeService extends ServiceBase
+class UserPasswordChangeUseCase extends ServiceBase
 {
     private DomainUserPasswordChangeService $userPasswordChangeService;
     private ValidationInterface $validator;
