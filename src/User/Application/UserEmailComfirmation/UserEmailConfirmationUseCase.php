@@ -20,7 +20,7 @@ use User\Application\UserEmailComfirmation\Exception\EmailConfirmationUserAlredy
 use User\Domain\Service\EmailConfirmationJwtTokenValidationService\Dto\EmailConfirmationJwtTokenValidationDto;
 use User\Domain\Service\EmailConfirmationJwtTokenValidationService\EmailConfirmationJwtTokenValidationService;
 
-class UserEmailConfirmationService extends ServiceBase
+class UserEmailConfirmationUseCase extends ServiceBase
 {
     private ValidationInterface $validator;
     private EmailConfirmationJwtTokenValidationService $emailConfirmationJwTTokenValidationService;

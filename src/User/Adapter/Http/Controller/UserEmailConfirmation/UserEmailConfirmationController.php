@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use User\Adapter\Http\Controller\UserEmailConfirmation\Dto\UserEmailConfirmationRequestDto;
 use User\Application\UserEmailComfirmation\Dto\UserEmailConfirmationInputDto;
-use User\Application\UserEmailComfirmation\UserEmailConfirmationService;
+use User\Application\UserEmailComfirmation\UserEmailConfirmationUseCase;
 
 #[OA\Tag('User')]
 #[OA\Patch(
@@ -62,11 +62,11 @@ use User\Application\UserEmailComfirmation\UserEmailConfirmationService;
 )]
 class UserEmailConfirmationController extends AbstractController
 {
-    private UserEmailConfirmationService $emailConfirmationService;
+    private UserEmailConfirmationUseCase $emailConfirmationService;
 
-    public function __construct(UserEmailConfirmationService $userEmailConfirmationService)
+    public function __construct(UserEmailConfirmationUseCase $userEmailConfirmationUseCase)
     {
-        $this->emailConfirmationService = $userEmailConfirmationService;
+        $this->emailConfirmationService = $userEmailConfirmationUseCase;
     }
 
     public function __invoke(UserEmailConfirmationRequestDto $request): JsonResponse
