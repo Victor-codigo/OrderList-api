@@ -21,19 +21,17 @@ use User\Domain\Port\User\UserInterface;
 #[OA\Tag('User')]
 #[OA\Put(description: 'This is the one to be use instead of POST version. The structure is the same as POST, but for documentation purposes POST version exists ')]
 #[OA\Post(
-    path: '/api/v{api_version}/users/modify',
     description: 'Modify current user. (Use PUT version)',
     requestBody: new OA\RequestBody(
         required: true,
         content: [new OA\MediaType(
             mediaType: 'multipart/form-data',
-            // mediaType: 'application/json',
             schema: new OA\Schema(
                 properties: [
-                    new OA\Property(property: 'name', required: ['true'], description: 'User\'s name', type: 'string', minLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MIN_LENGTH, maxLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MAX_LENGTH, example: 'Mary'),
+                    new OA\Property(property: 'name', description: 'User\'s name', type: 'string', minLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MIN_LENGTH, maxLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MAX_LENGTH, example: 'Mary'),
                     new OA\Property(property: 'image_remove', description: 'TRUE: user\'s image is removed. FALSE: do nothing', type: 'boolean', example: false),
                     new OA\Property(property: 'image', description: 'User\'s image', type: 'file', format: 'binary'),
-                    new OA\Property(property: '_method', required: ['true'], description: 'Indicates the html verb', type: 'string', default: 'PUT'),
+                    new OA\Property(property: '_method', description: 'Indicates the html verb', type: 'string', default: 'PUT'),
                 ]
             )
         )]
@@ -66,21 +64,6 @@ use User\Domain\Port\User\UserInterface;
                         new OA\Property(property: 'message', type: 'string', example: 'Error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
                         new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<name|image, string>')),
-                    ]
-                )
-            )
-        ),
-        new OA\Response(
-            response: Response::HTTP_INTERNAL_SERVER_ERROR,
-            description: 'Error',
-            content: new OA\MediaType(
-                mediaType: 'application/json',
-                schema: new OA\Schema(
-                    properties: [
-                        new OA\Property(property: 'status', type: 'string', example: 'error'),
-                        new OA\Property(property: 'message', type: 'string', example: 'Error message'),
-                        new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<internal, string>')),
                     ]
                 )
             )
