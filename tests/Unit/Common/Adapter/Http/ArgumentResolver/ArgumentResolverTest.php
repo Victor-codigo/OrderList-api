@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Test\Unit\Common\Adapter\Http\ArgumentResolver;
 
 use Common\Adapter\Http\ArgumentResolver\ArgumentResolver;
+use Common\Adapter\Http\ArgumentResolver\Exception\InvalidJsonException;
+use Common\Adapter\Http\ArgumentResolver\Exception\InvalidMimeTypeException;
 use Common\Adapter\Http\ArgumentResolver\RequestValidation;
-use Common\Domain\Exception\InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +24,7 @@ class ArgumentResolverTest extends TestCase
     public function setUp(): void
     {
         $this->argumentMetaData = $this->createPartialMock(ArgumentMetadata::class, ['getType']);
-        $this->request = Request::create('', 'GET', [], [], [], [], '{"key":"value"}');
+        $this->request = Request::create('', 'POST', [], [], [], [], '{"key":"value"}');
         $this->requestValidation = new RequestValidation();
         $this->object = new ArgumentResolver($this->requestValidation);
     }
@@ -38,8 +39,7 @@ class ArgumentResolverTest extends TestCase
 
         $return = $this->object->supports($this->request, $this->argumentMetaData);
 
-        $this->assertTrue($return,
-            'support: should not fail');
+        $this->assertTrue($return);
     }
 
     /** @test */
@@ -52,8 +52,7 @@ class ArgumentResolverTest extends TestCase
 
         $return = $this->object->supports($this->request, $this->argumentMetaData);
 
-        $this->assertFalse($return,
-            'support: It was expected that it wasn\´t suported');
+        $this->assertFalse($return);
     }
 
     /** @test */
@@ -66,17 +65,15 @@ class ArgumentResolverTest extends TestCase
 
         $this->request->headers->set('Content-Type', 'application/json');
         foreach ($this->object->resolve($this->request, $this->argumentMetaData) as $dto) {
-            $this->assertInstanceOf(CustomRequestDto::class, $dto,
-                'resolve: Class returned is worng');
-            $this->assertEquals($this->request, $dto->getRequest(),
-                'resolve: Request inserted in the Dto is wrong');
+            $this->assertInstanceOf(CustomRequestDto::class, $dto);
+            $this->assertEquals($this->request, $dto->getRequest());
         }
     }
 
     /** @test */
     public function resolveValidationError(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidMimeTypeException::class);
 
         $this->request->headers->set('Content-Type', 'application/html');
         foreach ($this->object->resolve($this->request, $this->argumentMetaData) as $dto) {
@@ -86,9 +83,35 @@ class ArgumentResolverTest extends TestCase
     /** @test */
     public function resolveValidationAllowedContentNull(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidMimeTypeException::class);
 
         $this->request->headers->set('Content-Type', null);
+        foreach ($this->object->resolve($this->request, $this->argumentMetaData) as $dto) {
+        }
+    }
+
+    /** @test */
+    public function resolveValidationContentJsonInvalid(): void
+    {
+        $this->expectException(InvalidJsonException::class);
+
+        $this->request = Request::create('', 'POST', [], [], [], [], '{"key":"va');
+        $this->request->headers->set('Content-Type', 'application/json');
+        foreach ($this->object->resolve($this->request, $this->argumentMetaData) as $dto) {
+        }
+    }
+
+    /** @test */
+    public function resolveValidationGetRequestHasNotContentType(): void
+    {
+        $this->request = Request::create('', 'GET');
+        $this->request->headers->set('Content-Type', null);
+
+        $this->argumentMetaData
+            ->expects($this->once())
+            ->method('getType')
+            ->willReturn(CustomRequestDto::class);
+
         foreach ($this->object->resolve($this->request, $this->argumentMetaData) as $dto) {
         }
     }

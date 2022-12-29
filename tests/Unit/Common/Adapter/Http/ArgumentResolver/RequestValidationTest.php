@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Http\ArgumentResolver;
 
+use Common\Adapter\Http\ArgumentResolver\Exception\InvalidJsonException;
+use Common\Adapter\Http\ArgumentResolver\Exception\InvalidMimeTypeException;
 use Common\Adapter\Http\ArgumentResolver\RequestValidation;
-use Common\Domain\Exception\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -21,7 +22,7 @@ class RequestValidationTest extends TestCase
     /** @test */
     public function contentTypeIncorrect(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidJsonException::class);
 
         $request = Request::create(
             '',
@@ -39,11 +40,11 @@ class RequestValidationTest extends TestCase
     /** @test */
     public function errorCreatingJsonParams(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidJsonException::class);
 
         $request = Request::create(
             '',
-            'GET',
+            'POST',
             [],
             [],
             [],
@@ -57,11 +58,11 @@ class RequestValidationTest extends TestCase
     /** @test */
     public function responseErrorContentTypeNameWrong(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(InvalidMimeTypeException::class);
 
         $request = Request::create(
             '',
-            'GET',
+            'POST',
             [],
             [],
             [],
@@ -77,7 +78,7 @@ class RequestValidationTest extends TestCase
     {
         $request = Request::create(
             '',
-            'GET',
+            'POST',
             [],
             [],
             [],
@@ -89,5 +90,23 @@ class RequestValidationTest extends TestCase
 
         $this->assertEquals('param', $request->get('key'),
             'RequestValidation: Error creating request content');
+    }
+
+    /** @test */
+    public function responseGetReuestOk(): void
+    {
+        $request = Request::create(
+            '',
+            'GET',
+            [],
+            [],
+            [],
+            [],
+            '{"key":"param"}'
+        );
+
+        $this->requestValidation->__invoke($request);
+
+        $this->assertEmpty($request->request);
     }
 }

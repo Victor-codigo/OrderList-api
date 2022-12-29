@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Http\ArgumentResolver;
 
+use Common\Adapter\Http\ArgumentResolver\Exception\InvalidJsonException;
+use Common\Adapter\Http\ArgumentResolver\Exception\InvalidMimeTypeException;
 use Common\Domain\Exception\InvalidArgumentException;
 use JsonException;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -16,12 +18,17 @@ class RequestValidation
      */
     public function __invoke(Request $request): void
     {
-        $this->validateContentType($request);
-
         try {
+            if ('GET' === $request->getMethod()) {
+                $request->request = new ParameterBag([]);
+
+                return;
+            }
+
+            $this->validateContentType($request);
             $request->request = $this->createParams($request);
         } catch (JsonException) {
-            throw InvalidArgumentException::fromMessage('Invalid JSON');
+            throw InvalidJsonException::fromMessage('Invalid JSON');
         }
     }
 
@@ -32,7 +39,7 @@ class RequestValidation
     {
         return match ($this->getContentType($request)) {
             REQUEST_ALLOWED_CONTENT::JSON->value => $this->applicationJson($request),
-            REQUEST_ALLOWED_CONTENT::FORM_DATA->value => $request->request
+            REQUEST_ALLOWED_CONTENT::FORM_DATA->value => $request->request,
         };
     }
 
@@ -69,7 +76,7 @@ class RequestValidation
         $contentType = $this->getContentType($request);
 
         if (!REQUEST_ALLOWED_CONTENT::allowed($contentType)) {
-            throw InvalidArgumentException::fromMessage(sprintf('Content-Type [%s] is not allowed. Only [%s] are allowed.', $request->getContentType(), implode(', ', array_column(REQUEST_ALLOWED_CONTENT::cases(), 'value'))));
+            throw InvalidMimeTypeException::fromMessage(sprintf('Content-Type [%s] is not allowed. Only [%s] are allowed.', $request->getContentType(), implode(', ', array_column(REQUEST_ALLOWED_CONTENT::cases(), 'value'))));
         }
     }
 }
