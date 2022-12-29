@@ -16,7 +16,7 @@ use User\Domain\Service\GetUsersProfilePublicData\GetUsersProfilePublicDataServi
 use User\Domain\Service\GetUsersPublicData\Dto\GetUsersPublicDataDto;
 use User\Domain\Service\GetUsersPublicData\GeUsersPublicDataService;
 
-class GetUsersService extends ServiceBase
+class GetUsersUseCase extends ServiceBase
 {
     private GeUsersPublicDataService $geUsersPublicDataService;
     private GetUsersProfilePublicDataService $getUsersProfilePublicDataService;

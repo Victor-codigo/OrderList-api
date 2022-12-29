@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use User\Adapter\Http\Controller\GetUsers\Dto\GetUsersRequestDto;
 use User\Application\GetUsers\Dto\GetUsersInputDto;
-use User\Application\GetUsers\GetUsersService;
+use User\Application\GetUsers\GetUsersUseCase;
 
 #[OA\Tag('User')]
 #[OA\Get(
@@ -91,16 +91,16 @@ use User\Application\GetUsers\GetUsersService;
 )]
 class GetUsersController extends AbstractController
 {
-    private GetUsersService $getUsersService;
+    private GetUsersUseCase $getUsersUserCase;
 
-    public function __construct(GetUsersService $getUsersService)
+    public function __construct(GetUsersUseCase $getUsersUserCase)
     {
-        $this->getUsersService = $getUsersService;
+        $this->GetUsersUserCase = $getUsersUserCase;
     }
 
     public function __invoke(GetUsersRequestDto $request): JsonResponse
     {
-        $response = $this->getUsersService->__invoke(
+        $response = $this->GetUsersUserCase->__invoke(
             $this->createGetUsersInputDto($request->usersId)
         );
 
