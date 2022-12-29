@@ -22,7 +22,7 @@ use User\Domain\Port\PasswordHasher\PasswordHasherInterface;
 use User\Domain\Port\Repository\UserRepositoryInterface;
 use User\Domain\Port\User\UserInterface;
 
-class UserRegisterService extends ServiceBase
+class UserRegisterUseCase extends ServiceBase
 {
     private UserRepositoryInterface $repository;
     private EventDispatcherInterface $eventDispatcher;

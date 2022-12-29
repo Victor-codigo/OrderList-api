@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use User\Adapter\Http\Controller\UserRegister\Dto\UserRegisterRequestDto;
 use User\Application\UserRegister\Dto\UserRegisterInputDto;
-use User\Application\UserRegister\UserRegisterService;
+use User\Application\UserRegister\UserRegisterUseCase;
 use User\Domain\Model\USER_ROLES;
 
 #[OA\Tag('User')]
@@ -70,16 +70,16 @@ use User\Domain\Model\USER_ROLES;
 )]
 class UserRegisterController extends AbstractController
 {
-    private UserRegisterService $UserRegisterService;
+    private UserRegisterUseCase $userRegisterUseCase;
 
-    public function __construct(UserRegisterService $UserRegisterService)
+    public function __construct(UserRegisterUseCase $userRegisterUseCase)
     {
-        $this->UserRegisterService = $UserRegisterService;
+        $this->userRegisterUseCase = $userRegisterUseCase;
     }
 
     public function __invoke(UserRegisterRequestDto $requestDto): JsonResponse
     {
-        $UserRegisterOutputDto = $this->UserRegisterService->__invoke(
+        $UserRegisterOutputDto = $this->userRegisterUseCase->__invoke(
             $this->createUserRegisterInputDto($requestDto)
         );
 
