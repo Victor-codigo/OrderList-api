@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace User\Application\UserEmailComfirmation\Exception;
+namespace User\Application\UserRegisterEmailConfirmation\Exception;
 
 use Common\Domain\Exception\DomainExceptionOutput;
 use Common\Domain\Exception\DomainExceptionOutputInterface;

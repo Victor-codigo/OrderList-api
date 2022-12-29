@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace User\Adapter\Http\Controller\UserEmailConfirmation;
+namespace User\Adapter\Http\Controller\UserRegisterEmailConfirmation;
 
 use Common\Domain\Response\ResponseDto;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use User\Adapter\Http\Controller\UserEmailConfirmation\Dto\UserEmailConfirmationRequestDto;
-use User\Application\UserEmailComfirmation\Dto\UserEmailConfirmationInputDto;
-use User\Application\UserEmailComfirmation\UserEmailConfirmationUseCase;
+use User\Adapter\Http\Controller\UserRegisterEmailConfirmation\Dto\UserEmailConfirmationRequestDto;
+use User\Application\UserRegisterEmailConfirmation\Dto\UserEmailConfirmationInputDto;
+use User\Application\UserRegisterEmailConfirmation\UserRegisterEmailConfirmationUseCase;
 
 #[OA\Tag('User')]
 #[OA\Patch(
@@ -60,13 +60,13 @@ use User\Application\UserEmailComfirmation\UserEmailConfirmationUseCase;
         ),
     ]
 )]
-class UserEmailConfirmationController extends AbstractController
+class UserRegisterEmailConfirmationController extends AbstractController
 {
-    private UserEmailConfirmationUseCase $emailConfirmationService;
+    private UserRegisterEmailConfirmationUseCase $emailConfirmationService;
 
-    public function __construct(UserEmailConfirmationUseCase $userEmailConfirmationUseCase)
+    public function __construct(UserRegisterEmailConfirmationUseCase $userRegisterEmailConfirmationUseCase)
     {
-        $this->emailConfirmationService = $userEmailConfirmationUseCase;
+        $this->emailConfirmationService = $userRegisterEmailConfirmationUseCase;
     }
 
     public function __invoke(UserEmailConfirmationRequestDto $request): JsonResponse

@@ -10,7 +10,7 @@ user_register:
 user_email_confirmation:
   path: /api/v{api_version}/users/confirm
   methods: PATCH
-  controller: User\Adapter\Http\Controller\UserEmailConfirmation\UserEmailConfirmationController
+  controller: User\Adapter\Http\Controller\UserRegisterEmailConfirmation\UserRegisterEmailConfirmationController
   requirements:
     api_version: '\d+[.\d]?'
 

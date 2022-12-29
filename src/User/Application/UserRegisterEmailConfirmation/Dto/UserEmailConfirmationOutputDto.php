@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace User\Application\UserEmailComfirmation\Dto;
+namespace User\Application\UserRegisterEmailConfirmation\Dto;
 
 use Common\Domain\Model\ValueObject\String\Identifier;
 

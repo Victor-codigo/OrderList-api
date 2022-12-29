@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\User\Application\UserEmailConfirmation\Dto;
+namespace Test\Unit\User\Application\UserRegisterEmailConfirmation\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use PHPUnit\Framework\TestCase;
-use User\Application\UserEmailComfirmation\Dto\UserEmailConfirmationInputDto;
+use User\Application\UserRegisterEmailConfirmation\Dto\UserEmailConfirmationInputDto;
 
-class UserEmailConfirmationInputDtoTest extends TestCase
+class UserRegisterEmailConfirmationInputDtoTest extends TestCase
 {
     private const TOKEN_MIN_LENGTH = 36;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Functional\User\Adapter\Http\Controller\UserEmailConfirmation;
+namespace Test\Functional\User\Adapter\Http\Controller\UserRegisterEmailConfirmation;
 
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -12,7 +12,7 @@ use Test\Functional\WebClientTestCase;
 use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
 
-class UserEmailConfirmationControllerTest extends WebClientTestCase
+class UserRegisterEmailConfirmationControllerTest extends WebClientTestCase
 {
     use RefreshDatabaseTrait;
 
