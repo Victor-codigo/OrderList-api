@@ -38,7 +38,7 @@ class UserEmailConfirmationControllerTest extends WebClientTestCase
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, ['username'], [], Response::HTTP_CREATED);
+        $this->assertResponseStructureIsOk($response, ['username'], [], Response::HTTP_OK);
         $this->assertSame('User activated', $responseContent->message);
         $this->assertSame(self::USER_ID, $responseContent->data->username);
 
