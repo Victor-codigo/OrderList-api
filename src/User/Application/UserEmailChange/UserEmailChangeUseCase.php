@@ -13,7 +13,7 @@ use User\Domain\Service\UserEmailChange\Dto\UserEmailChangeInputDto as DomainUse
 use User\Domain\Service\UserEmailChange\Exception\UserEmailChangePasswordWrongException as DomainUserEmailChangePasswordWrongException;
 use User\Domain\Service\UserEmailChange\UserEmailChangeService as DomainUserEmailChangeService;
 
-class UserEmailChangeService extends ServiceBase
+class UserEmailChangeUseCase extends ServiceBase
 {
     public function __construct(
         private ValidationInterface $validator,

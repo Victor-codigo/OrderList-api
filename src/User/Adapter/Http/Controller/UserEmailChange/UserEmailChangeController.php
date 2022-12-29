@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use User\Adapter\Http\Controller\UserEmailChange\Dto\UserEmailChangeRequestDto;
 use User\Application\UserEmailChange\Dto\UserEmailChangeInputDto;
-use User\Application\UserEmailChange\UserEmailChangeService;
+use User\Application\UserEmailChange\UserEmailChangeUseCase;
 
 #[OA\Tag('User')]
 #[OA\Patch(
@@ -63,14 +63,14 @@ use User\Application\UserEmailChange\UserEmailChangeService;
 class UserEmailChangeController extends AbstractController
 {
     public function __construct(
-        private UserEmailChangeService $userEmailChangeService,
+        private UserEmailChangeUseCase $userEmailChangeUseCase,
         private Security $security
     ) {
     }
 
     public function __invoke(UserEmailChangeRequestDto $request): JsonResponse
     {
-        $this->userEmailChangeService->__invoke(
+        $this->userEmailChangeUseCase->__invoke(
             $this->createUserChangeEmailInputDto($request)
         );
 
