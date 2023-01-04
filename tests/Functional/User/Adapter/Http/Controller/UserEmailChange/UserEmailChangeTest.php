@@ -188,7 +188,7 @@ class UserEmailChangeTest extends WebClientTestCase
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['password_worng'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['password_wrong'], Response::HTTP_BAD_REQUEST);
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Password is wrong', $responseContent->message);
     }

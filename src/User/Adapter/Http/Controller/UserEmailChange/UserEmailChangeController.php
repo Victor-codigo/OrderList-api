@@ -53,7 +53,7 @@ use User\Application\UserEmailChange\UserEmailChangeUseCase;
                         new OA\Property(property: 'status', type: 'string', example: 'Error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Error'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<email|password|password_worng, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<email|password|password_wrong, string|array>')),
                     ]
                 )
             )
