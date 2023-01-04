@@ -8,6 +8,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\ServiceInputDtoInterface;
 use Common\Domain\Validation\ValidationInterface;
+use User\Domain\Model\User;
 
 class GetUsersInputDto implements ServiceInputDtoInterface
 {
@@ -15,9 +16,12 @@ class GetUsersInputDto implements ServiceInputDtoInterface
      * @var Identifier[]
      */
     public readonly array|null $usersId;
+    public readonly User $userSession;
 
-    public function __construct(array|null $usersId)
+    public function __construct(User $userSession, array|null $usersId)
     {
+        $this->userSession = $userSession;
+
         if (null === $usersId) {
             $this->usersId = null;
 

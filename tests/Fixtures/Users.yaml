@@ -11,6 +11,10 @@ Common\Domain\Model\ValueObject\String\Identifier:
     __construct:
       value: "2606508b-4516-45d6-93a6-c7cb416b7f3f"
 
+  id_user_admin:
+    __construct:
+      value: "6df60afd-f7c3-4c2c-b920-e265f266c560"
+
 Common\Domain\Model\ValueObject\String\Email:
   email_random-{1..60}:
     __construct:
@@ -24,6 +28,10 @@ Common\Domain\Model\ValueObject\String\Email:
     __construct:
       value: "email.already.active@host.com"
 
+  email_user_admin:
+    __construct:
+      value: "email.admin.active@host.com"
+
 Common\Domain\Model\ValueObject\String\Password:
   password_random-{1..60}:
     __construct:
@@ -34,6 +42,10 @@ Common\Domain\Model\ValueObject\String\Password:
       value: "\\$2y\\$04\\$A5XxYKU/w5tpX6BY9Kpf9uDrXY3seHrYwmx70qZ0DWyp0Lmvfo29q" #qwerty
 
   password_user_active:
+    __construct:
+      value: "\\$2y\\$13\\$/Bu6Y2ggoPUQNi1gCIqZyeapz0wWXTQEFsTRHggTR72u31Af6X2Du" #123456
+
+  password_user_admin:
     __construct:
       value: "\\$2y\\$13\\$/Bu6Y2ggoPUQNi1gCIqZyeapz0wWXTQEFsTRHggTR72u31Af6X2Du" #123456
 
@@ -50,6 +62,10 @@ Common\Domain\Model\ValueObject\String\Name:
     __construct:
       value: "María"
 
+  name_user_admin:
+    __construct:
+      value: "Admin"
+
 Common\Domain\Model\ValueObject\Object\Rol:
   rol_random:
     __construct:
@@ -59,12 +75,19 @@ Common\Domain\Model\ValueObject\Object\Rol:
     __construct:
       value: <(User\Domain\Model\USER_ROLES::USER)>
 
+  rol_admin:
+    __construct:
+      value: <(User\Domain\Model\USER_ROLES::ADMIN)>
+
 Common\Domain\Model\ValueObject\Array\Roles:
   roles_random:
     __construct: [["@rol_random"]]
 
   roles_user_active:
     __construct: [["@rol_active"]]
+
+  roles_user_admin:
+    __construct: [["@rol_admin"]]
 
 User\Domain\Model\User:
   User-{1..60}:
@@ -90,3 +113,11 @@ User\Domain\Model\User:
       password: "@password_user_active"
       name: "@name_user_active"
       roles: "@roles_user_active"
+
+  User-admin:
+    __construct:
+      id: "@id_user_admin"
+      email: "@email_user_admin"
+      password: "@password_user_admin"
+      name: "@name_user_admin"
+      roles: "@roles_user_admin"

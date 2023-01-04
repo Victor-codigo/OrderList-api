@@ -8,6 +8,7 @@ use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
+use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
 
 class GetUsersControllerTest extends WebClientTestCase
@@ -18,12 +19,13 @@ class GetUsersControllerTest extends WebClientTestCase
     private const METHOD = 'GET';
     private const USER_NAME = 'email.already.active@host.com';
     private const USER_PASSWORD = '123456';
+    private const USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
+    private const USER_ADMIN_NAME = 'email.admin.active@host.com';
+    private const USER_ADMIN_PASSWORD = '123456';
 
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
     }
 
     private function getUsersIds(): array
@@ -31,6 +33,7 @@ class GetUsersControllerTest extends WebClientTestCase
         return [
             '1befdbe2-9c14-42f0-850f-63e061e33b8f',
             '2606508b-4516-45d6-93a6-c7cb416b7f3f',
+            '6df60afd-f7c3-4c2c-b920-e265f266c560',
         ];
     }
 
@@ -43,9 +46,65 @@ class GetUsersControllerTest extends WebClientTestCase
         ];
     }
 
-    /** @test */
-    public function itShouldReturnTwoUsers(): void
+    private function assertValidUserDataPrivate(array $data, array $usersIds, array $usersEmails, array $usersNames, array $usersRoles, array $usersCreatedOn, array $usersImages): void
     {
+        foreach ($data as $user) {
+            $this->assertCount(6, get_object_vars($user));
+
+            $this->assertObjectHasAttribute('id', $user);
+            $this->assertObjectHasAttribute('email', $user);
+            $this->assertObjectHasAttribute('name', $user);
+            $this->assertObjectHasAttribute('roles', $user);
+            $this->assertObjectHasAttribute('createdOn', $user);
+            $this->assertObjectHasAttribute('image', $user);
+
+            $this->assertContains($user->id, $usersIds);
+            $this->assertContains($user->email, $usersEmails);
+            $this->assertContains($user->name, $usersNames);
+            $this->assertContainsEquals($user->roles, $usersRoles);
+            $this->assertContains($user->createdOn, $usersCreatedOn);
+            $this->assertContains($user->image, $usersImages);
+        }
+    }
+
+    private function assertValidUserDataPublic(array $data, array $usersIds, array $usersNames, array $usersImages): void
+    {
+        foreach ($data as $user) {
+            $this->assertCount(3, get_object_vars($user));
+
+            $this->assertObjectHasAttribute('id', $user);
+            $this->assertObjectHasAttribute('name', $user);
+            $this->assertObjectHasAttribute('image', $user);
+
+            $this->assertContains($user->id, $usersIds);
+            $this->assertContains($user->name, $usersNames);
+            $this->assertContains($user->image, $usersImages);
+        }
+    }
+
+    private function getUserDataFromDataBase(array $usersIds): array
+    {
+        $userRepository = $this->getEntityManager()->getRepository(User::class);
+        $users = $userRepository->findBy(['id' => $usersIds]);
+
+        return [
+            'usersEmails' => array_map(fn (User $user) => $user->getEmail()->getValue(), $users),
+            'usersNames' => array_map(fn (User $user) => $user->getName()->getValue(), $users),
+            'usersRoles' => array_map(
+                fn (User $user) => array_map(
+                    fn (USER_ROLES $rol) => $rol->value,
+                    $user->getRoles()->getRolesEmums()),
+                $users
+            ),
+            'usersCreatedOn' => array_map(fn (User $user) => $user->getCreatedOn()->format('Y-m-d H:i'), $users),
+            'usersImages' => array_map(fn (User $user) => $user->getProfile()->getImage()->getValue(), $users),
+        ];
+    }
+
+    /** @test */
+    public function itShouldReturnThreeUsers(): void
+    {
+        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
         $usersIds = $this->getUsersIds();
         $this->client->request(
             method: self::METHOD,
@@ -56,29 +115,114 @@ class GetUsersControllerTest extends WebClientTestCase
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [0, 1], [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, [0, 1, 2], [], Response::HTTP_OK);
         $this->assertSame(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Users found', $responseContent->message);
         $this->assertCount(count($usersIds), $responseContent->data);
 
-        $userRepository = $this->getEntityManager()->getRepository(User::class);
-        $users = $userRepository->findBy(['id' => $usersIds]);
-        $usersNames = array_map(fn (User $user) => $user->getName()->getValue(), $users);
+        $usersData = $this->getUserDataFromDataBase($usersIds);
 
-        foreach ($responseContent->data as $user) {
-            $this->assertObjectHasAttribute('id', $user);
-            $this->assertObjectHasAttribute('name', $user);
-            $this->assertObjectHasAttribute('image', $user);
+        $this->assertValidUserDataPublic(
+            $responseContent->data,
+            $usersIds,
+            $usersData['usersNames'],
+            $usersData['usersImages']
+        );
+    }
 
-            $this->assertContains($user->id, $usersIds);
-            $this->assertContains($user->name, $usersNames);
-            $this->assertNull($user->image);
-        }
+    /** @test */
+    public function itShouldReturnAnUserDifferentFromItself(): void
+    {
+        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $userId = $this->getUsersIds()[0];
+        $this->client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT.'/'.$userId,
+            content: json_encode([])
+        );
+
+        $response = $this->client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [0], [], Response::HTTP_OK);
+        $this->assertSame(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Users found', $responseContent->message);
+        $this->assertCount(1, $responseContent->data);
+
+        $usersData = $this->getUserDataFromDataBase([$userId]);
+        $this->assertValidUserDataPublic(
+            $responseContent->data,
+            [$userId],
+            $usersData['usersNames'],
+            $usersData['usersImages']
+        );
+    }
+
+    /** @test */
+    public function itShouldReturnThreeUsersForAdminUser(): void
+    {
+        $this->client = $this->getNewClientAuthenticated(self::USER_ADMIN_NAME, self::USER_ADMIN_PASSWORD);
+        $usersIds = $this->getUsersIds();
+        $this->client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT.'/'.implode(',', $usersIds),
+            content: json_encode([])
+        );
+
+        $response = $this->client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [0, 1, 2], [], Response::HTTP_OK);
+        $this->assertSame(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Users found', $responseContent->message);
+        $this->assertCount(count($usersIds), $responseContent->data);
+
+        $usersData = $this->getUserDataFromDataBase($usersIds);
+        $this->assertValidUserDataPrivate(
+            $responseContent->data,
+            $usersIds,
+            $usersData['usersEmails'],
+            $usersData['usersNames'],
+            $usersData['usersRoles'],
+            $usersData['usersCreatedOn'],
+            $usersData['usersImages']
+        );
+    }
+
+    /** @test */
+    public function itShouldReturnUsersOwnData(): void
+    {
+        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT.'/'.self::USER_ID,
+            content: json_encode([])
+        );
+
+        $response = $this->client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [0], [], Response::HTTP_OK);
+        $this->assertSame(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Users found', $responseContent->message);
+        $this->assertCount(1, $responseContent->data);
+
+        $usersData = $this->getUserDataFromDataBase([self::USER_ID]);
+        $this->assertValidUserDataPrivate(
+            $responseContent->data,
+            [self::USER_ID],
+            $usersData['usersEmails'],
+            $usersData['usersNames'],
+            $usersData['usersRoles'],
+            $usersData['usersCreatedOn'],
+            $usersData['usersImages']
+        );
     }
 
     /** @test */
     public function itShouldFailNoUsersSent(): void
     {
+        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -93,6 +237,7 @@ class GetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUsersIdWrong(): void
     {
+        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
         $usersIds = $this->getUsersIds();
         $this->client->request(
             method: self::METHOD,
@@ -107,12 +252,13 @@ class GetUsersControllerTest extends WebClientTestCase
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error getting users', $responseContent->message);
 
-        $this->assertSame([['uuid_too_long']], $responseContent->errors);
+        $this->assertSame([['uuid_too_long'], ['uuid_too_long']], $responseContent->errors);
     }
 
     /** @test */
     public function itShouldFailUsersIdNotFound(): void
     {
+        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
         $usersIds = $this->getUsersIdsWrong();
         $this->client->request(
             method: self::METHOD,

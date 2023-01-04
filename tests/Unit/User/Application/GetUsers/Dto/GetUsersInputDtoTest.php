@@ -10,6 +10,7 @@ use Common\Domain\Validation\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use PHPUnit\Framework\TestCase;
 use User\Application\GetUsers\Dto\GetUsersInputDto;
+use User\Domain\Model\User;
 
 class GetUsersInputDtoTest extends TestCase
 {
@@ -27,7 +28,9 @@ class GetUsersInputDtoTest extends TestCase
 
     private function createGetUsersInputDto(array|null $usersId): GetUsersInputDto
     {
-        return new GetUsersInputDto($usersId);
+        $user = $this->createMock(User::class);
+
+        return new GetUsersInputDto($user, $usersId);
     }
 
     private function getIds(int $numIds): array

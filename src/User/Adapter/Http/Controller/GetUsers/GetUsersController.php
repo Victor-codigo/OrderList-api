@@ -9,7 +9,9 @@ use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Security;
 use User\Adapter\Http\Controller\GetUsers\Dto\GetUsersRequestDto;
+use User\Adapter\Security\User\UserSymfonyAdapter;
 use User\Application\GetUsers\Dto\GetUsersInputDto;
 use User\Application\GetUsers\GetUsersUseCase;
 
@@ -92,10 +94,12 @@ use User\Application\GetUsers\GetUsersUseCase;
 class GetUsersController extends AbstractController
 {
     private GetUsersUseCase $getUsersUserCase;
+    private Security $security;
 
-    public function __construct(GetUsersUseCase $getUsersUserCase)
+    public function __construct(GetUsersUseCase $getUsersUserCase, Security $security)
     {
-        $this->GetUsersUserCase = $getUsersUserCase;
+        $this->getUsersUserCase = $getUsersUserCase;
+        $this->security = $security;
     }
 
     public function __invoke(GetUsersRequestDto $request): JsonResponse
@@ -109,7 +113,10 @@ class GetUsersController extends AbstractController
 
     private function createGetUsersInputDto(array|null $usersId): GetUsersInputDto
     {
-        return new GetUsersInputDto($usersId);
+        /** @var UserSymfonyAdapter $user */
+        $user = $this->security->getUser();
+
+        return new GetUsersInputDto($user->getUser(), $usersId);
     }
 
     private function createResponse(array $users): JsonResponse

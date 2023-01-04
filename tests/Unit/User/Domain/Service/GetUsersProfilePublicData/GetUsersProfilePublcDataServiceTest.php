@@ -6,6 +6,7 @@ namespace Test\Unit\User\Domain\Service\GetUsersProfilePublicData;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Struct\SCOPE;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use User\Domain\Model\Profile;
@@ -60,7 +61,7 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
             ->willReturn($expectedProfiles);
 
         $profilesDto = new GetUsersProfilePublicDataDto($profilesId);
-        $return = $this->object->__invoke($profilesDto);
+        $return = $this->object->__invoke($profilesDto, SCOPE::PUBLIC);
 
         $this->assertInstanceOf(GetUsersProfilePublicDataOutputDto::class, $return);
 
@@ -73,6 +74,33 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
     }
 
     /** @test */
+    public function itShouldGetTheUsersProfilePrivateData(): void
+    {
+        $profilesId = $this->getProfilesId();
+        $expectedProfiles = $this->getProfiles();
+        $expectedProfileIdentifiers = array_map(fn (Profile $profile) => $profile->getId(), $expectedProfiles);
+        $expectedProfileImages = array_map(fn (Profile $profile) => $profile->getImage(), $expectedProfiles);
+
+        $this->profileRepository
+            ->expects($this->once())
+            ->method('findProfilesOrFail')
+            ->with($profilesId)
+            ->willReturn($expectedProfiles);
+
+        $profilesDto = new GetUsersProfilePublicDataDto($profilesId);
+        $return = $this->object->__invoke($profilesDto, SCOPE::PRIVATE);
+
+        $this->assertInstanceOf(GetUsersProfilePublicDataOutputDto::class, $return);
+
+        foreach ($return->profileData as $profile) {
+            $this->assertArrayHasKey('id', $profile);
+            $this->assertArrayHasKey('image', $profile);
+            $this->assertContains($profile['id'], $expectedProfileIdentifiers);
+            $this->assertContains($profile['image'], $expectedProfileImages);
+        }
+    }
+
+    /* @test */
     public function itShouldFailNoUsersProfileFound(): void
     {
         $this->expectException(DBNotFoundException::class);
@@ -84,6 +112,6 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
             ->willThrowException(DBNotFoundException::fromMessage(''));
 
         $usersProfileDto = new GetUsersProfilePublicDataDto([]);
-        $this->object->__invoke($usersProfileDto);
+        $this->object->__invoke($usersProfileDto, SCOPE::PRIVATE);
     }
 }
