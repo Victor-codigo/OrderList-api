@@ -45,4 +45,16 @@ class Roles extends ArrayValueObject
 
         return new static($rolesCreated);
     }
+
+    public function getRolesEmums(): array
+    {
+        if (null === $this->value) {
+            return [];
+        }
+
+        return array_map(
+            fn (Rol $rol) => $rol->getValue(),
+            $this->value
+        );
+    }
 }

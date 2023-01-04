@@ -68,6 +68,25 @@ class RolesTest extends TestCase
         $this->assertFalse($return);
     }
 
+    /** @test */
+    public function itSholuldReturnRolesEmumEmptyNoRoles(): void
+    {
+        $this->object = $this->createRoles(null);
+        $return = $this->object->getRolesEmums();
+
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function itSholuldReturnRolesEmum(): void
+    {
+        $roles = [USER_ROLES::ADMIN, USER_ROLES::USER];
+        $this->object = $this->createRoles($roles);
+        $return = $this->object->getRolesEmums();
+
+        $this->assertSame($roles, $return);
+    }
+
     private function createRoles(array|null $roles): Roles
     {
         $rolesValueObject = [];
