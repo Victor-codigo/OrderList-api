@@ -57,7 +57,7 @@ use User\Application\UserPasswordChange\UserPasswordChangeUseCase;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<id|passwordOld|passwordNew, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<password_change|password_new|password_new_repeat|permissions, string|array>')),
                     ]
                 )
             )

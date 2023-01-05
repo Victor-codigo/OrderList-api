@@ -12,6 +12,6 @@ class UserPasswordChangeUserNotFoundException extends DomainExceptionOutput
 {
     public static function fromMessage(string $message): static
     {
-        return new static($message, [], RESPONSE_STATUS::ERROR, RESPONSE_STATUS_HTTP::BAD_REQUEST);
+        return new static($message, ['password_change' => $message], RESPONSE_STATUS::ERROR, RESPONSE_STATUS_HTTP::BAD_REQUEST);
     }
 }
