@@ -33,7 +33,7 @@ class UserModifyUseCase extends ServiceBase
         private ValidationInterface $validation,
         private UserRepositoryInterface $userRepository,
         private FileUploadInterface $fileUpload,
-        private string $userPublicImagePath
+        private string $userImagePath
     ) {
     }
 
@@ -104,7 +104,7 @@ class UserModifyUseCase extends ServiceBase
     private function uploadUserImage(UserImage $image, Path $userCurrentFileName): Path
     {
         $uploadedFile = $image->getValue();
-        $this->fileUpload->__invoke($uploadedFile, $this->userPublicImagePath);
+        $this->fileUpload->__invoke($uploadedFile, $this->userImagePath);
         $this->removeUserImage($userCurrentFileName);
 
         return new Path($this->fileUpload->getFileName());
@@ -119,14 +119,14 @@ class UserModifyUseCase extends ServiceBase
             return;
         }
 
-        $file = $this->userPublicImagePath.'/'.$fileName->getValue();
+        $file = $this->userImagePath.'/'.$fileName->getValue();
 
         if (!file_exists($file)) {
             return;
         }
 
         if (!unlink($file)) {
-            throw DomainFileNotDeletedException::fromMessage(sprintf('File [%s] could not be deleted', $this->userPublicImagePath.'/'.$fileName->getValue()));
+            throw DomainFileNotDeletedException::fromMessage(sprintf('File [%s] could not be deleted', $this->userImagePath.'/'.$fileName->getValue()));
         }
     }
 }

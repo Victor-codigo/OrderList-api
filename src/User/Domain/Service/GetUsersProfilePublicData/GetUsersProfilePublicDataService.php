@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace User\Domain\Service\GetUsersProfilePublicData;
 
+use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Struct\SCOPE;
 use User\Domain\Port\Repository\ProfileRepositoryInterface;
 use User\Domain\Service\GetUsersProfilePublicData\Dto\GetUsersProfilePublicDataDto;
@@ -12,10 +13,12 @@ use User\Domain\Service\GetUsersProfilePublicData\Dto\GetUsersProfilePublicDataO
 class GetUsersProfilePublicDataService
 {
     private ProfileRepositoryInterface $profileRepository;
+    private string $userPublicImagePath;
 
-    public function __construct(ProfileRepositoryInterface $profileReposistory)
+    public function __construct(ProfileRepositoryInterface $profileReposistory, string $userPublicImagePath)
     {
         $this->profileRepository = $profileReposistory;
+        $this->userPublicImagePath = $userPublicImagePath;
     }
 
     public function __invoke(GetUsersProfilePublicDataDto $usersDto, SCOPE $scope): GetUsersProfilePublicDataOutputDto
@@ -33,9 +36,10 @@ class GetUsersProfilePublicDataService
     {
         $profilesData = [];
         foreach ($profiles as $profile) {
+            $image = $profile->getImage()->getValue();
             $profilesData[] = [
                 'id' => $profile->getId(),
-                'image' => $profile->getImage(),
+                'image' => null === $image ? null : ValueObjectFactory::createPath($this->userPublicImagePath.'/'.$image),
             ];
         }
 
@@ -49,9 +53,10 @@ class GetUsersProfilePublicDataService
     {
         $profileData = [];
         foreach ($profiles as $profile) {
+            $image = $profile->getImage()->getValue();
             $profileData[] = [
                 'id' => $profile->getId(),
-                'image' => $profile->getImage(),
+                'image' => null === $image ? null : ValueObjectFactory::createPath($this->userPublicImagePath.'/'.$image),
             ];
         }
 

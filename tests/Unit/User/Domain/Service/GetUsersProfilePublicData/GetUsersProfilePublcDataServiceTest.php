@@ -17,6 +17,8 @@ use User\Domain\Service\GetUsersProfilePublicData\GetUsersProfilePublicDataServi
 
 class GetUsersProfilePublcDataServiceTest extends TestCase
 {
+    private const URL_IMAGE_PUBLIC_PATH = 'URL_PUBLIC_IMAGE';
+
     private GetUsersProfilePublicDataService $object;
     private MockObject|ProfileRepositoryInterface $profileRepository;
 
@@ -25,7 +27,7 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
         parent::setUp();
 
         $this->profileRepository = $this->createMock(ProfileRepositoryInterface::class);
-        $this->object = new GetUsersProfilePublicDataService($this->profileRepository);
+        $this->object = new GetUsersProfilePublicDataService($this->profileRepository, self::URL_IMAGE_PUBLIC_PATH);
     }
 
     private function getProfilesId(): array
@@ -52,7 +54,10 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
         $profilesId = $this->getProfilesId();
         $expectedProfiles = $this->getProfiles();
         $expectedProfileIdentifiers = array_map(fn (Profile $profile) => $profile->getId(), $expectedProfiles);
-        $expectedProfileImages = array_map(fn (Profile $profile) => $profile->getImage(), $expectedProfiles);
+        $expectedProfileImages = array_map(
+            fn (Profile $profile) => ValueObjectFactory::createPath(self::URL_IMAGE_PUBLIC_PATH.'/'.$profile->getImage()->getValue()),
+            $expectedProfiles
+        );
 
         $this->profileRepository
             ->expects($this->once())
@@ -69,7 +74,7 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
             $this->assertArrayHasKey('id', $profile);
             $this->assertArrayHasKey('image', $profile);
             $this->assertContains($profile['id'], $expectedProfileIdentifiers);
-            $this->assertContains($profile['image'], $expectedProfileImages);
+            $this->assertContainsEquals($profile['image'], $expectedProfileImages);
         }
     }
 
@@ -79,7 +84,10 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
         $profilesId = $this->getProfilesId();
         $expectedProfiles = $this->getProfiles();
         $expectedProfileIdentifiers = array_map(fn (Profile $profile) => $profile->getId(), $expectedProfiles);
-        $expectedProfileImages = array_map(fn (Profile $profile) => $profile->getImage(), $expectedProfiles);
+        $expectedProfileImages = array_map(
+            fn (Profile $profile) => ValueObjectFactory::createPath(self::URL_IMAGE_PUBLIC_PATH.'/'.$profile->getImage()->getValue()),
+            $expectedProfiles
+        );
 
         $this->profileRepository
             ->expects($this->once())
@@ -96,7 +104,7 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
             $this->assertArrayHasKey('id', $profile);
             $this->assertArrayHasKey('image', $profile);
             $this->assertContains($profile['id'], $expectedProfileIdentifiers);
-            $this->assertContains($profile['image'], $expectedProfileImages);
+            $this->assertContainsEquals($profile['image'], $expectedProfileImages);
         }
     }
 
