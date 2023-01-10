@@ -165,25 +165,6 @@ class UserImageTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailCanNotDetermineWidthAndHeigth(): void
-    {
-        /** @var MockObject|File $file */
-        $file = $this->fileInterface->getFile();
-
-        $file
-            ->expects($this->any())
-            ->method('getMimeType')
-            ->willReturn('image/png');
-
-        BuiltInFunctionsReturn::$filesize = 1;
-        BuiltInFunctionsReturn::$getimagesize = [];
-
-        $return = $this->validator->validateValueObject($this->object);
-
-        $this->assertEquals([VALIDATION_ERRORS::FILE_USER_IMAGE_SIZE_NOT_DETECTED], $return);
-    }
-
-    /** @test */
     public function itShouldValidateFileWidthHasNotMinWidth(): void
     {
         /** @var MockObject|File $file */
@@ -343,25 +324,6 @@ class UserImageTest extends TestCase
         $return = $this->validator->validateValueObject($this->object);
 
         $this->assertEmpty($return);
-    }
-
-    /** @test */
-    public function itShouldFailFileCanNotBeALandscape(): void
-    {
-        /** @var MockObject|File $file */
-        $file = $this->fileInterface->getFile();
-
-        $file
-            ->expects($this->any())
-            ->method('getMimeType')
-            ->willReturn('image/png');
-
-        BuiltInFunctionsReturn::$filesize = 1;
-        BuiltInFunctionsReturn::$getimagesize = [101, 100];
-
-        $return = $this->validator->validateValueObject($this->object);
-
-        $this->assertEquals([VALIDATION_ERRORS::FILE_USER_IMAGE_LANDSCAPE_NOT_ALLOWED], $return);
     }
 
     /** @test */

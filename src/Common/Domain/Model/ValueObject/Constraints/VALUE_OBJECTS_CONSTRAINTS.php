@@ -52,7 +52,7 @@ final class VALUE_OBJECTS_CONSTRAINTS
     public const FILE_USER_IMAGE_MAX_PIXELS = null;
     public const FILE_USER_IMAGE_MIN_ASPECT_RATIO = null;
     public const FILE_USER_IMAGE_MAX_ASPECT_RATIO = null;
-    public const FILE_USER_IMAGE_ALLOW_LANDSCAPE = false;
+    public const FILE_USER_IMAGE_ALLOW_LANDSCAPE = true;
     public const FILE_USER_IMAGE_ALLOW_PORTRAIT = true;
     public const FILE_USER_IMAGE_ALLOW_SQUARE_IMAGE = true;
     public const FILE_USER_IMAGE_DETECT_CORRUPTED = false;

@@ -296,21 +296,4 @@ class UserModifyInputDtoTest extends TestCase
 
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_NO_TMP_DIR]], $return);
     }
-
-    /** @test */
-    public function itShouldFailImageLandscapeIsNotAllowed(): void
-    {
-        $object = UserModifyInputDto::create(
-            'anastasia@hotmail.com',
-            'Anastasia',
-            false,
-            new UploadedFileSymfonyAdapter(new UploadedFile(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK, true)),
-            User::fromPrimitives('id', 'Anastasia@hotmail.com', 'password', 'Anastasia', [USER_ROLES::USER])
-        );
-
-        BuiltInFunctionsReturn::$getimagesize = [100, 99];
-        $return = $object->validate($this->validator);
-
-        $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_USER_IMAGE_LANDSCAPE_NOT_ALLOWED]], $return);
-    }
 }
