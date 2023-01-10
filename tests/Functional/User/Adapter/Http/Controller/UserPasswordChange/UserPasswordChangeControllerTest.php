@@ -200,7 +200,8 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
 
         $this->assertResponseStructureIsOk(
             response: $response,
-            responseCode: Response::HTTP_BAD_REQUEST
+            responseCode: Response::HTTP_BAD_REQUEST,
+            errors: ['password_change']
         );
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('It could not change password', $responseContent->message);
@@ -223,7 +224,8 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
 
         $this->assertResponseStructureIsOk(
             response: $response,
-            responseCode: Response::HTTP_BAD_REQUEST
+            responseCode: Response::HTTP_BAD_REQUEST,
+            errors: ['password_new']
         );
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Pasword old is wrong', $responseContent->message);
@@ -246,7 +248,8 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
 
         $this->assertResponseStructureIsOk(
             response: $response,
-            responseCode: Response::HTTP_BAD_REQUEST
+            responseCode: Response::HTTP_BAD_REQUEST,
+            errors: ['permissions']
         );
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('User is not active', $responseContent->message);
@@ -269,7 +272,8 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
 
         $this->assertResponseStructureIsOk(
             response: $response,
-            responseCode: Response::HTTP_BAD_REQUEST
+            responseCode: Response::HTTP_BAD_REQUEST,
+            errors: ['password_new_repeat']
         );
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Password new and Repeat new are not equals', $responseContent->message);
