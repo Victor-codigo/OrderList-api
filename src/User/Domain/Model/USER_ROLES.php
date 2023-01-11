@@ -9,4 +9,5 @@ enum USER_ROLES: string
     case USER = 'ROLE_USER';
     case ADMIN = 'ROLE_ADMIN';
     case NOT_ACTIVE = 'ROLE_NOT_ACTIVE';
+    case DELETED = 'ROLE_DELETED';
 }

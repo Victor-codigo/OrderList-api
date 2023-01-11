@@ -98,7 +98,8 @@ class UserSymfonyProviderAdapter implements UserProviderInterface, PasswordUpgra
 
     private function isValidUser(User $user): bool
     {
-        return !$user->getRoles()->has(new Rol(USER_ROLES::NOT_ACTIVE));
+        return !$user->getRoles()->has(new Rol(USER_ROLES::NOT_ACTIVE))
+            && !$user->getRoles()->has(new Rol(USER_ROLES::DELETED));
     }
 
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void

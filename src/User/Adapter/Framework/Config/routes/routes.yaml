@@ -61,6 +61,16 @@ user_login:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
+# USER DELETE
+# -------------------------------------------------------------
+user_delete:
+  path: /api/v{api_version}/users/delete/{id}
+  methods: DELETE
+  controller: User\Adapter\Http\Controller\UserRemove\UserRemoveController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
 # GET USERS
 # -------------------------------------------------------------
 user_get:

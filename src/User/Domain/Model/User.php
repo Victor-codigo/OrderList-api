@@ -97,8 +97,9 @@ class User
         $roles = $this->roles->getValue();
         $rolSearched = new Rol(USER_ROLES::USER);
         $rolNotActive = new Rol(USER_ROLES::NOT_ACTIVE);
+        $rolDeleted = new Rol(USER_ROLES::DELETED);
 
-        if (!$this->roles->has($rolSearched) && !$this->roles->has($rolNotActive)) {
+        if (!$this->roles->has($rolSearched) && !$this->roles->has($rolNotActive) && !$this->roles->has($rolDeleted)) {
             $roles[] = $rolSearched;
         }
 
