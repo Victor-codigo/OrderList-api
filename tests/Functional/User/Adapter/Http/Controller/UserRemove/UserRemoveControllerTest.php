@@ -15,7 +15,7 @@ class UserRemoveControllerTest extends WebClientTestCase
     use ReloadDatabaseTrait;
 
     private const METHOD = 'DELETE';
-    private const ENDPOINT = '/api/v1/users/delete/';
+    private const ENDPOINT = '/api/v1/users/remove/';
     private const USER_NAME_ADMIN = 'email.admin.active@host.com';
     private const USER_PASSWORD_DAMIN = '123456';
     private const USER_NAME = 'email.already.active@host.com';
