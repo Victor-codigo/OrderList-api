@@ -93,7 +93,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['passwordOld' => [VALIDATION_ERRORS::STRING_TOO_SHORT]], $return);
+        $this->assertEquals(['password_old' => [VALIDATION_ERRORS::STRING_TOO_SHORT]], $return);
     }
 
     /** @test */
@@ -108,7 +108,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['passwordOld' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
+        $this->assertEquals(['password_old' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
     }
 
     /** @test */
@@ -123,7 +123,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['passwordOld' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
+        $this->assertEquals(['password_old' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
     /** @test */
@@ -138,7 +138,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['passwordNew' => [VALIDATION_ERRORS::STRING_TOO_SHORT]], $return);
+        $this->assertEquals(['password_new' => [VALIDATION_ERRORS::STRING_TOO_SHORT]], $return);
     }
 
     /** @test */
@@ -153,7 +153,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['passwordNew' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
+        $this->assertEquals(['password_new' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
     }
 
     /** @test */
@@ -168,7 +168,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['passwordNew' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
+        $this->assertEquals(['password_new' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
     /** @test */
@@ -183,7 +183,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['passwordNewRepeat' => [VALIDATION_ERRORS::STRING_TOO_SHORT]], $return);
+        $this->assertEquals(['password_new_repeat' => [VALIDATION_ERRORS::STRING_TOO_SHORT]], $return);
     }
 
     /** @test */
@@ -198,7 +198,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['passwordNewRepeat' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
+        $this->assertEquals(['password_new_repeat' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
     }
 
     /** @test */
@@ -213,6 +213,6 @@ class UserPasswordChangeInputDtoTest extends TestCase
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['passwordNewRepeat' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
+        $this->assertEquals(['password_new_repeat' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 }

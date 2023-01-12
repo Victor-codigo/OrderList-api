@@ -29,9 +29,9 @@ class UserPasswordChangeInputDto implements ServiceInputDtoInterface
     {
         return $validator->validateValueObjectArray([
             'id' => $this->id,
-            'passwordOld' => $this->passwordOld,
-            'passwordNew' => $this->passwordNew,
-            'passwordNewRepeat' => $this->passwordNewRepeat,
+            'password_old' => $this->passwordOld,
+            'password_new' => $this->passwordNew,
+            'password_new_repeat' => $this->passwordNewRepeat,
         ]);
     }
 }

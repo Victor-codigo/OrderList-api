@@ -63,15 +63,15 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         $this->assertResponseStructureIsOk(
             response: $response,
             responseCode: Response::HTTP_BAD_REQUEST,
-            errors: ['id', 'passwordOld', 'passwordNew', 'passwordNewRepeat']
+            errors: ['id', 'password_old', 'password_new', 'password_new_repeat']
         );
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Wrong password', $responseContent->message);
         $errorExpected = new \stdClass();
         $errorExpected->id = ['not_blank', 'not_null'];
-        $errorExpected->passwordOld = ['not_blank', 'not_null'];
-        $errorExpected->passwordNew = ['not_blank', 'not_null'];
-        $errorExpected->passwordNewRepeat = ['not_blank', 'not_null'];
+        $errorExpected->password_old = ['not_blank', 'not_null'];
+        $errorExpected->password_new = ['not_blank', 'not_null'];
+        $errorExpected->password_new_repeat = ['not_blank', 'not_null'];
         $this->assertEquals($errorExpected, $responseContent->errors);
     }
 
@@ -120,12 +120,12 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         $this->assertResponseStructureIsOk(
             response: $response,
             responseCode: Response::HTTP_BAD_REQUEST,
-            errors: ['passwordOld']
+            errors: ['password_old']
         );
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Wrong password', $responseContent->message);
         $errorExpected = new \stdClass();
-        $errorExpected->passwordOld = ['string_too_short'];
+        $errorExpected->password_old = ['string_too_short'];
         $this->assertEquals($errorExpected, $responseContent->errors);
     }
 
@@ -147,12 +147,12 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         $this->assertResponseStructureIsOk(
             response: $response,
             responseCode: Response::HTTP_BAD_REQUEST,
-            errors: ['passwordNew']
+            errors: ['password_new']
         );
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Wrong password', $responseContent->message);
         $errorExpected = new \stdClass();
-        $errorExpected->passwordNew = ['string_too_short'];
+        $errorExpected->password_new = ['string_too_short'];
         $this->assertEquals($errorExpected, $responseContent->errors);
     }
 
@@ -174,12 +174,12 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         $this->assertResponseStructureIsOk(
             response: $response,
             responseCode: Response::HTTP_BAD_REQUEST,
-            errors: ['passwordNewRepeat']
+            errors: ['password_new_repeat']
         );
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Wrong password', $responseContent->message);
         $errorExpected = new \stdClass();
-        $errorExpected->passwordNewRepeat = ['string_too_short'];
+        $errorExpected->password_new_repeat = ['string_too_short'];
         $this->assertEquals($errorExpected, $responseContent->errors);
     }
 
