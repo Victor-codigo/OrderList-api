@@ -72,7 +72,7 @@ class RolesTypeTest extends TestCase
     }
 
     /** @test */
-    public function convertToPHPValueAreManyAndReturnRolesWithTheRoles(): void
+    public function convertToPHPValueManyRolesAndReturnRolesWithTheRoles(): void
     {
         $roles = [USER_ROLES::NOT_ACTIVE, USER_ROLES::USER];
         $return = $this->object->convertToPHPValue(json_encode($roles), $this->abstractPlatform);

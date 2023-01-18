@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject;
 
+use App\Group\Domain\Model\GROUP_TYPE;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Array\ValueObjectArrayFactoryInterface;
 use Common\Domain\Model\ValueObject\Array\valueObjectArrayFactory;
 use Common\Domain\Model\ValueObject\Object\File;
+use Common\Domain\Model\ValueObject\Object\GroupType;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\Object\UserImage;
 use Common\Domain\Model\ValueObject\Object\ValueObjectObjectFactory;
@@ -23,7 +25,6 @@ use Common\Domain\Model\ValueObject\String\Url;
 use Common\Domain\Model\ValueObject\String\ValueObjectStringFactory;
 use Common\Domain\Model\ValueObject\String\ValueObjectStringFactoryInterface;
 use Common\Domain\Ports\FileUpload\FileInterface;
-use User\Domain\Model\USER_ROLES;
 
 final class ValueObjectFactory implements ValueObjectStringFactoryInterface, ValueObjectArrayFactoryInterface, ValueObjectObjectFactoryInterface
 {
@@ -35,7 +36,7 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
         return valueObjectArrayFactory::createRoles($roles);
     }
 
-    public static function createRol(USER_ROLES|null $roles): Rol
+    public static function createRol(\BackedEnum|null $roles): Rol
     {
         return ValueObjectObjectFactory::createRol($roles);
     }
@@ -88,5 +89,10 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
     public static function createUserImage(FileInterface|null $file): UserImage
     {
         return ValueObjectObjectFactory::createUserImage($file);
+    }
+
+    public static function createGroupType(GROUP_TYPE|null $type): GroupType
+    {
+        return ValueObjectObjectFactory::createGroupType($type);
     }
 }

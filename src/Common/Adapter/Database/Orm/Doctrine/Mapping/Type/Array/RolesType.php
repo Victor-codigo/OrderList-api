@@ -12,7 +12,6 @@ use Common\Domain\Model\ValueObject\Object\Rol;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Exception;
 use JsonException;
-use User\Domain\Model\USER_ROLES;
 
 class RolesType extends TypeBase
 {
@@ -29,7 +28,7 @@ class RolesType extends TypeBase
     /**
      * @return string|null
      *
-     * @throws JsonException
+     * @throws \JsonException
      * @throws InvalidArgumentException
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
@@ -64,7 +63,7 @@ class RolesType extends TypeBase
             $rolesObject = [];
 
             foreach ($roles as $rol) {
-                $rolesObject[] = new Rol(USER_ROLES::from($rol));
+                $rolesObject[] = Rol::fromString($rol);
             }
 
             return new Roles($rolesObject);

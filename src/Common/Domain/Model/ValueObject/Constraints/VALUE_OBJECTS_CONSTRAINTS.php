@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Constraints;
 
+use App\Group\Domain\Model\GROUP_TYPE;
+use Group\Domain\Model\GROUP_ROLES;
 use User\Domain\Model\USER_ROLES;
 
 final class VALUE_OBJECTS_CONSTRAINTS
@@ -60,5 +62,14 @@ final class VALUE_OBJECTS_CONSTRAINTS
         'image/jpeg',
         'image/png',
         'image/bmp',
+    ];
+
+    public const GROUP_TYPE_VALUES = [
+        GROUP_TYPE::GROUP,
+        GROUP_TYPE::USER,
+    ];
+    public const GROUP_ROLES = [
+        GROUP_ROLES::ADMIN,
+        GROUP_ROLES::USER,
     ];
 }

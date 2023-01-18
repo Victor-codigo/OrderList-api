@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Object;
 
+use App\Group\Domain\Model\GROUP_TYPE;
 use Common\Domain\Ports\FileUpload\FileInterface;
-use User\Domain\Model\USER_ROLES;
 
 class ValueObjectObjectFactory
 {
-    public static function createRol(USER_ROLES|null $rol): Rol
+    public static function createRol(\BackedEnum|null $rol): Rol
     {
         return new Rol($rol);
     }
@@ -22,5 +22,10 @@ class ValueObjectObjectFactory
     public static function createUserImage(FileInterface|null $file): UserImage
     {
         return new UserImage($file);
+    }
+
+    public static function createGroupType(GROUP_TYPE|null $type): GroupType
+    {
+        return new GroupType($type);
     }
 }
