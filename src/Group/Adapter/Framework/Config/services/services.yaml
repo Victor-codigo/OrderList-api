@@ -1,0 +1,17 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    bind:
+
+  # Adapter
+  Group\Adapter\:
+    resource: "../../../../../Group/Adapter/"
+
+  # Application
+  Group\Application\:
+    resource: "../../../../../Group/Application/"
+
+  # Domain
+  Group\Domain\:
+    resource: "../../../../../Group/Domain/"

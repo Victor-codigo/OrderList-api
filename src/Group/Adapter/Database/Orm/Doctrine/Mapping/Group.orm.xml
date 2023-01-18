@@ -2,7 +2,7 @@
 <doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping">
 
     <entity name="Group\Domain\Model\Group"
-            table="Groups"
+            table="`Groups`"
             repository-class="Group\Adapter\Database\Orm\Doctrine\Repository\GroupRepository">
 
         <id name="id"

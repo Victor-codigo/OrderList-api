@@ -1,0 +1,56 @@
+Common\Domain\Model\ValueObject\String\Identifier:
+  id_random-{1..60}:
+    __construct:
+      value: <uuid()>
+
+  id_group_type_group:
+    __construct:
+      value: "fdb242b4-bac8-4463-88d0-0941bb0beee0"
+
+  id_group_type_user:
+    __construct:
+      value: "a5002966-dbf7-4f76-a862-23a04b5ca465"
+
+Common\Domain\Model\ValueObject\String\Name:
+  name_random-{1..60}:
+    __construct:
+      value: <name()>
+
+  name_group_type_group:
+    __construct:
+      value: "Group One"
+
+  name_group_type_user:
+    __construct:
+      value: "Group Two"
+
+Common\Domain\Model\ValueObject\Object\GroupType:
+  group_type_group:
+    __construct:
+      value: <(App\Group\Domain\Model\GROUP_TYPE::GROUP)>
+
+  group_type_user:
+    __construct:
+      value: <(App\Group\Domain\Model\GROUP_TYPE::USER)>
+
+Group\Domain\Model\Group:
+  Group-{1..60}:
+    __construct:
+      id: "@id_random-<current()>"
+      name: "@name_random-<current()>"
+      type: "@group_type_group"
+      description: "<text(50)>"
+
+  Group_type_group:
+    __construct:
+      id: "@id_group_type_group"
+      name: "@name_group_type_group"
+      type: "@group_type_group"
+      description: "This is a group of users"
+
+  Group_type_user:
+    __construct:
+      id: "@id_group_type_user"
+      name: "@name_group_type_user"
+      type: "@group_type_user"
+      description: "This is a group of one user"

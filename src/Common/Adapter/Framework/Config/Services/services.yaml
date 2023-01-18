@@ -2,6 +2,9 @@ imports:
     - {
           resource: "../../../../../User/Adapter/Framework/Config/services/services.yaml",
       }
+    - {
+          resource: "../../../../../Group/Adapter/Framework/Config/services/services.yaml",
+      }
 parameters:
     common.enviroment.app_env: "%env(string:APP_ENV)%"
     common.app_name: "%env(string:APP_NAME)%"
