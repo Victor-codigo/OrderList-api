@@ -5,9 +5,9 @@ doctrine:
         auto_mapping: true
         mappings:
 
-            Product:
-                is_bundle: false
-                type: xml
-                dir: '%kernel.project_dir%/src/Product/Adapter/Database/Orm/Doctrine/Mapping'
-                prefix: 'Product\Domain\Model'
-                alias: Product
+            # Product:
+            #     is_bundle: false
+            #     type: xml
+            #     dir: '%kernel.project_dir%/src/Product/Adapter/Database/Orm/Doctrine/Mapping'
+            #     prefix: 'Product\Domain\Model'
+            #     alias: Product

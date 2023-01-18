@@ -4,10 +4,14 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         mappings:
-            
             Group:
                 is_bundle: false
                 type: xml
-                dir: '%kernel.project_dir%/src/Group/Adapter/Database/Orm/Doctrine/Mapping'
+                dir: "%kernel.project_dir%/src/Group/Adapter/Database/Orm/Doctrine/Mapping"
                 prefix: 'Group\Domain\Model'
-                alias: Group
+
+            UserGroup:
+                is_bundle: false
+                type: xml
+                dir: "%kernel.project_dir%/src/Group/Adapter/Database/Orm/Doctrine/Mapping"
+                prefix: 'Group\Domain\Model'
