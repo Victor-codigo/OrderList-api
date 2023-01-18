@@ -4,20 +4,23 @@ declare(strict_types=1);
 
 namespace Group\Domain\Model;
 
-use Common\Adapter\IdGenerator\IdGenerator;
+use App\Group\Domain\Model\GROUP_TYPE;
+use Common\Domain\Model\ValueObject\Object\GroupType;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
-use DateTime;
+use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use User\Domain\Model\User;
 
 final class Group
 {
     private Identifier $id;
     private Name $name;
     private string|null $description;
-    private DateTime $createdOn;
-    private array $users;
-    private array $shops;
-    private array $products;
+    private \DateTime $createdOn;
+    private Collection $users;
+    private GroupType $type;
 
     public function getId(): Identifier
     {
@@ -29,7 +32,7 @@ final class Group
         return $this->name;
     }
 
-    public function setName($name): self
+    public function setName(Name $name): self
     {
         $this->name = $name;
 
@@ -48,33 +51,48 @@ final class Group
         return $this->description;
     }
 
-    public function getUsers(): iterable
-    {
-        return $this->users;
-    }
-
-    public function getCreatedOn(): DateTime
+    public function getCreatedOn(): \DateTime
     {
         return $this->createdOn;
     }
 
-    public function getShops(): iterable
+    public function getType(): GroupType
     {
-        return $this->shops;
+        return $this->type;
     }
 
-    public function getProducts(): iterable
+    public function setType(GroupType $type): self
     {
-        return $this->products;
+        $this->type = $type;
+
+        return $this;
     }
 
-    public function __construct(string $name)
+    /**
+     * @return User[]
+     */
+    public function getUsers(): Collection
     {
-        $this->id = IdGenerator::createId();
+        return $this->users;
+    }
+
+    public function __construct(Identifier $id, Name $name, GroupType $type, string|null $description)
+    {
+        $this->id = $id;
         $this->name = $name;
-        $this->createdOn = new DateTime();
-        $this->users = [];
-        $this->shops = [];
-        $this->products = [];
+        $this->type = $type;
+        $this->description = $description;
+        $this->users = new ArrayCollection();
+        $this->createdOn = new \DateTime();
+    }
+
+    public static function fromPrimitives(string $id, string $name, GROUP_TYPE $type, string|null $description): self
+    {
+        return new self(
+            ValueObjectFactory::createIdentifier($id),
+            ValueObjectFactory::createName($name),
+            ValueObjectFactory::createGroupType($type),
+            $description
+        );
     }
 }

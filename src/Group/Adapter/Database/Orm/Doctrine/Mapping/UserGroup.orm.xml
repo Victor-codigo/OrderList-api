@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping">
+
+    <entity name="Group\Domain\Model\UserGroup"
+            table="Users_Group"
+            repository-class="Group\Adapter\Database\Orm\Doctrine\Repository\GroupRepository">
+
+        <id name="id"
+            type="integer">
+            <generator strategy="AUTO" />
+        </id>
+
+        <field name="userId"
+               column="user_id"
+               type="IdentifierType"
+               column-definition="CHAR(36) NOT NULL"/>
+
+        <field name="groupId"
+               column="group_id"
+               type="IdentifierType"
+               length="36"/>
+
+        <field name="roles"
+               type="RolesType"/>
+
+        <!-- Users - Group -->
+        <many-to-one field="groups"
+                     target-entity="Group\Domain\Model\Group"
+                     inversed-by="users">
+
+            <join-column name="group_id"
+                         referenced-column-name="id" />
+        </many-to-one>
+    </entity>
+</doctrine-mapping>

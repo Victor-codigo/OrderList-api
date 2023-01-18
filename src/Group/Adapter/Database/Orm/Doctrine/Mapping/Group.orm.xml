@@ -1,47 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping">
-    
-    <entity name="Group\Domain\Model\Group" 
-        table="Groups">
-        
+
+    <entity name="Group\Domain\Model\Group"
+            table="Groups"
+            repository-class="Group\Adapter\Database\Orm\Doctrine\Repository\GroupRepository">
+
         <id name="id"
-            type="string"
+            type="IdentifierType"
             column-definition="CHAR(36) NOT NULL"/>
 
         <field name="name"
-               type="string"
+               type="NameType"
                length="50"
                unique="true"/>
-        
+
         <field name="description"
                type="string"
                column-definition="TEXT"
                nullable="true"/>
 
-        <field name="createdOn" 
+        <field name="type"
+               type="GroupTypeType"
+               length="50"/>
+
+        <field name="createdOn"
                column="created_on"
                type="datetime"/>
 
-        <!-- Groups - Users -->
-        <many-to-many field="users" 
-                      mapped-by="groups" 
-                      target-entity="User\Domain\Model\User"/>
-
-        <!-- Groups - Shops -->
-        <one-to-many field="shops" 
-                     target-entity="Shop\Domain\Model\Shop" 
-                     mapped-by="group" />
-
-        <!-- Groups - Product -->
-        <one-to-many field="products" target-entity="Product\Domain\Model\Product" mapped-by="group" />
-        
         <unique-constraints>
 
-            <unique-constraint name="u_groups_id" 
+            <unique-constraint name="u_groups_id"
                                columns="id"/>
 
-            <unique-constraint name="u_groups_name" 
+            <unique-constraint name="u_groups_name"
                                columns="name"/>
         </unique-constraints>
+
+        <!-- Groups - Users -->
+        <one-to-many field="users"
+                     target-entity="Group\Domain\Model\UserGroup"
+                     mapped-by="groups" />
+
     </entity>
 </doctrine-mapping>
