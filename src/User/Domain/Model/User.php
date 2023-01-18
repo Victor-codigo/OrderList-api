@@ -10,8 +10,6 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use User\Domain\Event\UserPreRegistered\UserPreRegisteredEvent;
 
 class User
@@ -24,7 +22,6 @@ class User
     private Password $password;
     private Roles $roles;
     private \DateTime $createdOn;
-    private Collection $groups;
     private Profile $profile;
 
     private UserPreRegisteredEvent $userPreRegisteredEventData;
@@ -75,11 +72,6 @@ class User
         return $this->id;
     }
 
-    public function getGroups(): Collection
-    {
-        return $this->groups;
-    }
-
     public function getProfile(): Profile
     {
         return $this->profile;
@@ -121,7 +113,6 @@ class User
         $this->roles = $roles;
         $this->password = $password;
         $this->createdOn = new \DateTime();
-        $this->groups = new ArrayCollection([]);
         $this->profile = new Profile($this->getId());
     }
 

@@ -2,51 +2,31 @@
 <doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping">
 
     <entity table="Users"
-            name="User\Domain\Model\User" 
+            name="User\Domain\Model\User"
             repository-class="User\Adapter\Database\Orm\Doctrine\Repository\UserRepository">
 
-        <id name="id" 
-            type="IdentifierType" 
+        <id name="id"
+            type="IdentifierType"
             column-definition="CHAR(36) NOT NULL"/>
 
-        <field name="email" 
-               type="EmailType" 
-               length="50" 
+        <field name="email"
+               type="EmailType"
+               length="50"
                unique="true"/>
 
-        <field name="password" 
-               type="PasswordType" 
+        <field name="password"
+               type="PasswordType"
                length="256"/>
-            
-        <field name="name" 
-               type="NameType" 
+
+        <field name="name"
+               type="NameType"
                length="50"/>
-        
-        <field name="roles" 
-               type="RolesType"
-               nullable="true"/>
+
+        <field name="roles"
+               type="RolesType"/>
 
         <field name="createdOn"
                type="datetime"/>
-
-        <!-- User - Group -->
-        <many-to-many field="groups" 
-                      inversed-by="users"
-                      target-entity="Group\Domain\Model\Group">
-
-            <join-table name="Users_groups">
-                <join-columns>
-
-                    <join-column name="user_id" 
-                                 referenced-column-name="id"/>
-                </join-columns>
-                <inverse-join-columns>
-
-                    <join-column name="group_id" 
-                                 referenced-column-name="id"/>
-                </inverse-join-columns>
-            </join-table>
-        </many-to-many> 
 
         <!-- User - Profile -->
         <one-to-one field="profile" target-entity="User\Domain\Model\Profile">
