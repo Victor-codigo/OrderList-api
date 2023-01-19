@@ -21,6 +21,11 @@ class ValueObjectStringFactory
         return new Name($name);
     }
 
+    public static function createDescription(string|null $description): Description
+    {
+        return new Description($description);
+    }
+
     public static function createPassword(string|null $password): Password
     {
         return new Password($password);

@@ -72,4 +72,7 @@ final class VALUE_OBJECTS_CONSTRAINTS
         GROUP_ROLES::ADMIN,
         GROUP_ROLES::USER,
     ];
+
+    public const DESCRIPTION_MAX_LENGTH = 500;
+    public const DESCRIPTION_TYPE = 'string';
 }

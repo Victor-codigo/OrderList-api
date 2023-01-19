@@ -12,6 +12,8 @@ interface ValueObjectStringFactoryInterface
 
     public static function createName(string|null $name): Name;
 
+    public static function createDescription(string|null $description): Description;
+
     public static function createPassword(string|null $password): Password;
 
     public static function createPath(string|null $path): Path;

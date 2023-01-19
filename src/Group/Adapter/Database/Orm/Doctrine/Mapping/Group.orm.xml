@@ -15,8 +15,8 @@
                unique="true"/>
 
         <field name="description"
-               type="string"
-               column-definition="TEXT"
+               type="DescriptionType"
+               length="500"
                nullable="true"/>
 
         <field name="type"

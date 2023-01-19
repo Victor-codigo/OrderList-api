@@ -14,6 +14,7 @@ use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\Object\UserImage;
 use Common\Domain\Model\ValueObject\Object\ValueObjectObjectFactory;
 use Common\Domain\Model\ValueObject\Object\ValueObjectObjectFactoryInterface;
+use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\JwtToken;
@@ -54,6 +55,11 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
     public static function createName(string|null $name): Name
     {
         return ValueObjectStringFactory::createName($name);
+    }
+
+    public static function createDescription(string|null $description): Description
+    {
+        return ValueObjectStringFactory::createDescription($description);
     }
 
     public static function createPassword(string|null $password): Password
