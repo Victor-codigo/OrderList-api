@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Group\Domain\Port;
+namespace Group\Domain\Port\Repository;
 
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Group\Domain\Model\Group;

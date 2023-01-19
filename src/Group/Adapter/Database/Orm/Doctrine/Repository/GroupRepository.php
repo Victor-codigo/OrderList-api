@@ -12,7 +12,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use Group\Domain\Model\Group;
-use Group\Domain\Port\GroupRepositoryInterface;
+use Group\Domain\Port\Repository\GroupRepositoryInterface;
 
 class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
 {
