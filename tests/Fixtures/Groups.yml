@@ -24,6 +24,19 @@ Common\Domain\Model\ValueObject\String\Name:
     __construct:
       value: "Group Two"
 
+Common\Domain\Model\ValueObject\String\Description:
+  description_random-{1..60}:
+    __construct:
+      value: <text(500)>
+
+  description_group_type_group:
+    __construct:
+      value: "This is a group of users"
+
+  description_group_type_user:
+    __construct:
+      value: "This is a group of one user"
+
 Common\Domain\Model\ValueObject\Object\GroupType:
   group_type_group:
     __construct:
@@ -39,18 +52,18 @@ Group\Domain\Model\Group:
       id: "@id_random-<current()>"
       name: "@name_random-<current()>"
       type: "@group_type_group"
-      description: "<text(50)>"
+      description: "@description_random-<current()>"
 
-  Group_type_group:
+  Group-type_group:
     __construct:
       id: "@id_group_type_group"
       name: "@name_group_type_group"
       type: "@group_type_group"
-      description: "This is a group of users"
+      description: "@description_group_type_group"
 
-  Group_type_user:
+  Group-type_user:
     __construct:
       id: "@id_group_type_user"
       name: "@name_group_type_user"
       type: "@group_type_user"
-      description: "This is a group of one user"
+      description: "@description_group_type_user"

@@ -1,0 +1,8 @@
+# -------------------------------------------------------------
+# GROUP CREATE
+group_create:
+  path: /api/v{api_version}/groups
+  methods: POST
+  controller: Group\Adapter\Http\Controller\GroupCreate\GroupCreateController
+  requirements:
+    api_version: '\d+[.\d]?'

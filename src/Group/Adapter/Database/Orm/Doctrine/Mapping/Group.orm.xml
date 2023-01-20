@@ -31,9 +31,6 @@
 
             <unique-constraint name="u_groups_id"
                                columns="id"/>
-
-            <unique-constraint name="u_groups_name"
-                               columns="name"/>
         </unique-constraints>
 
         <!-- Groups - Users -->

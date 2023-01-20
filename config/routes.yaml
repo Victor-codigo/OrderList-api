@@ -1,2 +1,2 @@
 routes:
-    resource: '../src/Common/Adapter/Framework/Config/Routes/routes.yaml'
+    resource: "../src/Common/Adapter/Framework/Config/Routes/routes.yaml"

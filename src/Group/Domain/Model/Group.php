@@ -6,6 +6,7 @@ namespace Group\Domain\Model;
 
 use App\Group\Domain\Model\GROUP_TYPE;
 use Common\Domain\Model\ValueObject\Object\GroupType;
+use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -17,7 +18,7 @@ final class Group
 {
     private Identifier $id;
     private Name $name;
-    private string|null $description;
+    private Description $description;
     private \DateTime $createdOn;
     private Collection $users;
     private GroupType $type;
@@ -39,14 +40,14 @@ final class Group
         return $this;
     }
 
-    public function setDescription(string $description): self
+    public function setDescription(Description $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getDescription(): string
+    public function getDescription(): Description
     {
         return $this->description;
     }
@@ -71,12 +72,19 @@ final class Group
     /**
      * @return User[]
      */
-    public function getUsers(): Collection
+    public function getUsersGroup(): Collection
     {
         return $this->users;
     }
 
-    public function __construct(Identifier $id, Name $name, GroupType $type, string|null $description)
+    public function addUserGroup(UserGroup $userGroup): self
+    {
+        $this->users->add($userGroup);
+
+        return $this;
+    }
+
+    public function __construct(Identifier $id, Name $name, GroupType $type, Description $description)
     {
         $this->id = $id;
         $this->name = $name;
@@ -92,7 +100,7 @@ final class Group
             ValueObjectFactory::createIdentifier($id),
             ValueObjectFactory::createName($name),
             ValueObjectFactory::createGroupType($type),
-            $description
+            ValueObjectFactory::createDescription($description)
         );
     }
 }

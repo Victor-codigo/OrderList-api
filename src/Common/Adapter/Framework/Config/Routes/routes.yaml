@@ -1,2 +1,5 @@
 User:
   resource: "../../../../../User/Adapter/Framework/Config/routes/routes.yaml"
+
+Group:
+  resource: "../../../../../Group/Adapter/Framework/Config/routes/routes.yaml"
