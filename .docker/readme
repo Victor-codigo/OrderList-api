@@ -1,0 +1,9 @@
+# Docker-dev-nginx-php-mysql
+
+Docker compose for developoment
+
+- Nginx
+- PHP 8
+- Mysql 8
+- Composer
+- Mail catcher

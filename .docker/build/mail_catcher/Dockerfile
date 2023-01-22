@@ -1,0 +1,1 @@
+From schickling/mailcatcher:latest

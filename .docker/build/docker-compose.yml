@@ -1,0 +1,101 @@
+version: "3.9"
+
+services:
+
+  # SERVIDOR WEB
+  nginx-api:
+    container_name: ${APP_NAME}-nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - PATH_PUBLIC=${VOLUME_CONTAINER_PATH_PUBLIC}
+    ports:
+      - ${SERVER_PORT}
+    volumes:
+      - $PWD/${VOLUME_HOST_PATH_PHP_SOURCE}:${VOLUME_CONTAINER_PATH_PHP_SOURCE}
+    networks:
+      - orderlist-network-api
+
+  # INTERPRETE PHP
+  php:
+    container_name: ${APP_NAME}-php-8.1
+    user: ${USER_ID}:${GROUP_ID}
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+      args:
+        - GROUP_ID=${GROUP_ID}
+        - USER_ID=${USER_ID}
+        - TIMEZONE=${TIMEZONE}
+        - WORK_DIR=${VOLUME_CONTAINER_PATH_PHP_SOURCE}
+        - GIT_NAME=${GIT_NAME}
+        - GIT_EMAIL={GIT_EMAIL}
+    restart: always
+    env_file:
+      - ./env/php.env
+    volumes:
+      - $PWD/${VOLUME_HOST_PATH_PHP_SOURCE}:${VOLUME_CONTAINER_PATH_PHP_SOURCE}
+    networks:
+      - orderlist-network-api
+    depends_on:
+      - nginx-api
+      - mysql
+
+  # BASE DE DATOS
+  mysql:
+    container_name: ${APP_NAME}-mysql-8.0
+    build:
+      context: ./mysql
+      dockerfile: Dockerfile
+      args:
+        - GROUP_ID=${GROUP_ID}
+        - USER_ID=${USER_ID}
+    restart: always
+    env_file:
+      - ./env/mysql.env
+    ports:
+      - ${MYSQL_PORT}
+    volumes:
+      - mysql-data:${VOLUME_CONTAINER_PATH_MYSQL}
+    networks:
+      - orderlist-network-api
+    depends_on:
+      - nginx-api
+
+  # COMPOSER
+  composer:
+    container_name: ${APP_NAME}-composer-2.0
+    build:
+      context: ./composer
+      dockerfile: Dockerfile
+    networks:
+      - orderlist-network-api
+    depends_on:
+      - nginx-api
+
+  # MAIL
+  mail_catcher:
+    container_name: ${APP_NAME}-mail_catcher
+    build:
+      context: ./mail_catcher
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - ${MAIL_SMTP_PORT}
+      - ${MAIL_WEB_INTERFACE_PORT}
+    networks:
+      - orderlist-network-api
+
+
+#VOLUMENES
+volumes:
+  # VOLUMEN BASE DE DATOS
+  mysql-data:
+    name: ${APP_NAME}-mysql-data
+
+# REDES
+networks:
+  orderlist-network-api:
+    name: orderlist-network-api
