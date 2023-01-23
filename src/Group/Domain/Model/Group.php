@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Group\Domain\Model;
 
-use App\Group\Domain\Model\GROUP_TYPE;
 use Common\Domain\Model\ValueObject\Object\GroupType;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -20,8 +19,8 @@ final class Group
     private Name $name;
     private Description $description;
     private \DateTime $createdOn;
-    private Collection $users;
     private GroupType $type;
+    private Collection $users;
 
     public function getId(): Identifier
     {
@@ -72,7 +71,7 @@ final class Group
     /**
      * @return User[]
      */
-    public function getUsersGroup(): Collection
+    public function getUsers(): Collection
     {
         return $this->users;
     }

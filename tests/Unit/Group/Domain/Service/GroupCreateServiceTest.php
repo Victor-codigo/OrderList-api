@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service;
 
-use App\Group\Domain\Model\GROUP_TYPE;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Group\Domain\Model\GROUP_ROLES;
+use Group\Domain\Model\GROUP_TYPE;
 use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;

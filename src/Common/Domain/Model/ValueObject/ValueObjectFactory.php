@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject;
 
-use App\Group\Domain\Model\GROUP_TYPE;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Array\ValueObjectArrayFactoryInterface;
 use Common\Domain\Model\ValueObject\Array\valueObjectArrayFactory;
@@ -26,6 +25,7 @@ use Common\Domain\Model\ValueObject\String\Url;
 use Common\Domain\Model\ValueObject\String\ValueObjectStringFactory;
 use Common\Domain\Model\ValueObject\String\ValueObjectStringFactoryInterface;
 use Common\Domain\Ports\FileUpload\FileInterface;
+use Group\Domain\Model\GROUP_TYPE;
 
 final class ValueObjectFactory implements ValueObjectStringFactoryInterface, ValueObjectArrayFactoryInterface, ValueObjectObjectFactoryInterface
 {

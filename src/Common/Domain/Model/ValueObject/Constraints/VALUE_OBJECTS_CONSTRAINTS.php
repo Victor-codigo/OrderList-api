@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Constraints;
 
-use App\Group\Domain\Model\GROUP_TYPE;
 use Group\Domain\Model\GROUP_ROLES;
+use Group\Domain\Model\GROUP_TYPE;
 use User\Domain\Model\USER_ROLES;
 
 final class VALUE_OBJECTS_CONSTRAINTS

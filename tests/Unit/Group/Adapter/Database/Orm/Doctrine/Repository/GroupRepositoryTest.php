@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Adapter\Database\Orm\Doctrine\Repository;
 
-use App\Group\Domain\Model\GROUP_TYPE;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
@@ -12,6 +11,7 @@ use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\Persistence\ObjectManager;
 use Group\Adapter\Database\Orm\Doctrine\Repository\GroupRepository;
+use Group\Domain\Model\GROUP_TYPE;
 use Group\Domain\Model\Group;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use PHPUnit\Framework\MockObject\MockObject;

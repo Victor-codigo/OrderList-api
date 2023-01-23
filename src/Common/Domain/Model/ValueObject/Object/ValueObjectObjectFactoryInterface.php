@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Object;
 
-use App\Group\Domain\Model\GROUP_TYPE;
 use Common\Domain\Ports\FileUpload\FileInterface;
+use Group\Domain\Model\GROUP_TYPE;
 
 interface ValueObjectObjectFactoryInterface
 {

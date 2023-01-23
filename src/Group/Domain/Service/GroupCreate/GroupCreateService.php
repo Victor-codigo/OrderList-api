@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Group\Domain\Service\GroupCreate;
 
-use App\Group\Domain\Model\GROUP_TYPE;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Group\Domain\Model\GROUP_ROLES;
+use Group\Domain\Model\GROUP_TYPE;
 use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
@@ -27,7 +27,7 @@ class GroupCreateService
     public function __invoke(GroupCreateDto $input): Group
     {
         $groupNew = $this->createGroup($input);
-        $userGroup = $this->createUserGroup($groupNew->getId(), $input->userCreatorId);
+        $userGroup = $this->createUserGroup($groupNew->getId(), $input->userCreatorId, $groupNew);
         $groupNew->addUserGroup($userGroup);
         $this->groupRepository->save($groupNew);
 
@@ -46,12 +46,16 @@ class GroupCreateService
         );
     }
 
-    private function createUserGroup(Identifier $groupId, Identifier $userId): UserGroup
+    private function createUserGroup(Identifier $groupId, Identifier $userId, Group $group): UserGroup
     {
+        $id = $this->groupRepository->generateId();
+
         return new UserGroup(
+            ValueObjectFactory::createIdentifier($id),
             $groupId,
             $userId,
-            ValueObjectFactory::createRoles([ValueObjectFactory::createRol(GROUP_ROLES::ADMIN)])
+            ValueObjectFactory::createRoles([ValueObjectFactory::createRol(GROUP_ROLES::ADMIN)]),
+            $group
         );
     }
 }

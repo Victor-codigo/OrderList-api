@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String;
 
-use App\Group\Domain\Model\GROUP_TYPE;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\GroupTypeType;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Group\Domain\Model\GROUP_TYPE;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String;
 
-use App\Group\Domain\Model\GROUP_TYPE;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\TypeBase;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Model\ValueObject\Object\GroupType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Error;
+use Group\Domain\Model\GROUP_TYPE;
 
 class GroupTypeType extends TypeBase
 {

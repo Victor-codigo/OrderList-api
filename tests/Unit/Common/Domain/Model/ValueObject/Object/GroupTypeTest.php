@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Object;
 
-use App\Group\Domain\Model\GROUP_TYPE;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\GroupType;
 use Common\Domain\Validation\VALIDATION_ERRORS;
+use Group\Domain\Model\GROUP_TYPE;
 use PHPUnit\Framework\TestCase;
 
 class GroupTypeTest extends TestCase

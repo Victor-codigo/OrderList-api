@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Group\Domain\Model;
+namespace Group\Domain\Model;
 
 enum GROUP_TYPE: string
 {
