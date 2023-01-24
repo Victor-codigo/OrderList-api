@@ -1,123 +1,123 @@
 Common\Domain\Model\ValueObject\String\Identifier:
-  id_random-{1..60}:
+  user_id_random-{1..60}:
     __construct:
       value: <uuid()>
 
-  id_random-0:
+  user_id_random-0:
     __construct:
       value: "1befdbe2-9c14-42f0-850f-63e061e33b8f"
 
-  id_user_active:
+  user_id_active:
     __construct:
       value: "2606508b-4516-45d6-93a6-c7cb416b7f3f"
 
-  id_user_admin:
+  user_id_admin:
     __construct:
       value: "6df60afd-f7c3-4c2c-b920-e265f266c560"
 
 Common\Domain\Model\ValueObject\String\Email:
-  email_random-{1..60}:
+  user_email_random-{1..60}:
     __construct:
       value: <email()>
 
-  email_random-0:
+  user_email_random-0:
     __construct:
       value: "email.already.exists@host.com"
 
-  email_user_active:
+  user_email_active:
     __construct:
       value: "email.already.active@host.com"
 
-  email_user_admin:
+  user_email_admin:
     __construct:
       value: "email.admin.active@host.com"
 
 Common\Domain\Model\ValueObject\String\Password:
-  password_random-{1..60}:
+  user_password_random-{1..60}:
     __construct:
       value: <word()>
 
-  password_random-0:
+  user_password_random-0:
     __construct:
       value: "\\$2y\\$04\\$A5XxYKU/w5tpX6BY9Kpf9uDrXY3seHrYwmx70qZ0DWyp0Lmvfo29q" #qwerty
 
-  password_user_active:
+  user_password_active:
     __construct:
       value: "\\$2y\\$13\\$/Bu6Y2ggoPUQNi1gCIqZyeapz0wWXTQEFsTRHggTR72u31Af6X2Du" #123456
 
-  password_user_admin:
+  user_password_admin:
     __construct:
       value: "\\$2y\\$13\\$/Bu6Y2ggoPUQNi1gCIqZyeapz0wWXTQEFsTRHggTR72u31Af6X2Du" #123456
 
 Common\Domain\Model\ValueObject\String\Name:
-  name_random-{1..60}:
+  user_name_random-{1..60}:
     __construct:
       value: <name()>
 
-  name_random-0:
+  user_name_random-0:
     __construct:
       value: "Juanito"
 
-  name_user_active:
+  user_name_active:
     __construct:
       value: "María"
 
-  name_user_admin:
+  user_name_admin:
     __construct:
       value: "Admin"
 
 Common\Domain\Model\ValueObject\Object\Rol:
-  rol_random:
+  user_rol_random:
     __construct:
       value: <(User\Domain\Model\USER_ROLES::NOT_ACTIVE)>
 
-  rol_active:
+  user_rol_active:
     __construct:
       value: <(User\Domain\Model\USER_ROLES::USER)>
 
-  rol_admin:
+  user_rol_admin:
     __construct:
       value: <(User\Domain\Model\USER_ROLES::ADMIN)>
 
 Common\Domain\Model\ValueObject\Array\Roles:
-  roles_random:
-    __construct: [["@rol_random"]]
+  user_roles_random:
+    __construct: [["@user_rol_random"]]
 
-  roles_user_active:
-    __construct: [["@rol_active"]]
+  user_roles_active:
+    __construct: [["@user_rol_active"]]
 
-  roles_user_admin:
-    __construct: [["@rol_admin"]]
+  user_roles_admin:
+    __construct: [["@user_rol_admin"]]
 
 User\Domain\Model\User:
-  User-{1..60}:
+  entity-user_random-{1..60}:
     __construct:
-      id: "@id_random-<current()>"
-      email: "@email_random-<current()>"
-      password: "@password_random-<current()>"
-      name: "@name_random-<current()>"
-      roles: "@roles_random"
+      id: "@user_id_random-<current()>"
+      email: "@user_email_random-<current()>"
+      password: "@user_password_random-<current()>"
+      name: "@user_name_random-<current()>"
+      roles: "@user_roles_random"
 
-  User-0:
+  entity-user_0:
     __construct:
-      id: "@id_random-0"
-      email: "@email_random-0"
-      password: "@password_random-0"
-      name: "@name_random-0"
-      roles: "@roles_random"
+      id: "@user_id_random-0"
+      email: "@user_email_random-0"
+      password: "@user_password_random-0"
+      name: "@user_name_random-0"
+      roles: "@user_roles_random"
 
-  User-active:
+  entity-user_active:
     __construct:
-      id: "@id_user_active"
-      email: "@email_user_active"
-      password: "@password_user_active"
-      name: "@name_user_active"
-      roles: "@roles_user_active"
+      id: "@user_id_active"
+      email: "@user_email_active"
+      password: "@user_password_active"
+      name: "@user_name_active"
+      roles: "@user_roles_active"
 
-  User-admin:
+  entity-user_admin:
     __construct:
-      id: "@id_user_admin"
-      email: "@email_user_admin"
-      password: "@password_user_admin"
-      name: "@name_user_admin"
-      roles: "@roles_user_admin"
+      id: "@user_id_admin"
+      email: "@user_email_admin"
+      password: "@user_password_admin"
+      name: "@user_name_admin"
+      roles: "@user_roles_admin"

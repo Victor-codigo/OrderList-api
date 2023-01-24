@@ -12,6 +12,7 @@ use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupCreate\Dto\GroupCreateInputDto;
+use Group\Application\GroupCreate\Exception\GroupNameAlreadyExistsException;
 use Group\Domain\Service\GroupCreate\Dto\GroupCreateDto;
 use Group\Domain\Service\GroupCreate\GroupCreateService;
 
@@ -37,7 +38,9 @@ class GroupCreateUseCase extends ServiceBase
             );
 
             return $group->getId();
-        } catch (DBUniqueConstraintException|DBConnectionException $e) {
+        } catch (DBUniqueConstraintException) {
+            throw GroupNameAlreadyExistsException::fromMessage('The group name already exists');
+        } catch (DBConnectionException) {
             throw DomainErrorException::fromMessage('An error has been occurred');
         }
     }

@@ -76,6 +76,16 @@ final class Group
         return $this->users;
     }
 
+    /**
+     * @param UserGroup[] $usersGroup
+     */
+    public function setUsers(array $usersGroup): self
+    {
+        $this->users = $usersGroup;
+
+        return $this;
+    }
+
     public function addUserGroup(UserGroup $userGroup): self
     {
         $this->users->add($userGroup);

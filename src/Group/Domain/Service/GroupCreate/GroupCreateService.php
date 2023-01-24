@@ -48,10 +48,7 @@ class GroupCreateService
 
     private function createUserGroup(Identifier $groupId, Identifier $userId, Group $group): UserGroup
     {
-        $id = $this->groupRepository->generateId();
-
         return new UserGroup(
-            ValueObjectFactory::createIdentifier($id),
             $groupId,
             $userId,
             ValueObjectFactory::createRoles([ValueObjectFactory::createRol(GROUP_ROLES::ADMIN)]),

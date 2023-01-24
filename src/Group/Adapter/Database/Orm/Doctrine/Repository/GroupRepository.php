@@ -42,6 +42,7 @@ class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
      */
     public function findGroupByIdOrFail(Identifier $id): Group
     {
+        /** @var group $group */
         $group = $this->findOneBy(['id' => $id]);
 
         if (empty($group)) {

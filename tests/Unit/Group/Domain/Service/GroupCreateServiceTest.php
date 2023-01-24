@@ -6,7 +6,9 @@ namespace Test\Unit\Group\Domain\Service;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use DateTime;
 use Group\Domain\Model\GROUP_ROLES;
 use Group\Domain\Model\GROUP_TYPE;
 use Group\Domain\Model\Group;
@@ -41,11 +43,13 @@ class GroupCreateServiceTest extends DataBaseTestCase
 
     private function assertGroupIsCreated(Group $group, GroupCreateDto $groupCreateDto): void
     {
+        $this->assertInstanceOf(Identifier::class, $group->getId());
         $this->assertSame($groupCreateDto->name, $group->getName());
         $this->assertSame($groupCreateDto->description, $group->getDescription());
         $this->assertEquals(ValueObjectFactory::createGroupType(GROUP_TYPE::USER), $group->getType());
+        $this->assertInstanceOf(DateTime::class, $group->getCreatedOn());
 
-        $userGroupCollection = $group->getUsersGroup();
+        $userGroupCollection = $group->getUsers();
         $this->assertCount(1, $userGroupCollection);
         $this->assertContainsOnlyInstancesOf(UserGroup::class, $userGroupCollection);
         /** @var UserGroup $userGroup */

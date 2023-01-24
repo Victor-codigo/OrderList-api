@@ -36,7 +36,12 @@
         <!-- Groups - Users -->
         <one-to-many field="users"
                      target-entity="Group\Domain\Model\UserGroup"
-                     mapped-by="groups" />
+                     mapped-by="group">
+
+              <cascade>
+                     <cascade-all/>
+              </cascade>
+       </one-to-many>
 
     </entity>
 </doctrine-mapping>

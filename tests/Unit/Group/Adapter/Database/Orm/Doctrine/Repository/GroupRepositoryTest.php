@@ -11,8 +11,10 @@ use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\Persistence\ObjectManager;
 use Group\Adapter\Database\Orm\Doctrine\Repository\GroupRepository;
+use Group\Domain\Model\GROUP_ROLES;
 use Group\Domain\Model\GROUP_TYPE;
 use Group\Domain\Model\Group;
+use Group\Domain\Model\UserGroup;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\Unit\DataBaseTestCase;
@@ -50,15 +52,30 @@ class GroupRepositoryTest extends DataBaseTestCase
         );
     }
 
+    private function getNewUserGroup(Group $group, array $roles): UserGroup
+    {
+        return UserGroup::fromPrimitives(
+            $group->getId()->getValue(),
+            '141a0e83-fa01-453f-8177-63c87dba56fd',
+            $roles,
+            $group
+        );
+    }
+
     /** @test */
     public function itShouldSaveTheGroupInDatabase(): void
     {
         $groupNew = $this->getNewGroup();
+        $usergroupNew = $this->getNewUserGroup($groupNew, [GROUP_ROLES::ADMIN]);
+        $groupNew->addUserGroup($usergroupNew);
         $this->object->save($groupNew);
 
-        $userSaved = $this->object->findOneBy(['id' => $groupNew->getId()]);
+        /** @var Group $groupSaved */
+        $groupSaved = $this->object->findOneBy(['id' => $groupNew->getId()]);
 
-        $this->assertSame($groupNew, $userSaved);
+        $this->assertSame($groupNew, $groupSaved);
+        $this->assertCount(1, $groupSaved->getUsers());
+        $this->assertEquals($usergroupNew, $groupSaved->getUsers()->get(0));
     }
 
     /** @test */

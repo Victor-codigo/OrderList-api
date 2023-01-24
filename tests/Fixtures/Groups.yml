@@ -1,69 +1,69 @@
 Common\Domain\Model\ValueObject\String\Identifier:
-  id_random-{1..60}:
+  group_id_random-{1..60}:
     __construct:
       value: <uuid()>
 
-  id_group_type_group:
+  group_id_type_group:
     __construct:
       value: "fdb242b4-bac8-4463-88d0-0941bb0beee0"
 
-  id_group_type_user:
+  group_id_type_user:
     __construct:
       value: "a5002966-dbf7-4f76-a862-23a04b5ca465"
 
 Common\Domain\Model\ValueObject\String\Name:
-  name_random-{1..60}:
+  group_name_random-{1..60}:
     __construct:
       value: <name()>
 
-  name_group_type_group:
+  group_name_type_group:
     __construct:
-      value: "Group One"
+      value: "GroupOne"
 
-  name_group_type_user:
+  group_name_type_user:
     __construct:
-      value: "Group Two"
+      value: "GroupTwo"
 
 Common\Domain\Model\ValueObject\String\Description:
-  description_random-{1..60}:
+  group_description_random-{1..60}:
     __construct:
       value: <text(500)>
 
-  description_group_type_group:
+  group_description_type_group:
     __construct:
       value: "This is a group of users"
 
-  description_group_type_user:
+  group_description_type_user:
     __construct:
       value: "This is a group of one user"
 
 Common\Domain\Model\ValueObject\Object\GroupType:
   group_type_group:
     __construct:
-      value: <(App\Group\Domain\Model\GROUP_TYPE::GROUP)>
+      value: <(Group\Domain\Model\GROUP_TYPE::GROUP)>
 
   group_type_user:
     __construct:
-      value: <(App\Group\Domain\Model\GROUP_TYPE::USER)>
+      value: <(Group\Domain\Model\GROUP_TYPE::USER)>
 
 Group\Domain\Model\Group:
-  Group-{1..60}:
+  entity-group_random-{1..60}:
     __construct:
-      id: "@id_random-<current()>"
-      name: "@name_random-<current()>"
+      id: "@group_id_random-<current()>"
+      name: "@group_name_random-<current()>"
       type: "@group_type_group"
-      description: "@description_random-<current()>"
+      description: "@group_description_random-<current()>"
 
-  Group-type_group:
+  entity-group_type_group:
     __construct:
-      id: "@id_group_type_group"
-      name: "@name_group_type_group"
+      id: "@group_id_type_group"
+      name: "@group_name_type_group"
       type: "@group_type_group"
-      description: "@description_group_type_group"
+      description: "@group_description_type_group"
 
-  Group-type_user:
+  entity-group_type_user:
     __construct:
-      id: "@id_group_type_user"
-      name: "@name_group_type_user"
+      id: "@group_id_type_user"
+      name: "@group_name_type_user"
       type: "@group_type_user"
-      description: "@description_group_type_user"
+      description: "@group_description_type_user"

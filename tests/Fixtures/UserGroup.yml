@@ -1,0 +1,37 @@
+Common\Domain\Model\ValueObject\Object\Rol:
+  groupuser_rol_admin:
+    __construct:
+      value: <(Group\Domain\Model\GROUP_ROLES::ADMIN)>
+
+  groupuser_rol_user:
+    __construct:
+      value: <(Group\Domain\Model\GROUP_ROLES::USER)>
+
+Common\Domain\Model\ValueObject\Array\Roles:
+  groupuser_roles_admin:
+    __construct: [["@groupuser_rol_admin"]]
+
+  groupuser_roles_user:
+    __construct: [["@groupuser_rol_user"]]
+
+Group\Domain\Model\UserGroup:
+  entity-groupuser_random-{1..60}:
+    __construct:
+      groupId: "@entity-group_random-<current()>->getId"
+      userId: "@entity-user_random-<current()>->getId"
+      roles: "@groupuser_roles_admin"
+      group: "@entity-group_random-<current()>"
+
+  entity-groupuser_roles_group:
+    __construct:
+      groupId: "@entity-group_type_group->getId"
+      userId: "@entity-user_active->getId"
+      roles: "@groupuser_roles_user"
+      group: "@entity-group_type_group"
+
+  entity-groupuser_roles_user:
+    __construct:
+      groupId: "@entity-group_type_user->getId"
+      userId: "@entity-user_active->getId"
+      roles: "@groupuser_roles_user"
+      group: "@entity-group_type_user"

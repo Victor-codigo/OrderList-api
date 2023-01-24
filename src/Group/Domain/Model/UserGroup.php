@@ -5,23 +5,26 @@ declare(strict_types=1);
 namespace Group\Domain\Model;
 
 use Common\Domain\Model\ValueObject\Array\Roles;
+use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Doctrine\Common\Collections\Collection;
 
 class UserGroup
 {
     private int $id;
-    private Collection $groups;
 
     public function __construct(
         private Identifier $groupId,
         private Identifier $userId,
-        private Roles $roles
+        private Roles $roles,
+        private Group $group
     ) {
     }
 
-    public static function fromPrimitives(string $userId, string $groupId, array $roles): self
+    /**
+     * @param Rol[] $roles
+     */
+    public static function fromPrimitives(string $groupId, string $userId, array $roles, group $group): self
     {
         $roles = array_map(
             fn (GROUP_ROLES $rol) => ValueObjectFactory::createRol($rol),
@@ -29,10 +32,16 @@ class UserGroup
         );
 
         return new self(
-            ValueObjectFactory::createIdentifier($userId),
             ValueObjectFactory::createIdentifier($groupId),
+            ValueObjectFactory::createIdentifier($userId),
             ValueObjectFactory::createRoles($roles),
+            $group
         );
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     public function getUserId(): Identifier
@@ -67,6 +76,18 @@ class UserGroup
     public function setRoles(Roles $roles): self
     {
         $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function getGroup(): Group
+    {
+        return $this->group;
+    }
+
+    public function setGroup(Group $group): self
+    {
+        $this->group = $group;
 
         return $this;
     }

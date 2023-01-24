@@ -7,6 +7,7 @@
 
         <id name="id"
             type="integer">
+
             <generator strategy="AUTO" />
         </id>
 
@@ -24,7 +25,7 @@
                type="RolesType"/>
 
         <!-- Users - Group -->
-        <many-to-one field="groups"
+        <many-to-one field="group"
                      target-entity="Group\Domain\Model\Group"
                      inversed-by="users">
 
