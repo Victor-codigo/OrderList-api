@@ -6,3 +6,13 @@ group_create:
   controller: Group\Adapter\Http\Controller\GroupCreate\GroupCreateController
   requirements:
     api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# GROUP CHANNGE USER ROLE
+# -------------------------------------------------------------
+group_user_role_change:
+  path: /api/v{api_version}/groups/user/role
+  methods: PUT
+  controller: Group\Adapter\Http\Controller\GroupUserRoleChange\GroupUserRoleChangeController
+  requirements:
+    api_version: '\d+[.\d]?'

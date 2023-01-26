@@ -3,7 +3,7 @@
 
     <entity name="Group\Domain\Model\UserGroup"
             table="Users_Group"
-            repository-class="Group\Adapter\Database\Orm\Doctrine\Repository\GroupRepository">
+            repository-class="Group\Adapter\Database\Orm\Doctrine\Repository\UserGroupRepository">
 
         <id name="id"
             type="integer">

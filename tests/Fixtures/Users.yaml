@@ -11,6 +11,10 @@ Common\Domain\Model\ValueObject\String\Identifier:
     __construct:
       value: "2606508b-4516-45d6-93a6-c7cb416b7f3f"
 
+  user_id_other:
+    __construct:
+      value: "b11c9be1-b619-4ef5-be1b-a1cd9ef265b7"
+
   user_id_admin:
     __construct:
       value: "6df60afd-f7c3-4c2c-b920-e265f266c560"
@@ -28,6 +32,10 @@ Common\Domain\Model\ValueObject\String\Email:
     __construct:
       value: "email.already.active@host.com"
 
+  user_email_other:
+    __construct:
+      value: "email.other.active@host.com"
+
   user_email_admin:
     __construct:
       value: "email.admin.active@host.com"
@@ -42,6 +50,10 @@ Common\Domain\Model\ValueObject\String\Password:
       value: "\\$2y\\$04\\$A5XxYKU/w5tpX6BY9Kpf9uDrXY3seHrYwmx70qZ0DWyp0Lmvfo29q" #qwerty
 
   user_password_active:
+    __construct:
+      value: "\\$2y\\$13\\$/Bu6Y2ggoPUQNi1gCIqZyeapz0wWXTQEFsTRHggTR72u31Af6X2Du" #123456
+
+  user_password_other:
     __construct:
       value: "\\$2y\\$13\\$/Bu6Y2ggoPUQNi1gCIqZyeapz0wWXTQEFsTRHggTR72u31Af6X2Du" #123456
 
@@ -62,6 +74,10 @@ Common\Domain\Model\ValueObject\String\Name:
     __construct:
       value: "María"
 
+  user_name_other:
+    __construct:
+      value: "Manola"
+
   user_name_admin:
     __construct:
       value: "Admin"
@@ -75,6 +91,10 @@ Common\Domain\Model\ValueObject\Object\Rol:
     __construct:
       value: <(User\Domain\Model\USER_ROLES::USER)>
 
+  user_rol_other:
+    __construct:
+      value: <(User\Domain\Model\USER_ROLES::USER)>
+
   user_rol_admin:
     __construct:
       value: <(User\Domain\Model\USER_ROLES::ADMIN)>
@@ -85,6 +105,9 @@ Common\Domain\Model\ValueObject\Array\Roles:
 
   user_roles_active:
     __construct: [["@user_rol_active"]]
+
+  user_roles_other:
+    __construct: [["@user_rol_other"]]
 
   user_roles_admin:
     __construct: [["@user_rol_admin"]]
@@ -113,6 +136,14 @@ User\Domain\Model\User:
       password: "@user_password_active"
       name: "@user_name_active"
       roles: "@user_roles_active"
+
+  entity-user_other:
+    __construct:
+      id: "@user_id_other"
+      email: "@user_email_other"
+      password: "@user_password_other"
+      name: "@user_name_other"
+      roles: "@user_roles_other"
 
   entity-user_admin:
     __construct:

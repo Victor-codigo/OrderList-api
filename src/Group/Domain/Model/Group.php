@@ -13,7 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use User\Domain\Model\User;
 
-final class Group
+class Group
 {
     private Identifier $id;
     private Name $name;
@@ -81,7 +81,7 @@ final class Group
      */
     public function setUsers(array $usersGroup): self
     {
-        $this->users = $usersGroup;
+        $this->users = new ArrayCollection($usersGroup);
 
         return $this;
     }
