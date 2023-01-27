@@ -8,6 +8,16 @@ group_create:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
+# GROUP USER ADD
+# -------------------------------------------------------------
+group_user_add:
+  path: /api/v{api_version}/groups/user
+  methods: POST
+  controller: Group\Adapter\Http\Controller\GroupUserAdd\GroupUserAddController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
 # GROUP CHANNGE USER ROLE
 # -------------------------------------------------------------
 group_user_role_change:

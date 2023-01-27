@@ -12,7 +12,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\Persistence\ObjectManager;
-use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
+use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\Unit\DataBaseTestCase;
 use User\Adapter\Database\Orm\Doctrine\Repository\UserRepository;
@@ -21,7 +21,7 @@ use User\Domain\Model\User;
 
 class UserRepositoryTest extends DataBaseTestCase
 {
-    use RefreshDatabaseTrait;
+    use ReloadDatabaseTrait;
 
     private const USER_ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
     private const USER_EMAIL = 'email.already.exists@host.com';
