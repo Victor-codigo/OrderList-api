@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Group\Domain\Service;
+namespace Test\Unit\Group\Domain\Service\GroupCreate;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use DateTime;
 use Group\Domain\Model\GROUP_ROLES;
 use Group\Domain\Model\GROUP_TYPE;
 use Group\Domain\Model\Group;
@@ -47,7 +46,7 @@ class GroupCreateServiceTest extends DataBaseTestCase
         $this->assertSame($groupCreateDto->name, $group->getName());
         $this->assertSame($groupCreateDto->description, $group->getDescription());
         $this->assertEquals(ValueObjectFactory::createGroupType(GROUP_TYPE::USER), $group->getType());
-        $this->assertInstanceOf(DateTime::class, $group->getCreatedOn());
+        $this->assertInstanceOf(\DateTime::class, $group->getCreatedOn());
 
         $userGroupCollection = $group->getUsers();
         $this->assertCount(1, $userGroupCollection);
