@@ -15,7 +15,7 @@ use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserAdd\Dto\GroupUserAddInputDto;
 use Group\Application\GroupUserAdd\Dto\GroupUserAddOutputDto;
 use Group\Application\GroupUserAdd\Exception\GroupUserAddGroupNotFoundException;
-use Group\Application\GroupUserAdd\Exception\GroupUserRoleChangePermissionException;
+use Group\Application\GroupUserRoleChange\Exception\GroupUserRoleChangePermissionException;
 use Group\Domain\Model\GROUP_ROLES;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
