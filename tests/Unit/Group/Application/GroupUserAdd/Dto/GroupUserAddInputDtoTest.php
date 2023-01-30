@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Group\Application\GroupUserAdd;
+namespace Test\Unit\Group\Application\GroupUserAdd\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Identifier;
