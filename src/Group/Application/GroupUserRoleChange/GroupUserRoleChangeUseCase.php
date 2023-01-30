@@ -15,12 +15,14 @@ use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserRoleChange\Dto\GroupUserRoleChangeInputDto;
 use Group\Application\GroupUserRoleChange\Dto\GroupUserRoleChangeOutputDto;
+use Group\Application\GroupUserRoleChange\Exception\GroupUserRoleChangeGroupWithoutAdminsException;
 use Group\Application\GroupUserRoleChange\Exception\GroupUserRoleChangePermissionException;
 use Group\Application\GroupUserRoleChange\Exception\GroupUserRoleChangeUsersNotFoundException;
 use Group\Domain\Model\GROUP_ROLES;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupUserRoleChange\Dto\GroupUserRoleChangeDto;
+use Group\Domain\Service\GroupUserRoleChange\Exception\GroupWithoutAdminsException;
 use Group\Domain\Service\GroupUserRoleChange\GroupUserRoleChangeService;
 use User\Domain\Model\User;
 
@@ -44,6 +46,8 @@ class GroupUserRoleChangeUseCase extends ServiceBase
             );
 
             return $this->createGroupUserRoleChangeOutputDto($usersMoidifiedId);
+        } catch (GroupWithoutAdminsException) {
+            throw GroupUserRoleChangeGroupWithoutAdminsException::fromMessage('It should be at least one admin in the group');
         } catch (DBNotFoundException) {
             throw GroupUserRoleChangeUsersNotFoundException::fromMessage('Users do not exist in the group');
         } catch (DBUniqueConstraintException|DBConnectionException) {

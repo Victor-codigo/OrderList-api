@@ -217,4 +217,27 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
         $this->assertEquals(['users' => ['uuid_invalid_characters']], (array) $responseContent->errors);
     }
+
+    /** @test */
+    public function itShouldFailGroupSouldHaveAtleastOneAdmin(): void
+    {
+        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'users' => array_merge(self::USERS_ID, [self::GROUP_USER_ADMIN_ID]),
+                'admin' => false,
+            ])
+        );
+
+        $response = $this->client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['group_not_admins'], Response::HTTP_CONFLICT);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('It should be at least one admin in the group', $responseContent->message);
+        $this->assertArrayHasKey('group_not_admins', (array) $responseContent->errors);
+    }
 }

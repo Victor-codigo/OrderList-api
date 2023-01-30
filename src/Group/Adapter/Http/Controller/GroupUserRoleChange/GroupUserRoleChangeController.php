@@ -67,6 +67,21 @@ use User\Domain\Port\User\UserInterface;
             )
         ),
         new OA\Response(
+            response: Response::HTTP_CONFLICT,
+            description: 'The group must have at least one administrator',
+            content: new OA\MediaType(
+                mediaType: 'application/json',
+                schema: new OA\Schema(
+                    properties: [
+                        new OA\Property(property: 'status', type: 'string', example: 'error'),
+                        new OA\Property(property: 'message', type: 'string', example: 'It should be at least one admin in the group'),
+                        new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_not_admins, string>')),
+                    ]
+                )
+            )
+        ),
+        new OA\Response(
             response: Response::HTTP_UNAUTHORIZED,
             description: 'The user is not admin in the group',
             content: new OA\MediaType(
