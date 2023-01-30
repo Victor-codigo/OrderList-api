@@ -75,6 +75,12 @@ interface ValidationInterface
 
     public function range(int|\DateTime $min, int|\DateTime $max): self;
 
+    public function count(int $value): self;
+
+    public function countRange(int $min, int $max): self;
+
+    public function countDivisibleBy(int $divisibleBy): self;
+
     public function unique(): self;
 
     public function positive(): self;

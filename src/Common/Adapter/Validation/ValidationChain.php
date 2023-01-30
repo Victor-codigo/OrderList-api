@@ -11,6 +11,7 @@ use Common\Adapter\Validation\Validations\ValidationDateTime;
 use Common\Adapter\Validation\Validations\ValidationFactory;
 use Common\Adapter\Validation\Validations\ValidationFile;
 use Common\Adapter\Validation\Validations\ValidationGeneral;
+use Common\Adapter\Validation\Validations\ValidationIterable;
 use Common\Adapter\Validation\Validations\ValidationPositiveNegative;
 use Common\Adapter\Validation\Validations\ValidationString;
 use Common\Domain\Validation\EMAIL_TYPES;
@@ -27,6 +28,7 @@ class ValidationChain implements ValidationInterface
     private ValidationPositiveNegative $positiveNegative;
     private ValidationString $string;
     private ValidationChoice $choice;
+    private ValidationIterable $iterable;
     private Validator $validator;
 
     public function __construct()
@@ -38,6 +40,7 @@ class ValidationChain implements ValidationInterface
         $this->general = ValidationFactory::createValidationGeneral();
         $this->positiveNegative = ValidationFactory::createValidationPositiveNegative();
         $this->string = ValidationFactory::createValidationString();
+        $this->iterable = ValidationFactory::createValidationIterable();
         $this->choice = ValidationFactory::createValidationChoice();
     }
 
@@ -232,6 +235,27 @@ class ValidationChain implements ValidationInterface
     public function range(int|\DateTime $min, int|\DateTime $max): self
     {
         $this->validator->setConstraint($this->comparison->range($min, $max));
+
+        return $this;
+    }
+
+    public function count(int $value): self
+    {
+        $this->validator->setConstraint($this->iterable->count($value));
+
+        return $this;
+    }
+
+    public function countRange(int $min, int $max): self
+    {
+        $this->validator->setConstraint($this->iterable->countRange($min, $max));
+
+        return $this;
+    }
+
+    public function countDivisibleBy(int $divisibleBy): self
+    {
+        $this->validator->setConstraint($this->iterable->countDivisibleBy($divisibleBy));
 
         return $this;
     }

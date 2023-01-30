@@ -162,6 +162,28 @@ class ConstraintFactory
         ]);
     }
 
+    public static function count(int $value): ConstraintDto
+    {
+        return new ConstraintDto(CONSTRAINTS_NAMES::ITERABLE_EQUAL, [
+            'value' => $value,
+        ]);
+    }
+
+    public static function countRange(int $min, int $max): ConstraintDto
+    {
+        return new ConstraintDto(CONSTRAINTS_NAMES::ITERABLE_RANGE, [
+            'min' => $min,
+            'max' => $max,
+        ]);
+    }
+
+    public static function countDivisibleBy(int $dividibleBy): ConstraintDto
+    {
+        return new ConstraintDto(CONSTRAINTS_NAMES::ITERABLE_DIVISIBLE_BY, [
+            'divisibleBy' => $dividibleBy,
+        ]);
+    }
+
     public static function unique(): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::UNIQUE, null);

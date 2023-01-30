@@ -110,4 +110,9 @@ enum VALIDATION_ERRORS
     case URL;
 
     case LANGUAGE;
+
+    case ITERABLE_NOT_EQUAL;
+    case ITERABLE_TOO_FEW;
+    case ITERABLE_TOO_MANY;
+    case ITERABLE_DIVISIBLE_BY;
 }

@@ -50,4 +50,8 @@ enum CONSTRAINTS_NAMES: string
     case URL = 'url';
 
     case LANGUAGE = 'language';
+
+    case ITERABLE_EQUAL = 'iterableEqual';
+    case ITERABLE_RANGE = 'iterableRange';
+    case ITERABLE_DIVISIBLE_BY = 'iterableDivisibleBy';
 }

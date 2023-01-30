@@ -36,6 +36,11 @@ class ValidationFactory
         return new ValidationString();
     }
 
+    public static function createValidationIterable(): ValidationIterable
+    {
+        return new ValidationIterable();
+    }
+
     public static function createValidationChoice(): ValidationChoice
     {
         return new ValidationChoice();
