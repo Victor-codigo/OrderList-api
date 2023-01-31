@@ -32,4 +32,16 @@ abstract class RepositoryBase extends ServiceEntityRepository
     {
         return Uuid::isValid($id);
     }
+
+    protected function getClassUnqualifiedName(string $qualifiedName): string
+    {
+        $qualifiedNameArray = explode('\\', $qualifiedName);
+
+        return end($qualifiedNameArray);
+    }
+
+    protected function getString(string|int $constant): string
+    {
+        return (string) $constant;
+    }
 }
