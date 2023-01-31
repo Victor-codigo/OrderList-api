@@ -17,10 +17,11 @@ use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersMaxNumberExcededExc
 
 class GroupUserAddService
 {
+    private const GROUP_USERS_MAX = AppConfig::GROUP_USERS_MAX;
+
     public function __construct(
         private UserGroupRepositoryInterface $userGroupRepository,
-        private GroupRepositoryInterface $groupRepository,
-        private AppConfig $appConfig
+        private GroupRepositoryInterface $groupRepository
     ) {
     }
 
@@ -88,7 +89,7 @@ class GroupUserAddService
     {
         $groupUsersNumber = $this->userGroupRepository->findGroupUsersNumberOrFail($groupId);
 
-        if ($this->appConfig::GROUP_USERS_MAX < $groupUsersNumber + $numUsersToAdd) {
+        if (self::GROUP_USERS_MAX < $groupUsersNumber + $numUsersToAdd) {
             throw GroupAddUsersMaxNumberExcededException::fromMessage("Group [{$groupId}] maximum user number overpass");
         }
     }

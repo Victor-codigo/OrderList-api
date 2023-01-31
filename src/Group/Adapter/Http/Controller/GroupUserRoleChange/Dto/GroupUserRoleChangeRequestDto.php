@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Group\Adapter\Http\Controller\GroupUserRoleChange\Dto;
 
 use Common\Adapter\Http\Dto\RequestDtoInterface;
+use Common\Domain\Config\AppConfig;
 use Symfony\Component\HttpFoundation\Request;
 
 class GroupUserRoleChangeRequestDto implements RequestDtoInterface
 {
-    private const USERS_NUM_MAX = 50;
+    private const USERS_NUM_MAX = AppConfig::ENDPOINT_GROUP_USER_ROLE_CHANGE_MAX_USERS;
 
     public readonly string|null $groupId;
     /**

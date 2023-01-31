@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupUserAdd;
 
-use Common\Domain\Config\AppConfig;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -34,7 +33,7 @@ class GroupUserAddServiceTest extends TestCase
 
         $this->userGroupRepository = $this->createMock(UserGroupRepositoryInterface::class);
         $this->groupRepository = $this->createMock(GroupRepositoryInterface::class);
-        $this->object = new GroupUserAddService($this->userGroupRepository, $this->groupRepository, new AppConfig());
+        $this->object = new GroupUserAddService($this->userGroupRepository, $this->groupRepository);
     }
 
     /**
