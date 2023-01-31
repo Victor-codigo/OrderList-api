@@ -22,6 +22,12 @@
         <testsuite name="Project Test Suite">
             <directory>tests</directory>
         </testsuite>
+        <testsuite name="FunctionalTest">
+            <directory suffix="Test.php">tests/Functional</directory>
+        </testsuite>
+        <testsuite name="UnitTest">
+            <directory suffix="Test.php">tests/Unit</directory>
+        </testsuite>
     </testsuites>
 
     <coverage processUncoveredFiles="true">
