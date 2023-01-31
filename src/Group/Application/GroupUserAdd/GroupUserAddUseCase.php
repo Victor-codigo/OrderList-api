@@ -14,12 +14,14 @@ use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserAdd\Dto\GroupUserAddInputDto;
 use Group\Application\GroupUserAdd\Dto\GroupUserAddOutputDto;
+use Group\Application\GroupUserAdd\Exception\GroupUserAddGroupMaximunUsersNumberExcededException;
 use Group\Application\GroupUserAdd\Exception\GroupUserAddGroupNotFoundException;
 use Group\Application\GroupUserRoleChange\Exception\GroupUserRoleChangePermissionException;
 use Group\Domain\Model\GROUP_ROLES;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupUserAdd\Dto\GroupUserAddDto;
+use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersMaxNumberExcededException;
 use Group\Domain\Service\GroupUserAdd\GroupUserAddService;
 use User\Domain\Model\User;
 
@@ -43,6 +45,8 @@ class GroupUserAddUseCase extends ServiceBase
             );
 
             return $this->createGroupUserAddOutputDto($usersAdded);
+        } catch (GroupAddUsersMaxNumberExcededException) {
+            throw GroupUserAddGroupMaximunUsersNumberExcededException::fromMessage('Group User number exceded');
         } catch (DBNotFoundException) {
             throw GroupUserAddGroupNotFoundException::fromMessage('Group not found');
         } catch (DBConnectionException) {

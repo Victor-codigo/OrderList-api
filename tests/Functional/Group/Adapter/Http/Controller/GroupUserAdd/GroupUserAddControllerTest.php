@@ -20,6 +20,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     private const USER_NAME_NOT_GROUP_ADMIN = 'email.admin.active@host.com';
     private const USER_PASSWORD_NOT_GROUP_ADMIN = '123456';
     private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const GROUP_USERS_100_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const USER_TO_ADD_IDS = [
         'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7',
         '1552b279-5f78-4585-ae1b-31be2faabba8',
@@ -281,6 +282,29 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Permissions denied', $responseContent->message);
         $this->assertSame(['permission' => 'Permissions denied'], (array) $responseContent->errors);
+    }
+
+    /** @test */
+    public function itShouldFailGroupUsersNumberExceded100(): void
+    {
+        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_USERS_100_ID,
+                'users' => self::USER_TO_ADD_IDS,
+                'admin' => true,
+            ])
+        );
+
+        $response = $this->client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['group_users_exceded'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Group User number exceded', $responseContent->message);
+        $this->assertSame(['group_users_exceded' => 'Group User number exceded'], (array) $responseContent->errors);
     }
 
     /** @test */

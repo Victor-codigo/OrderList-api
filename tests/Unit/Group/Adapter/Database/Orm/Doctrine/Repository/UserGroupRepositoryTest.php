@@ -186,4 +186,20 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $this->expectException(DBConnectionException::class);
         $this->object->save($usersGroup);
     }
+
+    /** @test */
+    public function itShouldFindTheNumberOfUsersInTheGroup(): void
+    {
+        $groupUsers = $this->object->findBy(['groupId' => ValueObjectFactory::createIdentifier(self::GROUP_ID)]);
+        $return = $this->object->findGroupUsersNumberOrFail(ValueObjectFactory::createIdentifier(self::GROUP_ID));
+
+        $this->assertEquals(count($groupUsers), $return);
+    }
+
+    /** @test */
+    public function itShouldFailGroupDoesNotExists(): void
+    {
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findGroupUsersNumberOrFail(ValueObjectFactory::createIdentifier('invalid group'));
+    }
 }

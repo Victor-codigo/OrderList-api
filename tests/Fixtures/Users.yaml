@@ -1,5 +1,5 @@
 Common\Domain\Model\ValueObject\String\Identifier:
-  user_id_random-{1..60}:
+  user_id_random-{1..100}:
     __construct:
       value: <uuid()>
 
@@ -24,7 +24,7 @@ Common\Domain\Model\ValueObject\String\Identifier:
       value: "6df60afd-f7c3-4c2c-b920-e265f266c560"
 
 Common\Domain\Model\ValueObject\String\Email:
-  user_email_random-{1..60}:
+  user_email_random-{1..100}:
     __construct:
       value: <email()>
 
@@ -49,7 +49,7 @@ Common\Domain\Model\ValueObject\String\Email:
       value: "email.admin.active@host.com"
 
 Common\Domain\Model\ValueObject\String\Password:
-  user_password_random-{1..60}:
+  user_password_random-{1..100}:
     __construct:
       value: <word()>
 
@@ -74,7 +74,7 @@ Common\Domain\Model\ValueObject\String\Password:
       value: "\\$2y\\$13\\$/Bu6Y2ggoPUQNi1gCIqZyeapz0wWXTQEFsTRHggTR72u31Af6X2Du" #123456
 
 Common\Domain\Model\ValueObject\String\Name:
-  user_name_random-{1..60}:
+  user_name_random-{1..100}:
     __construct:
       value: <name()>
 
@@ -136,7 +136,7 @@ Common\Domain\Model\ValueObject\Array\Roles:
     __construct: [["@user_rol_admin"]]
 
 User\Domain\Model\User:
-  entity-user_random-{1..60}:
+  entity-user_random-{1..100}:
     __construct:
       id: "@user_id_random-<current()>"
       email: "@user_email_random-<current()>"

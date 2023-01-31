@@ -15,7 +15,7 @@ Common\Domain\Model\ValueObject\Array\Roles:
     __construct: [["@groupuser_rol_user"]]
 
 Group\Domain\Model\UserGroup:
-  entity-groupuser_random-{1..60}:
+  entity-groupuser_random-{1..100}:
     __construct:
       groupId: "@entity-group_random-<current()>->getId"
       userId: "@entity-user_random-<current()>->getId"
@@ -63,3 +63,17 @@ Group\Domain\Model\UserGroup:
       userId: "@entity-user_admin->getId"
       roles: "@groupuser_roles_user"
       group: "@entity-group_type_group"
+
+  entity-groupuser_users_100-{1..99}:
+    __construct:
+      groupId: "@entity-group_users_100->getId"
+      userId: "@entity-user_random-<current()>->getId"
+      roles: "@groupuser_roles_user"
+      group: "@entity-group_users_100"
+
+  entity-groupuser_users_100_admin:
+    __construct:
+      groupId: "@entity-group_users_100->getId"
+      userId: "@entity-user_active->getId"
+      roles: "@groupuser_roles_admin"
+      group: "@entity-group_users_100"

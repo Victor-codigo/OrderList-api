@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupUserAdd;
 
+use Common\Domain\Config\AppConfig;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -14,6 +15,7 @@ use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupUserAdd\Dto\GroupUserAddDto;
+use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersMaxNumberExcededException;
 use Group\Domain\Service\GroupUserAdd\GroupUserAddService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -32,7 +34,7 @@ class GroupUserAddServiceTest extends TestCase
 
         $this->userGroupRepository = $this->createMock(UserGroupRepositoryInterface::class);
         $this->groupRepository = $this->createMock(GroupRepositoryInterface::class);
-        $this->object = new GroupUserAddService($this->userGroupRepository, $this->groupRepository);
+        $this->object = new GroupUserAddService($this->userGroupRepository, $this->groupRepository, new AppConfig());
     }
 
     /**
@@ -249,6 +251,34 @@ class GroupUserAddServiceTest extends TestCase
 
         $this->expectException(DBConnectionException::class);
         $this->mockMethodsInvoke($groupUserAddDto, $expectUsersGroup, DBConnectionException::fromMessage(''));
+
+        $this->object->__invoke($groupUserAddDto);
+    }
+
+    /** @test */
+    public function itShouldFailGroupHasReachItMaximumNumberOfUsers100(): void
+    {
+        $usersId = [
+            '2606508b-4516-45d6-93a6-c7cb416b7f3f',
+            'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7',
+            'a004eb47-6d12-4467-a0d1-2d9fab757f19',
+        ];
+        $groupUserAddDto = $this->createGroupUserAddDto($usersId);
+
+        $this->expectException(GroupAddUsersMaxNumberExcededException::class);
+        $this->userGroupRepository
+            ->expects($this->once())
+            ->method('findGroupUsersNumberOrFail')
+            ->with($groupUserAddDto->groupId)
+            ->willReturn(100 - count($usersId) + 1);
+
+        $this->groupRepository
+            ->expects($this->never())
+            ->method('findGroupByIdOrFail');
+
+        $this->userGroupRepository
+            ->expects($this->never())
+            ->method('findGroupUsersOrFail');
 
         $this->object->__invoke($groupUserAddDto);
     }

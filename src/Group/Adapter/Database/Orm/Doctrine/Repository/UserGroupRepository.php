@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Adapter\Database\Orm\Doctrine\Repository;
 
+use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\IdentifierType;
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
@@ -52,6 +53,30 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
             $usersGroup,
             fn (UserGroup $userGroup) => $userGroup->getRoles()->has($adminRol)
         );
+    }
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findGroupUsersNumberOrFail(Identifier $groupId): int
+    {
+        $sql = <<<sql
+            SELECT COUNT(userGroup)
+            FROM {$this->getString(UserGroup::class)} userGroup
+            WHERE userGroup.groupId = :group_id
+        sql;
+
+        $query = $this->entityManager
+            ->createQuery($sql)
+            ->setParameter('group_id', $groupId, $this->getClassUnqualifiedName(IdentifierType::class));
+
+        $result = $query->getOneOrNullResult();
+
+        if (0 === $result[1]) {
+            throw DBNotFoundException::fromMessage('Group not found');
+        }
+
+        return (int) $result[1];
     }
 
     /**

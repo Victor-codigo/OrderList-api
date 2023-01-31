@@ -1,5 +1,5 @@
 Common\Domain\Model\ValueObject\String\Identifier:
-  group_id_random-{1..60}:
+  group_id_random-{1..100}:
     __construct:
       value: <uuid()>
 
@@ -11,8 +11,12 @@ Common\Domain\Model\ValueObject\String\Identifier:
     __construct:
       value: "a5002966-dbf7-4f76-a862-23a04b5ca465"
 
+  group_id_users_100:
+    __construct:
+      value: "4b513296-14ac-4fb1-a574-05bc9b1dbe3f"
+
 Common\Domain\Model\ValueObject\String\Name:
-  group_name_random-{1..60}:
+  group_name_random-{1..100}:
     __construct:
       value: <name()>
 
@@ -24,8 +28,12 @@ Common\Domain\Model\ValueObject\String\Name:
     __construct:
       value: "GroupTwo"
 
+  group_name_users_100:
+    __construct:
+      value: "Group100Users"
+
 Common\Domain\Model\ValueObject\String\Description:
-  group_description_random-{1..60}:
+  group_description_random-{1..100}:
     __construct:
       value: <text(500)>
 
@@ -37,6 +45,10 @@ Common\Domain\Model\ValueObject\String\Description:
     __construct:
       value: "This is a group of one user"
 
+  group_description_users_100:
+    __construct:
+      value: "This group contains 100 users"
+
 Common\Domain\Model\ValueObject\Object\GroupType:
   group_type_group:
     __construct:
@@ -47,7 +59,7 @@ Common\Domain\Model\ValueObject\Object\GroupType:
       value: <(Group\Domain\Model\GROUP_TYPE::USER)>
 
 Group\Domain\Model\Group:
-  entity-group_random-{1..60}:
+  entity-group_random-{1..100}:
     __construct:
       id: "@group_id_random-<current()>"
       name: "@group_name_random-<current()>"
@@ -67,3 +79,10 @@ Group\Domain\Model\Group:
       name: "@group_name_type_user"
       type: "@group_type_user"
       description: "@group_description_type_user"
+
+  entity-group_users_100:
+    __construct:
+      id: "@group_id_users_100"
+      name: "@group_name_users_100"
+      type: "@group_type_group"
+      description: "@group_description_users_100"
