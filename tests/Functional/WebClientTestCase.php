@@ -18,10 +18,27 @@ class WebClientTestCase extends WebTestCase
     private const PATH_PRIVATE_KEY = 'tests/Fixtures/JwtKey/private.pem';
 
     protected KernelBrowser|null $client = null;
+    /**
+     * @var EntityManager[]
+     */
+    private array $entityManagerArray = [];
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        foreach ($this->entityManagerArray as $entityManager) {
+            $entityManager->close();
+            $entityManager = null;
+        }
+    }
 
     protected function getNewClient(): KernelBrowser
     {
-        $this->client = static::createClient();
+        if (null === $this->client) {
+            $this->client = static::createClient();
+        }
+
         $this->client->setServerParameters([
             'CONTENT_TYPE' => static::CONTENT_TYPE_ALLOWED,
             'HTTP_ACCEPT' => static::CONTENT_TYPE_ALLOWED,
@@ -32,17 +49,13 @@ class WebClientTestCase extends WebTestCase
 
     protected function getNewClientAuthenticated(string $userName, string $password): KernelBrowser
     {
-        if (null !== $this->client) {
-            return $this->client;
-        }
-
         $this->client = $this->getNewClient();
         $this->client->request(
             method: 'POST',
             uri: self::LOGIN_URL,
             content: json_encode([
-              'username' => $userName,
-              'password' => $password,
+                'username' => $userName,
+                'password' => $password,
             ])
         );
 
@@ -51,10 +64,13 @@ class WebClientTestCase extends WebTestCase
 
     protected function getEntityManager(): EntityManager
     {
-        return $this->client
+        $entityManager = $this->client
             ->getContainer()
             ->get('doctrine')
             ->getManager();
+        $this->entityManagerArray[] = $entityManager;
+
+        return $entityManager;
     }
 
     protected function generateToken(array $data, float $expire = 3600): string
