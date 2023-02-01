@@ -68,7 +68,6 @@ class UserRegisterControllerTest extends WebClientTestCase
         ];
 
         $this->client = $this->getNewClient();
-        $this->client->disableReboot();
         $this->client->request(
             self::METHOD,
             self::ENDPOINT,
