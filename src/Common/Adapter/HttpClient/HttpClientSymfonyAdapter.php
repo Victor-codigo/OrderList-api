@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Common\Adapter\HttpClient;
 
 use Common\Domain\HttpClient\Exception\UnsuportedOptionException;
-use Common\Domain\Ports\HttpCllent\HttpClientInterface;
-use Common\Domain\Ports\HttpCllent\HttpClientResponseInteface;
+use Common\Domain\Ports\HttpClient\HttpClientInterface;
+use Common\Domain\Ports\HttpClient\HttpClientResponseInteface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface as SymfonyHttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
@@ -39,7 +39,7 @@ class HttpClientSymfonyAdapter implements HttpClientInterface
         return new static($this->httpClient->withOptions($options));
     }
 
-    private function createResponse(ResponseInterface $response): HttpClientResponse
+    private function createResponse(ResponseInterface $response): HttpClientResponseInteface
     {
         return new HttpClientResponse($response);
     }
