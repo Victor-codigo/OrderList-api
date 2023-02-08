@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Common\Domain\HttpClient\Exception;
 
 use Common\Adapter\HttpClient\HttpClientResponse;
-use Common\Domain\Ports\HttpCllent\HttpClientResponseInteface;
+use Common\Domain\Ports\HttpClient\HttpClientResponseInteface;
 use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
 
-class Error400Exception extends \DomainException
+class Error500Exception extends \DomainException
 {
     public static function fromMessage(string $message, HttpExceptionInterface $exception): static
     {
