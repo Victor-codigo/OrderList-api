@@ -16,7 +16,7 @@ class ResponseDto
         return $this->status;
     }
 
-    public function setStatus(RESPONSE_STATUS $status)
+    public function setStatus(RESPONSE_STATUS $status): static
     {
         $this->status = $status;
 
@@ -28,7 +28,7 @@ class ResponseDto
         return $this->message;
     }
 
-    public function setMessage(string $message)
+    public function setMessage(string $message): static
     {
         $this->message = $message;
 
@@ -40,7 +40,7 @@ class ResponseDto
         return $this->data;
     }
 
-    public function setData(array $data)
+    public function setData(array $data): static
     {
         $this->data = $data;
 
@@ -52,7 +52,7 @@ class ResponseDto
         return $this->errors;
     }
 
-    public function setErrors(array $errors)
+    public function setErrors(array $errors): static
     {
         $this->errors = $errors;
 
