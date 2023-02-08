@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 class JwtTokenTest extends TestCase
 {
     private ValidationInterface $validator;
-    private const PATH_PRIVATE_KEY = 'tests/Fixtures/JwtKey/private.pem';
+    private const PATH_PRIVATE_KEY = 'src/Common/Adapter/Framework/Config/JwtKeys/Lexik/private.pem';
 
     public function setUp(): void
     {
