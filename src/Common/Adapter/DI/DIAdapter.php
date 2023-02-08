@@ -7,6 +7,7 @@ namespace Common\Adapter\DI;
 use Common\Adapter\DI\Exception\RouteInvalidParameterException;
 use Common\Adapter\DI\Exception\RouteNotFoundException;
 use Common\Adapter\DI\Exception\RouteParametersMissingException;
+use Common\Domain\Config\AppConfig;
 use Common\Domain\Ports\DI\DIInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,7 +22,13 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 class DIAdapter implements DIInterface, ServiceSubscriberInterface
 {
-    protected ContainerInterface $DI;
+    private const API_DOMAIN = AppConfig::API_DOMAIN;
+    private const API_PROTOCOL = AppConfig::API_PROTOCOL;
+
+    public function __construct(
+        private ContainerInterface $DI
+    ) {
+    }
 
     public static function getSubscribedServices(): array
     {
@@ -29,11 +36,6 @@ class DIAdapter implements DIInterface, ServiceSubscriberInterface
             RouterInterface::class,
             RequestStack::class,
         ];
-    }
-
-    public function __construct(ContainerInterface $DI)
-    {
-        $this->DI = $DI;
     }
 
     /**
@@ -54,6 +56,18 @@ class DIAdapter implements DIInterface, ServiceSubscriberInterface
     public function getUrlRouteRelative(string $route, array $params): string
     {
         return $this->generateUrl($route, $params, UrlGeneratorInterface::RELATIVE_PATH);
+    }
+
+    /**
+     * @throws RouteNotFoundException
+     * @throws RouteParametersMissingException
+     * @throws RouteInvalidParameterException
+     */
+    public function getUrlRouteAbsoluteDomain(string $route, array $params): string
+    {
+        $url = $this->generateUrl($route, $params, UrlGeneratorInterface::ABSOLUTE_PATH);
+
+        return static::API_PROTOCOL.'://'.static::API_DOMAIN.$url;
     }
 
     /**
