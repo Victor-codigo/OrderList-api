@@ -23,6 +23,41 @@ class AppConfig
      */
     public const ENDPOINT_GROUP_USER_ROLE_CHANGE_MAX_USERS = 50;
 
+    /**
+     * Version of the api used.
+     */
+    public const API_VERSION = 1;
+
+    /**
+     * Time in seconds for the token of the api calls.
+     */
+    public const API_TOKEN_RESQUEST_EXPIRE_TIME = 300;
+
+    /**
+     * Api domina.
+     */
+    public const API_DOMAIN = 'orderlist.api';
+
+    /**
+     * Api protocol.
+     */
+    public const API_PROTOCOL = 'http';
+
+    /**
+     * Message Error for error 404.
+     */
+    public const ERROR_404_MESSAGE = 'Not found: error 404';
+
+    /**
+     * Message error for error 403.
+     */
+    public const ERROR_403_MESSAGE = 'Access denied: error 403';
+
+    /**
+     * Message error for error 500.
+     */
+    public const ERROR_500_MESSAGE = 'Internal server error: error 500';
+
     protected static AppConfig|null $instance = null;
     protected static VALUE_OBJECTS_CONSTRAINTS $valueObject;
 
