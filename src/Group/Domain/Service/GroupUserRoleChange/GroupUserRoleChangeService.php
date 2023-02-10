@@ -54,10 +54,10 @@ class GroupUserRoleChangeService
      */
     private function getUsersValid(array $groupUsers, array $usersId): array
     {
-        return array_filter(
+        return array_values(array_filter(
             $groupUsers,
             fn (UserGroup $userGroup) => in_array($userGroup->getUserId(), $usersId)
-        );
+        ));
     }
 
     /**

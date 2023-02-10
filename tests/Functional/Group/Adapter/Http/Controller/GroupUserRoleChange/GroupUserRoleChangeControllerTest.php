@@ -24,7 +24,6 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
     private const USERS_ID = [
         self::GROUP_USER_ADMIN_ID,
         '1befdbe2-9c14-42f0-850f-63e061e33b8f',
-        '2606508b-4516-45d6-93a6-c7cb416b7f3f',
         '6df60afd-f7c3-4c2c-b920-e265f266c560',
      ];
 
