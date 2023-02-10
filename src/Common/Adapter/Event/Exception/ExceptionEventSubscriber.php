@@ -16,100 +16,104 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Throwable;
 
 class ExceptionEventSubscriber implements EventSubscriberInterface
 {
     public const ERROR_404_MESSAGE = AppConfig::ERROR_404_MESSAGE;
     public const ERROR_403_MESSAGE = AppConfig::ERROR_403_MESSAGE;
     public const ERROR_500_MESSAGE = AppConfig::ERROR_500_MESSAGE;
+    public const ERROR_METHOD_NOT_ALLOWED = AppConfig::ERROR_METHOD_NOT_ALLOWED;
 
     public static function getSubscribedEvents(): array
     {
         return [KernelEvents::EXCEPTION => ['__invoke']];
     }
 
-    public function __invoke(ExceptionEvent $event)
-    {
-        $exception = $event->getThrowable();
-        $response = $this->handleSymfonyExceptions($exception);
-        $response ??= $this->handleCustomException($event);
-        $event->setResponse($response);
-    }
+      public function __invoke(ExceptionEvent $event)
+      {
+          $exception = $event->getThrowable();
+          $response = $this->handleSymfonyExceptions($exception);
+          $response ??= $this->handleCustomException($event);
+          $event->setResponse($response);
+      }
 
-    private function handleSymfonyExceptions(Throwable $exception): Response|null
-    {
-        if ($exception instanceof NotFoundHttpException) {
-            $message = static::ERROR_404_MESSAGE;
-            $status = Response::HTTP_NOT_FOUND;
-        } elseif ($exception instanceof AccessDeniedHttpException) {
-            $message = static::ERROR_403_MESSAGE;
-            $status = Response::HTTP_FORBIDDEN;
-        } elseif ($exception instanceof DomainInternalErrorException) {
-            $message = static::ERROR_500_MESSAGE;
-            $status = Response::HTTP_INTERNAL_SERVER_ERROR;
-        } else {
-            return null;
-        }
+      private function handleSymfonyExceptions(\Throwable $exception): Response|null
+      {
+          if ($exception instanceof NotFoundHttpException) {
+              $message = static::ERROR_404_MESSAGE;
+              $status = Response::HTTP_NOT_FOUND;
+          } elseif ($exception instanceof AccessDeniedHttpException) {
+              $message = static::ERROR_403_MESSAGE;
+              $status = Response::HTTP_FORBIDDEN;
+          } elseif ($exception instanceof DomainInternalErrorException) {
+              $message = static::ERROR_500_MESSAGE;
+              $status = Response::HTTP_INTERNAL_SERVER_ERROR;
+          } elseif ($exception instanceof MethodNotAllowedHttpException) {
+              $message = static::ERROR_METHOD_NOT_ALLOWED;
+              $status = Response::HTTP_METHOD_NOT_ALLOWED;
+          } else {
+              return null;
+          }
 
-        $response = new ResponseDto();
-        $response->setMessage($message);
+          $response = new ResponseDto();
+          $response->setMessage($message);
 
-        return $this->createJsonResponse($response, $status);
-    }
+          return $this->createJsonResponse($response, $status);
+      }
 
-    private function handleCustomException(ExceptionEvent $event): Response
-    {
-        $exception = $event->getThrowable();
+      private function handleCustomException(ExceptionEvent $event): Response
+      {
+          $exception = $event->getThrowable();
 
-        if ($exception instanceof HttpResponseException) {
-            return $this->createJsonResponse($exception->getResponseData(), $exception->getStatusCode());
-        }
+          if ($exception instanceof HttpResponseException) {
+              return $this->createJsonResponse($exception->getResponseData(), $exception->getStatusCode());
+          }
 
-        $customExceptionDto = $this->getCustomExceptionDto($exception);
-        $responseException = (new HttpResponseException())
-            ->setMessage($exception->getMessage())
-            ->setResponseData($customExceptionDto['responseDto'])
-            ->setStatusCode($customExceptionDto['statusCode']->value);
-        $event->setThrowable($responseException);
+          $customExceptionDto = $this->getCustomExceptionDto($exception);
+          $responseException = (new HttpResponseException())
+              ->setMessage($exception->getMessage())
+              ->setResponseData($customExceptionDto['responseDto'])
+              ->setStatusCode($customExceptionDto['statusCode']->value);
+          $event->setThrowable($responseException);
 
-        return $this->createJsonResponse($responseException->getResponseData(), $responseException->getStatusCode());
-    }
+          return $this->createJsonResponse($responseException->getResponseData(), $responseException->getStatusCode());
+      }
 
-    private function getCustomExceptionDto(Throwable $exception): array
-    {
-        if ($exception instanceof DomainExceptionOutput) {
-            $response = (new ResponseDto())
-                ->setStatus($exception->getStatus())
-                ->setMessage($exception->getMessage())
-                ->setErrors($exception->getErrors());
+      private function getCustomExceptionDto(\Throwable $exception): array
+      {
+          if ($exception instanceof DomainExceptionOutput) {
+              $response = (new ResponseDto())
+                  ->setStatus($exception->getStatus())
+                  ->setMessage($exception->getMessage())
+                  ->setErrors($exception->getErrors());
 
-            return [
-                'responseDto' => $response,
-                'statusCode' => $exception->getHttpStatus(),
-            ];
-        }
+              return [
+                  'responseDto' => $response,
+                  'statusCode' => $exception->getHttpStatus(),
+              ];
+          }
 
-        return $this->getResponseDefault();
-    }
+          return $this->getResponseDefault();
+      }
 
-    private function getResponseDefault(): array
-    {
-        $response = (new ResponseDto())
-            ->setStatus(RESPONSE_STATUS::ERROR)
-            ->setMessage('Internal server error')
-            ->setErrors(['internal' => 'Internal server error']);
+      private function getResponseDefault(): array
+      {
+          $response = (new ResponseDto())
+              ->setStatus(RESPONSE_STATUS::ERROR)
+              ->setMessage('Internal server error')
+              ->setErrors(['internal' => 'Internal server error']);
 
-        return [
-            'responseDto' => $response,
-            'statusCode' => RESPONSE_STATUS_HTTP::INTERNAL_SERVER_ERROR,
-        ];
-    }
+          return [
+              'responseDto' => $response,
+              'statusCode' => RESPONSE_STATUS_HTTP::INTERNAL_SERVER_ERROR,
+          ];
+      }
 
-    private function createJsonResponse(ResponseDto $responseDto, int $statusCode): JsonResponse
-    {
-        return new JsonResponse($responseDto, $statusCode);
-    }
+      private function createJsonResponse(ResponseDto $responseDto, int $statusCode): JsonResponse
+      {
+          return new JsonResponse($responseDto, $statusCode);
+      }
 }

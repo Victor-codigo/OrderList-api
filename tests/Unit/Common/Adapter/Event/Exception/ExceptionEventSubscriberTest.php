@@ -9,13 +9,13 @@ use Common\Adapter\Http\Exception\HttpResponseException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
-use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -35,7 +35,7 @@ class ExceptionEventSubscriberTest extends TestCase
         $this->object = new ExceptionEventSubscriber();
         $this->kernel = $this->createMock(KernelInterface::class);
         $this->request = $this->createMock(Request::class);
-        $this->event = new ExceptionEvent($this->kernel, $this->request, HttpKernelInterface::MAIN_REQUEST, new Exception());
+        $this->event = new ExceptionEvent($this->kernel, $this->request, HttpKernelInterface::MAIN_REQUEST, new \Exception());
     }
 
     private function getResponseDto(): ResponseDto
@@ -94,6 +94,21 @@ class ExceptionEventSubscriberTest extends TestCase
     }
 
     /** @test */
+    public function itShouldReturnAnMethodnotAllowedError(): void
+    {
+        $exception = new MethodNotAllowedHttpException([], 'MethodNotAllowedHttpException');
+        $this->event->setThrowable($exception);
+        $this->object->__invoke($this->event);
+
+        $response = $this->event->getResponse();
+        /** @var ResponseDto $responseContent */
+        $responseContent = json_decode($response->getContent(), false);
+
+        $this->assertEquals(Response::HTTP_METHOD_NOT_ALLOWED, $response->getStatusCode());
+        $this->assertEquals(ExceptionEventSubscriber::ERROR_METHOD_NOT_ALLOWED, $responseContent->message);
+    }
+
+    /** @test */
     public function itShouldReturnHttpResponseExceptionThrownHttpResponseException(): void
     {
         $responseDto = $this->getResponseDto();
@@ -135,7 +150,7 @@ class ExceptionEventSubscriberTest extends TestCase
     /** @test */
     public function itShouldReturnHttpResponseExceptionThrownNotADomainExceptionOutput(): void
     {
-        $expectedException = new Exception('Exception');
+        $expectedException = new \Exception('Exception');
         $this->event->setThrowable($expectedException);
         $this->object->__invoke($this->event);
 
