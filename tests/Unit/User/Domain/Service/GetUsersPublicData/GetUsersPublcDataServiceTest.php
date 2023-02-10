@@ -38,12 +38,28 @@ class GetUsersPublcDataServiceTest extends TestCase
         ];
     }
 
+    private function getUsersIdDeletedOrNotActive(): array
+    {
+        return [
+            ValueObjectFactory::createIdentifier('42610729-5cd9-35f3-86bc-ec9158e1797e'),   // not active
+            ValueObjectFactory::createIdentifier('68e94495-16f0-4acd-adbe-f2b9575e6544'),   // deleted
+        ];
+    }
+
     private function getUsers(): array
     {
         return [
             User::fromPrimitives('0b13e52d-b058-32fb-8507-10dec634a07c', 'email@domain.com', 'password1', 'name1', [USER_ROLES::USER]),
             User::fromPrimitives('0b17ca3e-490b-3ddb-aa78-35b4ce668dc0', 'email2@domain.com', 'password2', 'name2', [USER_ROLES::USER]),
             User::fromPrimitives('1befdbe2-9c14-42f0-850f-63e061e33b8f', 'email3@domain.com', 'password3', 'name3', [USER_ROLES::ADMIN]),
+        ];
+    }
+
+    private function getUsersDeletedOrNotActive(): array
+    {
+        return [
+            User::fromPrimitives('42610729-5cd9-35f3-86bc-ec9158e1797e', 'email4@domain.com', 'password1', 'name1', [USER_ROLES::NOT_ACTIVE]), // not active
+            User::fromPrimitives('68e94495-16f0-4acd-adbe-f2b9575e6544', 'email5@domain.com', 'password2', 'name2', [USER_ROLES::DELETED]),    // deleted
         ];
     }
 
@@ -113,7 +129,26 @@ class GetUsersPublcDataServiceTest extends TestCase
         }
     }
 
-    /* @test */
+    /** @test */
+    public function itShouldGetOnlyUsersThatAreActiveAndNotDeleted(): void
+    {
+        $usersId = array_merge($this->getUsersId(), $this->getUsersIdDeletedOrNotActive());
+        $expectedUsers = array_merge($this->getUsers(), $this->getUsersDeletedOrNotActive());
+
+        $this->userRepository
+            ->expects($this->once())
+            ->method('findUsersByIdOrFail')
+            ->with($usersId)
+            ->willReturn($expectedUsers);
+
+        $usersDto = new GetUsersPublicDataDto($usersId);
+        $return = $this->object->__invoke($usersDto, SCOPE::PUBLIC);
+
+        $this->assertInstanceOf(GetUsersPablicDataOutputDto::class, $return);
+        $this->assertCount(count($this->getUsersId()), $return->usersData);
+    }
+
+    /** @test */
     public function itShouldFailNoUsersFound(): void
     {
         $this->expectException(DBNotFoundException::class);

@@ -31,7 +31,7 @@ class GetUsersControllerTest extends WebClientTestCase
     private function getUsersIds(): array
     {
         return [
-            '1befdbe2-9c14-42f0-850f-63e061e33b8f',
+            '1552b279-5f78-4585-ae1b-31be2faabba8',
             '2606508b-4516-45d6-93a6-c7cb416b7f3f',
             '6df60afd-f7c3-4c2c-b920-e265f266c560',
         ];
@@ -43,6 +43,14 @@ class GetUsersControllerTest extends WebClientTestCase
             '5483539d-52f7-4aa9-a91c-1aae11c3d17f',
             '1fcab788-0def-4e56-b441-935361678da9',
             'b0bcc444-5bcc-460f-8c47-8085b39ffd3d',
+        ];
+    }
+
+    private function getUsersIdsDeletedOrNotActive()
+    {
+        return [
+            '68e94495-16f0-4acd-adbe-f2b9575e6544', // deleted
+            '1befdbe2-9c14-42f0-850f-63e061e33b8f', // not active
         ];
     }
 
@@ -128,6 +136,26 @@ class GetUsersControllerTest extends WebClientTestCase
             $usersData['usersNames'],
             $usersData['usersImages']
         );
+    }
+
+    /** @test */
+    public function itShouldReturnThreeUsersNotUsersDeletedOrNotActive(): void
+    {
+        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $usersIds = array_merge($this->getUsersIds(), $this->getUsersIdsDeletedOrNotActive());
+        $this->client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT.'/'.implode(',', $usersIds),
+            content: json_encode([])
+        );
+
+        $response = $this->client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [0, 1, 2], [], Response::HTTP_OK);
+        $this->assertSame(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Users found', $responseContent->message);
+        $this->assertCount(count($this->getUsersIds()), $responseContent->data);
     }
 
     /** @test */
@@ -269,8 +297,23 @@ class GetUsersControllerTest extends WebClientTestCase
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_NOT_FOUND);
-        $this->assertSame(RESPONSE_STATUS::OK->value, $responseContent->status);
-        $this->assertSame('Users not found', $responseContent->message);
+        $this->assertNull($responseContent);
+    }
+
+    /** @test */
+    public function itShouldFailUsersIdAreDeletedOrNotActived(): void
+    {
+        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $usersIds = $this->getUsersIdsDeletedOrNotActive();
+        $this->client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT.'/'.implode(',', $usersIds),
+            content: json_encode([])
+        );
+
+        $response = $this->client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertNull($responseContent);
     }
 }

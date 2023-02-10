@@ -24,17 +24,16 @@ use User\Domain\Service\GetUsersPublicData\GeUsersPublicDataService;
 
 class GetUsersUseCase extends ServiceBase
 {
-    private GeUsersPublicDataService $geUsersPublicDataService;
-    private GetUsersProfilePublicDataService $getUsersProfilePublicDataService;
-    private ValidationInterface $validator;
-
-    public function __construct(GeUsersPublicDataService $geUsersPublicDataService, GetUsersProfilePublicDataService $getUsersProfilePublicDataService, ValidationInterface $validator)
-    {
-        $this->geUsersPublicDataService = $geUsersPublicDataService;
-        $this->getUsersProfilePublicDataService = $getUsersProfilePublicDataService;
-        $this->validator = $validator;
+    public function __construct(
+        private GeUsersPublicDataService $geUsersPublicDataService,
+        private GetUsersProfilePublicDataService $getUsersProfilePublicDataService,
+        private ValidationInterface $validator
+    ) {
     }
 
+    /**
+     * @throws GetUsersNotFoundException
+     */
     public function __invoke(GetUsersInputDto $input): GetUsersOutputDto
     {
         $this->validation($input);
@@ -45,6 +44,10 @@ class GetUsersUseCase extends ServiceBase
                 $this->createGetUsersPublicDataDto($input->usersId),
                 $scope
             );
+
+            if (empty($users->usersData)) {
+                throw new DBNotFoundException();
+            }
 
             $profiles = $this->getUsersProfilePublicDataService->__invoke(
                 $this->createGetUsersProfilePublicDataDto($input->usersId),

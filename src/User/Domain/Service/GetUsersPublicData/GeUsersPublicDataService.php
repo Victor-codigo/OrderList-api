@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace User\Domain\Service\GetUsersPublicData;
 
+use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Struct\SCOPE;
+use User\Domain\Model\USER_ROLES;
+use User\Domain\Model\User;
 use User\Domain\Port\Repository\UserRepositoryInterface;
 use User\Domain\Service\GetUsersPublicData\Dto\GetUsersPablicDataOutputDto;
 use User\Domain\Service\GetUsersPublicData\Dto\GetUsersPublicDataDto;
@@ -25,13 +28,23 @@ class GeUsersPublicDataService
     {
         /** @var User[] $users */
         $users = $this->userRepository->findUsersByIdOrFail($usersDto->usersId);
+        $usersValid = $this->getValidUsers($users);
 
         $usersData = match ($scope) {
-            SCOPE::PRIVATE => $this->getUserPrivateData($users),
-            SCOPE::PUBLIC => $this->getUserPublicData($users)
+            SCOPE::PRIVATE => $this->getUserPrivateData($usersValid),
+            SCOPE::PUBLIC => $this->getUserPublicData($usersValid)
         };
 
         return new GetUsersPablicDataOutputDto($usersData);
+    }
+
+    private function getValidUsers(array $users): array
+    {
+        return array_values(array_filter(
+            $users,
+            fn (User $user) => !$user->getRoles()->has(new Rol(USER_ROLES::NOT_ACTIVE))
+                            && !$user->getRoles()->has(new Rol(USER_ROLES::DELETED))
+        ));
     }
 
     /**

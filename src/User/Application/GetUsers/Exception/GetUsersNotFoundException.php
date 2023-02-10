@@ -12,6 +12,6 @@ class GetUsersNotFoundException extends DomainExceptionOutput
 {
     public static function fromMessage(string $message): static
     {
-        return new static($message, [], RESPONSE_STATUS::OK, RESPONSE_STATUS_HTTP::NOT_FOUND);
+        return new static($message, ['not_found' => $message], RESPONSE_STATUS::ERROR, RESPONSE_STATUS_HTTP::NO_CONTENT);
     }
 }

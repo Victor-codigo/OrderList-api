@@ -11,6 +11,10 @@ Common\Domain\Model\ValueObject\String\Identifier:
     __construct:
       value: "2606508b-4516-45d6-93a6-c7cb416b7f3f"
 
+  user_id_deleted:
+    __construct:
+      value: "68e94495-16f0-4acd-adbe-f2b9575e6544"
+
   user_id_other:
     __construct:
       value: "b11c9be1-b619-4ef5-be1b-a1cd9ef265b7"
@@ -36,6 +40,10 @@ Common\Domain\Model\ValueObject\String\Email:
     __construct:
       value: "email.already.active@host.com"
 
+  user_email_deleted:
+    __construct:
+      value: "email.deleted@host.com"
+
   user_email_other:
     __construct:
       value: "email.other.active@host.com"
@@ -58,6 +66,10 @@ Common\Domain\Model\ValueObject\String\Password:
       value: "\\$2y\\$04\\$A5XxYKU/w5tpX6BY9Kpf9uDrXY3seHrYwmx70qZ0DWyp0Lmvfo29q" #qwerty
 
   user_password_active:
+    __construct:
+      value: "\\$2y\\$13\\$/Bu6Y2ggoPUQNi1gCIqZyeapz0wWXTQEFsTRHggTR72u31Af6X2Du" #123456
+
+  user_password_deleted:
     __construct:
       value: "\\$2y\\$13\\$/Bu6Y2ggoPUQNi1gCIqZyeapz0wWXTQEFsTRHggTR72u31Af6X2Du" #123456
 
@@ -86,6 +98,10 @@ Common\Domain\Model\ValueObject\String\Name:
     __construct:
       value: "María"
 
+  user_name_deleted:
+    __construct:
+      value: "Ramona"
+
   user_name_other:
     __construct:
       value: "Manola"
@@ -107,6 +123,10 @@ Common\Domain\Model\ValueObject\Object\Rol:
     __construct:
       value: <(User\Domain\Model\USER_ROLES::USER)>
 
+  user_rol_deleted:
+    __construct:
+      value: <(User\Domain\Model\USER_ROLES::DELETED)>
+
   user_rol_other:
     __construct:
       value: <(User\Domain\Model\USER_ROLES::USER)>
@@ -125,6 +145,9 @@ Common\Domain\Model\ValueObject\Array\Roles:
 
   user_roles_active:
     __construct: [["@user_rol_active"]]
+
+  user_roles_deleted:
+    __construct: [["@user_rol_deleted"]]
 
   user_roles_other:
     __construct: [["@user_rol_other"]]
@@ -159,6 +182,14 @@ User\Domain\Model\User:
       password: "@user_password_active"
       name: "@user_name_active"
       roles: "@user_roles_active"
+
+  entity-user_deleted:
+    __construct:
+      id: "@user_id_deleted"
+      email: "@user_email_deleted"
+      password: "@user_password_deleted"
+      name: "@user_name_deleted"
+      roles: "@user_roles_deleted"
 
   entity-user_other:
     __construct:
