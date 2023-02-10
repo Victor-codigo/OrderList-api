@@ -10,6 +10,7 @@ class ResponseDto
     public string $message;
     public array $data;
     public array $errors;
+    public bool $hasContent;
 
     public function getStatus(): RESPONSE_STATUS
     {
@@ -59,12 +60,18 @@ class ResponseDto
         return $this;
     }
 
-    public function __construct(array $data = [], array $errors = [], string $message = '', RESPONSE_STATUS $status = RESPONSE_STATUS::OK)
+    public function hasContent(): bool
+    {
+        return $this->hasContent;
+    }
+
+    public function __construct(array $data = [], array $errors = [], string $message = '', RESPONSE_STATUS $status = RESPONSE_STATUS::OK, bool $hasContent = true)
     {
         $this->status = $status;
         $this->message = $message;
         $this->data = $data;
         $this->errors = $errors;
+        $this->hasContent = $hasContent;
     }
 
     public function toArray(): array
@@ -74,6 +81,7 @@ class ResponseDto
             'message' => $this->message,
             'data' => $this->data,
             'errors' => $this->errors,
+            'hasContent' => $this->hasContent,
         ];
     }
 }
