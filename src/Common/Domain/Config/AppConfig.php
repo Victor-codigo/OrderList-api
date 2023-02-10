@@ -58,6 +58,11 @@ class AppConfig
      */
     public const ERROR_500_MESSAGE = 'Internal server error: error 500';
 
+    /**
+     * Message error for method not allowed.
+     */
+    public const ERROR_METHOD_NOT_ALLOWED = 'Method not allowed';
+
     protected static AppConfig|null $instance = null;
     protected static VALUE_OBJECTS_CONSTRAINTS $valueObject;
 
