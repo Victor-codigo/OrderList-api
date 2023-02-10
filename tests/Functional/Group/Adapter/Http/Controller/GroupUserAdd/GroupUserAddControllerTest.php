@@ -15,10 +15,6 @@ class GroupUserAddControllerTest extends WebClientTestCase
 
     private const ENDPOINT = '/api/v1/groups/user';
     private const METHOD = 'POST';
-    private const USER_NAME = 'email.already.active@host.com';
-    private const USER_PASSWORD = '123456';
-    private const USER_NAME_NOT_GROUP_ADMIN = 'email.admin.active@host.com';
-    private const USER_PASSWORD_NOT_GROUP_ADMIN = '123456';
     private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
     private const GROUP_USERS_100_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const USER_TO_ADD_IDS = [
@@ -38,9 +34,9 @@ class GroupUserAddControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldAddAllUsersToTheGroup(): void
+    public function itShouldAddAllUsersToTheGroup22(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -61,9 +57,9 @@ class GroupUserAddControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldAddOnlyTwoUsersToTheGroupOneIsAlreadyinTheGroup(): void
+    public function itShouldAddOnlyTwoUsersToTheGroup(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -86,7 +82,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldAddAllUsersToTheGroupAdminIsNull(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -109,7 +105,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldAddAllUsersToTheGroupAdminIsFalse(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -132,7 +128,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupIdIsNull(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -155,7 +151,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupIdIsNotValid(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -178,7 +174,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupIdIsNotExists(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -201,7 +197,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUsersIsNull(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -224,7 +220,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUsersAreNotRegisteredOrActive(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -247,7 +243,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUsersIdAreNotValid(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -270,7 +266,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUsersAreEmpty(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -293,7 +289,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUserIsNotAdminOfTheGroup(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME_NOT_GROUP_ADMIN, self::USER_PASSWORD_NOT_GROUP_ADMIN);
+        $this->client = $this->getNewClientAuthenticatedAdmin();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -316,7 +312,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupUsersNumberExceded100(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -339,7 +335,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUnauthorizedUser(): void
     {
-        $this->client = $this->getNewClientAuthenticated('not valid user', self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticated('not valid user', 'password');
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,

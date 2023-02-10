@@ -20,7 +20,6 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
     private const METHOD = 'PATCH';
     private const ID_USER = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
     private const ID_USER_NOT_ACTIVE = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
-    private const USER_EMAIL = 'email.already.active@host.com';
     private const USER_PASSWORD = '123456';
 
     /** @test */
@@ -33,7 +32,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
             'passwordNewRepeat' => 'newPassword',
         ];
 
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -55,7 +54,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
     {
         $clientData = [];
 
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -85,7 +84,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
             'passwordNewRepeat' => 'newPassword',
         ];
 
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -112,7 +111,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
             'passwordNewRepeat' => 'newPassword',
         ];
 
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -139,7 +138,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
             'passwordNewRepeat' => 'newPassword',
         ];
 
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -166,7 +165,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
             'passwordNewRepeat' => 'newpa',
         ];
 
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -193,7 +192,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
             'passwordNewRepeat' => 'newPassword',
         ];
 
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -217,7 +216,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
             'passwordNewRepeat' => 'newPassword',
         ];
 
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -241,7 +240,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
             'passwordNewRepeat' => 'newPassword',
         ];
 
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -265,7 +264,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
             'passwordNewRepeat' => 'newPassword',
         ];
 
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());

@@ -17,11 +17,7 @@ class GetUsersControllerTest extends WebClientTestCase
 
     private const ENDPOINT = '/api/v1/users';
     private const METHOD = 'GET';
-    private const USER_NAME = 'email.already.active@host.com';
-    private const USER_PASSWORD = '123456';
     private const USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
-    private const USER_ADMIN_NAME = 'email.admin.active@host.com';
-    private const USER_ADMIN_PASSWORD = '123456';
 
     protected function setUp(): void
     {
@@ -112,7 +108,7 @@ class GetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldReturnThreeUsers(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $usersIds = $this->getUsersIds();
         $this->client->request(
             method: self::METHOD,
@@ -141,7 +137,7 @@ class GetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldReturnThreeUsersNotUsersDeletedOrNotActive(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $usersIds = array_merge($this->getUsersIds(), $this->getUsersIdsDeletedOrNotActive());
         $this->client->request(
             method: self::METHOD,
@@ -161,7 +157,7 @@ class GetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldReturnAnUserDifferentFromItself(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $userId = $this->getUsersIds()[0];
         $this->client->request(
             method: self::METHOD,
@@ -189,7 +185,7 @@ class GetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldReturnThreeUsersForAdminUser(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_ADMIN_NAME, self::USER_ADMIN_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedAdmin();
         $usersIds = $this->getUsersIds();
         $this->client->request(
             method: self::METHOD,
@@ -220,7 +216,7 @@ class GetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldReturnUsersOwnData(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.'/'.self::USER_ID,
@@ -250,7 +246,7 @@ class GetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailNoUsersSent(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -265,7 +261,7 @@ class GetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUsersIdWrong(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $usersIds = $this->getUsersIds();
         $this->client->request(
             method: self::METHOD,
@@ -286,7 +282,7 @@ class GetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUsersIdNotFound(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $usersIds = $this->getUsersIdsWrong();
         $this->client->request(
             method: self::METHOD,
@@ -303,7 +299,7 @@ class GetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUsersIdAreDeletedOrNotActived(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $usersIds = $this->getUsersIdsDeletedOrNotActive();
         $this->client->request(
             method: self::METHOD,

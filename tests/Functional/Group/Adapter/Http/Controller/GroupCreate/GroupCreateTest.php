@@ -15,8 +15,6 @@ class GroupCreateTest extends WebClientTestCase
 
     private const ENDPOINT = '/api/v1/groups';
     private const METHOD = 'POST';
-    private const USER_NAME = 'email.already.active@host.com';
-    private const USER_PASSWORD = '123456';
 
     protected function setUp(): void
     {
@@ -26,7 +24,7 @@ class GroupCreateTest extends WebClientTestCase
     /** @test */
     public function itShouldCreateAGroup(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -48,7 +46,7 @@ class GroupCreateTest extends WebClientTestCase
     /** @test */
     public function itShouldCreateAGroupDescriptionIsNull(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -70,7 +68,7 @@ class GroupCreateTest extends WebClientTestCase
     /** @test */
     public function itShouldFailDescriptionIsTooLong(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -92,7 +90,7 @@ class GroupCreateTest extends WebClientTestCase
     /** @test */
     public function itShouldFailNameIsNull(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -114,7 +112,7 @@ class GroupCreateTest extends WebClientTestCase
     /** @test */
     public function itShouldFailNameIsTooShort(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -136,7 +134,7 @@ class GroupCreateTest extends WebClientTestCase
     /** @test */
     public function itShouldFailNameIsTooLong(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -158,7 +156,7 @@ class GroupCreateTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupNameAlreadyExists(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -179,7 +177,7 @@ class GroupCreateTest extends WebClientTestCase
     /** @test */
     public function itShouldFailNotPermission(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, 'not allowed user');
+        $this->client = $this->getNewClientAuthenticated('email@user.com', 'not allowed user');
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,

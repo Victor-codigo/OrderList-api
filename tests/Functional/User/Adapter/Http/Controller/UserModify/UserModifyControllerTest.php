@@ -23,7 +23,6 @@ class UserModifyControllerTest extends WebClientTestCase
     private const METHOD = 'PUT';
     private const ENDPOINT = '/api/v1/users/modify';
     private const USER_NAME = 'email.already.active@host.com';
-    private const USER_PASSWORD = '123456';
     private const PATH_FIXTURES = __DIR__.'/Fixtures';
     private const PATH_IMAGE_UPLOAD = __DIR__.'/Fixtures/Image.png';
     private const PATH_IMAGE_BACKUP = 'tests/Fixtures/Files/Image.png';
@@ -43,7 +42,7 @@ class UserModifyControllerTest extends WebClientTestCase
         copy(self::PATH_IMAGE_BACKUP, self::PATH_IMAGE_UPLOAD);
         copy(self::PATH_IMAGE_NOT_ALLOWED_BACKUP, self::PATH_IMAGE_NOT_ALLOWED);
 
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->pathPublicImageUser = static::getContainer()->getParameter('user.public.image.path');
     }
 

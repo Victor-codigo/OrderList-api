@@ -16,10 +16,6 @@ class UserRemoveControllerTest extends WebClientTestCase
 
     private const METHOD = 'DELETE';
     private const ENDPOINT = '/api/v1/users/remove/';
-    private const USER_NAME_ADMIN = 'email.admin.active@host.com';
-    private const USER_PASSWORD_DAMIN = '123456';
-    private const USER_NAME = 'email.already.active@host.com';
-    private const USER_PASSWORD = '123456';
     private const USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
     private const USER_OTHER_ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
     private const USER_ID_NOT_EXISTS = 'f876ffe5-df2e-4597-aea5-b236e0663c95';
@@ -29,7 +25,7 @@ class UserRemoveControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldRemoveTheUserSameUserPermissions(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.self::USER_ID,
@@ -47,7 +43,7 @@ class UserRemoveControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldRemoveTheUserAdminPermissions(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME_ADMIN, self::USER_PASSWORD_DAMIN);
+        $this->client = $this->getNewClientAuthenticatedAdmin();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.self::USER_ID,
@@ -65,7 +61,7 @@ class UserRemoveControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUserIdIsWrong(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.self::USER_ID.'-wrong',
@@ -83,7 +79,7 @@ class UserRemoveControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUserHasNotPermissions(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.self::USER_OTHER_ID,
@@ -101,7 +97,7 @@ class UserRemoveControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUserNotFound(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME_ADMIN, self::USER_PASSWORD_DAMIN);
+        $this->client = $this->getNewClientAuthenticatedAdmin();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.self::USER_ID_NOT_EXISTS,

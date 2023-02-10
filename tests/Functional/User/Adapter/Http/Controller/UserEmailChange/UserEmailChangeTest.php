@@ -17,14 +17,13 @@ class UserEmailChangeTest extends WebClientTestCase
 
     private const ENDPOINT = '/api/v1/users/email';
     private const METHOD = 'PATCH';
-    private const USER_NAME = 'email.already.active@host.com';
     private const USER_PASSWORD = '123456';
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
     }
 
     /** @test */

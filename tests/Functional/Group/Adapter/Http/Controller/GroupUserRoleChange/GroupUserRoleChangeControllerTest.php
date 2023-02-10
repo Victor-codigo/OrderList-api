@@ -15,8 +15,6 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
 
     private const ENDPOINT = '/api/v1/groups/user/role';
     private const METHOD = 'PUT';
-    private const USER_NAME = 'email.already.active@host.com';
-    private const USER_PASSWORD = '123456';
     private const USER_NOT_GROUP_ADMIN_NAME = 'email.other.active@host.com';
     private const USER_NOT_GROUP_ADMINPASSWORD = '123456';
     private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
@@ -35,7 +33,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldChangeGroupUsersRol(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -61,7 +59,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUsersIdAreNotValid(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -84,7 +82,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupIdIsNull(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -107,7 +105,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupIdIsNotValid(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -152,7 +150,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupIdIsRegistered(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -174,7 +172,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUsersIdIsNull(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -197,7 +195,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailNotAllUsersIdAreValid(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -220,7 +218,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupSouldHaveAtleastOneAdmin(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,

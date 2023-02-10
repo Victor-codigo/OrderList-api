@@ -20,8 +20,6 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     private const METHOD = 'PATCH';
     private const USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
     private const USER_ID_NOT_EXISTS = '1befdbe2-9c14-42f0-850f-63e061e33b8k';
-    private const USER_EMAIL = 'email.already.active@host.com';
-    private const USER_PASSWORD = '123456';
 
     protected function setUp(): void
     {
@@ -31,7 +29,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itshouldChangeThePassword(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
 
         $clientData = [
             'token' => $this->generateToken(['username' => self::USER_ID], 86_400),
@@ -61,7 +59,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itshouldFailTokenNotAValidToken(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $clientData = [
             'token' => $this->generateToken(['username' => self::USER_ID]).'-wrong',
             'passwordNew' => '123456',
@@ -80,7 +78,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itshouldFailTokenWrong(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $clientData = [
             'token' => $this->generateToken(['username' => self::USER_ID]).'-wrong',
             'passwordNew' => '123456',
@@ -99,7 +97,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itshouldFailTokenHasExpired(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $clientData = [
             'token' => $this->generateToken(['username' => self::USER_ID], 0),
             'passwordNew' => '123456',
@@ -118,7 +116,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itshouldFailPasswordNewIsTooShort(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $clientData = [
             'token' => $this->generateToken(['username' => self::USER_ID], 86_400),
             'passwordNew' => '12345',
@@ -139,7 +137,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itshouldFailPasswordNewIsTooLong(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $clientData = [
             'token' => $this->generateToken(['username' => self::USER_ID], 86_400),
             'passwordNew' => str_pad('', 51, '-'),
@@ -160,7 +158,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itshouldFailPasswordNewRepeatIsTooShort(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $clientData = [
             'token' => $this->generateToken(['username' => self::USER_ID], 86_400),
             'passwordNew' => '123456',
@@ -181,7 +179,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itshouldFailPasswordNewRepeatIsTooLong(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $clientData = [
             'token' => $this->generateToken(['username' => self::USER_ID], 86_400),
             'passwordNew' => '123456',
@@ -202,7 +200,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itshouldFailIdDoesNotExists(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $clientData = [
             'token' => $this->generateToken(['username' => self::USER_ID_NOT_EXISTS], 86_400),
             'passwordNew' => '123456',
@@ -221,7 +219,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itshouldFailIdPasswordNewAndPasswordNewRepeatAreNotEquals(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $this->client = $this->getNewClientAuthenticatedUser();
         $clientData = [
             'token' => $this->generateToken(['username' => self::USER_ID], 86_400),
             'passwordNew' => '123456',
