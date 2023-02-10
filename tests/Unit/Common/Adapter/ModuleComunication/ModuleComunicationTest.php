@@ -16,7 +16,6 @@ use Common\Domain\Ports\HttpClient\HttpClientInterface;
 use Common\Domain\Ports\HttpClient\HttpClientResponseInteface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
-use DomainException;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -70,7 +69,7 @@ class ModuleComunicationTest extends TestCase
     private function getResponseDtoFromString(string $responseContent): ResponseDto
     {
         if ('' === $responseContent) {
-            return (new ResponseDto())
+            return (new ResponseDto(hasContent: false))
                 ->setMessage('')
                 ->setStatus(RESPONSE_STATUS::OK)
                 ->setData([])
@@ -86,7 +85,7 @@ class ModuleComunicationTest extends TestCase
             ->setErrors($responseDto['errors']);
     }
 
-    private function mockRequestMethod(ModuleComunicationConfigDto $routeConfig, DomainException $requestException = null): void
+    private function mockRequestMethod(ModuleComunicationConfigDto $routeConfig, \DomainException $requestException = null): void
     {
         $this->DI
             ->expects($this->once())

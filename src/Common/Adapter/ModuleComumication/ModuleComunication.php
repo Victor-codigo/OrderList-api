@@ -15,7 +15,6 @@ use Common\Domain\Ports\HttpClient\HttpClientInterface;
 use Common\Domain\Ports\ModuleComunication\ModuleComumunicationInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
-use JsonException;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -23,7 +22,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class ModuleComunication implements ModuleComumunicationInterface
 {
     private const API_REQUEST_TOKEN_EXPIRATION_TIME = AppConfig::API_TOKEN_RESQUEST_EXPIRE_TIME;
-    private const DEV_QUERY_STRING = '?XDEBUG_SESSION=VSCODE';
+    private const DEV_QUERY_STRING = '?XDEBUG_SESSION=VSCODE&env=test';
 
     public function __construct(
         private HttpClientInterface $httpClient,
@@ -67,12 +66,12 @@ class ModuleComunication implements ModuleComumunicationInterface
         }
 
         if ('' === $responseContent) {
-            return (new ResponseDto())->toArray();
+            return (new ResponseDto(hasContent: false))->toArray();
         }
 
         try {
             return json_decode($responseContent, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
+        } catch (\JsonException $e) {
             throw ModuleComunicationException::fromComunicationError('Error json decode', $e);
         }
     }
@@ -86,7 +85,8 @@ class ModuleComunication implements ModuleComumunicationInterface
             $responseContent['data'],
             $responseContent['errors'],
             $responseContent['message'],
-            RESPONSE_STATUS::from($responseContent['status'])
+            RESPONSE_STATUS::from($responseContent['status']),
+            $responseContent['hasContent']
         );
     }
 
