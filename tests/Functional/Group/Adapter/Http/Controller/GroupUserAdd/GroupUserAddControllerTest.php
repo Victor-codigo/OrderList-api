@@ -22,9 +22,15 @@ class GroupUserAddControllerTest extends WebClientTestCase
     private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
     private const GROUP_USERS_100_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const USER_TO_ADD_IDS = [
-        'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7',
         '1552b279-5f78-4585-ae1b-31be2faabba8',
+        'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7',
     ];
+
+    private const USERS_DELETED_OR_NOT_ACTIVE = [
+        '68e94495-16f0-4acd-adbe-f2b9575e6544', // deleted
+        '1befdbe2-9c14-42f0-850f-63e061e33b8f', // not active
+    ];
+    private const USER_ALREADY_IN_THE_GROUP = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
 
     protected function setUp(): void
     {
@@ -32,7 +38,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldAddUsersToTheGroup(): void
+    public function itShouldAddAllUsersToTheGroup(): void
     {
         $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
         $this->client->request(
@@ -55,7 +61,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldAddOnlyTwoUsersToTheGroup(): void
+    public function itShouldAddOnlyTwoUsersToTheGroupOneIsAlreadyinTheGroup(): void
     {
         $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
         $this->client->request(
@@ -63,7 +69,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_ID,
-                'users' => array_merge(self::USER_TO_ADD_IDS, ['2606508b-4516-45d6-93a6-c7cb416b7f3f']),
+                'users' => array_merge(self::USER_TO_ADD_IDS, [self::USER_ALREADY_IN_THE_GROUP]),
                 'admin' => true,
             ])
         );
@@ -213,6 +219,29 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
         $this->assertSame(['users' => ['not_blank']], (array) $responseContent->errors);
+    }
+
+    /** @test */
+    public function itShouldFailUsersAreNotRegisteredOrActive(): void
+    {
+        $this->client = $this->getNewClientAuthenticated(self::USER_NAME, self::USER_PASSWORD);
+        $this->client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'users' => self::USERS_DELETED_OR_NOT_ACTIVE,
+                'admin' => true,
+            ])
+        );
+
+        $response = $this->client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['users_validation'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Wrong users', $responseContent->message);
+        $this->assertSame(['users_validation' => 'Wrong users'], (array) $responseContent->errors);
     }
 
     /** @test */
