@@ -13,6 +13,7 @@ class Kernel extends BaseKernel
 
     protected function build(ContainerBuilder $container): void
     {
+        $this->environment = KernelCustom::changeEnviromentByRequestQuery($this->environment);
         KernelCustom::eventSubscribersAutoWire($container);
     }
 }
