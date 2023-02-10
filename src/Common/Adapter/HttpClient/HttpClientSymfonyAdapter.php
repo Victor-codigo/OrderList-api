@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\HttpClient;
 
-use Common\Domain\Ports\HttpClient\Exception\UnsuportedOptionException;
+use Common\Domain\HttpClient\Exception\UnsuportedOptionException;
 use Common\Domain\Ports\HttpClient\HttpClientInterface;
 use Common\Domain\Ports\HttpClient\HttpClientResponseInteface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
