@@ -35,7 +35,7 @@ class GroupUserAddUseCase extends ServiceBase
         private ValidationInterface $validator,
         private UserGroupRepositoryInterface $userGroupRepository,
         private GroupUserAddService $groupUserAddService,
-        private ModuleComumunicationInterface $moduleComumunication
+        private ModuleComumunicationInterface $moduleComunication
     ) {
     }
 
@@ -86,7 +86,7 @@ class GroupUserAddUseCase extends ServiceBase
      */
     private function validateUsersToAdd(array $users): void
     {
-        $response = $this->moduleComumunication->__invoke(
+        $response = $this->moduleComunication->__invoke(
             ModuleComunicationFactory::userGet($users)
         );
 
