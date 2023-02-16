@@ -1,0 +1,18 @@
+<?php
+
+declare(strict_types=1);
+
+namespace [NAMESPACE];
+
+use [NAMESPACE]\Dto\[ENDPOINT]Dto;
+
+class [ENDPOINT]Service
+{
+    public function __construct(
+    ) {
+    }
+
+    public function __invoke([ENDPOINT]Dto $input)
+    {
+    }
+}

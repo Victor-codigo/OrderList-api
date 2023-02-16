@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+namespace [NAMESPACE];
+
+use [NAMESPACE]\Dto\[ENDPOINT]RequestDto;
+use [NAMESPACE_INNER_LAYER];
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+class [ENDPOINT]Controller extends AbstractController
+{
+    public function __construct(
+    ) {
+    }
+
+    public function __invoke([ENDPOINT]RequestDto $request): JsonResponse
+    {
+    }
+
+    private function create[ENDPOINT]InputDto(): [ENDPOINT]InputDto
+    {
+    }
+
+    private function createResponse(): JsonResponse
+    {
+    }
+}

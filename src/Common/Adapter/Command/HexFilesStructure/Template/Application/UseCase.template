@@ -1,0 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+namespace [NAMESPACE];
+
+use Common\Domain\Service\ServiceBase;
+use [NAMESPACE]\Dto\[ENDPOINT]InputDto;
+use [NAMESPACE_INNER_LAYER];
+
+class [ENDPOINT]UseCase extends ServiceBase
+{
+    public function __construct(
+    ) {
+    }
+
+    public function __invoke([ENDPOINT]InputDto $input)
+    {
+    }
+
+    private function validation([ENDPOINT]InputDto $input): void
+    {
+    }
+
+    private function create[ENDPOINT]Dto([ENDPOINT]InputDto $input): [ENDPOINT]Dto
+    {
+    }
+}
