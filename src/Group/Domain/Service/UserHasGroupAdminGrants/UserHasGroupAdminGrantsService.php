@@ -17,6 +17,9 @@ class UserHasGroupAdminGrantsService
     ) {
     }
 
+    /**
+     * @throws DBNotFoundException
+     */
     public function __invoke(User $user, Identifier $groupId): bool
     {
         $groupAdmins = $this->userGroupRepository->findGroupUsersByRol($groupId, GROUP_ROLES::ADMIN);
