@@ -31,8 +31,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                // 'group_id' => self::GROUP_ID,
-                'group_id' => [self::GROUP_ID],
+                'group_id' => self::GROUP_ID,
                 'users' => self::GROUP_USERS_TO_REMOVE_ID,
             ])
         );
