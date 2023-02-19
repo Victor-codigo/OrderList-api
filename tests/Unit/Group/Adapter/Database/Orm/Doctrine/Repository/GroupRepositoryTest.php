@@ -103,6 +103,35 @@ class GroupRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
+    public function itShouldRemoveTheGroup(): void
+    {
+        $group = $this->getNewGroup();
+        $this->object->remove($group);
+
+        $groupRemoved = $this->object->findBy(['id' => $group->getId()]);
+
+        $this->assertEmpty($groupRemoved);
+    }
+
+    /** @test */
+    public function itShouldFailRemovingTheGroupErrorConnection(): void
+    {
+        $this->expectException(DBConnectionException::class);
+
+        $group = $this->getNewGroup();
+
+        /** @var MockObject|ObjectManager $objectManagerMock */
+        $objectManagerMock = $this->createMock(ObjectManager::class);
+        $objectManagerMock
+            ->expects($this->once())
+            ->method('flush')
+            ->willThrowException(ConnectionException::driverRequired(''));
+
+        $this->mockObjectManager($this->object, $objectManagerMock);
+        $this->object->remove($group);
+    }
+
+    /** @test */
     public function itShouldFindAGroupById(): void
     {
         $groupId = $this->getExistsGroup()->getId();

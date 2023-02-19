@@ -8,12 +8,32 @@ group_create:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
+# GROUP REMOVE
+# -------------------------------------------------------------
+group_remove:
+  path: /api/v{api_version}/groups
+  methods: DELETE
+  controller: Group\Adapter\Http\Controller\GroupRemove\GroupRemoveController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
 # GROUP USER ADD
 # -------------------------------------------------------------
 group_user_add:
   path: /api/v{api_version}/groups/user
   methods: POST
   controller: Group\Adapter\Http\Controller\GroupUserAdd\GroupUserAddController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# GROUP USER REMOVE
+# -------------------------------------------------------------
+group_user_remove:
+  path: /api/v{api_version}/groups/user
+  methods: DELETE
+  controller: Group\Adapter\Http\Controller\GroupUserRemove\GroupUserRemoveController
   requirements:
     api_version: '\d+[.\d]?'
 

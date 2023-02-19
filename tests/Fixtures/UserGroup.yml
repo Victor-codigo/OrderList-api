@@ -36,13 +36,6 @@ Group\Domain\Model\UserGroup:
       roles: "@groupuser_roles_user"
       group: "@entity-group_type_user"
 
-  entity-groupuser_many_users-{1..5}:
-    __construct:
-      groupId: "@entity-group_type_group->getId"
-      userId: "@entity-user_random-<current()>->getId"
-      roles: "@groupuser_roles_user"
-      group: "@entity-group_type_group"
-
   entity-groupuser_many_users_uuidv4-1:
     __construct:
       groupId: "@entity-group_type_group->getId"
@@ -53,7 +46,7 @@ Group\Domain\Model\UserGroup:
   entity-groupuser_many_users_uuidv4-2:
     __construct:
       groupId: "@entity-group_type_group->getId"
-      userId: "@entity-user_active->getId"
+      userId: "@entity-user_other_3->getId"
       roles: "@groupuser_roles_user"
       group: "@entity-group_type_group"
 

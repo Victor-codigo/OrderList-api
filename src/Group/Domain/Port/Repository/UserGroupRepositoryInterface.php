@@ -18,6 +18,15 @@ interface UserGroupRepositoryInterface extends RepositoryInterface
     public function findGroupUsersOrFail(Identifier $groupId): array;
 
     /**
+     * @param Identifier[] $usersId
+     *
+     * @return UserGroup[]
+     *
+     * @throws DBNotFoundException
+     */
+    public function findGroupUsersByUserIdOrFail(Identifier $groupId, array $usersId): array;
+
+    /**
      * @return UserGroup[]
      *
      * @throws DBNotFoundException
@@ -35,4 +44,9 @@ interface UserGroupRepositoryInterface extends RepositoryInterface
      * @throws DBConnectionException
      */
     public function save(array $usersGroup): void;
+
+    /**
+     * @param UserGroup[] $usersGroup
+     */
+    public function removeUsers(array $usersGroup): void;
 }

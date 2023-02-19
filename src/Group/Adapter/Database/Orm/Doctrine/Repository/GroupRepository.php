@@ -38,6 +38,19 @@ class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
     }
 
     /**
+     * @throws DBConnectionException
+     */
+    public function remove(Group $group): void
+    {
+        try {
+            $this->objectManager->remove($group);
+            $this->objectManager->flush();
+        } catch (\Exception $e) {
+            throw DBConnectionException::fromConnection($e->getCode());
+        }
+    }
+
+    /**
      * @throws DBNotFoundException
      */
     public function findGroupByIdOrFail(Identifier $id): Group

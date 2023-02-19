@@ -40,6 +40,28 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
     }
 
     /**
+     * @param Identifier[] $usersId
+     *
+     * @return UserGroup[]
+     *
+     * @throws DBNotFoundException
+     */
+    public function findGroupUsersByUserIdOrFail(Identifier $groupId, array $usersId): array
+    {
+        /** @var UserGroup[] $groupUsers */
+        $groupUsers = $this->findBy([
+            'groupId' => $groupId,
+            'userId' => $usersId,
+        ]);
+
+        if (empty($groupUsers)) {
+            throw DBNotFoundException::fromMessage('Group users not found');
+        }
+
+        return $groupUsers;
+    }
+
+    /**
      * @return UserGroup[]
      *
      * @throws DBNotFoundException
@@ -89,6 +111,22 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
         try {
             foreach ($usersGroup as $userGroup) {
                 $this->objectManager->persist($userGroup);
+            }
+
+            $this->objectManager->flush();
+        } catch (\Exception $e) {
+            throw DBConnectionException::fromConnection($e->getCode());
+        }
+    }
+
+    /**
+     * @param UserGroup[] $usersGroup
+     */
+    public function removeUsers(array $usersGroup): void
+    {
+        try {
+            foreach ($usersGroup as $userGroup) {
+                $this->objectManager->remove($userGroup);
             }
 
             $this->objectManager->flush();

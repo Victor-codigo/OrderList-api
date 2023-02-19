@@ -41,13 +41,8 @@ class UserGroupRepositoryTest extends DataBaseTestCase
     {
         return [
            self::GROUP_USER_ADMIN_ID,
-           '0b13e52d-b058-32fb-8507-10dec634a07c',
-           '896c6153-794e-3e94-b62d-95997c8b60ad',
-           'f425bf79-5a19-31d4-ab56-ed4ca30a7b1a',
-           '0b17ca3e-490b-3ddb-aa78-35b4ce668dc0',
-           'f1eb9ed5-ccb1-33f4-bb05-19b8b0bea672',
            '1befdbe2-9c14-42f0-850f-63e061e33b8f',
-           '2606508b-4516-45d6-93a6-c7cb416b7f3f',
+           '08eda546-739f-4ab7-917a-8a9dbee426ef',
            '6df60afd-f7c3-4c2c-b920-e265f266c560',
         ];
     }
@@ -69,6 +64,73 @@ class UserGroupRepositoryTest extends DataBaseTestCase
     {
         $this->expectException(DBNotFoundException::class);
         $this->object->findGroupUsersOrFail(ValueObjectFactory::createIdentifier('not a valid id'));
+    }
+
+    /** @test */
+    public function itShouldFindUsersOfTheGroupByGroupAndUserId(): void
+    {
+        $groupUsersId = $this->getGroupUserIds();
+        $groupUsersIdentifiers = array_map(
+            fn (string $userId) => ValueObjectFactory::createIdentifier($userId),
+            $groupUsersId
+        );
+
+        $return = $this->object->findGroupUsersByUserIdOrFail(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            $groupUsersIdentifiers
+        );
+
+        $this->assertCount(count($groupUsersId), $return);
+
+        foreach ($return as $userGroup) {
+            $this->assertEquals(self::GROUP_ID, $userGroup->getGroupId()->getValue());
+            $this->assertContains($userGroup->getUserId()->getValue(), $groupUsersId);
+        }
+    }
+
+    /** @test */
+    public function itShouldFindOnlyEightUsersOfTheGroupByGroupAndUserId(): void
+    {
+        $groupUsersId = $this->getGroupUserIds();
+        // Users that do not exists in data base
+        $groupUsersId[] = 'ac2622c7-a38a-4581-980e-a63bec3cc5f0';
+        $groupUsersId[] = '9212bf15-915c-4903-824b-6b177e338cde';
+        $groupUsersIdentifiers = array_map(
+            fn (string $userId) => ValueObjectFactory::createIdentifier($userId),
+            $groupUsersId
+        );
+
+        $return = $this->object->findGroupUsersByUserIdOrFail(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            $groupUsersIdentifiers
+        );
+
+        $this->assertCount(count($groupUsersId) - 2, $return);
+
+        foreach ($return as $userGroup) {
+            $this->assertEquals(self::GROUP_ID, $userGroup->getGroupId()->getValue());
+            $this->assertContains($userGroup->getUserId()->getValue(), $groupUsersId);
+        }
+    }
+
+    /** @test */
+    public function itShouldFindNotFindUsersOfTheGroupByGroupAndUserId(): void
+    {
+        // Users that do not exists in data base
+        $groupUsersId = [
+            'ac2622c7-a38a-4581-980e-a63bec3cc5f0',
+            '9212bf15-915c-4903-824b-6b177e338cde',
+        ];
+        $groupUsersIdentifiers = array_map(
+            fn (string $userId) => ValueObjectFactory::createIdentifier($userId),
+            $groupUsersId
+        );
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findGroupUsersByUserIdOrFail(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            $groupUsersIdentifiers
+        );
     }
 
     /** @test */
@@ -147,27 +209,6 @@ class UserGroupRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    // public function itShouldFailGroupAlreadyExists(): void
-    // {
-    //     $group = group::fromPrimitives(self::GROUP_ID, 'GroupName', GROUP_TYPE::GROUP, 'description');
-    //     $this->
-    //     $expectedUsersId = [
-    //         $this->object->generateId(),
-    //         $this->object->generateId(),
-    //         $this->object->generateId(),
-    //     ];
-    //     $usersGroup = [
-    //         UserGroup::fromPrimitives(self::GROUP_ID, $expectedUsersId[0], [GROUP_ROLES::USER], $group),
-    //         UserGroup::fromPrimitives(self::GROUP_ID, $expectedUsersId[1], [GROUP_ROLES::USER], $group),
-    //         UserGroup::fromPrimitives(self::GROUP_ID, $expectedUsersId[1], [GROUP_ROLES::USER], $group),
-    //     ];
-    //     $group->setUsers($usersGroup);
-
-    //     $this->expectException(DBConnectionException::class);
-    //     $this->object->save($usersGroup);
-    // }
-
-    /** @test */
     public function itShouldFailDatabaseError(): void
     {
         $group = group::fromPrimitives(self::GROUP_ID, 'GroupName', GROUP_TYPE::GROUP, 'description');
@@ -201,5 +242,27 @@ class UserGroupRepositoryTest extends DataBaseTestCase
     {
         $this->expectException(DBNotFoundException::class);
         $this->object->findGroupUsersNumberOrFail(ValueObjectFactory::createIdentifier('invalid group'));
+    }
+
+    /** @test */
+    public function itShouldRemoveUsersGroup(): void
+    {
+        $usersId = array_map(
+            fn (string $userId) => ValueObjectFactory::createIdentifier($userId),
+            array_slice($this->getGroupUserIds(), 0, 3)
+        );
+        $usersGroup = $this->object->findBy([
+            'groupId' => ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            'userId' => $usersId,
+        ]);
+
+        $this->object->removeUsers($usersGroup);
+
+        $usersGroupAfter = $this->object->findBy([
+            'groupId' => ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            'userId' => $usersId,
+        ]);
+
+        $this->assertEmpty($usersGroupAfter);
     }
 }
