@@ -21,19 +21,19 @@ use Group\Application\GroupUserAdd\Exception\GroupUserAddGroupMaximunUsersNumber
 use Group\Application\GroupUserAdd\Exception\GroupUserAddGroupNotFoundException;
 use Group\Application\GroupUserAdd\Exception\GroupUserAddUsersValidationException;
 use Group\Application\GroupUserRoleChange\Exception\GroupUserRoleChangePermissionException;
-use Group\Domain\Model\GROUP_ROLES;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupUserAdd\Dto\GroupUserAddDto;
 use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersMaxNumberExcededException;
 use Group\Domain\Service\GroupUserAdd\GroupUserAddService;
-use User\Domain\Model\User;
+use Group\Domain\Service\UserHasGroupAdminGrants\UserHasGroupAdminGrantsService;
 
 class GroupUserAddUseCase extends ServiceBase
 {
     public function __construct(
         private ValidationInterface $validator,
         private UserGroupRepositoryInterface $userGroupRepository,
+        private UserHasGroupAdminGrantsService $userHasGroupAdminGrantsService,
         private GroupUserAddService $groupUserAddService,
         private ModuleComumunicationInterface $moduleComunication
     ) {
@@ -49,7 +49,6 @@ class GroupUserAddUseCase extends ServiceBase
     {
         try {
             $this->validation($input);
-            $this->hasGrantsOrFail($input->userSession, $input->groupId);
             $usersAdded = $this->groupUserAddService->__invoke(
                 $this->createGroupUserAddDto($input->groupId, $input->usersId, $input->rol)
             );
@@ -68,6 +67,7 @@ class GroupUserAddUseCase extends ServiceBase
      * @throws ValueObjectValidationException
      * @throws GroupUserAddUsersValidationException
      * @throws ModuleComunicationException
+     * @throws GroupUserRoleChangePermissionException
      */
     private function validation(GroupUserAddInputDto $input): void
     {
@@ -75,6 +75,10 @@ class GroupUserAddUseCase extends ServiceBase
 
         if (!empty($errorList)) {
             throw ValueObjectValidationException::fromArray('Error', $errorList);
+        }
+
+        if (!$this->userHasGroupAdminGrantsService->__invoke($input->userSession, $input->groupId)) {
+            throw GroupUserRoleChangePermissionException::fromMessage('Permissions denied');
         }
 
         $this->validateUsersToAdd($input->usersId);
@@ -92,23 +96,6 @@ class GroupUserAddUseCase extends ServiceBase
 
         if (!empty($response->getErrors()) || !$response->hasContent()) {
             throw GroupUserAddUsersValidationException::fromMessage('Wrong users');
-        }
-    }
-
-    /**
-     * @throws DBNotFoundException
-     * @throws GroupUserRoleChangePermissionException
-     */
-    private function hasGrantsOrFail(User $user, Identifier $groupId): void
-    {
-        $groupAdmins = $this->userGroupRepository->findGroupUsersByRol($groupId, GROUP_ROLES::ADMIN);
-        $groupAdminsIds = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId()->getValue(),
-            $groupAdmins
-        );
-
-        if (!in_array($user->getId()->getValue(), $groupAdminsIds)) {
-            throw GroupUserRoleChangePermissionException::fromMessage('Permissions denied');
         }
     }
 
