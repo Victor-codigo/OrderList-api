@@ -34,7 +34,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldAddAllUsersToTheGroup22(): void
+    public function itShouldAddAllUsersToTheGroup(): void
     {
         $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
