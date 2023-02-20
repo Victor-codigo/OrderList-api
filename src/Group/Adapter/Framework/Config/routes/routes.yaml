@@ -18,6 +18,16 @@ group_remove:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
+# GROUP MODIFY
+# -------------------------------------------------------------
+group_modify:
+  path: /api/v{api_version}/groups/modify
+  methods: POST
+  controller: Group\Adapter\Http\Controller\GroupModify\GroupModifyController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
 # GROUP USER ADD
 # -------------------------------------------------------------
 group_user_add:
