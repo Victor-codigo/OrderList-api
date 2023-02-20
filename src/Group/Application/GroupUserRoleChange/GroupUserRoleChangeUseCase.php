@@ -18,18 +18,17 @@ use Group\Application\GroupUserRoleChange\Dto\GroupUserRoleChangeOutputDto;
 use Group\Application\GroupUserRoleChange\Exception\GroupUserRoleChangeGroupWithoutAdminsException;
 use Group\Application\GroupUserRoleChange\Exception\GroupUserRoleChangePermissionException;
 use Group\Application\GroupUserRoleChange\Exception\GroupUserRoleChangeUsersNotFoundException;
-use Group\Domain\Model\GROUP_ROLES;
-use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupUserRoleChange\Dto\GroupUserRoleChangeDto;
 use Group\Domain\Service\GroupUserRoleChange\Exception\GroupWithoutAdminsException;
 use Group\Domain\Service\GroupUserRoleChange\GroupUserRoleChangeService;
-use User\Domain\Model\User;
+use Group\Domain\Service\UserHasGroupAdminGrants\UserHasGroupAdminGrantsService;
 
 class GroupUserRoleChangeUseCase extends ServiceBase
 {
     public function __construct(
         private GroupUserRoleChangeService $groupUserRoleChangeService,
+        private UserHasGroupAdminGrantsService $userHasGroupAdminGrantsService,
         private UserGroupRepositoryInterface $userGroupRepository,
         private ValidationInterface $validator
     ) {
@@ -37,10 +36,8 @@ class GroupUserRoleChangeUseCase extends ServiceBase
 
     public function __invoke(GroupUserRoleChangeInputDto $input): GroupUserRoleChangeOutputDto
     {
-        $this->validation($input);
-
         try {
-            $this->hasGrantsOrFail($input->userSession, $input->groupId);
+            $this->validation($input);
             $usersMoidifiedId = $this->groupUserRoleChangeService->__invoke(
                 $this->createGroupUserRoleChangeDto($input->groupId, $input->usersId, $input->rol)
             );
@@ -52,9 +49,15 @@ class GroupUserRoleChangeUseCase extends ServiceBase
             throw GroupUserRoleChangeUsersNotFoundException::fromMessage('Users do not exist in the group');
         } catch (DBUniqueConstraintException|DBConnectionException) {
             throw DomainErrorException::fromMessage('An error has been occurred');
+        } catch (ValueObjectValidationException|GroupUserRoleChangePermissionException $e) {
+            throw $e;
         }
     }
 
+    /**
+     * @throws ValueObjectValidationException
+     * @throws GroupUserRoleChangePermissionException
+     */
     private function validation(GroupUserRoleChangeInputDto $input): void
     {
         $errorList = $input->validate($this->validator);
@@ -62,17 +65,8 @@ class GroupUserRoleChangeUseCase extends ServiceBase
         if (!empty($errorList)) {
             throw ValueObjectValidationException::fromArray('Error', $errorList);
         }
-    }
 
-    private function hasGrantsOrFail(User $user, Identifier $groupId): void
-    {
-        $groupAdmins = $this->userGroupRepository->findGroupUsersByRol($groupId, GROUP_ROLES::ADMIN);
-        $groupAdminsIds = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId()->getValue(),
-            $groupAdmins
-        );
-
-        if (!in_array($user->getId()->getValue(), $groupAdminsIds)) {
+        if (!$this->userHasGroupAdminGrantsService->__invoke($input->userSession, $input->groupId)) {
             throw GroupUserRoleChangePermissionException::fromMessage('Permissions denied');
         }
     }
