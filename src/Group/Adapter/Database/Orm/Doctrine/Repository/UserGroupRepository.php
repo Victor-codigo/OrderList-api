@@ -9,7 +9,6 @@ use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Doctrine\Persistence\ManagerRegistry;
 use Group\Domain\Model\GROUP_ROLES;
 use Group\Domain\Model\UserGroup;
@@ -68,13 +67,56 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
      */
     public function findGroupUsersByRol(Identifier $groupId, GROUP_ROLES $groupRol): array
     {
-        $usersGroup = $this->findGroupUsersOrFail($groupId);
-        $adminRol = ValueObjectFactory::createRol($groupRol);
+        $dql = <<<DQL
+            SELECT userGroup
+            FROM {$this->getString(UserGroup::class)} userGroup
+            WHERE userGroup.groupId = :group_id
+                AND JSON_CONTAINS(userGroup.roles, :rol) = 1
+        DQL;
 
-        return array_filter(
-            $usersGroup,
-            fn (UserGroup $userGroup) => $userGroup->getRoles()->has($adminRol)
-        );
+        $query = $this->entityManager
+            ->createQuery($dql)
+            ->setParameters([
+                'group_id' => $groupId,
+                'rol' => '"'.$groupRol->value.'"',
+            ]);
+
+        $result = $query->getResult();
+
+        if (empty($result)) {
+            throw DBNotFoundException::fromMessage('Group users not found');
+        }
+
+        return $result;
+    }
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findUserGroupsById(Identifier $userId, GROUP_ROLES|null $groupRol = null): array
+    {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('userGroup')
+            ->from(UserGroup::class, 'userGroup')
+            ->where('userGroup.userId = :user_id')
+            ->setParameter('user_id', $userId);
+
+        if (null !== $groupRol) {
+            $queryBuilder
+                ->andWhere('JSON_CONTAINS(userGroup.roles, :rol) = 1')
+                ->setParameter('rol', '"'.$groupRol->value.'"');
+        }
+
+        $result = $queryBuilder
+            ->getQuery()
+            ->getResult();
+
+        if (empty($result)) {
+            throw DBNotFoundException::fromMessage('No groups found');
+        }
+
+        return $result;
     }
 
     /**
@@ -82,11 +124,11 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
      */
     public function findGroupUsersNumberOrFail(Identifier $groupId): int
     {
-        $sql = <<<sql
+        $sql = <<<SQL
             SELECT COUNT(userGroup)
             FROM {$this->getString(UserGroup::class)} userGroup
             WHERE userGroup.groupId = :group_id
-        sql;
+        SQL;
 
         $query = $this->entityManager
             ->createQuery($sql)

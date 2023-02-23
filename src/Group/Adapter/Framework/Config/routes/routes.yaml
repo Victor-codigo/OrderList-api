@@ -28,6 +28,16 @@ group_modify:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
+# GROUP GET DATA
+# -------------------------------------------------------------
+group_get_data:
+  path: /api/v{api_version}/groups/{groups_id}
+  methods: GET
+  controller: Group\Adapter\Http\Controller\GroupGetData\GroupGetDataController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
 # GROUP USER ADD
 # -------------------------------------------------------------
 group_user_add:
