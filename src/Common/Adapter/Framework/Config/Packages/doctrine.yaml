@@ -14,6 +14,11 @@ doctrine:
             RolesType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array\RolesType
             GroupTypeType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\GroupTypeType
 
+    orm:
+        dql:
+            string_functions:
+                JSON_CONTAINS: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Mysql\JsonContains
+
         # IMPORTANT: You MUST configure your server version,
         # either    here or in the DATABASE_URL env var (see .env file)
         #server_version: '13'
