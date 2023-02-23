@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Group\Application\GroupModify\Exception;
+namespace Group\Application\GroupModify\Exception;
 
 use Common\Domain\Exception\DomainExceptionOutput;
 use Common\Domain\Response\RESPONSE_STATUS;

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupModify;
 
-use App\Group\Application\GroupModify\Exception\GroupModifyPermissionsException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Service\Exception\DomainErrorException;
@@ -15,6 +14,7 @@ use Exception;
 use Group\Application\GroupModify\Dto\GroupModifyInputDto;
 use Group\Application\GroupModify\Dto\GroupModifyOutputDto;
 use Group\Application\GroupModify\Exception\GroupModifyGroupNotFoundException;
+use Group\Application\GroupModify\Exception\GroupModifyPermissionsException;
 use Group\Domain\Service\GroupModify\Dto\GroupModifyDto;
 use Group\Domain\Service\GroupModify\GroupModifyService;
 use Group\Domain\Service\UserHasGroupAdminGrants\UserHasGroupAdminGrantsService;
