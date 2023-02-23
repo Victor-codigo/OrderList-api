@@ -22,7 +22,11 @@ interface GroupRepositoryInterface extends RepositoryInterface
     public function remove(Group $group): void;
 
     /**
+     * @param Identifier[] $ids
+     *
+     * @return Group[]
+     *
      * @throws DBNotFoundException
      */
-    public function findGroupByIdOrFail(Identifier $id): Group;
+    public function findGroupsByIdOrFail(array $id): array;
 }

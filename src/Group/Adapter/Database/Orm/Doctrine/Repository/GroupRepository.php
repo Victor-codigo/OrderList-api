@@ -51,17 +51,21 @@ class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
     }
 
     /**
+     * @param Identifier[] $ids
+     *
+     * @return Group[]
+     *
      * @throws DBNotFoundException
      */
-    public function findGroupByIdOrFail(Identifier $id): Group
+    public function findGroupsByIdOrFail(array $groupsId): array
     {
-        /** @var group $group */
-        $group = $this->findOneBy(['id' => $id]);
+        /** @var Group[] $groups */
+        $groups = $this->findBy(['id' => $groupsId]);
 
-        if (empty($group)) {
-            throw DBNotFoundException::fromMessage('Group not found');
+        if (empty($groups)) {
+            throw DBNotFoundException::fromMessage('Groups not found');
         }
 
-        return $group;
+        return $groups;
     }
 }

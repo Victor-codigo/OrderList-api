@@ -20,8 +20,8 @@ class GroupRemoveService
      */
     public function __invoke(GroupRemoveDto $input): void
     {
-        $group = $this->groupRepository->findGroupByIdOrFail($input->groupId);
+        $group = $this->groupRepository->findGroupsByIdOrFail([$input->groupId]);
 
-        $this->groupRepository->remove($group);
+        $this->groupRepository->remove($group[0]);
     }
 }

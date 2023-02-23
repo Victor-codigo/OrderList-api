@@ -20,12 +20,12 @@ class GroupModifyService
      */
     public function __invoke(GroupModifyDto $input): void
     {
-        $group = $this->groupRepository->findGroupByIdOrFail($input->groupId);
+        $group = $this->groupRepository->findGroupsByIdOrFail([$input->groupId]);
 
-        $group
+        $group[0]
             ->setName($input->name)
             ->setDescription($input->description);
 
-        $this->groupRepository->save($group);
+        $this->groupRepository->save($group[0]);
     }
 }

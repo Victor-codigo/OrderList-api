@@ -44,9 +44,9 @@ class GroupRemoveServiceTest extends TestCase
 
         $this->groupRepository
             ->expects($this->once())
-            ->method('findGroupByIdOrFail')
-            ->with($groupId)
-            ->willReturn($group);
+            ->method('findGroupsByIdOrFail')
+            ->with([$groupId])
+            ->willReturn([$group]);
 
         $this->groupRepository
             ->expects($this->once())
@@ -64,8 +64,8 @@ class GroupRemoveServiceTest extends TestCase
 
         $this->groupRepository
             ->expects($this->once())
-            ->method('findGroupByIdOrFail')
-            ->with($groupId)
+            ->method('findGroupsByIdOrFail')
+            ->with([$groupId])
             ->willThrowException(new DBNotFoundException());
 
         $this->groupRepository
@@ -85,9 +85,9 @@ class GroupRemoveServiceTest extends TestCase
 
         $this->groupRepository
             ->expects($this->once())
-            ->method('findGroupByIdOrFail')
-            ->with($groupId)
-            ->willReturn($group);
+            ->method('findGroupsByIdOrFail')
+            ->with([$groupId])
+            ->willReturn([$group]);
 
         $this->groupRepository
             ->expects($this->once())

@@ -36,6 +36,11 @@ interface UserGroupRepositoryInterface extends RepositoryInterface
     /**
      * @throws DBNotFoundException
      */
+    public function findUserGroupsById(Identifier $userId, GROUP_ROLES|null $groupRol = null): array;
+
+    /**
+     * @throws DBNotFoundException
+     */
     public function findGroupUsersNumberOrFail(Identifier $groupId): int;
 
     /**

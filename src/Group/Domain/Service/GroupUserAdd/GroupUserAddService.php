@@ -35,10 +35,10 @@ class GroupUserAddService
     public function __invoke(GroupUserAddDto $input): array
     {
         $this->validateGroupUsersNumber($input->groupId, count($input->usersId));
-        $group = $this->groupRepository->findGroupByIdOrFail($input->groupId);
+        $group = $this->groupRepository->findGroupsByIdOrFail([$input->groupId]);
         $groupUsers = $this->userGroupRepository->findGroupUsersOrFail($input->groupId);
         $groupUsersNew = $this->getUsersNotInGroup($groupUsers, $input->usersId);
-        $usersGroupNewObjects = $this->createUserGroup($input->groupId, $groupUsersNew, $input->rol, $group);
+        $usersGroupNewObjects = $this->createUserGroup($input->groupId, $groupUsersNew, $input->rol, $group[0]);
 
         $this->userGroupRepository->save($usersGroupNewObjects);
 

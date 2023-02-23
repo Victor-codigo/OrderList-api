@@ -55,9 +55,9 @@ class GroupModifyServiceTest extends TestCase
 
         $this->groupRepository
             ->expects($this->once())
-            ->method('findGroupByIdOrFail')
-            ->with($groupModified->getId())
-            ->willReturn($group);
+            ->method('findGroupsByIdOrFail')
+            ->with([$groupModified->getId()])
+            ->willReturn([$group]);
 
         $this->groupRepository
             ->expects($this->once())
@@ -80,8 +80,8 @@ class GroupModifyServiceTest extends TestCase
 
         $this->groupRepository
             ->expects($this->once())
-            ->method('findGroupByIdOrFail')
-            ->with($groupModified->getId())
+            ->method('findGroupsByIdOrFail')
+            ->with([$groupModified->getId()])
             ->willThrowException(new DBNotFoundException());
 
         $this->groupRepository
@@ -105,9 +105,9 @@ class GroupModifyServiceTest extends TestCase
 
         $this->groupRepository
             ->expects($this->once())
-            ->method('findGroupByIdOrFail')
-            ->with($groupModified->getId())
-            ->willReturn($group);
+            ->method('findGroupsByIdOrFail')
+            ->with([$groupModified->getId()])
+            ->willReturn([$group]);
 
         $this->groupRepository
             ->expects($this->once())

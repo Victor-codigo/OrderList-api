@@ -52,6 +52,16 @@ class GroupRepositoryTest extends DataBaseTestCase
         );
     }
 
+    private function getOtherExistsGroup(): Group
+    {
+        return Group::fromPrimitives(
+            '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
+            'Group Other',
+            GROUP_TYPE::GROUP,
+            'This is a group of other users'
+        );
+    }
+
     private function getNewUserGroup(Group $group, array $roles): UserGroup
     {
         return UserGroup::fromPrimitives(
@@ -132,12 +142,19 @@ class GroupRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldFindAGroupById(): void
+    public function itShouldFindAllGroupsById(): void
     {
-        $groupId = $this->getExistsGroup()->getId();
-        $return = $this->object->findGroupByIdOrFail($groupId);
+        $groupId = [
+            $this->getExistsGroup()->getId(),
+            $this->getOtherExistsGroup()->getId(),
+        ];
+        $return = $this->object->findGroupsByIdOrFail($groupId);
 
-        $this->assertEquals($groupId, $return->getId());
+        $this->assertCount(2, $return);
+
+        foreach ($return as $group) {
+            $this->assertContainsEquals($group->getId(), $groupId);
+        }
     }
 
     /** @test */
@@ -145,6 +162,6 @@ class GroupRepositoryTest extends DataBaseTestCase
     {
         $this->expectException(DBNotFoundException::class);
 
-        $this->object->findGroupByIdOrFail(ValueObjectFactory::createIdentifier('0b13e52d-b058-32fb-8507-10dec634a07A'));
+        $this->object->findGroupsByIdOrFail([ValueObjectFactory::createIdentifier('0b13e52d-b058-32fb-8507-10dec634a07A')]);
     }
 }

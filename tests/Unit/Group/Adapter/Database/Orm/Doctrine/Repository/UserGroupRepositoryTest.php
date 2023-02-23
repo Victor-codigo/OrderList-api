@@ -6,6 +6,7 @@ namespace Test\Unit\Group\Adapter\Database\Orm\Doctrine\Repository;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Group\Adapter\Database\Orm\Doctrine\Repository\UserGroupRepository;
 use Group\Domain\Model\GROUP_ROLES;
@@ -168,6 +169,65 @@ class UserGroupRepositoryTest extends DataBaseTestCase
             ValueObjectFactory::createIdentifier('not a valid id'),
             GROUP_ROLES::ADMIN
         );
+    }
+
+    /** @test */
+    public function itShouldFindThreeGroups(): void
+    {
+        $userId = ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID);
+        $groups = $this->object->findBy(['userId' => $userId]);
+        $return = $this->object->findUserGroupsById($userId);
+
+        $this->assertCount(count($groups), $return);
+
+        foreach ($groups as $group) {
+            $this->assertContains($group, $return);
+        }
+    }
+
+    /** @test */
+    public function itShouldOnlyGroupsIsAdmin(): void
+    {
+        $userId = ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID);
+        $groups = array_filter(
+            $this->object->findBy(['userId' => $userId]),
+            fn (UserGroup $userGroup) => $userGroup->getRoles()->has(Rol::fromString(GROUP_ROLES::ADMIN->value))
+        );
+
+        $return = $this->object->findUserGroupsById($userId, GROUP_ROLES::ADMIN);
+
+        $this->assertCount(count($groups), $return);
+
+        foreach ($groups as $group) {
+            $this->assertContains($group, $return);
+        }
+    }
+
+    /** @test */
+    public function itShouldOnlyGroupsIsUser(): void
+    {
+        $userId = ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID);
+        $groups = array_filter(
+            $this->object->findBy(['userId' => $userId]),
+            fn (UserGroup $userGroup) => $userGroup->getRoles()->has(Rol::fromString(GROUP_ROLES::USER->value))
+        );
+
+        $return = $this->object->findUserGroupsById($userId, GROUP_ROLES::USER);
+
+        $this->assertCount(count($groups), $return);
+
+        foreach ($groups as $group) {
+            $this->assertContains($group, $return);
+        }
+    }
+
+    /** @test */
+    public function itShouldFailNotGroupsFound(): void
+    {
+        $userId = ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID.'-');
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findUserGroupsById($userId);
     }
 
     /** @test */

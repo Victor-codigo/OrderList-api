@@ -58,7 +58,7 @@ class GroupUserAddServiceTest extends TestCase
      */
     private function getFindGroupUsersOrFailReturn(): array
     {
-        $group = $this->getFindGroupByIdOrFailReturn();
+        $group = $this->getFindGroupByIdOrFailReturn()[0];
 
         return [
             UserGroup::fromPrimitives(self::GROUP_ID, 'c22ba0e4-1af4-4c16-98ed-afd9cdb1a3fb', [GROUP_ROLES::ADMIN], $group),
@@ -67,9 +67,9 @@ class GroupUserAddServiceTest extends TestCase
         ];
     }
 
-    private function getFindGroupByIdOrFailReturn(): Group
+    private function getFindGroupByIdOrFailReturn(): array
     {
-        return Group::fromPrimitives(self::GROUP_ID, 'GroupName', GROUP_TYPE::GROUP, 'Description');
+        return [Group::fromPrimitives(self::GROUP_ID, 'GroupName', GROUP_TYPE::GROUP, 'Description')];
     }
 
     /**
@@ -77,7 +77,7 @@ class GroupUserAddServiceTest extends TestCase
      *
      * @return UserGroup[]
      */
-    private function createUserGroupForIds(string $groupId, array $userIds, GROUP_ROLES $rol, $group): array
+    private function createUserGroupForIds(string $groupId, array $userIds, GROUP_ROLES $rol, Group $group): array
     {
         return array_map(
             fn (string $userId) => UserGroup::fromPrimitives($groupId, $userId, [$rol], $group),
@@ -85,7 +85,7 @@ class GroupUserAddServiceTest extends TestCase
         );
     }
 
-    private function assertUserGroupIsEqualToUserGroup(array $expectUsersGroup, array $acturalUserGroup): bool
+    private function assertUserGroupIsEqualToUserGroup(array $expectUsersGroup, array $actualUserGroup): bool
     {
         $this->assertEquals(
             array_map(
@@ -94,7 +94,7 @@ class GroupUserAddServiceTest extends TestCase
             ),
             array_map(
                 fn (UserGroup $userGroup) => $userGroup->getGroupId(),
-                $acturalUserGroup
+                $actualUserGroup
             )
         );
 
@@ -105,7 +105,7 @@ class GroupUserAddServiceTest extends TestCase
             ),
             array_map(
                 fn (UserGroup $userGroup) => $userGroup->getUserId(),
-                $acturalUserGroup
+                $actualUserGroup
             )
         );
 
@@ -116,7 +116,7 @@ class GroupUserAddServiceTest extends TestCase
             ),
             array_map(
                 fn (UserGroup $userGroup) => $userGroup->getGroup()->getId(),
-                $acturalUserGroup
+                $actualUserGroup
             )
         );
 
@@ -127,7 +127,7 @@ class GroupUserAddServiceTest extends TestCase
             ),
             array_map(
                 fn (UserGroup $userGroup) => $userGroup->getRoles(),
-                $acturalUserGroup
+                $actualUserGroup
             )
         );
 
@@ -144,8 +144,8 @@ class GroupUserAddServiceTest extends TestCase
 
         $this->groupRepository
             ->expects($this->once())
-            ->method('findGroupByIdOrFail')
-            ->with($groupUserAddDto->groupId)
+            ->method('findGroupsByIdOrFail')
+            ->with([$groupUserAddDto->groupId])
             ->willReturn($this->getFindGroupByIdOrFailReturn());
 
         $saveMethod = $this->userGroupRepository
@@ -166,7 +166,7 @@ class GroupUserAddServiceTest extends TestCase
             'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7',
             'a004eb47-6d12-4467-a0d1-2d9fab757f19',
         ];
-        $expectUsersGroup = $this->createUserGroupForIds(self::GROUP_ID, $usersId, GROUP_ROLES::ADMIN, $this->getFindGroupByIdOrFailReturn());
+        $expectUsersGroup = $this->createUserGroupForIds(self::GROUP_ID, $usersId, GROUP_ROLES::ADMIN, $this->getFindGroupByIdOrFailReturn()[0]);
         $groupUserAddDto = $this->createGroupUserAddDto($usersId);
 
         $this->mockMethodsInvoke($groupUserAddDto, $expectUsersGroup);
@@ -185,7 +185,7 @@ class GroupUserAddServiceTest extends TestCase
             'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7', // this is not in the group
             'f8bd3e42-db00-4bba-a0a0-7dc72c281744',
         ];
-        $expectUsersGroup = $this->createUserGroupForIds(self::GROUP_ID, [$usersId[1]], GROUP_ROLES::ADMIN, $this->getFindGroupByIdOrFailReturn());
+        $expectUsersGroup = $this->createUserGroupForIds(self::GROUP_ID, [$usersId[1]], GROUP_ROLES::ADMIN, $this->getFindGroupByIdOrFailReturn()[0]);
         $groupUserAddDto = $this->createGroupUserAddDto($usersId);
 
         $this->mockMethodsInvoke($groupUserAddDto, $expectUsersGroup);
@@ -226,8 +226,8 @@ class GroupUserAddServiceTest extends TestCase
         $this->expectException(DBNotFoundException::class);
         $this->groupRepository
             ->expects($this->once())
-            ->method('findGroupByIdOrFail')
-            ->with($groupUserAddDto->groupId)
+            ->method('findGroupsByIdOrFail')
+            ->with([$groupUserAddDto->groupId])
             ->willThrowException(DBNotFoundException::fromMessage(''));
 
         $this->userGroupRepository
@@ -245,7 +245,7 @@ class GroupUserAddServiceTest extends TestCase
             'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7',
             'a004eb47-6d12-4467-a0d1-2d9fab757f19',
         ];
-        $expectUsersGroup = $this->createUserGroupForIds(self::GROUP_ID, $usersId, GROUP_ROLES::ADMIN, $this->getFindGroupByIdOrFailReturn());
+        $expectUsersGroup = $this->createUserGroupForIds(self::GROUP_ID, $usersId, GROUP_ROLES::ADMIN, $this->getFindGroupByIdOrFailReturn()[0]);
         $groupUserAddDto = $this->createGroupUserAddDto($usersId);
 
         $this->expectException(DBConnectionException::class);
@@ -273,7 +273,7 @@ class GroupUserAddServiceTest extends TestCase
 
         $this->groupRepository
             ->expects($this->never())
-            ->method('findGroupByIdOrFail');
+            ->method('findGroupsByIdOrFail');
 
         $this->userGroupRepository
             ->expects($this->never())
