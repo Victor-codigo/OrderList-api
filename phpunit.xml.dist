@@ -25,6 +25,12 @@
         <testsuite name="functional">
             <directory suffix="Test.php">tests/Functional</directory>
         </testsuite>
+        <testsuite name="functionalUser">
+            <directory suffix="Test.php">tests/Functional/User</directory>
+        </testsuite>
+        <testsuite name="functionalGroup">
+            <directory suffix="Test.php">tests/Functional/Group</directory>
+        </testsuite>
         <testsuite name="unit">
             <directory suffix="Test.php">tests/Unit</directory>
         </testsuite>
