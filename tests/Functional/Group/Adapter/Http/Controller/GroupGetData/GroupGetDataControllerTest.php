@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupGetData;
 
 use Common\Domain\Response\RESPONSE_STATUS;
-use DateTime;
 use Group\Domain\Model\GROUP_TYPE;
 use Group\Domain\Model\Group;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -18,12 +17,13 @@ class GroupGetDataControllerTest extends WebClientTestCase
 
     private const ENDPOINT = '/api/v1/groups/';
     private const METHOD = 'GET';
+    private const GROUP_USER_ONLY_GROUP_EMAIL = 'email.other.active@host.com';
+    private const GROUP_USER_ONLY_GROUP_PASSWORD = '123456';
 
-    private function getGroupsData(DateTime $createdOn): array
+    private function getGroupsData(\DateTime $createdOn): array
     {
         return [
             Group::fromPrimitives('fdb242b4-bac8-4463-88d0-0941bb0beee0', 'GroupOne', GROUP_TYPE::GROUP, 'This is a group of users'),
-            Group::fromPrimitives('a5002966-dbf7-4f76-a862-23a04b5ca465', 'GroupTwo', GROUP_TYPE::USER, 'This is a group of one user'),
             Group::fromPrimitives('4b513296-14ac-4fb1-a574-05bc9b1dbe3f', 'Group100Users', GROUP_TYPE::GROUP, 'This group contains 100 users'),
         ];
     }
@@ -39,7 +39,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldGetGroupsData(): void
     {
-        $groupCreatedOn = new DateTime();
+        $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
@@ -54,7 +54,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [0, 1, 2], [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, [0, 1], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Groups data', $responseContent->message);
 
@@ -76,7 +76,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldGetGroupsDataFor50Groups(): void
     {
-        $groupCreatedOn = new DateTime();
+        $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
@@ -92,7 +92,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [0, 1, 2], [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, [0, 1], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Groups data', $responseContent->message);
 
@@ -114,7 +114,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldStripGroupsIdThatExceedTheMaximum(): void
     {
-        $groupCreatedOn = new DateTime();
+        $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
@@ -152,7 +152,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldReturnOnlyTheGroupThatTheUserSessionBelongTo(): void
     {
-        $groupCreatedOn = new DateTime();
+        $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
@@ -206,7 +206,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupsIdNotValid(): void
     {
-        $groupCreatedOn = new DateTime();
+        $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue().'-', $groups);
 
@@ -229,14 +229,14 @@ class GroupGetDataControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUserSessionDoesNotBelongsToAGroup(): void
     {
-        $groupCreatedOn = new DateTime();
+        $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
 
-        $this->client = $this->getNewClientAuthenticatedAdmin();
+        $this->client = $this->getNewClientAuthenticated(self::GROUP_USER_ONLY_GROUP_EMAIL, self::GROUP_USER_ONLY_GROUP_PASSWORD);
         $this->client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT.$groupsId[1].','.$groupsId[2]
+            uri: self::ENDPOINT.$groupsId[0].','.$groupsId[1]
         );
 
         $response = $this->client->getResponse();

@@ -10,11 +10,10 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
-use Exception;
-use Generator;
 use Group\Application\GroupGetData\Dto\GroupGetDataInputDto;
 use Group\Application\GroupGetData\Dto\GroupGetDataOutputDto;
 use Group\Application\GroupGetData\Exception\GroupGetDataUserNotBelongsToTheGroupException;
+use Group\Domain\Model\GROUP_TYPE;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupGetData\Dto\GroupGetDataDto;
@@ -46,7 +45,7 @@ class GroupGetDataUseCase extends ServiceBase
             return $this->createGroupGetDataOutputDto($groupsData);
         } catch (ValueObjectValidationException|GroupGetDataUserNotBelongsToTheGroupException $e) {
             throw $e;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }
@@ -90,10 +89,10 @@ class GroupGetDataUseCase extends ServiceBase
      */
     private function createGroupGetDataDto(array $groupsId): GroupGetDataDto
     {
-        return new GroupGetDataDto($groupsId);
+        return new GroupGetDataDto($groupsId, GROUP_TYPE::GROUP);
     }
 
-    private function createGroupGetDataOutputDto(Generator $groupsData): GroupGetDataOutputDto
+    private function createGroupGetDataOutputDto(\Generator $groupsData): GroupGetDataOutputDto
     {
         return new GroupGetDataOutputDto($groupsData);
     }

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Group\Domain\Service\GroupGetData;
 
-use Generator;
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\Object\GroupType;
+use Group\Domain\Model\GROUP_TYPE;
 use Group\Domain\Model\Group;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Service\GroupGetData\Dto\GroupGetDataDto;
@@ -19,17 +21,39 @@ class GroupGetDataService
     /**
      * @throws DBNotFoundException
      */
-    public function __invoke(GroupGetDataDto $input): Generator
+    public function __invoke(GroupGetDataDto $input): \Generator
     {
         $groups = $this->groupRepository->findGroupsByIdOrFail($input->groupsId);
+        $groupsValid = $this->getGroupsByType($groups, $input->groupType);
 
-        return $this->getPrivateData($groups);
+        if (empty($groupsValid)) {
+            throw DBNotFoundException::fromMessage('No groups found');
+        }
+
+        return $this->getPrivateData($groupsValid);
+    }
+
+    /**
+     * @param Group[] $groups
+     *
+     * @return Group[]
+     */
+    private function getGroupsByType(array $groups, GROUP_TYPE|null $groupType = null): array
+    {
+        if (null === $groupType) {
+            return $groups;
+        }
+
+        return array_filter(
+            $groups,
+            fn (Group $group) => $group->getType()->equalTo(new GroupType($groupType))
+        );
     }
 
     /**
      * @param Group[] $groups
      */
-    private function getPrivateData(array $groups): Generator
+    private function getPrivateData(array $groups): \Generator
     {
         foreach ($groups as $group) {
             yield [
