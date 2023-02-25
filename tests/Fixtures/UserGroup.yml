@@ -36,6 +36,13 @@ Group\Domain\Model\UserGroup:
       roles: "@groupuser_roles_user"
       group: "@entity-group_type_user"
 
+  entity-groupuser_user_unique_group:
+    __construct:
+      groupId: "@entity-group_type_user_unique_group->getId"
+      userId: "@entity-user_other->getId"
+      roles: "@groupuser_roles_user"
+      group: "@entity-group_type_user_unique_group"
+
   entity-groupuser_many_users_uuidv4-1:
     __construct:
       groupId: "@entity-group_type_group->getId"

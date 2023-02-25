@@ -11,6 +11,10 @@ Common\Domain\Model\ValueObject\String\Identifier:
     __construct:
       value: "a5002966-dbf7-4f76-a862-23a04b5ca465"
 
+  group_id_type_user_unique_group:
+    __construct:
+      value: "a1985210-71a4-4ef5-9909-9daadc9e0607"
+
   group_id_users_100:
     __construct:
       value: "4b513296-14ac-4fb1-a574-05bc9b1dbe3f"
@@ -28,6 +32,10 @@ Common\Domain\Model\ValueObject\String\Name:
     __construct:
       value: "GroupTwo"
 
+  group_name_type_user_unique_group:
+    __construct:
+      value: "GroupUserUniqueGroup"
+
   group_name_users_100:
     __construct:
       value: "Group100Users"
@@ -44,6 +52,10 @@ Common\Domain\Model\ValueObject\String\Description:
   group_description_type_user:
     __construct:
       value: "This is a group of one user"
+
+  group_description_type_user_unique_group:
+    __construct:
+      value: "The user of this group has not other groups"
 
   group_description_users_100:
     __construct:
@@ -79,6 +91,13 @@ Group\Domain\Model\Group:
       name: "@group_name_type_user"
       type: "@group_type_user"
       description: "@group_description_type_user"
+
+  entity-group_type_user_unique_group:
+    __construct:
+      id: "@group_id_type_user_unique_group"
+      name: "@group_name_type_user_unique_group"
+      type: "@group_type_user"
+      description: "@group_description_type_user_unique_group"
 
   entity-group_users_100:
     __construct:

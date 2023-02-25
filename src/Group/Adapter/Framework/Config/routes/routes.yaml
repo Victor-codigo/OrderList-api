@@ -28,6 +28,16 @@ group_modify:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
+# GROUP USER GET GROUPS
+# -------------------------------------------------------------
+group_user_get_groups:
+  path: /api/v{api_version}/groups/user
+  methods: GET
+  controller: Group\Adapter\Http\Controller\GroupUserGetGroups\GroupUserGetGroupsController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
 # GROUP GET DATA
 # -------------------------------------------------------------
 group_get_data:
@@ -58,7 +68,7 @@ group_user_remove:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
-# GROUP CHANNGE USER ROLE
+# GROUP CHANGE USER ROLE
 # -------------------------------------------------------------
 group_user_role_change:
   path: /api/v{api_version}/groups/user/role
