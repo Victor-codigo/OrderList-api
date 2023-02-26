@@ -60,12 +60,12 @@ class UserPasswordChangeService
             return;
         }
 
-        if (!$this->userPasswordHasher->passwordIsValid($passwordDto->passwordOld->getValue())) {
-            throw PasswordOldIsWrongException::fromMessage('User Password is wrong');
-        }
-
         if ($user->getRoles()->has(new Rol(USER_ROLES::NOT_ACTIVE))) {
             throw PermissionDeniedException::fromMessage('Not allowed to change password', [USER_ROLES::NOT_ACTIVE]);
+        }
+
+        if (!$this->userPasswordHasher->passwordIsValid($passwordDto->passwordOld->getValue())) {
+            throw PasswordOldIsWrongException::fromMessage('User Password is wrong');
         }
     }
 }
