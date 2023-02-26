@@ -29,6 +29,11 @@ class AppConfig
     public const ENDPOINT_GROUP_GET_DATA_MAX_USERS = 50;
 
     /**
+     * Maximum number of users can get, per request.
+     */
+    public const ENDPOINT_GROUP_GET_USERS_MAX_USERS = 50;
+
+    /**
      * Version of the api used.
      */
     public const API_VERSION = 1;
