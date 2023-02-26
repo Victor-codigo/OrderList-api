@@ -54,10 +54,52 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $groupUsersId = $this->getGroupUserIds();
         $return = $this->object->findGroupUsersOrFail(ValueObjectFactory::createIdentifier(self::GROUP_ID));
 
+        $this->assertCount(4, $return);
+
         foreach ($return as $userGroup) {
             $this->assertEquals(self::GROUP_ID, $userGroup->getGroupId()->getValue());
             $this->assertContains($userGroup->getUserId()->getValue(), $groupUsersId);
         }
+    }
+
+    /** @test */
+    public function itShouldFindUsersOfTheGroupLimit2(): void
+    {
+        $groupUsersId = $this->getGroupUserIds();
+        $return = $this->object->findGroupUsersOrFail(ValueObjectFactory::createIdentifier(self::GROUP_ID), 2);
+
+        $this->assertCount(2, $return);
+
+        $this->assertEquals(self::GROUP_ID, $return[0]->getGroupId()->getValue());
+        $this->assertEquals($return[0]->getUserId()->getValue(), $groupUsersId[0]);
+        $this->assertEquals(self::GROUP_ID, $return[1]->getGroupId()->getValue());
+        $this->assertEquals($return[1]->getUserId()->getValue(), $groupUsersId[1]);
+    }
+
+    /** @test */
+    public function itShouldFindUsersOfTheGroupOffset2(): void
+    {
+        $groupUsersId = $this->getGroupUserIds();
+        $return = $this->object->findGroupUsersOrFail(ValueObjectFactory::createIdentifier(self::GROUP_ID), 3, 3);
+
+        $this->assertCount(1, $return);
+
+        $this->assertEquals(self::GROUP_ID, $return[0]->getGroupId()->getValue());
+        $this->assertEquals($return[0]->getUserId()->getValue(), $groupUsersId[3]);
+    }
+
+    /** @test */
+    public function itShouldFindUsersOfTheGroupLimit2Offset2(): void
+    {
+        $groupUsersId = $this->getGroupUserIds();
+        $return = $this->object->findGroupUsersOrFail(ValueObjectFactory::createIdentifier(self::GROUP_ID), 2, 2);
+
+        $this->assertCount(2, $return);
+
+        $this->assertEquals(self::GROUP_ID, $return[0]->getGroupId()->getValue());
+        $this->assertEquals($return[0]->getUserId()->getValue(), $groupUsersId[2]);
+        $this->assertEquals(self::GROUP_ID, $return[1]->getGroupId()->getValue());
+        $this->assertEquals($return[1]->getUserId()->getValue(), $groupUsersId[3]);
     }
 
     /** @test */

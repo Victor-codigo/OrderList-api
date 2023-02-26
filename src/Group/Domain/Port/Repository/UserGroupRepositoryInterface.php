@@ -15,7 +15,7 @@ interface UserGroupRepositoryInterface extends RepositoryInterface
      *
      * @throws DBNotFoundException
      */
-    public function findGroupUsersOrFail(Identifier $groupId): array;
+    public function findGroupUsersOrFail(Identifier $groupId, int $limit = null, int $offset = null): array;
 
     /**
      * @param Identifier[] $usersId

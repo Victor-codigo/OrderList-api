@@ -26,10 +26,10 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
      *
      * @throws DBNotFoundException
      */
-    public function findGroupUsersOrFail(Identifier $groupId): array
+    public function findGroupUsersOrFail(Identifier $groupId, int $limit = null, int $offset = null): array
     {
         /** @var UserGroup[] $groupUsers */
-        $groupUsers = $this->findBy(['groupId' => $groupId]);
+        $groupUsers = $this->findBy(['groupId' => $groupId], null, $limit, $offset);
 
         if (empty($groupUsers)) {
             throw DBNotFoundException::fromMessage('UserGroup not found');
