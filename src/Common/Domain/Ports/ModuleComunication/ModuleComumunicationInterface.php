@@ -9,5 +9,10 @@ use Common\Domain\Response\ResponseDto;
 
 interface ModuleComumunicationInterface
 {
+    /**
+     * @throws Error400Exception
+     * @throws ModuleComunicationException
+     * @throws ValueError
+     */
     public function __invoke(ModuleComunicationConfigDto $routeConfig): ResponseDto;
 }
