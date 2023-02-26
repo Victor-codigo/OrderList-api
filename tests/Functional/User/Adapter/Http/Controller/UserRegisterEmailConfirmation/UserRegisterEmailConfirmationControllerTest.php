@@ -18,7 +18,7 @@ class UserRegisterEmailConfirmationControllerTest extends WebClientTestCase
 
     private const ENDPOINT = '/api/v1/users/confirm';
     private const METHOD = 'PATCH';
-    private const USER_ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
+    private const USER_ID = 'bd2cbad1-6ccf-48e3-bb92-bc9961bc011e';
     private const USER_ID_ALREADY_REGISTERED = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
     private const USER_ID_NOT_EXISTS = 'NO-EXISTS-4516-45d6-93a6-c7cb416b7f3f';
 

@@ -24,7 +24,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
 
     private const USERS_DELETED_OR_NOT_ACTIVE = [
         '68e94495-16f0-4acd-adbe-f2b9575e6544', // deleted
-        '1befdbe2-9c14-42f0-850f-63e061e33b8f', // not active
+        'bd2cbad1-6ccf-48e3-bb92-bc9961bc011e', // not active
     ];
     private const USER_ALREADY_IN_THE_GROUP = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
 

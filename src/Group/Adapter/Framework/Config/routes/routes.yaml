@@ -31,21 +31,33 @@ group_modify:
 # GROUP USER GET GROUPS
 # -------------------------------------------------------------
 group_user_get_groups:
-  path: /api/v{api_version}/groups/user
+  path: /api/v{api_version}/groups/user-groups
   methods: GET
   controller: Group\Adapter\Http\Controller\GroupUserGetGroups\GroupUserGetGroupsController
   requirements:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
+# GROUP USER GET GROUPS
+# -------------------------------------------------------------
+group_group_get_users:
+  path: /api/v{api_version}/groups/user/{group_id}
+  methods: GET
+  controller: Group\Adapter\Http\Controller\GroupGetUsers\GroupGetUsersController
+  requirements:
+    api_version: '\d+[.\d]?'
+    groups_id: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+
+# -------------------------------------------------------------
 # GROUP GET DATA
 # -------------------------------------------------------------
 group_get_data:
-  path: /api/v{api_version}/groups/{groups_id}
+  path: /api/v{api_version}/groups/data/{groups_id}
   methods: GET
   controller: Group\Adapter\Http\Controller\GroupGetData\GroupGetDataController
   requirements:
     api_version: '\d+[.\d]?'
+    # groups_id: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
 
 # -------------------------------------------------------------
 # GROUP USER ADD
