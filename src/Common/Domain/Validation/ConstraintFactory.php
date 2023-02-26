@@ -62,7 +62,7 @@ class ConstraintFactory
     /**
      * @param array $versions Uuid::V...
      */
-    public static function uuId(array $versions = [4], bool $strict = true): ConstraintDto
+    public static function uuId(array $versions = null, bool $strict = true): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::UUID, [
             'versions' => $versions,

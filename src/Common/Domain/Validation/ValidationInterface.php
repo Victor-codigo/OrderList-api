@@ -44,7 +44,7 @@ interface ValidationInterface
 
     public function stringRange(int $min, int $max): self;
 
-    public function uuId(array $versions = [4], bool $strict = true): self;
+    public function uuId(array $versions = null, bool $strict = true): self;
 
     public function regEx(string $pattern, bool $patternMatch = true): self;
 

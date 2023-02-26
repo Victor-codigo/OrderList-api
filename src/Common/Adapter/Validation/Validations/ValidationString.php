@@ -38,7 +38,7 @@ class ValidationString extends ValidationConstraintBase
     /**
      * @param array $versions Uuid::V...
      */
-    public function uuId(array $versions = [4], bool $strict = true): ValidationConstraint
+    public function uuId(array $versions = null, bool $strict = true): ValidationConstraint
     {
         return $this->createConstraint(
             new Uuid(null, null, $versions, $strict),

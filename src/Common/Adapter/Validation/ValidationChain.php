@@ -138,7 +138,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
-    public function uuId(array $versions = [4], bool $strict = true): self
+    public function uuId(array $versions = null, bool $strict = true): self
     {
         $this->validator->setConstraint($this->string->uuId($versions, $strict));
 
