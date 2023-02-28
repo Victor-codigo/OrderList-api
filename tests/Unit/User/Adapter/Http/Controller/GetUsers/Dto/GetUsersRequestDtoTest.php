@@ -40,7 +40,7 @@ class GetUsersRequestDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldProcessOnlyTheMaximun(): void
+    public function itShouldProcessOnlyTheMaximum(): void
     {
         $requestDto = $this->createRequest(array_fill(0, self::USERS_NUM_MAX + 1, self::USER_ID));
 

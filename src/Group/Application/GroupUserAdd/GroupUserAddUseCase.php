@@ -17,7 +17,7 @@ use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserAdd\Dto\GroupUserAddInputDto;
 use Group\Application\GroupUserAdd\Dto\GroupUserAddOutputDto;
-use Group\Application\GroupUserAdd\Exception\GroupUserAddGroupMaximunUsersNumberExceededException;
+use Group\Application\GroupUserAdd\Exception\GroupUserAddGroupMaximumUsersNumberExceededException;
 use Group\Application\GroupUserAdd\Exception\GroupUserAddGroupNotFoundException;
 use Group\Application\GroupUserAdd\Exception\GroupUserAddUsersValidationException;
 use Group\Application\GroupUserRoleChange\Exception\GroupUserRoleChangePermissionException;
@@ -40,7 +40,7 @@ class GroupUserAddUseCase extends ServiceBase
     }
 
     /**
-     * @throws GroupUserAddGroupMaximunUsersNumberExceededException
+     * @throws GroupUserAddGroupMaximumUsersNumberExceededException
      * @throws GroupUserAddGroupNotFoundException
      * @throws GroupUserAddUsersValidationException
      * @throws DomainErrorException
@@ -55,7 +55,7 @@ class GroupUserAddUseCase extends ServiceBase
 
             return $this->createGroupUserAddOutputDto($usersAdded);
         } catch (GroupAddUsersMaxNumberExceededException) {
-            throw GroupUserAddGroupMaximunUsersNumberExceededException::fromMessage('Group User number exceeded');
+            throw GroupUserAddGroupMaximumUsersNumberExceededException::fromMessage('Group User number exceeded');
         } catch (DBNotFoundException) {
             throw GroupUserAddGroupNotFoundException::fromMessage('Group not found');
         } catch (DBConnectionException|ModuleCommunicationException $e) {
