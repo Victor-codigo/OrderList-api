@@ -4,25 +4,54 @@ declare(strict_types=1);
 
 namespace [NAMESPACE];
 
+use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Service\ServiceBase;
+use Common\Domain\Validation\Exception\ValueObjectValidationException;
+use Common\Domain\Validation\ValidationInterface;
 use [NAMESPACE]\Dto\[ENDPOINT]InputDto;
-use [NAMESPACE_INNER_LAYER];
+use [NAMESPACE]\Dto\[ENDPOINT]OutputDto;
+use [NAMESPACE_INNER_LAYER]\Dto\[ENDPOINT]Dto;
+use [NAMESPACE_INNER_LAYER]\[ENDPOINT]Service;
 
 class [ENDPOINT]UseCase extends ServiceBase
 {
     public function __construct(
+        private [ENDPOINT]Service $[ENDPOINT]Service,
+        private ValidationInterface $validator
     ) {
     }
 
-    public function __invoke([ENDPOINT]InputDto $input)
+    public function __invoke([ENDPOINT]InputDto $input): [ENDPOINT]OutputDto
     {
+        $this->validation($input);
+
+        try {
+            $this->[ENDPOINT]Service->__invoke(
+                $this->create[ENDPOINT]Dto($input)
+            );
+
+            return $this->create[ENDPOINT]OutputDto();
+        } catch (\Exception) {
+            throw DomainInternalErrorException::fromMessage('An error has been occurred');
+        }
     }
 
     private function validation([ENDPOINT]InputDto $input): void
     {
+        $errorList = $input->validate($this->validator);
+
+        if (!empty($errorList)) {
+            throw ValueObjectValidationException::fromArray('Error', $errorList);
+        }
     }
 
     private function create[ENDPOINT]Dto([ENDPOINT]InputDto $input): [ENDPOINT]Dto
     {
+        return new [ENDPOINT]Dto();
+    }
+
+    private function create[ENDPOINT]OutputDto(): [ENDPOINT]OutputDto
+    {
+        return new [ENDPOINT]OutputDto();
     }
 }

@@ -137,7 +137,7 @@ class HexFilesStructure extends Command
             "{$this->module}/Adapter/Http/Controller/{$this->endpointName}/{$this->endpointName}Controller.php", [
                 PLACEHOLDER::NAMESPACE->value => "{$this->module}\\Adapter\\Http\Controller\\{$this->endpointName}",
                 PLACEHOLDER::ENDPOINT->value => $this->endpointName,
-                PLACEHOLDER::NAMESPACE_INNER_LAYER->value => "{$this->module}\\Application\\{$this->endpointName}\\Dto\\{$this->endpointName}InputDto",
+                PLACEHOLDER::NAMESPACE_INNER_LAYER->value => "{$this->module}\\Application\\{$this->endpointName}",
             ]
         );
 
@@ -163,7 +163,7 @@ class HexFilesStructure extends Command
             "{$this->module}/Application/{$this->endpointName}/{$this->endpointName}UseCase.php", [
                 PLACEHOLDER::NAMESPACE->value => "{$this->module}\\Application\\{$this->endpointName}",
                 PLACEHOLDER::ENDPOINT->value => $this->endpointName,
-                PLACEHOLDER::NAMESPACE_INNER_LAYER->value => "{$this->module}\\Domain\\Service\\{$this->endpointName}\\Dto\\{$this->endpointName}Dto",
+                PLACEHOLDER::NAMESPACE_INNER_LAYER->value => "{$this->module}\\Domain\\Service\\{$this->endpointName}",
             ]
         );
 

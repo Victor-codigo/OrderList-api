@@ -4,26 +4,43 @@ declare(strict_types=1);
 
 namespace [NAMESPACE];
 
+use Common\Domain\Response\RESPONSE_STATUS;
+use Common\Domain\Response\ResponseDto;
 use [NAMESPACE]\Dto\[ENDPOINT]RequestDto;
-use [NAMESPACE_INNER_LAYER];
+use [NAMESPACE_INNER_LAYER]\Dto\[ENDPOINT]InputDto;
+use [NAMESPACE_INNER_LAYER]\[ENDPOINT]UseCase;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class [ENDPOINT]Controller extends AbstractController
 {
     public function __construct(
+        private [ENDPOINT]UseCase $[ENDPOINT]UseCase
     ) {
     }
 
     public function __invoke([ENDPOINT]RequestDto $request): JsonResponse
     {
+        $this->[ENDPOINT]UseCase->__invoke(
+            $this->create[ENDPOINT]InputDto()
+        );
+
+        return $this->createResponse();
     }
 
     private function create[ENDPOINT]InputDto(): [ENDPOINT]InputDto
     {
+        return new [ENDPOINT]InputDto();
     }
 
     private function createResponse(): JsonResponse
     {
+        $responseDto = (new ResponseDto())
+            ->setMessage('')
+            ->setStatus(RESPONSE_STATUS::OK)
+            ->setData();
+
+        return new JsonResponse($responseDto, Response::HTTP_OK);
     }
 }
