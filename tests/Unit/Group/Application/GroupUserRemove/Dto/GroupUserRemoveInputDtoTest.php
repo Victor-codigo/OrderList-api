@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Group\Application\GroupUserRemove;
+namespace Test\Unit\Group\Application\GroupUserRemove\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\VALIDATION_ERRORS;
