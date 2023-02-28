@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupGetUsers;
 
-use Common\Adapter\ModuleComumication\Exception\ModuleComunicationException;
+use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\HttpClient\Exception\Error400Exception;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Common\Domain\ModuleComumication\ModuleComunicationConfigDto;
-use Common\Domain\ModuleComumication\ModuleComunicationFactory;
-use Common\Domain\Ports\ModuleComunication\ModuleComumunicationInterface;
+use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
+use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
+use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use Common\Domain\Service\Exception\DomainErrorException;
@@ -21,14 +21,14 @@ use Group\Application\GroupGetUsers\Dto\GroupGetUsersOutputDto;
 use Group\Application\GroupGetUsers\Exception\GroupGetUsersGroupNotFoundException;
 use Group\Application\GroupGetUsers\Exception\GroupGetUsersUserNotInTheGroupException;
 use Group\Application\GroupGetUsers\GroupGetUsersUseCase;
-use Group\Domain\Model\GROUP_ROLES;
 use Group\Domain\Model\Group;
+use Group\Domain\Model\GROUP_ROLES;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
+use User\Domain\Model\USER_ROLES;
 
 class GroupGetUsersUseCaseTest extends TestCase
 {
@@ -36,7 +36,7 @@ class GroupGetUsersUseCaseTest extends TestCase
 
     private GroupGetUsersUseCase $object;
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;
-    private MockObject|ModuleComumunicationInterface $moduleCommunication;
+    private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|ValidationInterface $validator;
     private MockObject|User $userSession;
 
@@ -45,7 +45,7 @@ class GroupGetUsersUseCaseTest extends TestCase
         parent::setUp();
 
         $this->userGroupRepository = $this->createMock(UserGroupRepositoryInterface::class);
-        $this->moduleCommunication = $this->createMock(ModuleComumunicationInterface::class);
+        $this->moduleCommunication = $this->createMock(ModuleCommunicationInterface::class);
         $this->validator = $this->createMock(ValidationInterface::class);
         $this->object = new GroupGetUsersUseCase($this->userGroupRepository, $this->moduleCommunication, $this->validator);
     }
@@ -78,9 +78,9 @@ class GroupGetUsersUseCaseTest extends TestCase
     /**
      * @param Identifier[] $userId
      */
-    private function getModuleCommunicationConfigDto(array $userId): ModuleComunicationConfigDto
+    private function getModuleCommunicationConfigDto(array $userId): ModuleCommunicationConfigDto
     {
-        return ModuleComunicationFactory::userGet($userId);
+        return ModuleCommunicationFactory::userGet($userId);
     }
 
     /** @test */
@@ -258,7 +258,7 @@ class GroupGetUsersUseCaseTest extends TestCase
             ->expects($this->once())
             ->method('__invoke')
             ->with($moduleCommunicationConfigDto)
-            ->willThrowException(new ModuleComunicationException());
+            ->willThrowException(new ModuleCommunicationException());
 
         $this->expectException(DomainErrorException::class);
         $this->object->__invoke($input);

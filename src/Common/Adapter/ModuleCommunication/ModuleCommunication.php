@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Common\Adapter\ModuleComumication;
+namespace Common\Adapter\ModuleCommunication;
 
-use Common\Adapter\ModuleComumication\Exception\ModuleComunicationException;
+use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Domain\Config\AppConfig;
 use Common\Domain\HttpClient\Exception\Error400Exception;
 use Common\Domain\HttpClient\Exception\Error500Exception;
 use Common\Domain\HttpClient\Exception\NetworkException;
-use Common\Domain\ModuleComumication\ModuleComunicationConfigDto;
+use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\DI\DIInterface;
 use Common\Domain\Ports\HttpClient\HttpClientInterface;
-use Common\Domain\Ports\ModuleComunication\ModuleComumunicationInterface;
+use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class ModuleComunication implements ModuleComumunicationInterface
+class ModuleCommunication implements ModuleCommunicationInterface
 {
     private const API_REQUEST_TOKEN_EXPIRATION_TIME = AppConfig::API_TOKEN_RESQUEST_EXPIRE_TIME;
     private const DEV_QUERY_STRING = '?XDEBUG_SESSION=VSCODE&env=test';
@@ -35,21 +35,21 @@ class ModuleComunication implements ModuleComumunicationInterface
 
     /**
      * @throws Error400Exception
-     * @throws ModuleComunicationException
+     * @throws ModuleCommunicationException
      * @throws ValueError
      */
-    public function __invoke(ModuleComunicationConfigDto $routeConfig): ResponseDto
+    public function __invoke(ModuleCommunicationConfigDto $routeConfig): ResponseDto
     {
-        $respnseContent = $this->request($routeConfig);
+        $responseContent = $this->request($routeConfig);
 
-        return $this->createResponseDto($respnseContent);
+        return $this->createResponseDto($responseContent);
     }
 
     /**
      * @throws Error400Exception
-     * @throws ModuleComunicationException
+     * @throws ModuleCommunicationException
      */
-    private function request(ModuleComunicationConfigDto $routeConfig): array
+    private function request(ModuleCommunicationConfigDto $routeConfig): array
     {
         try {
             $response = $this->httpClient->request(
@@ -62,7 +62,7 @@ class ModuleComunication implements ModuleComumunicationInterface
         } catch (Error400Exception|Error500Exception $e) {
             $responseContent = $response->getContent(false);
         } catch (NetworkException $e) {
-            throw ModuleComunicationException::fromComunicationError('Error network', $e);
+            throw ModuleCommunicationException::fromCommunicationError('Error network', $e);
         }
 
         if ('' === $responseContent) {
@@ -72,7 +72,7 @@ class ModuleComunication implements ModuleComumunicationInterface
         try {
             return json_decode($responseContent, true, 512, JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
-            throw ModuleComunicationException::fromComunicationError('Error json decode', $e);
+            throw ModuleCommunicationException::fromCommunicationError('Error json decode', $e);
         }
     }
 

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupGetUsers;
 
-use Common\Adapter\ModuleComumication\Exception\ModuleComunicationException;
+use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\HttpClient\Exception\Error400Exception;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\ModuleComumication\ModuleComunicationFactory;
-use Common\Domain\Ports\ModuleComunication\ModuleComumunicationInterface;
+use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
+use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Service\Exception\DomainErrorException;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
@@ -25,7 +25,7 @@ class GroupGetUsersUseCase extends ServiceBase
 {
     public function __construct(
         private UserGroupRepositoryInterface $userGroupRepository,
-        private ModuleComumunicationInterface $moduleCommunication,
+        private ModuleCommunicationInterface $moduleCommunication,
         private ValidationInterface $validator
     ) {
     }
@@ -86,7 +86,7 @@ class GroupGetUsersUseCase extends ServiceBase
      * @param UserGroup[] $usersGroup
      *
      * @throws Error400Exception
-     * @throws ModuleComunicationException
+     * @throws ModuleCommunicationException
      * @throws \ValueError
      */
     private function getUsersData(array $usersGroup): array
@@ -97,7 +97,7 @@ class GroupGetUsersUseCase extends ServiceBase
         );
 
         $response = $this->moduleCommunication->__invoke(
-            ModuleComunicationFactory::userGet($usersId)
+            ModuleCommunicationFactory::userGet($usersId)
         );
 
         return $response->getData();

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Common\Adapter\ModuleComunication;
+namespace Test\Unit\Common\Adapter\ModuleCommunication;
 
-use Common\Adapter\ModuleComumication\Exception\ModuleComunicationException;
-use Common\Adapter\ModuleComumication\ModuleComunication;
+use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
+use Common\Adapter\ModuleCommunication\ModuleCommunication;
 use Common\Domain\HttpClient\Exception\Error400Exception;
 use Common\Domain\HttpClient\Exception\Error500Exception;
 use Common\Domain\HttpClient\Exception\NetworkException;
-use Common\Domain\ModuleComumication\ModuleComunicationConfigDto;
-use Common\Domain\ModuleComumication\ModuleComunicationFactory;
+use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
+use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\DI\DIInterface;
 use Common\Domain\Ports\HttpClient\HttpClientInterface;
 use Common\Domain\Ports\HttpClient\HttpClientResponseInteface;
@@ -23,13 +23,13 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
 
-class ModuleComunicationTest extends TestCase
+class ModuleCommunicationTest extends TestCase
 {
     private const USER_ID = '96eb8c18-c11b-4003-a1d3-f884d4f24163';
     private const URL = 'http://domain.com/url/to/resource';
     private const JWT_TOKEN = 'asdgasdfbadsfhaetrhadfhbadfhbaerth';
 
-    private ModuleComunication $object;
+    private ModuleCommunication $object;
     private MockObject|HttpClientInterface $httpClient;
     private MockObject|HttpClientResponseInteface  $httpClientResponse;
     private MockObject|DIInterface $DI;
@@ -54,7 +54,7 @@ class ModuleComunicationTest extends TestCase
         $this->responseContentExpected = json_encode($this->getResponseDefaultDto());
         $this->getContentNumCalls = 0;
 
-        $this->object = new ModuleComunication($this->httpClient, $this->DI, $this->jwtManager, $this->security, $this->appEnv);
+        $this->object = new ModuleCommunication($this->httpClient, $this->DI, $this->jwtManager, $this->security, $this->appEnv);
     }
 
     private function getResponseDefaultDto(): ResponseDto
@@ -85,7 +85,7 @@ class ModuleComunicationTest extends TestCase
             ->setErrors($responseDto['errors']);
     }
 
-    private function mockRequestMethod(ModuleComunicationConfigDto $routeConfig, \DomainException $requestException = null): void
+    private function mockRequestMethod(ModuleCommunicationConfigDto $routeConfig, \DomainException $requestException = null): void
     {
         $this->DI
             ->expects($this->once())
@@ -147,7 +147,7 @@ class ModuleComunicationTest extends TestCase
     /** @test */
     public function itShouldReturnAValidResponseDto(): void
     {
-        $routeConfig = ModuleComunicationFactory::userGet([self::USER_ID]);
+        $routeConfig = ModuleCommunicationFactory::userGet([self::USER_ID]);
         $this->mockRequestMethod($routeConfig);
 
         $return = $this->object->__invoke($routeConfig);
@@ -159,7 +159,7 @@ class ModuleComunicationTest extends TestCase
     public function itShouldReturnAValidResponseDtoResponseContentEmpty(): void
     {
         $this->responseContentExpected = '';
-        $routeConfig = ModuleComunicationFactory::userGet([self::USER_ID]);
+        $routeConfig = ModuleCommunicationFactory::userGet([self::USER_ID]);
         $this->mockRequestMethod($routeConfig);
 
         $return = $this->object->__invoke($routeConfig);
@@ -171,9 +171,9 @@ class ModuleComunicationTest extends TestCase
     public function itShouldFailWrongJsonInResponseContent(): void
     {
         $this->responseContentExpected = 'Wrong json';
-        $routeConfig = ModuleComunicationFactory::userGet([self::USER_ID]);
+        $routeConfig = ModuleCommunicationFactory::userGet([self::USER_ID]);
         $this->mockRequestMethod($routeConfig);
-        $this->expectException(ModuleComunicationException::class);
+        $this->expectException(ModuleCommunicationException::class);
 
         $return = $this->object->__invoke($routeConfig);
 
@@ -186,7 +186,7 @@ class ModuleComunicationTest extends TestCase
         /** @var MockObject|HttpExceptionInterface $httpExceptionInterface */
         $httpExceptionInterface = $this->createMock(HttpExceptionInterface::class);
 
-        $routeConfig = ModuleComunicationFactory::userGet([self::USER_ID]);
+        $routeConfig = ModuleCommunicationFactory::userGet([self::USER_ID]);
         $this->mockRequestMethod($routeConfig, Error400Exception::fromMessage('', $httpExceptionInterface));
 
         $return = $this->object->__invoke($routeConfig);
@@ -200,7 +200,7 @@ class ModuleComunicationTest extends TestCase
         /** @var MockObject|HttpExceptionInterface $httpExceptionInterface */
         $httpExceptionInterface = $this->createMock(HttpExceptionInterface::class);
 
-        $routeConfig = ModuleComunicationFactory::userGet([self::USER_ID]);
+        $routeConfig = ModuleCommunicationFactory::userGet([self::USER_ID]);
         $this->mockRequestMethod($routeConfig, Error500Exception::fromMessage('', $httpExceptionInterface));
 
         $return = $this->object->__invoke($routeConfig);
@@ -213,9 +213,9 @@ class ModuleComunicationTest extends TestCase
     {
         /** @var MockObject|HttpExceptionInterface $httpExceptionInterface */
         $httpExceptionInterface = $this->createMock(HttpExceptionInterface::class);
-        $this->expectException(ModuleComunicationException::class);
+        $this->expectException(ModuleCommunicationException::class);
 
-        $routeConfig = ModuleComunicationFactory::userGet([self::USER_ID]);
+        $routeConfig = ModuleCommunicationFactory::userGet([self::USER_ID]);
         $this->mockRequestMethod($routeConfig, NetworkException::fromMessage('', $httpExceptionInterface));
 
         $this->object->__invoke($routeConfig);

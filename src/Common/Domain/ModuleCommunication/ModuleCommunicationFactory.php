@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Common\Domain\ModuleComumication;
+namespace Common\Domain\ModuleCommunication;
 
 use Common\Domain\Config\AppConfig;
 
-class ModuleComunicationFactory
+class ModuleCommunicationFactory
 {
     private const API_VERSION = AppConfig::API_VERSION;
 
     /**
      * @param string[] $usersId
      */
-    public static function userGet(array $usersId): ModuleComunicationConfigDto
+    public static function userGet(array $usersId): ModuleCommunicationConfigDto
     {
         $parameters = [
             'api_version' => static::API_VERSION,
             'users_id' => implode(',', $usersId),
         ];
 
-        return new ModuleComunicationConfigDto(
+        return new ModuleCommunicationConfigDto(
             'user_get',
             'GET',
             $parameters,

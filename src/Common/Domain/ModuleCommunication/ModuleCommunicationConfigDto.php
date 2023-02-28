@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Common\Domain\ModuleComumication;
+namespace Common\Domain\ModuleCommunication;
 
-class ModuleComunicationConfigDto
+class ModuleCommunicationConfigDto
 {
     public function __construct(
         public readonly string $route,
