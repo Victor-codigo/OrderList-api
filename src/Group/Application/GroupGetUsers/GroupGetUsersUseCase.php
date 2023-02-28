@@ -14,7 +14,6 @@ use Common\Domain\Service\Exception\DomainErrorException;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
-use Exception;
 use Group\Application\GroupGetUsers\Dto\GroupGetUsersInputDto;
 use Group\Application\GroupGetUsers\Dto\GroupGetUsersOutputDto;
 use Group\Application\GroupGetUsers\Exception\GroupGetUsersGroupNotFoundException;
@@ -31,6 +30,12 @@ class GroupGetUsersUseCase extends ServiceBase
     ) {
     }
 
+    /**
+     * @throws GroupGetUsersUserNotInTheGroupException
+     * @throws GroupGetUsersGroupNotFoundException
+     * @throws ValueObjectValidationException
+     * @throws DomainErrorException
+     */
     public function __invoke(GroupGetUsersInputDto $input): GroupGetUsersOutputDto
     {
         $this->validation($input);
@@ -45,7 +50,7 @@ class GroupGetUsersUseCase extends ServiceBase
             throw $e;
         } catch (DBNotFoundException) {
             throw GroupGetUsersGroupNotFoundException::fromMessage('Group not found');
-        } catch (Exception) {
+        } catch (\Throwable $e) {
             throw DomainErrorException::fromMessage('An error has been occurred');
         }
     }
