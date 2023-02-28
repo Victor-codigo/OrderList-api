@@ -38,7 +38,15 @@ use User\Application\GetUsers\GetUsersUseCase;
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'ok'),
                         new OA\Property(property: 'message', type: 'string', example: 'Users found'),
-                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(default: '<int, array>')),
+                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(
+                            properties: [
+                                new OA\Property(property: 'id', type: 'string', example: '1fcab788-0def-4e56-b441-935361678da9'),
+                                new OA\Property(property: 'email', type: 'string', example: 'user@email.com'),
+                                new OA\Property(property: 'name', type: 'string', example: 'UserName'),
+                                new OA\Property(property: 'roles', type: 'string', example: 'ROLE_USER'),
+                                new OA\Property(property: 'created_on', type: 'string', example: '22023-2-23 12:00:00'),
+                                new OA\Property(property: 'image', type: 'string', example: 'User\'s image'),
+                            ])),
                         new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),
                     ]
                 )
