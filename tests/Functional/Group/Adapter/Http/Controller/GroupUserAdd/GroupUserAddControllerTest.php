@@ -310,7 +310,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailGroupUsersNumberExceded100(): void
+    public function itShouldFailGroupUsersNumberExceeded100(): void
     {
         $this->client = $this->getNewClientAuthenticatedUser();
         $this->client->request(
@@ -326,10 +326,10 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['group_users_exceded'], Response::HTTP_INTERNAL_SERVER_ERROR);
+        $this->assertResponseStructureIsOk($response, [], ['group_users_exceeded'], Response::HTTP_INTERNAL_SERVER_ERROR);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Group User number exceded', $responseContent->message);
-        $this->assertSame(['group_users_exceded' => 'Group User number exceded'], (array) $responseContent->errors);
+        $this->assertSame('Group User number exceeded', $responseContent->message);
+        $this->assertSame(['group_users_exceeded' => 'Group User number exceeded'], (array) $responseContent->errors);
     }
 
     /** @test */

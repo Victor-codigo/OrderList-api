@@ -13,7 +13,7 @@ use User\Application\UserPasswordChange\Dto\UserPasswordChangeInputDto;
 use User\Application\UserPasswordChange\Dto\UserPasswordChangeOutputDto;
 use User\Application\UserPasswordChange\Exception\UserPasswordChangePasswordNewAndRepeatNewAreNotEqualException;
 use User\Application\UserPasswordChange\Exception\UserPasswordChangePasswordOldWrongException;
-use User\Application\UserPasswordChange\Exception\UserpasswordChangePermissionException;
+use User\Application\UserPasswordChange\Exception\UserPasswordChangePermissionException;
 use User\Application\UserPasswordChange\Exception\UserPasswordChangeUserNotFoundException;
 use User\Domain\Service\UserPasswordChange\Dto\UserPasswordChangeDto;
 use User\Domain\Service\UserPasswordChange\Exception\PasswordNewAndRepeatAreNotTheSameException;
@@ -44,9 +44,9 @@ class UserPasswordChangeUseCase extends ServiceBase
         } catch (DBNotFoundException) {
             throw UserPasswordChangeUserNotFoundException::fromMessage('It could not change password');
         } catch (PasswordOldIsWrongException) {
-            throw UserPasswordChangePasswordOldWrongException::fromMessage('Pasword old is wrong');
+            throw UserPasswordChangePasswordOldWrongException::fromMessage('Password old is wrong');
         } catch (PermissionDeniedException) {
-            throw UserpasswordChangePermissionException::fromMessage('User is not active');
+            throw UserPasswordChangePermissionException::fromMessage('User is not active');
         } catch (PasswordNewAndRepeatAreNotTheSameException) {
             throw UserPasswordChangePasswordNewAndRepeatNewAreNotEqualException::fromMessage('Password new and Repeat new are not equals');
         }
@@ -72,8 +72,8 @@ class UserPasswordChangeUseCase extends ServiceBase
         }
     }
 
-    private function createUserPasswordChangeOutputDto(bool $sucess): UserPasswordChangeOutputDto
+    private function createUserPasswordChangeOutputDto(bool $success): UserPasswordChangeOutputDto
     {
-        return new UserPasswordChangeOutputDto($sucess);
+        return new UserPasswordChangeOutputDto($success);
     }
 }

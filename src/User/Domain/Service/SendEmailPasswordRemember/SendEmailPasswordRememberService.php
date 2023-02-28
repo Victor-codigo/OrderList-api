@@ -78,12 +78,12 @@ class SendEmailPasswordRememberService
         return $this->emailPasswordRememberDto->setData(
             $appName,
             $userName->getValue(),
-            $this->getUrlPaswordRestoration($id, $emailUserPasswordRememberExpire, $passwordRememberUrl),
+            $this->getUrlPasswordRestoration($id, $emailUserPasswordRememberExpire, $passwordRememberUrl),
             $emailUserPasswordRememberExpire,
         );
     }
 
-    private function getUrlPaswordRestoration(Identifier $id, int $emailUserPasswordRememberExpire, Url $passwordRememberUrl): string
+    private function getUrlPasswordRestoration(Identifier $id, int $emailUserPasswordRememberExpire, Url $passwordRememberUrl): string
     {
         $token = $this->jwt->encode(['username' => $id->getValue()], $emailUserPasswordRememberExpire);
 

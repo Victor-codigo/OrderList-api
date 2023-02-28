@@ -21,7 +21,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class ModuleCommunication implements ModuleCommunicationInterface
 {
-    private const API_REQUEST_TOKEN_EXPIRATION_TIME = AppConfig::API_TOKEN_RESQUEST_EXPIRE_TIME;
+    private const API_REQUEST_TOKEN_EXPIRATION_TIME = AppConfig::API_TOKEN_REQUEST_EXPIRE_TIME;
     private const DEV_QUERY_STRING = '?XDEBUG_SESSION=VSCODE&env=test';
 
     public function __construct(

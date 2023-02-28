@@ -13,7 +13,7 @@ use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupUserAdd\Dto\GroupUserAddDto;
-use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersMaxNumberExcededException;
+use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersMaxNumberExceededException;
 
 class GroupUserAddService
 {
@@ -30,7 +30,7 @@ class GroupUserAddService
      *
      * @throws DBNotFoundException
      * @throws DBConnectionException
-     * @throws GroupAddUsersMaxNumberExcededException
+     * @throws GroupAddUsersMaxNumberExceededException
      */
     public function __invoke(GroupUserAddDto $input): array
     {
@@ -83,14 +83,14 @@ class GroupUserAddService
 
     /**
      * @throws DBNotFoundException
-     * @throws GroupAddUsersMaxNumberExcededException
+     * @throws GroupAddUsersMaxNumberExceededException
      */
     private function validateGroupUsersNumber(Identifier $groupId, int $numUsersToAdd): void
     {
         $groupUsersNumber = $this->userGroupRepository->findGroupUsersNumberOrFail($groupId);
 
         if (self::GROUP_USERS_MAX < $groupUsersNumber + $numUsersToAdd) {
-            throw GroupAddUsersMaxNumberExcededException::fromMessage("Group [{$groupId}] maximum user number overpass");
+            throw GroupAddUsersMaxNumberExceededException::fromMessage("Group [{$groupId}] maximum user number overpass");
         }
     }
 }

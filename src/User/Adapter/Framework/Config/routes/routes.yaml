@@ -17,7 +17,7 @@ user_email_confirmation:
 # -------------------------------------------------------------
 # USER PASSWORD REMEMBER
 # -------------------------------------------------------------
-user_password_rememeber:
+user_password_remember:
   path: /api/v{api_version}/users/remember
   methods: POST
   controller: User\Adapter\Http\Controller\UserPasswordRemember\UserPasswordRememberController

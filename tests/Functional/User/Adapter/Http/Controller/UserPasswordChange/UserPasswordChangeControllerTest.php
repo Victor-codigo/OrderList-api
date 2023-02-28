@@ -227,7 +227,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
             errors: ['password_new']
         );
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Pasword old is wrong', $responseContent->message);
+        $this->assertSame('Password old is wrong', $responseContent->message);
     }
 
     /** @test */

@@ -14,7 +14,7 @@ use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupUserAdd\Dto\GroupUserAddDto;
-use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersMaxNumberExcededException;
+use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersMaxNumberExceededException;
 use Group\Domain\Service\GroupUserAdd\GroupUserAddService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -58,7 +58,7 @@ class GroupUserAddServiceTest extends TestCase
      */
     private function getFindGroupUsersOrFailReturn(): array
     {
-        $group = $this->getFindGroupByIdOrFailReturn()[0];
+        $group = $this->getFindGroupsByIdOrFailReturn()[0];
 
         return [
             UserGroup::fromPrimitives(self::GROUP_ID, 'c22ba0e4-1af4-4c16-98ed-afd9cdb1a3fb', [GROUP_ROLES::ADMIN], $group),
@@ -67,7 +67,7 @@ class GroupUserAddServiceTest extends TestCase
         ];
     }
 
-    private function getFindGroupByIdOrFailReturn(): array
+    private function getFindGroupsByIdOrFailReturn(): array
     {
         return [Group::fromPrimitives(self::GROUP_ID, 'GroupName', GROUP_TYPE::GROUP, 'Description')];
     }
@@ -146,7 +146,7 @@ class GroupUserAddServiceTest extends TestCase
             ->expects($this->once())
             ->method('findGroupsByIdOrFail')
             ->with([$groupUserAddDto->groupId])
-            ->willReturn($this->getFindGroupByIdOrFailReturn());
+            ->willReturn($this->getFindGroupsByIdOrFailReturn());
 
         $saveMethod = $this->userGroupRepository
             ->expects($this->once())
@@ -166,7 +166,7 @@ class GroupUserAddServiceTest extends TestCase
             'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7',
             'a004eb47-6d12-4467-a0d1-2d9fab757f19',
         ];
-        $expectUsersGroup = $this->createUserGroupForIds(self::GROUP_ID, $usersId, GROUP_ROLES::ADMIN, $this->getFindGroupByIdOrFailReturn()[0]);
+        $expectUsersGroup = $this->createUserGroupForIds(self::GROUP_ID, $usersId, GROUP_ROLES::ADMIN, $this->getFindGroupsByIdOrFailReturn()[0]);
         $groupUserAddDto = $this->createGroupUserAddDto($usersId);
 
         $this->mockMethodsInvoke($groupUserAddDto, $expectUsersGroup);
@@ -185,7 +185,7 @@ class GroupUserAddServiceTest extends TestCase
             'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7', // this is not in the group
             'f8bd3e42-db00-4bba-a0a0-7dc72c281744',
         ];
-        $expectUsersGroup = $this->createUserGroupForIds(self::GROUP_ID, [$usersId[1]], GROUP_ROLES::ADMIN, $this->getFindGroupByIdOrFailReturn()[0]);
+        $expectUsersGroup = $this->createUserGroupForIds(self::GROUP_ID, [$usersId[1]], GROUP_ROLES::ADMIN, $this->getFindGroupsByIdOrFailReturn()[0]);
         $groupUserAddDto = $this->createGroupUserAddDto($usersId);
 
         $this->mockMethodsInvoke($groupUserAddDto, $expectUsersGroup);
@@ -245,7 +245,7 @@ class GroupUserAddServiceTest extends TestCase
             'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7',
             'a004eb47-6d12-4467-a0d1-2d9fab757f19',
         ];
-        $expectUsersGroup = $this->createUserGroupForIds(self::GROUP_ID, $usersId, GROUP_ROLES::ADMIN, $this->getFindGroupByIdOrFailReturn()[0]);
+        $expectUsersGroup = $this->createUserGroupForIds(self::GROUP_ID, $usersId, GROUP_ROLES::ADMIN, $this->getFindGroupsByIdOrFailReturn()[0]);
         $groupUserAddDto = $this->createGroupUserAddDto($usersId);
 
         $this->expectException(DBConnectionException::class);
@@ -264,7 +264,7 @@ class GroupUserAddServiceTest extends TestCase
         ];
         $groupUserAddDto = $this->createGroupUserAddDto($usersId);
 
-        $this->expectException(GroupAddUsersMaxNumberExcededException::class);
+        $this->expectException(GroupAddUsersMaxNumberExceededException::class);
         $this->userGroupRepository
             ->expects($this->once())
             ->method('findGroupUsersNumberOrFail')

@@ -12,9 +12,9 @@ class UserPasswordRememberDto
     public readonly Email $email;
     public readonly Url $passwordRememberUrl;
 
-    public function __construct(Email $email, Url $paswordRememberUrl)
+    public function __construct(Email $email, Url $passwordRememberUrl)
     {
         $this->email = $email;
-        $this->passwordRememberUrl = $paswordRememberUrl;
+        $this->passwordRememberUrl = $passwordRememberUrl;
     }
 }

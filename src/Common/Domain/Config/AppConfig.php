@@ -41,10 +41,10 @@ class AppConfig
     /**
      * Time in seconds for the token of the api calls.
      */
-    public const API_TOKEN_RESQUEST_EXPIRE_TIME = 300;
+    public const API_TOKEN_REQUEST_EXPIRE_TIME = 300;
 
     /**
-     * Api domina.
+     * Api domain.
      */
     public const API_DOMAIN = 'orderlist.api';
 
