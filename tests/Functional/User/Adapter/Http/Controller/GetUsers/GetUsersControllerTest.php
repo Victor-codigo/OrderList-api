@@ -59,14 +59,14 @@ class GetUsersControllerTest extends WebClientTestCase
             $this->assertObjectHasAttribute('email', $user);
             $this->assertObjectHasAttribute('name', $user);
             $this->assertObjectHasAttribute('roles', $user);
-            $this->assertObjectHasAttribute('createdOn', $user);
+            $this->assertObjectHasAttribute('created_on', $user);
             $this->assertObjectHasAttribute('image', $user);
 
             $this->assertContains($user->id, $usersIds);
             $this->assertContains($user->email, $usersEmails);
             $this->assertContains($user->name, $usersNames);
             $this->assertContainsEquals($user->roles, $usersRoles);
-            $this->assertContains($user->createdOn, $usersCreatedOn);
+            $this->assertContains($user->created_on, $usersCreatedOn);
             $this->assertContains($user->image, $usersImages);
         }
     }

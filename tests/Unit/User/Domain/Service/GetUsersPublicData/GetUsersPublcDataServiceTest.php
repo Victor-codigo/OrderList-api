@@ -119,13 +119,13 @@ class GetUsersPublcDataServiceTest extends TestCase
             $this->assertArrayHasKey('email', $user);
             $this->assertArrayHasKey('name', $user);
             $this->assertArrayHasKey('roles', $user);
-            $this->assertArrayHasKey('createdOn', $user);
+            $this->assertArrayHasKey('created_on', $user);
 
             $this->assertContains($user['id'], $expectedUsersIdentifiers);
             $this->assertContains($user['email'], $expectedUsersEmail);
             $this->assertContains($user['name'], $expectedUsersNames);
             $this->assertContainsEquals($user['roles'], $expectedUsersRoles);
-            $this->assertContains($user['createdOn'], $expectedUsersCreatedOn);
+            $this->assertContains($user['created_on'], $expectedUsersCreatedOn);
         }
     }
 

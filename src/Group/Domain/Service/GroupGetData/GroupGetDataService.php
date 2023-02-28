@@ -60,7 +60,7 @@ class GroupGetDataService
                 'group_id' => $group->getId()->getValue(),
                 'name' => $group->getName()->getValue(),
                 'description' => $group->getDescription()->getValue(),
-                'createdOn' => $group->getCreatedOn()->format('Y-m-d H:i:s'),
+                'created_on' => $group->getCreatedOn()->format('Y-m-d H:i:s'),
             ];
         }
     }

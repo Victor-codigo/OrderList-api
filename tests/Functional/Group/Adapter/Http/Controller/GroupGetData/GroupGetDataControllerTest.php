@@ -64,12 +64,12 @@ class GroupGetDataControllerTest extends WebClientTestCase
             $this->assertTrue(property_exists($groupData, 'group_id'));
             $this->assertTrue(property_exists($groupData, 'name'));
             $this->assertTrue(property_exists($groupData, 'description'));
-            $this->assertTrue(property_exists($groupData, 'createdOn'));
+            $this->assertTrue(property_exists($groupData, 'created_on'));
             $this->assertContains($groupData->group_id, $groupsId);
             $this->assertContains($groupData->name, $groupsName);
             $this->assertContains($groupData->description, $groupsDescription);
-            $this->assertIsString($groupData->createdOn);
-            $this->assertStringMatchesFormat('%d-%d-%d %d:%d:%d', $groupData->createdOn);
+            $this->assertIsString($groupData->created_on);
+            $this->assertStringMatchesFormat('%d-%d-%d %d:%d:%d', $groupData->created_on);
         }
     }
 
@@ -102,12 +102,12 @@ class GroupGetDataControllerTest extends WebClientTestCase
             $this->assertTrue(property_exists($groupData, 'group_id'));
             $this->assertTrue(property_exists($groupData, 'name'));
             $this->assertTrue(property_exists($groupData, 'description'));
-            $this->assertTrue(property_exists($groupData, 'createdOn'));
+            $this->assertTrue(property_exists($groupData, 'created_on'));
             $this->assertContains($groupData->group_id, $groupsId);
             $this->assertContains($groupData->name, $groupsName);
             $this->assertContains($groupData->description, $groupsDescription);
-            $this->assertIsString($groupData->createdOn);
-            $this->assertStringMatchesFormat('%d-%d-%d %d:%d:%d', $groupData->createdOn);
+            $this->assertIsString($groupData->created_on);
+            $this->assertStringMatchesFormat('%d-%d-%d %d:%d:%d', $groupData->created_on);
         }
     }
 
@@ -140,12 +140,12 @@ class GroupGetDataControllerTest extends WebClientTestCase
             $this->assertTrue(property_exists($groupData, 'group_id'));
             $this->assertTrue(property_exists($groupData, 'name'));
             $this->assertTrue(property_exists($groupData, 'description'));
-            $this->assertTrue(property_exists($groupData, 'createdOn'));
+            $this->assertTrue(property_exists($groupData, 'created_on'));
             $this->assertContains($groupData->group_id, $groupsId);
             $this->assertContains($groupData->name, $groupsName);
             $this->assertContains($groupData->description, $groupsDescription);
-            $this->assertIsString($groupData->createdOn);
-            $this->assertStringMatchesFormat('%d-%d-%d %d:%d:%d', $groupData->createdOn);
+            $this->assertIsString($groupData->created_on);
+            $this->assertStringMatchesFormat('%d-%d-%d %d:%d:%d', $groupData->created_on);
         }
     }
 
@@ -177,12 +177,12 @@ class GroupGetDataControllerTest extends WebClientTestCase
             $this->assertTrue(property_exists($groupData, 'group_id'));
             $this->assertTrue(property_exists($groupData, 'name'));
             $this->assertTrue(property_exists($groupData, 'description'));
-            $this->assertTrue(property_exists($groupData, 'createdOn'));
+            $this->assertTrue(property_exists($groupData, 'created_on'));
             $this->assertContains($groupData->group_id, $groupsId);
             $this->assertContains($groupData->name, $groupsName);
             $this->assertContains($groupData->description, $groupsDescription);
-            $this->assertIsString($groupData->createdOn);
-            $this->assertStringMatchesFormat('%d-%d-%d %d:%d:%d', $groupData->createdOn);
+            $this->assertIsString($groupData->created_on);
+            $this->assertStringMatchesFormat('%d-%d-%d %d:%d:%d', $groupData->created_on);
         }
     }
 

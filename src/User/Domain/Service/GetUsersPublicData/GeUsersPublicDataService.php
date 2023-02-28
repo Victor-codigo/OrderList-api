@@ -75,7 +75,7 @@ class GeUsersPublicDataService
                 'email' => $user->getEmail(),
                 'name' => $user->getName(),
                 'roles' => $user->getRoles(),
-                'createdOn' => $user->getCreatedOn(),
+                'created_on' => $user->getCreatedOn(),
             ];
         }
 

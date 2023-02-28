@@ -82,11 +82,11 @@ class GroupGetDataServiceTest extends TestCase
             $this->assertArrayHasKey('group_id', $groupData);
             $this->assertArrayHasKey('name', $groupData);
             $this->assertArrayHasKey('description', $groupData);
-            $this->assertArrayHasKey('createdOn', $groupData);
+            $this->assertArrayHasKey('created_on', $groupData);
             $this->assertEquals($expectedGroupsData[$key]->getId()->getValue(), $groupData['group_id']);
             $this->assertEquals($expectedGroupsData[$key]->getName()->getValue(), $groupData['name']);
             $this->assertEquals($expectedGroupsData[$key]->getDescription()->getValue(), $groupData['description']);
-            $this->assertEquals($expectedGroupsData[$key]->getCreatedOn()->format('Y-m-d H:i:s'), $groupData['createdOn']);
+            $this->assertEquals($expectedGroupsData[$key]->getCreatedOn()->format('Y-m-d H:i:s'), $groupData['created_on']);
         }
     }
 
@@ -113,11 +113,11 @@ class GroupGetDataServiceTest extends TestCase
             $this->assertArrayHasKey('group_id', $groupData);
             $this->assertArrayHasKey('name', $groupData);
             $this->assertArrayHasKey('description', $groupData);
-            $this->assertArrayHasKey('createdOn', $groupData);
+            $this->assertArrayHasKey('created_on', $groupData);
             $this->assertEquals($expectedGroupsData[$key]->getId()->getValue(), $groupData['group_id']);
             $this->assertEquals($expectedGroupsData[$key]->getName()->getValue(), $groupData['name']);
             $this->assertEquals($expectedGroupsData[$key]->getDescription()->getValue(), $groupData['description']);
-            $this->assertEquals($expectedGroupsData[$key]->getCreatedOn()->format('Y-m-d H:i:s'), $groupData['createdOn']);
+            $this->assertEquals($expectedGroupsData[$key]->getCreatedOn()->format('Y-m-d H:i:s'), $groupData['created_on']);
         }
     }
 
@@ -144,11 +144,11 @@ class GroupGetDataServiceTest extends TestCase
             $this->assertArrayHasKey('group_id', $groupData);
             $this->assertArrayHasKey('name', $groupData);
             $this->assertArrayHasKey('description', $groupData);
-            $this->assertArrayHasKey('createdOn', $groupData);
+            $this->assertArrayHasKey('created_on', $groupData);
             $this->assertEquals($expectedGroupsData[$key]->getId()->getValue(), $groupData['group_id']);
             $this->assertEquals($expectedGroupsData[$key]->getName()->getValue(), $groupData['name']);
             $this->assertEquals($expectedGroupsData[$key]->getDescription()->getValue(), $groupData['description']);
-            $this->assertEquals($expectedGroupsData[$key]->getCreatedOn()->format('Y-m-d H:i:s'), $groupData['createdOn']);
+            $this->assertEquals($expectedGroupsData[$key]->getCreatedOn()->format('Y-m-d H:i:s'), $groupData['created_on']);
         }
     }
 
