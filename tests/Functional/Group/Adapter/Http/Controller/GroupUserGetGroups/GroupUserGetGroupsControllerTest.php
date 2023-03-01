@@ -37,13 +37,13 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
 
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [0, 1], [], Response::HTTP_OK);
@@ -68,13 +68,13 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUserHasNoGroups(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::GROUP_USER_ONLY_GROUP_EMAIL, self::GROUP_USER_ONLY_GROUP_PASSWORD);
-        $this->client->request(
+        $client = $this->getNewClientAuthenticated(self::GROUP_USER_ONLY_GROUP_EMAIL, self::GROUP_USER_ONLY_GROUP_PASSWORD);
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['groups_not_found'], Response::HTTP_BAD_REQUEST);

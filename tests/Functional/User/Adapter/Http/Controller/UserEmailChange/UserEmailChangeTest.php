@@ -22,8 +22,6 @@ class UserEmailChangeTest extends WebClientTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->client = $this->getNewClientAuthenticatedUser();
     }
 
     /** @test */
@@ -32,7 +30,8 @@ class UserEmailChangeTest extends WebClientTestCase
         $emailNew = 'new.email@host.com';
         $password = self::USER_PASSWORD;
 
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -41,7 +40,7 @@ class UserEmailChangeTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_OK);
@@ -60,7 +59,8 @@ class UserEmailChangeTest extends WebClientTestCase
         $emailNew = null;
         $password = self::USER_PASSWORD;
 
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -69,7 +69,7 @@ class UserEmailChangeTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['email'], Response::HTTP_BAD_REQUEST);
@@ -83,7 +83,8 @@ class UserEmailChangeTest extends WebClientTestCase
         $emailNew = 'new.email@host';
         $password = self::USER_PASSWORD;
 
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -92,7 +93,7 @@ class UserEmailChangeTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['email'], Response::HTTP_BAD_REQUEST);
@@ -106,7 +107,8 @@ class UserEmailChangeTest extends WebClientTestCase
         $emailNew = 'new.email@host.com';
         $password = null;
 
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -115,7 +117,7 @@ class UserEmailChangeTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['password'], Response::HTTP_BAD_REQUEST);
@@ -129,7 +131,8 @@ class UserEmailChangeTest extends WebClientTestCase
         $emailNew = 'new.email@host.com';
         $password = '12345';
 
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -138,7 +141,7 @@ class UserEmailChangeTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['password'], Response::HTTP_BAD_REQUEST);
@@ -152,7 +155,8 @@ class UserEmailChangeTest extends WebClientTestCase
         $emailNew = 'new.email@host.com';
         $password = str_pad('', 51, 'p');
 
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -161,7 +165,7 @@ class UserEmailChangeTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['password'], Response::HTTP_BAD_REQUEST);
@@ -175,7 +179,8 @@ class UserEmailChangeTest extends WebClientTestCase
         $emailNew = 'new.email@host.com';
         $password = 'wrong password';
 
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -184,7 +189,7 @@ class UserEmailChangeTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['password_wrong'], Response::HTTP_BAD_REQUEST);

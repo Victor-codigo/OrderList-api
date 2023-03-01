@@ -21,7 +21,10 @@ class WebClientTestCase extends WebTestCase
     private const USER_USER_EMAIL = 'email.already.active@host.com';
     private const USER_USER_PASSWORD = '123456';
 
-    protected KernelBrowser|null $client = null;
+    // protected KernelBrowser|null $client = null;
+    private static KernelBrowser|null $clientAuthenticatedUser = null;
+    private static KernelBrowser|null $clientAuthenticatedAdmin = null;
+    protected static KernelBrowser|null $clientNoAuthenticated = null;
     /**
      * @var EntityManager[]
      */
@@ -30,6 +33,9 @@ class WebClientTestCase extends WebTestCase
     protected function tearDown(): void
     {
         parent::tearDown();
+        static::$clientAuthenticatedAdmin = null;
+        static::$clientAuthenticatedUser = null;
+        static::$clientNoAuthenticated = null;
 
         foreach ($this->entityManagerArray as $entityManager) {
             $entityManager->close();
@@ -39,22 +45,20 @@ class WebClientTestCase extends WebTestCase
 
     protected function getNewClient(): KernelBrowser
     {
-        if (null === $this->client) {
-            $this->client = static::createClient();
-        }
+        $client = static::createClient();
 
-        $this->client->setServerParameters([
+        $client->setServerParameters([
             'CONTENT_TYPE' => static::CONTENT_TYPE_ALLOWED,
             'HTTP_ACCEPT' => static::CONTENT_TYPE_ALLOWED,
         ]);
 
-        return $this->client;
+        return $client;
     }
 
     protected function getNewClientAuthenticated(string $userName, string $password): KernelBrowser
     {
-        $this->client = $this->getNewClient();
-        $this->client->request(
+        $client = $this->getNewClient();
+        $client->request(
             method: 'POST',
             uri: self::LOGIN_URL,
             content: json_encode([
@@ -63,22 +67,60 @@ class WebClientTestCase extends WebTestCase
             ])
         );
 
-        return $this->client;
+        return $client;
+    }
+
+    protected function getCurrentClient(): KernelBrowser|null
+    {
+        if (null !== static::$clientAuthenticatedUser) {
+            return static::$clientAuthenticatedUser;
+        }
+
+        if (null !== static::$clientAuthenticatedAdmin) {
+            return static::$clientAuthenticatedAdmin;
+        }
+
+        return static::$clientNoAuthenticated;
     }
 
     protected function getNewClientAuthenticatedUser(): KernelBrowser
     {
-        return $this->getNewClientAuthenticated(self::USER_USER_EMAIL, self::USER_USER_PASSWORD);
+        if (null === static::$clientAuthenticatedUser) {
+            static::$clientAuthenticatedUser = $this->getNewClientAuthenticated(self::USER_USER_EMAIL, self::USER_USER_PASSWORD);
+
+            return static::$clientAuthenticatedUser;
+        }
+
+        return static::$clientAuthenticatedUser;
     }
 
     protected function getNewClientAuthenticatedAdmin(): KernelBrowser
     {
-        return $this->getNewClientAuthenticated(self::USER_ADMIN_EMAIL, self::USER_ADMIN_PASSWORD);
+        if (null === static::$clientAuthenticatedAdmin) {
+            static::$clientAuthenticatedAdmin = $this->getNewClientAuthenticated(self::USER_ADMIN_EMAIL, self::USER_ADMIN_PASSWORD);
+
+            return static::$clientAuthenticatedAdmin;
+        }
+
+        return static::$clientAuthenticatedAdmin;
+    }
+
+    protected function getNewClientNoAuthenticated(): KernelBrowser
+    {
+        if (null === static::$clientNoAuthenticated) {
+            static::$clientNoAuthenticated = $this->getNewClient();
+
+            return static::$clientNoAuthenticated;
+        }
+
+        $this->bootKernel();
+
+        return static::$clientNoAuthenticated;
     }
 
     protected function getEntityManager(): EntityManager
     {
-        $entityManager = $this->client
+        $entityManager = $this->getCurrentClient()
             ->getContainer()
             ->get('doctrine')
             ->getManager();

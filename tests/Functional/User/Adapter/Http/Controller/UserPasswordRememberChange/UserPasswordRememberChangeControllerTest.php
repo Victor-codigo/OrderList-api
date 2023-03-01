@@ -29,7 +29,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itshouldChangeThePassword(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientAuthenticatedUser();
 
         $clientData = [
             'token' => $this->generateToken(['username' => self::USER_ID], 86_400),
@@ -37,8 +37,8 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
             'passwordNewRepeat' => '123456',
         ];
 
-        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
-        $response = $this->client->getResponse();
+        $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk(response: $response, responseCode: Response::HTTP_OK);
@@ -59,15 +59,15 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itshouldFailTokenNotAValidToken(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientAuthenticatedUser();
         $clientData = [
             'token' => $this->generateToken(['username' => self::USER_ID]).'-wrong',
             'passwordNew' => '123456',
             'passwordNewRepeat' => '123456',
         ];
 
-        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
-        $response = $this->client->getResponse();
+        $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk(response: $response, errors: ['token_wrong'], responseCode: Response::HTTP_BAD_REQUEST);
@@ -78,15 +78,15 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itshouldFailTokenWrong(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientAuthenticatedUser();
         $clientData = [
             'token' => $this->generateToken(['username' => self::USER_ID]).'-wrong',
             'passwordNew' => '123456',
             'passwordNewRepeat' => '123456',
         ];
 
-        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
-        $response = $this->client->getResponse();
+        $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk(response: $response, errors: ['token_wrong'], responseCode: Response::HTTP_BAD_REQUEST);
@@ -97,15 +97,15 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itshouldFailTokenHasExpired(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientAuthenticatedUser();
         $clientData = [
             'token' => $this->generateToken(['username' => self::USER_ID], 0),
             'passwordNew' => '123456',
             'passwordNewRepeat' => '123456',
         ];
 
-        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
-        $response = $this->client->getResponse();
+        $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk(response: $response, errors: ['token_expired'], responseCode: Response::HTTP_BAD_REQUEST);
@@ -116,15 +116,15 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itshouldFailPasswordNewIsTooShort(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientAuthenticatedUser();
         $clientData = [
             'token' => $this->generateToken(['username' => self::USER_ID], 86_400),
             'passwordNew' => '12345',
             'passwordNewRepeat' => '123456',
         ];
 
-        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
-        $response = $this->client->getResponse();
+        $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk(response: $response, errors: ['passwordNew'], responseCode: Response::HTTP_BAD_REQUEST);
@@ -137,15 +137,15 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itshouldFailPasswordNewIsTooLong(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientAuthenticatedUser();
         $clientData = [
             'token' => $this->generateToken(['username' => self::USER_ID], 86_400),
             'passwordNew' => str_pad('', 51, '-'),
             'passwordNewRepeat' => '123456',
         ];
 
-        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
-        $response = $this->client->getResponse();
+        $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk(response: $response, errors: ['passwordNew'], responseCode: Response::HTTP_BAD_REQUEST);
@@ -158,15 +158,15 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itshouldFailPasswordNewRepeatIsTooShort(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientAuthenticatedUser();
         $clientData = [
             'token' => $this->generateToken(['username' => self::USER_ID], 86_400),
             'passwordNew' => '123456',
             'passwordNewRepeat' => '12345',
         ];
 
-        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
-        $response = $this->client->getResponse();
+        $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk(response: $response, errors: ['passwordNewRepeat'], responseCode: Response::HTTP_BAD_REQUEST);
@@ -179,15 +179,15 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itshouldFailPasswordNewRepeatIsTooLong(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientAuthenticatedUser();
         $clientData = [
             'token' => $this->generateToken(['username' => self::USER_ID], 86_400),
             'passwordNew' => '123456',
             'passwordNewRepeat' => str_pad('', 51, '-'),
         ];
 
-        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
-        $response = $this->client->getResponse();
+        $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk(response: $response, errors: ['passwordNewRepeat'], responseCode: Response::HTTP_BAD_REQUEST);
@@ -200,15 +200,15 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itshouldFailIdDoesNotExists(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientAuthenticatedUser();
         $clientData = [
             'token' => $this->generateToken(['username' => self::USER_ID_NOT_EXISTS], 86_400),
             'passwordNew' => '123456',
             'passwordNewRepeat' => '123456',
         ];
 
-        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
-        $response = $this->client->getResponse();
+        $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk(response: $response, errors: ['password_change'], responseCode: Response::HTTP_BAD_REQUEST);
@@ -219,15 +219,15 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itshouldFailIdPasswordNewAndPasswordNewRepeatAreNotEquals(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientAuthenticatedUser();
         $clientData = [
             'token' => $this->generateToken(['username' => self::USER_ID], 86_400),
             'passwordNew' => '123456',
             'passwordNewRepeat' => '1234567',
         ];
 
-        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
-        $response = $this->client->getResponse();
+        $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk(response: $response, errors: ['passwoord_repeat'], responseCode: Response::HTTP_BAD_REQUEST);

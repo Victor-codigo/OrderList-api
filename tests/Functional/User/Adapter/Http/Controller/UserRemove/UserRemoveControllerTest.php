@@ -25,14 +25,14 @@ class UserRemoveControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldRemoveTheUserSameUserPermissions(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.self::USER_ID,
             content: json_encode([])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_OK);
@@ -43,14 +43,14 @@ class UserRemoveControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldRemoveTheUserAdminPermissions(): void
     {
-        $this->client = $this->getNewClientAuthenticatedAdmin();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedAdmin();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.self::USER_ID,
             content: json_encode([])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_OK);
@@ -61,14 +61,14 @@ class UserRemoveControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUserIdIsWrong(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.self::USER_ID.'-wrong',
             content: json_encode([])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['id'], Response::HTTP_BAD_REQUEST);
@@ -79,14 +79,14 @@ class UserRemoveControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUserHasNotPermissions(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.self::USER_OTHER_ID,
             content: json_encode([])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['permissions'], Response::HTTP_BAD_REQUEST);
@@ -97,14 +97,14 @@ class UserRemoveControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUserNotFound(): void
     {
-        $this->client = $this->getNewClientAuthenticatedAdmin();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedAdmin();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.self::USER_ID_NOT_EXISTS,
             content: json_encode([])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['user_not_found'], Response::HTTP_NOT_FOUND);

@@ -36,8 +36,8 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldAddAllUsersToTheGroup(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -47,7 +47,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
@@ -59,8 +59,8 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldAddOnlyTwoUsersToTheGroup(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -70,7 +70,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
@@ -82,8 +82,8 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldAddAllUsersToTheGroupAdminIsNull(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -93,7 +93,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
@@ -105,8 +105,8 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldAddAllUsersToTheGroupAdminIsFalse(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -116,7 +116,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
@@ -128,8 +128,8 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupIdIsNull(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -139,7 +139,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['group_id'], Response::HTTP_BAD_REQUEST);
@@ -151,8 +151,8 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupIdIsNotValid(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -162,7 +162,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['group_id'], Response::HTTP_BAD_REQUEST);
@@ -174,8 +174,8 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupIdIsNotExists(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -185,7 +185,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['group_not_found'], Response::HTTP_NOT_FOUND);
@@ -197,8 +197,8 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUsersIsNull(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -208,7 +208,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['users'], Response::HTTP_BAD_REQUEST);
@@ -220,8 +220,8 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUsersAreNotRegisteredOrActive(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -231,7 +231,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['users_validation'], Response::HTTP_BAD_REQUEST);
@@ -243,8 +243,8 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUsersIdAreNotValid(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -254,7 +254,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['users'], Response::HTTP_BAD_REQUEST);
@@ -266,8 +266,8 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUsersAreEmpty(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -277,7 +277,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['users'], Response::HTTP_BAD_REQUEST);
@@ -289,8 +289,8 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUserIsNotAdminOfTheGroup(): void
     {
-        $this->client = $this->getNewClientAuthenticatedAdmin();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedAdmin();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -300,7 +300,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['permission'], Response::HTTP_UNAUTHORIZED);
@@ -312,8 +312,8 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupUsersNumberExceeded100(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -323,7 +323,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['group_users_exceeded'], Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -335,8 +335,8 @@ class GroupUserAddControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUnauthorizedUser(): void
     {
-        $this->client = $this->getNewClientAuthenticated('not valid user', 'password');
-        $this->client->request(
+        $client = $this->getNewClientAuthenticated('not valid user', 'password');
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -346,7 +346,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertSame(Response::HTTP_UNAUTHORIZED, $responseContent->code);

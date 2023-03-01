@@ -7,6 +7,7 @@ namespace Test\Functional\User\Adapter\Http\Controller\UserRegisterEmailConfirma
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 use User\Domain\Model\USER_ROLES;
@@ -22,11 +23,13 @@ class UserRegisterEmailConfirmationControllerTest extends WebClientTestCase
     private const USER_ID_ALREADY_REGISTERED = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
     private const USER_ID_NOT_EXISTS = 'NO-EXISTS-4516-45d6-93a6-c7cb416b7f3f';
 
+    private KernelBrowser $client;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->client = $this->getNewClient();
+        $this->client = $this->getNewClientNoAuthenticated();
     }
 
     /** @test */

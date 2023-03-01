@@ -22,8 +22,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldGetTheGroupUsersData(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
-        $this->client->request(
+        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $client->request(
             method: self::METHOD,
             uri: str_replace(
                 ['{group_id}', '{limit}', '{offset}'],
@@ -32,7 +32,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
             )
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, range(0, 49), [], Response::HTTP_OK);
@@ -51,8 +51,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldGet50UsersNoLimitSet(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
-        $this->client->request(
+        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $client->request(
             method: self::METHOD,
             uri: str_replace(
                 ['{group_id}', 'limit={limit}&', '{offset}'],
@@ -61,7 +61,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
             )
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, range(0, 49), [], Response::HTTP_OK);
@@ -80,8 +80,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldGet50UsersNoOffsetSet(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
-        $this->client->request(
+        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $client->request(
             method: self::METHOD,
             uri: str_replace(
                 ['{group_id}', '{limit}', '&offset={offset}'],
@@ -90,7 +90,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
             )
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, range(0, 49), [], Response::HTTP_OK);
@@ -109,8 +109,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldGet50UsersNoLimitAndNoOffsetSet(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
-        $this->client->request(
+        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $client->request(
             method: self::METHOD,
             uri: str_replace(
                 ['{group_id}', '?limit={limit}', '&offset={offset}'],
@@ -119,7 +119,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
             )
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, range(0, 49), [], Response::HTTP_OK);
@@ -138,8 +138,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldGet5Users(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
-        $this->client->request(
+        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $client->request(
             method: self::METHOD,
             uri: str_replace(
                 ['{group_id}', '{limit}', '{offset}'],
@@ -148,7 +148,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
             )
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, range(0, 4), [], Response::HTTP_OK);
@@ -167,8 +167,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldGet3UsersWithOffset3(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
-        $this->client->request(
+        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $client->request(
             method: self::METHOD,
             uri: str_replace(
                 ['{group_id}', '{limit}', '{offset}'],
@@ -177,10 +177,10 @@ class GroupGetUsersControllerTest extends WebClientTestCase
             )
         );
 
-        $response10Users = $this->client->getResponse();
+        $response10Users = $client->getResponse();
         $responseContent10Users = json_decode($response10Users->getContent());
 
-        $this->client->request(
+        $client->request(
             method: self::METHOD,
             uri: str_replace(
                 ['{group_id}', '{limit}', '{offset}'],
@@ -189,7 +189,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
             )
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, range(0, 2), [], Response::HTTP_OK);
@@ -209,8 +209,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupIdIsEmpty(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
-        $this->client->request(
+        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $client->request(
             method: self::METHOD,
             uri: str_replace(
                 ['{group_id}', '{limit}', '{offset}'],
@@ -219,7 +219,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
             )
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
 
         $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_NOT_FOUND);
     }
@@ -227,8 +227,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupIdIsNotValid(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
-        $this->client->request(
+        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $client->request(
             method: self::METHOD,
             uri: str_replace(
                 ['{group_id}', '{limit}', '{offset}'],
@@ -237,7 +237,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
             )
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['group_id'], Response::HTTP_BAD_REQUEST);
@@ -250,8 +250,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupIdIsNotRegistered(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
-        $this->client->request(
+        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $client->request(
             method: self::METHOD,
             uri: str_replace(
                 ['{group_id}', '{limit}', '{offset}'],
@@ -260,7 +260,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
             )
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['group_not_found'], Response::HTTP_BAD_REQUEST);
@@ -273,8 +273,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailLimitTooHigh(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
-        $this->client->request(
+        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $client->request(
             method: self::METHOD,
             uri: str_replace(
                 ['{group_id}', '{limit}', '{offset}'],
@@ -283,7 +283,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
             )
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['limit'], Response::HTTP_BAD_REQUEST);
@@ -296,8 +296,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailLimitTooLow(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
-        $this->client->request(
+        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $client->request(
             method: self::METHOD,
             uri: str_replace(
                 ['{group_id}', '{limit}', '{offset}'],
@@ -306,7 +306,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
             )
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['limit'], Response::HTTP_BAD_REQUEST);
@@ -319,8 +319,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailOffsetTooLow(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
-        $this->client->request(
+        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $client->request(
             method: self::METHOD,
             uri: str_replace(
                 ['{group_id}', '{limit}', '{offset}'],
@@ -329,7 +329,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
             )
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['offset'], Response::HTTP_BAD_REQUEST);
@@ -342,8 +342,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUserSessionIsNotInTheGroup(): void
     {
-        $this->client = $this->getNewClientAuthenticatedAdmin();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedAdmin();
+        $client->request(
             method: self::METHOD,
             uri: str_replace(
                 ['{group_id}', '{limit}', '{offset}'],
@@ -352,7 +352,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
             )
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['permissions'], Response::HTTP_UNAUTHORIZED);

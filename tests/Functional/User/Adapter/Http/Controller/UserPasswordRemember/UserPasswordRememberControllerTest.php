@@ -6,6 +6,7 @@ namespace Test\Functional\User\Adapter\Http\Controller\UserPasswordRemember;
 
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
@@ -17,6 +18,8 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
     private const METHOD = 'POST';
     private const EMAIL_ALREADY_EXISTS = 'email.already.exists@host.com';
     private const EMAIL_NOT_FOUND = 'email.not.found@host.com';
+
+    private KernelBrowser $client;
 
     protected function setUp(): void
     {

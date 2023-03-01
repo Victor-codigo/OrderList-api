@@ -38,8 +38,8 @@ class UserRegisterControllerTest extends WebClientTestCase
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
-        $this->client = $this->getNewClient();
-        $this->client->request(
+        static::$clientNoAuthenticated = $this->getNewClient();
+        static::$clientNoAuthenticated->request(
             self::METHOD,
             self::ENDPOINT,
             [],
@@ -48,7 +48,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             json_encode($clientData)
         );
 
-        $response = $this->client->getResponse();
+        $response = static::$clientNoAuthenticated->getResponse();
         $content = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['email_exists' => 'email_exists'], Response::HTTP_BAD_REQUEST);
@@ -67,8 +67,8 @@ class UserRegisterControllerTest extends WebClientTestCase
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
-        $this->client = $this->getNewClient();
-        $this->client->request(
+        static::$clientNoAuthenticated = $this->getNewClient();
+        static::$clientNoAuthenticated->request(
             self::METHOD,
             self::ENDPOINT,
             [],
@@ -77,7 +77,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             json_encode($clientData)
         );
 
-        $response = $this->client->getResponse();
+        $response = static::$clientNoAuthenticated->getResponse();
         $content = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_CREATED);
@@ -101,7 +101,7 @@ class UserRegisterControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldCreateTheUserNameUpperBound(): void
     {
-        $this->client = $this->getNewClient();
+        static::$clientNoAuthenticated = $this->getNewClient();
         $clientData = [
             'name' => str_pad('', 50, 's'),
             'email' => 'anastasia@host.com',
@@ -109,7 +109,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
-        $this->client->request(
+        static::$clientNoAuthenticated->request(
             self::METHOD,
             self::ENDPOINT,
             [],
@@ -118,7 +118,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             json_encode($clientData)
         );
 
-        $response = $this->client->getResponse();
+        $response = static::$clientNoAuthenticated->getResponse();
         $content = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_CREATED);
@@ -145,7 +145,7 @@ class UserRegisterControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailOnNameTooShort(): void
     {
-        $this->client = $this->getNewClient();
+        static::$clientNoAuthenticated = $this->getNewClient();
         $clientData = [
             'name' => '',
             'email' => 'anastasia@host.com',
@@ -153,7 +153,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
-        $this->client->request(
+        static::$clientNoAuthenticated->request(
             self::METHOD,
             self::ENDPOINT,
             [],
@@ -162,7 +162,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             json_encode($clientData)
         );
 
-        $response = $this->client->getResponse();
+        $response = static::$clientNoAuthenticated->getResponse();
         $content = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['name'], Response::HTTP_BAD_REQUEST);
@@ -177,7 +177,7 @@ class UserRegisterControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailOnNameTooLong(): void
     {
-        $this->client = $this->getNewClient();
+        static::$clientNoAuthenticated = $this->getNewClient();
         $clientData = [
             'name' => str_pad('', 51, 's'),
             'email' => 'anastasia@host.com',
@@ -185,7 +185,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
-        $this->client->request(
+        static::$clientNoAuthenticated->request(
             self::METHOD,
             self::ENDPOINT,
             [],
@@ -194,7 +194,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             json_encode($clientData)
         );
 
-        $response = $this->client->getResponse();
+        $response = static::$clientNoAuthenticated->getResponse();
         $content = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['name'], Response::HTTP_BAD_REQUEST);
@@ -209,7 +209,7 @@ class UserRegisterControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailOnNameNotAlphanumeric(): void
     {
-        $this->client = $this->getNewClient();
+        static::$clientNoAuthenticated = $this->getNewClient();
         $clientData = [
             'name' => 'sdfg*',
             'email' => 'anastasia@host.com',
@@ -217,7 +217,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
-        $this->client->request(
+        static::$clientNoAuthenticated->request(
             self::METHOD,
             self::ENDPOINT,
             [],
@@ -226,7 +226,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             json_encode($clientData)
         );
 
-        $response = $this->client->getResponse();
+        $response = static::$clientNoAuthenticated->getResponse();
         $content = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['name'], Response::HTTP_BAD_REQUEST);
@@ -241,14 +241,14 @@ class UserRegisterControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailNameNotSet(): void
     {
-        $this->client = $this->getNewClient();
+        static::$clientNoAuthenticated = $this->getNewClient();
         $clientData = [
             'email' => 'anastasia@host.com',
             'password' => '123456',
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
-        $this->client->request(
+        static::$clientNoAuthenticated->request(
             self::METHOD,
             self::ENDPOINT,
             [],
@@ -257,7 +257,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             json_encode($clientData)
         );
 
-        $response = $this->client->getResponse();
+        $response = static::$clientNoAuthenticated->getResponse();
         $content = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['name'], Response::HTTP_BAD_REQUEST);
@@ -272,7 +272,7 @@ class UserRegisterControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailOnEmail(): void
     {
-        $this->client = $this->getNewClient();
+        static::$clientNoAuthenticated = $this->getNewClient();
         $clientData = [
             'name' => 'Anastasia',
             'email' => 'Email wrong',
@@ -280,7 +280,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
-        $this->client->request(
+        static::$clientNoAuthenticated->request(
             self::METHOD,
             self::ENDPOINT,
             [],
@@ -289,7 +289,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             json_encode($clientData)
         );
 
-        $response = $this->client->getResponse();
+        $response = static::$clientNoAuthenticated->getResponse();
         $content = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['email'], Response::HTTP_BAD_REQUEST);
@@ -304,14 +304,14 @@ class UserRegisterControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailEmailNotSet(): void
     {
-        $this->client = $this->getNewClient();
+        static::$clientNoAuthenticated = $this->getNewClient();
         $clientData = [
             'name' => 'Anastasia',
             'password' => '123456',
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
-        $this->client->request(
+        static::$clientNoAuthenticated->request(
             self::METHOD,
             self::ENDPOINT,
             [],
@@ -320,7 +320,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             json_encode($clientData)
         );
 
-        $response = $this->client->getResponse();
+        $response = static::$clientNoAuthenticated->getResponse();
         $content = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['email'], Response::HTTP_BAD_REQUEST);
@@ -335,7 +335,7 @@ class UserRegisterControllerTest extends WebClientTestCase
     /** @test */
     public function itShoulCreateTheUserPasswordBoundLower(): void
     {
-        $this->client = $this->getNewClient();
+        static::$clientNoAuthenticated = $this->getNewClient();
         $clientData = [
             'name' => 'Anastasia',
             'email' => 'anastasia@host.com',
@@ -343,7 +343,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
-        $this->client->request(
+        static::$clientNoAuthenticated->request(
             self::METHOD,
             self::ENDPOINT,
             [],
@@ -352,7 +352,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             json_encode($clientData)
         );
 
-        $response = $this->client->getResponse();
+        $response = static::$clientNoAuthenticated->getResponse();
         $content = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_CREATED);
@@ -376,7 +376,7 @@ class UserRegisterControllerTest extends WebClientTestCase
     /** @test */
     public function itShoulCreateTheUserPasswordBoundUpper(): void
     {
-        $this->client = $this->getNewClient();
+        static::$clientNoAuthenticated = $this->getNewClient();
         $clientData = [
             'name' => 'Anastasia',
             'email' => 'anastasia@host.com',
@@ -384,7 +384,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
-        $this->client->request(
+        static::$clientNoAuthenticated->request(
             self::METHOD,
             self::ENDPOINT,
             [],
@@ -393,7 +393,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             json_encode($clientData)
         );
 
-        $response = $this->client->getResponse();
+        $response = static::$clientNoAuthenticated->getResponse();
         $content = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_CREATED);
@@ -417,7 +417,7 @@ class UserRegisterControllerTest extends WebClientTestCase
     /** @test */
     public function itShoulFailPasswordTooshort(): void
     {
-        $this->client = $this->getNewClient();
+        static::$clientNoAuthenticated = $this->getNewClient();
         $clientData = [
             'name' => 'Anastasia',
             'email' => 'anastasia@host.com',
@@ -425,7 +425,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
-        $this->client->request(
+        static::$clientNoAuthenticated->request(
             self::METHOD,
             self::ENDPOINT,
             [],
@@ -434,7 +434,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             json_encode($clientData)
         );
 
-        $response = $this->client->getResponse();
+        $response = static::$clientNoAuthenticated->getResponse();
         $content = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['password'], Response::HTTP_BAD_REQUEST);
@@ -449,7 +449,7 @@ class UserRegisterControllerTest extends WebClientTestCase
     /** @test */
     public function itShoulFailPasswordTooLong(): void
     {
-        $this->client = $this->getNewClient();
+        static::$clientNoAuthenticated = $this->getNewClient();
         $clientData = [
             'name' => 'Anastasia',
             'email' => 'anastasia@host.com',
@@ -457,7 +457,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
-        $this->client->request(
+        static::$clientNoAuthenticated->request(
             self::METHOD,
             self::ENDPOINT,
             [],
@@ -466,7 +466,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             json_encode($clientData)
         );
 
-        $response = $this->client->getResponse();
+        $response = static::$clientNoAuthenticated->getResponse();
         $content = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['password'], Response::HTTP_BAD_REQUEST);
@@ -481,7 +481,7 @@ class UserRegisterControllerTest extends WebClientTestCase
     /** @test */
     public function itShoulFailPasswordNotSet(): void
     {
-        $this->client = $this->getNewClient();
+        static::$clientNoAuthenticated = $this->getNewClient();
         $clientData = [
             'name' => 'Anastasia',
             'email' => 'anastasia@host.com',
@@ -489,7 +489,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             'email_confirmation_url' => 'http://www.domain.com/users/confirm',
         ];
 
-        $this->client->request(
+        static::$clientNoAuthenticated->request(
             self::METHOD,
             self::ENDPOINT,
             [],
@@ -498,7 +498,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             json_encode($clientData)
         );
 
-        $response = $this->client->getResponse();
+        $response = static::$clientNoAuthenticated->getResponse();
         $content = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['password'], Response::HTTP_BAD_REQUEST);
@@ -513,14 +513,14 @@ class UserRegisterControllerTest extends WebClientTestCase
     /** @test */
     public function itShoulFailUrlConfirmEmailNotSet(): void
     {
-        $this->client = $this->getNewClient();
+        static::$clientNoAuthenticated = $this->getNewClient();
         $clientData = [
             'name' => 'Anastasia',
             'email' => 'anastasia@host.com',
             'password' => '123456',
         ];
 
-        $this->client->request(
+        static::$clientNoAuthenticated->request(
             self::METHOD,
             self::ENDPOINT,
             [],
@@ -529,7 +529,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             json_encode($clientData)
         );
 
-        $response = $this->client->getResponse();
+        $response = static::$clientNoAuthenticated->getResponse();
         $content = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['email_confirmation_url'], Response::HTTP_BAD_REQUEST);
@@ -544,7 +544,7 @@ class UserRegisterControllerTest extends WebClientTestCase
     /** @test */
     public function itShoulFailUrlConfirmEmailNotValid(): void
     {
-        $this->client = $this->getNewClient();
+        static::$clientNoAuthenticated = $this->getNewClient();
         $clientData = [
             'name' => 'Anastasia',
             'email' => 'anastasia@host.com',
@@ -552,7 +552,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             'email_confirmation_url' => 'htt://www.domain.com/users/confirm',
         ];
 
-        $this->client->request(
+        static::$clientNoAuthenticated->request(
             self::METHOD,
             self::ENDPOINT,
             [],
@@ -561,7 +561,7 @@ class UserRegisterControllerTest extends WebClientTestCase
             json_encode($clientData)
         );
 
-        $response = $this->client->getResponse();
+        $response = static::$clientNoAuthenticated->getResponse();
         $content = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['email_confirmation_url'], Response::HTTP_BAD_REQUEST);

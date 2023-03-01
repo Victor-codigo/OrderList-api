@@ -7,6 +7,7 @@ namespace Test\Functional\User\Adapter\Http\Controller\UserModify;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
@@ -30,6 +31,7 @@ class UserModifyControllerTest extends WebClientTestCase
     private const PATH_IMAGE_NOT_ALLOWED_BACKUP = 'tests/Fixtures/Files/MimeTypeNotAllowed.txt';
 
     private readonly string $pathPublicImageUser;
+    private KernelBrowser|null $client;
 
     protected function setUp(): void
     {

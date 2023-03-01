@@ -45,13 +45,13 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
 
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.implode(',', $groupsId)
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [0, 1], [], Response::HTTP_OK);
@@ -83,13 +83,13 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
         $groups50Id = array_merge(array_fill(0, 47, $groupsId[0]), $groupsId);
 
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.implode(',', $groups50Id)
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [0, 1], [], Response::HTTP_OK);
@@ -121,13 +121,13 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
         $groups50Id = array_merge(array_fill(0, 48, $groupsId[0]), $groupsId);
 
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.implode(',', $groups50Id)
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [0, 1], [], Response::HTTP_OK);
@@ -158,13 +158,13 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
 
-        $this->client = $this->getNewClientAuthenticatedAdmin();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedAdmin();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.implode(',', $groupsId)
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [0], [], Response::HTTP_OK);
@@ -189,13 +189,13 @@ class GroupGetDataControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailNotGroupsIdProvided(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_NOT_FOUND);
@@ -210,13 +210,13 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue().'-', $groups);
 
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.implode(',', $groupsId)
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['groups_id'], Response::HTTP_BAD_REQUEST);
@@ -233,13 +233,13 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
 
-        $this->client = $this->getNewClientAuthenticated(self::GROUP_USER_ONLY_GROUP_EMAIL, self::GROUP_USER_ONLY_GROUP_PASSWORD);
-        $this->client->request(
+        $client = $this->getNewClientAuthenticated(self::GROUP_USER_ONLY_GROUP_EMAIL, self::GROUP_USER_ONLY_GROUP_PASSWORD);
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.$groupsId[0].','.$groupsId[1]
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['permissions'], Response::HTTP_UNAUTHORIZED);
@@ -253,13 +253,13 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $groups = $this->getGroupsDoNotExitsData();
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
 
-        $this->client = $this->getNewClientAuthenticatedAdmin();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedAdmin();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.implode(',', $groupsId)
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['permissions'], Response::HTTP_UNAUTHORIZED);

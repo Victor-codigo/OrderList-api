@@ -108,15 +108,15 @@ class GetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldReturnThreeUsers(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientAuthenticatedUser();
         $usersIds = $this->getUsersIds();
-        $this->client->request(
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.'/'.implode(',', $usersIds),
             content: json_encode([])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [0, 1, 2], [], Response::HTTP_OK);
@@ -137,15 +137,15 @@ class GetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldReturnThreeUsersNotUsersDeletedOrNotActive(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientAuthenticatedUser();
         $usersIds = array_merge($this->getUsersIds(), $this->getUsersIdsDeletedOrNotActive());
-        $this->client->request(
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.'/'.implode(',', $usersIds),
             content: json_encode([])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [0, 1, 2], [], Response::HTTP_OK);
@@ -157,15 +157,15 @@ class GetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldReturnAnUserDifferentFromItself(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientAuthenticatedUser();
         $userId = $this->getUsersIds()[0];
-        $this->client->request(
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.'/'.$userId,
             content: json_encode([])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [0], [], Response::HTTP_OK);
@@ -185,15 +185,15 @@ class GetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldReturnThreeUsersForAdminUser(): void
     {
-        $this->client = $this->getNewClientAuthenticatedAdmin();
+        $client = $this->getNewClientAuthenticatedAdmin();
         $usersIds = $this->getUsersIds();
-        $this->client->request(
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.'/'.implode(',', $usersIds),
             content: json_encode([])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [0, 1, 2], [], Response::HTTP_OK);
@@ -216,14 +216,14 @@ class GetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldReturnUsersOwnData(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.'/'.self::USER_ID,
             content: json_encode([])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [0], [], Response::HTTP_OK);
@@ -246,14 +246,14 @@ class GetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailNoUsersSent(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
 
         $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_METHOD_NOT_ALLOWED);
     }
@@ -261,15 +261,15 @@ class GetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUsersIdWrong(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientAuthenticatedUser();
         $usersIds = $this->getUsersIds();
-        $this->client->request(
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.'/'.implode('AAA,', $usersIds),
             content: json_encode([])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], [0], Response::HTTP_BAD_REQUEST);
@@ -282,15 +282,15 @@ class GetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUsersIdNotFound(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientAuthenticatedUser();
         $usersIds = $this->getUsersIdsWrong();
-        $this->client->request(
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.'/'.implode(',', $usersIds),
             content: json_encode([])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertNull($responseContent);
@@ -299,15 +299,15 @@ class GetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUsersIdAreDeletedOrNotActived(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientAuthenticatedUser();
         $usersIds = $this->getUsersIdsDeletedOrNotActive();
-        $this->client->request(
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.'/'.implode(',', $usersIds),
             content: json_encode([])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertNull($responseContent);

@@ -33,8 +33,8 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldChangeGroupUsersRol(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -44,7 +44,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
@@ -59,8 +59,8 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUsersIdAreNotValid(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -70,7 +70,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
@@ -82,8 +82,8 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupIdIsNull(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -93,7 +93,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['group_id'], Response::HTTP_BAD_REQUEST);
@@ -105,8 +105,8 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupIdIsNotValid(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -116,7 +116,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['group_id'], Response::HTTP_BAD_REQUEST);
@@ -128,8 +128,8 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupUserIdIsNotGroupAdmin(): void
     {
-        $this->client = $this->getNewClientAuthenticated(self::USER_NOT_GROUP_ADMIN_NAME, self::USER_NOT_GROUP_ADMINPASSWORD);
-        $this->client->request(
+        $client = $this->getNewClientAuthenticated(self::USER_NOT_GROUP_ADMIN_NAME, self::USER_NOT_GROUP_ADMINPASSWORD);
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -139,7 +139,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['permission'], Response::HTTP_UNAUTHORIZED);
@@ -150,8 +150,8 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupIdIsRegistered(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -161,7 +161,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['users_not_found'], Response::HTTP_NOT_FOUND);
@@ -172,8 +172,8 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUsersIdIsNull(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -183,7 +183,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['users'], Response::HTTP_BAD_REQUEST);
@@ -195,8 +195,8 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailNotAllUsersIdAreValid(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -206,7 +206,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['users'], Response::HTTP_BAD_REQUEST);
@@ -218,8 +218,8 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupSouldHaveAtleastOneAdmin(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -229,7 +229,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['group_not_admins'], Response::HTTP_CONFLICT);

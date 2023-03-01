@@ -24,8 +24,8 @@ class GroupCreateTest extends WebClientTestCase
     /** @test */
     public function itShouldCreateAGroup(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -34,7 +34,7 @@ class GroupCreateTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_CREATED);
@@ -46,8 +46,8 @@ class GroupCreateTest extends WebClientTestCase
     /** @test */
     public function itShouldCreateAGroupDescriptionIsNull(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -56,7 +56,7 @@ class GroupCreateTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_CREATED);
@@ -68,8 +68,8 @@ class GroupCreateTest extends WebClientTestCase
     /** @test */
     public function itShouldFailDescriptionIsTooLong(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -78,7 +78,7 @@ class GroupCreateTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['description'], Response::HTTP_BAD_REQUEST);
@@ -90,8 +90,8 @@ class GroupCreateTest extends WebClientTestCase
     /** @test */
     public function itShouldFailNameIsNull(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -100,7 +100,7 @@ class GroupCreateTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['name'], Response::HTTP_BAD_REQUEST);
@@ -112,8 +112,8 @@ class GroupCreateTest extends WebClientTestCase
     /** @test */
     public function itShouldFailNameIsTooShort(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -122,7 +122,7 @@ class GroupCreateTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['name'], Response::HTTP_BAD_REQUEST);
@@ -134,8 +134,8 @@ class GroupCreateTest extends WebClientTestCase
     /** @test */
     public function itShouldFailNameIsTooLong(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -144,7 +144,7 @@ class GroupCreateTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['name'], Response::HTTP_BAD_REQUEST);
@@ -156,8 +156,8 @@ class GroupCreateTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupNameAlreadyExists(): void
     {
-        $this->client = $this->getNewClientAuthenticatedUser();
-        $this->client->request(
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -166,7 +166,7 @@ class GroupCreateTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [], ['group_name_repeated'], Response::HTTP_BAD_REQUEST);
@@ -177,8 +177,8 @@ class GroupCreateTest extends WebClientTestCase
     /** @test */
     public function itShouldFailNotPermission(): void
     {
-        $this->client = $this->getNewClientAuthenticated('email@user.com', 'not allowed user');
-        $this->client->request(
+        $client = $this->getNewClientAuthenticated('email@user.com', 'not allowed user');
+        $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
@@ -187,7 +187,7 @@ class GroupCreateTest extends WebClientTestCase
             ])
         );
 
-        $response = $this->client->getResponse();
+        $response = $client->getResponse();
         $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 }
