@@ -32,10 +32,10 @@ class JwtLexikAdapterTest extends TestCase
         $return = $this->object->encode($data, 3600);
         $tokenDecoded = $this->object->decode($return);
 
-        $this->assertObjectHasAttribute('iat', $tokenDecoded);
-        $this->assertObjectHasAttribute('exp', $tokenDecoded);
-        $this->assertObjectHasAttribute('username', $tokenDecoded);
-        $this->assertObjectHasAttribute('other', $tokenDecoded);
+        $this->assertTrue(property_exists($tokenDecoded, 'iat'));
+        $this->assertTrue(property_exists($tokenDecoded, 'exp'));
+        $this->assertTrue(property_exists($tokenDecoded, 'username'));
+        $this->assertTrue(property_exists($tokenDecoded, 'other'));
 
         $this->assertSame($data['username'], $tokenDecoded->username);
         $this->assertSame($data['other'], $tokenDecoded->other);
@@ -55,10 +55,10 @@ class JwtLexikAdapterTest extends TestCase
         $return = $this->object->encode($data, 0);
         $tokenDecoded = $this->object->decode($return);
 
-        $this->assertObjectHasAttribute('iat', $tokenDecoded);
-        $this->assertObjectHasAttribute('exp', $tokenDecoded);
-        $this->assertObjectHasAttribute('username', $tokenDecoded);
-        $this->assertObjectHasAttribute('other', $tokenDecoded);
+        $this->assertTrue(property_exists($tokenDecoded, 'iat'));
+        $this->assertTrue(property_exists($tokenDecoded, 'exp'));
+        $this->assertTrue(property_exists($tokenDecoded, 'username'));
+        $this->assertTrue(property_exists($tokenDecoded, 'other'));
 
         $this->assertSame($data['username'], $tokenDecoded->username);
         $this->assertSame($data['other'], $tokenDecoded->other);
@@ -78,9 +78,9 @@ class JwtLexikAdapterTest extends TestCase
 
         $return = $this->object->decode(self::TOKEN);
 
-        $this->assertObjectHasAttribute('iat', $return);
-        $this->assertObjectHasAttribute('exp', $return);
-        $this->assertObjectHasAttribute('username', $return);
+        $this->assertTrue(property_exists($return, 'iat'));
+        $this->assertTrue(property_exists($return, 'exp'));
+        $this->assertTrue(property_exists($return, 'username'));
 
         $this->assertSame($expect, (array) $return);
     }

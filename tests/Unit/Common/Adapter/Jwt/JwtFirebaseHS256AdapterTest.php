@@ -41,10 +41,10 @@ class JwtFirebaseHS256AdapterTest extends TestCase
         $return = $this->object->encode(self::PAYLOAD);
         $tokenDecoded = JWT::decode($return, $this->secretKey);
 
-        $this->assertObjectNotHasAttribute(JwtFirebaseHS256Adapter::KEY_TOKEN_DATA, $tokenDecoded);
-        $this->assertObjectHasAttribute('param1', $tokenDecoded);
-        $this->assertObjectHasAttribute('param2', $tokenDecoded);
-        $this->assertObjectHasAttribute('param3', $tokenDecoded);
+        $this->assertTrue(property_exists($tokenDecoded, JwtFirebaseHS256Adapter::KEY_TOKEN_DATA));
+        $this->assertTrue(property_exists($tokenDecoded, 'params1'));
+        $this->assertTrue(property_exists($tokenDecoded, 'params2'));
+        $this->assertTrue(property_exists($tokenDecoded, 'params3'));
         $this->assertEquals(self::PAYLOAD['param1'], $tokenDecoded->param1);
         $this->assertEquals(self::PAYLOAD['param2'], $tokenDecoded->param2);
         $this->assertEquals(self::PAYLOAD['param3'], $tokenDecoded->param3);
@@ -65,12 +65,12 @@ class JwtFirebaseHS256AdapterTest extends TestCase
         $return = $this->object->encode(self::PAYLOAD, $expirationInSeconds);   // 24H
         $tokenDecoded = JWT::decode($return, $this->secretKey);
 
-        $this->assertObjectHasAttribute(JwtFirebaseHS256Adapter::KEY_TOKEN_DATA, $tokenDecoded);
-        $this->assertObjectHasAttribute('expire', $tokenDecoded->{JwtFirebaseHS256Adapter::KEY_TOKEN_DATA});
+        $this->assertTrue(property_exists($tokenDecoded, JwtFirebaseHS256Adapter::KEY_TOKEN_DATA));
+        $this->assertTrue(property_exists($tokenDecoded->{JwtFirebaseHS256Adapter::KEY_TOKEN_DATA}, 'expire'));
         $this->assertEquals($dateTimeTokenExpiration->getTimestamp(), $tokenDecoded->{JwtFirebaseHS256Adapter::KEY_TOKEN_DATA}->expire);
-        $this->assertObjectHasAttribute('param1', $tokenDecoded);
-        $this->assertObjectHasAttribute('param2', $tokenDecoded);
-        $this->assertObjectHasAttribute('param3', $tokenDecoded);
+        $this->assertTrue(property_exists($tokenDecoded, 'params1'));
+        $this->assertTrue(property_exists($tokenDecoded, 'params2'));
+        $this->assertTrue(property_exists($tokenDecoded, 'params3'));
         $this->assertEquals(self::PAYLOAD['param1'], $tokenDecoded->param1);
         $this->assertEquals(self::PAYLOAD['param2'], $tokenDecoded->param2);
         $this->assertEquals(self::PAYLOAD['param3'], $tokenDecoded->param3);
@@ -82,9 +82,9 @@ class JwtFirebaseHS256AdapterTest extends TestCase
         $token = JWT::encode(self::PAYLOAD, self::SECRET_KEY, JwtFirebaseHS256Adapter::ALGORITM);
         $tokenDecoded = $this->object->decode($token);
 
-        $this->assertObjectHasAttribute('param1', $tokenDecoded);
-        $this->assertObjectHasAttribute('param2', $tokenDecoded);
-        $this->assertObjectHasAttribute('param3', $tokenDecoded);
+        $this->assertTrue(property_exists($tokenDecoded, 'params1'));
+        $this->assertTrue(property_exists($tokenDecoded, 'params2'));
+        $this->assertTrue(property_exists($tokenDecoded, 'params3'));
         $this->assertEquals(self::PAYLOAD['param1'], $tokenDecoded->param1);
         $this->assertEquals(self::PAYLOAD['param2'], $tokenDecoded->param2);
         $this->assertEquals(self::PAYLOAD['param3'], $tokenDecoded->param3);
@@ -98,11 +98,11 @@ class JwtFirebaseHS256AdapterTest extends TestCase
         $hasExpired = $this->object->hasExpired($tokenDecoded);
 
         if (isset($tokenDecoded->{JwtFirebaseHS256Adapter::KEY_TOKEN_DATA})) {
-            $this->assertObjectNotHasAttribute('expire', $tokenDecoded->{JwtFirebaseHS256Adapter::KEY_TOKEN_DATA});
+            $this->assertTrue(property_exists($tokenDecoded->{JwtFirebaseHS256Adapter::KEY_TOKEN_DATA}, 'expire'));
         }
 
         if (!isset($tokenDecoded->{JwtFirebaseHS256Adapter::KEY_TOKEN_DATA})) {
-            $this->assertObjectNotHasAttribute(JwtFirebaseHS256Adapter::KEY_TOKEN_DATA, $tokenDecoded);
+            $this->assertTrue(property_exists($tokenDecoded, JwtFirebaseHS256Adapter::KEY_TOKEN_DATA));
         }
 
         $this->assertFalse($hasExpired);
@@ -115,18 +115,27 @@ class JwtFirebaseHS256AdapterTest extends TestCase
         $dateTimeNow = new \DateTime();
         $dateTimeTokenExpiration = (clone $dateTimeNow)->add(new \DateInterval("PT{$expirationInSeconds}S"));
 
+        $matcher = $this->exactly(3);
         $this->object
-            ->expects($this->exactly(3))
+            ->expects($matcher)
             ->method('getDateTime')
-            ->withConsecutive([null], [$dateTimeTokenExpiration->getTimestamp()], [null])
-            ->willReturnOnConsecutiveCalls($dateTimeNow, $dateTimeTokenExpiration, $dateTimeTokenExpiration);
+            ->willReturnCallback(function (float|null $timestamp) use ($matcher, $dateTimeTokenExpiration, $dateTimeNow) {
+                $expectedNumCall = $matcher->getInvocationCount();
+
+                return match ([$expectedNumCall, $timestamp]) {
+                    [1, null] => $dateTimeNow ,
+                    [2, $dateTimeTokenExpiration->getTimestamp()] => $dateTimeTokenExpiration,
+                    [3, null] => $dateTimeTokenExpiration,
+                    default => throw new \LogicException()
+                };
+            });
 
         $token = $this->object->encode(self::PAYLOAD, $expirationInSeconds);
         $tokenDecoded = $this->object->decode($token);
         $hasExpired = $this->object->hasExpired($tokenDecoded);
 
-        $this->assertObjectHasAttribute(JwtFirebaseHS256Adapter::KEY_TOKEN_DATA, $tokenDecoded);
-        $this->assertObjectHasAttribute('expire', $tokenDecoded->{JwtFirebaseHS256Adapter::KEY_TOKEN_DATA});
+        $this->assertTrue(property_exists($tokenDecoded, JwtFirebaseHS256Adapter::KEY_TOKEN_DATA));
+        $this->assertTrue(property_exists($tokenDecoded->{JwtFirebaseHS256Adapter::KEY_TOKEN_DATA}, 'expire'));
         $this->assertFalse($hasExpired);
     }
 
@@ -140,18 +149,27 @@ class JwtFirebaseHS256AdapterTest extends TestCase
         $intervalLessOnesecond->invert = true;
         $dateTimeTokenexpirationLessOne = (clone $dateTimeTokenExpiration)->add($intervalLessOnesecond);
 
+        $matcher = $this->exactly(3);
         $this->object
-            ->expects($this->exactly(3))
+            ->expects($matcher)
             ->method('getDateTime')
-            ->withConsecutive([null], [$dateTimeTokenExpiration->getTimestamp()], [null])
-            ->willReturnOnConsecutiveCalls($dateTimeNow, $dateTimeTokenExpiration, $dateTimeTokenexpirationLessOne);
+            ->willReturnCallback(function (float $timestamp) use ($matcher, $dateTimeTokenExpiration, $dateTimeNow, $dateTimeTokenexpirationLessOne) {
+                $expectedNumCall = $matcher->getInvocationCount();
+
+                return match ([$expectedNumCall, $timestamp]) {
+                    [1, null] => $dateTimeNow,
+                    [2, $dateTimeTokenExpiration->getTimestamp()] => $dateTimeTokenExpiration,
+                    [3, null] => $dateTimeTokenexpirationLessOne,
+                    default => throw new \LogicException()
+                };
+            });
 
         $token = $this->object->encode(self::PAYLOAD, $expirationInSeconds);
         $tokenDecoded = $this->object->decode($token);
         $hasExpired = $this->object->hasExpired($tokenDecoded);
 
-        $this->assertObjectHasAttribute(JwtFirebaseHS256Adapter::KEY_TOKEN_DATA, $tokenDecoded);
-        $this->assertObjectHasAttribute('expire', $tokenDecoded->{JwtFirebaseHS256Adapter::KEY_TOKEN_DATA});
+        $this->assertTrue(property_exists($tokenDecoded, JwtFirebaseHS256Adapter::KEY_TOKEN_DATA));
+        $this->assertTrue(property_exists($tokenDecoded->{JwtFirebaseHS256Adapter::KEY_TOKEN_DATA}, 'expire'));
         $this->assertFalse($hasExpired);
     }
 
@@ -163,18 +181,27 @@ class JwtFirebaseHS256AdapterTest extends TestCase
         $dateTimeTokenExpiration = (clone $dateTimeNow)->add(new \DateInterval("PT{$expirationInSeconds}S"));
         $dateTimeTokenexpirationPlusOne = (clone $dateTimeTokenExpiration)->add(new \DateInterval('PT1S'));
 
+        $matcher = $this->exactly(3);
         $this->object
-            ->expects($this->exactly(3))
+            ->expects($matcher)
             ->method('getDateTime')
-            ->withConsecutive([null], [$dateTimeTokenExpiration->getTimestamp()], [null])
-            ->willReturnOnConsecutiveCalls($dateTimeNow, $dateTimeTokenExpiration, $dateTimeTokenexpirationPlusOne);
+            ->willReturnCallback(function (float $timestamp) use ($matcher, $dateTimeNow, $dateTimeTokenExpiration, $dateTimeTokenexpirationPlusOne) {
+                $expectedNumCall = $matcher->getInvocationCount();
+
+                return match ([$expectedNumCall, $timestamp]) {
+                    [1, null] => $dateTimeNow,
+                    [2, $dateTimeTokenExpiration->getTimestamp()] => $dateTimeTokenExpiration,
+                    [3, null] => $dateTimeTokenexpirationPlusOne,
+                    default => throw new \LogicException()
+                };
+            });
 
         $token = $this->object->encode(self::PAYLOAD, $expirationInSeconds);
         $tokenDecoded = $this->object->decode($token);
         $hasExpired = $this->object->hasExpired($tokenDecoded);
 
-        $this->assertObjectHasAttribute(JwtFirebaseHS256Adapter::KEY_TOKEN_DATA, $tokenDecoded);
-        $this->assertObjectHasAttribute('expire', $tokenDecoded->{JwtFirebaseHS256Adapter::KEY_TOKEN_DATA});
+        $this->assertTrue(property_exists($tokenDecoded, JwtFirebaseHS256Adapter::KEY_TOKEN_DATA));
+        $this->assertTrue(property_exists($tokenDecoded->{JwtFirebaseHS256Adapter::KEY_TOKEN_DATA}, 'expire'));
         $this->assertTrue($hasExpired);
     }
 }

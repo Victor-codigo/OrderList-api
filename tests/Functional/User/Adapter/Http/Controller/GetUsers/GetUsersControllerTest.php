@@ -55,12 +55,12 @@ class GetUsersControllerTest extends WebClientTestCase
         foreach ($data as $user) {
             $this->assertCount(6, get_object_vars($user));
 
-            $this->assertObjectHasAttribute('id', $user);
-            $this->assertObjectHasAttribute('email', $user);
-            $this->assertObjectHasAttribute('name', $user);
-            $this->assertObjectHasAttribute('roles', $user);
-            $this->assertObjectHasAttribute('created_on', $user);
-            $this->assertObjectHasAttribute('image', $user);
+            $this->assertTrue(property_exists($user, 'id'));
+            $this->assertTrue(property_exists($user, 'email'));
+            $this->assertTrue(property_exists($user, 'name'));
+            $this->assertTrue(property_exists($user, 'roles'));
+            $this->assertTrue(property_exists($user, 'created_on'));
+            $this->assertTrue(property_exists($user, 'image'));
 
             $this->assertContains($user->id, $usersIds);
             $this->assertContains($user->email, $usersEmails);
@@ -76,9 +76,9 @@ class GetUsersControllerTest extends WebClientTestCase
         foreach ($data as $user) {
             $this->assertCount(3, get_object_vars($user));
 
-            $this->assertObjectHasAttribute('id', $user);
-            $this->assertObjectHasAttribute('name', $user);
-            $this->assertObjectHasAttribute('image', $user);
+            $this->assertTrue(property_exists($user, 'id'));
+            $this->assertTrue(property_exists($user, 'name'));
+            $this->assertTrue(property_exists($user, 'image'));
 
             $this->assertContains($user->id, $usersIds);
             $this->assertContains($user->name, $usersNames);

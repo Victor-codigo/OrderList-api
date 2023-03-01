@@ -44,10 +44,19 @@ class EventDispatchTraitTest extends TestCase
         $eventDomain2 = new CustomEvent();
         $eventDomain3 = new CustomEvent();
 
+        $matcher = $this->exactly(3);
         $this->eventDispatcher
-            ->expects($this->exactly(3))
+            ->expects($matcher)
             ->method('dispatch')
-            ->withConsecutive([$eventDomain1], [$eventDomain2], [$eventDomain3]);
+            ->willReturnCallback(function (CustomEvent $event) use ($matcher, $eventDomain1, $eventDomain2, $eventDomain3) {
+                $expectedNumCall = $matcher->getInvocationCount();
+                match ([$expectedNumCall, $event]) {
+                    [1, $eventDomain1],
+                    [2, $eventDomain2],
+                    [3, $eventDomain3] => null,
+                    default => throw new \LogicException('withConsecutive calls error')
+                };
+            });
 
         $this->object->eventsRegisteredDispatch($this->eventDispatcher, [$eventDomain1, $eventDomain2, $eventDomain3]);
     }
@@ -63,17 +72,21 @@ class EventDispatchTraitTest extends TestCase
         $eventDomain5 = new CustomEvent();
         $eventDomain6 = new CustomEvent();
 
+        $matcher = $this->exactly(6);
         $this->eventDispatcher
-            ->expects($this->exactly(6))
+            ->expects($matcher)
             ->method('dispatch')
-            ->withConsecutive(
-                [$eventDomain1],
-                [$eventDomain2],
-                [$eventDomain3],
-                [$eventDomain4],
-                [$eventDomain5],
-                [$eventDomain6],
-            );
+            ->willReturnCallback(function (CustomEvent $event) use ($matcher, $eventDomain1, $eventDomain2, $eventDomain3, $eventDomain4, $eventDomain5, $eventDomain6) {
+                match ([$matcher->getInvocationCount(), $event]) {
+                    [1, $eventDomain1],
+                    [2, $eventDomain2],
+                    [3, $eventDomain3],
+                    [4, $eventDomain4],
+                    [5, $eventDomain5],
+                    [6, $eventDomain6] => null,
+                    default => throw new \LogicException('withConsecutive parameters exception')
+                };
+            });
 
         $this->object->eventsRegisteredDispatch($this->eventDispatcher, [$eventDomain1, $eventDomain2, $eventDomain3, $eventDomain4, $eventDomain5, $eventDomain6]);
     }

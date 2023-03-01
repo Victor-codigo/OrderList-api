@@ -102,10 +102,10 @@ class WebClientTestCase extends WebTestCase
         $this->assertEquals($responseCode, $response->getStatusCode());
         $this->assertSame($contentType, $response->headers->get('Content-Type'));
 
-        $this->assertObjectHasAttribute('status', $content);
-        $this->assertObjectHasAttribute('message', $content);
-        $this->assertObjectHasAttribute('data', $content);
-        $this->assertObjectHasAttribute('errors', $content);
+        $this->assertTrue(property_exists($content, 'status'));
+        $this->assertTrue(property_exists($content, 'message'));
+        $this->assertTrue(property_exists($content, 'data'));
+        $this->assertTrue(property_exists($content, 'errors'));
 
         if (empty($data)) {
             $this->assertEmpty($content->data);
@@ -139,11 +139,11 @@ class WebClientTestCase extends WebTestCase
 
         foreach ($data as $item) {
             if (is_array($content->data) && is_string($item)) {
-                $this->assertArrayHasKey($item, $content->data);
+                $this->assertTrue(property_exists($content->data, $item));
             }
 
             if (is_object($content->data)) {
-                $this->assertObjectHasAttribute($item, $content->data);
+                $this->assertTrue(property_exists($content->data, $item));
             }
         }
 
@@ -153,7 +153,7 @@ class WebClientTestCase extends WebTestCase
             }
 
             if (is_object($content->errors)) {
-                $this->assertObjectHasAttribute($item, $content->errors);
+                $this->assertTrue(property_exists($content->errors, $item));
             }
         }
     }
