@@ -4,7 +4,7 @@ services:
     autoconfigure: true
     bind:
       $groupImagePath: "%group.image.path%"
-      # $groupPublicImagePath: "%group.public.image.path%"
+      $groupPublicImagePath: "%group.public.image.path%"
 
   # Adapter
   Group\Adapter\:

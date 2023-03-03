@@ -14,7 +14,8 @@ use Group\Domain\Service\GroupGetData\Dto\GroupGetDataDto;
 class GroupGetDataService
 {
     public function __construct(
-        private GroupRepositoryInterface $groupRepository
+        private GroupRepositoryInterface $groupRepository,
+        private string $groupPublicImagePath
     ) {
     }
 
@@ -60,6 +61,7 @@ class GroupGetDataService
                 'group_id' => $group->getId()->getValue(),
                 'name' => $group->getName()->getValue(),
                 'description' => $group->getDescription()->getValue(),
+                'image' => $group->getImage()->isNull() ? '' : $group->getImage()->getValue(),
                 'created_on' => $group->getCreatedOn()->format('Y-m-d H:i:s'),
             ];
         }

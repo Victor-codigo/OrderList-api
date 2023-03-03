@@ -45,6 +45,7 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
                                 new OA\Property(property: 'group_id', type: 'string', example: '1fcab788-0def-4e56-b441-935361678da9'),
                                 new OA\Property(property: 'name', type: 'string', example: 'GroupName'),
                                 new OA\Property(property: 'description', type: 'string', example: 'Group description'),
+                                new OA\Property(property: 'image', type: 'string', example: 'Path to the group image'),
                                 new OA\Property(property: 'created_on', type: 'string', example: '2023-2-14 14:05:10'),
                             ])),
                         new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),

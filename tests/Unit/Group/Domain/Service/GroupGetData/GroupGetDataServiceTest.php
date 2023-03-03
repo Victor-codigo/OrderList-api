@@ -15,6 +15,8 @@ use PHPUnit\Framework\TestCase;
 
 class GroupGetDataServiceTest extends TestCase
 {
+    private const PATH_GROUP_IMAGES_PUBLIC = 'path/to/group/public/images';
+
     private GroupGetDataService $object;
     private MockObject|GroupRepositoryInterface $groupRepository;
 
@@ -23,7 +25,7 @@ class GroupGetDataServiceTest extends TestCase
         parent::setUp();
 
         $this->groupRepository = $this->createMock(GroupRepositoryInterface::class);
-        $this->object = new GroupGetDataService($this->groupRepository);
+        $this->object = new GroupGetDataService($this->groupRepository, self::PATH_GROUP_IMAGES_PUBLIC);
     }
 
     /**
@@ -33,7 +35,7 @@ class GroupGetDataServiceTest extends TestCase
     {
         return [
             Group::fromPrimitives('4b513296-14ac-4fb1-a574-05bc9b1dbe3f', 'GroupOneName', GROUP_TYPE::GROUP, 'group one description', null),
-            Group::fromPrimitives('fdb242b4-bac8-4463-88d0-0941bb0beee0', 'GroupOneName', GROUP_TYPE::GROUP, 'group one description', null),
+            Group::fromPrimitives('fdb242b4-bac8-4463-88d0-0941bb0beee0', 'GroupOneName', GROUP_TYPE::GROUP, 'group one description', 'image.png'),
         ];
     }
 
@@ -54,7 +56,7 @@ class GroupGetDataServiceTest extends TestCase
     {
         return [
             Group::fromPrimitives('4b513296-14ac-4fb1-a574-05bc9b1dbe3f', 'GroupOneName', GROUP_TYPE::GROUP, 'group one description', null),
-            Group::fromPrimitives('a5002966-dbf7-4f76-a862-23a04b5ca465', 'GroupTwo', GROUP_TYPE::USER, 'This is a group of one user', null),
+            Group::fromPrimitives('a5002966-dbf7-4f76-a862-23a04b5ca465', 'GroupTwo', GROUP_TYPE::USER, 'This is a group of one user', 'image.png'),
             Group::fromPrimitives('fdb242b4-bac8-4463-88d0-0941bb0beee0', 'GroupOneName', GROUP_TYPE::GROUP, 'group one description', null),
         ];
     }
@@ -82,10 +84,12 @@ class GroupGetDataServiceTest extends TestCase
             $this->assertArrayHasKey('group_id', $groupData);
             $this->assertArrayHasKey('name', $groupData);
             $this->assertArrayHasKey('description', $groupData);
+            $this->assertArrayHasKey('image', $groupData);
             $this->assertArrayHasKey('created_on', $groupData);
             $this->assertEquals($expectedGroupsData[$key]->getId()->getValue(), $groupData['group_id']);
             $this->assertEquals($expectedGroupsData[$key]->getName()->getValue(), $groupData['name']);
             $this->assertEquals($expectedGroupsData[$key]->getDescription()->getValue(), $groupData['description']);
+            $this->assertEquals($expectedGroupsData[$key]->getImage()->getValue(), $groupData['image']);
             $this->assertEquals($expectedGroupsData[$key]->getCreatedOn()->format('Y-m-d H:i:s'), $groupData['created_on']);
         }
     }
@@ -113,10 +117,12 @@ class GroupGetDataServiceTest extends TestCase
             $this->assertArrayHasKey('group_id', $groupData);
             $this->assertArrayHasKey('name', $groupData);
             $this->assertArrayHasKey('description', $groupData);
+            $this->assertArrayHasKey('image', $groupData);
             $this->assertArrayHasKey('created_on', $groupData);
             $this->assertEquals($expectedGroupsData[$key]->getId()->getValue(), $groupData['group_id']);
             $this->assertEquals($expectedGroupsData[$key]->getName()->getValue(), $groupData['name']);
             $this->assertEquals($expectedGroupsData[$key]->getDescription()->getValue(), $groupData['description']);
+            $this->assertEquals($expectedGroupsData[$key]->getImage()->getValue(), $groupData['image']);
             $this->assertEquals($expectedGroupsData[$key]->getCreatedOn()->format('Y-m-d H:i:s'), $groupData['created_on']);
         }
     }
@@ -144,10 +150,12 @@ class GroupGetDataServiceTest extends TestCase
             $this->assertArrayHasKey('group_id', $groupData);
             $this->assertArrayHasKey('name', $groupData);
             $this->assertArrayHasKey('description', $groupData);
+            $this->assertArrayHasKey('image', $groupData);
             $this->assertArrayHasKey('created_on', $groupData);
             $this->assertEquals($expectedGroupsData[$key]->getId()->getValue(), $groupData['group_id']);
             $this->assertEquals($expectedGroupsData[$key]->getName()->getValue(), $groupData['name']);
             $this->assertEquals($expectedGroupsData[$key]->getDescription()->getValue(), $groupData['description']);
+            $this->assertEquals($expectedGroupsData[$key]->getImage()->getValue(), $groupData['image']);
             $this->assertEquals($expectedGroupsData[$key]->getCreatedOn()->format('Y-m-d H:i:s'), $groupData['created_on']);
         }
     }

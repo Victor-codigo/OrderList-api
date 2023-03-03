@@ -23,8 +23,8 @@ class GroupGetDataControllerTest extends WebClientTestCase
     private function getGroupsData(\DateTime $createdOn): array
     {
         return [
-            Group::fromPrimitives('fdb242b4-bac8-4463-88d0-0941bb0beee0', 'GroupOne', GROUP_TYPE::GROUP, 'This is a group of users', null),
-            Group::fromPrimitives('4b513296-14ac-4fb1-a574-05bc9b1dbe3f', 'Group100Users', GROUP_TYPE::GROUP, 'This group contains 100 users', null),
+            Group::fromPrimitives('fdb242b4-bac8-4463-88d0-0941bb0beee0', 'GroupOne', GROUP_TYPE::GROUP, 'This is a group of users', 'image_of_group_type_group'),
+            Group::fromPrimitives('4b513296-14ac-4fb1-a574-05bc9b1dbe3f', 'Group100Users', GROUP_TYPE::GROUP, 'This group contains 100 users', 'image_of_group_type_users_100'),
         ];
     }
 
@@ -44,6 +44,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
+        $groupsImage = array_map(fn (Group $group) => $group->getImage()->getValue(), $groups);
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -64,10 +65,12 @@ class GroupGetDataControllerTest extends WebClientTestCase
             $this->assertTrue(property_exists($groupData, 'group_id'));
             $this->assertTrue(property_exists($groupData, 'name'));
             $this->assertTrue(property_exists($groupData, 'description'));
+            $this->assertTrue(property_exists($groupData, 'image'));
             $this->assertTrue(property_exists($groupData, 'created_on'));
             $this->assertContains($groupData->group_id, $groupsId);
             $this->assertContains($groupData->name, $groupsName);
             $this->assertContains($groupData->description, $groupsDescription);
+            $this->assertContains($groupData->image, $groupsImage);
             $this->assertIsString($groupData->created_on);
             $this->assertStringMatchesFormat('%d-%d-%d %d:%d:%d', $groupData->created_on);
         }
@@ -81,6 +84,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
+        $groupsImage = array_map(fn (Group $group) => $group->getImage()->getValue(), $groups);
         $groups50Id = array_merge(array_fill(0, 47, $groupsId[0]), $groupsId);
 
         $client = $this->getNewClientAuthenticatedUser();
@@ -102,10 +106,12 @@ class GroupGetDataControllerTest extends WebClientTestCase
             $this->assertTrue(property_exists($groupData, 'group_id'));
             $this->assertTrue(property_exists($groupData, 'name'));
             $this->assertTrue(property_exists($groupData, 'description'));
+            $this->assertTrue(property_exists($groupData, 'image'));
             $this->assertTrue(property_exists($groupData, 'created_on'));
             $this->assertContains($groupData->group_id, $groupsId);
             $this->assertContains($groupData->name, $groupsName);
             $this->assertContains($groupData->description, $groupsDescription);
+            $this->assertContains($groupData->image, $groupsImage);
             $this->assertIsString($groupData->created_on);
             $this->assertStringMatchesFormat('%d-%d-%d %d:%d:%d', $groupData->created_on);
         }
@@ -119,6 +125,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
+        $groupsImage = array_map(fn (Group $group) => $group->getImage()->getValue(), $groups);
         $groups50Id = array_merge(array_fill(0, 48, $groupsId[0]), $groupsId);
 
         $client = $this->getNewClientAuthenticatedUser();
@@ -140,10 +147,12 @@ class GroupGetDataControllerTest extends WebClientTestCase
             $this->assertTrue(property_exists($groupData, 'group_id'));
             $this->assertTrue(property_exists($groupData, 'name'));
             $this->assertTrue(property_exists($groupData, 'description'));
+            $this->assertTrue(property_exists($groupData, 'image'));
             $this->assertTrue(property_exists($groupData, 'created_on'));
             $this->assertContains($groupData->group_id, $groupsId);
             $this->assertContains($groupData->name, $groupsName);
             $this->assertContains($groupData->description, $groupsDescription);
+            $this->assertContains($groupData->image, $groupsImage);
             $this->assertIsString($groupData->created_on);
             $this->assertStringMatchesFormat('%d-%d-%d %d:%d:%d', $groupData->created_on);
         }
@@ -157,6 +166,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
+        $groupsImage = array_map(fn (Group $group) => $group->getImage()->getValue(), $groups);
 
         $client = $this->getNewClientAuthenticatedAdmin();
         $client->request(
@@ -177,10 +187,12 @@ class GroupGetDataControllerTest extends WebClientTestCase
             $this->assertTrue(property_exists($groupData, 'group_id'));
             $this->assertTrue(property_exists($groupData, 'name'));
             $this->assertTrue(property_exists($groupData, 'description'));
+            $this->assertTrue(property_exists($groupData, 'image'));
             $this->assertTrue(property_exists($groupData, 'created_on'));
             $this->assertContains($groupData->group_id, $groupsId);
             $this->assertContains($groupData->name, $groupsName);
             $this->assertContains($groupData->description, $groupsDescription);
+            $this->assertContains($groupData->image, $groupsImage);
             $this->assertIsString($groupData->created_on);
             $this->assertStringMatchesFormat('%d-%d-%d %d:%d:%d', $groupData->created_on);
         }
