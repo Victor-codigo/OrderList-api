@@ -40,7 +40,7 @@ final class VALUE_OBJECTS_CONSTRAINTS
      * File size in Bytes.
      */
     public const FILE_MAX_FILE_SIZE = 2 * 1_000_000;
-    public const FILE_MIME_TIPES = [];
+    public const FILE_MIME_TYPES = [];
 
     /**
      * Constraints for user image.
@@ -48,8 +48,8 @@ final class VALUE_OBJECTS_CONSTRAINTS
     public const FILE_USER_IMAGE_MAX_FILE_SIZE = 2 * 1_000_000;
     public const FILE_USER_IMAGE_MIN_WITH = null;
     public const FILE_USER_IMAGE_MAX_WITH = null;
-    public const FILE_USER_IMAGE_MIN_HEIGTH = null;
-    public const FILE_USER_IMAGE_MAX_HEIGTH = null;
+    public const FILE_USER_IMAGE_MIN_HEIGH = null;
+    public const FILE_USER_IMAGE_MAX_HEIGH = null;
     public const FILE_USER_IMAGE_MIN_PIXELS = null;
     public const FILE_USER_IMAGE_MAX_PIXELS = null;
     public const FILE_USER_IMAGE_MIN_ASPECT_RATIO = null;
@@ -58,7 +58,7 @@ final class VALUE_OBJECTS_CONSTRAINTS
     public const FILE_USER_IMAGE_ALLOW_PORTRAIT = true;
     public const FILE_USER_IMAGE_ALLOW_SQUARE_IMAGE = true;
     public const FILE_USER_IMAGE_DETECT_CORRUPTED = false;
-    public const FILE_USER_IMAGE_MIME_TIPES = [
+    public const FILE_USER_IMAGE_MIME_TYPES = [
         'image/jpeg',
         'image/png',
         'image/bmp',

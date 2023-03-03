@@ -9,11 +9,11 @@ use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Struct\SCOPE;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
+use User\Domain\Model\USER_ROLES;
 use User\Domain\Port\Repository\UserRepositoryInterface;
-use User\Domain\Service\GetUsersPublicData\Dto\GetUsersPablicDataOutputDto;
 use User\Domain\Service\GetUsersPublicData\Dto\GetUsersPublicDataDto;
+use User\Domain\Service\GetUsersPublicData\Dto\GetUsersPublicDataOutputDto;
 use User\Domain\Service\GetUsersPublicData\GeUsersPublicDataService;
 
 class GetUsersPublcDataServiceTest extends TestCase
@@ -80,7 +80,7 @@ class GetUsersPublcDataServiceTest extends TestCase
         $usersDto = new GetUsersPublicDataDto($usersId);
         $return = $this->object->__invoke($usersDto, SCOPE::PUBLIC);
 
-        $this->assertInstanceOf(GetUsersPablicDataOutputDto::class, $return);
+        $this->assertInstanceOf(GetUsersPublicDataOutputDto::class, $return);
 
         foreach ($return->usersData as $user) {
             $this->assertCount(2, $user);
@@ -111,7 +111,7 @@ class GetUsersPublcDataServiceTest extends TestCase
         $usersDto = new GetUsersPublicDataDto($usersId);
         $return = $this->object->__invoke($usersDto, SCOPE::PRIVATE);
 
-        $this->assertInstanceOf(GetUsersPablicDataOutputDto::class, $return);
+        $this->assertInstanceOf(GetUsersPublicDataOutputDto::class, $return);
 
         foreach ($return->usersData as $user) {
             $this->assertCount(5, $user);
@@ -144,7 +144,7 @@ class GetUsersPublcDataServiceTest extends TestCase
         $usersDto = new GetUsersPublicDataDto($usersId);
         $return = $this->object->__invoke($usersDto, SCOPE::PUBLIC);
 
-        $this->assertInstanceOf(GetUsersPablicDataOutputDto::class, $return);
+        $this->assertInstanceOf(GetUsersPublicDataOutputDto::class, $return);
         $this->assertCount(count($this->getUsersId()), $return->usersData);
     }
 

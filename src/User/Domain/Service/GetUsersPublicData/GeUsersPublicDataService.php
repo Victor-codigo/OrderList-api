@@ -6,11 +6,11 @@ namespace User\Domain\Service\GetUsersPublicData;
 
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Struct\SCOPE;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
+use User\Domain\Model\USER_ROLES;
 use User\Domain\Port\Repository\UserRepositoryInterface;
-use User\Domain\Service\GetUsersPublicData\Dto\GetUsersPablicDataOutputDto;
 use User\Domain\Service\GetUsersPublicData\Dto\GetUsersPublicDataDto;
+use User\Domain\Service\GetUsersPublicData\Dto\GetUsersPublicDataOutputDto;
 
 class GeUsersPublicDataService
 {
@@ -24,7 +24,7 @@ class GeUsersPublicDataService
     /**
      * @throws DBNotFoundException
      */
-    public function __invoke(GetUsersPublicDataDto $usersDto, SCOPE $scope): GetUsersPablicDataOutputDto
+    public function __invoke(GetUsersPublicDataDto $usersDto, SCOPE $scope): GetUsersPublicDataOutputDto
     {
         /** @var User[] $users */
         $users = $this->userRepository->findUsersByIdOrFail($usersDto->usersId);
@@ -35,7 +35,7 @@ class GeUsersPublicDataService
             SCOPE::PUBLIC => $this->getUserPublicData($usersValid)
         };
 
-        return new GetUsersPablicDataOutputDto($usersData);
+        return new GetUsersPublicDataOutputDto($usersData);
     }
 
     private function getValidUsers(array $users): array

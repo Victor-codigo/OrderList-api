@@ -387,7 +387,7 @@ class UserModifyControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailImageParialyUploaded(): void
+    public function itShouldFailImagePartilallyUploaded(): void
     {
         $name = 'MariaMod';
         BuiltInFunctionsReturn::$unlink = false;

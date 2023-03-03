@@ -6,7 +6,7 @@ imports:
           resource: "../../../../../Group/Adapter/Framework/Config/services/services.yaml",
       }
 parameters:
-    common.enviroment.app_env: "%env(string:APP_ENV)%"
+    common.environment.app_env: "%env(string:APP_ENV)%"
     common.app_name: "%env(string:APP_NAME)%"
     common.admin_email: "%env(string:ADMIN_EMAIL)%"
     common.email_user_registration_confirmation_expire: "%env(int:EMAIL_REGISTRATION_CONFIRM_EXPIRE)%"
@@ -23,7 +23,7 @@ services:
         autoconfigure: true
 
         bind:
-            $appEnv: "%common.enviroment.app_env%"
+            $appEnv: "%common.environment.app_env%"
 
     # Adapter
     Common\Adapter\:

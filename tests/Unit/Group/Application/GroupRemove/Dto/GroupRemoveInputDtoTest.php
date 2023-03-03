@@ -27,7 +27,7 @@ class GroupRemoveInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itSouldValidateTheData(): void
+    public function itShouldValidateTheData(): void
     {
         $groupRemoveInputDto = new GroupRemoveInputDto($this->userSession, self::GROUP_ID);
         $return = $groupRemoveInputDto->validate($this->validator);
@@ -36,7 +36,7 @@ class GroupRemoveInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itSouldFailGroupIdIsNull(): void
+    public function itShouldFailGroupIdIsNull(): void
     {
         $groupRemoveInputDto = new GroupRemoveInputDto($this->userSession, null);
         $return = $groupRemoveInputDto->validate($this->validator);
@@ -45,7 +45,7 @@ class GroupRemoveInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itSouldFailGroupIdIsWorng(): void
+    public function itShouldFailGroupIdIsWorng(): void
     {
         $groupRemoveInputDto = new GroupRemoveInputDto($this->userSession, 'id not valid');
         $return = $groupRemoveInputDto->validate($this->validator);

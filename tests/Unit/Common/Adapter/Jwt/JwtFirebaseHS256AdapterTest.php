@@ -145,21 +145,21 @@ class JwtFirebaseHS256AdapterTest extends TestCase
         $expirationInSeconds = 60 * 60 * 24;
         $dateTimeNow = new \DateTime();
         $dateTimeTokenExpiration = (clone $dateTimeNow)->add(new \DateInterval("PT{$expirationInSeconds}S"));
-        $intervalLessOnesecond = new \DateInterval('PT1S');
-        $intervalLessOnesecond->invert = true;
-        $dateTimeTokenexpirationLessOne = (clone $dateTimeTokenExpiration)->add($intervalLessOnesecond);
+        $intervalLessOneSecond = new \DateInterval('PT1S');
+        $intervalLessOneSecond->invert = true;
+        $dateTimeTokenExpirationLessOne = (clone $dateTimeTokenExpiration)->add($intervalLessOneSecond);
 
         $matcher = $this->exactly(3);
         $this->object
             ->expects($matcher)
             ->method('getDateTime')
-            ->willReturnCallback(function (float $timestamp) use ($matcher, $dateTimeTokenExpiration, $dateTimeNow, $dateTimeTokenexpirationLessOne) {
+            ->willReturnCallback(function (float $timestamp) use ($matcher, $dateTimeTokenExpiration, $dateTimeNow, $dateTimeTokenExpirationLessOne) {
                 $expectedNumCall = $matcher->getInvocationCount();
 
                 return match ([$expectedNumCall, $timestamp]) {
                     [1, null] => $dateTimeNow,
                     [2, $dateTimeTokenExpiration->getTimestamp()] => $dateTimeTokenExpiration,
-                    [3, null] => $dateTimeTokenexpirationLessOne,
+                    [3, null] => $dateTimeTokenExpirationLessOne,
                     default => throw new \LogicException()
                 };
             });
@@ -179,19 +179,19 @@ class JwtFirebaseHS256AdapterTest extends TestCase
         $expirationInSeconds = 60 * 60 * 24;
         $dateTimeNow = new \DateTime();
         $dateTimeTokenExpiration = (clone $dateTimeNow)->add(new \DateInterval("PT{$expirationInSeconds}S"));
-        $dateTimeTokenexpirationPlusOne = (clone $dateTimeTokenExpiration)->add(new \DateInterval('PT1S'));
+        $dataTimeTokenExpirationPlusOne = (clone $dateTimeTokenExpiration)->add(new \DateInterval('PT1S'));
 
         $matcher = $this->exactly(3);
         $this->object
             ->expects($matcher)
             ->method('getDateTime')
-            ->willReturnCallback(function (float $timestamp) use ($matcher, $dateTimeNow, $dateTimeTokenExpiration, $dateTimeTokenexpirationPlusOne) {
+            ->willReturnCallback(function (float $timestamp) use ($matcher, $dateTimeNow, $dateTimeTokenExpiration, $dataTimeTokenExpirationPlusOne) {
                 $expectedNumCall = $matcher->getInvocationCount();
 
                 return match ([$expectedNumCall, $timestamp]) {
                     [1, null] => $dateTimeNow,
                     [2, $dateTimeTokenExpiration->getTimestamp()] => $dateTimeTokenExpiration,
-                    [3, null] => $dateTimeTokenexpirationPlusOne,
+                    [3, null] => $dataTimeTokenExpirationPlusOne,
                     default => throw new \LogicException()
                 };
             });

@@ -236,7 +236,7 @@ class UserModifyInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailImageParialyUploaded(): void
+    public function itShouldFailImagePartilallyUploaded(): void
     {
         $object = UserModifyInputDto::create(
             'anastasia@hotmail.com',

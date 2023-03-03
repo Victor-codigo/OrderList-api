@@ -13,7 +13,7 @@ class KernelCustomTest extends TestCase
     public function itShouldReturnDevEnvironmentParameterIsDev()
     {
         $environment = 'dev';
-        $return = KernelCustom::changeEnviromentByRequestQuery($environment);
+        $return = KernelCustom::changeEnvironmentByRequestQuery($environment);
 
         $this->assertSame($environment, $return);
     }
@@ -22,7 +22,7 @@ class KernelCustomTest extends TestCase
     public function itShouldReturnDevEnvironmentParameterDevRequestQueryNotEnvParameter()
     {
         $environment = 'dev';
-        $return = KernelCustom::changeEnviromentByRequestQuery($environment);
+        $return = KernelCustom::changeEnvironmentByRequestQuery($environment);
 
         $this->assertSame($environment, $return);
     }
@@ -32,7 +32,7 @@ class KernelCustomTest extends TestCase
     {
         $environment = 'dev';
         $_REQUEST['env'] = 'not valid environment';
-        $return = KernelCustom::changeEnviromentByRequestQuery($environment);
+        $return = KernelCustom::changeEnvironmentByRequestQuery($environment);
 
         $this->assertSame($environment, $return);
     }
@@ -42,7 +42,7 @@ class KernelCustomTest extends TestCase
     {
         $environment = 'dev';
         $_REQUEST['env'] = 'test';
-        $return = KernelCustom::changeEnviromentByRequestQuery($environment);
+        $return = KernelCustom::changeEnvironmentByRequestQuery($environment);
 
         $this->assertSame('test', $return);
     }

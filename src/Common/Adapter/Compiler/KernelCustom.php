@@ -19,7 +19,7 @@ class KernelCustom
         $container->addCompilerPass(new RegisterEventDomainSubscribers());
     }
 
-    public static function changeEnviromentByRequestQuery($environment): string
+    public static function changeEnvironmentByRequestQuery($environment): string
     {
         if ('dev' !== $environment) {
             return $environment;

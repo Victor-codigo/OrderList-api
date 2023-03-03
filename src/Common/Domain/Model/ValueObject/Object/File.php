@@ -25,7 +25,7 @@ class File extends ObjectValueObject
             ->setConstraint(ConstraintFactory::notBlank())
             ->setConstraint(ConstraintFactory::file(
                 VALUE_OBJECTS_CONSTRAINTS::FILE_MAX_FILE_SIZE,
-                VALUE_OBJECTS_CONSTRAINTS::FILE_MIME_TIPES
+                VALUE_OBJECTS_CONSTRAINTS::FILE_MIME_TYPES
             ));
     }
 }

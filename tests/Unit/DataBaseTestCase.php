@@ -23,7 +23,7 @@ abstract class DataBaseTestCase extends KernelTestCase
         $kernel = static::bootKernel();
 
         if ('test' !== $kernel->getEnvironment()) {
-            throw new LogicException('Only executable in test enviroment');
+            throw new LogicException('Only executable in test environment');
         }
 
         $this->entityManager = $kernel

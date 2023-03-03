@@ -11,8 +11,8 @@ use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserAdd\Dto\GroupUserAddInputDto;
 use Group\Domain\Model\GROUP_ROLES;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
+use User\Domain\Model\USER_ROLES;
 
 class GroupUserAddInputDtoTest extends TestCase
 {
@@ -92,7 +92,7 @@ class GroupUserAddInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itSouldFailGroupIdIsNull(): void
+    public function itShouldFailGroupIdIsNull(): void
     {
         $object = new GroupUserAddInputDto(
             $this->userSession,
@@ -109,7 +109,7 @@ class GroupUserAddInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itSouldFailGroupIdIsNotValid(): void
+    public function itShouldFailGroupIdIsNotValid(): void
     {
         $object = new GroupUserAddInputDto(
             $this->userSession,
@@ -126,7 +126,7 @@ class GroupUserAddInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itSouldFailUsersIdIsNull(): void
+    public function itShouldFailUsersIdIsNull(): void
     {
         $object = new GroupUserAddInputDto(
             $this->userSession,
@@ -143,7 +143,7 @@ class GroupUserAddInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itSouldFailNotAllUsersIdAreValid(): void
+    public function itShouldFailNotAllUsersIdAreValid(): void
     {
         $object = new GroupUserAddInputDto(
             $this->userSession,

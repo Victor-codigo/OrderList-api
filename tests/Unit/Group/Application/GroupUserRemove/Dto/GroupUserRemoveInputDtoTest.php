@@ -9,8 +9,8 @@ use Common\Domain\Validation\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserRemove\Dto\GroupUserRemoveInputDto;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
+use User\Domain\Model\USER_ROLES;
 
 class GroupUserRemoveInputDtoTest extends TestCase
 {
@@ -36,7 +36,7 @@ class GroupUserRemoveInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itSouldValidateGroupUserRemoveValidation(): void
+    public function itShouldValidateGroupUserRemoveValidation(): void
     {
         $userSession = $this->getUserSession();
         $object = new GroupUserRemoveInputDto($userSession, self::GROUP_ID, self::USERS_TO_REMOVE_ID);
@@ -47,7 +47,7 @@ class GroupUserRemoveInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itSouldFailGroupIdIsNull(): void
+    public function itShouldFailGroupIdIsNull(): void
     {
         $userSession = $this->getUserSession();
         $object = new GroupUserRemoveInputDto($userSession, null, self::USERS_TO_REMOVE_ID);
@@ -58,7 +58,7 @@ class GroupUserRemoveInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itSouldFailGroupIdNotValid(): void
+    public function itShouldFailGroupIdNotValid(): void
     {
         $userSession = $this->getUserSession();
         $object = new GroupUserRemoveInputDto($userSession, 'not valid id', self::USERS_TO_REMOVE_ID);
@@ -69,7 +69,7 @@ class GroupUserRemoveInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itSouldFailUsersIdIsNull(): void
+    public function itShouldFailUsersIdIsNull(): void
     {
         $userSession = $this->getUserSession();
         $object = new GroupUserRemoveInputDto($userSession, self::GROUP_ID, null);
@@ -80,7 +80,7 @@ class GroupUserRemoveInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itSouldFailUsersIdNotValid(): void
+    public function itShouldFailUsersIdNotValid(): void
     {
         $userSession = $this->getUserSession();
         $usersToRemove = array_merge(self::USERS_TO_REMOVE_ID, ['user id not valid']);

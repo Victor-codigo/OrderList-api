@@ -71,7 +71,7 @@ class FileTest extends TestCase
     }
 
     /** @test */
-    public function itSouldValidate(): void
+    public function itShouldValidate(): void
     {
         /** @var MockObject|SymfonyFile $file */
         $file = $this->fileInterface->getFile();
@@ -87,7 +87,7 @@ class FileTest extends TestCase
     }
 
     /** @test */
-    public function itSouldFailFileCanNotBeNull(): void
+    public function itShouldFailFileCanNotBeNull(): void
     {
         $this->object = new File(null);
         $return = $this->validator->validateValueObject($this->object);
@@ -96,7 +96,7 @@ class FileTest extends TestCase
     }
 
     /** @test */
-    public function itSouldFailFileNotFound(): void
+    public function itShouldFailFileNotFound(): void
     {
         $object = new File($this->getFileInterface(self::PATH_FILE_NOT_FOUND));
 
@@ -106,7 +106,7 @@ class FileTest extends TestCase
     }
 
     /** @test */
-    public function itSouldFailFileIsNotReadable(): void
+    public function itShouldFailFileIsNotReadable(): void
     {
         /** @var MockObject|SymfonyFile $file */
         $file = $this->fileInterface->getFile();
@@ -124,7 +124,7 @@ class FileTest extends TestCase
     }
 
     /** @test */
-    public function itSouldFailFileIsEmpty(): void
+    public function itShouldFailFileIsEmpty(): void
     {
         $fileInterface = $this->getFileInterface(self::PATH_FILE_EMPTY);
         /** @var MockObject|SymfonyFile $file */
@@ -143,7 +143,7 @@ class FileTest extends TestCase
     }
 
     /** @test */
-    public function itSouldFailFileSizeIslargeThan2MB(): void
+    public function itShouldFailFileSizeIsLargeThan2MB(): void
     {
         /** @var MockObject|SymfonyFile $file */
         $file = $this->fileInterface->getFile();
@@ -162,7 +162,7 @@ class FileTest extends TestCase
     }
 
     /** @test */
-    public function itSouldReturnNullAsAValidationValue(): void
+    public function itShouldReturnNullAsAValidationValue(): void
     {
         $object = new File(null);
         $return = $object->getValidationValue();
@@ -171,7 +171,7 @@ class FileTest extends TestCase
     }
 
     /** @test */
-    public function itSouldReturnTheValidationValue(): void
+    public function itShouldReturnTheValidationValue(): void
     {
         $return = $this->object->getValidationValue();
 

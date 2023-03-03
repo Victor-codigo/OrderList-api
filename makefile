@@ -17,7 +17,7 @@ setup: ## Sets the application up
 	@echo '------------------------------'
 	composer install
 
-	@echo 'Migrating database, dev and test enviroments'
+	@echo 'Migrating database, dev and test environments'
 	@echo '--------------------------------------------'
 	bin/console doctrine:migrations:migrate --no-interaction
 	bin/console doctrine:migrations:migrate --no-interaction --env=test

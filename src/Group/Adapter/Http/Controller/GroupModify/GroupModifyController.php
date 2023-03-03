@@ -32,7 +32,7 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
                     properties: [
                         new OA\Property(property: 'group_id', type: 'string', description: 'Group\'s id', example: 'fdb242b4-bac8-4463-88d0-0941bb0beee0'),
                         new OA\Property(property: 'name', type: 'string', minLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MIN_LENGTH, maxLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MAX_LENGTH, description: 'Group\'s name', example: 'GroupOne'),
-                        new OA\Property(property: 'description', type: 'string', maxLength: VALUE_OBJECTS_CONSTRAINTS::DESCRIPTION_MAX_LENGTH, description: 'Grpup description', example: 'This is the description of the group'),
+                        new OA\Property(property: 'description', type: 'string', maxLength: VALUE_OBJECTS_CONSTRAINTS::DESCRIPTION_MAX_LENGTH, description: 'Group description', example: 'This is the description of the group'),
                         new OA\Property(property: 'image', type: 'string', format: 'binary', description: 'Group image'),
                     ]
                 )

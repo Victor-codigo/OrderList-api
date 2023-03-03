@@ -216,7 +216,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailGroupSouldHaveAtleastOneAdmin(): void
+    public function itShouldFailGroupShouldHaveAtleastOneAdmin(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(

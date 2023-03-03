@@ -147,7 +147,7 @@ class UserImageTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailFileSizeIslargeThan2MB(): void
+    public function itShouldFailFileSizeIsLargeThan2MB(): void
     {
         /** @var MockObject|File $file */
         $file = $this->fileInterface->getFile();
@@ -200,7 +200,7 @@ class UserImageTest extends TestCase
     }
 
     /** @test */
-    public function itShouldValidateFileHeigthHasNotMinWidth(): void
+    public function itShouldValidateFileHeighHasNotMinWidth(): void
     {
         /** @var MockObject|File $file */
         $file = $this->fileInterface->getFile();
@@ -218,7 +218,7 @@ class UserImageTest extends TestCase
     }
 
     /** @test */
-    public function itShouldValidateFileHeigthHasNotMaxWidth(): void
+    public function itShouldValidateFileHeighHasNotMaxWidth(): void
     {
         /** @var MockObject|File $file */
         $file = $this->fileInterface->getFile();
@@ -346,7 +346,7 @@ class UserImageTest extends TestCase
     }
 
     /** @test */
-    public function itSouldReturnNullAsAValidationValue(): void
+    public function itShouldReturnNullAsAValidationValue(): void
     {
         $object = new UserImage(null);
         $return = $object->getValidationValue();
@@ -355,7 +355,7 @@ class UserImageTest extends TestCase
     }
 
     /** @test */
-    public function itSouldReturnTheValidationValue(): void
+    public function itShouldReturnTheValidationValue(): void
     {
         $return = $this->object->getValidationValue();
 

@@ -15,9 +15,9 @@ class GetUsersProfilePublicDataService
     private ProfileRepositoryInterface $profileRepository;
     private string $userPublicImagePath;
 
-    public function __construct(ProfileRepositoryInterface $profileReposistory, string $userPublicImagePath)
+    public function __construct(ProfileRepositoryInterface $profileRepository, string $userPublicImagePath)
     {
-        $this->profileRepository = $profileReposistory;
+        $this->profileRepository = $profileRepository;
         $this->userPublicImagePath = $userPublicImagePath;
     }
 
