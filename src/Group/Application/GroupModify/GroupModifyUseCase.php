@@ -66,7 +66,7 @@ class GroupModifyUseCase extends ServiceBase
 
     private function createGroupModifyDto(GroupModifyInputDto $input): GroupModifyDto
     {
-        return new GroupModifyDto($input->groupId, $input->name, $input->description);
+        return new GroupModifyDto($input->groupId, $input->name, $input->description, $input->image);
     }
 
     private function createGroupModifyOutputDto(Identifier $modified): GroupModifyOutputDto

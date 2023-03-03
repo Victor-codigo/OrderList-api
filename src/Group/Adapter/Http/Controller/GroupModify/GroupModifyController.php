@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Adapter\Http\Controller\GroupModify;
 
+use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Response\RESPONSE_STATUS;
@@ -13,6 +14,7 @@ use Group\Application\GroupModify\Dto\GroupModifyInputDto;
 use Group\Application\GroupModify\GroupModifyUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
@@ -20,7 +22,7 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
 
 #[OA\Tag('Group')]
 #[OA\Post(
-    description: 'Modificates a group',
+    description: 'Modify a group',
     requestBody: new OA\RequestBody(
         required: true,
         content: [
@@ -31,6 +33,7 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
                         new OA\Property(property: 'group_id', type: 'string', description: 'Group\'s id', example: 'fdb242b4-bac8-4463-88d0-0941bb0beee0'),
                         new OA\Property(property: 'name', type: 'string', minLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MIN_LENGTH, maxLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MAX_LENGTH, description: 'Group\'s name', example: 'GroupOne'),
                         new OA\Property(property: 'description', type: 'string', maxLength: VALUE_OBJECTS_CONSTRAINTS::DESCRIPTION_MAX_LENGTH, description: 'Grpup description', example: 'This is the description of the group'),
+                        new OA\Property(property: 'image', type: 'string', format: 'binary', description: 'Group image'),
                     ]
                 )
             ),
@@ -62,7 +65,7 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|name|description|group_not_found, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|name|description|group_not_found|image, string|array>')),
                     ]
                 )
             )
@@ -94,19 +97,25 @@ class GroupModifyController extends AbstractController
 
     public function __invoke(GroupModifyRequestDto $request): JsonResponse
     {
-        $groupmodified = $this->groupModifyUseCase->__invoke(
-            $this->createGroupModifyInputDto($request->groupId, $request->name, $request->description)
+        $groupModified = $this->groupModifyUseCase->__invoke(
+            $this->createGroupModifyInputDto($request->groupId, $request->name, $request->description, $request->image)
         );
 
-        return $this->createResponse($groupmodified->groupId);
+        return $this->createResponse($groupModified->groupId);
     }
 
-    private function createGroupModifyInputDto(string|null $groupId, string|null $name, string|null $description): GroupModifyInputDto
+    private function createGroupModifyInputDto(string|null $groupId, string|null $name, string|null $description, UploadedFile|null $image): GroupModifyInputDto
     {
         /** @var UserSymfonyAdapter $userAdapter */
         $userAdapter = $this->security->getUser();
 
-        return new GroupModifyInputDto($userAdapter->getUser(), $groupId, $name, $description);
+        return new GroupModifyInputDto(
+            $userAdapter->getUser(),
+            $groupId,
+            $name,
+            $description,
+            null === $image ? null : new UploadedFileSymfonyAdapter($image)
+        );
     }
 
     private function createResponse(Identifier $groupId): JsonResponse

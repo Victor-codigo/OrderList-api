@@ -6,6 +6,7 @@ namespace Test\Functional\Group\Adapter\Http\Controller\GroupModify;
 
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
@@ -16,6 +17,37 @@ class GroupModifyControllerTest extends WebClientTestCase
     private const ENDPOINT = '/api/v1/groups/modify';
     private const METHOD = 'POST';
     private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+
+    private const PATH_FIXTURES = __DIR__.'/Fixtures';
+    private const PATH_IMAGE_UPLOAD = __DIR__.'/Fixtures/Image.png';
+    private const PATH_IMAGE_BACKUP = 'tests/Fixtures/Files/Image.png';
+    private const PATH_IMAGE_NOT_ALLOWED = __DIR__.'/Fixtures/MimeTypeNotAllowed.txt';
+    private const PATH_IMAGE_NOT_ALLOWED_BACKUP = 'tests/Fixtures/Files/MimeTypeNotAllowed.txt';
+    private const PATH_IMAGES_GROUP_PUBLIC = 'public/assets/img/groups';
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        if (!file_exists(self::PATH_FIXTURES)) {
+            mkdir(self::PATH_FIXTURES);
+        }
+
+        copy(self::PATH_IMAGE_BACKUP, self::PATH_IMAGE_UPLOAD);
+        copy(self::PATH_IMAGE_NOT_ALLOWED_BACKUP, self::PATH_IMAGE_NOT_ALLOWED);
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        $this->removeFolderFiles(self::PATH_IMAGES_GROUP_PUBLIC);
+    }
+
+    private function getImageUploaded(string $path, string $originalName, string $mimeType, int $error): UploadedFile
+    {
+        return new UploadedFile($path, $originalName, $mimeType, $error, true);
+    }
 
     /** @test */
     public function itShouldModifyTheGroup(): void
@@ -28,7 +60,10 @@ class GroupModifyControllerTest extends WebClientTestCase
                 'group_id' => self::GROUP_ID,
                 'name' => 'GroupName',
                 'description' => 'group description',
-            ])
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            ]
         );
 
         $response = $client->getResponse();
@@ -42,6 +77,32 @@ class GroupModifyControllerTest extends WebClientTestCase
 
     /** @test */
     public function itShouldModifyTheGroupDescriptionIsNull(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'name' => 'GroupName',
+                'description' => null,
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            ]
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Group modified', $responseContent->message);
+        $this->assertSame(self::GROUP_ID, $responseContent->data->id);
+    }
+
+    /** @test */
+    public function itShouldModifyTheGroupImageIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -74,7 +135,10 @@ class GroupModifyControllerTest extends WebClientTestCase
                 'group_id' => null,
                 'name' => 'GroupName',
                 'description' => 'group description',
-            ])
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            ]
         );
 
         $response = $client->getResponse();
@@ -97,7 +161,10 @@ class GroupModifyControllerTest extends WebClientTestCase
                 'group_id' => 'not valid id',
                 'name' => 'GroupName',
                 'description' => 'group description',
-            ])
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            ]
         );
 
         $response = $client->getResponse();
@@ -120,7 +187,10 @@ class GroupModifyControllerTest extends WebClientTestCase
                 'group_id' => self::GROUP_ID,
                 'name' => null,
                 'description' => 'group description',
-            ])
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            ]
         );
 
         $response = $client->getResponse();
@@ -143,7 +213,10 @@ class GroupModifyControllerTest extends WebClientTestCase
                 'group_id' => self::GROUP_ID,
                 'name' => 'not valid name+',
                 'description' => 'group description',
-            ])
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            ]
         );
 
         $response = $client->getResponse();
@@ -166,7 +239,10 @@ class GroupModifyControllerTest extends WebClientTestCase
                 'group_id' => self::GROUP_ID,
                 'name' => 'GroupName',
                 'description' => str_pad('', 501, 'u'),
-            ])
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            ]
         );
 
         $response = $client->getResponse();
@@ -189,7 +265,10 @@ class GroupModifyControllerTest extends WebClientTestCase
                 'group_id' => self::GROUP_ID,
                 'name' => 'GroupName',
                 'description' => 'Group description',
-            ])
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            ]
         );
 
         $response = $client->getResponse();
@@ -212,7 +291,10 @@ class GroupModifyControllerTest extends WebClientTestCase
                 'group_id' => '1befdbe2-9c14-42f0-850f-63e061e33b8f',
                 'name' => 'GroupName',
                 'description' => 'Group description',
-            ])
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            ]
         );
 
         $response = $client->getResponse();
@@ -222,5 +304,213 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Group not found', $responseContent->message);
         $this->assertSame('Group not found', $responseContent->errors->group_not_found);
+    }
+
+    /** @test */
+    public function itShouldFailImageMimeTypeNotAllowed(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'name' => 'GroupName',
+                'description' => 'group description',
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_NOT_ALLOWED, 'MimeTypeNotAllowed.txt', 'text/plain', UPLOAD_ERR_OK),
+            ]
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['image'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertSame(['file_invalid_mime_type'], $responseContent->errors->image);
+    }
+
+    /** @test */
+    public function itShouldFailImageSizeFormTooLarge(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'name' => 'GroupName',
+                'description' => 'group description',
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_FORM_SIZE),
+            ]
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['image'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertSame(['file_upload_form_size'], $responseContent->errors->image);
+    }
+
+    /** @test */
+    public function itShouldFailImageSizeIniTooLarge(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'name' => 'GroupName',
+                'description' => 'group description',
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_INI_SIZE),
+            ]
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['image'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertSame(['file_upload_init_size'], $responseContent->errors->image);
+    }
+
+    /** @test */
+    public function itShouldFailImageNoUploaded(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'name' => 'GroupName',
+                'description' => 'group description',
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_NO_FILE),
+            ]
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['image'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertSame(['file_upload_no_file'], $responseContent->errors->image);
+    }
+
+    /** @test */
+    public function itShouldFailImagePartiallyUploaded(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'name' => 'GroupName',
+                'description' => 'group description',
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_PARTIAL),
+            ]
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['image'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertSame(['file_upload_partial'], $responseContent->errors->image);
+    }
+
+    /** @test */
+    public function itShouldFailImageCantWrite(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'name' => 'GroupName',
+                'description' => 'group description',
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_CANT_WRITE),
+            ]
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['image'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertSame(['file_upload_cant_write'], $responseContent->errors->image);
+    }
+
+    /** @test */
+    public function itShouldFailImageErrorExtension(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'name' => 'GroupName',
+                'description' => 'group description',
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_EXTENSION),
+            ]
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['image'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertSame(['file_upload_extension'], $responseContent->errors->image);
+    }
+
+    /** @test */
+    public function itShouldFailImageErrorTmpDir(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'name' => 'GroupName',
+                'description' => 'group description',
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_NO_TMP_DIR),
+            ]
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['image'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertSame(['file_upload_no_tmp_dir'], $responseContent->errors->image);
     }
 }
