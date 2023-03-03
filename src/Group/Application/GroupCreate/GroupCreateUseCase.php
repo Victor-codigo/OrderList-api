@@ -6,12 +6,14 @@ namespace Group\Application\GroupCreate;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
+use Common\Domain\FileUpload\Exception\FileUploadException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Service\Exception\DomainErrorException;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupCreate\Dto\GroupCreateInputDto;
+use Group\Application\GroupCreate\Exception\GroupCreateCanNotUploadFile;
 use Group\Application\GroupCreate\Exception\GroupNameAlreadyExistsException;
 use Group\Domain\Service\GroupCreate\Dto\GroupCreateDto;
 use Group\Domain\Service\GroupCreate\GroupCreateService;
@@ -40,6 +42,8 @@ class GroupCreateUseCase extends ServiceBase
             return $group->getId();
         } catch (DBUniqueConstraintException) {
             throw GroupNameAlreadyExistsException::fromMessage('The group name already exists');
+        } catch (FileUploadException) {
+            throw GroupCreateCanNotUploadFile::fromMessage('An error occurred while file was uploading');
         } catch (DBConnectionException) {
             throw DomainErrorException::fromMessage('An error has been occurred');
         }
@@ -62,7 +66,8 @@ class GroupCreateUseCase extends ServiceBase
         return new GroupCreateDto(
             $input->userCreatorId,
             $input->name,
-            $input->description
+            $input->description,
+            $input->image
         );
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Adapter\Http\Controller\GroupCreate;
 
+use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Response\RESPONSE_STATUS;
@@ -13,6 +14,7 @@ use Group\Application\GroupCreate\Dto\GroupCreateInputDto;
 use Group\Application\GroupCreate\GroupCreateUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
@@ -29,7 +31,8 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
                 schema: new OA\Schema(
                     properties: [
                         new OA\Property(property: 'name', type: 'string', minLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MIN_LENGTH, maxLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MAX_LENGTH, description: 'Group\'s name', example: 'GroupOne'),
-                        new OA\Property(property: 'description', type: 'string', maxLength: VALUE_OBJECTS_CONSTRAINTS::DESCRIPTION_MAX_LENGTH, description: 'Grpup description', example: 'This is the description of the group'),
+                        new OA\Property(property: 'description', type: 'string', maxLength: VALUE_OBJECTS_CONSTRAINTS::DESCRIPTION_MAX_LENGTH, description: 'Group description', example: 'This is the description of the group'),
+                        new OA\Property(property: 'image', type: 'string', format: 'binay', description: 'Group image'),
                     ]
                 )
             ),
@@ -61,7 +64,7 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<name|description|group_name_repeated, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<name|description|group_name_repeated|image, string|array>')),
                     ]
                 )
             )
@@ -79,13 +82,13 @@ class GroupCreateController extends AbstractController
     public function __invoke(GroupCreateRequestDto $request): JsonResponse
     {
         $groupId = $this->groupCreateUseCase->__invoke(
-            $this->createGroupCreateInputDto($request->name, $request->description)
+            $this->createGroupCreateInputDto($request->name, $request->description, $request->image)
         );
 
         return $this->createResponse($groupId);
     }
 
-    private function createGroupCreateInputDto(string|null $name, string|null $description): GroupCreateInputDto
+    private function createGroupCreateInputDto(string|null $name, string|null $description, UploadedFile|null $image): GroupCreateInputDto
     {
         /** @var UserSymfonyAdapter $userAdapter */
         $userAdapter = $this->security->getUser();
@@ -93,7 +96,8 @@ class GroupCreateController extends AbstractController
         return new GroupCreateInputDto(
             $userAdapter->getUser()->getId(),
             $name,
-            $description
+            $description,
+            null === $image ? null : new UploadedFileSymfonyAdapter($image)
         );
     }
 

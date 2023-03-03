@@ -23,16 +23,16 @@ class GroupGetDataControllerTest extends WebClientTestCase
     private function getGroupsData(\DateTime $createdOn): array
     {
         return [
-            Group::fromPrimitives('fdb242b4-bac8-4463-88d0-0941bb0beee0', 'GroupOne', GROUP_TYPE::GROUP, 'This is a group of users'),
-            Group::fromPrimitives('4b513296-14ac-4fb1-a574-05bc9b1dbe3f', 'Group100Users', GROUP_TYPE::GROUP, 'This group contains 100 users'),
+            Group::fromPrimitives('fdb242b4-bac8-4463-88d0-0941bb0beee0', 'GroupOne', GROUP_TYPE::GROUP, 'This is a group of users', null),
+            Group::fromPrimitives('4b513296-14ac-4fb1-a574-05bc9b1dbe3f', 'Group100Users', GROUP_TYPE::GROUP, 'This group contains 100 users', null),
         ];
     }
 
     private function getGroupsDoNotExitsData(): array
     {
         return [
-            Group::fromPrimitives('b9e452d5-29ab-44af-aa97-79169bdd5899', 'GroupOne', GROUP_TYPE::GROUP, 'This is a group of users'),
-            Group::fromPrimitives('24f2c226-6d04-41bc-810e-a24be4382633', 'GroupTwo', GROUP_TYPE::USER, 'This is a group of one user'),
+            Group::fromPrimitives('b9e452d5-29ab-44af-aa97-79169bdd5899', 'GroupOne', GROUP_TYPE::GROUP, 'This is a group of users', null),
+            Group::fromPrimitives('24f2c226-6d04-41bc-810e-a24be4382633', 'GroupTwo', GROUP_TYPE::USER, 'This is a group of one user', null),
         ];
     }
 

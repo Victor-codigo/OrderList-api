@@ -23,6 +23,11 @@
                type="GroupTypeType"
                length="50"/>
 
+        <field name="image"
+               type="PathType"
+               length="256"
+               nullable="true"/>
+
         <field name="createdOn"
                column="created_on"
                type="datetime"/>

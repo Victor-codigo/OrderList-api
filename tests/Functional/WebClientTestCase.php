@@ -21,7 +21,6 @@ class WebClientTestCase extends WebTestCase
     private const USER_USER_EMAIL = 'email.already.active@host.com';
     private const USER_USER_PASSWORD = '123456';
 
-    // protected KernelBrowser|null $client = null;
     private static KernelBrowser|null $clientAuthenticatedUser = null;
     private static KernelBrowser|null $clientAuthenticatedAdmin = null;
     protected static KernelBrowser|null $clientNoAuthenticated = null;

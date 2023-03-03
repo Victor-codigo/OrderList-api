@@ -8,6 +8,7 @@ use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Array\ValueObjectArrayFactoryInterface;
 use Common\Domain\Model\ValueObject\Array\valueObjectArrayFactory;
 use Common\Domain\Model\ValueObject\Object\File;
+use Common\Domain\Model\ValueObject\Object\GroupImage;
 use Common\Domain\Model\ValueObject\Object\GroupType;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\Object\UserImage;
@@ -95,6 +96,11 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
     public static function createUserImage(FileInterface|null $file): UserImage
     {
         return ValueObjectObjectFactory::createUserImage($file);
+    }
+
+    public static function createGroupImage(FileInterface|null $file): GroupImage
+    {
+        return ValueObjectObjectFactory::createGroupImage($file);
     }
 
     public static function createGroupType(GROUP_TYPE|null $type): GroupType

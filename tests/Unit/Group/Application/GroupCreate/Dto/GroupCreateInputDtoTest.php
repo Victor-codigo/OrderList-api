@@ -4,16 +4,23 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupCreate\Dto;
 
+use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupCreate\Dto\GroupCreateInputDto;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints\BuiltInFunctionsReturn;
+
+require_once 'tests/BuiltinFunctions/SymfonyComponentValidatorConstraints.php';
 
 class GroupCreateInputDtoTest extends TestCase
 {
     private const GROUP_ID = '452618d5-17fa-4c16-8825-f4f540fca822';
+    private const PATH_IMAGE_UPLOAD = 'tests/Fixtures/Files/Image.png';
+    private const PATH_FILE = 'tests/Fixtures/Files/file.txt';
 
     private ValidationInterface $validator;
 
@@ -24,19 +31,33 @@ class GroupCreateInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    private function createNewGroupCreateInputDto(): GroupCreateInputDto
+    protected function tearDown(): void
     {
-        return new GroupCreateInputDto(
-            ValueObjectFactory::createIdentifier(self::GROUP_ID),
-            'GroupName',
-            'this is a description of the group'
+        parent::tearDown();
+
+        BuiltInFunctionsReturn::$filesize = null;
+        BuiltInFunctionsReturn::$getimagesize = null;
+        BuiltInFunctionsReturn::$imagecreatefromstring = null;
+        BuiltInFunctionsReturn::$is_readable = null;
+        BuiltInFunctionsReturn::$unlink = null;
+    }
+
+    private function getUploadedImage(string $path, string $originalName, string $mimeType, int $error): UploadedFileSymfonyAdapter
+    {
+        return new UploadedFileSymfonyAdapter(
+            new UploadedFile($path, $originalName, $mimeType, $error, true)
         );
     }
 
     /** @test */
     public function itShouldValidate(): void
     {
-        $object = $this->createNewGroupCreateInputDto();
+        $object = new GroupCreateInputDto(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            'GroupName',
+            'this is a description of the group',
+            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK)
+        );
         $return = $object->validate($this->validator);
 
         $this->assertEmpty($return);
@@ -48,7 +69,8 @@ class GroupCreateInputDtoTest extends TestCase
         $object = new GroupCreateInputDto(
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             'GroupName',
-            null
+            null,
+            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK)
         );
         $return = $object->validate($this->validator);
 
@@ -61,7 +83,8 @@ class GroupCreateInputDtoTest extends TestCase
         $object = new GroupCreateInputDto(
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             null,
-            'This is a description of the group'
+            'This is a description of the group',
+            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK)
         );
         $return = $object->validate($this->validator);
 
@@ -74,7 +97,8 @@ class GroupCreateInputDtoTest extends TestCase
         $object = new GroupCreateInputDto(
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             'Group Name',
-            'This is a description of the group'
+            'This is a description of the group',
+            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK)
         );
         $return = $object->validate($this->validator);
 
@@ -87,10 +111,133 @@ class GroupCreateInputDtoTest extends TestCase
         $object = new GroupCreateInputDto(
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             'GroupName',
-            str_pad('', 501, 'f')
+            str_pad('', 501, 'f'),
+            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK)
         );
         $return = $object->validate($this->validator);
 
         $this->assertSame(['description' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailGroupImageMimeTypeNotAllowed(): void
+    {
+        $object = new GroupCreateInputDto(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            'GroupName',
+            'This is a description of the group',
+            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_OK)
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_INVALID_MIME_TYPE]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailGroupImageSizeFormTooLarge(): void
+    {
+        $object = new GroupCreateInputDto(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            'GroupName',
+            'This is a description of the group',
+            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_OK)
+        );
+
+        BuiltInFunctionsReturn::$filesize = 2 * 1_000_000 + 1;
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_USER_IMAGE_TOO_LARGE]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailGroupImageSizeIniTooLarge(): void
+    {
+        $object = new GroupCreateInputDto(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            'GroupName',
+            'This is a description of the group',
+            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_INI_SIZE)
+        );
+
+        BuiltInFunctionsReturn::$filesize = 2 * 1_000_000 + 1;
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_INIT_SIZE]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailGroupImageNoUploaded(): void
+    {
+        $object = new GroupCreateInputDto(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            'GroupName',
+            'This is a description of the group',
+            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_NO_FILE)
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_NO_FILE]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailGroupImagePartiallyUploaded(): void
+    {
+        $object = new GroupCreateInputDto(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            'GroupName',
+            'This is a description of the group',
+            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_PARTIAL)
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_PARTIAL]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailGroupImageCantWrite(): void
+    {
+        $object = new GroupCreateInputDto(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            'GroupName',
+            'This is a description of the group',
+            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_CANT_WRITE)
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_CANT_WRITE]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailGroupImageErrorExtension(): void
+    {
+        $object = new GroupCreateInputDto(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            'GroupName',
+            'This is a description of the group',
+            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_EXTENSION)
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_EXTENSION]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailGroupImageErrorTmpDir(): void
+    {
+        $object = new GroupCreateInputDto(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            'GroupName',
+            'This is a description of the group',
+            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_NO_TMP_DIR)
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_NO_TMP_DIR]], $return);
     }
 }

@@ -39,7 +39,7 @@ class GroupUserRoleChangeTest extends TestCase
 
         $this->userGroupRepository = $this->createMock(UserGroupRepositoryInterface::class);
         $this->object = new GroupUserRoleChangeService($this->userGroupRepository);
-        $this->group = Group::fromPrimitives(self::GROUP_ID, 'GroupName', GROUP_TYPE::GROUP, 'description');
+        $this->group = Group::fromPrimitives(self::GROUP_ID, 'GroupName', GROUP_TYPE::GROUP, 'description', 'image.png');
     }
 
     /**

@@ -43,7 +43,7 @@ final class VALUE_OBJECTS_CONSTRAINTS
     public const FILE_MIME_TIPES = [];
 
     /**
-     * File size in Bytes.
+     * Constraints for user image.
      */
     public const FILE_USER_IMAGE_MAX_FILE_SIZE = 2 * 1_000_000;
     public const FILE_USER_IMAGE_MIN_WITH = null;
@@ -59,6 +59,32 @@ final class VALUE_OBJECTS_CONSTRAINTS
     public const FILE_USER_IMAGE_ALLOW_SQUARE_IMAGE = true;
     public const FILE_USER_IMAGE_DETECT_CORRUPTED = false;
     public const FILE_USER_IMAGE_MIME_TIPES = [
+        'image/jpeg',
+        'image/png',
+        'image/bmp',
+    ];
+
+    /**
+     * Constraints for group image.
+     */
+
+    /**
+     * File size in Bytes.
+     */
+    public const FILE_GROUP_IMAGE_MAX_FILE_SIZE = 2 * 1_000_000;
+    public const FILE_GROUP_IMAGE_MIN_WITH = null;
+    public const FILE_GROUP_IMAGE_MAX_WITH = null;
+    public const FILE_GROUP_IMAGE_MIN_HEIGH = null;
+    public const FILE_GROUP_IMAGE_MAX_HEIGH = null;
+    public const FILE_GROUP_IMAGE_MIN_PIXELS = null;
+    public const FILE_GROUP_IMAGE_MAX_PIXELS = null;
+    public const FILE_GROUP_IMAGE_MIN_ASPECT_RATIO = null;
+    public const FILE_GROUP_IMAGE_MAX_ASPECT_RATIO = null;
+    public const FILE_GROUP_IMAGE_ALLOW_LANDSCAPE = true;
+    public const FILE_GROUP_IMAGE_ALLOW_PORTRAIT = true;
+    public const FILE_GROUP_IMAGE_ALLOW_SQUARE_IMAGE = true;
+    public const FILE_GROUP_IMAGE_DETECT_CORRUPTED = false;
+    public const FILE_GROUP_IMAGE_MIME_TYPES = [
         'image/jpeg',
         'image/png',
         'image/bmp',

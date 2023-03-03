@@ -32,8 +32,8 @@ class GroupGetDataServiceTest extends TestCase
     private function getGroupsTypeGroupData(): array
     {
         return [
-            Group::fromPrimitives('4b513296-14ac-4fb1-a574-05bc9b1dbe3f', 'GroupOneName', GROUP_TYPE::GROUP, 'group one description'),
-            Group::fromPrimitives('fdb242b4-bac8-4463-88d0-0941bb0beee0', 'GroupOneName', GROUP_TYPE::GROUP, 'group one description'),
+            Group::fromPrimitives('4b513296-14ac-4fb1-a574-05bc9b1dbe3f', 'GroupOneName', GROUP_TYPE::GROUP, 'group one description', null),
+            Group::fromPrimitives('fdb242b4-bac8-4463-88d0-0941bb0beee0', 'GroupOneName', GROUP_TYPE::GROUP, 'group one description', null),
         ];
     }
 
@@ -43,7 +43,7 @@ class GroupGetDataServiceTest extends TestCase
     private function getGroupsTypeUserData(): array
     {
         return [
-            Group::fromPrimitives('a5002966-dbf7-4f76-a862-23a04b5ca465', 'GroupTwo', GROUP_TYPE::USER, 'This is a group of one user'),
+            Group::fromPrimitives('a5002966-dbf7-4f76-a862-23a04b5ca465', 'GroupTwo', GROUP_TYPE::USER, 'This is a group of one user', null),
         ];
     }
 
@@ -53,9 +53,9 @@ class GroupGetDataServiceTest extends TestCase
     private function getGroupsTypeUndefinedData(): array
     {
         return [
-            Group::fromPrimitives('4b513296-14ac-4fb1-a574-05bc9b1dbe3f', 'GroupOneName', GROUP_TYPE::GROUP, 'group one description'),
-            Group::fromPrimitives('a5002966-dbf7-4f76-a862-23a04b5ca465', 'GroupTwo', GROUP_TYPE::USER, 'This is a group of one user'),
-            Group::fromPrimitives('fdb242b4-bac8-4463-88d0-0941bb0beee0', 'GroupOneName', GROUP_TYPE::GROUP, 'group one description'),
+            Group::fromPrimitives('4b513296-14ac-4fb1-a574-05bc9b1dbe3f', 'GroupOneName', GROUP_TYPE::GROUP, 'group one description', null),
+            Group::fromPrimitives('a5002966-dbf7-4f76-a862-23a04b5ca465', 'GroupTwo', GROUP_TYPE::USER, 'This is a group of one user', null),
+            Group::fromPrimitives('fdb242b4-bac8-4463-88d0-0941bb0beee0', 'GroupOneName', GROUP_TYPE::GROUP, 'group one description', null),
         ];
     }
 

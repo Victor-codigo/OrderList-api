@@ -70,6 +70,27 @@ Common\Domain\Model\ValueObject\Object\GroupType:
     __construct:
       value: <(Group\Domain\Model\GROUP_TYPE::USER)>
 
+Common\Domain\Model\ValueObject\String\Path:
+  group_image_random-{1..100}:
+    __construct:
+      value: <text(256)>
+
+  group_image_type_group:
+    __construct:
+      value: "image_of_group_type_group"
+
+  group_image_type_user:
+    __construct:
+      value: "image_of_group_type_user"
+
+  group_image_type_user_unique_group:
+    __construct:
+      value: "image_of_group_type_user_unique_group"
+
+  group_image_users_100:
+    __construct:
+      value: "image_of_group_type_users_100"
+
 Group\Domain\Model\Group:
   entity-group_random-{1..100}:
     __construct:
@@ -77,6 +98,7 @@ Group\Domain\Model\Group:
       name: "@group_name_random-<current()>"
       type: "@group_type_group"
       description: "@group_description_random-<current()>"
+      image: "@group_image_random-<current()>"
 
   entity-group_type_group:
     __construct:
@@ -84,6 +106,7 @@ Group\Domain\Model\Group:
       name: "@group_name_type_group"
       type: "@group_type_group"
       description: "@group_description_type_group"
+      image: "@group_image_type_group"
 
   entity-group_type_user:
     __construct:
@@ -91,6 +114,7 @@ Group\Domain\Model\Group:
       name: "@group_name_type_user"
       type: "@group_type_user"
       description: "@group_description_type_user"
+      image: "@group_image_type_user"
 
   entity-group_type_user_unique_group:
     __construct:
@@ -98,6 +122,7 @@ Group\Domain\Model\Group:
       name: "@group_name_type_user_unique_group"
       type: "@group_type_user"
       description: "@group_description_type_user_unique_group"
+      image: "@group_image_type_user_unique_group"
 
   entity-group_users_100:
     __construct:
@@ -105,3 +130,4 @@ Group\Domain\Model\Group:
       name: "@group_name_users_100"
       type: "@group_type_group"
       description: "@group_description_users_100"
+      image: "@group_image_users_100"

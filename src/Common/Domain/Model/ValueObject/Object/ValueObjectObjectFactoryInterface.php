@@ -15,5 +15,7 @@ interface ValueObjectObjectFactoryInterface
 
     public static function createUserImage(FileInterface|null $file): UserImage;
 
+    public static function createGroupImage(FileInterface|null $file): GroupImage;
+
     public static function createGroupType(GROUP_TYPE|null $type): GroupType;
 }

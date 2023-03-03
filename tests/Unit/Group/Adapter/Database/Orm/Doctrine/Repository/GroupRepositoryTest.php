@@ -38,7 +38,8 @@ class GroupRepositoryTest extends DataBaseTestCase
             'ddb1a26e-ed57-4e83-bc5c-0ee6f6f5c8f8',
             'New group',
             GROUP_TYPE::USER,
-            'This is a new group'
+            'This is a new group',
+            null
         );
     }
 
@@ -48,7 +49,8 @@ class GroupRepositoryTest extends DataBaseTestCase
             'fdb242b4-bac8-4463-88d0-0941bb0beee0',
             'Group One',
             GROUP_TYPE::GROUP,
-            'This is a group of users'
+            'This is a group of users',
+            'image.png'
         );
     }
 
@@ -58,7 +60,8 @@ class GroupRepositoryTest extends DataBaseTestCase
             '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
             'Group Other',
             GROUP_TYPE::GROUP,
-            'This is a group of other users'
+            'This is a group of other users',
+            'otherImage.png'
         );
     }
 
@@ -76,8 +79,8 @@ class GroupRepositoryTest extends DataBaseTestCase
     public function itShouldSaveTheGroupInDatabase(): void
     {
         $groupNew = $this->getNewGroup();
-        $usergroupNew = $this->getNewUserGroup($groupNew, [GROUP_ROLES::ADMIN]);
-        $groupNew->addUserGroup($usergroupNew);
+        $userGroupNew = $this->getNewUserGroup($groupNew, [GROUP_ROLES::ADMIN]);
+        $groupNew->addUserGroup($userGroupNew);
         $this->object->save($groupNew);
 
         /** @var Group $groupSaved */
@@ -85,7 +88,7 @@ class GroupRepositoryTest extends DataBaseTestCase
 
         $this->assertSame($groupNew, $groupSaved);
         $this->assertCount(1, $groupSaved->getUsers());
-        $this->assertEquals($usergroupNew, $groupSaved->getUsers()->get(0));
+        $this->assertEquals($userGroupNew, $groupSaved->getUsers()->get(0));
     }
 
     /** @test */

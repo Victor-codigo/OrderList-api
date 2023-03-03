@@ -32,7 +32,7 @@ class GroupModifyServiceTest extends TestCase
 
     private function getGroup(): Group
     {
-        return Group::fromPrimitives(self::GROUP_ID, 'groupName', GROUP_TYPE::GROUP, 'group description');
+        return Group::fromPrimitives(self::GROUP_ID, 'groupName', GROUP_TYPE::GROUP, 'group description', null);
     }
 
     private function getGroupModified(Group $group): Group

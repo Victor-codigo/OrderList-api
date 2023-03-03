@@ -69,7 +69,7 @@ class GroupUserAddServiceTest extends TestCase
 
     private function getFindGroupsByIdOrFailReturn(): array
     {
-        return [Group::fromPrimitives(self::GROUP_ID, 'GroupName', GROUP_TYPE::GROUP, 'Description')];
+        return [Group::fromPrimitives(self::GROUP_ID, 'GroupName', GROUP_TYPE::GROUP, 'Description', null)];
     }
 
     /**

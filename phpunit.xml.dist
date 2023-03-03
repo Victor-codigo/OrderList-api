@@ -34,6 +34,12 @@
         <testsuite name="unit">
             <directory suffix="Test.php">tests/Unit</directory>
         </testsuite>
+        <testsuite name="unitUser">
+            <directory suffix="Test.php">tests/Unit/User</directory>
+        </testsuite>
+        <testsuite name="unitGroup">
+            <directory suffix="Test.php">tests/Unit/Group</directory>
+        </testsuite>
     </testsuites>
 
     <coverage processUncoveredFiles="true">

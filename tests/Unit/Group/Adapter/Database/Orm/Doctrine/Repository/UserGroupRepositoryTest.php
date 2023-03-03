@@ -313,7 +313,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
     /** @test */
     public function itShouldFailDatabaseError(): void
     {
-        $group = group::fromPrimitives(self::GROUP_ID, 'GroupName', GROUP_TYPE::GROUP, 'description');
+        $group = group::fromPrimitives(self::GROUP_ID, 'GroupName', GROUP_TYPE::GROUP, 'description', null);
         $expectedUsersId = [
             $this->object->generateId(),
             $this->object->generateId(),

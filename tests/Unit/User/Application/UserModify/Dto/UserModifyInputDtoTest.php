@@ -32,6 +32,8 @@ class UserModifyInputDtoTest extends TestCase
 
     protected function tearDown(): void
     {
+        parent::tearDown();
+
         BuiltInFunctionsReturn::$filesize = null;
         BuiltInFunctionsReturn::$getimagesize = null;
         BuiltInFunctionsReturn::$imagecreatefromstring = null;

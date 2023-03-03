@@ -32,7 +32,7 @@ class GroupRemoveServiceTest extends TestCase
 
     private function getGroup(): Group
     {
-        return Group::fromPrimitives(self::GROUP_ID, 'group', GROUP_TYPE::GROUP, 'description');
+        return Group::fromPrimitives(self::GROUP_ID, 'group', GROUP_TYPE::GROUP, 'description', null);
     }
 
     /** @test */

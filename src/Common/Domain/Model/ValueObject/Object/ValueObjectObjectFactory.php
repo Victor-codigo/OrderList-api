@@ -24,6 +24,11 @@ class ValueObjectObjectFactory
         return new UserImage($file);
     }
 
+    public static function createGroupImage(FileInterface|null $file): GroupImage
+    {
+        return new GroupImage($file);
+    }
+
     public static function createGroupType(GROUP_TYPE|null $type): GroupType
     {
         return new GroupType($type);
