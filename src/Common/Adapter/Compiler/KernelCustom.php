@@ -13,7 +13,7 @@ class KernelCustom
     public static function eventSubscribersAutoWire(ContainerBuilder $container): void
     {
         $container
-            ->registerForAutoconfiguration(EventDomainSubscriberInterface::class)
+            ->registerForAutoConfiguration(EventDomainSubscriberInterface::class)
             ->addTag(RegisterEventDomainSubscribers::EVENT_DOMAIN_SUBSCRIBER_TAG);
 
         $container->addCompilerPass(new RegisterEventDomainSubscribers());
@@ -25,7 +25,7 @@ class KernelCustom
             return $environment;
         }
 
-        if (!isset($_REQUEST['env'])) {
+        if (!isset($_REQUEST['env']) || !is_string($_REQUEST['env'])) {
             return $environment;
         }
 

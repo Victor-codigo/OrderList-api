@@ -46,4 +46,14 @@ class KernelCustomTest extends TestCase
 
         $this->assertSame('test', $return);
     }
+
+    /** @test */
+    public function itShouldReturnDevEnvironmentParameterDevRequestQueryNotValidType()
+    {
+        $environment = 'dev';
+        $_REQUEST['env'] = [];
+        $return = KernelCustom::changeEnvironmentByRequestQuery($environment);
+
+        $this->assertSame('dev', $return);
+    }
 }
