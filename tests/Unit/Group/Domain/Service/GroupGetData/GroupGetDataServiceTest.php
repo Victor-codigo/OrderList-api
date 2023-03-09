@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 class GroupGetDataServiceTest extends TestCase
 {
-    private const PATH_GROUP_IMAGES_PUBLIC = 'path/to/group/public/images';
+    private const PATH_GROUP_IMAGES_PUBLIC = 'assets/img/groups';
 
     private GroupGetDataService $object;
     private MockObject|GroupRepositoryInterface $groupRepository;
@@ -89,8 +89,16 @@ class GroupGetDataServiceTest extends TestCase
             $this->assertEquals($expectedGroupsData[$key]->getId()->getValue(), $groupData['group_id']);
             $this->assertEquals($expectedGroupsData[$key]->getName()->getValue(), $groupData['name']);
             $this->assertEquals($expectedGroupsData[$key]->getDescription()->getValue(), $groupData['description']);
-            $this->assertEquals($expectedGroupsData[$key]->getImage()->getValue(), $groupData['image']);
             $this->assertEquals($expectedGroupsData[$key]->getCreatedOn()->format('Y-m-d H:i:s'), $groupData['created_on']);
+
+            if (null === $expectedGroupsData[$key]->getImage()->getValue()) {
+                $this->assertNull($groupData['image']);
+            } else {
+                $this->assertEquals(
+                    self::PATH_GROUP_IMAGES_PUBLIC."/{$expectedGroupsData[$key]->getImage()->getValue()}",
+                    $groupData['image']
+                );
+            }
         }
     }
 
@@ -122,8 +130,16 @@ class GroupGetDataServiceTest extends TestCase
             $this->assertEquals($expectedGroupsData[$key]->getId()->getValue(), $groupData['group_id']);
             $this->assertEquals($expectedGroupsData[$key]->getName()->getValue(), $groupData['name']);
             $this->assertEquals($expectedGroupsData[$key]->getDescription()->getValue(), $groupData['description']);
-            $this->assertEquals($expectedGroupsData[$key]->getImage()->getValue(), $groupData['image']);
             $this->assertEquals($expectedGroupsData[$key]->getCreatedOn()->format('Y-m-d H:i:s'), $groupData['created_on']);
+
+            if (null === $expectedGroupsData[$key]->getImage()->getValue()) {
+                $this->assertNull($groupData['image']);
+            } else {
+                $this->assertEquals(
+                    self::PATH_GROUP_IMAGES_PUBLIC."/{$expectedGroupsData[$key]->getImage()->getValue()}",
+                    $groupData['image']
+                );
+            }
         }
     }
 
@@ -155,8 +171,16 @@ class GroupGetDataServiceTest extends TestCase
             $this->assertEquals($expectedGroupsData[$key]->getId()->getValue(), $groupData['group_id']);
             $this->assertEquals($expectedGroupsData[$key]->getName()->getValue(), $groupData['name']);
             $this->assertEquals($expectedGroupsData[$key]->getDescription()->getValue(), $groupData['description']);
-            $this->assertEquals($expectedGroupsData[$key]->getImage()->getValue(), $groupData['image']);
             $this->assertEquals($expectedGroupsData[$key]->getCreatedOn()->format('Y-m-d H:i:s'), $groupData['created_on']);
+
+            if (null === $expectedGroupsData[$key]->getImage()->getValue()) {
+                $this->assertNull($groupData['image']);
+            } else {
+                $this->assertEquals(
+                    self::PATH_GROUP_IMAGES_PUBLIC."/{$expectedGroupsData[$key]->getImage()->getValue()}",
+                    $groupData['image']
+                );
+            }
         }
     }
 

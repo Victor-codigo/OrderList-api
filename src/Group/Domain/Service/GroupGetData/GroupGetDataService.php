@@ -61,7 +61,9 @@ class GroupGetDataService
                 'group_id' => $group->getId()->getValue(),
                 'name' => $group->getName()->getValue(),
                 'description' => $group->getDescription()->getValue(),
-                'image' => $group->getImage()->isNull() ? '' : $group->getImage()->getValue(),
+                'image' => $group->getImage()->isNull()
+                    ? null
+                    : "{$this->groupPublicImagePath}/{$group->getImage()->getValue()}",
                 'created_on' => $group->getCreatedOn()->format('Y-m-d H:i:s'),
             ];
         }
