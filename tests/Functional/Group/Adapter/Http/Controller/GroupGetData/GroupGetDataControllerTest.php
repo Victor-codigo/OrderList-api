@@ -19,6 +19,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
     private const METHOD = 'GET';
     private const GROUP_USER_ONLY_GROUP_EMAIL = 'email.other.active@host.com';
     private const GROUP_USER_ONLY_GROUP_PASSWORD = '123456';
+    private const PATH_GROUP_IMAGES_PUBLIC = '/assets/img/groups';
 
     private function getGroupsData(\DateTime $createdOn): array
     {
@@ -44,7 +45,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
-        $groupsImage = array_map(fn (Group $group) => $group->getImage()->getValue(), $groups);
+        $groupsImage = array_map(fn (Group $group) => self::PATH_GROUP_IMAGES_PUBLIC."/{$group->getImage()->getValue()}", $groups);
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -70,8 +71,8 @@ class GroupGetDataControllerTest extends WebClientTestCase
             $this->assertContains($groupData->group_id, $groupsId);
             $this->assertContains($groupData->name, $groupsName);
             $this->assertContains($groupData->description, $groupsDescription);
-            $this->assertContains($groupData->image, $groupsImage);
             $this->assertIsString($groupData->created_on);
+            $this->assertContains($groupData->image, $groupsImage);
             $this->assertStringMatchesFormat('%d-%d-%d %d:%d:%d', $groupData->created_on);
         }
     }
@@ -84,7 +85,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
-        $groupsImage = array_map(fn (Group $group) => $group->getImage()->getValue(), $groups);
+        $groupsImage = array_map(fn (Group $group) => self::PATH_GROUP_IMAGES_PUBLIC."/{$group->getImage()->getValue()}", $groups);
         $groups50Id = array_merge(array_fill(0, 47, $groupsId[0]), $groupsId);
 
         $client = $this->getNewClientAuthenticatedUser();
@@ -125,7 +126,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
-        $groupsImage = array_map(fn (Group $group) => $group->getImage()->getValue(), $groups);
+        $groupsImage = array_map(fn (Group $group) => self::PATH_GROUP_IMAGES_PUBLIC."/{$group->getImage()->getValue()}", $groups);
         $groups50Id = array_merge(array_fill(0, 48, $groupsId[0]), $groupsId);
 
         $client = $this->getNewClientAuthenticatedUser();
@@ -166,7 +167,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
-        $groupsImage = array_map(fn (Group $group) => $group->getImage()->getValue(), $groups);
+        $groupsImage = array_map(fn (Group $group) => self::PATH_GROUP_IMAGES_PUBLIC."/{$group->getImage()->getValue()}", $groups);
 
         $client = $this->getNewClientAuthenticatedAdmin();
         $client->request(
