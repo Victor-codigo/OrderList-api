@@ -24,7 +24,7 @@ require_once 'tests/BuiltinFunctions/GroupApplicationGroupModify.php';
 class GroupModifyServiceTest extends TestCase
 {
     private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const PATH_UPLOAD_GROUP_IMAGED = 'path/uploaded/images';
+    private const PATH_UPLOAD_GROUP_IMAGE = 'path/uploaded/images';
     private const FILE_NAME_FILE_UPLOADED = 'image.png';
     private const FILE_NAME_FILE_UPLOADED_MODIFIED = 'imageModified.png';
 
@@ -40,7 +40,7 @@ class GroupModifyServiceTest extends TestCase
         $this->groupRepository = $this->createMock(GroupRepositoryInterface::class);
         $this->fileUpload = $this->createMock(FileUploadInterface::class);
         $this->imageUploaded = $this->createMock(UploadedFileInterface::class);
-        $this->object = new GroupModifyService($this->groupRepository, $this->fileUpload, self::PATH_UPLOAD_GROUP_IMAGED);
+        $this->object = new GroupModifyService($this->groupRepository, $this->fileUpload, self::PATH_UPLOAD_GROUP_IMAGE);
     }
 
     protected function tearDown(): void
@@ -85,7 +85,7 @@ class GroupModifyServiceTest extends TestCase
         $this->fileUpload
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->imageUploaded, self::PATH_UPLOAD_GROUP_IMAGED);
+            ->with($this->imageUploaded, self::PATH_UPLOAD_GROUP_IMAGE);
 
         $this->fileUpload
             ->expects($this->once())
@@ -99,7 +99,7 @@ class GroupModifyServiceTest extends TestCase
 
         BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage) {
             $this->assertEquals(
-                self::PATH_UPLOAD_GROUP_IMAGED.'/'.$groupImage,
+                self::PATH_UPLOAD_GROUP_IMAGE.'/'.$groupImage,
                 $fileName
             );
 
@@ -132,7 +132,7 @@ class GroupModifyServiceTest extends TestCase
         $this->fileUpload
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->imageUploaded, self::PATH_UPLOAD_GROUP_IMAGED);
+            ->with($this->imageUploaded, self::PATH_UPLOAD_GROUP_IMAGE);
 
         $this->fileUpload
             ->expects($this->once())
@@ -170,7 +170,7 @@ class GroupModifyServiceTest extends TestCase
         $this->fileUpload
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->imageUploaded, self::PATH_UPLOAD_GROUP_IMAGED);
+            ->with($this->imageUploaded, self::PATH_UPLOAD_GROUP_IMAGE);
 
         $this->fileUpload
             ->expects($this->once())
@@ -184,7 +184,7 @@ class GroupModifyServiceTest extends TestCase
 
         BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage) {
             $this->assertEquals(
-                self::PATH_UPLOAD_GROUP_IMAGED.'/'.$groupImage,
+                self::PATH_UPLOAD_GROUP_IMAGE.'/'.$groupImage,
                 $fileName
             );
 
@@ -195,7 +195,7 @@ class GroupModifyServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldModifyTheGroupImageIsNull(): void
+    public function itShouldModifyTheGroupImageIsNullAndRemoveImageIsFalse(): void
     {
         $group = $this->getGroup();
         $groupModified = $this->getGroupModified($group);
@@ -231,7 +231,7 @@ class GroupModifyServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldModifyTheGroupImageRemoveIsTrue(): void
+    public function itShouldModifyTheGroupImageIsNullAndRemoveImageIsTrue(): void
     {
         $group = $this->getGroup();
         $groupImage = $group->getImage()->getValue();
@@ -266,7 +266,55 @@ class GroupModifyServiceTest extends TestCase
 
         BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage) {
             $this->assertEquals(
-                self::PATH_UPLOAD_GROUP_IMAGED.'/'.$groupImage,
+                self::PATH_UPLOAD_GROUP_IMAGE.'/'.$groupImage,
+                $fileName
+            );
+
+            return true;
+        };
+        BuiltInFunctionsReturn::$unlink = BuiltInFunctionsReturn::$file_exists;
+
+        $this->object->__invoke($input);
+    }
+
+    /** @test */
+    public function itShouldModifyTheGroupImageIsNotNullAndRemoveImageIsTrue(): void
+    {
+        $group = $this->getGroup();
+        $groupImage = $group->getImage()->getValue();
+        $groupModified = $this->getGroupModified($group);
+        $input = new GroupModifyDto(
+            $group->getId(),
+            $groupModified->getName(),
+            $groupModified->getDescription(),
+            true,
+            ValueObjectFactory::createGroupImage($this->imageUploaded)
+        );
+
+        $this->groupRepository
+            ->expects($this->once())
+            ->method('findGroupsByIdOrFail')
+            ->with([$groupModified->getId()])
+            ->willReturn([$group]);
+
+        $this->fileUpload
+            ->expects($this->once())
+            ->method('__invoke')
+            ->with($this->imageUploaded, self::PATH_UPLOAD_GROUP_IMAGE);
+
+        $this->fileUpload
+            ->expects($this->once())
+            ->method('getFileName')
+            ->willReturn(self::FILE_NAME_FILE_UPLOADED_MODIFIED);
+
+        $this->groupRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($groupModified);
+
+        BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage) {
+            $this->assertEquals(
+                self::PATH_UPLOAD_GROUP_IMAGE.'/'.$groupImage,
                 $fileName
             );
 
@@ -334,7 +382,7 @@ class GroupModifyServiceTest extends TestCase
         $this->fileUpload
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->imageUploaded, self::PATH_UPLOAD_GROUP_IMAGED);
+            ->with($this->imageUploaded, self::PATH_UPLOAD_GROUP_IMAGE);
 
         $this->fileUpload
             ->expects($this->once())
@@ -349,7 +397,7 @@ class GroupModifyServiceTest extends TestCase
 
         BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage) {
             $this->assertEquals(
-                self::PATH_UPLOAD_GROUP_IMAGED.'/'.$groupImage,
+                self::PATH_UPLOAD_GROUP_IMAGE.'/'.$groupImage,
                 $fileName
             );
 
@@ -383,7 +431,7 @@ class GroupModifyServiceTest extends TestCase
         $this->fileUpload
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->imageUploaded, self::PATH_UPLOAD_GROUP_IMAGED)
+            ->with($this->imageUploaded, self::PATH_UPLOAD_GROUP_IMAGE)
             ->willThrowException(new FileUploadException());
 
         $this->fileUpload
@@ -421,7 +469,7 @@ class GroupModifyServiceTest extends TestCase
         $this->fileUpload
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->imageUploaded, self::PATH_UPLOAD_GROUP_IMAGED);
+            ->with($this->imageUploaded, self::PATH_UPLOAD_GROUP_IMAGE);
 
         $this->fileUpload
             ->expects($this->never())
@@ -433,7 +481,7 @@ class GroupModifyServiceTest extends TestCase
 
         BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage) {
             $this->assertEquals(
-                self::PATH_UPLOAD_GROUP_IMAGED.'/'.$groupImage,
+                self::PATH_UPLOAD_GROUP_IMAGE.'/'.$groupImage,
                 $fileName
             );
 
@@ -442,7 +490,7 @@ class GroupModifyServiceTest extends TestCase
 
         BuiltInFunctionsReturn::$unlink = function (string $fileName) use ($groupImage) {
             $this->assertEquals(
-                self::PATH_UPLOAD_GROUP_IMAGED.'/'.$groupImage,
+                self::PATH_UPLOAD_GROUP_IMAGE.'/'.$groupImage,
                 $fileName
             );
 

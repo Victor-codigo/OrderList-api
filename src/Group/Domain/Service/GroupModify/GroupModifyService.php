@@ -39,15 +39,13 @@ class GroupModifyService
 
     private function setGroupImage(Group $group, GroupImage $image, bool $imageRemove): void
     {
-        if ($imageRemove) {
-            $this->removeGroupImage($group->getImage());
-            $group->setImage(ValueObjectFactory::createPath(null));
-
-            return;
-        }
-
         $fileUploadedName = $this->uploadGroupImage($image, $group->getImage());
         $fileUploadedName->isNull() ?: $group->setImage($fileUploadedName);
+
+        if ($imageRemove && $fileUploadedName->isNull()) {
+            $this->removeGroupImage($group->getImage());
+            $group->setImage(ValueObjectFactory::createPath(null));
+        }
     }
 
     /**
