@@ -14,14 +14,13 @@ use Group\Application\GroupModify\Dto\GroupModifyInputDto;
 use Group\Application\GroupModify\GroupModifyUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use User\Adapter\Security\User\UserSymfonyAdapter;
 
 #[OA\Tag('Group')]
-#[OA\Post(
+#[OA\Put(
     description: 'Modify a group',
     requestBody: new OA\RequestBody(
         required: true,
@@ -33,6 +32,7 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
                         new OA\Property(property: 'group_id', type: 'string', description: 'Group\'s id', example: 'fdb242b4-bac8-4463-88d0-0941bb0beee0'),
                         new OA\Property(property: 'name', type: 'string', minLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MIN_LENGTH, maxLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MAX_LENGTH, description: 'Group\'s name', example: 'GroupOne'),
                         new OA\Property(property: 'description', type: 'string', maxLength: VALUE_OBJECTS_CONSTRAINTS::DESCRIPTION_MAX_LENGTH, description: 'Group description', example: 'This is the description of the group'),
+                        new OA\Property(property: 'image_remove', type: 'boolean', description: 'TRUE if the group image is removed, FASE no'),
                         new OA\Property(property: 'image', type: 'string', format: 'binary', description: 'Group image'),
                     ]
                 )
@@ -98,23 +98,24 @@ class GroupModifyController extends AbstractController
     public function __invoke(GroupModifyRequestDto $request): JsonResponse
     {
         $groupModified = $this->groupModifyUseCase->__invoke(
-            $this->createGroupModifyInputDto($request->groupId, $request->name, $request->description, $request->image)
+            $this->createGroupModifyInputDto($request)
         );
 
         return $this->createResponse($groupModified->groupId);
     }
 
-    private function createGroupModifyInputDto(string|null $groupId, string|null $name, string|null $description, UploadedFile|null $image): GroupModifyInputDto
+    private function createGroupModifyInputDto(GroupModifyRequestDto $request): GroupModifyInputDto
     {
         /** @var UserSymfonyAdapter $userAdapter */
         $userAdapter = $this->security->getUser();
 
         return new GroupModifyInputDto(
             $userAdapter->getUser(),
-            $groupId,
-            $name,
-            $description,
-            null === $image ? null : new UploadedFileSymfonyAdapter($image)
+            $request->groupId,
+            $request->name,
+            $request->description,
+            $request->imageRemove,
+            null === $request->image ? null : new UploadedFileSymfonyAdapter($request->image)
         );
     }
 

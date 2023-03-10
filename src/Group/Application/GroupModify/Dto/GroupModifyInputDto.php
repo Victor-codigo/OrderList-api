@@ -20,14 +20,16 @@ class GroupModifyInputDto implements ServiceInputDtoInterface
     public readonly Identifier $groupId;
     public readonly Name $name;
     public readonly Description $description;
+    public readonly bool $imageRemove;
     public readonly GroupImage $image;
 
-    public function __construct(User $userSession, string|null $groupId, string|null $name, string|null $description, FileInterface|null $image)
+    public function __construct(User $userSession, string|null $groupId, string|null $name, string|null $description, bool $imageRemove, FileInterface|null $image)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
         $this->name = ValueObjectFactory::createName($name);
         $this->description = ValueObjectFactory::createDescription($description);
+        $this->imageRemove = $imageRemove;
         $this->image = ValueObjectFactory::createGroupImage($image);
     }
 

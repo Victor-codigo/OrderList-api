@@ -13,6 +13,7 @@ class GroupModifyRequestDto implements RequestDtoInterface
     public readonly string|null $groupId;
     public readonly string|null $name;
     public readonly string|null $description;
+    public readonly bool|null $imageRemove;
     public readonly UploadedFile|null $image;
 
     public function __construct(Request $request)
@@ -20,6 +21,7 @@ class GroupModifyRequestDto implements RequestDtoInterface
         $this->groupId = $request->request->get('group_id');
         $this->name = $request->request->get('name');
         $this->description = $request->request->get('description');
+        $this->imageRemove = $request->request->getBoolean('image_remove');
         $this->image = $request->files->get('image');
     }
 }

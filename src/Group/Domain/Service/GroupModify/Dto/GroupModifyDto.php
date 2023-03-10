@@ -15,6 +15,7 @@ class GroupModifyDto
         public readonly Identifier $groupId,
         public readonly Name $name,
         public readonly Description $description,
+        public readonly bool $imageRemove,
         public readonly GroupImage $image,
     ) {
     }

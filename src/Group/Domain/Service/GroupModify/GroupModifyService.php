@@ -7,7 +7,9 @@ namespace Group\Domain\Service\GroupModify;
 use Common\Domain\Exception\FileSystem\DomainFileNotDeletedException;
 use Common\Domain\Model\ValueObject\Object\GroupImage;
 use Common\Domain\Model\ValueObject\String\Path;
+use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
+use Group\Domain\Model\Group;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Service\GroupModify\Dto\GroupModifyDto;
 
@@ -27,14 +29,25 @@ class GroupModifyService
     public function __invoke(GroupModifyDto $input): void
     {
         $group = $this->groupRepository->findGroupsByIdOrFail([$input->groupId]);
-        $fileUploadedName = $this->uploadGroupImage($input->image, $group[0]->getImage());
 
-        $group[0]
-            ->setName($input->name)
-            ->setDescription($input->description)
-            ->setImage($fileUploadedName);
+        $input->name->isNull() ?: $group[0]->setName($input->name);
+        $input->description->isNull() ?: $group[0]->setDescription($input->description);
+        $this->setGroupImage($group[0], $input->image, $input->imageRemove);
 
         $this->groupRepository->save($group[0]);
+    }
+
+    private function setGroupImage(Group $group, GroupImage $image, bool $imageRemove): void
+    {
+        if ($imageRemove) {
+            $this->removeGroupImage($group->getImage());
+            $group->setImage(ValueObjectFactory::createPath(null));
+
+            return;
+        }
+
+        $fileUploadedName = $this->uploadGroupImage($image, $group->getImage());
+        $fileUploadedName->isNull() ?: $group->setImage($fileUploadedName);
     }
 
     /**

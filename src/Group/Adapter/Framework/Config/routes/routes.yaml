@@ -22,7 +22,7 @@ group_remove:
 # -------------------------------------------------------------
 group_modify:
   path: /api/v{api_version}/groups/modify
-  methods: POST
+  methods: PUT
   controller: Group\Adapter\Http\Controller\GroupModify\GroupModifyController
   requirements:
     api_version: '\d+[.\d]?'

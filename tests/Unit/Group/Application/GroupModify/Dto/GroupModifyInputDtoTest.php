@@ -66,6 +66,27 @@ class GroupModifyInputDtoTest extends TestCase
             self::GROUP_ID,
             $userNameModify,
             $userDescriptionModify,
+            false,
+            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK)
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function itShouldValidateTheInputImageRemoveIsTrue(): void
+    {
+        $user = $this->getUser();
+        $userNameModify = 'UserNameModified';
+        $userDescriptionModify = 'User description modify';
+        $object = new GroupModifyInputDto(
+            $user,
+            self::GROUP_ID,
+            $userNameModify,
+            $userDescriptionModify,
+            true,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK)
         );
 
@@ -84,6 +105,7 @@ class GroupModifyInputDtoTest extends TestCase
             self::GROUP_ID,
             $userNameModify,
             null,
+            false,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK)
         );
 
@@ -102,6 +124,7 @@ class GroupModifyInputDtoTest extends TestCase
             self::GROUP_ID,
             $userNameModify,
             null,
+            false,
             null
         );
 
@@ -121,6 +144,7 @@ class GroupModifyInputDtoTest extends TestCase
             null,
             $userNameModify,
             $userDescriptionModify,
+            false,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK)
         );
 
@@ -140,6 +164,7 @@ class GroupModifyInputDtoTest extends TestCase
             'group id not valid',
             $userNameModify,
             $userDescriptionModify,
+            false,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK)
         );
 
@@ -158,6 +183,7 @@ class GroupModifyInputDtoTest extends TestCase
             self::GROUP_ID,
             null,
             $userDescriptionModify,
+            false,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK)
         );
 
@@ -176,6 +202,7 @@ class GroupModifyInputDtoTest extends TestCase
             self::GROUP_ID,
             'not valid name',
             $userDescriptionModify,
+            false,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK)
         );
 
@@ -195,6 +222,7 @@ class GroupModifyInputDtoTest extends TestCase
             self::GROUP_ID,
             $userNameModify,
             $userDescriptionModify,
+            false,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK)
         );
 
@@ -214,6 +242,7 @@ class GroupModifyInputDtoTest extends TestCase
             self::GROUP_ID,
             $userNameModify,
             $userDescriptionModify,
+            false,
             $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_OK)
         );
 
@@ -233,6 +262,7 @@ class GroupModifyInputDtoTest extends TestCase
             self::GROUP_ID,
             $userNameModify,
             $userDescriptionModify,
+            false,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'file.txt', 'text/plain', UPLOAD_ERR_OK)
         );
 
@@ -253,6 +283,7 @@ class GroupModifyInputDtoTest extends TestCase
             self::GROUP_ID,
             $userNameModify,
             $userDescriptionModify,
+            false,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'file.txt', 'text/plain', UPLOAD_ERR_INI_SIZE)
         );
 
@@ -273,6 +304,7 @@ class GroupModifyInputDtoTest extends TestCase
             self::GROUP_ID,
             $userNameModify,
             $userDescriptionModify,
+            false,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'file.txt', 'text/plain', UPLOAD_ERR_NO_FILE)
         );
 
@@ -293,6 +325,7 @@ class GroupModifyInputDtoTest extends TestCase
             self::GROUP_ID,
             $userNameModify,
             $userDescriptionModify,
+            false,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'file.txt', 'text/plain', UPLOAD_ERR_PARTIAL)
         );
 
@@ -313,6 +346,7 @@ class GroupModifyInputDtoTest extends TestCase
             self::GROUP_ID,
             $userNameModify,
             $userDescriptionModify,
+            false,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'file.txt', 'text/plain', UPLOAD_ERR_CANT_WRITE)
         );
 

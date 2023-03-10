@@ -15,7 +15,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     use ReloadDatabaseTrait;
 
     private const ENDPOINT = '/api/v1/groups/modify';
-    private const METHOD = 'POST';
+    private const METHOD = 'PUT';
     private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
 
     private const PATH_FIXTURES = __DIR__.'/Fixtures';
@@ -112,7 +112,35 @@ class GroupModifyControllerTest extends WebClientTestCase
                 'group_id' => self::GROUP_ID,
                 'name' => 'GroupName',
                 'description' => null,
+                'remove_image' => false,
             ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Group modified', $responseContent->message);
+        $this->assertSame(self::GROUP_ID, $responseContent->data->id);
+    }
+
+    /** @test */
+    public function itShouldModifyTheGroupImageRemoveIsTrue(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'name' => 'GroupName',
+                'description' => null,
+                'image_remove' => true,
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            ]
         );
 
         $response = $client->getResponse();

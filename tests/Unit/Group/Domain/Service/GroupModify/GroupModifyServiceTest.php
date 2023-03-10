@@ -66,11 +66,13 @@ class GroupModifyServiceTest extends TestCase
     public function itShouldModifyTheGroup(): void
     {
         $group = $this->getGroup();
+        $groupImage = $group->getImage()->getValue();
         $groupModified = $this->getGroupModified($group);
         $input = new GroupModifyDto(
             $group->getId(),
             $groupModified->getName(),
             $groupModified->getDescription(),
+            false,
             ValueObjectFactory::createGroupImage($this->imageUploaded)
         );
 
@@ -95,8 +97,15 @@ class GroupModifyServiceTest extends TestCase
             ->method('save')
             ->with($groupModified);
 
-        BuiltInFunctionsReturn::$file_exists = true;
-        BuiltInFunctionsReturn::$unlink = true;
+        BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage) {
+            $this->assertEquals(
+                self::PATH_UPLOAD_GROUP_IMAGED.'/'.$groupImage,
+                $fileName
+            );
+
+            return true;
+        };
+        BuiltInFunctionsReturn::$unlink = BuiltInFunctionsReturn::$file_exists;
         $this->object->__invoke($input);
     }
 
@@ -110,6 +119,7 @@ class GroupModifyServiceTest extends TestCase
             $group->getId(),
             $groupModified->getName(),
             $groupModified->getDescription(),
+            false,
             ValueObjectFactory::createGroupImage($this->imageUploaded)
         );
 
@@ -134,8 +144,6 @@ class GroupModifyServiceTest extends TestCase
             ->method('save')
             ->with($groupModified);
 
-        BuiltInFunctionsReturn::$file_exists = true;
-        BuiltInFunctionsReturn::$unlink = false;
         $this->object->__invoke($input);
     }
 
@@ -143,11 +151,13 @@ class GroupModifyServiceTest extends TestCase
     public function itShouldModifyTheGroupImageDoesNotExists(): void
     {
         $group = $this->getGroup();
+        $groupImage = $group->getImage()->getValue();
         $groupModified = $this->getGroupModified($group);
         $input = new GroupModifyDto(
             $group->getId(),
             $groupModified->getName(),
             $groupModified->getDescription(),
+            false,
             ValueObjectFactory::createGroupImage($this->imageUploaded)
         );
 
@@ -172,7 +182,15 @@ class GroupModifyServiceTest extends TestCase
             ->method('save')
             ->with($groupModified);
 
-        BuiltInFunctionsReturn::$file_exists = false;
+        BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage) {
+            $this->assertEquals(
+                self::PATH_UPLOAD_GROUP_IMAGED.'/'.$groupImage,
+                $fileName
+            );
+
+            return false;
+        };
+
         $this->object->__invoke($input);
     }
 
@@ -181,11 +199,12 @@ class GroupModifyServiceTest extends TestCase
     {
         $group = $this->getGroup();
         $groupModified = $this->getGroupModified($group);
-        $groupModified->setImage(ValueObjectFactory::createPath(null));
+        $groupModified->setImage($group->getImage());
         $input = new GroupModifyDto(
             $group->getId(),
             $groupModified->getName(),
             $groupModified->getDescription(),
+            false,
             ValueObjectFactory::createGroupImage(null)
         );
 
@@ -208,8 +227,52 @@ class GroupModifyServiceTest extends TestCase
             ->method('save')
             ->with($groupModified);
 
-        BuiltInFunctionsReturn::$file_exists = true;
-        BuiltInFunctionsReturn::$unlink = false;
+        $this->object->__invoke($input);
+    }
+
+    /** @test */
+    public function itShouldModifyTheGroupImageRemoveIsTrue(): void
+    {
+        $group = $this->getGroup();
+        $groupImage = $group->getImage()->getValue();
+        $groupModified = $this->getGroupModified($group);
+        $groupModified->setImage(ValueObjectFactory::createPath(null));
+        $input = new GroupModifyDto(
+            $group->getId(),
+            $groupModified->getName(),
+            $groupModified->getDescription(),
+            true,
+            ValueObjectFactory::createGroupImage(null)
+        );
+
+        $this->groupRepository
+            ->expects($this->once())
+            ->method('findGroupsByIdOrFail')
+            ->with([$groupModified->getId()])
+            ->willReturn([$group]);
+
+        $this->fileUpload
+            ->expects($this->never())
+            ->method('__invoke');
+
+        $this->fileUpload
+            ->expects($this->never())
+            ->method('getFileName');
+
+        $this->groupRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($groupModified);
+
+        BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage) {
+            $this->assertEquals(
+                self::PATH_UPLOAD_GROUP_IMAGED.'/'.$groupImage,
+                $fileName
+            );
+
+            return true;
+        };
+        BuiltInFunctionsReturn::$unlink = BuiltInFunctionsReturn::$file_exists;
         $this->object->__invoke($input);
     }
 
@@ -222,6 +285,7 @@ class GroupModifyServiceTest extends TestCase
             $group->getId(),
             $groupModified->getName(),
             $groupModified->getDescription(),
+            false,
             ValueObjectFactory::createGroupImage($this->imageUploaded)
         );
 
@@ -251,11 +315,13 @@ class GroupModifyServiceTest extends TestCase
     public function itShouldFailConnectionOnSave(): void
     {
         $group = $this->getGroup();
+        $groupImage = $group->getImage()->getValue();
         $groupModified = $this->getGroupModified($group);
         $input = new GroupModifyDto(
             $group->getId(),
             $groupModified->getName(),
             $groupModified->getDescription(),
+            false,
             ValueObjectFactory::createGroupImage($this->imageUploaded)
         );
 
@@ -281,8 +347,16 @@ class GroupModifyServiceTest extends TestCase
             ->with($groupModified)
             ->willThrowException(new DBConnectionException());
 
-        BuiltInFunctionsReturn::$file_exists = true;
-        BuiltInFunctionsReturn::$unlink = true;
+        BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage) {
+            $this->assertEquals(
+                self::PATH_UPLOAD_GROUP_IMAGED.'/'.$groupImage,
+                $fileName
+            );
+
+            return true;
+        };
+        BuiltInFunctionsReturn::$unlink = BuiltInFunctionsReturn::$file_exists;
+
         $this->expectException(DBConnectionException::class);
         $this->object->__invoke($input);
     }
@@ -296,6 +370,7 @@ class GroupModifyServiceTest extends TestCase
             $group->getId(),
             $groupModified->getName(),
             $groupModified->getDescription(),
+            false,
             ValueObjectFactory::createGroupImage($this->imageUploaded)
         );
 
@@ -327,11 +402,13 @@ class GroupModifyServiceTest extends TestCase
     public function itShouldFailFormerGroupImageCanNotBeDeleted(): void
     {
         $group = $this->getGroup();
+        $groupImage = $group->getImage()->getValue();
         $groupModified = $this->getGroupModified($group);
         $input = new GroupModifyDto(
             $group->getId(),
             $groupModified->getName(),
             $groupModified->getDescription(),
+            false,
             ValueObjectFactory::createGroupImage($this->imageUploaded)
         );
 
@@ -354,8 +431,24 @@ class GroupModifyServiceTest extends TestCase
             ->expects($this->never())
             ->method('save');
 
-        BuiltInFunctionsReturn::$file_exists = true;
-        BuiltInFunctionsReturn::$unlink = false;
+        BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage) {
+            $this->assertEquals(
+                self::PATH_UPLOAD_GROUP_IMAGED.'/'.$groupImage,
+                $fileName
+            );
+
+            return true;
+        };
+
+        BuiltInFunctionsReturn::$unlink = function (string $fileName) use ($groupImage) {
+            $this->assertEquals(
+                self::PATH_UPLOAD_GROUP_IMAGED.'/'.$groupImage,
+                $fileName
+            );
+
+            return false;
+        };
+
         $this->expectException(DomainFileNotDeletedException::class);
         $this->object->__invoke($input);
     }

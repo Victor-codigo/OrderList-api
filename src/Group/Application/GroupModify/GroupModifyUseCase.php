@@ -10,7 +10,6 @@ use Common\Domain\Service\Exception\DomainErrorException;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
-use Exception;
 use Group\Application\GroupModify\Dto\GroupModifyInputDto;
 use Group\Application\GroupModify\Dto\GroupModifyOutputDto;
 use Group\Application\GroupModify\Exception\GroupModifyGroupNotFoundException;
@@ -42,7 +41,7 @@ class GroupModifyUseCase extends ServiceBase
             throw $e;
         } catch (DBNotFoundException) {
             throw GroupModifyGroupNotFoundException::fromMessage('Group not found');
-        } catch (Exception) {
+        } catch (\Exception $e) {
             throw DomainErrorException::fromMessage('An error has been occurred');
         }
     }
@@ -66,7 +65,13 @@ class GroupModifyUseCase extends ServiceBase
 
     private function createGroupModifyDto(GroupModifyInputDto $input): GroupModifyDto
     {
-        return new GroupModifyDto($input->groupId, $input->name, $input->description, $input->image);
+        return new GroupModifyDto(
+            $input->groupId,
+            $input->name,
+            $input->description,
+            $input->imageRemove,
+            $input->image
+        );
     }
 
     private function createGroupModifyOutputDto(Identifier $modified): GroupModifyOutputDto
