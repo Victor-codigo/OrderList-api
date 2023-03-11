@@ -23,7 +23,8 @@ class GroupModifyControllerTest extends WebClientTestCase
     private const PATH_IMAGE_BACKUP = 'tests/Fixtures/Files/Image.png';
     private const PATH_IMAGE_NOT_ALLOWED = __DIR__.'/Fixtures/MimeTypeNotAllowed.txt';
     private const PATH_IMAGE_NOT_ALLOWED_BACKUP = 'tests/Fixtures/Files/MimeTypeNotAllowed.txt';
-    private const PATH_IMAGES_GROUP_PUBLIC = 'public/assets/img/groups';
+
+    private string $patImageGroup;
 
     protected function setUp(): void
     {
@@ -41,7 +42,17 @@ class GroupModifyControllerTest extends WebClientTestCase
     {
         parent::tearDown();
 
-        $this->removeFolderFiles(self::PATH_IMAGES_GROUP_PUBLIC);
+        $this->removeFolderFiles($this->patImageGroup);
+        rmdir($this->patImageGroup);
+    }
+
+    private function createImageTestPath(): void
+    {
+        $this->patImageGroup = static::getContainer()->getParameter('group.image.path');
+
+        if (!file_exists($this->patImageGroup)) {
+            mkdir($this->patImageGroup);
+        }
     }
 
     private function getImageUploaded(string $path, string $originalName, string $mimeType, int $error): UploadedFile
@@ -53,6 +64,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     public function itShouldModifyTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -79,6 +91,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     public function itShouldModifyTheGroupDescriptionIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -105,6 +118,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     public function itShouldModifyTheGroupImageIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -129,6 +143,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     public function itShouldModifyTheGroupImageRemoveIsTrue(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -156,6 +171,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     public function itShouldFailGroupIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -182,6 +198,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     public function itShouldFailGroupIdIsNotValid(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -208,6 +225,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     public function itShouldFailNameIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -234,6 +252,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     public function itShouldFailNameIsNotValid(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -260,6 +279,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     public function itShouldFailDescriptionIsTooLong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -286,6 +306,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     public function itShouldFailUserSessionIsNotAdminInTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -312,6 +333,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     public function itShouldFailGroupNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -338,6 +360,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     public function itShouldFailImageMimeTypeNotAllowed(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -364,6 +387,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     public function itShouldFailImageSizeFormTooLarge(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -390,6 +414,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     public function itShouldFailImageSizeIniTooLarge(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -416,6 +441,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     public function itShouldFailImageNoUploaded(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -442,6 +468,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     public function itShouldFailImagePartiallyUploaded(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -468,6 +495,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     public function itShouldFailImageCantWrite(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -494,6 +522,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     public function itShouldFailImageErrorExtension(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -520,6 +549,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     public function itShouldFailImageErrorTmpDir(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
