@@ -40,14 +40,16 @@ class GroupGetDataControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldGetGroupsData(): void
     {
+        $client = $this->getNewClientAuthenticatedUser();
+        $patImageGroup = static::getContainer()->getParameter('group.public.image.path');
+
         $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
-        $groupsImage = array_map(fn (Group $group) => self::PATH_GROUP_IMAGES_PUBLIC."/{$group->getImage()->getValue()}", $groups);
+        $groupsImage = array_map(fn (Group $group) => "{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
 
-        $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.implode(',', $groupsId)
@@ -80,15 +82,17 @@ class GroupGetDataControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldGetGroupsDataFor50Groups(): void
     {
+        $client = $this->getNewClientAuthenticatedUser();
+        $patImageGroup = static::getContainer()->getParameter('group.public.image.path');
+
         $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
-        $groupsImage = array_map(fn (Group $group) => self::PATH_GROUP_IMAGES_PUBLIC."/{$group->getImage()->getValue()}", $groups);
+        $groupsImage = array_map(fn (Group $group) => "{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
         $groups50Id = array_merge(array_fill(0, 47, $groupsId[0]), $groupsId);
 
-        $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.implode(',', $groups50Id)
@@ -121,15 +125,17 @@ class GroupGetDataControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldStripGroupsIdThatExceedTheMaximum(): void
     {
+        $client = $this->getNewClientAuthenticatedUser();
+        $patImageGroup = static::getContainer()->getParameter('group.public.image.path');
+
         $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
-        $groupsImage = array_map(fn (Group $group) => self::PATH_GROUP_IMAGES_PUBLIC."/{$group->getImage()->getValue()}", $groups);
+        $groupsImage = array_map(fn (Group $group) => "{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
         $groups50Id = array_merge(array_fill(0, 48, $groupsId[0]), $groupsId);
 
-        $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.implode(',', $groups50Id)
@@ -162,14 +168,16 @@ class GroupGetDataControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldReturnOnlyTheGroupThatTheUserSessionBelongTo(): void
     {
+        $client = $this->getNewClientAuthenticatedAdmin();
+        $patImageGroup = static::getContainer()->getParameter('group.public.image.path');
+
         $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
-        $groupsImage = array_map(fn (Group $group) => self::PATH_GROUP_IMAGES_PUBLIC."/{$group->getImage()->getValue()}", $groups);
+        $groupsImage = array_map(fn (Group $group) => "{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
 
-        $client = $this->getNewClientAuthenticatedAdmin();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.implode(',', $groupsId)
