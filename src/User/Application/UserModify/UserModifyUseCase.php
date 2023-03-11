@@ -78,7 +78,7 @@ class UserModifyUseCase extends ServiceBase
         $userModifyDto->user->setName($userModifyDto->name);
         $profile = $userModifyDto->user->getProfile();
 
-        if ($userModifyDto->imageRemove) {
+        if ($userModifyDto->imageRemove && $userModifyDto->image->isNull()) {
             $this->removeUserImage($profile->getImage());
             $profile->setImage(ValueObjectFactory::createPath(null));
         } elseif (!$userModifyDto->image->isNull()) {

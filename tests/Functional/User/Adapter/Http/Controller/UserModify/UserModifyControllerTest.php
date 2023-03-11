@@ -30,7 +30,7 @@ class UserModifyControllerTest extends WebClientTestCase
     private const PATH_IMAGE_NOT_ALLOWED = __DIR__.'/Fixtures/MimeTypeNotAllowed.txt';
     private const PATH_IMAGE_NOT_ALLOWED_BACKUP = 'tests/Fixtures/Files/MimeTypeNotAllowed.txt';
 
-    private readonly string $pathPublicImageUser;
+    private readonly string $pathImageUser;
     private KernelBrowser|null $client;
 
     protected function setUp(): void
@@ -45,7 +45,11 @@ class UserModifyControllerTest extends WebClientTestCase
         copy(self::PATH_IMAGE_NOT_ALLOWED_BACKUP, self::PATH_IMAGE_NOT_ALLOWED);
 
         $this->client = $this->getNewClientAuthenticatedUser();
-        $this->pathPublicImageUser = static::getContainer()->getParameter('user.public.image.path');
+        $this->pathImageUser = static::getContainer()->getParameter('user.image.path');
+
+        if (!file_exists($this->pathImageUser)) {
+            mkdir($this->pathImageUser);
+        }
     }
 
     protected function tearDown(): void
@@ -56,7 +60,8 @@ class UserModifyControllerTest extends WebClientTestCase
         BuiltInFunctionsReturn::$unlink = null;
         BuiltInFunctionsReturn::$file_exists = null;
 
-        $this->removeFolderFiles($this->pathPublicImageUser);
+        $this->removeFolderFiles($this->pathImageUser);
+        rmdir($this->pathImageUser);
     }
 
     /** @test */
@@ -166,6 +171,36 @@ class UserModifyControllerTest extends WebClientTestCase
             content: json_encode([
                 'name' => $name,
                 'image_remove' => true,
+            ])
+        );
+
+        $response = $this->client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_OK);
+        $this->assertSame(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('User modified', $responseContent->message);
+
+        $userRepository = $this->getEntityManager()->getRepository(User::class);
+        $user = $userRepository->findOneBy(['email' => ValueObjectFactory::createEmail(self::USER_NAME)]);
+
+        $this->assertEquals($name, $user->getName()->getValue());
+        $this->assertNull($user->getProfile()->getImage()->getValue());
+    }
+
+    /** @test */
+    public function itShouldModifyTheUserImageRemoveIsTrueAndImageIsNotNull(): void
+    {
+        $name = 'MariaMod';
+        $this->client->request(
+            method: self::METHOD_FORM,
+            uri: self::ENDPOINT,
+            parameters: [
+                '_method' => self::METHOD,
+            ],
+            content: json_encode([
+                'name' => $name,
+                'image_remove' => true,
             ]),
             files: [
                 'image' => new UploadedFile(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK, true),
@@ -183,7 +218,7 @@ class UserModifyControllerTest extends WebClientTestCase
         $user = $userRepository->findOneBy(['email' => ValueObjectFactory::createEmail(self::USER_NAME)]);
 
         $this->assertEquals($name, $user->getName()->getValue());
-        $this->assertNull($user->getProfile()->getImage()->getValue());
+        $this->assertNotNull($user->getProfile()->getImage()->getValue());
     }
 
     /** @test */
