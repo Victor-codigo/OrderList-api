@@ -12,12 +12,14 @@ class GroupCreateRequestDto implements RequestDtoInterface
 {
     public readonly string|null $name;
     public readonly string|null $description;
+    public readonly string|null $type;
     public readonly UploadedFile|null $image;
 
     public function __construct(Request $request)
     {
         $this->name = $request->request->get('name');
         $this->description = $request->request->get('description');
+        $this->type = $request->request->get('type');
         $this->image = $request->files->get('image');
     }
 }

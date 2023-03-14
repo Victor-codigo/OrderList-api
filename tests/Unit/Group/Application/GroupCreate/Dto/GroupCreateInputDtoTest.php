@@ -50,12 +50,28 @@ class GroupCreateInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldValidate(): void
+    public function itShouldValidateGroupTypeUser(): void
     {
         $object = new GroupCreateInputDto(
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             'GroupName',
             'this is a description of the group',
+            'TYPE_USER',
+            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK)
+        );
+        $return = $object->validate($this->validator);
+
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function itShouldValidateGroupTypeGroup(): void
+    {
+        $object = new GroupCreateInputDto(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            'GroupName',
+            'this is a description of the group',
+            'TYPE_GROUP',
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK)
         );
         $return = $object->validate($this->validator);
@@ -70,6 +86,7 @@ class GroupCreateInputDtoTest extends TestCase
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             'GroupName',
             null,
+            'TYPE_GROUP',
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK)
         );
         $return = $object->validate($this->validator);
@@ -84,6 +101,7 @@ class GroupCreateInputDtoTest extends TestCase
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             null,
             'This is a description of the group',
+            'TYPE_GROUP',
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK)
         );
         $return = $object->validate($this->validator);
@@ -98,6 +116,7 @@ class GroupCreateInputDtoTest extends TestCase
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             'Group Name',
             'This is a description of the group',
+            'TYPE_GROUP',
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK)
         );
         $return = $object->validate($this->validator);
@@ -112,11 +131,27 @@ class GroupCreateInputDtoTest extends TestCase
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             'GroupName',
             str_pad('', 501, 'f'),
+            'TYPE_GROUP',
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK)
         );
         $return = $object->validate($this->validator);
 
         $this->assertSame(['description' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailGroupTypeIsWrong(): void
+    {
+        $object = new GroupCreateInputDto(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            'GroupName',
+            'This is a description of the group',
+            'WRONG_TYPE',
+            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK)
+        );
+        $return = $object->validate($this->validator);
+
+        $this->assertSame(['type' => [VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
     /** @test */
@@ -126,6 +161,7 @@ class GroupCreateInputDtoTest extends TestCase
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             'GroupName',
             'This is a description of the group',
+            'TYPE_GROUP',
             $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_OK)
         );
 
@@ -141,6 +177,7 @@ class GroupCreateInputDtoTest extends TestCase
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             'GroupName',
             'This is a description of the group',
+            'TYPE_GROUP',
             $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_OK)
         );
 
@@ -157,6 +194,7 @@ class GroupCreateInputDtoTest extends TestCase
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             'GroupName',
             'This is a description of the group',
+            'TYPE_GROUP',
             $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_INI_SIZE)
         );
 
@@ -173,6 +211,7 @@ class GroupCreateInputDtoTest extends TestCase
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             'GroupName',
             'This is a description of the group',
+            'TYPE_GROUP',
             $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_NO_FILE)
         );
 
@@ -188,6 +227,7 @@ class GroupCreateInputDtoTest extends TestCase
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             'GroupName',
             'This is a description of the group',
+            'TYPE_GROUP',
             $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_PARTIAL)
         );
 
@@ -203,6 +243,7 @@ class GroupCreateInputDtoTest extends TestCase
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             'GroupName',
             'This is a description of the group',
+            'TYPE_GROUP',
             $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_CANT_WRITE)
         );
 
@@ -218,6 +259,7 @@ class GroupCreateInputDtoTest extends TestCase
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             'GroupName',
             'This is a description of the group',
+            'TYPE_GROUP',
             $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_EXTENSION)
         );
 
@@ -233,6 +275,7 @@ class GroupCreateInputDtoTest extends TestCase
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             'GroupName',
             'This is a description of the group',
+            'TYPE_GROUP',
             $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_NO_TMP_DIR)
         );
 

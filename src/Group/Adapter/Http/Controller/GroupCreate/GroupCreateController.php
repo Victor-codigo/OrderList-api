@@ -32,7 +32,8 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
                     properties: [
                         new OA\Property(property: 'name', type: 'string', minLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MIN_LENGTH, maxLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MAX_LENGTH, description: 'Group\'s name', example: 'GroupOne'),
                         new OA\Property(property: 'description', type: 'string', maxLength: VALUE_OBJECTS_CONSTRAINTS::DESCRIPTION_MAX_LENGTH, description: 'Group description', example: 'This is the description of the group'),
-                        new OA\Property(property: 'image', type: 'string', format: 'binay', description: 'Group image'),
+                        new OA\Property(property: 'type', type: 'string', description: 'Group type', example: 'TYPE_USER | TYPE_GROUP'),
+                        new OA\Property(property: 'image', type: 'string', format: 'binary', description: 'Group image'),
                     ]
                 )
             ),
@@ -82,13 +83,13 @@ class GroupCreateController extends AbstractController
     public function __invoke(GroupCreateRequestDto $request): JsonResponse
     {
         $groupId = $this->groupCreateUseCase->__invoke(
-            $this->createGroupCreateInputDto($request->name, $request->description, $request->image)
+            $this->createGroupCreateInputDto($request->name, $request->description, $request->type, $request->image)
         );
 
         return $this->createResponse($groupId);
     }
 
-    private function createGroupCreateInputDto(string|null $name, string|null $description, UploadedFile|null $image): GroupCreateInputDto
+    private function createGroupCreateInputDto(string|null $name, string|null $description, string|null $type, UploadedFile|null $image): GroupCreateInputDto
     {
         /** @var UserSymfonyAdapter $userAdapter */
         $userAdapter = $this->security->getUser();
@@ -97,6 +98,7 @@ class GroupCreateController extends AbstractController
             $userAdapter->getUser()->getId(),
             $name,
             $description,
+            $type,
             null === $image ? null : new UploadedFileSymfonyAdapter($image)
         );
     }

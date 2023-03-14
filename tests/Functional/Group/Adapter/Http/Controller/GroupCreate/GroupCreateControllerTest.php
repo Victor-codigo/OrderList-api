@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupCreate;
 
 use Common\Domain\Response\RESPONSE_STATUS;
-use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use Hautelook\AliceBundle\PhpUnit\RecreateDatabaseTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
 class GroupCreateControllerTest extends WebClientTestCase
 {
-    use ReloadDatabaseTrait;
+    use RecreateDatabaseTrait;
 
     private const ENDPOINT = '/api/v1/groups';
     private const METHOD = 'POST';
@@ -22,6 +22,10 @@ class GroupCreateControllerTest extends WebClientTestCase
     private const PATH_IMAGE_NOT_ALLOWED = __DIR__.'/Fixtures/MimeTypeNotAllowed.txt';
     private const PATH_IMAGE_NOT_ALLOWED_BACKUP = 'tests/Fixtures/Files/MimeTypeNotAllowed.txt';
     private const PATH_IMAGES_GROUP_PUBLIC = 'public/assets/img/groups';
+    private const USER_HAS_NO_GROUP_EMAIL = 'email.other_2.active@host.com';
+    private const USER_HAS_NO_GROUP_PASSWORD = '123456';
+
+    private string $patImageGroup;
 
     protected function setUp(): void
     {
@@ -39,7 +43,17 @@ class GroupCreateControllerTest extends WebClientTestCase
     {
         parent::tearDown();
 
-        $this->removeFolderFiles(self::PATH_IMAGES_GROUP_PUBLIC);
+        $this->removeFolderFiles($this->patImageGroup);
+        rmdir($this->patImageGroup);
+    }
+
+    private function createImageTestPath(): void
+    {
+        $this->patImageGroup = static::getContainer()->getParameter('group.image.path');
+
+        if (!file_exists($this->patImageGroup)) {
+            mkdir($this->patImageGroup);
+        }
     }
 
     private function getImageUpload(string $path, string $originalName, string $mimetype, int $error): UploadedFile
@@ -48,15 +62,44 @@ class GroupCreateControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldCreateAGroup(): void
+    public function itShouldCreateAGroupTypeGroup(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'name' => 'GroupName',
                 'description' => str_pad('', 500, 'd'),
+                'type' => 'TYPE_GROUP',
+            ]),
+            files: [
+                'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            ]
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_CREATED);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Group created', $responseContent->message);
+        $this->assertIsString($responseContent->data->id);
+    }
+
+    /** @test */
+    public function itShouldCreateAGroupTypeUser(): void
+    {
+        $client = $this->getNewClientAuthenticated(self::USER_HAS_NO_GROUP_EMAIL, self::USER_HAS_NO_GROUP_PASSWORD);
+        $this->createImageTestPath();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'name' => 'GroupName',
+                'description' => str_pad('', 500, 'd'),
+                'type' => 'TYPE_USER',
             ]),
             files: [
                 'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
@@ -76,12 +119,14 @@ class GroupCreateControllerTest extends WebClientTestCase
     public function itShouldCreateAGroupDescriptionIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'name' => 'GroupNameOther',
                 'description' => null,
+                'type' => 'TYPE_GROUP',
             ]),
             files: [
                 'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
@@ -101,12 +146,14 @@ class GroupCreateControllerTest extends WebClientTestCase
     public function itShouldCreateAGroupImageIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'name' => 'GroupName',
                 'description' => str_pad('', 500, 'd'),
+                'type' => 'TYPE_GROUP',
             ])
         );
 
@@ -123,12 +170,14 @@ class GroupCreateControllerTest extends WebClientTestCase
     public function itShouldFailDescriptionIsTooLong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'name' => 'GroupName',
                 'description' => str_pad('', 501, 'd'),
+                'type' => 'TYPE_GROUP',
             ]),
             files: [
                 'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
@@ -145,15 +194,71 @@ class GroupCreateControllerTest extends WebClientTestCase
     }
 
     /** @test */
+    public function itShouldFailTypeGroupIsWrong(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'name' => 'GroupName',
+                'description' => 'Group description',
+                'type' => 'WRONG_TYPE',
+            ]),
+            files: [
+                'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            ]
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['type'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertEquals(['not_null'], $responseContent->errors->type);
+    }
+
+    /** @test */
+    public function itShouldFailUserAlreadyHasAUserGroup(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'name' => 'GroupName',
+                'description' => 'Group description',
+                'type' => 'TYPE_USER',
+            ]),
+            files: [
+                'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            ]
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['group_type_user_repeated'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('User already has a group of type user', $responseContent->message);
+        $this->assertEquals('User already has a group of type user', $responseContent->errors->group_type_user_repeated);
+    }
+
+    /** @test */
     public function itShouldFailNameIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'name' => null,
                 'description' => 'Group description',
+                'type' => 'TYPE_GROUP',
             ]),
             files: [
                 'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
@@ -173,12 +278,14 @@ class GroupCreateControllerTest extends WebClientTestCase
     public function itShouldFailNameIsTooShort(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'name' => '',
                 'description' => 'Group description',
+                'type' => 'TYPE_GROUP',
             ]),
             files: [
                 'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
@@ -198,12 +305,14 @@ class GroupCreateControllerTest extends WebClientTestCase
     public function itShouldFailNameIsTooLong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'name' => str_pad('', 51, 'h'),
                 'description' => 'Group description',
+                'type' => 'TYPE_GROUP',
             ]),
             files: [
                 'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
@@ -223,12 +332,14 @@ class GroupCreateControllerTest extends WebClientTestCase
     public function itShouldFailGroupNameAlreadyExists(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'name' => 'GroupOne',
                 'description' => 'Group description',
+                'type' => 'TYPE_GROUP',
             ]),
             files: [
                 'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
@@ -247,12 +358,14 @@ class GroupCreateControllerTest extends WebClientTestCase
     public function itShouldFailNotPermission(): void
     {
         $client = $this->getNewClientAuthenticated('email@user.com', 'not allowed user');
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'name' => str_pad('', 51, 'h'),
                 'description' => 'Group description',
+                'type' => 'TYPE_GROUP',
             ]),
             files: [
                 'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
@@ -267,12 +380,14 @@ class GroupCreateControllerTest extends WebClientTestCase
     public function itShouldFailImageMimeTypeNotAllowed(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'name' => 'GroupNewOne',
                 'description' => 'Group description',
+                'type' => 'TYPE_GROUP',
             ]),
             files: [
                 'image' => $this->getImageUpload(self::PATH_IMAGE_NOT_ALLOWED, 'MimeTypeNotAllowed.txt', 'text/plain', UPLOAD_ERR_OK),
@@ -292,12 +407,14 @@ class GroupCreateControllerTest extends WebClientTestCase
     public function itShouldFailImageSizeFormTooLarge(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'name' => 'GroupNewOne',
                 'description' => 'Group description',
+                'type' => 'TYPE_GROUP',
             ]),
             files: [
                 'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_FORM_SIZE),
@@ -317,12 +434,14 @@ class GroupCreateControllerTest extends WebClientTestCase
     public function itShouldFailImageSizeIniTooLarge(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'name' => 'GroupNewOne',
                 'description' => 'Group description',
+                'type' => 'TYPE_GROUP',
             ]),
             files: [
                 'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_INI_SIZE),
@@ -342,12 +461,14 @@ class GroupCreateControllerTest extends WebClientTestCase
     public function itShouldFailImageNoUploaded(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'name' => 'GroupNewOne',
                 'description' => 'Group description',
+                'type' => 'TYPE_GROUP',
             ]),
             files: [
                 'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_NO_FILE),
@@ -367,12 +488,14 @@ class GroupCreateControllerTest extends WebClientTestCase
     public function itShouldFailImagePartiallyUploaded(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'name' => 'GroupNewOne',
                 'description' => 'Group description',
+                'type' => 'TYPE_GROUP',
             ]),
             files: [
                 'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_PARTIAL),
@@ -392,12 +515,14 @@ class GroupCreateControllerTest extends WebClientTestCase
     public function itShouldFailImageCantWrite(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'name' => 'GroupNewOne',
                 'description' => 'Group description',
+                'type' => 'TYPE_GROUP',
             ]),
             files: [
                 'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_CANT_WRITE),
@@ -417,12 +542,14 @@ class GroupCreateControllerTest extends WebClientTestCase
     public function itShouldFailImageErrorExtension(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'name' => 'GroupNewOne',
                 'description' => 'Group description',
+                'type' => 'TYPE_GROUP',
             ]),
             files: [
                 'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_EXTENSION),
@@ -442,12 +569,14 @@ class GroupCreateControllerTest extends WebClientTestCase
     public function itShouldFailImageErrorTmpDir(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'name' => 'GroupNewOne',
                 'description' => 'Group description',
+                'type' => 'TYPE_GROUP',
             ]),
             files: [
                 'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_NO_TMP_DIR),

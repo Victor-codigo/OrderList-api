@@ -14,8 +14,10 @@ use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupCreate\Dto\GroupCreateInputDto;
 use Group\Application\GroupCreate\Exception\GroupCreateCanNotUploadFile;
+use Group\Application\GroupCreate\Exception\GroupCreateUserGroupTypeAlreadyExitsException as ExceptionGroupCreateUserGroupTypeAlreadyExitsException;
 use Group\Application\GroupCreate\Exception\GroupNameAlreadyExistsException;
 use Group\Domain\Service\GroupCreate\Dto\GroupCreateDto;
+use Group\Domain\Service\GroupCreate\Exception\GroupCreateUserGroupTypeAlreadyExitsException;
 use Group\Domain\Service\GroupCreate\GroupCreateService;
 
 class GroupCreateUseCase extends ServiceBase
@@ -42,6 +44,8 @@ class GroupCreateUseCase extends ServiceBase
             return $group->getId();
         } catch (DBUniqueConstraintException) {
             throw GroupNameAlreadyExistsException::fromMessage('The group name already exists');
+        } catch (GroupCreateUserGroupTypeAlreadyExitsException) {
+            throw ExceptionGroupCreateUserGroupTypeAlreadyExitsException::fromMessage('User already has a group of type user');
         } catch (FileUploadException) {
             throw GroupCreateCanNotUploadFile::fromMessage('An error occurred while file was uploading');
         } catch (DBConnectionException) {
@@ -67,6 +71,7 @@ class GroupCreateUseCase extends ServiceBase
             $input->userCreatorId,
             $input->name,
             $input->description,
+            $input->type,
             $input->image
         );
     }
