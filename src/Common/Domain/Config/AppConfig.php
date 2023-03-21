@@ -39,6 +39,11 @@ class AppConfig
     public const API_VERSION = 1;
 
     /**
+     * Name of the cookie for the token session.
+     */
+    public const COOKIE_SESSION_NAME = 'TOKENSESSION';
+
+    /**
      * Time in seconds for the token of the api calls.
      */
     public const API_TOKEN_REQUEST_EXPIRE_TIME = 300;
