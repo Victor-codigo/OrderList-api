@@ -6,7 +6,7 @@ namespace Test\Functional\User\Adapter\Http\Controller\UserRegisterEmailConfirma
 
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
+use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
@@ -15,7 +15,7 @@ use User\Domain\Model\User;
 
 class UserRegisterEmailConfirmationControllerTest extends WebClientTestCase
 {
-    use RefreshDatabaseTrait;
+    use ReloadDatabaseTrait;
 
     private const ENDPOINT = '/api/v1/users/confirm';
     private const METHOD = 'PATCH';
@@ -36,7 +36,11 @@ class UserRegisterEmailConfirmationControllerTest extends WebClientTestCase
     public function itShouldActivateTheUser(): void
     {
         $token = $this->generateToken(['username' => self::USER_ID], 86_400); // 24H
-        $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode(['token' => $token]));
+        $this->client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode(['token' => $token])
+        );
 
         $response = $this->client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -49,7 +53,7 @@ class UserRegisterEmailConfirmationControllerTest extends WebClientTestCase
         $userSaved = $entityManager->find(User::class, self::USER_ID);
 
         $this->assertSame(self::USER_ID, $userSaved->getId()->getValue());
-        $this->assertEquals([new Rol(USER_ROLES::USER)], $userSaved->getRoles()->getValue());
+        $this->assertContainsEquals(new Rol(USER_ROLES::USER_FIRST_LOGIN), $userSaved->getRoles()->getValue());
     }
 
     /** @test */
@@ -107,7 +111,7 @@ class UserRegisterEmailConfirmationControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailUserDoesntExists(): void
+    public function itShouldFailUserDoesNotExists(): void
     {
         $token = $this->generateToken(['username' => self::USER_ID_NOT_EXISTS], 86_400); // 24H
         $this->client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode(['token' => $token]));
