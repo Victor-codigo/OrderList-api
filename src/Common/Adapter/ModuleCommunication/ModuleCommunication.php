@@ -44,7 +44,7 @@ class ModuleCommunication implements ModuleCommunicationInterface
         try {
             $response = $this->httpClient->request(
                 $routeConfig->method,
-                $this->getRequestUrl($routeConfig->route, $routeConfig->attributes),
+                $this->getRequestUrl($routeConfig->route, array_merge($routeConfig->attributes, $routeConfig->query)),
                 $this->getOptions($routeConfig->contentType, $routeConfig->content, $routeConfig->files, $routeConfig->authentication)
             );
 

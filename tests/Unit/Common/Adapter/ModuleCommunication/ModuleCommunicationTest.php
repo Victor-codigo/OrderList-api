@@ -90,7 +90,7 @@ class ModuleCommunicationTest extends TestCase
         $this->DI
             ->expects($this->once())
             ->method('getUrlRouteAbsoluteDomain')
-            ->with($routeConfig->route, $routeConfig->attributes)
+            ->with($routeConfig->route, array_merge($routeConfig->attributes, $routeConfig->query))
             ->willReturn(self::URL);
 
         $this->security
@@ -168,7 +168,10 @@ class ModuleCommunicationTest extends TestCase
             'param1' => 'param1',
             'param2' => 'param2',
         ];
-        $routeConfig = ModuleCommunicationFactoryTest::json($content, [], true);
+        $query = [
+            'queryParam1' => 'queryParam1',
+        ];
+        $routeConfig = ModuleCommunicationFactoryTest::json($content, $query, [], true);
         $this->mockRequestMethod($routeConfig);
 
         $return = $this->object->__invoke($routeConfig);
@@ -183,7 +186,10 @@ class ModuleCommunicationTest extends TestCase
             'param1' => 'param1',
             'param2' => 'param2',
         ];
-        $routeConfig = ModuleCommunicationFactoryTest::form($content, [], [], true);
+        $query = [
+            'queryParam1' => 'queryParam1',
+        ];
+        $routeConfig = ModuleCommunicationFactoryTest::form($content, $query, [], [], true);
         $this->mockRequestMethod($routeConfig);
 
         $return = $this->object->__invoke($routeConfig);
@@ -199,7 +205,10 @@ class ModuleCommunicationTest extends TestCase
             'param1' => 'param1',
             'param2' => 'param2',
         ];
-        $routeConfig = ModuleCommunicationFactoryTest::json($content, [], true);
+        $query = [
+            'queryParam1' => 'queryParam1',
+        ];
+        $routeConfig = ModuleCommunicationFactoryTest::json($content, $query, [], true);
         $this->mockRequestMethod($routeConfig);
 
         $return = $this->object->__invoke($routeConfig);
@@ -215,7 +224,10 @@ class ModuleCommunicationTest extends TestCase
             'param1' => 'param1',
             'param2' => 'param2',
         ];
-        $routeConfig = ModuleCommunicationFactoryTest::json($content, [], true);
+        $query = [
+            'queryParam1' => 'queryParam1',
+        ];
+        $routeConfig = ModuleCommunicationFactoryTest::json($content, $query, [], true);
         $this->mockRequestMethod($routeConfig);
         $this->expectException(ModuleCommunicationException::class);
 
@@ -234,7 +246,10 @@ class ModuleCommunicationTest extends TestCase
             'param1' => 'param1',
             'param2' => 'param2',
         ];
-        $routeConfig = ModuleCommunicationFactoryTest::json($content, [], true);
+        $query = [
+            'queryParam1' => 'queryParam1',
+        ];
+        $routeConfig = ModuleCommunicationFactoryTest::json($content, $query, [], true);
         $this->mockRequestMethod($routeConfig, Error400Exception::fromMessage('', $httpExceptionInterface));
 
         $return = $this->object->__invoke($routeConfig);
@@ -252,7 +267,10 @@ class ModuleCommunicationTest extends TestCase
             'param1' => 'param1',
             'param2' => 'param2',
         ];
-        $routeConfig = ModuleCommunicationFactoryTest::json($content, [], true);
+        $query = [
+            'queryParam1' => 'queryParam1',
+        ];
+        $routeConfig = ModuleCommunicationFactoryTest::json($content, $query, [], true);
         $this->mockRequestMethod($routeConfig, Error500Exception::fromMessage('', $httpExceptionInterface));
 
         $return = $this->object->__invoke($routeConfig);
@@ -271,7 +289,10 @@ class ModuleCommunicationTest extends TestCase
             'param1' => 'param1',
             'param2' => 'param2',
         ];
-        $routeConfig = ModuleCommunicationFactoryTest::json($content, [], true);
+        $query = [
+            'queryParam1' => 'queryParam1',
+        ];
+        $routeConfig = ModuleCommunicationFactoryTest::json($content, $query, [], true);
         $this->mockRequestMethod($routeConfig, NetworkException::fromMessage('', $httpExceptionInterface));
 
         $this->object->__invoke($routeConfig);
