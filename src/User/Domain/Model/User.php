@@ -24,7 +24,17 @@ class User
     private \DateTime $createdOn;
     private Profile $profile;
 
-    private UserPreRegisteredEvent $userPreRegisteredEventData;
+    private UserPreRegisteredEvent|null $userPreRegisteredEventData = null;
+
+    public function setUserPreRegisteredEventData(UserPreRegisteredEvent $data)
+    {
+        $this->userPreRegisteredEventData = $data;
+    }
+
+    public function getUserPreRegisteredEventData(): UserPreRegisteredEvent|null
+    {
+        return $this->userPreRegisteredEventData;
+    }
 
     public function getEmail(): Email
     {
@@ -133,23 +143,5 @@ class User
             ValueObjectFactory::createName($name),
             ValueObjectFactory::createRoles($roles)
         );
-    }
-
-    public function setUserPreRegisteredEventData(UserPreRegisteredEvent $data)
-    {
-        $this->userPreRegisteredEventData = $data;
-    }
-
-    public function onCreated(): void
-    {
-        if (!isset($this->userPreRegisteredEventData)) {
-            $this->userPreRegisteredEventData = new UserPreRegisteredEvent(
-                $this->id,
-                $this->email,
-                ValueObjectFactory::createUrl(null)
-            );
-        }
-
-        $this->eventDispatchRegister($this->userPreRegisteredEventData);
     }
 }

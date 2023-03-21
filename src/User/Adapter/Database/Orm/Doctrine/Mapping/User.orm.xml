@@ -41,10 +41,5 @@
             <unique-constraint name="u_users_id" columns="id"/>
             <unique-constraint name="u_users_email" columns="email"/>
         </unique-constraints>
-
-        <!-- Events -->
-        <lifecycle-callbacks>
-            <lifecycle-callback type="postPersist" method="onCreated"/>
-        </lifecycle-callbacks>
     </entity>
 </doctrine-mapping>
