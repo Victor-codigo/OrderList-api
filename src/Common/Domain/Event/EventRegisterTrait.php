@@ -11,7 +11,7 @@ trait EventRegisterTrait
      */
     private array $eventsRegistered = [];
 
-    protected function eventDispatchRegister(EventDomainInterface $event): void
+    public function eventDispatchRegister(EventDomainInterface $event): void
     {
         $this->eventsRegistered[] = $event;
     }
