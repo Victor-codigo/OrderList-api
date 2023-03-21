@@ -94,7 +94,7 @@ class ExceptionEventSubscriberTest extends TestCase
     }
 
     /** @test */
-    public function itShouldReturnAnMethodnotAllowedError(): void
+    public function itShouldReturnAnMethodNotAllowedError(): void
     {
         $exception = new MethodNotAllowedHttpException([], 'MethodNotAllowedHttpException');
         $this->event->setThrowable($exception);

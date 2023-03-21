@@ -24,11 +24,11 @@ class JwtFirebaseHS256AdapterTest extends TestCase
 
     public function setUp(): void
     {
-        $this->markTestSkipped('Intall library [composer require firebase/php-jwt]');
+        $this->markTestSkipped('Install library [composer require firebase/php-jwt]');
 
         parent::setUp();
 
-        $this->secretKey = new Key(self::SECRET_KEY, JwtFirebaseHS256Adapter::ALGORITM);
+        $this->secretKey = new Key(self::SECRET_KEY, JwtFirebaseHS256Adapter::ALGORITHM);
         $this->object = $this->getMockBuilder(JwtFirebaseHS256Adapter::class)
             ->setConstructorArgs([self::SECRET_KEY])
             ->onlyMethods(['getDateTime'])
@@ -36,7 +36,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
     }
 
     /** @test */
-    public function itShouldEncodeWitoutExpirationTime(): void
+    public function itShouldEncodeWithoutExpirationTime(): void
     {
         $return = $this->object->encode(self::PAYLOAD);
         $tokenDecoded = JWT::decode($return, $this->secretKey);
@@ -79,7 +79,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
     /** @test */
     public function itShouldDecodedTheToken(): void
     {
-        $token = JWT::encode(self::PAYLOAD, self::SECRET_KEY, JwtFirebaseHS256Adapter::ALGORITM);
+        $token = JWT::encode(self::PAYLOAD, self::SECRET_KEY, JwtFirebaseHS256Adapter::ALGORITHM);
         $tokenDecoded = $this->object->decode($token);
 
         $this->assertTrue(property_exists($tokenDecoded, 'params1'));

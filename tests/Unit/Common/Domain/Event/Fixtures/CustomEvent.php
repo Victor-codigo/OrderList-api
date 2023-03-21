@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Test\Unit\Common\Domain\Event\Fixtures;
 
 use Common\Domain\Event\EventDomainInterface;
-use DateTimeImmutable;
 
 class CustomEvent implements EventDomainInterface
 {
@@ -13,8 +12,8 @@ class CustomEvent implements EventDomainInterface
     {
     }
 
-    public function getOccurreddOn(): DateTimeImmutable
+    public function getOccurredOn(): \DateTimeImmutable
     {
-        return new DateTimeImmutable();
+        return new \DateTimeImmutable();
     }
 }

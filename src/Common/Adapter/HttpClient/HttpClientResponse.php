@@ -9,7 +9,7 @@ use Common\Domain\HttpClient\Exception\Error300Exception;
 use Common\Domain\HttpClient\Exception\Error400Exception;
 use Common\Domain\HttpClient\Exception\Error500Exception;
 use Common\Domain\HttpClient\Exception\NetworkException;
-use Common\Domain\Ports\HttpClient\HttpClientResponseInteface;
+use Common\Domain\Ports\HttpClient\HttpClientResponseInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -17,7 +17,7 @@ use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-class HttpClientResponse implements HttpClientResponseInteface
+class HttpClientResponse implements HttpClientResponseInterface
 {
     private ResponseInterface $response;
 

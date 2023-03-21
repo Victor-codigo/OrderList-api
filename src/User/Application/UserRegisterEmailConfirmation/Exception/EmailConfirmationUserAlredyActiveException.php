@@ -9,7 +9,7 @@ use Common\Domain\Exception\DomainExceptionOutputInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\RESPONSE_STATUS_HTTP;
 
-class EmailConfirmationUserAlredyActiveException extends DomainExceptionOutput implements DomainExceptionOutputInterface
+class EmailConfirmationUserAlreadyActiveException extends DomainExceptionOutput implements DomainExceptionOutputInterface
 {
     public static function fromMessage(string $message): static
     {

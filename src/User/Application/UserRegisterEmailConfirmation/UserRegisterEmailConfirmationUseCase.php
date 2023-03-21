@@ -17,7 +17,7 @@ use User\Application\UserRegisterEmailConfirmation\Dto\UserEmailConfirmationInpu
 use User\Application\UserRegisterEmailConfirmation\Dto\UserEmailConfirmationOutputDto;
 use User\Application\UserRegisterEmailConfirmation\Exception\EmailConfigurationJwtTokenHasExpiredException;
 use User\Application\UserRegisterEmailConfirmation\Exception\EmailConfirmationJwtTokenNotValidException;
-use User\Application\UserRegisterEmailConfirmation\Exception\EmailConfirmationUserAlredyActiveException;
+use User\Application\UserRegisterEmailConfirmation\Exception\EmailConfirmationUserAlreadyActiveException;
 use User\Domain\Service\EmailConfirmationJwtTokenValidationService\Dto\EmailConfirmationJwtTokenValidationDto;
 use User\Domain\Service\EmailConfirmationJwtTokenValidationService\EmailConfirmationJwtTokenValidationService;
 
@@ -49,7 +49,7 @@ class UserRegisterEmailConfirmationUseCase extends ServiceBase
         } catch (DBNotFoundException) {
             throw EmailConfirmationJwtTokenNotValidException::fromMessage('Wrong token');
         } catch (InvalidArgumentException) {
-            throw EmailConfirmationUserAlredyActiveException::fromMessage('User already active');
+            throw EmailConfirmationUserAlreadyActiveException::fromMessage('User already active');
         }
     }
 

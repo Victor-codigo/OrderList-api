@@ -26,7 +26,7 @@ class UserPreRegisteredEvent implements EventDomainInterface
         $this->occurredOn = new \DateTimeImmutable();
     }
 
-    public function getOccurreddOn(): \DateTimeImmutable
+    public function getOccurredOn(): \DateTimeImmutable
     {
         return $this->occurredOn;
     }

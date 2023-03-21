@@ -20,7 +20,7 @@ use User\Application\UserRegisterEmailConfirmation\Dto\UserEmailConfirmationInpu
 use User\Application\UserRegisterEmailConfirmation\Dto\UserEmailConfirmationOutputDto;
 use User\Application\UserRegisterEmailConfirmation\Exception\EmailConfigurationJwtTokenHasExpiredException;
 use User\Application\UserRegisterEmailConfirmation\Exception\EmailConfirmationJwtTokenNotValidException;
-use User\Application\UserRegisterEmailConfirmation\Exception\EmailConfirmationUserAlredyActiveException;
+use User\Application\UserRegisterEmailConfirmation\Exception\EmailConfirmationUserAlreadyActiveException;
 use User\Application\UserRegisterEmailConfirmation\UserRegisterEmailConfirmationUseCase;
 use User\Domain\Model\User;
 use User\Domain\Service\EmailConfirmationJwtTokenValidationService\Dto\EmailConfirmationJwtTokenValidationDto;
@@ -236,7 +236,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
             }))
             ->willThrowException(new InvalidArgumentException());
 
-        $this->expectException(EmailConfirmationUserAlredyActiveException::class);
+        $this->expectException(EmailConfirmationUserAlreadyActiveException::class);
         $this->object->__invoke($input);
     }
 }

@@ -27,7 +27,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itshouldChangeThePassword(): void
+    public function itShouldChangeThePassword(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
 
@@ -57,7 +57,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itshouldFailTokenNotAValidToken(): void
+    public function itShouldFailTokenNotAValidToken(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $clientData = [
@@ -76,7 +76,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itshouldFailTokenWrong(): void
+    public function itShouldFailTokenWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $clientData = [
@@ -95,7 +95,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itshouldFailTokenHasExpired(): void
+    public function itShouldFailTokenHasExpired(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $clientData = [
@@ -114,7 +114,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itshouldFailPasswordNewIsTooShort(): void
+    public function itShouldFailPasswordNewIsTooShort(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $clientData = [
@@ -135,7 +135,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itshouldFailPasswordNewIsTooLong(): void
+    public function itShouldFailPasswordNewIsTooLong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $clientData = [
@@ -156,7 +156,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itshouldFailPasswordNewRepeatIsTooShort(): void
+    public function itShouldFailPasswordNewRepeatIsTooShort(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $clientData = [
@@ -177,7 +177,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itshouldFailPasswordNewRepeatIsTooLong(): void
+    public function itShouldFailPasswordNewRepeatIsTooLong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $clientData = [
@@ -198,7 +198,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itshouldFailIdDoesNotExists(): void
+    public function itShouldFailIdDoesNotExists(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $clientData = [
@@ -217,7 +217,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itshouldFailIdPasswordNewAndPasswordNewRepeatAreNotEquals(): void
+    public function itShouldFailIdPasswordNewAndPasswordNewRepeatAreNotEquals(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $clientData = [
@@ -230,7 +230,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk(response: $response, errors: ['passwoord_repeat'], responseCode: Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk(response: $response, errors: ['password_repeat'], responseCode: Response::HTTP_BAD_REQUEST);
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Password new and Repeat new are not equals', $responseContent->message);
     }

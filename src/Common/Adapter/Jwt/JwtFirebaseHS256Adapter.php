@@ -19,7 +19,7 @@ use UnexpectedValueException as NativeUnexpectedValueException;
 
 class JwtFirebaseHS256Adapter /* implements JwtHS256Interface */
 {
-    public const ALGORITM = 'HS256';
+    public const ALGORITHM = 'HS256';
     public const KEY_TOKEN_DATA = '__jwt_data';
 
     private readonly Key $secretKey;
@@ -37,7 +37,7 @@ class JwtFirebaseHS256Adapter /* implements JwtHS256Interface */
                 ->getTimestamp();
         }
 
-        return JWT::encode($data, $this->secretKey->getKeyMaterial(), self::ALGORITM);
+        return JWT::encode($data, $this->secretKey->getKeyMaterial(), self::ALGORITHM);
     }
 
     /**
@@ -86,6 +86,6 @@ class JwtFirebaseHS256Adapter /* implements JwtHS256Interface */
 
     protected function getKey(string $secretKey)
     {
-        return new Key($secretKey, self::ALGORITM);
+        return new Key($secretKey, self::ALGORITHM);
     }
 }

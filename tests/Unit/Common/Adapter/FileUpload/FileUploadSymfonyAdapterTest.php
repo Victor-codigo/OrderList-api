@@ -39,7 +39,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function istShouldThrowLogicExceptionGetingTheFileName(): void
+    public function istShouldThrowLogicExceptionGettingTheFileName(): void
     {
         $this->expectException(LogicException::class);
 
@@ -47,7 +47,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function istShouldGetingTheFileName(): void
+    public function istShouldGettingTheFileName(): void
     {
         $pathToSaveFile = 'path/to/save/file';
         $originalFileName = 'file.txt';
@@ -98,7 +98,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function itshouldUploadTheFile(): void
+    public function itShouldUploadTheFile(): void
     {
         $pathToSaveFile = 'path/to/save/file';
         $originalFileName = 'file.txt';
@@ -113,7 +113,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function itshouldThrowFileUploadCanNotWriteException(): void
+    public function itShouldThrowFileUploadCanNotWriteException(): void
     {
         $pathToSaveFile = 'path/to/save/file';
         $originalFileName = 'file.txt';
@@ -136,7 +136,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function itshouldThrowFileUploadExtensionFileException(): void
+    public function itShouldThrowFileUploadExtensionFileException(): void
     {
         $pathToSaveFile = 'path/to/save/file';
         $originalFileName = 'file.txt';
@@ -159,7 +159,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function itshouldThrowFileUploadSizeException(): void
+    public function itShouldThrowFileUploadSizeException(): void
     {
         $pathToSaveFile = 'path/to/save/file';
         $originalFileName = 'file.txt';
@@ -182,7 +182,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function itshouldThrowFileUploadIniSizeException(): void
+    public function itShouldThrowFileUploadIniSizeException(): void
     {
         $pathToSaveFile = 'path/to/save/file';
         $originalFileName = 'file.txt';
@@ -205,7 +205,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function itshouldThrowFileUploadNoFileException(): void
+    public function itShouldThrowFileUploadNoFileException(): void
     {
         $pathToSaveFile = 'path/to/save/file';
         $originalFileName = 'file.txt';
@@ -228,7 +228,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function itshouldThrowFileUploadTmpDirFileException(): void
+    public function itShouldThrowFileUploadTmpDirFileException(): void
     {
         $pathToSaveFile = 'path/to/save/file';
         $originalFileName = 'file.txt';
@@ -251,7 +251,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function itshouldThrowFileUploadPartialFileException(): void
+    public function itShouldThrowFileUploadPartialFileException(): void
     {
         $pathToSaveFile = 'path/to/save/file';
         $originalFileName = 'file.txt';
@@ -274,7 +274,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function itshouldThrowFileUploadException(): void
+    public function itShouldThrowFileUploadException(): void
     {
         $pathToSaveFile = 'path/to/save/file';
         $originalFileName = 'file.txt';

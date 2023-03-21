@@ -12,7 +12,7 @@ use Common\Domain\HttpClient\Exception\NetworkException;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\DI\DIInterface;
 use Common\Domain\Ports\HttpClient\HttpClientInterface;
-use Common\Domain\Ports\HttpClient\HttpClientResponseInteface;
+use Common\Domain\Ports\HttpClient\HttpClientResponseInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTManager;
@@ -31,7 +31,7 @@ class ModuleCommunicationTest extends TestCase
 
     private ModuleCommunication $object;
     private MockObject|HttpClientInterface $httpClient;
-    private MockObject|HttpClientResponseInteface  $httpClientResponse;
+    private MockObject|HttpClientResponseInterface  $httpClientResponse;
     private MockObject|DIInterface $DI;
     private MockObject|JWTManager $jwtManager;
     private MockObject|Security $security;
@@ -45,7 +45,7 @@ class ModuleCommunicationTest extends TestCase
         parent::setUp();
 
         $this->httpClient = $this->createMock(HttpClientInterface::class);
-        $this->httpClientResponse = $this->createMock(HttpClientResponseInteface::class);
+        $this->httpClientResponse = $this->createMock(HttpClientResponseInterface::class);
         $this->DI = $this->createMock(DIInterface::class);
         $this->jwtManager = $this->createMock(JWTManager::class);
         $this->security = $this->createMock(Security::class);

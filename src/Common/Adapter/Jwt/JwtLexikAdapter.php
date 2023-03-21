@@ -10,7 +10,7 @@ use JWT\Authentication\JWT;
 
 class JwtLexikAdapter implements JwtHS256Interface
 {
-    public const ALGORITM = 'HS256';
+    public const ALGORITHM = 'HS256';
     public const KEY_ISSUED_AT = 'iat';
     public const KEY_EXPIRE = 'exp';
 
@@ -25,7 +25,7 @@ class JwtLexikAdapter implements JwtHS256Interface
     {
         $data[self::KEY_ISSUED_AT] = (new \DateTimeImmutable())->getTimestamp();
         $data[self::KEY_EXPIRE] = $data[self::KEY_ISSUED_AT] + $expireTimeInSeconds;
-        $token = JWT::encode($data, $this->secretKey, self::ALGORITM);
+        $token = JWT::encode($data, $this->secretKey, self::ALGORITHM);
 
         return $token;
     }

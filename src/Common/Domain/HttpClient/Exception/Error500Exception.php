@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Common\Domain\HttpClient\Exception;
 
 use Common\Adapter\HttpClient\HttpClientResponse;
-use Common\Domain\Ports\HttpClient\HttpClientResponseInteface;
+use Common\Domain\Ports\HttpClient\HttpClientResponseInterface;
 use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
 
 class Error500Exception extends \DomainException
@@ -15,7 +15,7 @@ class Error500Exception extends \DomainException
         return new static($message, 0, $exception);
     }
 
-    public function getResponse(): HttpClientResponseInteface
+    public function getResponse(): HttpClientResponseInterface
     {
         /** @var HttpExceptionInterface $exception */
         $exception = $this->getPrevious();

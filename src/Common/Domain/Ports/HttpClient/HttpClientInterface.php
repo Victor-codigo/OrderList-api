@@ -7,9 +7,9 @@ namespace Common\Domain\Ports\HttpClient;
 interface HttpClientInterface
 {
     /**
-     * @throws UnsuportedOptionException
+     * @throws UnsupportedOptionException
      */
-    public function request(string $method, string $url, array $options = []): HttpClientResponseInteface;
+    public function request(string $method, string $url, array $options = []): HttpClientResponseInterface;
 
     public function getNewInstance(array $options = []): static;
 }
