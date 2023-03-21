@@ -9,6 +9,7 @@ class ResponseDto
     public RESPONSE_STATUS $status;
     public string $message;
     public array $data;
+    public array $headers;
     public array $errors;
     public bool $hasContent;
 
@@ -41,6 +42,11 @@ class ResponseDto
         return $this->data;
     }
 
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
     public function setData(array $data): static
     {
         $this->data = $data;
@@ -65,11 +71,12 @@ class ResponseDto
         return $this->hasContent;
     }
 
-    public function __construct(array $data = [], array $errors = [], string $message = '', RESPONSE_STATUS $status = RESPONSE_STATUS::OK, bool $hasContent = true)
+    public function __construct(array $data = [], array $errors = [], string $message = '', RESPONSE_STATUS $status = RESPONSE_STATUS::OK, bool $hasContent = true, array $headers = [])
     {
         $this->status = $status;
         $this->message = $message;
         $this->data = $data;
+        $this->headers = $headers;
         $this->errors = $errors;
         $this->hasContent = $hasContent;
     }
@@ -80,6 +87,7 @@ class ResponseDto
             'status' => $this->status->value,
             'message' => $this->message,
             'data' => $this->data,
+            'headers' => $this->headers,
             'errors' => $this->errors,
             'hasContent' => $this->hasContent,
         ];
