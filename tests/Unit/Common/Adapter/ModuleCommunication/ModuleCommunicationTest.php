@@ -10,7 +10,6 @@ use Common\Domain\HttpClient\Exception\Error400Exception;
 use Common\Domain\HttpClient\Exception\Error500Exception;
 use Common\Domain\HttpClient\Exception\NetworkException;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
-use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\DI\DIInterface;
 use Common\Domain\Ports\HttpClient\HttpClientInterface;
 use Common\Domain\Ports\HttpClient\HttpClientResponseInteface;
@@ -22,6 +21,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
+use Test\Unit\Common\Adapter\ModuleCommunication\Fixtures\ModuleCommunicationFactoryTest;
 
 class ModuleCommunicationTest extends TestCase
 {
@@ -90,7 +90,7 @@ class ModuleCommunicationTest extends TestCase
         $this->DI
             ->expects($this->once())
             ->method('getUrlRouteAbsoluteDomain')
-            ->with($routeConfig->route, $routeConfig->parameters)
+            ->with($routeConfig->route, $routeConfig->attributes)
             ->willReturn(self::URL);
 
         $this->security
@@ -107,15 +107,32 @@ class ModuleCommunicationTest extends TestCase
         $this->httpClient
             ->expects($this->once())
             ->method('request')
-            ->with($routeConfig->method,
-                self::URL, [
-                    'proxy' => 'http://proxy:80',
-                    'verify_peer' => false,
-                    'verify_host' => false,
-                    'json' => $routeConfig->parameters,
-                    'auth_bearer' => self::JWT_TOKEN,
-                ]
-            )
+            ->with(
+                $routeConfig->method,
+                self::URL,
+                $this->callback(function (array $options) use ($routeConfig) {
+                    if ('multipart/form-data' === $routeConfig->contentType) {
+                        $this->assertArrayHasKey('body', $options);
+                        $this->assertInstanceOf(\Generator::class, $options['body']);
+                        $this->assertEquals('Content-Type: multipart/form-data', explode(';', $options['headers'][0])[0]);
+                    }
+
+                    if ('application/json' === $routeConfig->contentType) {
+                        $this->assertArrayHasKey('json', $options);
+                        $this->assertEquals($routeConfig->content, $options['json']);
+                    }
+
+                    $this->assertArrayHasKey('proxy', $options);
+                    $this->assertArrayHasKey('verify_peer', $options);
+                    $this->assertArrayHasKey('verify_host', $options);
+                    $this->assertArrayHasKey('auth_bearer', $options);
+                    $this->assertEquals('http://proxy:80', $options['proxy']);
+                    $this->assertFalse($options['verify_peer']);
+                    $this->assertFalse($options['verify_host']);
+                    $this->assertEquals(self::JWT_TOKEN, $options['auth_bearer']);
+
+                    return true;
+                }))
             ->willReturn($this->httpClientResponse);
 
         $this->httpClientResponse
@@ -145,9 +162,28 @@ class ModuleCommunicationTest extends TestCase
     }
 
     /** @test */
-    public function itShouldReturnAValidResponseDto(): void
+    public function itShouldReturnAValidResponseDtoRequestApplicationJson(): void
     {
-        $routeConfig = ModuleCommunicationFactory::userGet([self::USER_ID]);
+        $content = [
+            'param1' => 'param1',
+            'param2' => 'param2',
+        ];
+        $routeConfig = ModuleCommunicationFactoryTest::json($content, [], true);
+        $this->mockRequestMethod($routeConfig);
+
+        $return = $this->object->__invoke($routeConfig);
+
+        $this->assertEquals($this->getResponseDtoFromString($this->responseContentExpected), $return);
+    }
+
+    /** @test */
+    public function itShouldReturnAValidResponseDtoRequestMultiPartFormData(): void
+    {
+        $content = [
+            'param1' => 'param1',
+            'param2' => 'param2',
+        ];
+        $routeConfig = ModuleCommunicationFactoryTest::form($content, [], [], true);
         $this->mockRequestMethod($routeConfig);
 
         $return = $this->object->__invoke($routeConfig);
@@ -159,7 +195,11 @@ class ModuleCommunicationTest extends TestCase
     public function itShouldReturnAValidResponseDtoResponseContentEmpty(): void
     {
         $this->responseContentExpected = '';
-        $routeConfig = ModuleCommunicationFactory::userGet([self::USER_ID]);
+        $content = [
+            'param1' => 'param1',
+            'param2' => 'param2',
+        ];
+        $routeConfig = ModuleCommunicationFactoryTest::json($content, [], true);
         $this->mockRequestMethod($routeConfig);
 
         $return = $this->object->__invoke($routeConfig);
@@ -171,7 +211,11 @@ class ModuleCommunicationTest extends TestCase
     public function itShouldFailWrongJsonInResponseContent(): void
     {
         $this->responseContentExpected = 'Wrong json';
-        $routeConfig = ModuleCommunicationFactory::userGet([self::USER_ID]);
+        $content = [
+            'param1' => 'param1',
+            'param2' => 'param2',
+        ];
+        $routeConfig = ModuleCommunicationFactoryTest::json($content, [], true);
         $this->mockRequestMethod($routeConfig);
         $this->expectException(ModuleCommunicationException::class);
 
@@ -186,7 +230,11 @@ class ModuleCommunicationTest extends TestCase
         /** @var MockObject|HttpExceptionInterface $httpExceptionInterface */
         $httpExceptionInterface = $this->createMock(HttpExceptionInterface::class);
 
-        $routeConfig = ModuleCommunicationFactory::userGet([self::USER_ID]);
+        $content = [
+            'param1' => 'param1',
+            'param2' => 'param2',
+        ];
+        $routeConfig = ModuleCommunicationFactoryTest::json($content, [], true);
         $this->mockRequestMethod($routeConfig, Error400Exception::fromMessage('', $httpExceptionInterface));
 
         $return = $this->object->__invoke($routeConfig);
@@ -200,7 +248,11 @@ class ModuleCommunicationTest extends TestCase
         /** @var MockObject|HttpExceptionInterface $httpExceptionInterface */
         $httpExceptionInterface = $this->createMock(HttpExceptionInterface::class);
 
-        $routeConfig = ModuleCommunicationFactory::userGet([self::USER_ID]);
+        $content = [
+            'param1' => 'param1',
+            'param2' => 'param2',
+        ];
+        $routeConfig = ModuleCommunicationFactoryTest::json($content, [], true);
         $this->mockRequestMethod($routeConfig, Error500Exception::fromMessage('', $httpExceptionInterface));
 
         $return = $this->object->__invoke($routeConfig);
@@ -215,7 +267,11 @@ class ModuleCommunicationTest extends TestCase
         $httpExceptionInterface = $this->createMock(HttpExceptionInterface::class);
         $this->expectException(ModuleCommunicationException::class);
 
-        $routeConfig = ModuleCommunicationFactory::userGet([self::USER_ID]);
+        $content = [
+            'param1' => 'param1',
+            'param2' => 'param2',
+        ];
+        $routeConfig = ModuleCommunicationFactoryTest::json($content, [], true);
         $this->mockRequestMethod($routeConfig, NetworkException::fromMessage('', $httpExceptionInterface));
 
         $this->object->__invoke($routeConfig);
