@@ -10,6 +10,7 @@ use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\JwtToken;
+use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\JwtToken\JwtHS256Interface;
 use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
@@ -27,16 +28,26 @@ class EmailConfirmationJwtTokenValidationService
         $this->userRepository = $userRepository;
     }
 
-    public function __invoke(EmailConfirmationJwtTokenValidationDto $tokenDto): Identifier
+    /**
+     * @throws JwtTokenExpiredException
+     * @throws InvalidArgumentException
+     * @throws DBUniqueConstraintException
+     * @throws DBNotFoundException
+     * @throws DBConnectionException
+     */
+    public function __invoke(EmailConfirmationJwtTokenValidationDto $tokenDto): User
     {
         $tokenDecoded = $this->getToken($tokenDto->token);
-        $userIdentifier = new Identifier($tokenDecoded->username);
+        $userIdentifier = ValueObjectFactory::createIdentifier($tokenDecoded->username);
         $user = $this->getUser($userIdentifier);
         $this->setUserActive($user);
 
-        return $userIdentifier;
+        return $user;
     }
 
+    /**
+     * @throws JwtTokenExpiredException
+     */
     private function getToken(JwtToken $token): object
     {
         $tokenDecoded = $this->jwt->decode($token->getValue());
@@ -48,6 +59,10 @@ class EmailConfirmationJwtTokenValidationService
         return $tokenDecoded;
     }
 
+    /**
+     * @throws InvalidArgumentException
+     * @throws DBNotFoundException
+     */
     private function getUser(Identifier $userId): User
     {
         /** @var User $user */
@@ -60,9 +75,13 @@ class EmailConfirmationJwtTokenValidationService
         return $user;
     }
 
+    /**
+     * @throws DBUniqueConstraintException
+     * @throws DBConnectionException
+     */
     private function setUserActive(User $user): void
     {
-        $user->setRoles(Roles::create([USER_ROLES::USER]));
+        $user->setRoles(Roles::create([USER_ROLES::USER_FIRST_LOGIN]));
         $this->userRepository->save($user);
     }
 }
