@@ -9,6 +9,7 @@ use Common\Adapter\Jwt\Exception\JwtTokenExpiredException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Model\ValueObject\String\JwtToken;
+use Common\Domain\Ports\Event\EventDispatcherInterface;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
@@ -22,13 +23,11 @@ use User\Domain\Service\EmailConfirmationJwtTokenValidationService\EmailConfirma
 
 class UserRegisterEmailConfirmationUseCase extends ServiceBase
 {
-    private ValidationInterface $validator;
-    private EmailConfirmationJwtTokenValidationService $emailConfirmationJwTTokenValidationService;
-
-    public function __construct(ValidationInterface $validator, EmailConfirmationJwtTokenValidationService $emailConfirmationJwtTokenValidationService)
-    {
-        $this->validator = $validator;
-        $this->emailConfirmationJwTTokenValidationService = $emailConfirmationJwtTokenValidationService;
+    public function __construct(
+        private ValidationInterface $validator,
+        private EmailConfirmationJwtTokenValidationService $emailConfirmationJwtTokenValidationService,
+        private EventDispatcherInterface $eventDispatcher,
+    ) {
     }
 
     public function __invoke(UserEmailConfirmationInputDto $emailConfirmation): UserEmailConfirmationOutputDto
@@ -36,11 +35,13 @@ class UserRegisterEmailConfirmationUseCase extends ServiceBase
         try {
             $this->validation($emailConfirmation);
 
-            $userId = $this->emailConfirmationJwTTokenValidationService->__invoke(
+            $user = $this->emailConfirmationJwtTokenValidationService->__invoke(
                 $this->createEmailConfirmationJwtTokenValidationDto($emailConfirmation->token)
             );
 
-            return new UserEmailConfirmationOutputDto($userId);
+            $this->eventsRegisteredDispatch($this->eventDispatcher, $user->getEventsRegistered());
+
+            return new UserEmailConfirmationOutputDto($user->getId());
         } catch (JwtTokenExpiredException) {
             throw EmailConfigurationJwtTokenHasExpiredException::fromMessage('Token has expired');
         } catch (JwtException) {
