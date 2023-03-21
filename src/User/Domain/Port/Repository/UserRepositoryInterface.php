@@ -11,6 +11,10 @@ use User\Domain\Model\User;
 
 interface UserRepositoryInterface extends RepositoryInterface
 {
+    /**
+     * @throws DBUniqueConstraintException
+     * @throws DBConnectionException
+     */
     public function save(User $user): void;
 
     /**
