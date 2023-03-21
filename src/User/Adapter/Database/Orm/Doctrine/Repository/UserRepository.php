@@ -24,6 +24,10 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
         parent::__construct($managerRegistry, User::class);
     }
 
+    /**
+     * @throws DBUniqueConstraintException
+     * @throws DBConnectionException
+     */
     public function save(User $user): void
     {
         try {
@@ -63,7 +67,7 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
     {
         $query = $this->entityManager
             ->createQuery('SELECT u FROM '.User::class.' u WHERE u.id=:id')
-            ->setParameter('id', $id->getValue());
+            ->setParameter('id', $id);
 
         if (!$cache) {
             $query->setHint(Query::HINT_REFRESH, true);
