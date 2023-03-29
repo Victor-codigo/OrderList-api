@@ -78,6 +78,11 @@ class AppConfig
      */
     public const ERROR_METHOD_NOT_ALLOWED = 'Method not allowed';
 
+    /**
+     * Maximum number of items per page in pagination.
+     */
+    public const PAGINATION_PAGE_ITEMS_MAX = 100;
+
     protected static AppConfig|null $instance = null;
     protected static VALUE_OBJECTS_CONSTRAINTS $valueObject;
 
