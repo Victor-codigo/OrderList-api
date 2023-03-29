@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Group\Application\GroupGetUsers\Dto;
 
 use Common\Domain\Config\AppConfig;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\ServiceInputDtoInterface;
@@ -17,39 +19,23 @@ class GroupGetUsersInputDto implements ServiceInputDtoInterface
 
     public readonly User $userSession;
     public readonly Identifier $groupId;
-    public readonly int $limit;
-    public readonly int $offset;
+    public readonly PaginatorPage $page;
+    public readonly PaginatorPageItems $pageItems;
 
-    public function __construct(User $userSession, string|null $groupId, int $limit, int $offset)
+    public function __construct(User $userSession, string|null $groupId, int|null $page, int|null $pageItems)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
-        $this->limit = $limit;
-        $this->offset = $offset;
+        $this->page = ValueObjectFactory::createPaginatorPage($page);
+        $this->pageItems = ValueObjectFactory::createPaginatorPageItems($pageItems);
     }
 
     public function validate(ValidationInterface $validator): array
     {
-        $errorListLimit = $validator
-            ->setValue($this->limit)
-            ->greaterThanOrEqual(1)
-            ->lessThanOrEqual(self::LIMIT_USERS_MAX)
-            ->validate();
-
-        $errorListOffset = $validator
-            ->setValue($this->offset)
-            ->greaterThanOrEqual(0)
-            ->validate();
-
-        $errorListGroupId = $validator->validateValueObjectArray([
+        return $validator->validateValueObjectArray([
             'group_id' => $this->groupId,
+            'page' => $this->page,
+            'page_items' => $this->pageItems,
         ]);
-
-        $errorList = [];
-        empty($errorListLimit) ?: $errorList['limit'] = $errorListLimit;
-        empty($errorListOffset) ?: $errorList['offset'] = $errorListOffset;
-        empty($errorListGroupId) ?: $errorList['group_id'] = $errorListGroupId['group_id'];
-
-        return $errorList;
     }
 }

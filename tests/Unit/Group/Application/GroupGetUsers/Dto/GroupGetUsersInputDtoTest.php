@@ -37,9 +37,9 @@ class GroupGetUsersInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldValidateLimitIs1(): void
+    public function itShouldValidatePageItemsIs1(): void
     {
-        $object = new GroupGetUsersInputDto($this->userSession, self::GROUP_ID, 1, 5);
+        $object = new GroupGetUsersInputDto($this->userSession, self::GROUP_ID, 5, 1);
         $return = $object->validate($this->validator);
 
         $this->assertEmpty($return);
@@ -55,9 +55,9 @@ class GroupGetUsersInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldValidateOffsetIs0(): void
+    public function itShouldValidatePageIs1(): void
     {
-        $object = new GroupGetUsersInputDto($this->userSession, self::GROUP_ID, 1, 0);
+        $object = new GroupGetUsersInputDto($this->userSession, self::GROUP_ID, 1, 1);
         $return = $object->validate($this->validator);
 
         $this->assertEmpty($return);
@@ -74,20 +74,29 @@ class GroupGetUsersInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailLimitIsLessThanOne(): void
+    public function itShouldFailPageItemsIsLessThanOne(): void
     {
-        $object = new GroupGetUsersInputDto($this->userSession, self::GROUP_ID, 0, 5);
+        $object = new GroupGetUsersInputDto($this->userSession, self::GROUP_ID, 5, 0);
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['limit' => [VALIDATION_ERRORS::GREATER_THAN_OR_EQUAL]], $return);
+        $this->assertEquals(['page_items' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
     }
 
     /** @test */
-    public function itShouldFailOffsetIsLessThanZero(): void
+    public function itShouldFailPageItemsIsGreaterThan100(): void
     {
-        $object = new GroupGetUsersInputDto($this->userSession, self::GROUP_ID, 1, -1);
+        $object = new GroupGetUsersInputDto($this->userSession, self::GROUP_ID, 5, 101);
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['offset' => [VALIDATION_ERRORS::GREATER_THAN_OR_EQUAL]], $return);
+        $this->assertEquals(['page_items' => [VALIDATION_ERRORS::LESS_THAN_OR_EQUAL]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailPageIsLessThanOne(): void
+    {
+        $object = new GroupGetUsersInputDto($this->userSession, self::GROUP_ID, 0, 1);
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['page' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
     }
 }

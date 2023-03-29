@@ -7,9 +7,12 @@ namespace Group\Application\GroupGetUsers;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\HttpClient\Exception\Error400Exception;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
+use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Service\Exception\DomainErrorException;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
@@ -41,9 +44,9 @@ class GroupGetUsersUseCase extends ServiceBase
         $this->validation($input);
 
         try {
-            $groupUsers = $this->userGroupRepository->findGroupUsersOrFail($input->groupId, $input->limit, $input->offset);
+            $groupUsers = $this->userGroupRepository->findGroupUsersOrFail($input->groupId);
             $this->validateIsUserSessionInGroup($input->groupId, $input->userSession->getId());
-            $usersData = $this->getUsersData($groupUsers);
+            $usersData = $this->getUsersData($groupUsers, $input->page, $input->pageItems);
 
             return $this->createGroupGetUsersOutputDto($usersData);
         } catch (GroupGetUsersUserNotInTheGroupException $e) {
@@ -83,17 +86,16 @@ class GroupGetUsersUseCase extends ServiceBase
     }
 
     /**
-     * @param UserGroup[] $usersGroup
-     *
      * @throws Error400Exception
      * @throws ModuleCommunicationException
      * @throws \ValueError
      */
-    private function getUsersData(array $usersGroup): array
+    private function getUsersData(PaginatorInterface $usersGroup, PaginatorPage $page, PaginatorPageItems $pageItems): array
     {
+        $usersGroup->setPagination($page->getValue(), $pageItems->getValue());
         $usersId = array_map(
             fn (UserGroup $userGroup) => $userGroup->getUserId()->getValue(),
-            $usersGroup
+            iterator_to_array($usersGroup)
         );
 
         $response = $this->moduleCommunication->__invoke(

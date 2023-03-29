@@ -12,6 +12,7 @@ use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
+use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use Common\Domain\Service\Exception\DomainErrorException;
@@ -21,14 +22,14 @@ use Group\Application\GroupGetUsers\Dto\GroupGetUsersOutputDto;
 use Group\Application\GroupGetUsers\Exception\GroupGetUsersGroupNotFoundException;
 use Group\Application\GroupGetUsers\Exception\GroupGetUsersUserNotInTheGroupException;
 use Group\Application\GroupGetUsers\GroupGetUsersUseCase;
-use Group\Domain\Model\Group;
 use Group\Domain\Model\GROUP_ROLES;
+use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\User;
 use User\Domain\Model\USER_ROLES;
+use User\Domain\Model\User;
 
 class GroupGetUsersUseCaseTest extends TestCase
 {
@@ -55,15 +56,32 @@ class GroupGetUsersUseCaseTest extends TestCase
         return User::fromPrimitives('2606508b-4516-45d6-93a6-c7cb416b7f3f', 'user@emil.com', 'password', 'UserName', [USER_ROLES::USER]);
     }
 
-    private function getUsersGroup(): array
+    private function getUsersGroup(): MockObject|PaginatorInterface
     {
         $group = $this->createMock(Group::class);
-
-        return [
+        $userGroups = [
             UserGroup::fromPrimitives(self::GROUP_ID, '1befdbe2-9c14-42f0-850f-63e061e33b8f', [GROUP_ROLES::USER], $group),
             UserGroup::fromPrimitives(self::GROUP_ID, '08eda546-739f-4ab7-917a-8a9dbee426ef', [GROUP_ROLES::USER], $group),
             UserGroup::fromPrimitives(self::GROUP_ID, '6df60afd-f7c3-4c2c-b920-e265f266c560', [GROUP_ROLES::USER], $group),
         ];
+
+        /** @var MockObject|PaginatorInterface $paginator */
+        $paginator = $this->createMock(PaginatorInterface::class);
+        $paginator
+            ->expects($this->any())
+            ->method('getIterator')
+            ->willReturnCallback(function () use ($userGroups) {
+                foreach ($userGroups as $userGroup) {
+                    yield $userGroup;
+                }
+            });
+
+        $paginator
+            ->expects($this->any())
+            ->method('count')
+            ->willReturn(count($userGroups));
+
+        return $paginator;
     }
 
     private function getUsersGroupData(): array
@@ -88,8 +106,8 @@ class GroupGetUsersUseCaseTest extends TestCase
     {
         $userSession = $this->getUserSession();
         $usersGroup = $this->getUsersGroup();
-        $usersGroupId = array_map(fn (UserGroup $userGroup) => $userGroup->getUserId(), $usersGroup);
-        $usersGroupIdPlain = array_map(fn (UserGroup $userGroup) => $userGroup->getUserId()->getValue(), $usersGroup);
+        $usersGroupId = array_map(fn (UserGroup $userGroup) => $userGroup->getUserId(), iterator_to_array($usersGroup));
+        $usersGroupIdPlain = array_map(fn (UserGroup $userGroup) => $userGroup->getUserId()->getValue(), iterator_to_array($usersGroup));
         $usersGroupData = $this->getUsersGroupData();
         $usersGroupNames = array_column($usersGroupData, 'name');
 
@@ -97,14 +115,14 @@ class GroupGetUsersUseCaseTest extends TestCase
         $responseDtoGetUsers = new ResponseDto($usersGroupData, [], '', RESPONSE_STATUS::OK, true);
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
 
-        $limit = 50;
-        $offset = 0;
-        $input = new GroupGetUsersInputDto($userSession, self::GROUP_ID, $limit, $offset);
+        $pageItems = 50;
+        $page = 0;
+        $input = new GroupGetUsersInputDto($userSession, self::GROUP_ID, $pageItems, $page);
 
         $this->userGroupRepository
             ->expects($this->once())
             ->method('findGroupUsersOrFail')
-            ->with($groupId, $limit, $offset)
+            ->with($groupId)
             ->willReturn($usersGroup);
 
         $this->userGroupRepository
@@ -138,14 +156,14 @@ class GroupGetUsersUseCaseTest extends TestCase
     {
         $userSession = $this->getUserSession();
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
-        $limit = 50;
-        $offset = 0;
-        $input = new GroupGetUsersInputDto($userSession, self::GROUP_ID, $limit, $offset);
+        $pageItems = 50;
+        $page = 0;
+        $input = new GroupGetUsersInputDto($userSession, self::GROUP_ID, $pageItems, $page);
 
         $this->userGroupRepository
             ->expects($this->once())
             ->method('findGroupUsersOrFail')
-            ->with($groupId, $limit, $offset)
+            ->with($groupId)
             ->willThrowException(new DBNotFoundException());
 
         $this->userGroupRepository
@@ -168,14 +186,14 @@ class GroupGetUsersUseCaseTest extends TestCase
 
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
 
-        $limit = 50;
-        $offset = 0;
-        $input = new GroupGetUsersInputDto($userSession, self::GROUP_ID, $limit, $offset);
+        $pageItems = 50;
+        $page = 0;
+        $input = new GroupGetUsersInputDto($userSession, self::GROUP_ID, $pageItems, $page);
 
         $this->userGroupRepository
             ->expects($this->once())
             ->method('findGroupUsersOrFail')
-            ->with($groupId, $limit, $offset)
+            ->with($groupId)
             ->willReturn($usersGroup);
 
         $this->userGroupRepository
@@ -197,19 +215,19 @@ class GroupGetUsersUseCaseTest extends TestCase
     {
         $userSession = $this->getUserSession();
         $usersGroup = $this->getUsersGroup();
-        $usersGroupId = array_map(fn (UserGroup $userGroup) => $userGroup->getUserId(), $usersGroup);
+        $usersGroupId = array_map(fn (UserGroup $userGroup) => $userGroup->getUserId(), iterator_to_array($usersGroup));
 
         $moduleCommunicationConfigDto = $this->getModuleCommunicationConfigDto($usersGroupId);
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
 
-        $limit = 50;
-        $offset = 0;
-        $input = new GroupGetUsersInputDto($userSession, self::GROUP_ID, $limit, $offset);
+        $pageItems = 50;
+        $page = 0;
+        $input = new GroupGetUsersInputDto($userSession, self::GROUP_ID, $pageItems, $page);
 
         $this->userGroupRepository
             ->expects($this->once())
             ->method('findGroupUsersOrFail')
-            ->with($groupId, $limit, $offset)
+            ->with($groupId)
             ->willReturn($usersGroup);
 
         $this->userGroupRepository
@@ -233,19 +251,19 @@ class GroupGetUsersUseCaseTest extends TestCase
     {
         $userSession = $this->getUserSession();
         $usersGroup = $this->getUsersGroup();
-        $usersGroupId = array_map(fn (UserGroup $userGroup) => $userGroup->getUserId(), $usersGroup);
+        $usersGroupId = array_map(fn (UserGroup $userGroup) => $userGroup->getUserId(), iterator_to_array($usersGroup));
 
         $moduleCommunicationConfigDto = $this->getModuleCommunicationConfigDto($usersGroupId);
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
 
-        $limit = 50;
-        $offset = 0;
-        $input = new GroupGetUsersInputDto($userSession, self::GROUP_ID, $limit, $offset);
+        $pageItems = 50;
+        $page = 0;
+        $input = new GroupGetUsersInputDto($userSession, self::GROUP_ID, $pageItems, $page);
 
         $this->userGroupRepository
             ->expects($this->once())
             ->method('findGroupUsersOrFail')
-            ->with($groupId, $limit, $offset)
+            ->with($groupId)
             ->willReturn($usersGroup);
 
         $this->userGroupRepository
@@ -269,19 +287,19 @@ class GroupGetUsersUseCaseTest extends TestCase
     {
         $userSession = $this->getUserSession();
         $usersGroup = $this->getUsersGroup();
-        $usersGroupId = array_map(fn (UserGroup $userGroup) => $userGroup->getUserId(), $usersGroup);
+        $usersGroupId = array_map(fn (UserGroup $userGroup) => $userGroup->getUserId(), iterator_to_array($usersGroup));
 
         $moduleCommunicationConfigDto = $this->getModuleCommunicationConfigDto($usersGroupId);
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
 
-        $limit = 50;
-        $offset = 0;
-        $input = new GroupGetUsersInputDto($userSession, self::GROUP_ID, $limit, $offset);
+        $pageItems = 50;
+        $page = 0;
+        $input = new GroupGetUsersInputDto($userSession, self::GROUP_ID, $pageItems, $page);
 
         $this->userGroupRepository
             ->expects($this->once())
             ->method('findGroupUsersOrFail')
-            ->with($groupId, $limit, $offset)
+            ->with($groupId)
             ->willReturn($usersGroup);
 
         $this->userGroupRepository

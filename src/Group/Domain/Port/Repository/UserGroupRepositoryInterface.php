@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Group\Domain\Port\Repository;
 
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Ports\Repository\RepositoryInterface;
 use Group\Domain\Model\GROUP_ROLES;
+use Group\Domain\Model\GROUP_TYPE;
 
 interface UserGroupRepositoryInterface extends RepositoryInterface
 {
     /**
-     * @return UserGroup[]
-     *
      * @throws DBNotFoundException
      */
-    public function findGroupUsersOrFail(Identifier $groupId, int $limit = null, int $offset = null): array;
+    public function findGroupUsersOrFail(Identifier $groupId): PaginatorInterface;
 
     /**
      * @param Identifier[] $usersId
@@ -36,7 +36,7 @@ interface UserGroupRepositoryInterface extends RepositoryInterface
     /**
      * @throws DBNotFoundException
      */
-    public function findUserGroupsById(Identifier $userId, GROUP_ROLES|null $groupRol = null): array;
+    public function findUserGroupsById(Identifier $userId, GROUP_ROLES|null $groupRol = null, GROUP_TYPE|null $groupType = null): PaginatorInterface;
 
     /**
      * @throws DBNotFoundException

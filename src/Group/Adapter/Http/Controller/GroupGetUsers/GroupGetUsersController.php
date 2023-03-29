@@ -30,20 +30,20 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
             schema: new OA\Schema(type: 'string')
         ),
         new OA\Parameter(
-            name: 'limit',
+            name: 'page',
             in: 'query',
             required: false,
-            description: 'Maximum number of users returned. (max. users: '.AppConfig::ENDPOINT_GROUP_GET_USERS_MAX_USERS.')',
-            example: 50,
+            description: 'Number of users to skip before starting to return',
+            example: 1,
             schema: new OA\Schema(type: 'int')
         ),
 
         new OA\Parameter(
-            name: 'offset',
+            name: 'page_items',
             in: 'query',
             required: false,
-            description: 'Number of users to skip before starting to return',
-            example: 0,
+            description: 'Maximum number of users returned. (max. users: '.AppConfig::ENDPOINT_GROUP_GET_USERS_MAX_USERS.')',
+            example: 50,
             schema: new OA\Schema(type: 'int')
         ),
     ],
@@ -82,7 +82,7 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
                         new OA\Property(property: 'status', type: 'string', example: 'ok'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<groups_id|group_not_found|limit|offset, string>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<groups_id|group_not_found|page|offset, string>')),
                     ]
                 )
             )
@@ -115,18 +115,18 @@ class GroupGetUsersController extends AbstractController
     public function __invoke(GroupGetUsersRequestDto $request): JsonResponse
     {
         $groupUsers = $this->groupGetUsersUseCase->__invoke(
-            $this->createGroupGetUsersInputDto($request->groupId, $request->limit, $request->offset)
+            $this->createGroupGetUsersInputDto($request->groupId, $request->page, $request->pageItems)
         );
 
         return $this->createResponse($groupUsers->users);
     }
 
-    private function createGroupGetUsersInputDto(string|null $groupId, int $start, int $offset): GroupGetUsersInputDto
+    private function createGroupGetUsersInputDto(string|null $groupId, int $page, int $pageItems): GroupGetUsersInputDto
     {
         /** @var UserSymfonyAdapter $userAdapter */
         $userAdapter = $this->security->getUser();
 
-        return new GroupGetUsersInputDto($userAdapter->getUser(), $groupId, $start, $offset);
+        return new GroupGetUsersInputDto($userAdapter->getUser(), $groupId, $page, $pageItems);
     }
 
     private function createResponse(array $groupUsers): JsonResponse

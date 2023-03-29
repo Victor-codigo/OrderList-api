@@ -13,7 +13,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/groups/user/{group_id}?limit={limit}&offset={offset}';
+    private const ENDPOINT = '/api/v1/groups/user/{group_id}?page={page}&page_items={page_items}';
     private const METHOD = 'GET';
     private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const USER_EMAIL = 'email.already.active@host.com';
@@ -26,8 +26,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: str_replace(
-                ['{group_id}', '{limit}', '{offset}'],
-                [self::GROUP_ID, 50, 0],
+                ['{group_id}',  '{page}', '{page_items}'],
+                [self::GROUP_ID, 1, 50],
                 self::ENDPOINT
             )
         );
@@ -55,8 +55,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: str_replace(
-                ['{group_id}', 'limit={limit}&', '{offset}'],
-                [self::GROUP_ID, '', 0],
+                ['{group_id}',  '{page}', '&page_items={page_items}'],
+                [self::GROUP_ID, 1, ''],
                 self::ENDPOINT
             )
         );
@@ -84,8 +84,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: str_replace(
-                ['{group_id}', '{limit}', '&offset={offset}'],
-                [self::GROUP_ID, 50, ''],
+                ['{group_id}',  'page={page}', '{page_items}'],
+                [self::GROUP_ID, '', 50],
                 self::ENDPOINT
             )
         );
@@ -113,7 +113,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: str_replace(
-                ['{group_id}', '?limit={limit}', '&offset={offset}'],
+                ['{group_id}', '?page={page}', '&page_items={page_items}'],
                 [self::GROUP_ID, '', ''],
                 self::ENDPOINT
             )
@@ -142,8 +142,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: str_replace(
-                ['{group_id}', '{limit}', '{offset}'],
-                [self::GROUP_ID, 5, 0],
+                ['{group_id}',  '{page}', '{page_items}'],
+                [self::GROUP_ID, 1, 5],
                 self::ENDPOINT
             )
         );
@@ -171,8 +171,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: str_replace(
-                ['{group_id}', '{limit}', '{offset}'],
-                [self::GROUP_ID, 4, 0],
+                ['{group_id}',  '{page}', '{page_items}'],
+                [self::GROUP_ID, 1, 4],
                 self::ENDPOINT
             )
         );
@@ -183,8 +183,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: str_replace(
-                ['{group_id}', '{limit}', '{offset}'],
-                [self::GROUP_ID, 3, 1],
+                ['{group_id}',  '{page}', '{page_items}'],
+                [self::GROUP_ID, 1, 3],
                 self::ENDPOINT
             )
         );
@@ -213,8 +213,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: str_replace(
-                ['{group_id}', '{limit}', '{offset}'],
-                ['', 50, 0],
+                ['{group_id}',  '{page}', '{page_items}'],
+                ['', 1, 50],
                 self::ENDPOINT
             )
         );
@@ -231,8 +231,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: str_replace(
-                ['{group_id}', '{limit}', '{offset}'],
-                ['not_valid_id', 50, 0],
+                ['{group_id}',  '{page}', '{page_items}'],
+                ['not_valid_id', 1, 50],
                 self::ENDPOINT
             )
         );
@@ -254,8 +254,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: str_replace(
-                ['{group_id}', '{limit}', '{offset}'],
-                ['20354d7a-e4fe-47af-8ff6-187bca92f3f9', 50, 0],
+                ['{group_id}',  '{page}', '{page_items}'],
+                ['20354d7a-e4fe-47af-8ff6-187bca92f3f9', 1, 50],
                 self::ENDPOINT
             )
         );
@@ -277,8 +277,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: str_replace(
-                ['{group_id}', '{limit}', '{offset}'],
-                [self::GROUP_ID, 51, 0],
+                ['{group_id}',  '{page}', '{page_items}'],
+                [self::GROUP_ID, 1, 101],
                 self::ENDPOINT
             )
         );
@@ -286,11 +286,11 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['limit'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['page_items'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
 
-        $this->assertEquals(['less_than_or_equal'], $responseContent->errors->limit);
+        $this->assertEquals(['less_than_or_equal'], $responseContent->errors->page_items);
     }
 
     /** @test */
@@ -300,8 +300,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: str_replace(
-                ['{group_id}', '{limit}', '{offset}'],
-                [self::GROUP_ID, -1, 0],
+                ['{group_id}',  '{page}', '{page_items}'],
+                [self::GROUP_ID, 1, -1],
                 self::ENDPOINT
             )
         );
@@ -309,11 +309,11 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['limit'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['page_items'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
 
-        $this->assertEquals(['greater_than_or_equal'], $responseContent->errors->limit);
+        $this->assertEquals(['greater_than'], $responseContent->errors->page_items);
     }
 
     /** @test */
@@ -323,8 +323,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: str_replace(
-                ['{group_id}', '{limit}', '{offset}'],
-                [self::GROUP_ID, 1, -1],
+                ['{group_id}',  '{page}', '{page_items}'],
+                [self::GROUP_ID, -1, 1],
                 self::ENDPOINT
             )
         );
@@ -332,21 +332,21 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['offset'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['page'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
 
-        $this->assertEquals(['greater_than_or_equal'], $responseContent->errors->offset);
+        $this->assertEquals(['greater_than'], $responseContent->errors->page);
     }
 
     /** @test */
-    public function itShouldFailUserSessionIsNotInTheGroup(): void
+    public function itShouldFailUserSessionIsNotInTheGroup22(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();
         $client->request(
             method: self::METHOD,
             uri: str_replace(
-                ['{group_id}', '{limit}', '{offset}'],
+                ['{group_id}',  '{page}', '{page_items}'],
                 [self::GROUP_ID, 1, 1],
                 self::ENDPOINT
             )
