@@ -7,6 +7,7 @@ namespace Test\Unit\Group\Domain\Service\GroupUserAdd;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Group\Domain\Model\GROUP_ROLES;
 use Group\Domain\Model\GROUP_TYPE;
 use Group\Domain\Model\Group;
@@ -56,15 +57,27 @@ class GroupUserAddServiceTest extends TestCase
     /**
      * @return UserGroup[]
      */
-    private function getFindGroupUsersOrFailReturn(): array
+    private function getFindGroupUsersOrFailReturn(): MockObject|PaginatorInterface
     {
         $group = $this->getFindGroupsByIdOrFailReturn()[0];
-
-        return [
+        $usersGroup = [
             UserGroup::fromPrimitives(self::GROUP_ID, 'c22ba0e4-1af4-4c16-98ed-afd9cdb1a3fb', [GROUP_ROLES::ADMIN], $group),
             UserGroup::fromPrimitives(self::GROUP_ID, 'f8bd3e42-db00-4bba-a0a0-7dc72c281744', [GROUP_ROLES::USER], $group),
             UserGroup::fromPrimitives(self::GROUP_ID, '4586fd14-f2de-4c22-b96d-65a8f70ed2ed', [GROUP_ROLES::USER], $group),
         ];
+
+        /** @var MockObject|PaginatorInterface */
+        $paginator = $this->createMock(PaginatorInterface::class);
+        $paginator
+            ->expects($this->any())
+            ->method('getIterator')
+            ->willReturnCallback(function () use ($usersGroup) {
+                foreach ($usersGroup as $userGroup) {
+                    yield $userGroup;
+                }
+            });
+
+        return $paginator;
     }
 
     private function getFindGroupsByIdOrFailReturn(): array

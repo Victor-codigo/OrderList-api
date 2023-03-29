@@ -8,6 +8,7 @@ use Common\Domain\Config\AppConfig;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
@@ -46,16 +47,15 @@ class GroupUserAddService
     }
 
     /**
-     * @param UserGroup[]  $usersGroup
      * @param Identifier[] $usersId
      *
      * @return Identifier[]
      */
-    private function getUsersNotInGroup(array $usersGroup, array $usersId): array
+    private function getUsersNotInGroup(PaginatorInterface $usersGroup, array $usersId): array
     {
         $usersGroupIds = array_map(
             fn (UserGroup $userGroup) => $userGroup->getUserId(),
-            $usersGroup
+            iterator_to_array($usersGroup)
         );
 
         return array_diff($usersId, $usersGroupIds);
