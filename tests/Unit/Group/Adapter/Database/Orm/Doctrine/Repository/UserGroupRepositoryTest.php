@@ -8,6 +8,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionExcepti
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Doctrine\ORM\Query\Expr\Join;
 use Group\Adapter\Database\Orm\Doctrine\Repository\UserGroupRepository;
 use Group\Domain\Model\GROUP_ROLES;
 use Group\Domain\Model\GROUP_TYPE;
@@ -60,46 +61,6 @@ class UserGroupRepositoryTest extends DataBaseTestCase
             $this->assertEquals(self::GROUP_ID, $userGroup->getGroupId()->getValue());
             $this->assertContains($userGroup->getUserId()->getValue(), $groupUsersId);
         }
-    }
-
-    /** @test */
-    public function itShouldFindUsersOfTheGroupLimit2(): void
-    {
-        $groupUsersId = $this->getGroupUserIds();
-        $return = $this->object->findGroupUsersOrFail(ValueObjectFactory::createIdentifier(self::GROUP_ID), 2);
-
-        $this->assertCount(2, $return);
-
-        $this->assertEquals(self::GROUP_ID, $return[0]->getGroupId()->getValue());
-        $this->assertEquals($return[0]->getUserId()->getValue(), $groupUsersId[0]);
-        $this->assertEquals(self::GROUP_ID, $return[1]->getGroupId()->getValue());
-        $this->assertEquals($return[1]->getUserId()->getValue(), $groupUsersId[1]);
-    }
-
-    /** @test */
-    public function itShouldFindUsersOfTheGroupOffset2(): void
-    {
-        $groupUsersId = $this->getGroupUserIds();
-        $return = $this->object->findGroupUsersOrFail(ValueObjectFactory::createIdentifier(self::GROUP_ID), 3, 3);
-
-        $this->assertCount(1, $return);
-
-        $this->assertEquals(self::GROUP_ID, $return[0]->getGroupId()->getValue());
-        $this->assertEquals($return[0]->getUserId()->getValue(), $groupUsersId[3]);
-    }
-
-    /** @test */
-    public function itShouldFindUsersOfTheGroupLimit2Offset2(): void
-    {
-        $groupUsersId = $this->getGroupUserIds();
-        $return = $this->object->findGroupUsersOrFail(ValueObjectFactory::createIdentifier(self::GROUP_ID), 2, 2);
-
-        $this->assertCount(2, $return);
-
-        $this->assertEquals(self::GROUP_ID, $return[0]->getGroupId()->getValue());
-        $this->assertEquals($return[0]->getUserId()->getValue(), $groupUsersId[2]);
-        $this->assertEquals(self::GROUP_ID, $return[1]->getGroupId()->getValue());
-        $this->assertEquals($return[1]->getUserId()->getValue(), $groupUsersId[3]);
     }
 
     /** @test */
@@ -255,6 +216,58 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         );
 
         $return = $this->object->findUserGroupsById($userId, GROUP_ROLES::USER);
+
+        $this->assertCount(count($groups), $return);
+
+        foreach ($groups as $group) {
+            $this->assertContains($group, $return);
+        }
+    }
+
+    /** @test */
+    public function itShouldOnlyGroupsTypeGroup(): void
+    {
+        $userId = ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID);
+
+        $groups = $this->object->createQueryBuilder('u')
+            ->leftJoin(Group::class, 'g', Join::WITH, 'u.groupId = g.id')
+            ->where('g.type = :type')
+            ->andWhere('u.userId = :userId')
+            ->setParameters([
+                'type' => GROUP_TYPE::GROUP,
+                'userId' => $userId,
+            ])
+            ->getQuery()
+            ->getResult();
+
+        $return = $this->object->findUserGroupsById($userId, null, GROUP_TYPE::GROUP);
+
+        $this->assertCount(count($groups), $return);
+
+        foreach ($groups as $group) {
+            $this->assertContains($group, $return);
+        }
+    }
+
+    /** @test */
+    public function itShouldOnlyGroupsTypeGroupAndIsUser(): void
+    {
+        $userId = ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID);
+
+        $groups = $this->object->createQueryBuilder('u')
+            ->leftJoin(Group::class, 'g', Join::WITH, 'u.groupId = g.id')
+            ->where('u.userId = :userId')
+            ->andWhere('g.type = :type')
+            ->andWhere('JSON_CONTAINS(u.roles, :groupRoles) = 1')
+            ->setParameters([
+                'userId' => $userId,
+                'type' => GROUP_TYPE::GROUP->value,
+                'groupRoles' => '"'.GROUP_ROLES::ADMIN->value.'"',
+            ])
+            ->getQuery()
+            ->getResult();
+
+        $return = $this->object->findUserGroupsById($userId, GROUP_ROLES::ADMIN, GROUP_TYPE::GROUP);
 
         $this->assertCount(count($groups), $return);
 

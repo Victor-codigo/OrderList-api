@@ -9,33 +9,47 @@ use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Ports\Paginator\PaginatorInterface;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 use Group\Domain\Model\GROUP_ROLES;
+use Group\Domain\Model\GROUP_TYPE;
+use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 
 class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryInterface
 {
-    public function __construct(ManagerRegistry $managerRegistry)
-    {
+    public function __construct(
+        ManagerRegistry $managerRegistry,
+        private PaginatorInterface $paginator
+    ) {
         parent::__construct($managerRegistry, UserGroup::class);
     }
 
     /**
-     * @return UserGroup[]
-     *
      * @throws DBNotFoundException
      */
-    public function findGroupUsersOrFail(Identifier $groupId, int $limit = null, int $offset = null): array
+    public function findGroupUsersOrFail(Identifier $groupId): PaginatorInterface
     {
-        /** @var UserGroup[] $groupUsers */
-        $groupUsers = $this->findBy(['groupId' => $groupId], null, $limit, $offset);
+        $userGroupTable = UserGroup::class;
+        $dql = <<<DQL
+            SELECT userGroup
+            FROM {$userGroupTable} userGroup
+            WHERE userGroup.groupId = :groupId
+        DQL;
 
-        if (empty($groupUsers)) {
+        $query = $this->entityManager
+            ->createQuery($dql)
+            ->setParameter('groupId', $groupId->getValue());
+
+        $paginator = $this->paginator->createPaginator($query);
+
+        if (0 === $paginator->getItemsTotal()) {
             throw DBNotFoundException::fromMessage('UserGroup not found');
         }
 
-        return $groupUsers;
+        return $paginator;
     }
 
     /**
@@ -93,7 +107,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
     /**
      * @throws DBNotFoundException
      */
-    public function findUserGroupsById(Identifier $userId, GROUP_ROLES|null $groupRol = null): array
+    public function findUserGroupsById(Identifier $userId, GROUP_ROLES|null $groupRol = null, GROUP_TYPE|null $groupType = null): PaginatorInterface
     {
         $queryBuilder = $this->entityManager
             ->createQueryBuilder()
@@ -108,15 +122,20 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
                 ->setParameter('rol', '"'.$groupRol->value.'"');
         }
 
-        $result = $queryBuilder
-            ->getQuery()
-            ->getResult();
+        if (null !== $groupType) {
+            $queryBuilder
+                ->leftJoin(Group::class, 'groups', Join::WITH, 'userGroup.groupId = groups.id')
+                ->andWhere('groups.type = :type')
+                ->setParameter('type', $groupType);
+        }
 
-        if (empty($result)) {
+        $paginator = $this->paginator->createPaginator($queryBuilder);
+
+        if (0 == $paginator->getItemsTotal()) {
             throw DBNotFoundException::fromMessage('No groups found');
         }
 
-        return $result;
+        return $paginator;
     }
 
     /**
