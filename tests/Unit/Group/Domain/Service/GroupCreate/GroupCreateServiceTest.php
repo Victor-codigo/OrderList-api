@@ -12,6 +12,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
+use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Group\Domain\Model\GROUP_ROLES;
 use Group\Domain\Model\GROUP_TYPE;
 use Group\Domain\Model\Group;
@@ -271,12 +272,13 @@ class GroupCreateServiceTest extends DataBaseTestCase
     public function itShouldFailTheUserAlreadyHaveAUserGroup(): void
     {
         $groupCreateDto = $this->createGroupCreateDto($this->imageUploaded, GROUP_TYPE::USER);
+        $paginator = $this->createMock(PaginatorInterface::class);
 
         $this->userGroupRepository
             ->expects($this->once())
             ->method('findUserGroupsById')
             ->with($groupCreateDto->userCreatorId)
-            ->willReturn([]);
+            ->willReturn($paginator);
 
         $this->groupRepository
             ->expects($this->never())
