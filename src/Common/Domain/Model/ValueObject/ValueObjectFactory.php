@@ -7,6 +7,9 @@ namespace Common\Domain\Model\ValueObject;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Array\ValueObjectArrayFactoryInterface;
 use Common\Domain\Model\ValueObject\Array\valueObjectArrayFactory;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
+use Common\Domain\Model\ValueObject\Integer\ValueObjectIntegerFactory;
 use Common\Domain\Model\ValueObject\Object\File;
 use Common\Domain\Model\ValueObject\Object\GroupImage;
 use Common\Domain\Model\ValueObject\Object\GroupType;
@@ -106,5 +109,15 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
     public static function createGroupType(GROUP_TYPE|null $type): GroupType
     {
         return ValueObjectObjectFactory::createGroupType($type);
+    }
+
+    public static function createPaginatorPage(int|null $page): PaginatorPage
+    {
+        return ValueObjectIntegerFactory::createPaginatorPage($page);
+    }
+
+    public static function createPaginatorPageItems(int|null $pageItems): PaginatorPageItems
+    {
+        return ValueObjectIntegerFactory::createPaginatorPageItems($pageItems);
     }
 }
