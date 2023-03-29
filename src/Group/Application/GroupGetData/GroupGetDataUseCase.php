@@ -79,7 +79,7 @@ class GroupGetDataUseCase extends ServiceBase
         $userGroups = $this->userGroupRepository->findUserGroupsById($userId);
 
         return array_filter(
-            $userGroups,
+            iterator_to_array($userGroups),
             fn (UserGroup $userGroup) => in_array($userGroup->getGroupId(), $groupsId)
         );
     }
