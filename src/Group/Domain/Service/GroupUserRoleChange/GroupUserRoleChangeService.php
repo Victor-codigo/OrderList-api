@@ -7,6 +7,7 @@ namespace Group\Domain\Service\GroupUserRoleChange;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Group\Domain\Model\GROUP_ROLES;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
@@ -47,15 +48,14 @@ class GroupUserRoleChangeService
     }
 
     /**
-     * @param UserGroup[]  $groupUsers
      * @param Identifier[] $usersId
      *
      * @return UserGroup[]
      */
-    private function getUsersValid(array $groupUsers, array $usersId): array
+    private function getUsersValid(PaginatorInterface $groupUsers, array $usersId): array
     {
         return array_values(array_filter(
-            $groupUsers,
+            iterator_to_array($groupUsers),
             fn (UserGroup $userGroup) => in_array($userGroup->getUserId(), $usersId)
         ));
     }
