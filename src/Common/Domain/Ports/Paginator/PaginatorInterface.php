@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Common\Domain\Ports\Paginator;
 
-interface PaginatorInterface
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
+
+interface PaginatorInterface extends \IteratorAggregate, \Countable
 {
-    public function setPageItems(int $pageItems = 100): self;
+    public function createPaginator(Query|QueryBuilder $query): self;
 
     public function getPageItems(): int;
 
-    public function setPage(int $page): self;
+    public function setPagination(int $page = 1, int $pageItems = 100): self;
 
     public function getPageCurrent(): int;
 
@@ -25,6 +28,4 @@ interface PaginatorInterface
     public function getPagePreviousNumber(): int|null;
 
     public function getItemsTotal(): int;
-
-    public function getIterator(): \Traversable;
 }
