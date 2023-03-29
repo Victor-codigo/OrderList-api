@@ -9,7 +9,6 @@ use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
-use Exception;
 use Group\Application\GroupUserGetGroups\Dto\GroupUserGetGroupsInputDto;
 use Group\Application\GroupUserGetGroups\Dto\GroupUserGetGroupsOutputDto;
 use Group\Application\GroupUserGetGroups\Exception\GroupUserGetGroupsNoGroupsFoundException;
@@ -39,7 +38,7 @@ class GroupUserGetGroupsUseCase extends ServiceBase
             return $this->createGroupUserGetGroupsOutputDto($userGroups);
         } catch (DBNotFoundException) {
             throw GroupUserGetGroupsNoGroupsFoundException::fromMessage('No groups found');
-        } catch (Exception) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }
@@ -58,7 +57,7 @@ class GroupUserGetGroupsUseCase extends ServiceBase
 
     private function createGroupUserGetGroupsDto(GroupUserGetGroupsInputDto $input): GroupUserGetGroupsDto
     {
-        return new GroupUserGetGroupsDto($input->userSession->getId());
+        return new GroupUserGetGroupsDto($input->userSession->getId(), $input->page, $input->pageItems);
     }
 
     private function createGroupUserGetGroupsOutputDto(\Generator $groups): GroupUserGetGroupsOutputDto

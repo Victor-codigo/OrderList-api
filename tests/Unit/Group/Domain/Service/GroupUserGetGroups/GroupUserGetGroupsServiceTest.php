@@ -7,6 +7,7 @@ namespace Test\Unit\Group\Domain\Service\GroupUserGetGroups;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Group\Domain\Model\GROUP_ROLES;
 use Group\Domain\Model\GROUP_TYPE;
 use Group\Domain\Model\Group;
@@ -37,6 +38,7 @@ class GroupUserGetGroupsServiceTest extends TestCase
 
         $this->groupRepository = $this->createMock(GroupRepositoryInterface::class);
         $this->userGroupRepository = $this->createMock(UserGroupRepositoryInterface::class);
+
         $this->groupGetDataService = new GroupGetDataService($this->groupRepository, self::PATH_TO_GROUP_IMAGE_PUBLIC_PATH);
         $this->object = new GroupUserGetGroupsService($this->userGroupRepository, $this->groupGetDataService);
     }
@@ -49,15 +51,27 @@ class GroupUserGetGroupsServiceTest extends TestCase
     /**
      * @return UserGroup[]
      */
-    private function getUserGroups(): array
+    private function getUserGroups(): MockObject|PaginatorInterface
     {
         $group = $this->createMock(Group::class);
-
-        return [
+        $userGroups = [
             UserGroup::fromPrimitives('fdb242b4-bac8-4463-88d0-0941bb0beee0', self::USER_ID, [GROUP_ROLES::ADMIN], $group),
             UserGroup::fromPrimitives('a5002966-dbf7-4f76-a862-23a04b5ca465', self::USER_ID, [GROUP_ROLES::USER], $group),
             UserGroup::fromPrimitives('4b513296-14ac-4fb1-a574-05bc9b1dbe3f', self::USER_ID, [GROUP_ROLES::ADMIN], $group),
         ];
+
+        /** @var MockObject|PaginatorInterface $paginator */
+        $paginator = $this->createMock(PaginatorInterface::class);
+        $paginator
+            ->expects($this->any())
+            ->method('getIterator')
+            ->willReturnCallback(function () use ($userGroups) {
+                foreach ($userGroups as $group) {
+                    yield $group;
+                }
+            });
+
+        return $paginator;
     }
 
     /**
@@ -85,11 +99,13 @@ class GroupUserGetGroupsServiceTest extends TestCase
     public function itShouldGetUserGroupsAllData(): void
     {
         $userId = $this->getUserId();
+        $paginatorPage = ValueObjectFactory::createPaginatorPage(1);
+        $paginatorPageItems = ValueObjectFactory::createPaginatorPageItems(100);
         $expectedUserGroups = $this->getUserGroups();
         $expectedGroupsData = $this->getGroupsData();
         $groupGetDataDto = new GroupGetDataDto(array_map(
             fn (UserGroup $userGroup) => $userGroup->getGroupId(),
-            $expectedUserGroups
+            iterator_to_array($expectedUserGroups)
         ));
 
         $this->userGroupRepository
@@ -100,7 +116,7 @@ class GroupUserGetGroupsServiceTest extends TestCase
 
         $this->mockGroupGetDataService($groupGetDataDto->groupsId, $expectedGroupsData, $this->once());
 
-        $return = $this->object->__invoke(new GroupUserGetGroupsDto($userId));
+        $return = $this->object->__invoke(new GroupUserGetGroupsDto($userId, $paginatorPage, $paginatorPageItems));
         $returnData = iterator_to_array($return);
 
         $this->assertCount(count($expectedGroupsData), $returnData);
@@ -122,11 +138,13 @@ class GroupUserGetGroupsServiceTest extends TestCase
     public function itShouldFailNoGroupsFound(): void
     {
         $userId = $this->getUserId();
+        $paginatorPage = ValueObjectFactory::createPaginatorPage(1);
+        $paginatorPageItems = ValueObjectFactory::createPaginatorPageItems(100);
         $expectedUserGroups = $this->getUserGroups();
         $expectedGroupsData = $this->getGroupsData();
         $groupGetDataDto = new GroupGetDataDto(array_map(
             fn (UserGroup $userGroup) => $userGroup->getGroupId(),
-            $expectedUserGroups
+            iterator_to_array($expectedUserGroups)
         ));
 
         $this->userGroupRepository
@@ -138,6 +156,6 @@ class GroupUserGetGroupsServiceTest extends TestCase
         $this->mockGroupGetDataService($groupGetDataDto->groupsId, $expectedGroupsData, $this->never());
 
         $this->expectException(DBNotFoundException::class);
-        $this->object->__invoke(new GroupUserGetGroupsDto($userId));
+        $this->object->__invoke(new GroupUserGetGroupsDto($userId, $paginatorPage, $paginatorPageItems));
     }
 }

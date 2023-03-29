@@ -20,6 +20,25 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
 #[OA\Tag('Group')]
 #[OA\Get(
     description: 'Get user groups information',
+    parameters: [
+        new OA\Parameter(
+            name: 'page',
+            in: 'query',
+            required: true,
+            description: 'Number of the page',
+            example: '1',
+            schema: new OA\Schema(type: 'integer')
+        ),
+
+        new OA\Parameter(
+            name: 'page_items',
+            in: 'query',
+            required: false,
+            description: 'Number of groups by page',
+            example: 100,
+            schema: new OA\Schema(type: 'int')
+        ),
+    ],
     responses: [
         new OA\Response(
             response: Response::HTTP_OK,
@@ -35,6 +54,7 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
                                 new OA\Property(property: 'group_id', type: 'string', example: '1fcab788-0def-4e56-b441-935361678da9'),
                                 new OA\Property(property: 'name', type: 'string', example: 'GroupName'),
                                 new OA\Property(property: 'description', type: 'string', example: 'Group description'),
+                                new OA\Property(property: 'image', type: 'string', example: 'Path to group Image'),
                                 new OA\Property(property: 'created_on', type: 'string', example: '2023-2-14 14:05:10'),
                             ])),
                         new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),
@@ -70,18 +90,18 @@ class GroupUserGetGroupsController extends AbstractController
     public function __invoke(GroupUserGetGroupsRequestDto $request): JsonResponse
     {
         $userGroups = $this->groupUserGetGroupsUseCase->__invoke(
-            $this->createGroupUserGetGroupsInputDto()
+            $this->createGroupUserGetGroupsInputDto($request->page, $request->pageItems)
         );
 
         return $this->createResponse($userGroups);
     }
 
-    private function createGroupUserGetGroupsInputDto(): GroupUserGetGroupsInputDto
+    private function createGroupUserGetGroupsInputDto(int $page, int $pgaItem): GroupUserGetGroupsInputDto
     {
         /** @var UserSymfonyAdapter $userAdapter */
         $userAdapter = $this->security->getUser();
 
-        return new GroupUserGetGroupsInputDto($userAdapter->getUser());
+        return new GroupUserGetGroupsInputDto($userAdapter->getUser(), $page, $pgaItem);
     }
 
     private function createResponse(GroupUserGetGroupsOutputDto $userGroups): JsonResponse

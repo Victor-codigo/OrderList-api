@@ -29,7 +29,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldAllGroupsDataFroTheUser(): void
+    public function itShouldAllGroupsDataForTheUser(): void
     {
         $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
@@ -40,7 +40,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT
+            uri: self::ENDPOINT.'?page=1&page_items=2'
         );
 
         $response = $client->getResponse();

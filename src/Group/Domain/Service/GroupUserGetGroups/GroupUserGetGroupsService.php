@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Group\Domain\Service\GroupUserGetGroups;
 
+use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Group\Domain\Model\GROUP_TYPE;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
@@ -25,21 +28,21 @@ class GroupUserGetGroupsService
      */
     public function __invoke(GroupUserGetGroupsDto $input): \Generator
     {
-        $userGroups = $this->userGroupRepository->findUserGroupsById($input->userId);
+        $userGroups = $this->userGroupRepository->findUserGroupsById($input->userId, null, GROUP_TYPE::GROUP);
 
-        return $this->getUserGroups($userGroups);
+        return $this->getUserGroups($userGroups, $input->page, $input->pageItems);
     }
 
     /**
-     * @param UserGroup[] $userGroups
-     *
      * @throws DBNotFoundException
      */
-    private function getUserGroups(array $userGroups): \Generator
+    private function getUserGroups(PaginatorInterface $userGroups, PaginatorPage $page, PaginatorPageItems $pageItems): \Generator
     {
+        $userGroups->setPagination($page->getValue(), $pageItems->getValue());
+
         $groupsId = array_map(
             fn (UserGroup $userGroup) => $userGroup->getGroupId(),
-            $userGroups
+            iterator_to_array($userGroups)
         );
 
         return $this->groupGetDataService->__invoke(
