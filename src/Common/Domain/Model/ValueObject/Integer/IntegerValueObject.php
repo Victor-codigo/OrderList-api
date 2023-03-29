@@ -10,7 +10,7 @@ abstract class IntegerValueObject extends ValueObjectBase
 {
     protected readonly int|null $value;
 
-    public function __construct(int $value)
+    public function __construct(int|null $value)
     {
         $this->value = $value;
 
