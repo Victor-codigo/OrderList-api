@@ -120,7 +120,7 @@ Common\Domain\Model\ValueObject\String\Name:
 
   user_name_active:
     __construct:
-      value: "María"
+      value: "Maria"
 
   user_name_not_active:
     __construct:

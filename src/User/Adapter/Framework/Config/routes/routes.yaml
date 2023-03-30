@@ -71,12 +71,22 @@ user_delete:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
-# GET USERS
+# GET USERS BY ID
 # -------------------------------------------------------------
 user_get:
   path: /api/v{api_version}/users/{users_id}
   methods: GET
   controller: User\Adapter\Http\Controller\GetUsers\GetUsersController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# GET USERS BY NAME
+# -------------------------------------------------------------
+user_get_by_name:
+  path: /api/v{api_version}/users/name/{users_name}
+  methods: GET
+  controller: User\Adapter\Http\Controller\UserGetByName\UserGetByNameController
   requirements:
     api_version: '\d+[.\d]?'
 

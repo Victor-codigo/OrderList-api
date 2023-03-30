@@ -297,7 +297,7 @@ class GetUsersControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailUsersIdAreDeletedOrNotActived(): void
+    public function itShouldFailUsersIdAreDeletedOrNotActivated(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $usersIds = $this->getUsersIdsDeletedOrNotActive();
