@@ -10,6 +10,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\Name;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Query;
@@ -103,6 +104,24 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
     public function findUsersByIdOrFail(array $id): array
     {
         $users = $this->findBy(['id' => $id]);
+
+        if (empty($users)) {
+            throw DBNotFoundException::fromMessage('Users not found');
+        }
+
+        return $users;
+    }
+
+    /**
+     * @param Name[] $usersName
+     *
+     * @return Users[]
+     *
+     * @throws DBNotFoundException
+     */
+    public function findUsersByNameOrFail(array $usersName): array
+    {
+        $users = $this->findBy(['name' => $usersName]);
 
         if (empty($users)) {
             throw DBNotFoundException::fromMessage('Users not found');

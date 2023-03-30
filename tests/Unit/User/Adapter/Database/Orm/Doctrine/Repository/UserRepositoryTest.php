@@ -50,7 +50,7 @@ class UserRepositoryTest extends DataBaseTestCase
     {
         $this->expectException(DBUniqueConstraintException::class);
 
-        $this->userRepository->save($this->getExsitsUser());
+        $this->userRepository->save($this->getExitsUser());
     }
 
     /** @test */
@@ -156,6 +156,46 @@ class UserRepositoryTest extends DataBaseTestCase
         $this->userRepository->findUsersByIdOrFail($usersId);
     }
 
+    /** @test */
+    public function itShouldReturnManyUsersByName(): void
+    {
+        $usersName = [
+            ValueObjectFactory::createName('Wendell Kautzer'),
+            ValueObjectFactory::createName('Dr. Lorine Barrows'),
+            ValueObjectFactory::createName('Juanito'),
+        ];
+        $return = $this->userRepository->findUsersByNameOrFail($usersName);
+        $dbUsersName = array_map(
+            fn (User $user) => $user->getName()->getValue(),
+            $return
+        );
+
+        $this->assertContainsOnlyInstancesOf(User::class, $return);
+        $this->assertCount(count($usersName), $return);
+        $this->assertEquals($dbUsersName, $usersName);
+    }
+
+    /** @test */
+    public function itShouldFailNoNames(): void
+    {
+        $this->expectException(DBNotFoundException::class);
+
+        $this->userRepository->findUsersByNameOrFail([]);
+    }
+
+    /** @test */
+    public function itShouldFailNamesDoesNotExistsInDataBase(): void
+    {
+        $this->expectException(DBNotFoundException::class);
+
+        $usersId = [
+            ValueObjectFactory::createIdentifier('NameNotExisting1'),
+            ValueObjectFactory::createIdentifier('NameNotExisting2'),
+            ValueObjectFactory::createIdentifier('NameNotExisting3'),
+        ];
+        $this->userRepository->findUsersByNameOrFail($usersId);
+    }
+
     private function getNewUser(): User
     {
         return User::fromPrimitives(
@@ -167,7 +207,7 @@ class UserRepositoryTest extends DataBaseTestCase
         );
     }
 
-    private function getExsitsUser(): User
+    private function getExitsUser(): User
     {
         return User::fromPrimitives(
             '1befdbe2-9c14-42f0-850f-63e061e33b8f',
