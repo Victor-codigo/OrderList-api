@@ -9,8 +9,8 @@ use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 use User\Adapter\Http\Controller\UserGetByName\UserGetByNameController;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
+use User\Domain\Model\USER_ROLES;
 
 class UserGetByNameControllerTest extends WebClientTestCase
 {
@@ -45,7 +45,7 @@ class UserGetByNameControllerTest extends WebClientTestCase
     {
         $userRoles = [];
         foreach ($users as $user) {
-            $roles = $user->getRoles()->getRolesEmums();
+            $roles = $user->getRoles()->getRolesEnums();
             $userRoles[] = array_map(
                 fn (USER_ROLES $userRoles) => $userRoles->value,
                 $roles

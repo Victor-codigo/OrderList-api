@@ -46,7 +46,7 @@ class Roles extends ArrayValueObject
         return new static($rolesCreated);
     }
 
-    public function getRolesEmums(): array
+    public function getRolesEnums(): array
     {
         if (null === $this->value) {
             return [];

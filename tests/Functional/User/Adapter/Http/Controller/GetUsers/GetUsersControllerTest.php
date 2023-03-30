@@ -8,8 +8,8 @@ use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
+use User\Domain\Model\USER_ROLES;
 
 class GetUsersControllerTest extends WebClientTestCase
 {
@@ -97,7 +97,7 @@ class GetUsersControllerTest extends WebClientTestCase
             'usersRoles' => array_map(
                 fn (User $user) => array_map(
                     fn (USER_ROLES $rol) => $rol->value,
-                    $user->getRoles()->getRolesEmums()),
+                    $user->getRoles()->getRolesEnums()),
                 $users
             ),
             'usersCreatedOn' => array_map(fn (User $user) => $user->getCreatedOn()->format('Y-m-d H:i'), $users),

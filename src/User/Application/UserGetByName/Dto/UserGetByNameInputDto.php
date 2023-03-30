@@ -14,9 +14,9 @@ class UserGetByNameInputDto implements ServiceInputDtoInterface
 {
     public readonly User $userSession;
     /**
-     * @var Name[]
+     * @var Name[]|null
      */
-    public readonly array $usersName;
+    public readonly array|null $usersName;
 
     public function __construct(User $userSession, array|null $usersName)
     {

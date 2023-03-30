@@ -15,8 +15,8 @@ use Common\Domain\Validation\ValidationInterface;
 use User\Application\GetUsers\Dto\GetUsersInputDto;
 use User\Application\GetUsers\Dto\GetUsersOutputDto;
 use User\Application\GetUsers\Exception\GetUsersNotFoundException;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
+use User\Domain\Model\USER_ROLES;
 use User\Domain\Service\GetUsersProfilePublicData\Dto\GetUsersProfilePublicDataDto;
 use User\Domain\Service\GetUsersProfilePublicData\GetUsersProfilePublicDataService;
 use User\Domain\Service\GetUsersPublicData\Dto\GetUsersPublicDataDto;
@@ -122,7 +122,7 @@ class GetUsersUseCase extends ServiceBase
         $itemPlain = [];
         foreach ($item as $key => $value) {
             $itemPlain[$key] = match (true) {
-                $value instanceof Roles => $value->getRolesEmums(),
+                $value instanceof Roles => $value->getRolesEnums(),
                 $value instanceof ValueObjectBase => $value->getValue(),
                 $value instanceof \DateTime => $value->format('Y-m-d H:i'),
                 default => $value
