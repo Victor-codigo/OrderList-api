@@ -19,4 +19,9 @@ class Name extends StringValueObject
             ->setConstraint(ConstraintFactory::alphanumeric())
             ->setConstraint(ConstraintFactory::stringRange(VALUE_OBJECTS_CONSTRAINTS::NAME_MIN_LENGTH, VALUE_OBJECTS_CONSTRAINTS::NAME_MAX_LENGTH));
     }
+
+    public function __toString()
+    {
+        return $this->getValue();
+    }
 }
