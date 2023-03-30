@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace User\Domain\Service\GetUsersPublicData\Dto;
 
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\Name;
 
 class GetUsersPublicDataDto
 {
     /**
-     * @var Identifier[]
+     * @param Identifier[]|Name[] $users
      */
-    public readonly array $usersId;
-
-    public function __construct(array $usersId)
-    {
-        $this->usersId = $usersId;
+    public function __construct(
+        public readonly array $users
+    ) {
     }
 }

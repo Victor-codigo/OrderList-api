@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Test\Unit\User\Domain\Service\GetUsersPublicData;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Struct\SCOPE;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\User;
 use User\Domain\Model\USER_ROLES;
+use User\Domain\Model\User;
 use User\Domain\Port\Repository\UserRepositoryInterface;
 use User\Domain\Service\GetUsersPublicData\Dto\GetUsersPublicDataDto;
 use User\Domain\Service\GetUsersPublicData\Dto\GetUsersPublicDataOutputDto;
@@ -149,17 +150,61 @@ class GetUsersPublcDataServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailNoUsersFound(): void
+    public function itShouldGetUsersByName(): void
     {
-        $this->expectException(DBNotFoundException::class);
+        $usersName = array_map(fn (User $user) => $user->getName(), $this->getUsers());
+        $expectedUsers = $this->getUsers();
 
         $this->userRepository
             ->expects($this->once())
-            ->method('findUsersByIdOrFail')
-            ->with([])
-            ->willThrowException(DBNotFoundException::fromMessage(''));
+            ->method('findUsersByNameOrFail')
+            ->with($usersName)
+            ->willReturn($expectedUsers);
+
+        $usersDto = new GetUsersPublicDataDto($usersName);
+        $return = $this->object->__invoke($usersDto, SCOPE::PUBLIC);
+
+        $this->assertInstanceOf(GetUsersPublicDataOutputDto::class, $return);
+        $this->assertCount(count($usersName), $return->usersData);
+    }
+
+    /** @test */
+    public function itShouldFailNoUsersPassToFind(): void
+    {
+        $this->expectException(LogicException::class);
 
         $usersDto = new GetUsersPublicDataDto([]);
+        $this->object->__invoke($usersDto, SCOPE::PRIVATE);
+    }
+
+    /** @test */
+    public function itShouldFailUsersPassAreNotIdentifiersOrNames(): void
+    {
+        $users = [
+            'user1',
+            'user2',
+            'user3',
+        ];
+
+        $this->expectException(LogicException::class);
+
+        $usersDto = new GetUsersPublicDataDto($users);
+        $this->object->__invoke($usersDto, SCOPE::PRIVATE);
+    }
+
+    /** @test */
+    public function itShouldFailNoUsersFound(): void
+    {
+        $usersId = array_map(fn (User $user) => $user->getId(), $this->getUsersDeletedOrNotActive());
+
+        $this->userRepository
+        ->expects($this->once())
+        ->method('findUsersByIdOrFail')
+        ->with($usersId)
+        ->willThrowException(DBNotFoundException::fromMessage(''));
+
+        $this->expectException(DBNotFoundException::class);
+        $usersDto = new GetUsersPublicDataDto($usersId);
         $this->object->__invoke($usersDto, SCOPE::PRIVATE);
     }
 }

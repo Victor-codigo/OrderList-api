@@ -6,10 +6,8 @@ namespace User\Domain\Service\GetUsersPublicData\Dto;
 
 class GetUsersPublicDataOutputDto
 {
-    public readonly array $usersData;
-
-    public function __construct(array $usersData)
-    {
-        $this->usersData = $usersData;
+    public function __construct(
+        public readonly array $usersData
+    ) {
     }
 }
