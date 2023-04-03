@@ -3,3 +3,6 @@ User:
 
 Group:
   resource: "../../../../../Group/Adapter/Framework/Config/routes/routes.yaml"
+
+Notification:
+  resource: "../../../../../Notification/Adapter/Framework/Config/routes/routes.yaml"

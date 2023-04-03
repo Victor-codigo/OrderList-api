@@ -73,6 +73,7 @@
             "Product\\": "src/Product/",
             "Shop\\": "src/Shop/",
             "User\\": "src/User/",
+            "Notification\\": "src/Notification/",
             "Common\\": "src/Common/"
         }
     },
@@ -83,6 +84,7 @@
             "Product\\Test\\Unit\\": "src/tests/Unit/Product/",
             "Shop\\Test\\Unit\\": "src/tests/Unit/Shop/",
             "User\\Test\\Unit\\": "src/tests/Unit/User/",
+            "Notification\\Test\\Unit\\": "src/tests/Unit/Notification/",
             "Common\\Test\\Unit\\": "src/tests/Unit/Common/"
         }
     },

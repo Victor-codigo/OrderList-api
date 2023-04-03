@@ -1,0 +1,16 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  # Adapter
+  Notification\Adapter\:
+    resource: "../../../../../Notification/Adapter/"
+
+  # Application
+  Notification\Application\:
+    resource: "../../../../../Notification/Application/"
+
+  # Domain
+  Notification\Domain\:
+    resource: "../../../../../Notification/Domain/"

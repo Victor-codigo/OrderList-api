@@ -1,0 +1,12 @@
+doctrine:
+    orm:
+        auto_generate_proxy_classes: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: true
+        mappings:
+            Notification:
+                is_bundle: false
+                type: xml
+                dir: "%kernel.project_dir%/src/Notification/Adapter/Database/Orm/Doctrine/Mapping"
+                prefix: 'Notification\Domain\Model'
+                alias: Notification
