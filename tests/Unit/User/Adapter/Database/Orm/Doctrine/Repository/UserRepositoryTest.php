@@ -160,19 +160,22 @@ class UserRepositoryTest extends DataBaseTestCase
     public function itShouldReturnManyUsersByName(): void
     {
         $usersName = [
-            ValueObjectFactory::createName('Wendell Kautzer'),
-            ValueObjectFactory::createName('Dr. Lorine Barrows'),
+            ValueObjectFactory::createName('Maria'),
+            ValueObjectFactory::createName('Admin'),
             ValueObjectFactory::createName('Juanito'),
         ];
         $return = $this->userRepository->findUsersByNameOrFail($usersName);
         $dbUsersName = array_map(
-            fn (User $user) => $user->getName()->getValue(),
+            fn (User $user) => $user->getName(),
             $return
         );
 
         $this->assertContainsOnlyInstancesOf(User::class, $return);
         $this->assertCount(count($usersName), $return);
-        $this->assertEquals($dbUsersName, $usersName);
+
+        foreach ($dbUsersName as $name) {
+            $this->assertContainsEquals($name, $usersName);
+        }
     }
 
     /** @test */
