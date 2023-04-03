@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Common\Domain\Model\ValueObject\Object;
+
+use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
+use Common\Domain\Validation\ConstraintFactory;
+use Common\Domain\Validation\TYPES;
+
+class NotificationType extends ObjectValueObject
+{
+    protected function defineConstraints(): void
+    {
+        $this
+            ->setConstraint(ConstraintFactory::notBlank())
+            ->setConstraint(ConstraintFactory::notNull())
+            ->setConstraint(ConstraintFactory::type(TYPES::OBJECT))
+            ->setConstraint(ConstraintFactory::choice(VALUE_OBJECTS_CONSTRAINTS::NOTIFICATION_TYPES, false, true, null, null));
+    }
+}

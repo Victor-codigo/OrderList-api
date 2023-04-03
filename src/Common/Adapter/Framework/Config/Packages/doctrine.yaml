@@ -13,6 +13,7 @@ doctrine:
             UrlType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\UrlType
             RolesType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array\RolesType
             GroupTypeType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\GroupTypeType
+            NotificationTypeType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\NotificationTypeType
 
     orm:
         dql:
@@ -63,4 +64,7 @@ imports:
       }
     - {
           resource: "../../../../../User/Adapter/Framework/Config/packages/doctrine.yaml",
+      }
+    - {
+          resource: "../../../../../Notification/Adapter/Framework/Config/packages/doctrine.yaml",
       }

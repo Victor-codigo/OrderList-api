@@ -13,6 +13,7 @@ use Common\Domain\Model\ValueObject\Integer\ValueObjectIntegerFactory;
 use Common\Domain\Model\ValueObject\Object\File;
 use Common\Domain\Model\ValueObject\Object\GroupImage;
 use Common\Domain\Model\ValueObject\Object\GroupType;
+use Common\Domain\Model\ValueObject\Object\NotificationType;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\Object\UserImage;
 use Common\Domain\Model\ValueObject\Object\ValueObjectObjectFactory;
@@ -30,6 +31,7 @@ use Common\Domain\Model\ValueObject\String\ValueObjectStringFactory;
 use Common\Domain\Model\ValueObject\String\ValueObjectStringFactoryInterface;
 use Common\Domain\Ports\FileUpload\FileInterface;
 use Group\Domain\Model\GROUP_TYPE;
+use Notification\Domain\Model\NOTIFICATION_TYPE;
 
 final class ValueObjectFactory implements ValueObjectStringFactoryInterface, ValueObjectArrayFactoryInterface, ValueObjectObjectFactoryInterface
 {
@@ -119,5 +121,10 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
     public static function createPaginatorPageItems(int|null $pageItems): PaginatorPageItems
     {
         return ValueObjectIntegerFactory::createPaginatorPageItems($pageItems);
+    }
+
+    public static function createNotificationType(NOTIFICATION_TYPE|null $type): NotificationType
+    {
+        return ValueObjectObjectFactory::createNotificationType($type);
     }
 }

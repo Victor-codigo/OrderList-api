@@ -6,6 +6,7 @@ namespace Common\Domain\Model\ValueObject\Constraints;
 
 use Group\Domain\Model\GROUP_ROLES;
 use Group\Domain\Model\GROUP_TYPE;
+use Notification\Domain\Model\NOTIFICATION_TYPE;
 use User\Domain\Model\USER_ROLES;
 
 final class VALUE_OBJECTS_CONSTRAINTS
@@ -101,4 +102,9 @@ final class VALUE_OBJECTS_CONSTRAINTS
 
     public const DESCRIPTION_MAX_LENGTH = 500;
     public const DESCRIPTION_TYPE = 'string';
+
+    public const NOTIFICATION_TYPES = [
+        NOTIFICATION_TYPE::USER_REGISTERED,
+        NOTIFICATION_TYPE::GROUP_USER_ADDED,
+    ];
 }

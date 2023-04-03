@@ -6,6 +6,7 @@ namespace Common\Domain\Model\ValueObject\Object;
 
 use Common\Domain\Ports\FileUpload\FileInterface;
 use Group\Domain\Model\GROUP_TYPE;
+use Notification\Domain\Model\NOTIFICATION_TYPE;
 
 interface ValueObjectObjectFactoryInterface
 {
@@ -18,4 +19,6 @@ interface ValueObjectObjectFactoryInterface
     public static function createGroupImage(FileInterface|null $file): GroupImage;
 
     public static function createGroupType(GROUP_TYPE|null $type): GroupType;
+
+    public static function createNotificationType(NOTIFICATION_TYPE|null $type): NotificationType;
 }
