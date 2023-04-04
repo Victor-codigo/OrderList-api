@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Notification\Application\Dto;
+namespace Test\Unit\Notification\Application\NotificationCreate\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\VALIDATION_ERRORS;

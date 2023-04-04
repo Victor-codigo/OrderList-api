@@ -46,6 +46,9 @@ class Roles extends ArrayValueObject
         return new static($rolesCreated);
     }
 
+    /**
+     * @return \BackedEnum[]
+     */
     public function getRolesEnums(): array
     {
         if (null === $this->value) {

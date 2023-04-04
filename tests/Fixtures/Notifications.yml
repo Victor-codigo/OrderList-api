@@ -15,6 +15,18 @@ Common\Domain\Model\ValueObject\String\Identifier:
     __construct:
       value: "38dac117-2d4f-4057-8bc6-c972b5f439c6"
 
+  notification_id_user_active:
+    __construct:
+      value: "f79ddff5-486b-4b5f-af64-b99fe9154fc1"
+
+  notification_id_user_active_2:
+    __construct:
+      value: "f7621fbd-0c8e-4a8a-8059-9e87b8ea4fe1"
+
+  notification_id_user_active_3:
+    __construct:
+      value: "d75a3fb1-42aa-46c0-be4c-1147f0808d60"
+
 Common\Domain\Model\ValueObject\Object\NotificationType:
   notification_type_user_registered:
     __construct:
@@ -42,3 +54,21 @@ Notification\Domain\Model\Notification:
       id: "@notification_id_group_user_added"
       userId: "@entity-user_0->getId()"
       type: "@notification_type_group_user_added"
+
+  entity-notification_id_user_active:
+    __construct:
+      id: "@notification_id_user_active"
+      userId: "@entity-user_active->getId()"
+      type: "@notification_type_group_user_added"
+
+  entity-notification_id_user_active_2:
+    __construct:
+      id: "@notification_id_user_active_2"
+      userId: "@entity-user_active->getId()"
+      type: "@notification_type_group_user_added"
+
+  entity-notification_id_user_active_3:
+    __construct:
+      id: "@notification_id_user_active_3"
+      userId: "@entity-user_active->getId()"
+      type: "@notification_type_user_registered"

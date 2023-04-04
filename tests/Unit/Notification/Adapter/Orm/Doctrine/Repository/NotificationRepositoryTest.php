@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Test\Unit\Notification\Adapter\Orm\Doctrine\Repository;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
+use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\Persistence\ObjectManager;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
@@ -23,6 +25,9 @@ class NotificationRepositoryTest extends DataBaseTestCase
     private const NOTIFICATION_2_ID = '5e5c28e1-0f72-4e86-999f-743c5174d5d2';
     private const NOTIFICATION_REPEATED_ID = '84a08f7c-30a6-4bd5-8e5b-b2d49948e72c';
     private const NOTIFICATION_USER_ID = 'b92f6cbe-f995-47b5-b54b-bf2218d6cf26';
+    private const NOTIFICATION_SAVED_1 = '79a674c7-e109-3094-b8d5-c19cc00f5519';
+    private const NOTIFICATION_SAVED_2 = '2d208936-a7e9-32c1-963f-0df7f57ae463';
+    private const NOTIFICATION_SAVED_3 = 'b04cb546-da1c-31d5-a4f2-00a7a2e85e89';
 
     private NotificationRepository $object;
 
@@ -120,5 +125,35 @@ class NotificationRepositoryTest extends DataBaseTestCase
 
         $this->expectException(DBConnectionException::class);
         $this->object->save([$notification]);
+    }
+
+    /** @test */
+    public function itShouldGetNotificationsById(): void
+    {
+        $notificationsId = [
+            ValueObjectFactory::createIdentifier(self::NOTIFICATION_SAVED_1),
+            ValueObjectFactory::createIdentifier(self::NOTIFICATION_SAVED_2),
+            ValueObjectFactory::createIdentifier(self::NOTIFICATION_SAVED_3),
+        ];
+
+        $return = $this->object->getNotificationsByIdOrFail($notificationsId);
+
+        $this->assertCount(count($notificationsId), $return);
+
+        /** @var Notification $notification */
+        foreach ($return as $notification) {
+            $this->assertContainsEquals($notification->getId(), $notificationsId);
+        }
+    }
+
+    /** @test */
+    public function itShouldFailGettingNotificationsByIdNotNotificationsFound(): void
+    {
+        $notificationsId = [
+            ValueObjectFactory::createIdentifier('notification not exists'),
+        ];
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->getNotificationsByIdOrFail($notificationsId);
     }
 }

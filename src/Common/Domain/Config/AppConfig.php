@@ -34,6 +34,11 @@ class AppConfig
     public const ENDPOINT_GROUP_GET_USERS_MAX_USERS = 50;
 
     /**
+     * Maximum number of notifications can be removed per request.
+     */
+    public const ENDPOINT_NOTIFICATION_REMOVE_MAX = 100;
+
+    /**
      * Version of the api used.
      */
     public const API_VERSION = 1;

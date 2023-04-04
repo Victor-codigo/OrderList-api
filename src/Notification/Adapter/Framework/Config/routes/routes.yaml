@@ -1,9 +1,19 @@
---- # -------------------------------------------------------------
 # -------------------------------------------------------------
-# GROUP REMOVE
+# NOTIFICATION REMOVE
 notification_create:
   path: /api/v{api_version}/notification
   methods: POST
   controller: Notification\Adapter\Http\Controller\NotificationCreate\NotificationCreateController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# -------------------------------------------------------------
+# NOTIFICATION REMOVE
+# -------------------------------------------------------------
+notification_remove:
+  path: /api/v{api_version}/notification/{notifications_id}
+  methods: DELETE
+  controller: Notification\Adapter\Http\Controller\NotificationRemove\NotificationRemoveController
   requirements:
     api_version: '\d+[.\d]?'
