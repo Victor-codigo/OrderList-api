@@ -8,12 +8,21 @@ notification_create:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
-# -------------------------------------------------------------
 # NOTIFICATION REMOVE
 # -------------------------------------------------------------
 notification_remove:
   path: /api/v{api_version}/notification/{notifications_id}
   methods: DELETE
   controller: Notification\Adapter\Http\Controller\NotificationRemove\NotificationRemoveController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# NOTIFICATION GET DATA
+# -------------------------------------------------------------
+notification_get_data:
+  path: /api/v{api_version}/notification
+  methods: GET
+  controller: Notification\Adapter\Http\Controller\NotificationGetData\NotificationGetDataController
   requirements:
     api_version: '\d+[.\d]?'

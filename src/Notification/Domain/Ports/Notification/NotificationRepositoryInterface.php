@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Notification\Domain\Ports\Notification;
 
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Ports\Repository\RepositoryInterface;
 use Notification\Domain\Model\Notification;
@@ -31,4 +32,11 @@ interface NotificationRepositoryInterface extends RepositoryInterface
      * @throws DBNotFoundException
      */
     public function getNotificationsByIdOrFail(array $notificationsId): PaginatorInterface;
+
+    /**
+     * @param Identifier[] $notificationsId
+     *
+     * @throws DBNotFoundException
+     */
+    public function getNotificationByUserIdOrFail(Identifier $userId): PaginatorInterface;
 }

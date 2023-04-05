@@ -101,4 +101,31 @@ class NotificationRepository extends RepositoryBase implements NotificationRepos
 
         return $paginator;
     }
+
+    /**
+     * @param Identifier[] $notificationsId
+     *
+     * @throws DBNotFoundException
+     */
+    public function getNotificationByUserIdOrFail(Identifier $userId): PaginatorInterface
+    {
+        $notificationEntity = Notification::class;
+        $dql = <<<DQL
+            SELECT notification
+            FROM {$notificationEntity} notification
+            WHERE notification.userId = :userId
+        DQL;
+
+        $query = $this->entityManager
+            ->createQuery($dql)
+            ->setParameter('userId', $userId);
+
+        $paginator = $this->paginator->createPaginator($query);
+
+        if (0 === count($paginator)) {
+            throw DBNotFoundException::fromMessage('No notifications found');
+        }
+
+        return $paginator;
+    }
 }

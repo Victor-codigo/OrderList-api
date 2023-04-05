@@ -28,6 +28,7 @@ class NotificationRepositoryTest extends DataBaseTestCase
     private const NOTIFICATION_SAVED_1 = '79a674c7-e109-3094-b8d5-c19cc00f5519';
     private const NOTIFICATION_SAVED_2 = '2d208936-a7e9-32c1-963f-0df7f57ae463';
     private const NOTIFICATION_SAVED_3 = 'b04cb546-da1c-31d5-a4f2-00a7a2e85e89';
+    private const NOTIFICATION_USER_ID_ACTIVE = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
     private NotificationRepository $object;
 
@@ -155,5 +156,29 @@ class NotificationRepositoryTest extends DataBaseTestCase
 
         $this->expectException(DBNotFoundException::class);
         $this->object->getNotificationsByIdOrFail($notificationsId);
+    }
+
+    /** @test */
+    public function itShouldGetNotificationsByUserId(): void
+    {
+        $userId = ValueObjectFactory::createIdentifier(self::NOTIFICATION_USER_ID_ACTIVE);
+        $return = $this->object->getNotificationByUserIdOrFail($userId);
+
+        $notificationsExpected = $this->object->findBy(['userId' => $userId]);
+
+        $this->assertCount(count($notificationsExpected), $return);
+
+        foreach ($return as $notification) {
+            $this->assertContainsEquals($notification, $notificationsExpected);
+        }
+    }
+
+    /** @test */
+    public function itShouldFailGettingNotificationsByUserIdNotFound(): void
+    {
+        $userId = ValueObjectFactory::createIdentifier('7499d138-b2a2-4b73-b9ac-0bdba054373b');
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->getNotificationByUserIdOrFail($userId);
     }
 }
