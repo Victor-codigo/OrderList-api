@@ -14,10 +14,12 @@ class NotificationCreateRequestDto implements RequestDtoInterface
      */
     public readonly array|null $userId;
     public readonly string|null $notificationType;
+    public readonly string|null $systemKey;
 
     public function __construct(Request $request)
     {
         $this->userId = $request->request->get('users_id');
         $this->notificationType = $request->request->get('type');
+        $this->systemKey = $request->request->get('system_key');
     }
 }

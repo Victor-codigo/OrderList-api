@@ -20,22 +20,19 @@ class NotificationCreateControllerTest extends WebClientTestCase
     private const USER_2_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
     private const USER_3_ID = '6df60afd-f7c3-4c2c-b920-e265f266c560';
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
-
     /** @test */
     public function itShouldCreateANotification(): void
     {
         $usersId = [self::USER_ID];
         $client = $this->getNewClientAuthenticatedUser();
+        $systemKey = $this->getContainer()->getParameter('system.key');
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'users_id' => $usersId,
                 'type' => NOTIFICATION_TYPE::USER_REGISTERED,
+                'system_key' => $systemKey,
             ])
         );
 
@@ -49,7 +46,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldCreateManyNotification(): void
+    public function itShouldCreateManyNotifications(): void
     {
         $usersId = [
             self::USER_ID,
@@ -57,12 +54,14 @@ class NotificationCreateControllerTest extends WebClientTestCase
             self::USER_3_ID,
         ];
         $client = $this->getNewClientAuthenticatedUser();
+        $systemKey = $this->getContainer()->getParameter('system.key');
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'users_id' => $usersId,
                 'type' => NOTIFICATION_TYPE::USER_REGISTERED,
+                'system_key' => $systemKey,
             ])
         );
 
@@ -84,12 +83,14 @@ class NotificationCreateControllerTest extends WebClientTestCase
             self::USER_3_ID,
         ];
         $client = $this->getNewClientAuthenticatedUser();
+        $systemKey = $this->getContainer()->getParameter('system.key');
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'users_id' => $usersId,
                 'type' => NOTIFICATION_TYPE::USER_REGISTERED,
+                'system_key' => $systemKey,
             ])
         );
 
@@ -111,12 +112,14 @@ class NotificationCreateControllerTest extends WebClientTestCase
             self::USER_3_ID,
         ];
         $client = $this->getNewClientAuthenticatedUser();
+        $systemKey = $this->getContainer()->getParameter('system.key');
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'users_id' => $usersId,
                 'type' => NOTIFICATION_TYPE::USER_REGISTERED,
+                'system_key' => $systemKey,
             ])
         );
 
@@ -136,12 +139,14 @@ class NotificationCreateControllerTest extends WebClientTestCase
             '22fd9f1f-ff4c-4f4a-abca-b0be7f965048',
         ];
         $client = $this->getNewClientAuthenticatedUser();
+        $systemKey = $this->getContainer()->getParameter('system.key');
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'users_id' => $usersId,
                 'type' => NOTIFICATION_TYPE::USER_REGISTERED,
+                'system_key' => $systemKey,
             ])
         );
 
@@ -159,12 +164,14 @@ class NotificationCreateControllerTest extends WebClientTestCase
     {
         $usersId = [];
         $client = $this->getNewClientAuthenticatedUser();
+        $systemKey = $this->getContainer()->getParameter('system.key');
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'users_id' => $usersId,
                 'type' => NOTIFICATION_TYPE::USER_REGISTERED,
+                'system_key' => $systemKey,
             ])
         );
 
@@ -186,12 +193,14 @@ class NotificationCreateControllerTest extends WebClientTestCase
             self::USER_3_ID,
         ];
         $client = $this->getNewClientAuthenticatedUser();
+        $systemKey = $this->getContainer()->getParameter('system.key');
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'users_id' => $usersId,
                 'type' => 'wrong type',
+                'system_key' => $systemKey,
             ])
         );
 
@@ -205,6 +214,62 @@ class NotificationCreateControllerTest extends WebClientTestCase
     }
 
     /** @test */
+    public function itShouldFailCreatingAUserNotificationSystemKeyIsNull(): void
+    {
+        $usersId = [
+            self::USER_ID,
+            self::USER_2_ID,
+            self::USER_3_ID,
+        ];
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'users_id' => $usersId,
+                'type' => NOTIFICATION_TYPE::USER_REGISTERED,
+                'system_key' => null,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['system_key'], Response::HTTP_BAD_REQUEST);
+        $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertEquals(['not_blank'], $responseContent->errors->system_key);
+    }
+
+    /** @test */
+    public function itShouldFailCreatingAUserNotificationSystemKeyIsWrong(): void
+    {
+        $usersId = [
+            self::USER_ID,
+            self::USER_2_ID,
+            self::USER_3_ID,
+        ];
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'users_id' => $usersId,
+                'type' => NOTIFICATION_TYPE::USER_REGISTERED,
+                'system_key' => 'wrong system key',
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['system_key'], Response::HTTP_BAD_REQUEST);
+        $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('The system key is wrong', $responseContent->message);
+        $this->assertEquals('The system key is wrong', $responseContent->errors->system_key);
+    }
+
+    /** @test */
     public function itShouldFailCreatingAUserNotificationNotAuthorized(): void
     {
         $usersId = [
@@ -213,12 +278,14 @@ class NotificationCreateControllerTest extends WebClientTestCase
             self::USER_3_ID,
         ];
         $client = $this->getNewClientNoAuthenticated();
+        $systemKey = $this->getContainer()->getParameter('system.key');
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'users_id' => $usersId,
                 'type' => 'wrong type',
+                'system_key' => $systemKey,
             ])
         );
 

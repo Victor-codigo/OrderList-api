@@ -16,6 +16,7 @@ use User\Domain\Model\User;
 class NotificationCreateInputDtoTest extends TestCase
 {
     private const USER_ID = '38dac117-2d4f-4057-8bc6-c972b5f439c6';
+    private const SYSTEM_KEY = 'system key';
 
     private ValidationInterface $validator;
     private MockObject|User $user;
@@ -34,7 +35,8 @@ class NotificationCreateInputDtoTest extends TestCase
         $object = new NotificationCreateInputDto(
             $this->user,
             [self::USER_ID],
-            NOTIFICATION_TYPE::GROUP_USER_ADDED->value
+            NOTIFICATION_TYPE::GROUP_USER_ADDED->value,
+            self::SYSTEM_KEY
         );
 
         $return = $object->validate($this->validator);
@@ -52,7 +54,8 @@ class NotificationCreateInputDtoTest extends TestCase
                 'a57cbab6-7611-4138-a7c2-0306403d89d9',
                 'e0d0a1d7-1e67-4817-888c-3c9c1ea27ff4',
             ],
-            NOTIFICATION_TYPE::GROUP_USER_ADDED->value
+            NOTIFICATION_TYPE::GROUP_USER_ADDED->value,
+            self::SYSTEM_KEY
         );
 
         $return = $object->validate($this->validator);
@@ -66,7 +69,8 @@ class NotificationCreateInputDtoTest extends TestCase
         $object = new NotificationCreateInputDto(
             $this->user,
             null,
-            NOTIFICATION_TYPE::GROUP_USER_ADDED->value
+            NOTIFICATION_TYPE::GROUP_USER_ADDED->value,
+            self::SYSTEM_KEY
         );
 
         $return = $object->validate($this->validator);
@@ -75,12 +79,28 @@ class NotificationCreateInputDtoTest extends TestCase
     }
 
     /** @test */
+    public function itShouldFaiSystemKeyIsNull(): void
+    {
+        $object = new NotificationCreateInputDto(
+            $this->user,
+            [self::USER_ID],
+            NOTIFICATION_TYPE::GROUP_USER_ADDED->value,
+            null
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['system_key' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
+    }
+
+    /** @test */
     public function itShouldFailUserIdINotValidIdAndTypeNotValid(): void
     {
         $object = new NotificationCreateInputDto(
             $this->user,
             ['not a valid id'],
-            'not valid type'
+            'not valid type',
+            ''
         );
 
         $return = $object->validate($this->validator);
@@ -88,6 +108,7 @@ class NotificationCreateInputDtoTest extends TestCase
         $this->assertEquals([
             'users_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
             'type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
+            'system_key' => [VALIDATION_ERRORS::NOT_BLANK],
         ],
             $return
         );
@@ -99,7 +120,8 @@ class NotificationCreateInputDtoTest extends TestCase
         $object = new NotificationCreateInputDto(
             $this->user,
             ['not a valid id'],
-            NOTIFICATION_TYPE::GROUP_USER_ADDED->value
+            NOTIFICATION_TYPE::GROUP_USER_ADDED->value,
+            self::SYSTEM_KEY
         );
 
         $return = $object->validate($this->validator);
@@ -117,7 +139,8 @@ class NotificationCreateInputDtoTest extends TestCase
                 'not a valid id',
                 'not a valid id',
             ],
-            NOTIFICATION_TYPE::GROUP_USER_ADDED->value
+            NOTIFICATION_TYPE::GROUP_USER_ADDED->value,
+            self::SYSTEM_KEY
         );
 
         $return = $object->validate($this->validator);
@@ -131,7 +154,8 @@ class NotificationCreateInputDtoTest extends TestCase
         $object = new NotificationCreateInputDto(
             $this->user,
             [self::USER_ID],
-            null
+            null,
+            self::SYSTEM_KEY
         );
 
         $return = $object->validate($this->validator);
@@ -145,7 +169,8 @@ class NotificationCreateInputDtoTest extends TestCase
         $object = new NotificationCreateInputDto(
             $this->user,
             [self::USER_ID],
-            'not valid notification'
+            'not valid notification',
+            self::SYSTEM_KEY
         );
 
         $return = $object->validate($this->validator);

@@ -3,6 +3,9 @@ services:
     autowire: true
     autoconfigure: true
 
+    bind:
+      $systemKey: "%system.key%"
+
   # Adapter
   Notification\Adapter\:
     resource: "../../../../../Notification/Adapter/"

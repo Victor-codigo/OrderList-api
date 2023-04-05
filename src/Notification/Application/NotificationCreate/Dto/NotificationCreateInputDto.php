@@ -20,12 +20,14 @@ class NotificationCreateInputDto implements ServiceInputDtoInterface
      */
     public readonly array $usersId;
     public readonly NotificationType $notificationType;
+    public readonly string $systemKey;
 
     /**
      * @param string[]|null $userId
      */
-    public function __construct(User $userSession, array|null $usersId, string|null $notificationType)
+    public function __construct(User $userSession, array|null $usersId, string|null $notificationType, string|null $systemKey)
     {
+        $this->systemKey = null === $systemKey ? '' : $systemKey;
         $this->userSession = $userSession;
         $this->usersId = null === $usersId
             ? []
@@ -58,6 +60,16 @@ class NotificationCreateInputDto implements ServiceInputDtoInterface
 
         if (!empty($errorListUsersId)) {
             $errorList['users_id'] = $errorListUsersId[0];
+        }
+
+        $errorListSystemKey = $validator
+            ->setValue($this->systemKey)
+            ->notNull()
+            ->notBlank()
+            ->validate();
+
+        if (!empty($errorListSystemKey)) {
+            $errorList['system_key'] = $errorListSystemKey;
         }
 
         return $errorList;

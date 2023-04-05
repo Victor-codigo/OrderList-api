@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Notification\Application\NotificationCreate;
 
+use App\Common\Domain\Exception\System\SystemKeyWrongException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\Object\NotificationType;
@@ -15,6 +16,7 @@ use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use Notification\Application\NotificationCreate\Dto\NotificationCreateInputDto;
 use Notification\Application\NotificationCreate\Dto\NotificationCreateOutputDto;
+use Notification\Application\NotificationCreate\Exception\NotificationCreateSystemKeyWrongException;
 use Notification\Application\NotificationCreate\Exception\NotificationCreateUsersValidationException;
 use Notification\Domain\Model\Notification;
 use Notification\Domain\Service\NotificationCreate\Dto\NotificationCreateDto;
@@ -25,7 +27,8 @@ class NotificationCreateUseCase extends ServiceBase
     public function __construct(
         private NotificationCreateService $NotificationCreateService,
         private ValidationInterface $validator,
-        private ModuleCommunicationInterface $moduleCommunication
+        private ModuleCommunicationInterface $moduleCommunication,
+        private string $systemKey
     ) {
     }
 
@@ -40,6 +43,8 @@ class NotificationCreateUseCase extends ServiceBase
             return $this->createNotificationCreateOutputDto($notification);
         } catch (NotificationCreateUsersValidationException|ValueObjectValidationException $e) {
             throw $e;
+        } catch (SystemKeyWrongException) {
+            throw NotificationCreateSystemKeyWrongException::fromMessage('The system key is wrong');
         } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
@@ -58,6 +63,7 @@ class NotificationCreateUseCase extends ServiceBase
             throw ValueObjectValidationException::fromArray('Error', $errorList);
         }
 
+        $this->validateSystemKey($input->systemKey);
         $this->validateUsersId($input->usersId);
     }
 
@@ -84,6 +90,13 @@ class NotificationCreateUseCase extends ServiceBase
 
         if (count($response->getData()) !== count($usersId)) {
             throw NotificationCreateUsersValidationException::fromMessage('Wrong users');
+        }
+    }
+
+    private function validateSystemKey(string $systemKey): void
+    {
+        if ($this->systemKey !== $systemKey) {
+            throw SystemKeyWrongException::formMessage('Wrong system key');
         }
     }
 
