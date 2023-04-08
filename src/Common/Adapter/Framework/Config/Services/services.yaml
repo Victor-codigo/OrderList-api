@@ -45,3 +45,5 @@ services:
     Common\Adapter\Http\ArgumentResolver\ArgumentResolver:
         tags:
             - { name: controller.argument_value_resolver, priority: 50 }
+
+    Test\Fixtures\Helpers\AliceBundleHelpers: ~

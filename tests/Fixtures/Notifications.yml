@@ -36,39 +36,54 @@ Common\Domain\Model\ValueObject\Object\NotificationType:
     __construct:
       value: <(Notification\Domain\Model\NOTIFICATION_TYPE::GROUP_USER_ADDED)>
 
+Common\Domain\Model\ValueObject\Array\NotificationData:
+  notification_data_user_registered:
+    __construct:
+      value: <getNotificationUserRegisteredData()>
+
+  notification_data_group_user_added:
+    __construct:
+      value: <getNotificationGroupUserAddData()>
+
 Notification\Domain\Model\Notification:
   entity-notification_random-{1..10}:
     __construct:
       id: "@notification_id_random-<current()>"
       userId: "@notification_user_id_random-<current()>"
       type: "@notification_type_user_registered"
+      data: "@notification_data_user_registered"
 
   entity-notification_user_registered:
     __construct:
       id: "@notification_id_user_registered"
       userId: "@entity-user_active->getId()"
       type: "@notification_type_user_registered"
+      data: "@notification_data_user_registered"
 
   entity-notification_id_group_user_added:
     __construct:
       id: "@notification_id_group_user_added"
       userId: "@entity-user_0->getId()"
       type: "@notification_type_group_user_added"
+      data: "@notification_data_group_user_added"
 
   entity-notification_id_user_active:
     __construct:
       id: "@notification_id_user_active"
       userId: "@entity-user_active->getId()"
       type: "@notification_type_group_user_added"
+      data: "@notification_data_group_user_added"
 
   entity-notification_id_user_active_2:
     __construct:
       id: "@notification_id_user_active_2"
       userId: "@entity-user_active->getId()"
       type: "@notification_type_group_user_added"
+      data: "@notification_data_group_user_added"
 
   entity-notification_id_user_active_3:
     __construct:
       id: "@notification_id_user_active_3"
       userId: "@entity-user_active->getId()"
       type: "@notification_type_user_registered"
+      data: "@notification_data_user_registered"
