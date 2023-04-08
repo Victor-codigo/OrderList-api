@@ -4,7 +4,7 @@ services:
     autoconfigure: true
 
     bind:
-      $systemKey: "%system.key%"
+      $systemKey: "%common.system.key%"
 
   # Adapter
   Notification\Adapter\:

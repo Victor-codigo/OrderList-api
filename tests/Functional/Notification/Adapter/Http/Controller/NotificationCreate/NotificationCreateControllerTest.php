@@ -25,7 +25,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
     {
         $usersId = [self::USER_ID];
         $client = $this->getNewClientAuthenticatedUser();
-        $systemKey = $this->getContainer()->getParameter('system.key');
+        $systemKey = $this->getContainer()->getParameter('common.system.key');
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -55,7 +55,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
             self::USER_3_ID,
         ];
         $client = $this->getNewClientAuthenticatedUser();
-        $systemKey = $this->getContainer()->getParameter('system.key');
+        $systemKey = $this->getContainer()->getParameter('common.system.key');
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -85,7 +85,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
             self::USER_3_ID,
         ];
         $client = $this->getNewClientAuthenticatedUser();
-        $systemKey = $this->getContainer()->getParameter('system.key');
+        $systemKey = $this->getContainer()->getParameter('common.system.key');
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -115,7 +115,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
             self::USER_3_ID,
         ];
         $client = $this->getNewClientAuthenticatedUser();
-        $systemKey = $this->getContainer()->getParameter('system.key');
+        $systemKey = $this->getContainer()->getParameter('common.system.key');
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -143,7 +143,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
             '22fd9f1f-ff4c-4f4a-abca-b0be7f965048',
         ];
         $client = $this->getNewClientAuthenticatedUser();
-        $systemKey = $this->getContainer()->getParameter('system.key');
+        $systemKey = $this->getContainer()->getParameter('common.system.key');
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -169,7 +169,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
     {
         $usersId = [];
         $client = $this->getNewClientAuthenticatedUser();
-        $systemKey = $this->getContainer()->getParameter('system.key');
+        $systemKey = $this->getContainer()->getParameter('common.system.key');
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -199,7 +199,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
             self::USER_3_ID,
         ];
         $client = $this->getNewClientAuthenticatedUser();
-        $systemKey = $this->getContainer()->getParameter('system.key');
+        $systemKey = $this->getContainer()->getParameter('common.system.key');
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -287,7 +287,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
             self::USER_3_ID,
         ];
         $client = $this->getNewClientAuthenticatedUser();
-        $systemKey = $this->getContainer()->getParameter('system.key');
+        $systemKey = $this->getContainer()->getParameter('common.system.key');
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
@@ -317,7 +317,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
             self::USER_3_ID,
         ];
         $client = $this->getNewClientNoAuthenticated();
-        $systemKey = $this->getContainer()->getParameter('system.key');
+        $systemKey = $this->getContainer()->getParameter('common.system.key');
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
