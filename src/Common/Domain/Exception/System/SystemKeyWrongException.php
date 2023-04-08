@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Common\Domain\Exception\System;
+namespace Common\Domain\Exception\System;
 
 use Common\Domain\Exception\DomainException;
 

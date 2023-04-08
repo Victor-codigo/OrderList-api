@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Notification\Application\NotificationCreate;
 
-use App\Common\Domain\Exception\System\SystemKeyWrongException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Domain\Exception\DomainInternalErrorException;
+use Common\Domain\Exception\System\SystemKeyWrongException;
 use Common\Domain\Model\ValueObject\Array\NotificationData;
 use Common\Domain\Model\ValueObject\Object\NotificationType;
 use Common\Domain\Model\ValueObject\String\Identifier;
