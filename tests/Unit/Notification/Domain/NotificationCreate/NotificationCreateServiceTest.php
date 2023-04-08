@@ -6,6 +6,7 @@ namespace Test\Unit\Notification\Domain\NotificationCreate;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
+use Common\Domain\Model\ValueObject\Array\NotificationData;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Notification\Domain\Model\NOTIFICATION_TYPE;
 use Notification\Domain\Model\Notification;
@@ -28,12 +29,21 @@ class NotificationCreateServiceTest extends TestCase
         $this->object = new NotificationCreateService($this->notificationRepository);
     }
 
+    private function getNotificationData(): NotificationData
+    {
+        return new NotificationData([
+            'group_name' => 'GROUP NAME',
+            'user_name' => 'USER NAME',
+        ]);
+    }
+
     /** @test */
     public function itShouldCreateANotification(): void
     {
         $input = new NotificationCreateDto(
             [ValueObjectFactory::createIdentifier('user id')],
-            ValueObjectFactory::createNotificationType(NOTIFICATION_TYPE::GROUP_USER_ADDED)
+            ValueObjectFactory::createNotificationType(NOTIFICATION_TYPE::GROUP_USER_ADDED),
+            $this->getNotificationData()
         );
         $notificationId = 'notification id';
 
@@ -52,6 +62,7 @@ class NotificationCreateServiceTest extends TestCase
                     $this->assertEquals($notification[$key]->getId()->getValue(), $notificationId);
                     $this->assertContainsEquals($notification[$key]->getUserId(), $input->usersId);
                     $this->assertEquals($notification[$key]->getType(), $input->notificationType);
+                    $this->assertEquals($notification[$key]->getData(), $input->notificationData);
                 }
 
                 return true;
@@ -64,6 +75,7 @@ class NotificationCreateServiceTest extends TestCase
         foreach ($input->usersId as $key => $userId) {
             $this->assertContainsEquals($return[$key]->getUserId(), $input->usersId);
             $this->assertEquals($return[$key]->getType(), $input->notificationType);
+            $this->assertEquals($return[$key]->getData(), $input->notificationData);
         }
     }
 
@@ -76,7 +88,8 @@ class NotificationCreateServiceTest extends TestCase
                 ValueObjectFactory::createIdentifier('user id 2'),
                 ValueObjectFactory::createIdentifier('user id 3'),
             ],
-            ValueObjectFactory::createNotificationType(NOTIFICATION_TYPE::USER_REGISTERED)
+            ValueObjectFactory::createNotificationType(NOTIFICATION_TYPE::USER_REGISTERED),
+            $this->getNotificationData()
         );
         $notificationId = 'notification id';
 
@@ -95,6 +108,7 @@ class NotificationCreateServiceTest extends TestCase
                     $this->assertEquals($notification[$key]->getId()->getValue(), $notificationId);
                     $this->assertContainsEquals($notification[$key]->getUserId(), $input->usersId);
                     $this->assertEquals($notification[$key]->getType(), $input->notificationType);
+                    $this->assertEquals($notification[$key]->getData(), $input->notificationData);
                 }
 
                 return true;
@@ -107,6 +121,7 @@ class NotificationCreateServiceTest extends TestCase
         foreach ($input->usersId as $key => $userId) {
             $this->assertContainsEquals($return[$key]->getUserId(), $input->usersId);
             $this->assertEquals($return[$key]->getType(), $input->notificationType);
+            $this->assertEquals($return[$key]->getData(), $input->notificationData);
         }
     }
 
@@ -115,7 +130,8 @@ class NotificationCreateServiceTest extends TestCase
     {
         $input = new NotificationCreateDto(
             [ValueObjectFactory::createIdentifier('user id')],
-            ValueObjectFactory::createNotificationType(NOTIFICATION_TYPE::GROUP_USER_ADDED)
+            ValueObjectFactory::createNotificationType(NOTIFICATION_TYPE::GROUP_USER_ADDED),
+            $this->getNotificationData()
         );
 
         $this->notificationRepository
@@ -132,7 +148,8 @@ class NotificationCreateServiceTest extends TestCase
     {
         $input = new NotificationCreateDto(
             [ValueObjectFactory::createIdentifier('user id')],
-            ValueObjectFactory::createNotificationType(NOTIFICATION_TYPE::GROUP_USER_ADDED)
+            ValueObjectFactory::createNotificationType(NOTIFICATION_TYPE::GROUP_USER_ADDED),
+            $this->getNotificationData()
         );
 
         $this->notificationRepository

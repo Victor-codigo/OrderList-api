@@ -80,7 +80,7 @@ class NotificationCreateController extends AbstractController
     public function __invoke(NotificationCreateRequestDto $request): JsonResponse
     {
         $notification = $this->NotificationCreateUseCase->__invoke(
-            $this->createNotificationCreateInputDto($request->userId, $request->notificationType, $request->systemKey)
+            $this->createNotificationCreateInputDto($request->userId, $request->notificationType, $request->notificationData, $request->systemKey)
         );
 
         return $this->createResponse($notification);
@@ -89,12 +89,12 @@ class NotificationCreateController extends AbstractController
     /**
      * @param string[]|null $userId
      */
-    private function createNotificationCreateInputDto(array|null $userId, string|null $notificationType, string|null $systemKey): NotificationCreateInputDto
+    private function createNotificationCreateInputDto(array|null $userId, string|null $notificationType, array|null $notificationData, string|null $systemKey): NotificationCreateInputDto
     {
         /** @var UserSymfonyAdapter $userAdapter */
         $userAdapter = $this->security->getUser();
 
-        return new NotificationCreateInputDto($userAdapter->getUser(), $userId, $notificationType, $systemKey);
+        return new NotificationCreateInputDto($userAdapter->getUser(), $userId, $notificationType, $notificationData, $systemKey);
     }
 
     private function createResponse(NotificationCreateOutputDto $notificationOutput): JsonResponse

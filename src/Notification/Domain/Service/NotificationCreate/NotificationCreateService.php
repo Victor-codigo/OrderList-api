@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Notification\Domain\Service\NotificationCreate;
 
+use Common\Domain\Model\ValueObject\Array\NotificationData;
 use Common\Domain\Model\ValueObject\Object\NotificationType;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -28,7 +29,7 @@ class NotificationCreateService
      */
     public function __invoke(NotificationCreateDto $input): array
     {
-        $notification = $this->createNotifications($input->usersId, $input->notificationType);
+        $notification = $this->createNotifications($input->usersId, $input->notificationType, $input->notificationData);
 
         $this->notificationRepository->save($notification);
 
@@ -40,13 +41,13 @@ class NotificationCreateService
      *
      * @return Notification[]
      */
-    private function createNotifications(array $usersId, NotificationType $notificationType): array
+    private function createNotifications(array $usersId, NotificationType $notificationType, NotificationData $notificationData): array
     {
         $notifications = array_map(
-            function (Identifier $userId) use ($notificationType) {
+            function (Identifier $userId) use ($notificationType, $notificationData) {
                 $notificationId = ValueObjectFactory::createIdentifier($this->notificationRepository->generateId());
 
-                return new Notification($notificationId, $userId, $notificationType);
+                return new Notification($notificationId, $userId, $notificationType, $notificationData);
             },
             $usersId
         );

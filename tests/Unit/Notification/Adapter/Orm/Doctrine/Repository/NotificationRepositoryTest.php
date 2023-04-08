@@ -39,13 +39,22 @@ class NotificationRepositoryTest extends DataBaseTestCase
         $this->object = $this->entityManager->getRepository(Notification::class);
     }
 
+    private function getNotificationData(): array
+    {
+        return [
+            'data1' => 'value1',
+            'data2' => 'value2',
+        ];
+    }
+
     /** @test */
     public function itShouldSaveTheNotification(): void
     {
         $notification = Notification::fromPrimitives(
             self::NOTIFICATION_ID,
             self::NOTIFICATION_USER_ID,
-            NOTIFICATION_TYPE::USER_REGISTERED
+            NOTIFICATION_TYPE::USER_REGISTERED,
+            $this->getNotificationData()
         );
 
         $this->object->save([$notification]);
@@ -57,6 +66,7 @@ class NotificationRepositoryTest extends DataBaseTestCase
         $this->assertEquals($notification->getId(), $notificationSaved->getId());
         $this->assertEquals($notification->getUserId(), $notificationSaved->getUserId());
         $this->assertEquals($notification->getType(), $notificationSaved->getType());
+        $this->assertEquals($notification->getData(), $notificationSaved->getData());
         $this->assertFalse($notificationSaved->getViewed());
     }
 
@@ -67,12 +77,14 @@ class NotificationRepositoryTest extends DataBaseTestCase
             Notification::fromPrimitives(
                 self::NOTIFICATION_ID,
                 self::NOTIFICATION_USER_ID,
-                NOTIFICATION_TYPE::USER_REGISTERED
+                NOTIFICATION_TYPE::USER_REGISTERED,
+                $this->getNotificationData()
             ),
             Notification::fromPrimitives(
                 self::NOTIFICATION_2_ID,
                 self::NOTIFICATION_USER_ID,
-                NOTIFICATION_TYPE::USER_REGISTERED
+                NOTIFICATION_TYPE::USER_REGISTERED,
+                $this->getNotificationData()
             ),
         ];
         $notificationsId = array_map(fn (Notification $notification) => $notification->getId(), $notifications);
@@ -89,6 +101,7 @@ class NotificationRepositoryTest extends DataBaseTestCase
             $this->assertContainsEquals($notificationSaved[$key]->getId(), $notificationsId);
             $this->assertContainsEquals($notificationSaved[$key]->getUserId(), $notificationsUsersId);
             $this->assertEquals($notification->getType(), $notificationSaved[$key]->getType());
+            $this->assertEquals($notification->getData(), $notificationSaved[$key]->getData());
             $this->assertFalse($notificationSaved[$key]->getViewed());
         }
     }
@@ -99,7 +112,8 @@ class NotificationRepositoryTest extends DataBaseTestCase
         $notification = Notification::fromPrimitives(
             self::NOTIFICATION_REPEATED_ID,
             self::NOTIFICATION_USER_ID,
-            NOTIFICATION_TYPE::USER_REGISTERED
+            NOTIFICATION_TYPE::USER_REGISTERED,
+            $this->getNotificationData()
         );
 
         $this->expectException(DBUniqueConstraintException::class);
@@ -112,7 +126,8 @@ class NotificationRepositoryTest extends DataBaseTestCase
         $notification = Notification::fromPrimitives(
             self::NOTIFICATION_REPEATED_ID,
             self::NOTIFICATION_USER_ID,
-            NOTIFICATION_TYPE::USER_REGISTERED
+            NOTIFICATION_TYPE::USER_REGISTERED,
+            $this->getNotificationData()
         );
 
         /** @var MockObject|ObjectManager $objectManagerMock */

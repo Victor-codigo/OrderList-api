@@ -7,6 +7,7 @@ namespace Notification\Application\NotificationCreate;
 use App\Common\Domain\Exception\System\SystemKeyWrongException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Domain\Exception\DomainInternalErrorException;
+use Common\Domain\Model\ValueObject\Array\NotificationData;
 use Common\Domain\Model\ValueObject\Object\NotificationType;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
@@ -37,7 +38,7 @@ class NotificationCreateUseCase extends ServiceBase
         try {
             $this->validation($input);
             $notification = $this->NotificationCreateService->__invoke(
-                $this->createNotificationCreateDto($input->usersId, $input->notificationType)
+                $this->createNotificationCreateDto($input->usersId, $input->notificationType, $input->notificationData)
             );
 
             return $this->createNotificationCreateOutputDto($notification);
@@ -103,9 +104,9 @@ class NotificationCreateUseCase extends ServiceBase
     /**
      * @param Identifier[] $userId
      */
-    private function createNotificationCreateDto(array $usersId, NotificationType $notificationType): NotificationCreateDto
+    private function createNotificationCreateDto(array $usersId, NotificationType $notificationType, NotificationData $notificationData): NotificationCreateDto
     {
-        return new NotificationCreateDto($usersId, $notificationType);
+        return new NotificationCreateDto($usersId, $notificationType, $notificationData);
     }
 
     /**
