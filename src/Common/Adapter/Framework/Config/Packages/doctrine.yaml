@@ -14,6 +14,7 @@ doctrine:
             RolesType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array\RolesType
             GroupTypeType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\GroupTypeType
             NotificationTypeType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\NotificationTypeType
+            NotificationDataType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array\NotificationDataType
 
     orm:
         dql:

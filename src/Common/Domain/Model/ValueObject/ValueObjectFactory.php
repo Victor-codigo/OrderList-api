@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject;
 
+use Common\Domain\Model\ValueObject\Array\NotificationData;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Array\ValueObjectArrayFactoryInterface;
 use Common\Domain\Model\ValueObject\Array\valueObjectArrayFactory;
@@ -46,6 +47,11 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
     public static function createRol(\BackedEnum|null $roles): Rol
     {
         return ValueObjectObjectFactory::createRol($roles);
+    }
+
+    public static function createNotificationData(array|null $data): NotificationData
+    {
+        return valueObjectArrayFactory::createNotificationData($data);
     }
 
     public static function createEmail(string|null $email): Email

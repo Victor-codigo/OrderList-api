@@ -15,4 +15,9 @@ class valueObjectArrayFactory
     {
         return new Roles($roles);
     }
+
+    public static function createNotificationData(array|null $data): NotificationData
+    {
+        return new NotificationData($data);
+    }
 }
