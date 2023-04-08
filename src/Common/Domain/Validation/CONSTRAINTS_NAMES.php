@@ -51,6 +51,8 @@ enum CONSTRAINTS_NAMES: string
 
     case LANGUAGE = 'language';
 
+    case JSON = 'json';
+
     case ITERABLE_EQUAL = 'iterableEqual';
     case ITERABLE_RANGE = 'iterableRange';
     case ITERABLE_DIVISIBLE_BY = 'iterableDivisibleBy';

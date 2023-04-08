@@ -7,6 +7,7 @@ namespace Common\Adapter\Validation\Validations;
 use Common\Adapter\Validation\Constraints\Alphanumeric\Alphanumeric;
 use Common\Domain\Validation\PROTOCOLS;
 use Common\Domain\Validation\VALIDATION_ERRORS;
+use Symfony\Component\Validator\Constraints\Json;
 use Symfony\Component\Validator\Constraints\Language;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
@@ -96,6 +97,14 @@ class ValidationString extends ValidationConstraintBase
         return $this->createConstraint(
             new Language(),
             [Language::NO_SUCH_LANGUAGE_ERROR => VALIDATION_ERRORS::LANGUAGE]
+        );
+    }
+
+    public function json(): ValidationConstraint
+    {
+        return $this->createConstraint(
+            new Json(),
+            [Json::INVALID_JSON_ERROR => VALIDATION_ERRORS::JSON]
         );
     }
 

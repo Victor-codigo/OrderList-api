@@ -57,6 +57,8 @@ interface ValidationInterface
 
     public function language(): self;
 
+    public function json(): self;
+
     public function equalTo(mixed $value): self;
 
     public function notEqualTo(mixed $value): self;

@@ -337,4 +337,28 @@ class ValidationStringTest extends TestCase
         $this->assertIsArray($return);
         $this->assertSame([VALIDATION_ERRORS::LANGUAGE], $return);
     }
+
+    /** @test */
+    public function validateJsonOk(): void
+    {
+        $return = $this->object
+            ->setValue(json_encode(['param1' => 'value1']))
+            ->json()
+            ->validate();
+
+        $this->assertIsArray($return);
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function validateJsonFail(): void
+    {
+        $return = $this->object
+            ->setValue('not valid json')
+            ->json()
+            ->validate();
+
+        $this->assertIsArray($return);
+        $this->assertSame([VALIDATION_ERRORS::JSON], $return);
+    }
 }

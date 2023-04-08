@@ -111,6 +111,8 @@ enum VALIDATION_ERRORS
 
     case LANGUAGE;
 
+    case JSON;
+
     case ITERABLE_NOT_EQUAL;
     case ITERABLE_TOO_FEW;
     case ITERABLE_TOO_MANY;
