@@ -221,6 +221,30 @@ class NotificationGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
+    public function itShouldFailGettingNotificationLangIsWrong(): void
+    {
+        $page = 1;
+        $pageItems = 10;
+        $lang = 'ru';
+
+        $client = $this->getNewClientAuthenticatedAdmin();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT."?page={$page}&page_items={$pageItems}&lang={$lang}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['lang'], Response::HTTP_BAD_REQUEST);
+        $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['choice_not_such'], $responseContent->errors->lang);
+    }
+
+    /** @test */
     public function itShouldFailUserNotAuthorized(): void
     {
         $page = 1;
