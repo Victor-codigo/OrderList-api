@@ -30,7 +30,8 @@ class NotificationGetDataInputDtoTest extends TestCase
     {
         $page = 1;
         $pageItems = 10;
-        $object = new NotificationGetDataInputDto($this->userSession, $page, $pageItems);
+        $lang = 'en';
+        $object = new NotificationGetDataInputDto($this->userSession, $page, $pageItems, $lang);
 
         $return = $object->validate($this->validator);
 
@@ -42,7 +43,8 @@ class NotificationGetDataInputDtoTest extends TestCase
     {
         $page = null;
         $pageItems = 10;
-        $object = new NotificationGetDataInputDto($this->userSession, $page, $pageItems);
+        $lang = 'es';
+        $object = new NotificationGetDataInputDto($this->userSession, $page, $pageItems, $lang);
 
         $return = $object->validate($this->validator);
 
@@ -54,7 +56,8 @@ class NotificationGetDataInputDtoTest extends TestCase
     {
         $page = 0;
         $pageItems = 10;
-        $object = new NotificationGetDataInputDto($this->userSession, $page, $pageItems);
+        $lang = 'en';
+        $object = new NotificationGetDataInputDto($this->userSession, $page, $pageItems, $lang);
 
         $return = $object->validate($this->validator);
 
@@ -66,7 +69,8 @@ class NotificationGetDataInputDtoTest extends TestCase
     {
         $page = 1;
         $pageItems = null;
-        $object = new NotificationGetDataInputDto($this->userSession, $page, $pageItems);
+        $lang = 'en';
+        $object = new NotificationGetDataInputDto($this->userSession, $page, $pageItems, $lang);
 
         $return = $object->validate($this->validator);
 
@@ -78,7 +82,8 @@ class NotificationGetDataInputDtoTest extends TestCase
     {
         $page = 1;
         $pageItems = 0;
-        $object = new NotificationGetDataInputDto($this->userSession, $page, $pageItems);
+        $lang = 'en';
+        $object = new NotificationGetDataInputDto($this->userSession, $page, $pageItems, $lang);
 
         $return = $object->validate($this->validator);
 
@@ -90,7 +95,8 @@ class NotificationGetDataInputDtoTest extends TestCase
     {
         $page = 1;
         $pageItems = 101;
-        $object = new NotificationGetDataInputDto($this->userSession, $page, $pageItems);
+        $lang = 'en';
+        $object = new NotificationGetDataInputDto($this->userSession, $page, $pageItems, $lang);
 
         $return = $object->validate($this->validator);
 
@@ -98,17 +104,32 @@ class NotificationGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
+    public function itShouldFailLanguageIsWrong(): void
+    {
+        $page = 1;
+        $pageItems = 10;
+        $lang = 'ru';
+        $object = new NotificationGetDataInputDto($this->userSession, $page, $pageItems, $lang);
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['lang' => [VALIDATION_ERRORS::CHOICE_NOT_SUCH]], $return);
+    }
+
+    /** @test */
     public function itShouldFailPageAndPageItemsIsLowerThanOne(): void
     {
         $page = 0;
         $pageItems = 0;
-        $object = new NotificationGetDataInputDto($this->userSession, $page, $pageItems);
+        $lang = 'ru';
+        $object = new NotificationGetDataInputDto($this->userSession, $page, $pageItems, $lang);
 
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
                 'page' => [VALIDATION_ERRORS::GREATER_THAN],
                 'page_items' => [VALIDATION_ERRORS::GREATER_THAN],
+                'lang' => [VALIDATION_ERRORS::CHOICE_NOT_SUCH],
             ],
             $return
         );

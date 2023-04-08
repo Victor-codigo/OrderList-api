@@ -36,6 +36,14 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
             example: '1',
             schema: new OA\Schema(type: 'integer')
         ),
+        new OA\Parameter(
+            name: 'lang',
+            in: 'query',
+            required: true,
+            description: 'Language of the notifications',
+            example: 'en|es',
+            schema: new OA\Schema(type: 'string')
+        ),
     ],
     responses: [
         new OA\Response(
@@ -51,7 +59,7 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
                             properties: [
                                 new OA\Property(property: 'id', type: 'string', example: '1fcab788-0def-4e56-b441-935361678da9'),
                                 new OA\Property(property: 'user_id', type: 'string', example: '2606508b-4516-45d6-93a6-c7cb416b7f3f'),
-                                new OA\Property(property: 'type', type: 'string', example: 'NOTIFICATION_USER_REGISTERED'),
+                                new OA\Property(property: 'message', type: 'string', example: 'This is an example of notification'),
                                 new OA\Property(property: 'viewed', type: 'bool'),
                                 new OA\Property(property: 'created_on', type: 'string', example: '2023-2-14 14:05:10'),
                             ])),
@@ -100,18 +108,18 @@ class NotificationGetDataController extends AbstractController
     public function __invoke(NotificationGetDataRequestDto $request): JsonResponse
     {
         $notifications = $this->NotificationGetDataUseCase->__invoke(
-            $this->createNotificationGetDataInputDto($request->page, $request->pageItems)
+            $this->createNotificationGetDataInputDto($request->page, $request->pageItems, $request->lang)
         );
 
         return $this->createResponse($notifications->notificationsData);
     }
 
-    private function createNotificationGetDataInputDto(int|null $page, int|null $pageItems): NotificationGetDataInputDto
+    private function createNotificationGetDataInputDto(int|null $page, int|null $pageItems, string|null $lang): NotificationGetDataInputDto
     {
         /** @var UserSymfonyAdapter $userAdapter */
         $userAdapter = $this->security->getUser();
 
-        return new NotificationGetDataInputDto($userAdapter->getUser(), $page, $pageItems);
+        return new NotificationGetDataInputDto($userAdapter->getUser(), $page, $pageItems, $lang);
     }
 
     private function createResponse(array $notificationsData): JsonResponse

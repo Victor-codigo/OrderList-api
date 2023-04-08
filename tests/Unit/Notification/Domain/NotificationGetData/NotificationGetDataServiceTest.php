@@ -7,6 +7,7 @@ namespace Test\Unit\Notification\Domain\NotificationGetData;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use Common\Domain\Ports\Translator\TranslatorInterface;
 use Notification\Domain\Model\NOTIFICATION_TYPE;
 use Notification\Domain\Model\Notification;
 use Notification\Domain\Ports\Notification\NotificationRepositoryInterface;
@@ -20,10 +21,12 @@ class NotificationGetDataServiceTest extends TestCase
     private const NOTIFICATION_ID_1 = '2d208936-a7e9-32c1-963f-0df7f57ae463';
     private const NOTIFICATION_ID_2 = '38dac117-2d4f-4057-8bc6-c972b5f439c6';
     private const NOTIFICATION_ID_3 = '79a674c7-e109-3094-b8d5-c19cc00f5519';
+    private const TRANSLATOR_DOMAIN = 'Notifications';
 
     private NotificationGetDataService $object;
     private MockObject|NotificationRepositoryInterface $notificationRepository;
     private MockObject|PaginatorInterface $paginator;
+    private MockObject|TranslatorInterface $translator;
 
     protected function setUp(): void
     {
@@ -31,7 +34,8 @@ class NotificationGetDataServiceTest extends TestCase
 
         $this->notificationRepository = $this->createMock(NotificationRepositoryInterface::class);
         $this->paginator = $this->createMock(PaginatorInterface::class);
-        $this->object = new NotificationGetDataService($this->notificationRepository);
+        $this->translator = $this->createMock(TranslatorInterface::class);
+        $this->object = new NotificationGetDataService($this->notificationRepository, $this->translator);
     }
 
     /**
@@ -39,26 +43,50 @@ class NotificationGetDataServiceTest extends TestCase
      */
     private function getNotifications(): \Iterator
     {
+        $notificationGroupUserAdd = [
+            'group_name' => 'GROUP NAME',
+            'user_who_adds_you_name' => 'USER WHO ADDS YOU',
+        ];
+
+        $notificationUserRegistered = [
+            'user_name' => 'USER NAME',
+            'domain_name' => 'DOMAIN NAME',
+        ];
+
         return new \ArrayIterator([
-            Notification::fromPrimitives(self::NOTIFICATION_ID_1, 'user id 1', NOTIFICATION_TYPE::GROUP_USER_ADDED),
-            Notification::fromPrimitives(self::NOTIFICATION_ID_2, 'user id 2', NOTIFICATION_TYPE::USER_REGISTERED),
-            Notification::fromPrimitives(self::NOTIFICATION_ID_3, 'user id 3', NOTIFICATION_TYPE::GROUP_USER_ADDED),
+            Notification::fromPrimitives(self::NOTIFICATION_ID_1, 'user id 1', NOTIFICATION_TYPE::GROUP_USER_ADDED, $notificationGroupUserAdd),
+            Notification::fromPrimitives(self::NOTIFICATION_ID_2, 'user id 2', NOTIFICATION_TYPE::USER_REGISTERED, $notificationUserRegistered),
+            Notification::fromPrimitives(self::NOTIFICATION_ID_3, 'user id 3', NOTIFICATION_TYPE::GROUP_USER_ADDED, $notificationGroupUserAdd),
         ]);
     }
 
-    /** @test */
-    public function itShouldGetNotificationData(): void
+    private function providerNotificationLanguage(): array
+    {
+        return [
+            ['en'],
+            ['es'],
+        ];
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider providerNotificationLanguage
+     */
+    public function itShouldGetNotificationData($providerLang): void
     {
         $notifications = $this->getNotifications();
-        $notificationsIds = array_map(fn (Notification $notification) => $notification->getId(), iterator_to_array($notifications));
-        $notificationsUserIds = array_map(fn (Notification $notification) => $notification->getUserId(), iterator_to_array($notifications));
-        $notificationsTypes = array_map(fn (Notification $notification) => $notification->getType(), iterator_to_array($notifications));
+        $notificationsIds = array_map(fn (Notification $notification) => $notification->getId()->getValue(), iterator_to_array($notifications));
+        $notificationsUserIds = array_map(fn (Notification $notification) => $notification->getUserId()->getValue(), iterator_to_array($notifications));
+        $notificationsTypes = array_map(fn (Notification $notification) => $notification->getType()->getValue(), iterator_to_array($notifications));
+        $notificationsData = array_map(fn (Notification $notification) => $notification->getData()->getValue(), iterator_to_array($notifications));
         $notificationsViewed = array_map(fn (Notification $notification) => $notification->getViewed(), iterator_to_array($notifications));
 
         $page = ValueObjectFactory::createPaginatorPage(1);
         $pageItems = ValueObjectFactory::createPaginatorPageItems(10);
         $userId = ValueObjectFactory::createIdentifier('user id');
-        $input = new NotificationGetDataDto($userId, $page, $pageItems);
+        $lang = ValueObjectFactory::createLanguage($providerLang);
+        $input = new NotificationGetDataDto($userId, $page, $pageItems, $lang);
 
         $this->paginator
             ->expects($this->once())
@@ -71,6 +99,30 @@ class NotificationGetDataServiceTest extends TestCase
             ->with($userId)
             ->willReturn($this->paginator);
 
+        $this->translator
+            ->expects($this->exactly(count($notifications)))
+            ->method('translate')
+            ->with($this->callback(function (string $placeholder) use ($notificationsTypes) {
+                static $callNumber = 0;
+
+                match ($notificationsTypes[$callNumber++]) {
+                    NOTIFICATION_TYPE::GROUP_USER_ADDED => $this->assertEquals('notification.group_user_added', $placeholder),
+                    NOTIFICATION_TYPE::USER_REGISTERED => $this->assertEquals('notification.user_registered', $placeholder)
+                };
+
+                return true;
+            }),
+                $this->callback(function (array $data) use ($notificationsData) {
+                    static $callNumber = 0;
+
+                    $this->assertEquals($notificationsData[$callNumber++], $data);
+
+                    return true;
+                }),
+                self::TRANSLATOR_DOMAIN,
+                $lang->getValue()
+            );
+
         $return = $this->object->__invoke($input);
 
         $this->assertCount(count($notifications), $return);
@@ -78,13 +130,13 @@ class NotificationGetDataServiceTest extends TestCase
         foreach ($return as $notificationData) {
             $this->assertArrayHasKey('id', $notificationData);
             $this->assertArrayHasKey('user_id', $notificationData);
-            $this->assertArrayHasKey('type', $notificationData);
+            $this->assertArrayHasKey('message', $notificationData);
             $this->assertArrayHasKey('viewed', $notificationData);
             $this->assertArrayHasKey('created_on', $notificationData);
 
             $this->assertContainsEquals($notificationData['id'], $notificationsIds);
             $this->assertContainsEquals($notificationData['user_id'], $notificationsUserIds);
-            $this->assertContainsEquals($notificationData['type'], $notificationsTypes);
+            $this->assertContainsEquals($notificationData['message'], $notificationsViewed);
             $this->assertContainsEquals($notificationData['viewed'], $notificationsViewed);
         }
     }
@@ -95,7 +147,8 @@ class NotificationGetDataServiceTest extends TestCase
         $page = ValueObjectFactory::createPaginatorPage(1);
         $pageItems = ValueObjectFactory::createPaginatorPageItems(10);
         $userId = ValueObjectFactory::createIdentifier('user id');
-        $input = new NotificationGetDataDto($userId, $page, $pageItems);
+        $lang = ValueObjectFactory::createLanguage('en');
+        $input = new NotificationGetDataDto($userId, $page, $pageItems, $lang);
 
         $this->notificationRepository
             ->expects($this->once())

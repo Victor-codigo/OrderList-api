@@ -1,0 +1,3 @@
+notification:
+  user_registered: Bienvenido {user_name}. Ya eres un nuevo miembro de {domain_name}!
+  group_user_added: "{user_who_adds_you_name} te ha añadido al grupo {group_name}."

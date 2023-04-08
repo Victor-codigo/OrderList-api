@@ -6,3 +6,4 @@ framework:
             - en
         paths:
             - "%kernel.project_dir%/src/User/Domain/Translation"
+            - "%kernel.project_dir%/src/Notification/Domain/Translation"

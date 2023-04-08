@@ -21,10 +21,10 @@ class NotificationGetDataControllerTest extends WebClientTestCase
     private function getNotificationsDatabaseData(): array
     {
         return [
-            Notification::fromPrimitives('84a08f7c-30a6-4bd5-8e5b-b2d49948e72c', '2606508b-4516-45d6-93a6-c7cb416b7f3f', NOTIFICATION_TYPE::USER_REGISTERED),
-            Notification::fromPrimitives('d75a3fb1-42aa-46c0-be4c-1147f0808d60', '2606508b-4516-45d6-93a6-c7cb416b7f3f', NOTIFICATION_TYPE::USER_REGISTERED),
-            Notification::fromPrimitives('f7621fbd-0c8e-4a8a-8059-9e87b8ea4fe1', '2606508b-4516-45d6-93a6-c7cb416b7f3f', NOTIFICATION_TYPE::GROUP_USER_ADDED),
-            Notification::fromPrimitives('f79ddff5-486b-4b5f-af64-b99fe9154fc1', '2606508b-4516-45d6-93a6-c7cb416b7f3f', NOTIFICATION_TYPE::GROUP_USER_ADDED),
+            Notification::fromPrimitives('84a08f7c-30a6-4bd5-8e5b-b2d49948e72c', '2606508b-4516-45d6-93a6-c7cb416b7f3f', NOTIFICATION_TYPE::USER_REGISTERED, []),
+            Notification::fromPrimitives('d75a3fb1-42aa-46c0-be4c-1147f0808d60', '2606508b-4516-45d6-93a6-c7cb416b7f3f', NOTIFICATION_TYPE::USER_REGISTERED, []),
+            Notification::fromPrimitives('f7621fbd-0c8e-4a8a-8059-9e87b8ea4fe1', '2606508b-4516-45d6-93a6-c7cb416b7f3f', NOTIFICATION_TYPE::GROUP_USER_ADDED, []),
+            Notification::fromPrimitives('f79ddff5-486b-4b5f-af64-b99fe9154fc1', '2606508b-4516-45d6-93a6-c7cb416b7f3f', NOTIFICATION_TYPE::GROUP_USER_ADDED, []),
         ];
     }
 
@@ -32,18 +32,16 @@ class NotificationGetDataControllerTest extends WebClientTestCase
     {
         $notificationsExpectedIds = array_map(fn (Notification $notification) => $notification->getId()->getValue(), $notificationsDataExpected);
         $notificationsExpectedUsersIds = array_map(fn (Notification $notification) => $notification->getUserId()->getValue(), $notificationsDataExpected);
-        $notificationsExpectedTypes = array_map(fn (Notification $notification) => $notification->getType()->getValue()->value, $notificationsDataExpected);
         $notificationsExpectedViewed = array_map(fn (Notification $notification) => $notification->getViewed(), $notificationsDataExpected);
 
         $this->assertTrue(property_exists($notificationData, 'id'));
         $this->assertTrue(property_exists($notificationData, 'user_id'));
-        $this->assertTrue(property_exists($notificationData, 'type'));
+        $this->assertTrue(property_exists($notificationData, 'message'));
         $this->assertTrue(property_exists($notificationData, 'viewed'));
         $this->assertTrue(property_exists($notificationData, 'created_on'));
 
         $this->assertContainsEquals($notificationData->id, $notificationsExpectedIds);
         $this->assertContainsEquals($notificationData->user_id, $notificationsExpectedUsersIds);
-        $this->assertContainsEquals($notificationData->type, $notificationsExpectedTypes);
         $this->assertContainsEquals($notificationData->viewed, $notificationsExpectedViewed);
     }
 
@@ -52,12 +50,13 @@ class NotificationGetDataControllerTest extends WebClientTestCase
     {
         $page = 1;
         $pageItems = 10;
+        $lang = 'en';
         $notificationsDataExpected = $this->getNotificationsDatabaseData();
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?page={$page}&page_items={$pageItems}",
+            uri: self::ENDPOINT."?page={$page}&page_items={$pageItems}&lang={$lang}",
             content: json_encode([])
         );
 
@@ -106,13 +105,14 @@ class NotificationGetDataControllerTest extends WebClientTestCase
     {
         $page = 2;
         $pageItems = 2;
+        $lang = 'es';
         $notificationsDataExpected = $this->getNotificationsDatabaseData();
         $notificationsDataExpected = [$notificationsDataExpected[2], $notificationsDataExpected[3]];
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?page={$page}&page_items={$pageItems}",
+            uri: self::ENDPOINT."?page={$page}&page_items={$pageItems}&lang={$lang}",
             content: json_encode([])
         );
 
@@ -134,11 +134,12 @@ class NotificationGetDataControllerTest extends WebClientTestCase
     {
         $page = 1;
         $pageItems = 10;
+        $lang = 'en';
 
         $client = $this->getNewClientAuthenticatedAdmin();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?page={$page}&page_items={$pageItems}",
+            uri: self::ENDPOINT."?page={$page}&page_items={$pageItems}&lang={$lang}",
             content: json_encode([])
         );
 
@@ -152,11 +153,12 @@ class NotificationGetDataControllerTest extends WebClientTestCase
     {
         $page = 0;
         $pageItems = 10;
+        $lang = 'en';
 
         $client = $this->getNewClientAuthenticatedAdmin();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?page={$page}&page_items={$pageItems}",
+            uri: self::ENDPOINT."?page={$page}&page_items={$pageItems}&lang={$lang}",
             content: json_encode([])
         );
 
@@ -175,11 +177,12 @@ class NotificationGetDataControllerTest extends WebClientTestCase
     {
         $page = 1;
         $pageItems = 0;
+        $lang = 'en';
 
         $client = $this->getNewClientAuthenticatedAdmin();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?page={$page}&page_items={$pageItems}",
+            uri: self::ENDPOINT."?page={$page}&page_items={$pageItems}&lang={$lang}",
             content: json_encode([])
         );
 
@@ -198,11 +201,12 @@ class NotificationGetDataControllerTest extends WebClientTestCase
     {
         $page = 1;
         $pageItems = 101;
+        $lang = 'en';
 
         $client = $this->getNewClientAuthenticatedAdmin();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?page={$page}&page_items={$pageItems}",
+            uri: self::ENDPOINT."?page={$page}&page_items={$pageItems}&lang={$lang}",
             content: json_encode([])
         );
 

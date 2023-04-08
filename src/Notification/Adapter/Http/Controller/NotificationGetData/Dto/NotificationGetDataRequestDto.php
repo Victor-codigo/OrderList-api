@@ -9,12 +9,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class NotificationGetDataRequestDto implements RequestDtoInterface
 {
-    public readonly int $page;
-    public readonly int $pageItems;
+    public readonly int|null $page;
+    public readonly int|null $pageItems;
+    public readonly string|null $lang;
 
     public function __construct(Request $request)
     {
         $this->page = $request->query->getInt('page');
         $this->pageItems = $request->query->getInt('page_items');
+        $this->lang = $request->query->get('lang', 'en');
     }
 }
