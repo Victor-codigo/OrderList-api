@@ -30,7 +30,8 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
                     properties: [
                         new OA\Property(property: 'users_id', type: 'array', items: new OA\Items('string'), description: 'User\'s id to send notification', example: '[22fd9f1f-ff4c-4f4a-abca-b0be7f965048]'),
                         new OA\Property(property: 'type', type: 'string', description: 'Notification type', example: 'NOTIFICATION_TYPE::*'),
-                        new OA\Property(property: 'type', type: 'string', description: 'A key to validate the system is creating the notification', example: 'sdfhwewetgeñrkjgqwérhgqelrkgnqehrgqehg'),
+                        new OA\Property(property: 'notification_data', type: 'array', items: new OA\Items('string'), description: 'Data needed to create the notification', example: '["group_name" => "group of friends"]'),
+                        new OA\Property(property: 'system_key', type: 'string', description: 'A key to validate the system is creating the notification', example: 'sdfhwewetgeñrkjgqwérhgqelrkgnqehrgqehg'),
                     ]
                 )
             ),
@@ -62,7 +63,7 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<users_id|users_wrong|type|system_key, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<users_id|users_wrong|type|system_key|notification_data, string|array>')),
                     ]
                 )
             )

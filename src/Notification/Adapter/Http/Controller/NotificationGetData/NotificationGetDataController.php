@@ -82,7 +82,7 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<page|page_items, string>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<page|page_items|lang, string>')),
                     ]
                 )
             )
