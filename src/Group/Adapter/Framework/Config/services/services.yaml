@@ -5,6 +5,7 @@ services:
     bind:
       $groupImagePath: "%group.image.path%"
       $groupPublicImagePath: "%group.public.image.path%"
+      $systemKey: "%common.system.key%"
 
   # Adapter
   Group\Adapter\:

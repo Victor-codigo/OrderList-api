@@ -19,23 +19,29 @@ use Group\Application\GroupUserAdd\Dto\GroupUserAddInputDto;
 use Group\Application\GroupUserAdd\Dto\GroupUserAddOutputDto;
 use Group\Application\GroupUserAdd\Exception\GroupUserAddGroupMaximumUsersNumberExceededException;
 use Group\Application\GroupUserAdd\Exception\GroupUserAddGroupNotFoundException;
+use Group\Application\GroupUserAdd\Exception\GroupUserAddNotificationException;
 use Group\Application\GroupUserAdd\Exception\GroupUserAddUsersValidationException;
 use Group\Application\GroupUserRoleChange\Exception\GroupUserRoleChangePermissionException;
+use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
+use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupUserAdd\Dto\GroupUserAddDto;
 use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersMaxNumberExceededException;
 use Group\Domain\Service\GroupUserAdd\GroupUserAddService;
 use Group\Domain\Service\UserHasGroupAdminGrants\UserHasGroupAdminGrantsService;
+use User\Domain\Model\User;
 
 class GroupUserAddUseCase extends ServiceBase
 {
     public function __construct(
         private ValidationInterface $validator,
         private UserGroupRepositoryInterface $userGroupRepository,
+        private GroupRepositoryInterface $groupRepository,
         private UserHasGroupAdminGrantsService $userHasGroupAdminGrantsService,
         private GroupUserAddService $groupUserAddService,
-        private ModuleCommunicationInterface $moduleCommunication
+        private ModuleCommunicationInterface $moduleCommunication,
+        private string $systemKey
     ) {
     }
 
@@ -52,6 +58,9 @@ class GroupUserAddUseCase extends ServiceBase
             $usersAdded = $this->groupUserAddService->__invoke(
                 $this->createGroupUserAddDto($input->groupId, $input->usersId, $input->rol)
             );
+
+            $group = $this->groupRepository->findGroupsByIdOrFail([$input->groupId])[0];
+            $this->createNotificationGroupUserAdded($usersAdded, $group, $input->userSession, $this->systemKey);
 
             return $this->createGroupUserAddOutputDto($usersAdded);
         } catch (GroupAddUsersMaxNumberExceededException) {
@@ -96,6 +105,25 @@ class GroupUserAddUseCase extends ServiceBase
 
         if (!empty($response->getErrors()) || !$response->hasContent()) {
             throw GroupUserAddUsersValidationException::fromMessage('Wrong users');
+        }
+    }
+
+    /**
+     * @param UserGroup[] $usersGroupToNotify
+     */
+    private function createNotificationGroupUserAdded(array $usersGroupToNotify, Group $group, User $userSession, string $systemKey): void
+    {
+        $notificationData = ModuleCommunicationFactory::notificationCreateGroupUserAdded(
+            array_map(fn (UserGroup $userGroup) => $userGroup->getUserId()->getValue(), $usersGroupToNotify),
+            $group->getName()->getValue(),
+            $userSession->getName()->getValue(),
+            $systemKey
+        );
+
+        $response = $this->moduleCommunication->__invoke($notificationData);
+
+        if (!empty($response->getErrors())) {
+            throw GroupUserAddNotificationException::fromMessage('An error war ocurred when trying to send the notification: user added to the group');
         }
     }
 
