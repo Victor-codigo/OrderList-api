@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Group\Adapter\Http\Controller\GroupUserGetGroups;
 
+use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use Group\Adapter\Http\Controller\GroupUserGetGroups\Dto\GroupUserGetGroupsRequestDto;
 use Group\Application\GroupUserGetGroups\Dto\GroupUserGetGroupsInputDto;
-use Group\Application\GroupUserGetGroups\Dto\GroupUserGetGroupsOutputDto;
 use Group\Application\GroupUserGetGroups\GroupUserGetGroupsUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -51,11 +51,16 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
                         new OA\Property(property: 'message', type: 'string', example: 'Groups of the user'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items(
                             properties: [
-                                new OA\Property(property: 'group_id', type: 'string', example: '1fcab788-0def-4e56-b441-935361678da9'),
-                                new OA\Property(property: 'name', type: 'string', example: 'GroupName'),
-                                new OA\Property(property: 'description', type: 'string', example: 'Group description'),
-                                new OA\Property(property: 'image', type: 'string', example: 'Path to group Image'),
-                                new OA\Property(property: 'created_on', type: 'string', example: '2023-2-14 14:05:10'),
+                                new OA\Property(property: 'page', type: 'integer', example: '1', description: 'Number of the current page'),
+                                new OA\Property(property: 'pages_total', type: 'integer', example: '5', description: 'Number of total pages'),
+                                new OA\Property(property: 'groups', type: 'array', items: new OA\Items(
+                                    properties: [
+                                    new OA\Property(property: 'group_id', type: 'string', example: '1fcab788-0def-4e56-b441-935361678da9'),
+                                    new OA\Property(property: 'name', type: 'string', example: 'GroupName'),
+                                    new OA\Property(property: 'description', type: 'string', example: 'Group description'),
+                                    new OA\Property(property: 'image', type: 'string', example: 'Path to group Image'),
+                                    new OA\Property(property: 'created_on', type: 'string', example: '2023-2-14 14:05:10'),
+                                ])),
                             ])),
                         new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),
                     ]
@@ -104,12 +109,12 @@ class GroupUserGetGroupsController extends AbstractController
         return new GroupUserGetGroupsInputDto($userAdapter->getUser(), $page, $pgaItem);
     }
 
-    private function createResponse(GroupUserGetGroupsOutputDto $userGroups): JsonResponse
+    private function createResponse(ApplicationOutputInterface $userGroups): JsonResponse
     {
         $responseDto = (new ResponseDto())
             ->setMessage('Groups of the user')
             ->setStatus(RESPONSE_STATUS::OK)
-            ->setData(iterator_to_array($userGroups->groups));
+            ->setData($userGroups->toArray());
 
         return new JsonResponse($responseDto, Response::HTTP_OK);
     }

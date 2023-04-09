@@ -13,6 +13,7 @@ use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupGetData\Dto\GroupGetDataDto;
 use Group\Domain\Service\GroupGetData\GroupGetDataService;
+use Group\Domain\Service\GroupUserGetGroups\Dto\GroupUserGeGroupsOutputDto;
 use Group\Domain\Service\GroupUserGetGroups\Dto\GroupUserGetGroupsDto;
 
 class GroupUserGetGroupsService
@@ -26,7 +27,7 @@ class GroupUserGetGroupsService
     /**
      * @throws DBNotFoundException
      */
-    public function __invoke(GroupUserGetGroupsDto $input): \Generator
+    public function __invoke(GroupUserGetGroupsDto $input): GroupUserGeGroupsOutputDto
     {
         $userGroups = $this->userGroupRepository->findUserGroupsById($input->userId, null, GROUP_TYPE::GROUP);
 
@@ -36,7 +37,7 @@ class GroupUserGetGroupsService
     /**
      * @throws DBNotFoundException
      */
-    private function getUserGroups(PaginatorInterface $userGroups, PaginatorPage $page, PaginatorPageItems $pageItems): \Generator
+    private function getUserGroups(PaginatorInterface $userGroups, PaginatorPage $page, PaginatorPageItems $pageItems): GroupUserGeGroupsOutputDto
     {
         $userGroups->setPagination($page->getValue(), $pageItems->getValue());
 
@@ -45,9 +46,11 @@ class GroupUserGetGroupsService
             iterator_to_array($userGroups)
         );
 
-        return $this->groupGetDataService->__invoke(
+        $groups = $this->groupGetDataService->__invoke(
             $this->createGroupGetDataDto($groupsId)
         );
+
+        return new GroupUserGeGroupsOutputDto($page, $userGroups->getPagesTotal(), $groups);
     }
 
     /**

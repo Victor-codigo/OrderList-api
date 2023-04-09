@@ -6,12 +6,14 @@ namespace Group\Application\GroupUserGetGroups;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserGetGroups\Dto\GroupUserGetGroupsInputDto;
 use Group\Application\GroupUserGetGroups\Dto\GroupUserGetGroupsOutputDto;
 use Group\Application\GroupUserGetGroups\Exception\GroupUserGetGroupsNoGroupsFoundException;
+use Group\Domain\Service\GroupUserGetGroups\Dto\GroupUserGeGroupsOutputDto;
 use Group\Domain\Service\GroupUserGetGroups\Dto\GroupUserGetGroupsDto;
 use Group\Domain\Service\GroupUserGetGroups\GroupUserGetGroupsService;
 
@@ -35,7 +37,7 @@ class GroupUserGetGroupsUseCase extends ServiceBase
                 $this->createGroupUserGetGroupsDto($input)
             );
 
-            return $this->createGroupUserGetGroupsOutputDto($userGroups);
+            return $this->createGroupUserGetGroupsOutputDto($input->page, $userGroups);
         } catch (DBNotFoundException) {
             throw GroupUserGetGroupsNoGroupsFoundException::fromMessage('No groups found');
         } catch (\Exception) {
@@ -60,8 +62,8 @@ class GroupUserGetGroupsUseCase extends ServiceBase
         return new GroupUserGetGroupsDto($input->userSession->getId(), $input->page, $input->pageItems);
     }
 
-    private function createGroupUserGetGroupsOutputDto(\Generator $groups): GroupUserGetGroupsOutputDto
+    private function createGroupUserGetGroupsOutputDto(PaginatorPage $page, GroupUserGeGroupsOutputDto $userGroups): GroupUserGetGroupsOutputDto
     {
-        return new GroupUserGetGroupsOutputDto($groups);
+        return new GroupUserGetGroupsOutputDto($page, $userGroups->pagesTotal, iterator_to_array($userGroups->groups));
     }
 }
