@@ -123,7 +123,7 @@ class GroupUserAddUseCase extends ServiceBase
         $response = $this->moduleCommunication->__invoke($notificationData);
 
         if (!empty($response->getErrors())) {
-            throw GroupUserAddNotificationException::fromMessage('An error war ocurred when trying to send the notification: user added to the group');
+            throw GroupUserAddNotificationException::fromMessage('An error was ocurred when trying to send the notification: user added to the group');
         }
     }
 
