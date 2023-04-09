@@ -6,6 +6,9 @@ namespace User\Domain\Service\UserFirstLogin;
 
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
+use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
+use Common\Domain\Service\Exception\DomainErrorException;
 use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
 use User\Domain\Port\Repository\UserRepositoryInterface;
@@ -13,18 +16,23 @@ use User\Domain\Service\UserCreateGroup\Dto\UserCreateGroupDto;
 use User\Domain\Service\UserCreateGroup\Exception\UserCreateGroupUserException;
 use User\Domain\Service\UserCreateGroup\UserCreateGroupService;
 use User\Domain\Service\UserFirstLogin\Dto\UserFirstLoginDto;
-use User\Domain\Service\UserFirstLogin\Exception\UserFirstLoginCreateGroupException as ExceptionUserFirstLoginCreateGroupException;
+use User\Domain\Service\UserFirstLogin\Exception\UserFirstLoginCreateGroupException;
+use User\Domain\Service\UserFirstLogin\Exception\UserFirstLoginNotificationUserRegisteredException;
 
 class UserFirstLoginService
 {
     public function __construct(
         private UserRepositoryInterface $userRepository,
         private UserCreateGroupService $userCreateGroupService,
+        private ModuleCommunicationInterface $moduleCommunication,
+        private string $appName,
+        private string $systemKey
     ) {
     }
 
     /**
-     * @throws UserFirsLoginCreateGroupException
+     * @throws UserFirstLoginCreateGroupException
+     * @throws DomainErrorException
      */
     public function __invoke(UserFirstLoginDto $input): void
     {
@@ -36,11 +44,14 @@ class UserFirstLoginService
             $this->userCreateGroupService->__invoke(
                 $this->createUserCreateGroupDto($input->user->getName())
             );
-        } catch (UserCreateGroupUserException) {
-            throw ExceptionUserFirstLoginCreateGroupException::formMessage('Could not create the user\'s group');
-        }
 
-        $this->changeRoleToUser($input->user);
+            $this->changeRoleToUser($input->user);
+            $this->createNotificationUserRegistered($input->user, $this->appName, $this->systemKey);
+        } catch (UserCreateGroupUserException) {
+            throw UserFirstLoginCreateGroupException::formMessage('Could not create the user\'s group');
+        } catch (\Exception $e) {
+            throw DomainErrorException::fromMessage('An error has been occurred');
+        }
     }
 
     private function isFirstLogin(User $user): bool
@@ -52,6 +63,10 @@ class UserFirstLoginService
         return false;
     }
 
+    /**
+     * @throws DBUniqueConstraintException
+     * @throws DBConnectionException
+     */
     private function changeRoleToUser(User $user): void
     {
         $user->setRoles(ValueObjectFactory::createRoles([
@@ -64,5 +79,24 @@ class UserFirstLoginService
     private function createUserCreateGroupDto(Name $userName): UserCreateGroupDto
     {
         return new UserCreateGroupDto($userName);
+    }
+
+    /**
+     * @throws UserFirstLoginNotificationUserRegisteredException
+     */
+    private function createNotificationUserRegistered(User $user, string $appName, string $systemKey): void
+    {
+        $notificationData = ModuleCommunicationFactory::notificationCreateUserRegistered(
+            $user->getId()->getValue(),
+            $user->getName()->getValue(),
+            $appName,
+            $systemKey
+        );
+
+        $response = $this->moduleCommunication->__invoke($notificationData);
+
+        if (!empty($response->getErrors())) {
+            throw UserFirstLoginNotificationUserRegisteredException::fromMessage('An error was ocurred when trying to send the notification: user registered');
+        }
     }
 }

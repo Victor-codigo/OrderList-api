@@ -9,6 +9,7 @@ services:
             $emailUserPasswordRememberExpire: "%common.email_user_password_remember_expire%"
             $userImagePath: "%user.image.path%"
             $userPublicImagePath: "%user.public.image.path%"
+            $systemKey: "%common.system.key%"
 
     # Adapter
     User\Adapter\:

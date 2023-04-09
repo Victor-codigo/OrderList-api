@@ -90,10 +90,10 @@ class ModuleCommunicationFactory
         );
     }
 
-    public static function notificationCreateUserRegistered(array $recipientUsers, string $userName, string $domainName, string $systemKey): ModuleCommunicationConfigDto
+    public static function notificationCreateUserRegistered(string $recipientUserId, string $userName, string $domainName, string $systemKey): ModuleCommunicationConfigDto
     {
         $content = [
-            'users_id' => $recipientUsers,
+            'users_id' => $recipientUserId,
             'type' => NOTIFICATION_TYPE::USER_REGISTERED->value,
             'notification_data' => [
                 'user_name' => $userName,
@@ -105,10 +105,10 @@ class ModuleCommunicationFactory
         return self::notificationCreate($content);
     }
 
-    public static function notificationCreateGroupUserAdded(array $recipientUsers, string $groupName, string $userWhoAddsYouName, string $systemKey): ModuleCommunicationConfigDto
+    public static function notificationCreateGroupUserAdded(array $recipientUsersId, string $groupName, string $userWhoAddsYouName, string $systemKey): ModuleCommunicationConfigDto
     {
         $content = [
-            'users_id' => $recipientUsers,
+            'users_id' => $recipientUsersId,
             'type' => NOTIFICATION_TYPE::GROUP_USER_ADDED->value,
             'notification_data' => [
                 'group_name' => $groupName,
