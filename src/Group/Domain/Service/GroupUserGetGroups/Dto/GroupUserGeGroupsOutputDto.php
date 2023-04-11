@@ -11,7 +11,7 @@ class GroupUserGeGroupsOutputDto
     public function __construct(
         public readonly PaginatorPage $page,
         public readonly int $pagesTotal,
-        public readonly \Generator $groups,
+        public readonly array $groups,
     ) {
     }
 }

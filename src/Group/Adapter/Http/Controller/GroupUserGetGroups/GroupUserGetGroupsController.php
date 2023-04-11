@@ -59,6 +59,7 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
                                     new OA\Property(property: 'name', type: 'string', example: 'GroupName'),
                                     new OA\Property(property: 'description', type: 'string', example: 'Group description'),
                                     new OA\Property(property: 'image', type: 'string', example: 'Path to group Image'),
+                                    new OA\Property(property: 'admin', type: 'boolean'),
                                     new OA\Property(property: 'created_on', type: 'string', example: '2023-2-14 14:05:10'),
                                 ])),
                             ])),
