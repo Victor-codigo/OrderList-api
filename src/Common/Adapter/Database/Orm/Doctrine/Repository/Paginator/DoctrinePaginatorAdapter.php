@@ -60,8 +60,10 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
             throw PaginatorPageException::formMessage('Wrong page. Page must be bigger than 1');
         }
 
-        if ($page > $this->getPagesTotal()) {
-            throw PaginatorPageException::formMessage("Wrong page. Page must be lower than pages total: {$this->getPagesTotal()}");
+        $pagesTotal = $this->getPagesTotal();
+
+        if ($page > $pagesTotal) {
+            $page = $pagesTotal;
         }
 
         $this->paginator

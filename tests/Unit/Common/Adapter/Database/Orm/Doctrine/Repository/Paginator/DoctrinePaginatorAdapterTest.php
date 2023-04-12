@@ -356,7 +356,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
     }
 
      /** @test */
-     public function itShouldFailSettingPaginationPageGreaterThanTotalPages(): void
+     public function itShouldSetPaginationPageGreaterThanTotalPagesToLastPage(): void
      {
          $pageItems = 5;
          $page = 5;
@@ -370,8 +370,14 @@ class DoctrinePaginatorAdapterTest extends TestCase
              ->method('setMaxResults')
              ->with($pageItems);
 
-         $this->expectException(PaginatorPageException::class);
-         $object->setPagination($page, $pageItems);
+         $query
+            ->expects($this->any())
+            ->method('setFirstResult')
+            ->with($pageItems * (4 - 1));
+
+         $return = $object->setPagination($page, $pageItems);
+
+         $this->assertInstanceOf(DoctrinePaginatorAdapter::class, $return);
      }
 
     /** @test */
