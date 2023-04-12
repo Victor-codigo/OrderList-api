@@ -46,22 +46,27 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [0, 1], [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'groups'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Groups of the user', $responseContent->message);
 
-        $this->assertCount(count($groupsId), $responseContent->data);
+        $this->assertTrue(property_exists($responseContent->data, 'page'));
+        $this->assertTrue(property_exists($responseContent->data, 'pages_total'));
+        $this->assertTrue(property_exists($responseContent->data, 'groups'));
+        $this->assertCount(count($groupsId), $responseContent->data->groups);
 
-        foreach ($responseContent->data as $groupData) {
+        foreach ($responseContent->data->groups as $groupData) {
             $this->assertTrue(property_exists($groupData, 'group_id'));
             $this->assertTrue(property_exists($groupData, 'name'));
             $this->assertTrue(property_exists($groupData, 'description'));
             $this->assertTrue(property_exists($groupData, 'created_on'));
+            $this->assertTrue(property_exists($groupData, 'admin'));
             $this->assertContains($groupData->group_id, $groupsId);
             $this->assertContains($groupData->name, $groupsName);
             $this->assertContains($groupData->description, $groupsDescription);
             $this->assertIsString($groupData->created_on);
             $this->assertStringMatchesFormat('%d-%d-%d %d:%d:%d', $groupData->created_on);
+            $this->assertTrue($groupData->admin);
         }
     }
 
@@ -75,10 +80,6 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         );
 
         $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [], ['groups_not_found'], Response::HTTP_BAD_REQUEST);
-        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('No groups found', $responseContent->message);
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 }

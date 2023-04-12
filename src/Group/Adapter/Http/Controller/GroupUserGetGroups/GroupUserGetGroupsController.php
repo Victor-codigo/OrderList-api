@@ -69,18 +69,11 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
             )
         ),
         new OA\Response(
-            response: Response::HTTP_BAD_REQUEST,
+            response: Response::HTTP_NO_CONTENT,
             description: 'The user has not join any group',
             content: new OA\MediaType(
                 mediaType: 'application/json',
-                schema: new OA\Schema(
-                    properties: [
-                        new OA\Property(property: 'status', type: 'string', example: 'ok'),
-                        new OA\Property(property: 'message', type: 'string', example: 'No groups found'),
-                        new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),
-                    ]
-                )
+                schema: new OA\Schema()
             )
         ),
     ]

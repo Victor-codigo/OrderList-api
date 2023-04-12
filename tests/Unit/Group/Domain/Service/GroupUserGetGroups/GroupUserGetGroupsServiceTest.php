@@ -117,20 +117,24 @@ class GroupUserGetGroupsServiceTest extends TestCase
         $this->mockGroupGetDataService($groupGetDataDto->groupsId, $expectedGroupsData, $this->once());
 
         $return = $this->object->__invoke(new GroupUserGetGroupsDto($userId, $paginatorPage, $paginatorPageItems));
-        $returnData = iterator_to_array($return);
 
-        $this->assertCount(count($expectedGroupsData), $returnData);
+        $this->assertTrue(property_exists($return, 'page'));
+        $this->assertTrue(property_exists($return, 'pagesTotal'));
+        $this->assertTrue(property_exists($return, 'groups'));
+        $this->assertCount(count($expectedGroupsData), $return->groups);
 
-        foreach ($returnData as $key => $groupData) {
+        foreach ($return->groups as $key => $groupData) {
             $this->assertArrayHasKey('group_id', $groupData);
             $this->assertArrayHasKey('name', $groupData);
             $this->assertArrayHasKey('description', $groupData);
             $this->assertArrayHasKey('created_on', $groupData);
+            $this->assertArrayHasKey('admin', $groupData);
 
             $this->assertEquals($expectedGroupsData[$key]->getId()->getValue(), $groupData['group_id']);
             $this->assertEquals($expectedGroupsData[$key]->getName()->getValue(), $groupData['name']);
             $this->assertEquals($expectedGroupsData[$key]->getDescription()->getValue(), $groupData['description']);
             $this->assertEquals($expectedGroupsData[$key]->getCreatedOn()->format('Y-m-d H:i:s'), $groupData['created_on']);
+            $this->assertTrue($groupData['admin']);
         }
     }
 
