@@ -52,7 +52,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         $this->patImageGroup = static::getContainer()->getParameter('group.image.path');
 
         if (!file_exists($this->patImageGroup)) {
-            mkdir($this->patImageGroup);
+            mkdir($this->patImageGroup, 0777, true);
         }
     }
 

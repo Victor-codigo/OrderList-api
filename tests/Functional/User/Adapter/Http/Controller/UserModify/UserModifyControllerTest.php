@@ -48,7 +48,7 @@ class UserModifyControllerTest extends WebClientTestCase
         $this->pathImageUser = static::getContainer()->getParameter('user.image.path');
 
         if (!file_exists($this->pathImageUser)) {
-            mkdir($this->pathImageUser);
+            mkdir($this->pathImageUser, 0777, true);
         }
     }
 
