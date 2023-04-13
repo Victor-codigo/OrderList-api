@@ -49,6 +49,16 @@ group_group_get_users:
     groups_id: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
 
 # -------------------------------------------------------------
+# GROUP USER GET GROUPS
+# -------------------------------------------------------------
+group_get_admins:
+  path: /api/v{api_version}/groups/admins/{group_id}
+  methods: GET
+  controller: Group\Adapter\Http\Controller\GroupGetAdmins\GroupGetAdminsController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
 # GROUP GET DATA
 # -------------------------------------------------------------
 group_get_data:
@@ -57,7 +67,6 @@ group_get_data:
   controller: Group\Adapter\Http\Controller\GroupGetData\GroupGetDataController
   requirements:
     api_version: '\d+[.\d]?'
-    # groups_id: "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
 
 # -------------------------------------------------------------
 # GROUP USER ADD
