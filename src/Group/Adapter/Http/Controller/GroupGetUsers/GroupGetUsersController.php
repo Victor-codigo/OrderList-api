@@ -9,6 +9,7 @@ use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use Group\Adapter\Http\Controller\GroupGetUsers\Dto\GroupGetUsersRequestDto;
 use Group\Application\GroupGetUsers\Dto\GroupGetUsersInputDto;
+use Group\Application\GroupGetUsers\Dto\GroupGetUsersOutputDto;
 use Group\Application\GroupGetUsers\GroupGetUsersUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -59,9 +60,15 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
                         new OA\Property(property: 'message', type: 'string', example: 'Users of the group'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items(
                             properties: [
-                                new OA\Property(property: 'id', type: 'string', example: '1fcab788-0def-4e56-b441-935361678da9'),
-                                new OA\Property(property: 'name', type: 'string', example: 'UserName'),
-                                new OA\Property(property: 'image', type: 'string', example: 'User\'s image'),
+                                new OA\Property(property: 'page', type: 'integer', example: '1', description: 'Number of the current page'),
+                                new OA\Property(property: 'pages_total', type: 'integer', example: '5', description: 'Number of total pages'),
+                                new OA\Property(property: 'users', type: 'array', items: new OA\Items(
+                                    properties: [
+                                        new OA\Property(property: 'id', type: 'string', example: '1fcab788-0def-4e56-b441-935361678da9'),
+                                        new OA\Property(property: 'name', type: 'string', example: 'UserName'),
+                                        new OA\Property(property: 'admin', type: 'boolean'),
+                                        new OA\Property(property: 'image', type: 'string', example: 'User\'s image'),
+                                    ])),
                             ])),
                         new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),
                     ]
@@ -118,7 +125,7 @@ class GroupGetUsersController extends AbstractController
             $this->createGroupGetUsersInputDto($request->groupId, $request->page, $request->pageItems)
         );
 
-        return $this->createResponse($groupUsers->users);
+        return $this->createResponse($groupUsers);
     }
 
     private function createGroupGetUsersInputDto(string|null $groupId, int $page, int $pageItems): GroupGetUsersInputDto
@@ -129,12 +136,12 @@ class GroupGetUsersController extends AbstractController
         return new GroupGetUsersInputDto($userAdapter->getUser(), $groupId, $page, $pageItems);
     }
 
-    private function createResponse(array $groupUsers): JsonResponse
+    private function createResponse(GroupGetUsersOutputDto $groupUsers): JsonResponse
     {
         $responseDto = (new ResponseDto())
             ->setMessage('Users of the group')
             ->setStatus(RESPONSE_STATUS::OK)
-            ->setData($groupUsers);
+            ->setData($groupUsers->toArray());
 
         return new JsonResponse($responseDto, Response::HTTP_OK);
     }

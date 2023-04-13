@@ -7,6 +7,7 @@ namespace Test\Unit\Group\Application\GroupGetUsers;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\HttpClient\Exception\Error400Exception;
+use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
@@ -39,7 +40,6 @@ class GroupGetUsersUseCaseTest extends TestCase
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|ValidationInterface $validator;
-    private MockObject|User $userSession;
 
     protected function setUp(): void
     {
@@ -108,6 +108,7 @@ class GroupGetUsersUseCaseTest extends TestCase
         $usersGroup = $this->getUsersGroup();
         $usersGroupId = array_map(fn (UserGroup $userGroup) => $userGroup->getUserId(), iterator_to_array($usersGroup));
         $usersGroupIdPlain = array_map(fn (UserGroup $userGroup) => $userGroup->getUserId()->getValue(), iterator_to_array($usersGroup));
+        $usersGroupAdmin = array_map(fn (UserGroup $userGroup) => $userGroup->getRoles()->has(new Rol(GROUP_ROLES::ADMIN)), iterator_to_array($usersGroup));
         $usersGroupData = $this->getUsersGroupData();
         $usersGroupNames = array_column($usersGroupData, 'name');
 
@@ -142,12 +143,14 @@ class GroupGetUsersUseCaseTest extends TestCase
         $this->assertInstanceOf(GroupGetUsersOutputDto::class, $return);
         $this->assertCount(count($usersGroup), $return->users);
 
-        foreach ($return->users as $user) {
-            $this->assertCount(2, $user);
+        foreach ($return->users as $key => $user) {
+            $this->assertCount(3, $user);
             $this->assertArrayHasKey('id', $user);
             $this->assertArrayHasKey('name', $user);
+            $this->assertArrayHasKey('admin', $user);
             $this->assertContains($user['id'], $usersGroupIdPlain);
             $this->assertContains($user['name'], $usersGroupNames);
+            $this->assertEquals($user['admin'], $usersGroupAdmin[$key]);
         }
     }
 

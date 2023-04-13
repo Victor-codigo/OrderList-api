@@ -35,16 +35,19 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, range(0, 49), [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'users'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Users of the group', $responseContent->message);
 
-        $this->assertCount(50, $responseContent->data);
+        $this->assertCount(50, $responseContent->data->users);
+        $this->assertEquals(1, $responseContent->data->page);
+        $this->assertEquals(2, $responseContent->data->pages_total);
 
-        foreach ($responseContent->data as $userData) {
+        foreach ($responseContent->data->users as $userData) {
             $this->assertTrue(property_exists($userData, 'id'));
             $this->assertTrue(property_exists($userData, 'name'));
             $this->assertTrue(property_exists($userData, 'image'));
+            $this->assertTrue(property_exists($userData, 'admin'));
         }
     }
 
@@ -64,16 +67,19 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, range(0, 49), [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'users'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Users of the group', $responseContent->message);
 
-        $this->assertCount(50, $responseContent->data);
+        $this->assertCount(50, $responseContent->data->users);
+        $this->assertEquals(1, $responseContent->data->page);
+        $this->assertEquals(2, $responseContent->data->pages_total);
 
-        foreach ($responseContent->data as $userData) {
+        foreach ($responseContent->data->users as $userData) {
             $this->assertTrue(property_exists($userData, 'id'));
             $this->assertTrue(property_exists($userData, 'name'));
             $this->assertTrue(property_exists($userData, 'image'));
+            $this->assertTrue(property_exists($userData, 'admin'));
         }
     }
 
@@ -93,16 +99,19 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, range(0, 49), [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'users'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Users of the group', $responseContent->message);
 
-        $this->assertCount(50, $responseContent->data);
+        $this->assertCount(50, $responseContent->data->users);
+        $this->assertEquals(1, $responseContent->data->page);
+        $this->assertEquals(2, $responseContent->data->pages_total);
 
-        foreach ($responseContent->data as $userData) {
+        foreach ($responseContent->data->users as $userData) {
             $this->assertTrue(property_exists($userData, 'id'));
             $this->assertTrue(property_exists($userData, 'name'));
             $this->assertTrue(property_exists($userData, 'image'));
+            $this->assertTrue(property_exists($userData, 'admin'));
         }
     }
 
@@ -122,16 +131,19 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, range(0, 49), [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'users'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Users of the group', $responseContent->message);
 
-        $this->assertCount(50, $responseContent->data);
+        $this->assertCount(50, $responseContent->data->users);
+        $this->assertEquals(1, $responseContent->data->page);
+        $this->assertEquals(2, $responseContent->data->pages_total);
 
-        foreach ($responseContent->data as $userData) {
+        foreach ($responseContent->data->users as $userData) {
             $this->assertTrue(property_exists($userData, 'id'));
             $this->assertTrue(property_exists($userData, 'name'));
             $this->assertTrue(property_exists($userData, 'image'));
+            $this->assertTrue(property_exists($userData, 'admin'));
         }
     }
 
@@ -151,16 +163,19 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, range(0, 4), [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'users'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Users of the group', $responseContent->message);
 
-        $this->assertCount(5, $responseContent->data);
+        $this->assertCount(5, $responseContent->data->users);
+        $this->assertEquals(1, $responseContent->data->page);
+        $this->assertEquals(20, $responseContent->data->pages_total);
 
-        foreach ($responseContent->data as $userData) {
+        foreach ($responseContent->data->users as $userData) {
             $this->assertTrue(property_exists($userData, 'id'));
             $this->assertTrue(property_exists($userData, 'name'));
             $this->assertTrue(property_exists($userData, 'image'));
+            $this->assertTrue(property_exists($userData, 'admin'));
         }
     }
 
@@ -192,17 +207,20 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, range(0, 2), [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'users'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Users of the group', $responseContent->message);
 
-        $this->assertCount(3, $responseContent->data);
+        $this->assertCount(3, $responseContent->data->users);
+        $this->assertEquals(1, $responseContent->data->page);
+        $this->assertEquals(34, $responseContent->data->pages_total);
 
-        foreach ($responseContent->data as $userData) {
+        foreach ($responseContent->data->users as $userData) {
             $this->assertTrue(property_exists($userData, 'id'));
             $this->assertTrue(property_exists($userData, 'name'));
             $this->assertTrue(property_exists($userData, 'image'));
-            $this->assertContainsEquals($userData, $responseContent10Users->data);
+            $this->assertTrue(property_exists($userData, 'admin'));
+            $this->assertContainsEquals($userData, $responseContent10Users->data->users);
         }
     }
 

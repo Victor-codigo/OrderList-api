@@ -9,6 +9,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\HttpClient\Exception\Error400Exception;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
+use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -21,6 +22,7 @@ use Group\Application\GroupGetUsers\Dto\GroupGetUsersInputDto;
 use Group\Application\GroupGetUsers\Dto\GroupGetUsersOutputDto;
 use Group\Application\GroupGetUsers\Exception\GroupGetUsersGroupNotFoundException;
 use Group\Application\GroupGetUsers\Exception\GroupGetUsersUserNotInTheGroupException;
+use Group\Domain\Model\GROUP_ROLES;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 
@@ -48,7 +50,7 @@ class GroupGetUsersUseCase extends ServiceBase
             $this->validateIsUserSessionInGroup($input->groupId, $input->userSession->getId());
             $usersData = $this->getUsersData($groupUsers, $input->page, $input->pageItems);
 
-            return $this->createGroupGetUsersOutputDto($usersData);
+            return $this->createGroupGetUsersOutputDto($usersData, $input->page, $groupUsers->getPagesTotal());
         } catch (GroupGetUsersUserNotInTheGroupException $e) {
             throw $e;
         } catch (DBNotFoundException) {
@@ -98,15 +100,30 @@ class GroupGetUsersUseCase extends ServiceBase
             iterator_to_array($usersGroup)
         );
 
-        $response = $this->moduleCommunication->__invoke(
+        $usersAdmin = array_filter(
+            iterator_to_array($usersGroup),
+            fn (UserGroup $userGroup) => $userGroup->getRoles()->has(new Rol(GROUP_ROLES::ADMIN)),
+        );
+
+        $usersAdminId = array_map(
+            fn (UserGroup $userGroup) => $userGroup->getUserId()->getValue(),
+            $usersAdmin
+        );
+
+        $usersData = $this->moduleCommunication->__invoke(
             ModuleCommunicationFactory::userGet($usersId)
         );
 
-        return $response->getData();
+        array_walk(
+            $usersData->data,
+            fn (array &$userData) => $userData['admin'] = in_array($userData['id'], $usersAdminId)
+        );
+
+        return $usersData->getData();
     }
 
-    private function createGroupGetUsersOutputDto(array $users): GroupGetUsersOutputDto
+    private function createGroupGetUsersOutputDto(array $users, PaginatorPage $page, int $pagesTotal): GroupGetUsersOutputDto
     {
-        return new GroupGetUsersOutputDto($users);
+        return new GroupGetUsersOutputDto($users, $page, $pagesTotal);
     }
 }
