@@ -28,6 +28,7 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
                 schema: new OA\Schema(
                     properties: [
                         new OA\Property(property: 'group_id', type: 'string', description: 'Group id', example: 'fdb242b4-bac8-4463-88d0-0941bb0beee0'),
+                        new OA\Property(property: 'identifier_type', type: 'string', description: 'Sets the type of value passed in parameter users. values: identifier|name', example: 'identifier'),
                         new OA\Property(property: 'users', type: 'array', items: new OA\Items(), description: 'Ids of users to add to the group', example: ['fdb242b4-bac8-4463-88d0-0941bb0beee0', '2606508b-4516-45d6-93a6-c7cb416b7f3f']),
                         new OA\Property(property: 'admin', type: 'boolean', description: 'Users\'s role in the group. TRUE to set rol to admin, FALSE to set rol to user', example: false),
                     ]
