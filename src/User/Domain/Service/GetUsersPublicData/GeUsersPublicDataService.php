@@ -81,13 +81,22 @@ class GeUsersPublicDataService
         }
     }
 
+    /**
+     * @throws DBNotFoundException
+     */
     private function getValidUsers(array $users): array
     {
-        return array_values(array_filter(
+        $usersValid = array_values(array_filter(
             $users,
             fn (User $user) => !$user->getRoles()->has(new Rol(USER_ROLES::NOT_ACTIVE))
                             && !$user->getRoles()->has(new Rol(USER_ROLES::DELETED))
         ));
+
+        if (empty($usersValid)) {
+            throw DBNotFoundException::fromMessage('users not found');
+        }
+
+        return $usersValid;
     }
 
     /**

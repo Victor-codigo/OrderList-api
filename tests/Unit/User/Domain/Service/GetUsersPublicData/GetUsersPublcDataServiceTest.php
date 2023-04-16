@@ -207,4 +207,22 @@ class GetUsersPublcDataServiceTest extends TestCase
         $usersDto = new GetUsersPublicDataDto($usersId);
         $this->object->__invoke($usersDto, SCOPE::PRIVATE);
     }
+
+    /** @test */
+    public function itShouldFailUsersAreNotValid(): void
+    {
+        $usersId = $this->getUsersIdDeletedOrNotActive();
+        $expectedUsers = $this->getUsersDeletedOrNotActive();
+
+        $this->userRepository
+            ->expects($this->once())
+            ->method('findUsersByIdOrFail')
+            ->with($usersId)
+            ->willReturn($expectedUsers);
+
+        $usersDto = new GetUsersPublicDataDto($usersId);
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->__invoke($usersDto, SCOPE::PRIVATE);
+    }
 }
