@@ -109,13 +109,13 @@ class GroupUserAddController extends AbstractController
     public function __invoke(GroupUserAddRequestDto $request): JsonResponse
     {
         $usersModifiedId = $this->groupUserAddUseCase->__invoke(
-            $this->createGroupUserAddInputDto($request->groupId, $request->usersId, $request->admin)
+            $this->createGroupUserAddInputDto($request->groupId, $request->users, $request->identifierType, $request->admin)
         );
 
         return $this->createResponse($usersModifiedId->usersId);
     }
 
-    private function createGroupUserAddInputDto(string|null $groupId, array|null $usersId, bool|null $admin): GroupUserAddInputDto
+    private function createGroupUserAddInputDto(string|null $groupId, array|null $users, string|null $identifierType, bool|null $admin): GroupUserAddInputDto
     {
         /** @var UserSymfonyAdapter */
         $userAdapter = $this->security->getUser();
@@ -123,7 +123,8 @@ class GroupUserAddController extends AbstractController
         return new GroupUserAddInputDto(
             $userAdapter->getUser(),
             $groupId,
-            $usersId,
+            $users,
+            $identifierType,
             $admin
         );
     }

@@ -63,6 +63,29 @@ class ModuleCommunicationFactory
     }
 
     /**
+     * @param string[] $usersId
+     */
+    public static function userGetByName(array $usersNames): ModuleCommunicationConfigDto
+    {
+        $attributes = [
+            'api_version' => static::API_VERSION,
+            'users_name' => implode(',', $usersNames),
+        ];
+
+        return new ModuleCommunicationConfigDto(
+            'user_get_by_name',
+            'GET',
+            $attributes,
+            [],
+            [],
+            self::CONTENT_TYPE_APPLICATION_JSON,
+            [],
+            [],
+            true
+        );
+    }
+
+    /**
      * @param UploadedFileInterface[] $files
      */
     public static function groupCreate(string $name, string $description, GROUP_TYPE $type, array $files = []): ModuleCommunicationConfigDto

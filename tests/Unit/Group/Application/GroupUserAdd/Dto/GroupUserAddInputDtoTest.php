@@ -11,8 +11,8 @@ use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserAdd\Dto\GroupUserAddInputDto;
 use Group\Domain\Model\GROUP_ROLES;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\User;
 use User\Domain\Model\USER_ROLES;
+use User\Domain\Model\User;
 
 class GroupUserAddInputDtoTest extends TestCase
 {
@@ -47,13 +47,14 @@ class GroupUserAddInputDtoTest extends TestCase
             $this->userSession,
             self::GROUP_ID,
             self::USERS_TO_ADD_ID,
+            'identifier',
             true
         );
 
         $return = $object->validate($this->validator);
 
         $this->assertEmpty($return);
-        $this->assertContainsOnlyInstancesOf(Identifier::class, $object->usersId);
+        $this->assertContainsOnlyInstancesOf(Identifier::class, $object->users);
         $this->assertEquals(GROUP_ROLES::ADMIN, $object->rol->getValue());
     }
 
@@ -64,13 +65,14 @@ class GroupUserAddInputDtoTest extends TestCase
             $this->userSession,
             self::GROUP_ID,
             self::USERS_TO_ADD_ID,
+            'identifier',
             false
         );
 
         $return = $object->validate($this->validator);
 
         $this->assertEmpty($return);
-        $this->assertContainsOnlyInstancesOf(Identifier::class, $object->usersId);
+        $this->assertContainsOnlyInstancesOf(Identifier::class, $object->users);
         $this->assertEquals(GROUP_ROLES::USER, $object->rol->getValue());
     }
 
@@ -81,13 +83,14 @@ class GroupUserAddInputDtoTest extends TestCase
             $this->userSession,
             self::GROUP_ID,
             self::USERS_TO_ADD_ID,
+            'identifier',
             null
         );
 
         $return = $object->validate($this->validator);
 
         $this->assertEmpty($return);
-        $this->assertContainsOnlyInstancesOf(Identifier::class, $object->usersId);
+        $this->assertContainsOnlyInstancesOf(Identifier::class, $object->users);
         $this->assertEquals(GROUP_ROLES::USER, $object->rol->getValue());
     }
 
@@ -98,12 +101,13 @@ class GroupUserAddInputDtoTest extends TestCase
             $this->userSession,
             null,
             self::USERS_TO_ADD_ID,
+            'identifier',
             false
         );
 
         $return = $object->validate($this->validator);
 
-        $this->assertContainsOnlyInstancesOf(Identifier::class, $object->usersId);
+        $this->assertContainsOnlyInstancesOf(Identifier::class, $object->users);
         $this->assertEquals(GROUP_ROLES::USER, $object->rol->getValue());
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
@@ -115,12 +119,13 @@ class GroupUserAddInputDtoTest extends TestCase
             $this->userSession,
             'not valid id',
             self::USERS_TO_ADD_ID,
+            'identifier',
             false
         );
 
         $return = $object->validate($this->validator);
 
-        $this->assertContainsOnlyInstancesOf(Identifier::class, $object->usersId);
+        $this->assertContainsOnlyInstancesOf(Identifier::class, $object->users);
         $this->assertEquals(GROUP_ROLES::USER, $object->rol->getValue());
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
@@ -132,12 +137,13 @@ class GroupUserAddInputDtoTest extends TestCase
             $this->userSession,
             self::GROUP_ID,
             null,
+            'identifier',
             false
         );
 
         $return = $object->validate($this->validator);
 
-        $this->assertContainsOnlyInstancesOf(Identifier::class, $object->usersId);
+        $this->assertContainsOnlyInstancesOf(Identifier::class, $object->users);
         $this->assertEquals(GROUP_ROLES::USER, $object->rol->getValue());
         $this->assertEquals(['users' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
@@ -149,12 +155,13 @@ class GroupUserAddInputDtoTest extends TestCase
             $this->userSession,
             self::GROUP_ID,
             array_merge(self::USERS_TO_ADD_ID, ['not a valid id']),
+            'identifier',
             false
         );
 
         $return = $object->validate($this->validator);
 
-        $this->assertContainsOnlyInstancesOf(Identifier::class, $object->usersId);
+        $this->assertContainsOnlyInstancesOf(Identifier::class, $object->users);
         $this->assertEquals(GROUP_ROLES::USER, $object->rol->getValue());
         $this->assertEquals(['users' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }

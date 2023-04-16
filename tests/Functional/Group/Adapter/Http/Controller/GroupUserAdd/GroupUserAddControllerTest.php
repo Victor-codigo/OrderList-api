@@ -33,8 +33,28 @@ class GroupUserAddControllerTest extends WebClientTestCase
         parent::setUp();
     }
 
+    private function usersIdDataProvider(): array
+    {
+        return [
+            [
+                'identifier',
+                [
+                    '1552b279-5f78-4585-ae1b-31be2faabba8' => '1552b279-5f78-4585-ae1b-31be2faabba8',
+                    'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7' => 'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7',
+                ],
+            ],
+            [
+                'name',
+                [
+                    'a3ca650a-a26a-4198-9317-ff3797dcca25' => 'Alfreda',
+                    'a0f50ee2-363d-4044-9d3e-d2929f46fbb4' => 'Charlota',
+                ],
+            ],
+        ];
+    }
+
     /** @test */
-    public function itShouldAddAllUsersToTheGroup(): void
+    public function itShouldAddByIdAllUsersToTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -43,6 +63,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_ID,
                 'users' => self::USER_TO_ADD_IDS,
+                'identifier_type' => 'identifier',
                 'admin' => true,
             ])
         );
@@ -53,7 +74,51 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Users added to the group', $responseContent->message);
-        $this->assertSame(self::USER_TO_ADD_IDS, $responseContent->data->id);
+        $this->assertEquals(self::USER_TO_ADD_IDS, $responseContent->data->id);
+    }
+
+    private function providerUsersToAddByName(): array
+    {
+        return [
+            [
+                [
+                    'a3ca650a-a26a-4198-9317-ff3797dcca25' => 'Alfreda',
+                    'a0f50ee2-363d-4044-9d3e-d2929f46fbb4' => 'Charlota',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     *
+     * @dataProvider providerUsersToAddByName
+     */
+    public function itShouldAddByNameAllUsersToTheGroup(array $users): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'users' => array_values($users),
+                'identifier_type' => 'name',
+                'admin' => true,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Users added to the group', $responseContent->message);
+        $this->assertCount(count($users), $responseContent->data->id);
+
+        foreach ($users as $userId => $userName) {
+            $this->assertContains($userId, $responseContent->data->id);
+        }
     }
 
     /** @test */
@@ -66,6 +131,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_ID,
                 'users' => array_merge(self::USER_TO_ADD_IDS, [self::USER_ALREADY_IN_THE_GROUP]),
+                'identifier_type' => 'identifier',
                 'admin' => true,
             ])
         );
@@ -89,6 +155,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_ID,
                 'users' => self::USER_TO_ADD_IDS,
+                'identifier_type' => 'identifier',
                 'admin' => null,
             ])
         );
@@ -112,6 +179,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_ID,
                 'users' => self::USER_TO_ADD_IDS,
+                'identifier_type' => 'identifier',
                 'admin' => false,
             ])
         );
@@ -135,6 +203,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => null,
                 'users' => array_merge(self::USER_TO_ADD_IDS, ['2606508b-4516-45d6-93a6-c7cb416b7f3f']),
+                'identifier_type' => 'identifier',
                 'admin' => true,
             ])
         );
@@ -158,6 +227,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => 'not valid id',
                 'users' => array_merge(self::USER_TO_ADD_IDS, ['2606508b-4516-45d6-93a6-c7cb416b7f3f']),
+                'identifier_type' => 'identifier',
                 'admin' => true,
             ])
         );
@@ -181,6 +251,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => '431a2943-7b3c-4f80-b461-791c78792936',
                 'users' => array_merge(self::USER_TO_ADD_IDS, ['2606508b-4516-45d6-93a6-c7cb416b7f3f']),
+                'identifier_type' => 'identifier',
                 'admin' => true,
             ])
         );
@@ -204,6 +275,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_ID,
                 'users' => null,
+                'identifier_type' => 'identifier',
                 'admin' => true,
             ])
         );
@@ -227,6 +299,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_ID,
                 'users' => self::USERS_DELETED_OR_NOT_ACTIVE,
+                'identifier_type' => 'identifier',
                 'admin' => true,
             ])
         );
@@ -250,6 +323,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_ID,
                 'users' => array_merge(self::USER_TO_ADD_IDS, ['not valid id']),
+                'identifier_type' => 'identifier',
                 'admin' => true,
             ])
         );
@@ -273,6 +347,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_ID,
                 'users' => [],
+                'identifier_type' => 'identifier',
                 'admin' => true,
             ])
         );
@@ -296,6 +371,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_ID,
                 'users' => self::USER_TO_ADD_IDS,
+                'identifier_type' => 'identifier',
                 'admin' => true,
             ])
         );
@@ -319,6 +395,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_USERS_100_ID,
                 'users' => self::USER_TO_ADD_IDS,
+                'identifier_type' => 'identifier',
                 'admin' => true,
             ])
         );
@@ -342,6 +419,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_ID,
                 'users' => self::USER_TO_ADD_IDS,
+                'identifier_type' => 'identifier',
                 'admin' => true,
             ])
         );

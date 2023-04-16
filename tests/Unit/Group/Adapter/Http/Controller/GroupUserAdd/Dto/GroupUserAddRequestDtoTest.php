@@ -41,7 +41,7 @@ class GroupUserAddRequestDtoTest extends TestCase
     {
         $requestDto = $this->createRequest(array_fill(0, self::USERS_NUM_MAX, self::USER_ID));
 
-        $this->assertCount(self::USERS_NUM_MAX, $requestDto->usersId);
+        $this->assertCount(self::USERS_NUM_MAX, $requestDto->users);
     }
 
     /** @test */
@@ -49,7 +49,7 @@ class GroupUserAddRequestDtoTest extends TestCase
     {
         $requestDto = $this->createRequest(array_fill(0, self::USERS_NUM_MAX + 1, self::USER_ID));
 
-        $this->assertCount(self::USERS_NUM_MAX, $requestDto->usersId);
+        $this->assertCount(self::USERS_NUM_MAX, $requestDto->users);
     }
 
     /** @test */
@@ -57,6 +57,6 @@ class GroupUserAddRequestDtoTest extends TestCase
     {
         $requestDto = $this->createRequest(null);
 
-        $this->assertNull($requestDto->usersId);
+        $this->assertNull($requestDto->users);
     }
 }

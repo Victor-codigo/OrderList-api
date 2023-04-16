@@ -31,6 +31,18 @@ Common\Domain\Model\ValueObject\String\Identifier:
     __construct:
       value: "08eda546-739f-4ab7-917a-8a9dbee426ef"
 
+  user_id_other_4:
+    __construct:
+      value: "a3ca650a-a26a-4198-9317-ff3797dcca25"
+
+  user_id_other_5:
+    __construct:
+      value: "a0f50ee2-363d-4044-9d3e-d2929f46fbb4"
+
+  user_id_other_6:
+    __construct:
+      value: "49ea01e4-9df9-4920-9777-0238574dc198"
+
   user_id_admin:
     __construct:
       value: "6df60afd-f7c3-4c2c-b920-e265f266c560"
@@ -68,6 +80,18 @@ Common\Domain\Model\ValueObject\String\Email:
     __construct:
       value: "email.other_3.active@host.com"
 
+  user_email_other_4:
+    __construct:
+      value: "email.other_4.active@host.com"
+
+  user_email_other_5:
+    __construct:
+      value: "email.other_5.active@host.com"
+
+  user_email_other_6:
+    __construct:
+      value: "email.other_6.active@host.com"
+
   user_email_admin:
     __construct:
       value: "email.admin.active@host.com"
@@ -102,6 +126,18 @@ Common\Domain\Model\ValueObject\String\Password:
       value: "\\$2y\\$13\\$/Bu6Y2ggoPUQNi1gCIqZyeapz0wWXTQEFsTRHggTR72u31Af6X2Du" #123456
 
   user_password_other_3:
+    __construct:
+      value: "\\$2y\\$13\\$/Bu6Y2ggoPUQNi1gCIqZyeapz0wWXTQEFsTRHggTR72u31Af6X2Du" #123456
+
+  user_password_other_4:
+    __construct:
+      value: "\\$2y\\$13\\$/Bu6Y2ggoPUQNi1gCIqZyeapz0wWXTQEFsTRHggTR72u31Af6X2Du" #123456
+
+  user_password_other_5:
+    __construct:
+      value: "\\$2y\\$13\\$/Bu6Y2ggoPUQNi1gCIqZyeapz0wWXTQEFsTRHggTR72u31Af6X2Du" #123456
+
+  user_password_other_6:
     __construct:
       value: "\\$2y\\$13\\$/Bu6Y2ggoPUQNi1gCIqZyeapz0wWXTQEFsTRHggTR72u31Af6X2Du" #123456
 
@@ -142,6 +178,18 @@ Common\Domain\Model\ValueObject\String\Name:
     __construct:
       value: "Bartolo"
 
+  user_name_other_4:
+    __construct:
+      value: "Alfreda"
+
+  user_name_other_5:
+    __construct:
+      value: "Charlota"
+
+  user_name_other_6:
+    __construct:
+      value: "Umehala"
+
   user_name_admin:
     __construct:
       value: "Admin"
@@ -175,6 +223,18 @@ Common\Domain\Model\ValueObject\Object\Rol:
     __construct:
       value: <(User\Domain\Model\USER_ROLES::USER)>
 
+  user_rol_other_4:
+    __construct:
+      value: <(User\Domain\Model\USER_ROLES::USER)>
+
+  user_rol_other_5:
+    __construct:
+      value: <(User\Domain\Model\USER_ROLES::USER)>
+
+  user_rol_other_6:
+    __construct:
+      value: <(User\Domain\Model\USER_ROLES::USER)>
+
   user_rol_admin:
     __construct:
       value: <(User\Domain\Model\USER_ROLES::ADMIN)>
@@ -199,6 +259,15 @@ Common\Domain\Model\ValueObject\Array\Roles:
     __construct: [["@user_rol_other"]]
 
   user_roles_other_3:
+    __construct: [["@user_rol_other"]]
+
+  user_roles_other_4:
+    __construct: [["@user_rol_other"]]
+
+  user_roles_other_5:
+    __construct: [["@user_rol_other"]]
+
+  user_roles_other_6:
     __construct: [["@user_rol_other"]]
 
   user_roles_admin:
@@ -268,6 +337,30 @@ User\Domain\Model\User:
       password: "@user_password_other_3"
       name: "@user_name_other_3"
       roles: "@user_roles_other_3"
+
+  entity-user_other_4:
+    __construct:
+      id: "@user_id_other_4"
+      email: "@user_email_other_4"
+      password: "@user_password_other_4"
+      name: "@user_name_other_4"
+      roles: "@user_roles_other_4"
+
+  entity-user_other_5:
+    __construct:
+      id: "@user_id_other_5"
+      email: "@user_email_other_5"
+      password: "@user_password_other_5"
+      name: "@user_name_other_5"
+      roles: "@user_roles_other_5"
+
+  entity-user_other_6:
+    __construct:
+      id: "@user_id_other_6"
+      email: "@user_email_other_6"
+      password: "@user_password_other_6"
+      name: "@user_name_other_6"
+      roles: "@user_roles_other_6"
 
   entity-user_admin:
     __construct:

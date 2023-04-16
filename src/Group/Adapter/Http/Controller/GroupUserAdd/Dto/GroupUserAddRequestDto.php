@@ -13,13 +13,15 @@ class GroupUserAddRequestDto implements RequestDtoInterface
     private const USERS_NUM_MAX = AppConfig::ENDPOINT_GROUP_USER_ADD_MAX_USERS;
 
     public readonly string|null $groupId;
-    public readonly array|null $usersId;
+    public readonly array|null $users;
+    public readonly string|null $identifierType;
     public readonly bool|null $admin;
 
     public function __construct(Request $request)
     {
         $this->groupId = $request->request->get('group_id');
-        $this->usersId = $this->removeUsersOverflow($request->request->get('users'));
+        $this->users = $this->removeUsersOverflow($request->request->get('users'));
+        $this->identifierType = $request->request->get('identifier_type');
         $this->admin = $request->request->get('admin');
     }
 

@@ -9,6 +9,8 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionExcepti
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Service\Exception\DomainErrorException;
@@ -20,6 +22,7 @@ use Group\Application\GroupUserAdd\Dto\GroupUserAddOutputDto;
 use Group\Application\GroupUserAdd\Exception\GroupUserAddGroupMaximumUsersNumberExceededException;
 use Group\Application\GroupUserAdd\Exception\GroupUserAddGroupNotFoundException;
 use Group\Application\GroupUserAdd\Exception\GroupUserAddNotificationException;
+use Group\Application\GroupUserAdd\Exception\GroupUserAddUserNameNotFoundException;
 use Group\Application\GroupUserAdd\Exception\GroupUserAddUsersValidationException;
 use Group\Application\GroupUserRoleChange\Exception\GroupUserRoleChangePermissionException;
 use Group\Domain\Model\Group;
@@ -49,14 +52,17 @@ class GroupUserAddUseCase extends ServiceBase
      * @throws GroupUserAddGroupMaximumUsersNumberExceededException
      * @throws GroupUserAddGroupNotFoundException
      * @throws GroupUserAddUsersValidationException
+     * @throws GroupUserAddUserNameNotFoundException
      * @throws DomainErrorException
      */
     public function __invoke(GroupUserAddInputDto $input): GroupUserAddOutputDto
     {
         try {
             $this->validation($input);
+            $usersId = $this->getUsers($input->users);
+            $this->validateUsersToAdd($usersId);
             $usersAdded = $this->groupUserAddService->__invoke(
-                $this->createGroupUserAddDto($input->groupId, $input->usersId, $input->rol)
+                $this->createGroupUserAddDto($input->groupId, $usersId, $input->rol)
             );
 
             $group = $this->groupRepository->findGroupsByIdOrFail([$input->groupId])[0];
@@ -89,8 +95,6 @@ class GroupUserAddUseCase extends ServiceBase
         if (!$this->userHasGroupAdminGrantsService->__invoke($input->userSession, $input->groupId)) {
             throw GroupUserRoleChangePermissionException::fromMessage('Permissions denied');
         }
-
-        $this->validateUsersToAdd($input->usersId);
     }
 
     /**
@@ -106,6 +110,48 @@ class GroupUserAddUseCase extends ServiceBase
         if (!empty($response->getErrors()) || !$response->hasContent()) {
             throw GroupUserAddUsersValidationException::fromMessage('Wrong users');
         }
+    }
+
+    /**
+     * @param Identifier[]|Name[] $users
+     *
+     * @throws GroupUserAddUserNameNotFoundException
+     */
+    private function getUsers(array $users): array
+    {
+        if (reset($users) instanceof Identifier) {
+            return $users;
+        }
+
+        $usersData = $this->getUserByNameOrFail($users);
+
+        return array_map(
+            fn (array $userData) => ValueObjectFactory::createIdentifier($userData['id']),
+            $usersData
+        );
+    }
+
+    /**
+     * @param Name[] $userName
+     *
+     * @throws GroupUserAddUserNameNotFoundException
+     */
+    private function getUserByNameOrFail(array $usersNames): array
+    {
+        $usersNamesPlain = array_map(
+            fn (Name $userName) => $userName->getValue(),
+            $usersNames
+        );
+
+        $response = $this->moduleCommunication->__invoke(
+            ModuleCommunicationFactory::userGetByName($usersNamesPlain)
+        );
+
+        if (!empty($response->getErrors()) || !$response->hasContent()) {
+            throw GroupUserAddUserNameNotFoundException::fromMessage('User not found');
+        }
+
+        return $response->getData();
     }
 
     /**
