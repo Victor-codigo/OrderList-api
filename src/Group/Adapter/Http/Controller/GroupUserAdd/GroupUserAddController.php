@@ -62,7 +62,7 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|users, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|group_not_found|users|users_validation|group_already_in_the_group, string|array>')),
                     ]
                 )
             )
@@ -93,6 +93,21 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
                         new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_not_found, string>')),
+                    ]
+                )
+            )
+        ),
+        new OA\Response(
+            response: Response::HTTP_INTERNAL_SERVER_ERROR,
+            description: 'Internal server error',
+            content: new OA\MediaType(
+                mediaType: 'application/json',
+                schema: new OA\Schema(
+                    properties: [
+                        new OA\Property(property: 'status', type: 'string', example: 'error'),
+                        new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
+                        new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_users_exceeded|internal, string>')),
                     ]
                 )
             )
