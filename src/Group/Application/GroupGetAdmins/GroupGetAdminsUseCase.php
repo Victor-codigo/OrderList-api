@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupGetAdmins;
 
-use App\Group\Application\GroupGetAdmins\Exception\GroupGetAdminsGroupNotPermissionsException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\Object\Rol;
@@ -15,6 +14,7 @@ use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupGetAdmins\Dto\GroupGetAdminsInputDto;
 use Group\Application\GroupGetAdmins\Dto\GroupGetAdminsOutputDto;
 use Group\Application\GroupGetAdmins\Exception\GroupGetAdminsGroupNotFoundException;
+use Group\Application\GroupGetAdmins\Exception\GroupGetAdminsGroupNotPermissionsException;
 use Group\Domain\Model\GROUP_ROLES;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;

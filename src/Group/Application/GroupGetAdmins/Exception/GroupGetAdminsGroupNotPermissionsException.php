@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Group\Application\GroupGetAdmins\Exception;
+namespace Group\Application\GroupGetAdmins\Exception;
 
 use Common\Domain\Exception\DomainExceptionOutput;
 use Common\Domain\Response\RESPONSE_STATUS;
