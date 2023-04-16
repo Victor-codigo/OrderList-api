@@ -314,6 +314,30 @@ class GroupUserAddControllerTest extends WebClientTestCase
     }
 
     /** @test */
+    public function itShouldFailUsersNameNotFound(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'users' => ['NameNotExists1', 'NameNotExists2'],
+                'identifier_type' => 'name',
+                'admin' => true,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['users_validation'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Wrong users', $responseContent->message);
+        $this->assertSame(['users_validation' => 'Wrong users'], (array) $responseContent->errors);
+    }
+
+    /** @test */
     public function itShouldFailUsersIdAreNotValid(): void
     {
         $client = $this->getNewClientAuthenticatedUser();

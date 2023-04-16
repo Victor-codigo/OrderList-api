@@ -19,10 +19,10 @@ use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserAdd\Dto\GroupUserAddInputDto;
 use Group\Application\GroupUserAdd\Dto\GroupUserAddOutputDto;
+use Group\Application\GroupUserAdd\Exception\GroupUserAddAllUsersAreAlreadyInTheGroupException;
 use Group\Application\GroupUserAdd\Exception\GroupUserAddGroupMaximumUsersNumberExceededException;
 use Group\Application\GroupUserAdd\Exception\GroupUserAddGroupNotFoundException;
 use Group\Application\GroupUserAdd\Exception\GroupUserAddNotificationException;
-use Group\Application\GroupUserAdd\Exception\GroupUserAddUserNameNotFoundException;
 use Group\Application\GroupUserAdd\Exception\GroupUserAddUsersValidationException;
 use Group\Application\GroupUserRoleChange\Exception\GroupUserRoleChangePermissionException;
 use Group\Domain\Model\Group;
@@ -30,6 +30,7 @@ use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupUserAdd\Dto\GroupUserAddDto;
+use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersAlreadyInTheGroupException;
 use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersMaxNumberExceededException;
 use Group\Domain\Service\GroupUserAdd\GroupUserAddService;
 use Group\Domain\Service\UserHasGroupAdminGrants\UserHasGroupAdminGrantsService;
@@ -52,7 +53,6 @@ class GroupUserAddUseCase extends ServiceBase
      * @throws GroupUserAddGroupMaximumUsersNumberExceededException
      * @throws GroupUserAddGroupNotFoundException
      * @throws GroupUserAddUsersValidationException
-     * @throws GroupUserAddUserNameNotFoundException
      * @throws DomainErrorException
      */
     public function __invoke(GroupUserAddInputDto $input): GroupUserAddOutputDto
@@ -71,7 +71,9 @@ class GroupUserAddUseCase extends ServiceBase
             return $this->createGroupUserAddOutputDto($usersAdded);
         } catch (GroupAddUsersMaxNumberExceededException) {
             throw GroupUserAddGroupMaximumUsersNumberExceededException::fromMessage('Group User number exceeded');
-        } catch (DBNotFoundException) {
+        } catch(GroupAddUsersAlreadyInTheGroupException){
+            throw GroupUserAddAllUsersAreAlreadyInTheGroupException::fromMessage('All users are already in the group');
+        }catch (DBNotFoundException) {
             throw GroupUserAddGroupNotFoundException::fromMessage('Group not found');
         } catch (DBConnectionException|ModuleCommunicationException $e) {
             throw DomainErrorException::fromMessage('An error has been occurred');
@@ -115,7 +117,7 @@ class GroupUserAddUseCase extends ServiceBase
     /**
      * @param Identifier[]|Name[] $users
      *
-     * @throws GroupUserAddUserNameNotFoundException
+     * @throws GroupUserAddUsersValidationException
      */
     private function getUsers(array $users): array
     {
@@ -134,7 +136,7 @@ class GroupUserAddUseCase extends ServiceBase
     /**
      * @param Name[] $userName
      *
-     * @throws GroupUserAddUserNameNotFoundException
+     * @throws GroupUserAddUsersValidationException
      */
     private function getUserByNameOrFail(array $usersNames): array
     {
@@ -148,7 +150,7 @@ class GroupUserAddUseCase extends ServiceBase
         );
 
         if (!empty($response->getErrors()) || !$response->hasContent()) {
-            throw GroupUserAddUserNameNotFoundException::fromMessage('User not found');
+            throw GroupUserAddUsersValidationException::fromMessage('Wrong users');
         }
 
         return $response->getData();

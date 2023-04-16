@@ -14,6 +14,7 @@ use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupUserAdd\Dto\GroupUserAddDto;
+use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersAlreadyInTheGroupException;
 use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersMaxNumberExceededException;
 
 class GroupUserAddService
@@ -32,6 +33,7 @@ class GroupUserAddService
      * @throws DBNotFoundException
      * @throws DBConnectionException
      * @throws GroupAddUsersMaxNumberExceededException
+     * @throws GroupAddUsersAlreadyInTheGroupException
      */
     public function __invoke(GroupUserAddDto $input): array
     {
@@ -50,6 +52,8 @@ class GroupUserAddService
      * @param Identifier[] $usersId
      *
      * @return Identifier[]
+     *
+     * @throws GroupAddUsersAlreadyInTheGroupException
      */
     private function getUsersNotInGroup(PaginatorInterface $usersGroup, array $usersId): array
     {
@@ -58,7 +62,13 @@ class GroupUserAddService
             iterator_to_array($usersGroup)
         );
 
-        return array_diff($usersId, $usersGroupIds);
+        $usersNotInGroup = array_diff($usersId, $usersGroupIds);
+
+        if (empty($usersNotInGroup)) {
+            throw GroupAddUsersAlreadyInTheGroupException::fromMessage('All users are already in the group');
+        }
+
+        return $usersNotInGroup;
     }
 
     /**

@@ -15,6 +15,7 @@ use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupUserAdd\Dto\GroupUserAddDto;
+use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersAlreadyInTheGroupException;
 use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersMaxNumberExceededException;
 use Group\Domain\Service\GroupUserAdd\GroupUserAddService;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -162,7 +163,7 @@ class GroupUserAddServiceTest extends TestCase
             ->willReturn($this->getFindGroupsByIdOrFailReturn());
 
         $saveMethod = $this->userGroupRepository
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('save')
             ->with($this->callback(fn (array $usersGroupSaved) => $this->assertUserGroupIsEqualToUserGroup($expectUsersGroup, $usersGroupSaved)));
 
@@ -221,9 +222,8 @@ class GroupUserAddServiceTest extends TestCase
 
         $this->mockMethodsInvoke($groupUserAddDto, []);
 
-        $return = $this->object->__invoke($groupUserAddDto);
-
-        $this->assertEmpty($return);
+        $this->expectException(GroupAddUsersAlreadyInTheGroupException::class);
+        $this->object->__invoke($groupUserAddDto);
     }
 
     /** @test */
