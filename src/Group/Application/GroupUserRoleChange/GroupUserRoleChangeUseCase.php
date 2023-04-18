@@ -38,11 +38,11 @@ class GroupUserRoleChangeUseCase extends ServiceBase
     {
         try {
             $this->validation($input);
-            $usersMoidifiedId = $this->groupUserRoleChangeService->__invoke(
+            $usersModifiedId = $this->groupUserRoleChangeService->__invoke(
                 $this->createGroupUserRoleChangeDto($input->groupId, $input->usersId, $input->rol)
             );
 
-            return $this->createGroupUserRoleChangeOutputDto($usersMoidifiedId);
+            return $this->createGroupUserRoleChangeOutputDto($usersModifiedId);
         } catch (GroupWithoutAdminsException) {
             throw GroupUserRoleChangeGroupWithoutAdminsException::fromMessage('It should be at least one admin in the group');
         } catch (DBNotFoundException) {
