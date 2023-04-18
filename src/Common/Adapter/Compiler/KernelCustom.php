@@ -29,9 +29,11 @@ class KernelCustom
             return $environment;
         }
 
-        return match ($_REQUEST['env']) {
+        $_ENV['APP_ENV'] = match ($_REQUEST['env']) {
             'test' => 'test',
             default => $environment
         };
+
+        return $_ENV['APP_ENV'];
     }
 }

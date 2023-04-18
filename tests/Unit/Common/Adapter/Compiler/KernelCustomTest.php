@@ -16,6 +16,7 @@ class KernelCustomTest extends TestCase
         $return = KernelCustom::changeEnvironmentByRequestQuery($environment);
 
         $this->assertSame($environment, $return);
+        $this->assertEquals($_ENV['APP_ENV'], 'test');
     }
 
     /** @test */
@@ -25,6 +26,7 @@ class KernelCustomTest extends TestCase
         $return = KernelCustom::changeEnvironmentByRequestQuery($environment);
 
         $this->assertSame($environment, $return);
+        $this->assertEquals($_ENV['APP_ENV'], 'test');
     }
 
     /** @test */
@@ -35,6 +37,7 @@ class KernelCustomTest extends TestCase
         $return = KernelCustom::changeEnvironmentByRequestQuery($environment);
 
         $this->assertSame($environment, $return);
+        $this->assertEquals($_ENV['APP_ENV'], $environment);
     }
 
     /** @test */
@@ -45,6 +48,7 @@ class KernelCustomTest extends TestCase
         $return = KernelCustom::changeEnvironmentByRequestQuery($environment);
 
         $this->assertSame('test', $return);
+        $this->assertEquals($_ENV['APP_ENV'], $_REQUEST['env']);
     }
 
     /** @test */
@@ -55,5 +59,6 @@ class KernelCustomTest extends TestCase
         $return = KernelCustom::changeEnvironmentByRequestQuery($environment);
 
         $this->assertSame('dev', $return);
+        $this->assertEquals($_ENV['APP_ENV'], 'test');
     }
 }
