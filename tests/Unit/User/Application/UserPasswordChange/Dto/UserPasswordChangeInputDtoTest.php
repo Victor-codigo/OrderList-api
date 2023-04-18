@@ -7,17 +7,21 @@ namespace Test\Unit\User\Application\UserPasswordChange\Dto;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use User\Application\UserPasswordChange\Dto\UserPasswordChangeInputDto;
+use User\Domain\Model\User;
 
 class UserPasswordChangeInputDtoTest extends TestCase
 {
     private ValidationInterface $validator;
+    private MockObject|User $userSession;
 
     protected function setUp(): void
     {
         parent::setUp();
 
+        $this->userSession = $this->createMock(User::class);
         $this->validator = new ValidationChain();
     }
 
@@ -25,6 +29,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
     public function itShouldPassValidation(): void
     {
         $object = new UserPasswordChangeInputDto(
+            $this->userSession,
             '2606508b-4516-45d6-93a6-c7cb416b7f3f',
             'passwordOld',
             'passwordNew',
@@ -40,6 +45,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
     public function itShouldFailIdIsTooShort(): void
     {
         $object = new UserPasswordChangeInputDto(
+            $this->userSession,
             '2606508b-4516-45d6-93a6-c7cb416b7f3',
             'passwordOld',
             'passwordNew',
@@ -55,6 +61,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
     public function itShouldFailIdIsTooLong(): void
     {
         $object = new UserPasswordChangeInputDto(
+            $this->userSession,
             '2606508b-4516-45d6-93a6-c7cb416b7f3f3',
             'passwordOld',
             'passwordNew',
@@ -70,6 +77,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
     public function itShouldFailIdIsNull(): void
     {
         $object = new UserPasswordChangeInputDto(
+            $this->userSession,
             null,
             'passwordOld',
             'passwordNew',
@@ -85,6 +93,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
     public function itShouldFailPasswordOldTooShort(): void
     {
         $object = new UserPasswordChangeInputDto(
+            $this->userSession,
             '2606508b-4516-45d6-93a6-c7cb416b7f3f',
             'pass5',
             'passwordNew',
@@ -100,6 +109,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
     public function itShouldFailPasswordOldTooLong(): void
     {
         $object = new UserPasswordChangeInputDto(
+            $this->userSession,
             '2606508b-4516-45d6-93a6-c7cb416b7f3f',
             str_pad('', 51, '-'),
             'passwordNew',
@@ -115,6 +125,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
     public function itShouldFailPasswordOldIsNull(): void
     {
         $object = new UserPasswordChangeInputDto(
+            $this->userSession,
             '2606508b-4516-45d6-93a6-c7cb416b7f3f',
             null,
             'passwordNew',
@@ -130,6 +141,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
     public function itShouldFailPasswordNewTooShort(): void
     {
         $object = new UserPasswordChangeInputDto(
+            $this->userSession,
             '2606508b-4516-45d6-93a6-c7cb416b7f3f',
             'passwordOld',
             'pass5',
@@ -145,6 +157,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
     public function itShouldFailPasswordNewTooLong(): void
     {
         $object = new UserPasswordChangeInputDto(
+            $this->userSession,
             '2606508b-4516-45d6-93a6-c7cb416b7f3f',
             'passwordOld',
             str_pad('', 51, '-'),
@@ -160,6 +173,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
     public function itShouldFailPasswordNewIsNull(): void
     {
         $object = new UserPasswordChangeInputDto(
+            $this->userSession,
             '2606508b-4516-45d6-93a6-c7cb416b7f3f',
             'passwordOld',
             null,
@@ -175,6 +189,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
     public function itShouldFailPasswordNewRepeatTooShort(): void
     {
         $object = new UserPasswordChangeInputDto(
+            $this->userSession,
             '2606508b-4516-45d6-93a6-c7cb416b7f3f',
             'passwordOld',
             'passwordNew',
@@ -190,6 +205,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
     public function itShouldFailPasswordNewRepeatTooLong(): void
     {
         $object = new UserPasswordChangeInputDto(
+            $this->userSession,
             '2606508b-4516-45d6-93a6-c7cb416b7f3f',
             'passwordOld',
             'passwordNew',
@@ -205,6 +221,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
     public function itShouldFailPasswordNewRepeatIsNull(): void
     {
         $object = new UserPasswordChangeInputDto(
+            $this->userSession,
             '2606508b-4516-45d6-93a6-c7cb416b7f3f',
             'passwordOld',
             'passwordNew',
