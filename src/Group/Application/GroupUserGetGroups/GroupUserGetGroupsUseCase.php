@@ -13,8 +13,8 @@ use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserGetGroups\Dto\GroupUserGetGroupsInputDto;
 use Group\Application\GroupUserGetGroups\Dto\GroupUserGetGroupsOutputDto;
 use Group\Application\GroupUserGetGroups\Exception\GroupUserGetGroupsNoGroupsFoundException;
-use Group\Domain\Service\GroupUserGetGroups\Dto\GroupUserGeGroupsOutputDto;
 use Group\Domain\Service\GroupUserGetGroups\Dto\GroupUserGetGroupsDto;
+use Group\Domain\Service\GroupUserGetGroups\Dto\GroupUserGetGroupsOutputDto as GroupUserGetGroupsOutputServiceDto;
 use Group\Domain\Service\GroupUserGetGroups\GroupUserGetGroupsService;
 
 class GroupUserGetGroupsUseCase extends ServiceBase
@@ -62,7 +62,7 @@ class GroupUserGetGroupsUseCase extends ServiceBase
         return new GroupUserGetGroupsDto($input->userSession->getId(), $input->page, $input->pageItems);
     }
 
-    private function createGroupUserGetGroupsOutputDto(PaginatorPage $page, GroupUserGeGroupsOutputDto $userGroups): GroupUserGetGroupsOutputDto
+    private function createGroupUserGetGroupsOutputDto(PaginatorPage $page, GroupUserGetGroupsOutputServiceDto $userGroups): GroupUserGetGroupsOutputDto
     {
         return new GroupUserGetGroupsOutputDto($page, $userGroups->pagesTotal, $userGroups->groups);
     }

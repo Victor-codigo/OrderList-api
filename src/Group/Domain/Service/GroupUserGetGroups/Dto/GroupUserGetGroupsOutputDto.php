@@ -6,7 +6,7 @@ namespace Group\Domain\Service\GroupUserGetGroups\Dto;
 
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 
-class GroupUserGeGroupsOutputDto
+class GroupUserGetGroupsOutputDto
 {
     public function __construct(
         public readonly PaginatorPage $page,

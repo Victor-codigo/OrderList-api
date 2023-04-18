@@ -15,8 +15,8 @@ use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupGetData\Dto\GroupGetDataDto;
 use Group\Domain\Service\GroupGetData\GroupGetDataService;
-use Group\Domain\Service\GroupUserGetGroups\Dto\GroupUserGeGroupsOutputDto;
 use Group\Domain\Service\GroupUserGetGroups\Dto\GroupUserGetGroupsDto;
+use Group\Domain\Service\GroupUserGetGroups\Dto\GroupUserGetGroupsOutputDto;
 
 class GroupUserGetGroupsService
 {
@@ -29,7 +29,7 @@ class GroupUserGetGroupsService
     /**
      * @throws DBNotFoundException
      */
-    public function __invoke(GroupUserGetGroupsDto $input): GroupUserGeGroupsOutputDto
+    public function __invoke(GroupUserGetGroupsDto $input): GroupUserGetGroupsOutputDto
     {
         $userGroups = $this->userGroupRepository->findUserGroupsById($input->userId, null, GROUP_TYPE::GROUP);
 
@@ -39,7 +39,7 @@ class GroupUserGetGroupsService
     /**
      * @throws DBNotFoundException
      */
-    private function getUserGroups(PaginatorInterface $userGroups, PaginatorPage $page, PaginatorPageItems $pageItems): GroupUserGeGroupsOutputDto
+    private function getUserGroups(PaginatorInterface $userGroups, PaginatorPage $page, PaginatorPageItems $pageItems): GroupUserGetGroupsOutputDto
     {
         $userGroups->setPagination($page->getValue(), $pageItems->getValue());
 
@@ -67,7 +67,7 @@ class GroupUserGetGroupsService
             fn (array &$groupData) => $groupData['admin'] = in_array($groupData['group_id'], $groupsIsAdminId)
         );
 
-        return new GroupUserGeGroupsOutputDto($page, $userGroups->getPagesTotal(), $groupsData);
+        return new GroupUserGetGroupsOutputDto($page, $userGroups->getPagesTotal(), $groupsData);
     }
 
     /**
