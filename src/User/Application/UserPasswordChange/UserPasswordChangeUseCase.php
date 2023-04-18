@@ -6,15 +6,20 @@ namespace User\Application\UserPasswordChange;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\PermissionDeniedException;
+use Common\Domain\Model\ValueObject\Object\Rol;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use User\Application\UserPasswordChange\Dto\UserPasswordChangeInputDto;
 use User\Application\UserPasswordChange\Dto\UserPasswordChangeOutputDto;
+use User\Application\UserPasswordChange\Exception\UserPasswordChangeNotPermissionsException;
 use User\Application\UserPasswordChange\Exception\UserPasswordChangePasswordNewAndRepeatNewAreNotEqualException;
 use User\Application\UserPasswordChange\Exception\UserPasswordChangePasswordOldWrongException;
 use User\Application\UserPasswordChange\Exception\UserPasswordChangePermissionException;
 use User\Application\UserPasswordChange\Exception\UserPasswordChangeUserNotFoundException;
+use User\Domain\Model\USER_ROLES;
+use User\Domain\Model\User;
 use User\Domain\Service\UserPasswordChange\Dto\UserPasswordChangeDto;
 use User\Domain\Service\UserPasswordChange\Exception\PasswordNewAndRepeatAreNotTheSameException;
 use User\Domain\Service\UserPasswordChange\Exception\PasswordOldIsWrongException;
@@ -22,13 +27,10 @@ use User\Domain\Service\UserPasswordChange\UserPasswordChangeService as DomainUs
 
 class UserPasswordChangeUseCase extends ServiceBase
 {
-    private DomainUserPasswordChangeService $userPasswordChangeService;
-    private ValidationInterface $validator;
-
-    public function __construct(DomainUserPasswordChangeService $userPasswordChangeService, ValidationInterface $validator)
-    {
-        $this->userPasswordChangeService = $userPasswordChangeService;
-        $this->validator = $validator;
+    public function __construct(
+        private DomainUserPasswordChangeService $userPasswordChangeService,
+        private ValidationInterface $validator
+    ) {
     }
 
     public function __invoke(UserPasswordChangeInputDto $passwordDto): UserPasswordChangeOutputDto
@@ -70,6 +72,23 @@ class UserPasswordChangeUseCase extends ServiceBase
         if (!empty($errorList)) {
             throw ValueObjectValidationException::fromArray('Wrong password', $errorList);
         }
+
+        if (!$this->userHasPermissions($passwordDto->userSession, $passwordDto->id)) {
+            throw UserPasswordChangeNotPermissionsException::fromMessage('You have not permissions');
+        }
+    }
+
+    private function userHasPermissions(User $userSession, Identifier $userIdToModify): bool
+    {
+        if ($userSession->getRoles()->has(new Rol(USER_ROLES::ADMIN))) {
+            return true;
+        }
+
+        if ($userSession->getId()->equalTo($userIdToModify)) {
+            return true;
+        }
+
+        return false;
     }
 
     private function createUserPasswordChangeOutputDto(bool $success): UserPasswordChangeOutputDto

@@ -19,11 +19,12 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
     private const ENDPOINT = '/api/v1/users/password';
     private const METHOD = 'PATCH';
     private const ID_USER = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
-    private const ID_USER_NOT_ACTIVE = 'bd2cbad1-6ccf-48e3-bb92-bc9961bc011e';
     private const USER_PASSWORD = '123456';
+    private const ID_USER_NOT_ACTIVE = 'bd2cbad1-6ccf-48e3-bb92-bc9961bc011e';
+    private const ID_USER_OTHER = 'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7';
 
     /** @test */
-    public function itShouldChangeTheUserPassword(): void
+    public function itShouldChangeTheUserPasswordUserSessionIsItself(): void
     {
         $clientData = [
             'id' => self::ID_USER,
@@ -47,6 +48,53 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         $userHasher = $client->getContainer()->get(UserSymfonyAdapter::class);
 
         $this->assertEquals($userHasher->getPassword(), $userSaved->getpassword()->getValue());
+    }
+
+    /** @test */
+    public function itShouldChangeTheUserPasswordUserSessionIsAdmin(): void
+    {
+        $clientData = [
+            'id' => self::ID_USER,
+            'passwordOld' => self::USER_PASSWORD,
+            'passwordNew' => 'newPassword',
+            'passwordNewRepeat' => 'newPassword',
+        ];
+
+        $client = $this->getNewClientAuthenticatedAdmin();
+        $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk(response: $response, responseCode: Response::HTTP_OK);
+        $this->assertSame(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Password changed', $responseContent->message);
+
+        $userRepository = $this->getEntityManager()->getRepository(User::class);
+        $userSaved = $userRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::ID_USER)]);
+        /** @var UserSymfonyAdapter $userHasher */
+        $userHasher = $client->getContainer()->get(UserSymfonyAdapter::class);
+
+        $this->assertEquals($userHasher->getPassword(), $userSaved->getPassword()->getValue());
+    }
+
+    /** @test */
+    public function itShouldFailChangingOtherUserPasswordUserSessionIsNotAdmin(): void
+    {
+        $clientData = [
+            'id' => self::ID_USER_OTHER,
+            'passwordOld' => self::USER_PASSWORD,
+            'passwordNew' => 'newPassword',
+            'passwordNewRepeat' => 'newPassword',
+        ];
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk(response: $response, errors: ['permissions'], responseCode: Response::HTTP_UNAUTHORIZED);
+        $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('You have not permissions', $responseContent->message);
     }
 
     /** @test */
@@ -192,7 +240,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
             'passwordNewRepeat' => 'newPassword',
         ];
 
-        $client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientAuthenticatedAdmin();
         $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
@@ -240,7 +288,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
             'passwordNewRepeat' => 'newPassword',
         ];
 
-        $client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientAuthenticatedAdmin();
         $client->request(method: self::METHOD, uri: self::ENDPOINT, content: json_encode($clientData));
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());

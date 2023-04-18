@@ -15,12 +15,12 @@ class UserPasswordChangeDto
     public readonly Password $passwordNewRepeat;
     public readonly bool $checkOldPassword;
 
-    public function __construct(Identifier $id, Password $passwordOld, Password $passordNew, Password $passwordNewRepeat, bool $ckeckOldPassword)
+    public function __construct(Identifier $id, Password $passwordOld, Password $passwordNew, Password $passwordNewRepeat, bool $checkOldPassword)
     {
         $this->id = $id;
         $this->passwordOld = $passwordOld;
-        $this->passwordNew = $passordNew;
+        $this->passwordNew = $passwordNew;
         $this->passwordNewRepeat = $passwordNewRepeat;
-        $this->checkOldPassword = $ckeckOldPassword;
+        $this->checkOldPassword = $checkOldPassword;
     }
 }

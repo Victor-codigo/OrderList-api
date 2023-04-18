@@ -10,7 +10,9 @@ use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Security;
 use User\Adapter\Http\Controller\UserPasswordChange\Dto\UserPasswordChangeRequestDto;
+use User\Adapter\Security\User\UserSymfonyAdapter;
 use User\Application\UserPasswordChange\Dto\UserPasswordChangeInputDto;
 use User\Application\UserPasswordChange\UserPasswordChangeUseCase;
 
@@ -49,7 +51,7 @@ use User\Application\UserPasswordChange\UserPasswordChangeUseCase;
         ),
         new OA\Response(
             response: Response::HTTP_BAD_REQUEST,
-            description: 'Password cound not be changed',
+            description: 'Password could not be changed',
             content: new OA\MediaType(
                 mediaType: 'application/json',
                 schema: new OA\Schema(
@@ -57,7 +59,23 @@ use User\Application\UserPasswordChange\UserPasswordChangeUseCase;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<password_change|password_old|password_new|password_new_repeat|permissions, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<id|password_change|password_old|password_new|password_new_repeat|permissions, string|array>')),
+                    ]
+                )
+            )
+        ),
+
+        new OA\Response(
+            response: Response::HTTP_UNAUTHORIZED,
+            description: 'You hav not permissions to change the password',
+            content: new OA\MediaType(
+                mediaType: 'application/json',
+                schema: new OA\Schema(
+                    properties: [
+                        new OA\Property(property: 'status', type: 'string', example: 'error'),
+                        new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
+                        new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<permissions, string|array>')),
                     ]
                 )
             )
@@ -66,11 +84,10 @@ use User\Application\UserPasswordChange\UserPasswordChangeUseCase;
 )]
 class UserPasswordChangeController extends AbstractController
 {
-    private UserPasswordChangeUseCase $userPasswordChangeUseCase;
-
-    public function __construct(UserPasswordChangeUseCase $userPasswordChangeUseCase)
-    {
-        $this->userPasswordChangeUseCase = $userPasswordChangeUseCase;
+    public function __construct(
+        private UserPasswordChangeUseCase $userPasswordChangeUseCase,
+        private Security $security
+    ) {
     }
 
     public function __invoke(UserPasswordChangeRequestDto $passwordChangeRequestDto): JsonResponse
@@ -87,7 +104,11 @@ class UserPasswordChangeController extends AbstractController
 
     private function createUserPasswordChangeInputDto(UserPasswordChangeRequestDto $passwordChangeRequestDto): UserPasswordChangeInputDto
     {
+        /** @var UserSymfonyAdapter $userSymfonyAdapter */
+        $userSymfonyAdapter = $this->security->getUser();
+
         return new UserPasswordChangeInputDto(
+            $userSymfonyAdapter->getUser(),
             $passwordChangeRequestDto->id,
             $passwordChangeRequestDto->passwordOld,
             $passwordChangeRequestDto->passwordNew,
