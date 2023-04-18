@@ -27,7 +27,7 @@ use User\Adapter\Security\User\UserSymfonyAdapter;
         required: true,
         content: [
             new OA\MediaType(
-                mediaType: 'application/json',
+                mediaType: 'multipart/form-data',
                 schema: new OA\Schema(
                     properties: [
                         new OA\Property(property: 'name', type: 'string', minLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MIN_LENGTH, maxLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MAX_LENGTH, description: 'Group\'s name', example: 'GroupOne'),
