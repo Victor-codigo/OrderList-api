@@ -10,6 +10,7 @@ use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use Common\Domain\Validation\ValidationInterface;
+use Notification\Domain\Model\NOTIFICATION_TYPE;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use User\Application\UserPasswordChange\Dto\UserPasswordChangeInputDto;
@@ -83,6 +84,7 @@ class UserPasswordChangeUseCaseTest extends TestCase
             ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($userId) {
                 $this->assertEquals([$userId], $notificationDto->content['users_id']);
                 $this->assertEquals(self::SYSTEM_KEY, $notificationDto->content['system_key']);
+                $this->assertEquals(NOTIFICATION_TYPE::USER_PASSWORD_CHANGED->value, $notificationDto->content['type']);
 
                 return true;
             }))
@@ -130,6 +132,7 @@ class UserPasswordChangeUseCaseTest extends TestCase
             ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($userId) {
                 $this->assertEquals([$userId], $notificationDto->content['users_id']);
                 $this->assertEquals(self::SYSTEM_KEY, $notificationDto->content['system_key']);
+                $this->assertEquals(NOTIFICATION_TYPE::USER_PASSWORD_CHANGED->value, $notificationDto->content['type']);
 
                 return true;
             }))

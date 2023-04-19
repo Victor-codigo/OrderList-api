@@ -10,6 +10,7 @@ use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use Common\Domain\Validation\ValidationInterface;
+use Notification\Domain\Model\NOTIFICATION_TYPE;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use User\Application\UserEmailChange\Dto\UserEmailChangeInputDto;
@@ -72,6 +73,7 @@ class UserEmailChangeUseCaseTest extends TestCase
             ->with($this->callback(function (ModuleCommunicationConfigDto $moduleCommunicationDto) use ($userId) {
                 $this->assertEquals([$userId->getValue()], $moduleCommunicationDto->content['users_id']);
                 $this->assertEquals(self::SYSTEM_KEY, $moduleCommunicationDto->content['system_key']);
+                $this->assertEquals(NOTIFICATION_TYPE::USER_EMAIL_CHANGED->value, $moduleCommunicationDto->content['type']);
 
                 return true;
             }))
@@ -110,6 +112,7 @@ class UserEmailChangeUseCaseTest extends TestCase
             ->with($this->callback(function (ModuleCommunicationConfigDto $moduleCommunicationDto) use ($userId) {
                 $this->assertEquals([$userId->getValue()], $moduleCommunicationDto->content['users_id']);
                 $this->assertEquals(self::SYSTEM_KEY, $moduleCommunicationDto->content['system_key']);
+                $this->assertEquals(NOTIFICATION_TYPE::USER_EMAIL_CHANGED->value, $moduleCommunicationDto->content['type']);
 
                 return true;
             }))
