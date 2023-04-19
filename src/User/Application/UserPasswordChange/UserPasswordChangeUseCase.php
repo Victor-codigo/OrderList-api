@@ -8,12 +8,16 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Exception\PermissionDeniedException;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
+use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
+use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use User\Application\UserPasswordChange\Dto\UserPasswordChangeInputDto;
 use User\Application\UserPasswordChange\Dto\UserPasswordChangeOutputDto;
 use User\Application\UserPasswordChange\Exception\UserPasswordChangeNotPermissionsException;
+use User\Application\UserPasswordChange\Exception\UserPasswordChangeNotificationException;
 use User\Application\UserPasswordChange\Exception\UserPasswordChangePasswordNewAndRepeatNewAreNotEqualException;
 use User\Application\UserPasswordChange\Exception\UserPasswordChangePasswordOldWrongException;
 use User\Application\UserPasswordChange\Exception\UserPasswordChangePermissionException;
@@ -29,7 +33,9 @@ class UserPasswordChangeUseCase extends ServiceBase
 {
     public function __construct(
         private DomainUserPasswordChangeService $userPasswordChangeService,
-        private ValidationInterface $validator
+        private ValidationInterface $validator,
+        private ModuleCommunicationInterface $moduleCommunication,
+        private string $systemKey
     ) {
     }
 
@@ -41,6 +47,8 @@ class UserPasswordChangeUseCase extends ServiceBase
             $this->userPasswordChangeService->__invoke(
                 $this->createUserPasswordChangeDto($passwordDto)
             );
+
+            $this->createNotificationPasswordChanged($passwordDto->id, $this->systemKey);
 
             return $this->createUserPasswordChangeOutputDto(true);
         } catch (DBNotFoundException) {
@@ -89,6 +97,17 @@ class UserPasswordChangeUseCase extends ServiceBase
         }
 
         return false;
+    }
+
+    private function createNotificationPasswordChanged(Identifier $userId, string $systemKey): void
+    {
+        $response = $this->moduleCommunication->__invoke(
+            ModuleCommunicationFactory::notificationUserPasswordChanged($userId, $systemKey)
+        );
+
+        if (RESPONSE_STATUS::OK !== $response->getStatus()) {
+            throw UserPasswordChangeNotificationException::fromMessage('An error was ocurred when trying to send the notification: user password changed');
+        }
     }
 
     private function createUserPasswordChangeOutputDto(bool $success): UserPasswordChangeOutputDto
