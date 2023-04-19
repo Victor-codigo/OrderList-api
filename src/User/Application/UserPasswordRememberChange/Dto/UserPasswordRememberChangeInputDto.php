@@ -12,9 +12,9 @@ use Common\Domain\Validation\ValidationInterface;
 
 class UserPasswordRememberChangeInputDto implements ServiceInputDtoInterface
 {
-    public readonly JwtToken|null $token;
-    public readonly Password|null $passwordNew;
-    public readonly Password|null $passwordNewRepeat;
+    public readonly JwtToken $token;
+    public readonly Password $passwordNew;
+    public readonly Password $passwordNewRepeat;
 
     public function __construct(string|null $token, string|null $passwordNew, string|null $passwordNewRepeat)
     {

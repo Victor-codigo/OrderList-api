@@ -10,12 +10,16 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Model\ValueObject\String\JwtToken;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\JwtToken\JwtHS256Interface;
+use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
+use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use InvalidArgumentException;
 use User\Application\UserPasswordRememberChange\Dto\UserPasswordRememberChangeInputDto;
+use User\Application\UserPasswordRememberChange\Exception\UserPasswordRememberChangeNotificationException;
 use User\Application\UserPasswordRememberChange\Exception\UserPasswordRememberChangePasswordNewAndPasswrodNewRepeatAreNotEqualsException;
 use User\Application\UserPasswordRememberChange\Exception\UserPasswordRememberChangeTokenExpiredException;
 use User\Application\UserPasswordRememberChange\Exception\UserPasswordRememberChangeTokenWrongException;
@@ -26,21 +30,22 @@ use User\Domain\Service\UserPasswordChange\UserPasswordChangeService;
 
 class UserPasswordRememberChangeUseCase extends ServiceBase
 {
-    private UserPasswordChangeService $userPasswordChangeService;
-    private JwtHS256Interface  $jwt;
-    private ValidationInterface  $validator;
-
     public function __construct(
-        UserPasswordChangeService $userPasswordChangeService,
-        JwtHS256Interface $jwt,
-        ValidationInterface $validator
+        private UserPasswordChangeService $userPasswordChangeService,
+        private JwtHS256Interface $jwt,
+        private ValidationInterface $validator,
+        private ModuleCommunicationInterface $moduleCommunication,
+        private string $systemKey,
     ) {
-        $this->userPasswordChangeService = $userPasswordChangeService;
-        $this->jwt = $jwt;
-        $this->validator = $validator;
     }
 
-    public function __invoke(UserPasswordRememberChangeInputDto $passwordChangeDto)
+    /**
+     * @throws UserPasswordRememberChangeTokenWrongException
+     * @throws UserPasswordRememberChangeTokenExpiredException
+     * @throws UserPasswordRememberChangeUserNotFoundException
+     * @throws UserPasswordRememberChangePasswordNewAndPasswrodNewRepeatAreNotEqualsException
+     */
+    public function __invoke(UserPasswordRememberChangeInputDto $passwordChangeDto): void
     {
         $this->validation($passwordChangeDto);
 
@@ -50,6 +55,8 @@ class UserPasswordRememberChangeUseCase extends ServiceBase
             $this->userPasswordChangeService->__invoke(
                 $this->createUserPasswordChangeDto($tokenDecoded->username, $passwordChangeDto->passwordNew, $passwordChangeDto->passwordNewRepeat)
             );
+
+            $this->createNotificationPasswordRemember($tokenDecoded->username, $this->systemKey);
         } catch (InvalidArgumentException) {
             throw UserPasswordRememberChangeTokenWrongException::fromMessage('Wrong token');
         } catch (JwtTokenExpiredException) {
@@ -74,6 +81,9 @@ class UserPasswordRememberChangeUseCase extends ServiceBase
         );
     }
 
+    /**
+     * @throws ValueObjectValidationException
+     */
     private function validation(UserPasswordRememberChangeInputDto $passwordChangeDto): void
     {
         $errorList = $passwordChangeDto->validate($this->validator);
@@ -83,6 +93,9 @@ class UserPasswordRememberChangeUseCase extends ServiceBase
         }
     }
 
+    /**
+     * @throws JwtTokenExpiredException
+     */
     private function getToken(JwtToken $token): \stdClass
     {
         $tokenDecoded = $this->jwt->decode($token->getValue());
@@ -92,5 +105,20 @@ class UserPasswordRememberChangeUseCase extends ServiceBase
         }
 
         return $tokenDecoded;
+    }
+
+    /**
+     * @throws UserPasswordRememberChangeNotificationException
+     */
+    private function createNotificationPasswordRemember(string $userIdPlain, string $systemKey): void
+    {
+        $userId = ValueObjectFactory::createIdentifier($userIdPlain);
+        $response = $this->moduleCommunication->__invoke(
+            ModuleCommunicationFactory::notificationUserPasswordRemember($userId, $systemKey)
+        );
+
+        if (RESPONSE_STATUS::OK !== $response->getStatus()) {
+            throw UserPasswordRememberChangeNotificationException::fromMessage('An error was ocurred when trying to send the notification: user password remember');
+        }
     }
 }

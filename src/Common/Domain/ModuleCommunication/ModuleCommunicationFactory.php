@@ -188,7 +188,22 @@ class ModuleCommunicationFactory
     {
         $content = [
             'users_id' => [$userId->getValue()],
-            'type' => NOTIFICATION_TYPE::USER_EMAIL_CHANGED->value,
+            'type' => NOTIFICATION_TYPE::USER_PASSWORD_CHANGED->value,
+            'notification_data' => [],
+            'system_key' => $systemKey,
+        ];
+
+        return self::notificationCreate($content);
+    }
+
+    /**
+     * @param Identifier[] $recipientUsersId
+     */
+    public static function notificationUserPasswordRemember(Identifier $userId, string $systemKey): ModuleCommunicationConfigDto
+    {
+        $content = [
+            'users_id' => [$userId->getValue()],
+            'type' => NOTIFICATION_TYPE::USER_PASSWORD_REMEMBER->value,
             'notification_data' => [],
             'system_key' => $systemKey,
         ];

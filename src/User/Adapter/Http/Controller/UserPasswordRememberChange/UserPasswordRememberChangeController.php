@@ -16,14 +16,14 @@ use User\Application\UserPasswordRememberChange\UserPasswordRememberChangeUseCas
 
 #[OA\Tag('User')]
 #[OA\Patch(
-    description: 'Canges the user\'s password',
+    description: 'Changes the user\'s password',
     requestBody: new OA\RequestBody(
         required: true,
         content: [new OA\MediaType(
             mediaType: 'application/json',
             schema: new OA\Schema(
                 properties: [
-                    new OA\Property(property: 'token', description: 'Token forwared to the users email', type: 'string', example: 'A chunk of characters'),
+                    new OA\Property(property: 'token', description: 'Token forward to the users email', type: 'string', example: 'A chunk of characters'),
                     new OA\Property(property: 'passwordNew', description: 'Current user\'s password', type: 'string', example: 'My current password'),
                     new OA\Property(property: 'passwordNewRepeat', description: 'User\'s new password', type: 'string', example: 'My new password'),
                 ]
