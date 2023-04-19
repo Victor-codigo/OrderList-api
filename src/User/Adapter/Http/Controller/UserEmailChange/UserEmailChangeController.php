@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use User\Adapter\Http\Controller\UserEmailChange\Dto\UserEmailChangeRequestDto;
+use User\Adapter\Security\User\UserSymfonyAdapter;
 use User\Application\UserEmailChange\Dto\UserEmailChangeInputDto;
 use User\Application\UserEmailChange\UserEmailChangeUseCase;
 
@@ -83,7 +84,11 @@ class UserEmailChangeController extends AbstractController
 
     private function createUserChangeEmailInputDto(UserEmailChangeRequestDto $request): UserEmailChangeInputDto
     {
+        /** @var UserSymfonyAdapter $userSymfonyAdapter */
+        $userSymfonyAdapter = $this->security->getUser();
+
         return new UserEmailChangeInputDto(
+            $userSymfonyAdapter->getUser()->getId(),
             $this->security->getUser()->getUserIdentifier(),
             $request->email,
             $request->password
