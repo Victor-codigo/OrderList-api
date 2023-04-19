@@ -87,8 +87,8 @@ class UserFirstLoginService
     private function createNotificationUserRegistered(User $user, string $appName, string $systemKey): void
     {
         $notificationData = ModuleCommunicationFactory::notificationCreateUserRegistered(
-            $user->getId()->getValue(),
-            $user->getName()->getValue(),
+            $user->getId(),
+            $user->getName(),
             $appName,
             $systemKey
         );

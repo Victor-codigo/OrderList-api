@@ -76,13 +76,8 @@ class NotificationCreateUseCase extends ServiceBase
      */
     private function validateUsersId(array $usersId): void
     {
-        $usersIdPlain = array_map(
-            fn (Identifier $userId) => $userId->getValue(),
-            $usersId
-        );
-
         $response = $this->moduleCommunication->__invoke(
-            ModuleCommunicationFactory::userGet($usersIdPlain)
+            ModuleCommunicationFactory::userGet($usersId)
         );
 
         if (!empty($response->getErrors()) || !$response->hasContent()) {

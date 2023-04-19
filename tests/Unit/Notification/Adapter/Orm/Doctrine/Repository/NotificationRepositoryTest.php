@@ -10,7 +10,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintE
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\Persistence\ObjectManager;
-use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
+use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Notification\Adapter\Database\Orm\Doctrine\Repository\NotificationRepository;
 use Notification\Domain\Model\NOTIFICATION_TYPE;
 use Notification\Domain\Model\Notification;
@@ -19,7 +19,7 @@ use Test\Unit\DataBaseTestCase;
 
 class NotificationRepositoryTest extends DataBaseTestCase
 {
-    use RefreshDatabaseTrait;
+    use ReloadDatabaseTrait;
 
     private const NOTIFICATION_ID = '5f4ef311-6942-4c73-882e-c4fb1dbff7bc';
     private const NOTIFICATION_2_ID = '5e5c28e1-0f72-4e86-999f-743c5174d5d2';

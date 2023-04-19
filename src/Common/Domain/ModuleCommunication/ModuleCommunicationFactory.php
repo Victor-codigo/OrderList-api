@@ -5,6 +5,11 @@ declare(strict_types=1);
 namespace Common\Domain\ModuleCommunication;
 
 use Common\Domain\Config\AppConfig;
+use Common\Domain\Model\ValueObject\String\Description;
+use Common\Domain\Model\ValueObject\String\Email;
+use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
 use Group\Domain\Model\GROUP_TYPE;
 use Notification\Domain\Model\NOTIFICATION_TYPE;
@@ -15,15 +20,15 @@ class ModuleCommunicationFactory
     private const CONTENT_TYPE_APPLICATION_JSON = 'application/json';
     private const CONTENT_TYPE_APPLICATION_FORM = 'multipart/form-data';
 
-    public static function userLogin(string $email, string $password): ModuleCommunicationConfigDto
+    public static function userLogin(Email $email, Password $password): ModuleCommunicationConfigDto
     {
         $attributes = [
             'api_version' => static::API_VERSION,
         ];
 
         $content = [
-            'username' => $email,
-            'password' => $password,
+            'username' => $email->getValue(),
+            'password' => $password->getValue(),
         ];
 
         return new ModuleCommunicationConfigDto(
@@ -40,13 +45,18 @@ class ModuleCommunicationFactory
     }
 
     /**
-     * @param string[] $usersId
+     * @param Identifier[] $usersId
      */
     public static function userGet(array $usersId): ModuleCommunicationConfigDto
     {
+        $usersIdPlain = array_map(
+            fn (Identifier $userId) => $userId->getValue(),
+            $usersId
+        );
+
         $attributes = [
             'api_version' => static::API_VERSION,
-            'users_id' => implode(',', $usersId),
+            'users_id' => implode(',', $usersIdPlain),
         ];
 
         return new ModuleCommunicationConfigDto(
@@ -63,13 +73,18 @@ class ModuleCommunicationFactory
     }
 
     /**
-     * @param string[] $usersId
+     * @param Name[] $usersId
      */
     public static function userGetByName(array $usersNames): ModuleCommunicationConfigDto
     {
+        $usersNamePlain = array_map(
+            fn (Name $userName) => $userName->getValue(),
+            $usersNames
+        );
+
         $attributes = [
             'api_version' => static::API_VERSION,
-            'users_name' => implode(',', $usersNames),
+            'users_name' => implode(',', $usersNamePlain),
         ];
 
         return new ModuleCommunicationConfigDto(
@@ -88,15 +103,15 @@ class ModuleCommunicationFactory
     /**
      * @param UploadedFileInterface[] $files
      */
-    public static function groupCreate(string $name, string $description, GROUP_TYPE $type, array $files = []): ModuleCommunicationConfigDto
+    public static function groupCreate(Name $name, Description $description, GROUP_TYPE $type, array $files = []): ModuleCommunicationConfigDto
     {
         $attributes = [
             'api_version' => static::API_VERSION,
         ];
 
         $content = [
-            'name' => $name,
-            'description' => $description,
+            'name' => $name->getValue(),
+            'description' => $description->getValue(),
             'type' => $type->value,
         ];
 
@@ -113,13 +128,13 @@ class ModuleCommunicationFactory
         );
     }
 
-    public static function notificationCreateUserRegistered(string $recipientUserId, string $userName, string $domainName, string $systemKey): ModuleCommunicationConfigDto
+    public static function notificationCreateUserRegistered(Identifier $recipientUserId, Name $userName, string $domainName, string $systemKey): ModuleCommunicationConfigDto
     {
         $content = [
-            'users_id' => $recipientUserId,
+            'users_id' => $recipientUserId->getValue(),
             'type' => NOTIFICATION_TYPE::USER_REGISTERED->value,
             'notification_data' => [
-                'user_name' => $userName,
+                'user_name' => $userName->getValue(),
                 'domain_name' => $domainName,
             ],
             'system_key' => $systemKey,
@@ -128,14 +143,22 @@ class ModuleCommunicationFactory
         return self::notificationCreate($content);
     }
 
-    public static function notificationCreateGroupUserAdded(array $recipientUsersId, string $groupName, string $userWhoAddsYouName, string $systemKey): ModuleCommunicationConfigDto
+    /**
+     * @param Identifier[] $recipientUsersId
+     */
+    public static function notificationCreateGroupUserAdded(array $recipientUsersId, Name $groupName, Name $userWhoAddsYouName, string $systemKey): ModuleCommunicationConfigDto
     {
+        $recipientUsersIdPlain = array_map(
+            fn (Identifier $recipientUserId) => $recipientUserId->getValue(),
+            $recipientUsersId
+        );
+
         $content = [
-            'users_id' => $recipientUsersId,
+            'users_id' => $recipientUsersIdPlain,
             'type' => NOTIFICATION_TYPE::GROUP_USER_ADDED->value,
             'notification_data' => [
-                'group_name' => $groupName,
-                'user_who_adds_you_name' => $userWhoAddsYouName,
+                'group_name' => $groupName->getValue(),
+                'user_who_adds_you_name' => $userWhoAddsYouName->getValue(),
             ],
             'system_key' => $systemKey,
         ];

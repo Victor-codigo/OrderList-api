@@ -6,12 +6,15 @@ namespace Test\Unit\User\Adapter\Database\Orm\Doctrine\Repository;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Test\Unit\DataBaseTestCase;
 use User\Adapter\Database\Orm\Doctrine\Repository\ProfileRepository;
 use User\Domain\Model\Profile;
 
 class ProfileRepositoryTest extends DataBaseTestCase
 {
+    use ReloadDatabaseTrait;
+
     private ProfileRepository $object;
 
     protected function setUp(): void

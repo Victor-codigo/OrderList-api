@@ -96,7 +96,7 @@ class GroupGetUsersUseCase extends ServiceBase
     {
         $usersGroup->setPagination($page->getValue(), $pageItems->getValue());
         $usersId = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId()->getValue(),
+            fn (UserGroup $userGroup) => $userGroup->getUserId(),
             iterator_to_array($usersGroup)
         );
 

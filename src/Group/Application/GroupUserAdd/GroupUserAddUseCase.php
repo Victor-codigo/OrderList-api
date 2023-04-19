@@ -71,9 +71,9 @@ class GroupUserAddUseCase extends ServiceBase
             return $this->createGroupUserAddOutputDto($usersAdded);
         } catch (GroupAddUsersMaxNumberExceededException) {
             throw GroupUserAddGroupMaximumUsersNumberExceededException::fromMessage('Group User number exceeded');
-        } catch(GroupAddUsersAlreadyInTheGroupException){
+        } catch (GroupAddUsersAlreadyInTheGroupException) {
             throw GroupUserAddAllUsersAreAlreadyInTheGroupException::fromMessage('All users are already in the group');
-        }catch (DBNotFoundException) {
+        } catch (DBNotFoundException) {
             throw GroupUserAddGroupNotFoundException::fromMessage('Group not found');
         } catch (DBConnectionException|ModuleCommunicationException $e) {
             throw DomainErrorException::fromMessage('An error has been occurred');
@@ -100,6 +100,8 @@ class GroupUserAddUseCase extends ServiceBase
     }
 
     /**
+     * @param Identifier[] $users
+     *
      * @throws GroupUserAddUsersValidationException
      * @throws ModuleCommunicationException
      */
@@ -116,6 +118,8 @@ class GroupUserAddUseCase extends ServiceBase
 
     /**
      * @param Identifier[]|Name[] $users
+     *
+     * @return Identifier[]
      *
      * @throws GroupUserAddUsersValidationException
      */
@@ -140,13 +144,8 @@ class GroupUserAddUseCase extends ServiceBase
      */
     private function getUserByNameOrFail(array $usersNames): array
     {
-        $usersNamesPlain = array_map(
-            fn (Name $userName) => $userName->getValue(),
-            $usersNames
-        );
-
         $response = $this->moduleCommunication->__invoke(
-            ModuleCommunicationFactory::userGetByName($usersNamesPlain)
+            ModuleCommunicationFactory::userGetByName($usersNames)
         );
 
         if (!empty($response->getErrors()) || !$response->hasContent()) {
@@ -162,9 +161,9 @@ class GroupUserAddUseCase extends ServiceBase
     private function createNotificationGroupUserAdded(array $usersGroupToNotify, Group $group, User $userSession, string $systemKey): void
     {
         $notificationData = ModuleCommunicationFactory::notificationCreateGroupUserAdded(
-            array_map(fn (UserGroup $userGroup) => $userGroup->getUserId()->getValue(), $usersGroupToNotify),
-            $group->getName()->getValue(),
-            $userSession->getName()->getValue(),
+            array_map(fn (UserGroup $userGroup) => $userGroup->getUserId(), $usersGroupToNotify),
+            $group->getName(),
+            $userSession->getName(),
             $systemKey
         );
 
