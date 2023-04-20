@@ -5,17 +5,23 @@ declare(strict_types=1);
 namespace Group\Application\GroupUserRemove;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
+use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
+use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Service\Exception\DomainErrorException;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
-use Exception;
 use Group\Application\GroupUserRemove\Dto\GroupUserRemoveInputDto;
 use Group\Application\GroupUserRemove\Dto\GroupUserRemoveOutputDto;
 use Group\Application\GroupUserRemove\Exception\GroupUserRemoveGroupEmptyException;
+use Group\Application\GroupUserRemove\Exception\GroupUserRemoveGroupNotificationException;
 use Group\Application\GroupUserRemove\Exception\GroupUserRemoveGroupWithoutAdminException;
 use Group\Application\GroupUserRemove\Exception\GroupUserRemoveGrouporUsersNotFoundException;
 use Group\Application\GroupUserRemove\Exception\GroupUserRemovePermissionsException;
+use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Service\GroupUserRemove\Dto\GroupUserRemoveDto;
 use Group\Domain\Service\GroupUserRemove\Exception\GroupUserRemoveEmptyException;
 use Group\Domain\Service\GroupUserRemove\Exception\GroupUserRemoveGroupWithoutAdmin;
@@ -27,17 +33,31 @@ class GroupUserRemoveUseCase extends ServiceBase
     public function __construct(
         private ValidationInterface $validator,
         private UserHasGroupAdminGrantsService $userHasGroupAdminGrantsService,
-        private GroupUserRemoveService $groupUserRemoveService
+        private GroupUserRemoveService $groupUserRemoveService,
+        private ModuleCommunicationInterface $moduleCommunication,
+        private GroupRepositoryInterface $groupRepository,
+        private string $systemKey
     ) {
     }
 
+    /**
+     * @throws GroupUserRemoveGroupEmptyException
+     * @throws GroupUserRemoveGroupWithoutAdminException
+     * @throws GroupUserRemoveGrouporUsersNotFoundException
+     * @throws GroupUserRemovePermissionsException
+     * @throws ValueObjectValidationException
+     * @throws DomainErrorException
+     */
     public function __invoke(GroupUserRemoveInputDto $input): GroupUserRemoveOutputDto
     {
         try {
             $this->validation($input);
+            $group = $this->groupRepository->findGroupsByIdOrFail([$input->groupId])[0];
             $usersRemovedId = $this->groupUserRemoveService->__invoke(
                 $this->createGroupUserRemoveDto($input)
             );
+
+            $this->createNotificationGroupUserRemoved($usersRemovedId, $group->getName(), $this->systemKey);
 
             return $this->createGroupUserRemoveOutputDto($usersRemovedId);
         } catch (GroupUserRemoveEmptyException) {
@@ -46,13 +66,13 @@ class GroupUserRemoveUseCase extends ServiceBase
             throw GroupUserRemoveGroupWithoutAdminException::fromMessage('Cannot remove all admins form a group');
         } catch (DBNotFoundException) {
             throw GroupUserRemoveGrouporUsersNotFoundException::fromMessage('Group or users not found');
-        } catch (GroupUserRemovePermissionsException|ValueObjectValidationException $e) {
-            throw $e;
-        } catch (Exception) {
-            throw DomainErrorException::fromMessage('An error has been occurred');
         }
     }
 
+    /**
+     * @throws GroupUserRemovePermissionsException
+     * @throws GroupUserRemovePermissionsException
+     */
     private function validation(GroupUserRemoveInputDto $input): void
     {
         $errorList = $input->validate($this->validator);
@@ -63,6 +83,22 @@ class GroupUserRemoveUseCase extends ServiceBase
 
         if (!$this->userHasGroupAdminGrantsService->__invoke($input->userSession, $input->groupId)) {
             throw GroupUserRemovePermissionsException::fromMessage('Not permissions in this group');
+        }
+    }
+
+    /**
+     * @param Identifier[] $usersId
+     *
+     * @throws GroupUserRemoveGroupNotificationException
+     */
+    private function createNotificationGroupUserRemoved(array $usersId, Name $groupName, string $systemKey): void
+    {
+        $response = $this->moduleCommunication->__invoke(
+            ModuleCommunicationFactory::notificationCreateGroupUsersRemoved($usersId, $groupName, $systemKey)
+        );
+
+        if (RESPONSE_STATUS::OK !== $response->getStatus()) {
+            throw GroupUserRemoveGroupNotificationException::fromMessage('An error was ocurred when trying to send the notification: group user removed');
         }
     }
 

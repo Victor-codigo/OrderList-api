@@ -195,6 +195,28 @@ class ModuleCommunicationFactory
     }
 
     /**
+     * @param Identifier[] $usersId
+     */
+    public static function notificationCreateGroupUsersRemoved(array $usersId, Name $groupName, string $systemKey): ModuleCommunicationConfigDto
+    {
+        $usersIdPlain = array_map(
+            fn (Identifier $userId) => $userId->getValue(),
+            $usersId
+        );
+
+        $content = [
+            'users_id' => $usersIdPlain,
+            'type' => NOTIFICATION_TYPE::GROUP_USER_REMOVED->value,
+            'notification_data' => [
+                'group_name' => $groupName->getValue(),
+            ],
+            'system_key' => $systemKey,
+        ];
+
+        return self::notificationCreate($content);
+    }
+
+    /**
      * @param Identifier[] $recipientUsersId
      */
     public static function notificationUserEmailChanged(Identifier $userId, string $systemKey): ModuleCommunicationConfigDto
