@@ -8,12 +8,17 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionExcepti
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\FileUpload\Exception\FileUploadException;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
+use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
+use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Service\Exception\DomainErrorException;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupCreate\Dto\GroupCreateInputDto;
 use Group\Application\GroupCreate\Exception\GroupCreateCanNotUploadFile;
+use Group\Application\GroupCreate\Exception\GroupCreateNotificationException;
 use Group\Application\GroupCreate\Exception\GroupCreateUserGroupTypeAlreadyExitsException as ExceptionGroupCreateUserGroupTypeAlreadyExitsException;
 use Group\Application\GroupCreate\Exception\GroupNameAlreadyExistsException;
 use Group\Domain\Service\GroupCreate\Dto\GroupCreateDto;
@@ -24,8 +29,10 @@ class GroupCreateUseCase extends ServiceBase
 {
     public function __construct(
         private GroupCreateService $groupCreateService,
-        private ValidationInterface $validator
-        ) {
+        private ValidationInterface $validator,
+        private ModuleCommunicationInterface $moduleCommunication,
+        private string $systemKey
+    ) {
     }
 
     /**
@@ -40,6 +47,8 @@ class GroupCreateUseCase extends ServiceBase
             $group = $this->groupCreateService->__invoke(
                 $this->createGroupCreateDto($input)
             );
+
+            $this->createNotificationGroupCreated($input->userCreatorId, $group->getName(), $this->systemKey);
 
             return $group->getId();
         } catch (DBUniqueConstraintException) {
@@ -62,6 +71,17 @@ class GroupCreateUseCase extends ServiceBase
 
         if (!empty($errorList)) {
             throw ValueObjectValidationException::fromArray('Error', $errorList);
+        }
+    }
+
+    private function createNotificationGroupCreated(Identifier $userId, Name $groupName, string $systemKey): void
+    {
+        $response = $this->moduleCommunication->__invoke(
+            ModuleCommunicationFactory::notificationCreateGroupCreated($userId, $groupName, $systemKey)
+        );
+
+        if (RESPONSE_STATUS::OK !== $response->getStatus()) {
+            throw GroupCreateNotificationException::fromMessage('An error was ocurred when trying to send the notification: user group created');
         }
     }
 
