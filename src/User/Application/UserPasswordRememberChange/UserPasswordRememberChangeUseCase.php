@@ -20,7 +20,7 @@ use Common\Domain\Validation\ValidationInterface;
 use InvalidArgumentException;
 use User\Application\UserPasswordRememberChange\Dto\UserPasswordRememberChangeInputDto;
 use User\Application\UserPasswordRememberChange\Exception\UserPasswordRememberChangeNotificationException;
-use User\Application\UserPasswordRememberChange\Exception\UserPasswordRememberChangePasswordNewAndPasswrodNewRepeatAreNotEqualsException;
+use User\Application\UserPasswordRememberChange\Exception\UserPasswordRememberChangePasswordNewAndPasswordNewRepeatAreNotEqualsException;
 use User\Application\UserPasswordRememberChange\Exception\UserPasswordRememberChangeTokenExpiredException;
 use User\Application\UserPasswordRememberChange\Exception\UserPasswordRememberChangeTokenWrongException;
 use User\Application\UserPasswordRememberChange\Exception\UserPasswordRememberChangeUserNotFoundException;
@@ -43,7 +43,7 @@ class UserPasswordRememberChangeUseCase extends ServiceBase
      * @throws UserPasswordRememberChangeTokenWrongException
      * @throws UserPasswordRememberChangeTokenExpiredException
      * @throws UserPasswordRememberChangeUserNotFoundException
-     * @throws UserPasswordRememberChangePasswordNewAndPasswrodNewRepeatAreNotEqualsException
+     * @throws UserPasswordRememberChangePasswordNewAndPasswordNewRepeatAreNotEqualsException
      */
     public function __invoke(UserPasswordRememberChangeInputDto $passwordChangeDto): void
     {
@@ -66,7 +66,7 @@ class UserPasswordRememberChangeUseCase extends ServiceBase
         } catch (DBNotFoundException) {
             throw UserPasswordRememberChangeUserNotFoundException::fromMessage('It could not change password');
         } catch (PasswordNewAndRepeatAreNotTheSameException) {
-            throw UserPasswordRememberChangePasswordNewAndPasswrodNewRepeatAreNotEqualsException::fromMessage('Password new and Repeat new are not equals');
+            throw UserPasswordRememberChangePasswordNewAndPasswordNewRepeatAreNotEqualsException::fromMessage('Password new and Repeat new are not equals');
         }
     }
 

@@ -8,7 +8,7 @@ use Common\Domain\Exception\DomainExceptionOutput;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\RESPONSE_STATUS_HTTP;
 
-class GroupCreateCanNotUploadFile extends DomainExceptionOutput
+class GroupCreateCanNotUploadFileException extends DomainExceptionOutput
 {
     public static function fromMessage(string $message): static
     {
