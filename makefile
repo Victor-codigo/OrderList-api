@@ -19,7 +19,9 @@ setup: ## Sets the application up
 
 	@echo 'Migrating database, dev and test environments'
 	@echo '--------------------------------------------'
-	bin/console doctrine:migrations:migrate --no-interaction
+	bin/console doctrine:database:create --env=dev
+	bin/console doctrine:database:create --env=test
+	bin/console doctrine:migrations:migrate --no-interaction --env=dev
 	bin/console doctrine:migrations:migrate --no-interaction --env=test
 
 	@echo 'Generating public and private keys'
