@@ -21,6 +21,12 @@ class NotificationGetDataServiceTest extends TestCase
     private const NOTIFICATION_ID_1 = '2d208936-a7e9-32c1-963f-0df7f57ae463';
     private const NOTIFICATION_ID_2 = '38dac117-2d4f-4057-8bc6-c972b5f439c6';
     private const NOTIFICATION_ID_3 = '79a674c7-e109-3094-b8d5-c19cc00f5519';
+    private const NOTIFICATION_ID_4 = '26884a81-c072-4af9-bbdb-6045d827b4ac';
+    private const NOTIFICATION_ID_5 = '10332278-54b9-4f2a-a307-ecf10cc49a2b';
+    private const NOTIFICATION_ID_6 = '0776d4da-edc9-4337-80d5-57e12ac51b17';
+    private const NOTIFICATION_ID_7 = 'a43d386d-c878-40bf-a9bf-0aedea922260';
+    private const NOTIFICATION_ID_8 = '67d5ab78-5f19-40f0-869c-d079f6983bb3';
+
     private const TRANSLATOR_DOMAIN = 'Notifications';
 
     private NotificationGetDataService $object;
@@ -43,9 +49,21 @@ class NotificationGetDataServiceTest extends TestCase
      */
     private function getNotifications(): \Iterator
     {
-        $notificationGroupUserAdd = [
+        $notificationGroupUserAdded = [
             'group_name' => 'GROUP NAME',
             'user_who_adds_you_name' => 'USER WHO ADDS YOU',
+        ];
+
+        $notificationGroupCreated = [
+            'group_name' => 'GROUP NAME',
+        ];
+
+        $notificationGroupRemoved = [
+            'group_name' => 'GROUP NAME',
+        ];
+
+        $notificationGroupUserRemoved = [
+            'group_name' => 'GROUP NAME',
         ];
 
         $notificationUserRegistered = [
@@ -54,9 +72,14 @@ class NotificationGetDataServiceTest extends TestCase
         ];
 
         return new \ArrayIterator([
-            Notification::fromPrimitives(self::NOTIFICATION_ID_1, 'user id 1', NOTIFICATION_TYPE::GROUP_USER_ADDED, $notificationGroupUserAdd),
-            Notification::fromPrimitives(self::NOTIFICATION_ID_2, 'user id 2', NOTIFICATION_TYPE::USER_REGISTERED, $notificationUserRegistered),
-            Notification::fromPrimitives(self::NOTIFICATION_ID_3, 'user id 3', NOTIFICATION_TYPE::GROUP_USER_ADDED, $notificationGroupUserAdd),
+            Notification::fromPrimitives(self::NOTIFICATION_ID_1, 'user id 1', NOTIFICATION_TYPE::GROUP_CREATED, $notificationGroupCreated),
+            Notification::fromPrimitives(self::NOTIFICATION_ID_2, 'user id 2', NOTIFICATION_TYPE::GROUP_REMOVED, $notificationGroupRemoved),
+            Notification::fromPrimitives(self::NOTIFICATION_ID_3, 'user id 3', NOTIFICATION_TYPE::GROUP_USER_ADDED, $notificationGroupUserAdded),
+            Notification::fromPrimitives(self::NOTIFICATION_ID_4, 'user id 4', NOTIFICATION_TYPE::GROUP_USER_REMOVED, $notificationGroupUserRemoved),
+            Notification::fromPrimitives(self::NOTIFICATION_ID_5, 'user id 5', NOTIFICATION_TYPE::USER_EMAIL_CHANGED, []),
+            Notification::fromPrimitives(self::NOTIFICATION_ID_6, 'user id 6', NOTIFICATION_TYPE::USER_PASSWORD_CHANGED, []),
+            Notification::fromPrimitives(self::NOTIFICATION_ID_7, 'user id 7', NOTIFICATION_TYPE::USER_PASSWORD_REMEMBER, []),
+            Notification::fromPrimitives(self::NOTIFICATION_ID_8, 'user id 8', NOTIFICATION_TYPE::USER_REGISTERED, $notificationUserRegistered),
         ]);
     }
 
@@ -106,8 +129,15 @@ class NotificationGetDataServiceTest extends TestCase
                 static $callNumber = 0;
 
                 match ($notificationsTypes[$callNumber++]) {
-                    NOTIFICATION_TYPE::GROUP_USER_ADDED => $this->assertEquals('notification.group_user_added', $placeholder),
-                    NOTIFICATION_TYPE::USER_REGISTERED => $this->assertEquals('notification.user_registered', $placeholder)
+                    NOTIFICATION_TYPE::GROUP_CREATED => $this->assertEquals('notification.group.created', $placeholder),
+                    NOTIFICATION_TYPE::GROUP_REMOVED => $this->assertEquals('notification.group.removed', $placeholder),
+                    NOTIFICATION_TYPE::GROUP_USER_ADDED => $this->assertEquals('notification.group.user_added', $placeholder),
+                    NOTIFICATION_TYPE::GROUP_USER_REMOVED => $this->assertEquals('notification.group.user_removed', $placeholder),
+
+                    NOTIFICATION_TYPE::USER_EMAIL_CHANGED => $this->assertEquals('notification.user.email_changed', $placeholder),
+                    NOTIFICATION_TYPE::USER_PASSWORD_CHANGED => $this->assertEquals('notification.user.password_changed', $placeholder),
+                    NOTIFICATION_TYPE::USER_PASSWORD_REMEMBER => $this->assertEquals('notification.user.password_remembered', $placeholder),
+                    NOTIFICATION_TYPE::USER_REGISTERED => $this->assertEquals('notification.user.registered', $placeholder)
                 };
 
                 return true;

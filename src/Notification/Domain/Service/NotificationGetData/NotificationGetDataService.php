@@ -57,20 +57,24 @@ class NotificationGetDataService
      */
     private function translateNotification(language $lang, NotificationType $notificationType, NotificationData $notificationData): string
     {
-        return match ($notificationType->getValue()) {
-            NOTIFICATION_TYPE::GROUP_USER_ADDED => $this->translator->translate(
-                'notification.group_user_added',
-                $notificationData->getValue(),
-                self::TRANSLATION_DOMAIN,
-                $lang->getValue()
-            ),
-            NOTIFICATION_TYPE::USER_REGISTERED => $this->translator->translate(
-                'notification.user_registered',
-                $notificationData->getValue(),
-                self::TRANSLATION_DOMAIN,
-                $lang->getValue()
-            ),
+        $translateKey = match ($notificationType->getValue()) {
+            NOTIFICATION_TYPE::GROUP_CREATED => 'notification.group.created',
+            NOTIFICATION_TYPE::GROUP_REMOVED => 'notification.group.removed',
+            NOTIFICATION_TYPE::GROUP_USER_ADDED => 'notification.group.user_added',
+            NOTIFICATION_TYPE::GROUP_USER_REMOVED => 'notification.group.user_removed',
+
+            NOTIFICATION_TYPE::USER_EMAIL_CHANGED => 'notification.user.email_changed',
+            NOTIFICATION_TYPE::USER_PASSWORD_CHANGED => 'notification.user.password_changed',
+            NOTIFICATION_TYPE::USER_PASSWORD_REMEMBER => 'notification.user.password_remembered',
+            NOTIFICATION_TYPE::USER_REGISTERED => 'notification.user.registered',
             default => throw LogicException::fromMessage('Notification type not found')
         };
+
+        return $this->translator->translate(
+            $translateKey,
+            $notificationData->getValue(),
+            self::TRANSLATION_DOMAIN,
+            $lang->getValue()
+        );
     }
 }

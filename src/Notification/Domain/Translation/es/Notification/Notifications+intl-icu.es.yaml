@@ -1,3 +1,12 @@
 notification:
-  user_registered: Bienvenido {user_name}. Ya eres un nuevo miembro de {domain_name}!
-  group_user_added: "{user_who_adds_you_name} te ha añadido al grupo {group_name}."
+  user:
+    registered: Bienvenido {user_name}. Ya eres un nuevo miembro de {domain_name}!
+    email_changed: Has cambiado tú email
+    password_changed: Has cambiado tú password
+    password_remembered: Tú contraseña ha sido restablecida
+
+  group:
+    user_added: Has sido añadido al grupo {group_name} por {user_who_adds_you_name}.
+    user_removed: Has sido eliminado del grupo {group_name}
+    created: Has creado el grupo {group_name}
+    removed: Has eliminado el grupo {group_name}
