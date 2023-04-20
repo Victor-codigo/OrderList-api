@@ -14,7 +14,7 @@ use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use User\Adapter\Http\Controller\UserPasswordRemember\Dto\UserPasswordRememberOutputDto;
 use User\Application\UserPasswordRemember\Dto\UserPasswordRememberInputDto;
-use User\Application\UserPasswordRemember\Exception\UserPasswordRememberUserNotfoundexception;
+use User\Application\UserPasswordRemember\Exception\UserPasswordRememberUserNotFoundException;
 use User\Domain\Service\UserPasswordRemember\Dto\UserPasswordRememberDto;
 use User\Domain\Service\UserPasswordRemember\UserPasswordRememberService as DomainUserPasswordRememberService;
 
@@ -40,7 +40,7 @@ class UserPasswordRememberUseCase extends ServiceBase
 
             return new UserPasswordRememberOutputDto(true);
         } catch (DBNotFoundException) {
-            throw UserPasswordRememberUserNotfoundexception::fromMessage('Email not found');
+            throw UserPasswordRememberUserNotFoundException::fromMessage('Email not found');
         } catch (DomainException) {
             throw DomainInternalErrorException::fromMessage('Email could not be sent, try it later');
         }

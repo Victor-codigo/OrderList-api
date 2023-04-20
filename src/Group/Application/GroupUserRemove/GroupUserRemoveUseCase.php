@@ -18,8 +18,8 @@ use Group\Application\GroupUserRemove\Dto\GroupUserRemoveInputDto;
 use Group\Application\GroupUserRemove\Dto\GroupUserRemoveOutputDto;
 use Group\Application\GroupUserRemove\Exception\GroupUserRemoveGroupEmptyException;
 use Group\Application\GroupUserRemove\Exception\GroupUserRemoveGroupNotificationException;
+use Group\Application\GroupUserRemove\Exception\GroupUserRemoveGroupUsersNotFoundException;
 use Group\Application\GroupUserRemove\Exception\GroupUserRemoveGroupWithoutAdminException;
-use Group\Application\GroupUserRemove\Exception\GroupUserRemoveGrouporUsersNotFoundException;
 use Group\Application\GroupUserRemove\Exception\GroupUserRemovePermissionsException;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Service\GroupUserRemove\Dto\GroupUserRemoveDto;
@@ -43,7 +43,7 @@ class GroupUserRemoveUseCase extends ServiceBase
     /**
      * @throws GroupUserRemoveGroupEmptyException
      * @throws GroupUserRemoveGroupWithoutAdminException
-     * @throws GroupUserRemoveGrouporUsersNotFoundException
+     * @throws GroupUserRemoveGroupUsersNotFoundException
      * @throws GroupUserRemovePermissionsException
      * @throws ValueObjectValidationException
      * @throws DomainErrorException
@@ -65,7 +65,7 @@ class GroupUserRemoveUseCase extends ServiceBase
         } catch (GroupUserRemoveGroupWithoutAdmin) {
             throw GroupUserRemoveGroupWithoutAdminException::fromMessage('Cannot remove all admins form a group');
         } catch (DBNotFoundException) {
-            throw GroupUserRemoveGrouporUsersNotFoundException::fromMessage('Group or users not found');
+            throw GroupUserRemoveGroupUsersNotFoundException::fromMessage('Group or users not found');
         }
     }
 
