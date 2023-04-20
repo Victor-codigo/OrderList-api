@@ -166,14 +166,25 @@ class ModuleCommunicationFactory
         return self::notificationCreate($content);
     }
 
-    /**
-     * @param Identifier[] $recipientUsersId
-     */
     public static function notificationCreateGroupCreated(Identifier $userId, Name $groupName, string $systemKey): ModuleCommunicationConfigDto
     {
         $content = [
             'users_id' => [$userId->getValue()],
             'type' => NOTIFICATION_TYPE::GROUP_CREATED->value,
+            'notification_data' => [
+                'group_name' => $groupName->getValue(),
+            ],
+            'system_key' => $systemKey,
+        ];
+
+        return self::notificationCreate($content);
+    }
+
+    public static function notificationCreateGroupRemoved(Identifier $userId, Name $groupName, string $systemKey): ModuleCommunicationConfigDto
+    {
+        $content = [
+            'users_id' => [$userId->getValue()],
+            'type' => NOTIFICATION_TYPE::GROUP_REMOVED->value,
             'notification_data' => [
                 'group_name' => $groupName->getValue(),
             ],

@@ -18,6 +18,7 @@ use Group\Domain\Model\GROUP_TYPE;
 use Group\Domain\Model\Group;
 use Group\Domain\Service\GroupCreate\Dto\GroupCreateDto;
 use Group\Domain\Service\GroupCreate\GroupCreateService;
+use Notification\Domain\Model\NOTIFICATION_TYPE;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -84,6 +85,7 @@ class GroupCreateUseCaseTest extends TestCase
                 $this->assertEquals([$userId->getValue()], $notificationDto->content['users_id']);
                 $this->assertEquals($groupName->getValue(), $notificationDto->content['notification_data']['group_name']);
                 $this->assertEquals(self::SYSTEM_KEY, $notificationDto->content['system_key']);
+                $this->assertEquals(NOTIFICATION_TYPE::GROUP_CREATED->value, $notificationDto->content['type']);
 
                 return true;
             }))
@@ -108,7 +110,6 @@ class GroupCreateUseCaseTest extends TestCase
     public function itShouldFailCreateTheGroupNotificationError(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
-        $groupId = ValueObjectFactory::createIdentifier('group id');
         $groupName = ValueObjectFactory::createName('group name');
         $description = ValueObjectFactory::createDescription('description');
         $groupType = ValueObjectFactory::createGroupType(GROUP_TYPE::GROUP);
@@ -141,6 +142,7 @@ class GroupCreateUseCaseTest extends TestCase
                 $this->assertEquals([$userId->getValue()], $notificationDto->content['users_id']);
                 $this->assertEquals($groupName->getValue(), $notificationDto->content['notification_data']['group_name']);
                 $this->assertEquals(self::SYSTEM_KEY, $notificationDto->content['system_key']);
+                $this->assertEquals(NOTIFICATION_TYPE::GROUP_CREATED->value, $notificationDto->content['type']);
 
                 return true;
             }))
