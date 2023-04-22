@@ -9,13 +9,13 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class HexFileStructureTest extends KernelTestCase
+class HexFileStructureCommandTest extends KernelTestCase
 {
     public const OUTPUT_PATH = 'tests/Unit/Common/Adapter/Command/HexFileStructure/Fixtures/Output/FileStructure/';
     public const OUTPUT_PATH_ALTERNATIVE = 'tests/Unit/Common/Adapter/Command/HexFileStructure/Fixtures/Output/FileStructure/Alternative/';
     public const TEMPLATE_EXPECTED_PATH = 'tests/Unit/Common/Adapter/Command/HexFileStructure/Fixtures/Expected/';
 
-    private const COMMAND = 'hex:file:structure';
+    private const COMMAND = 'app:file:structure';
     private const COMMAND_PARAMS = [
         'module' => 'Module',
         'endpointName' => 'Endpoint',

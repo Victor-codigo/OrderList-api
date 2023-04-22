@@ -14,12 +14,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 #[AsCommand(
-    'hex:file:structure',
-    'Creates the files structure for a endpoint in an hexadecimal arquitecture',
-    ['h:f:s'],
+    'app:file:structure',
+    'Creates the files structure for a endpoint in an hexadecimal architecture',
+    ['a:f:s'],
     false
 )]
-class HexFilesStructure extends Command
+class HexFilesStructureCommand extends Command
 {
     private const TEMPLATES_PATH = __DIR__.'/Template';
     private const OUTPUT_DEFAULT_PATH = 'src/';
