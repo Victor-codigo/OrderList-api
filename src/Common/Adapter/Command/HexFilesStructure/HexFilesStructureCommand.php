@@ -117,12 +117,12 @@ class HexFilesStructureCommand extends Command
     private function writeOutput(OutputInterface $output): void
     {
         $projectDir = $this->kernel->getProjectDir().'/';
-        $comandOutput = array_map(
+        $commandOutput = array_map(
             fn (string $file) => 'CREATED '.str_replace($projectDir, '', $file),
             $this->filesCreated
         );
 
-        $output->writeln($comandOutput);
+        $output->writeln($commandOutput);
     }
 
     /**
