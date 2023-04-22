@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -45,21 +46,30 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
           if ($exception instanceof NotFoundHttpException) {
               $message = static::ERROR_404_MESSAGE;
               $status = Response::HTTP_NOT_FOUND;
+              $responseStatus = RESPONSE_STATUS::OK;
           } elseif ($exception instanceof AccessDeniedHttpException) {
               $message = static::ERROR_403_MESSAGE;
               $status = Response::HTTP_FORBIDDEN;
+              $responseStatus = RESPONSE_STATUS::OK;
           } elseif ($exception instanceof DomainInternalErrorException) {
               $message = static::ERROR_500_MESSAGE;
               $status = Response::HTTP_INTERNAL_SERVER_ERROR;
+              $responseStatus = RESPONSE_STATUS::OK;
           } elseif ($exception instanceof MethodNotAllowedHttpException) {
               $message = static::ERROR_METHOD_NOT_ALLOWED;
               $status = Response::HTTP_METHOD_NOT_ALLOWED;
+              $responseStatus = RESPONSE_STATUS::OK;
+          } elseif ($exception instanceof BadRequestHttpException) {
+              $message = $exception->getMessage();
+              $status = $exception->getStatusCode();
+              $responseStatus = RESPONSE_STATUS::ERROR;
           } else {
               return null;
           }
 
-          $response = new ResponseDto();
-          $response->setMessage($message);
+          $response = (new ResponseDto())
+            ->setStatus($responseStatus)
+            ->setMessage($message);
 
           return $this->createJsonResponse($response, $status);
       }

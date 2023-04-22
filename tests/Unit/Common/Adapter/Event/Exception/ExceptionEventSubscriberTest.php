@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -60,6 +61,7 @@ class ExceptionEventSubscriberTest extends TestCase
         $responseContent = json_decode($response->getContent(), false);
 
         $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertEquals(ExceptionEventSubscriber::ERROR_404_MESSAGE, $responseContent->message);
     }
 
@@ -75,6 +77,7 @@ class ExceptionEventSubscriberTest extends TestCase
         $responseContent = json_decode($response->getContent(), false);
 
         $this->assertEquals(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertEquals(ExceptionEventSubscriber::ERROR_403_MESSAGE, $responseContent->message);
     }
 
@@ -90,6 +93,7 @@ class ExceptionEventSubscriberTest extends TestCase
         $responseContent = json_decode($response->getContent(), false);
 
         $this->assertEquals(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getStatusCode());
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertEquals(ExceptionEventSubscriber::ERROR_500_MESSAGE, $responseContent->message);
     }
 
@@ -105,7 +109,24 @@ class ExceptionEventSubscriberTest extends TestCase
         $responseContent = json_decode($response->getContent(), false);
 
         $this->assertEquals(Response::HTTP_METHOD_NOT_ALLOWED, $response->getStatusCode());
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertEquals(ExceptionEventSubscriber::ERROR_METHOD_NOT_ALLOWED, $responseContent->message);
+    }
+
+    /** @test */
+    public function itShouldReturnAnBadRequestHttpException(): void
+    {
+        $exception = new BadRequestHttpException('BadRequestHttpException');
+        $this->event->setThrowable($exception);
+        $this->object->__invoke($this->event);
+
+        $response = $this->event->getResponse();
+        /** @var ResponseDto $responseContent */
+        $responseContent = json_decode($response->getContent(), false);
+
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertEquals('BadRequestHttpException', $responseContent->message);
     }
 
     /** @test */
