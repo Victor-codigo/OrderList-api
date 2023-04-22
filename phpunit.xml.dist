@@ -38,6 +38,9 @@
         <testsuite name="functionalNotification">
             <directory suffix="Test.php">tests/Functional/Notification</directory>
         </testsuite>
+        <testsuite name="functionalCommon">
+            <directory suffix="Test.php">tests/Functional/Common</directory>
+        </testsuite>
     </testsuites>
 
     <coverage processUncoveredFiles="true">
