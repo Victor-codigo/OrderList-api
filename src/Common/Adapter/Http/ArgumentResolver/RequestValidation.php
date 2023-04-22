@@ -8,7 +8,7 @@ use Common\Adapter\Http\ArgumentResolver\Exception\InvalidJsonException;
 use Common\Adapter\Http\ArgumentResolver\Exception\InvalidMimeTypeException;
 use Common\Domain\Exception\InvalidArgumentException;
 use JsonException;
-use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 
 class RequestValidation
@@ -20,7 +20,7 @@ class RequestValidation
     {
         try {
             if ('GET' === $request->getMethod()) {
-                $request->request = new ParameterBag([]);
+                $request->request = new InputBag([]);
 
                 return;
             }
@@ -35,7 +35,7 @@ class RequestValidation
     /**
      * @throws \JsonException
      */
-    private function createParams(Request $request): ParameterBag
+    private function createParams(Request $request): InputBag
     {
         return match ($this->getContentType($request)) {
             REQUEST_ALLOWED_CONTENT::JSON->value => $this->applicationJson($request),
@@ -43,7 +43,7 @@ class RequestValidation
         };
     }
 
-    private function applicationJson(Request $request): ParameterBag
+    private function applicationJson(Request $request): InputBag
     {
         $params = (array) json_decode(
             $request->getContent(),
@@ -52,7 +52,7 @@ class RequestValidation
             JSON_THROW_ON_ERROR
         );
 
-        return new ParameterBag($params);
+        return new InputBag($params);
     }
 
     private function getContentType(Request $request): string

@@ -93,7 +93,7 @@ class RequestValidationTest extends TestCase
     }
 
     /** @test */
-    public function responseGetReuestOk(): void
+    public function responseGetRequestOk(): void
     {
         $request = Request::create(
             '',
