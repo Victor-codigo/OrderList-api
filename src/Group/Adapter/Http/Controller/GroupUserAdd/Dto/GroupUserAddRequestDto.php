@@ -20,7 +20,7 @@ class GroupUserAddRequestDto implements RequestDtoInterface
     public function __construct(Request $request)
     {
         $this->groupId = $request->request->get('group_id');
-        $this->users = $this->removeUsersOverflow($request->request->get('users'));
+        $this->users = $this->removeUsersOverflow($request->request->all('users'));
         $this->identifierType = $request->request->get('identifier_type');
         $this->admin = $request->request->get('admin');
     }

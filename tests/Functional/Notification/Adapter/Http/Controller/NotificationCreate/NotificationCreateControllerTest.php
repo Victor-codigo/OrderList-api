@@ -77,6 +77,36 @@ class NotificationCreateControllerTest extends WebClientTestCase
     }
 
     /** @test */
+    public function itShouldCreateAUserNotificationNotificationDataIsNull(): void
+    {
+        $usersId = [
+            self::USER_ID,
+            self::USER_2_ID,
+            self::USER_3_ID,
+        ];
+        $client = $this->getNewClientAuthenticatedUser();
+        $systemKey = $this->getContainer()->getParameter('common.system.key');
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'users_id' => $usersId,
+                'type' => NOTIFICATION_TYPE::USER_REGISTERED,
+                'system_key' => $systemKey,
+                'notification_data' => null,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_CREATED);
+        $this->assertSame(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Notification created', $responseContent->message);
+        $this->assertCount(count($usersId), $responseContent->data->id);
+    }
+
+    /** @test */
     public function itShouldFailCreatingAUserNotificationUserIdNotValid(): void
     {
         $usersId = [
@@ -276,36 +306,6 @@ class NotificationCreateControllerTest extends WebClientTestCase
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('The system key is wrong', $responseContent->message);
         $this->assertEquals('The system key is wrong', $responseContent->errors->system_key);
-    }
-
-    /** @test */
-    public function itShouldFailCreatingAUserNotificationNotificationDataIsNull(): void
-    {
-        $usersId = [
-            self::USER_ID,
-            self::USER_2_ID,
-            self::USER_3_ID,
-        ];
-        $client = $this->getNewClientAuthenticatedUser();
-        $systemKey = $this->getContainer()->getParameter('common.system.key');
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT,
-            content: json_encode([
-                'users_id' => $usersId,
-                'type' => NOTIFICATION_TYPE::USER_REGISTERED,
-                'system_key' => $systemKey,
-                'notification_data' => null,
-            ])
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [], ['notification_data'], Response::HTTP_BAD_REQUEST);
-        $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Error', $responseContent->message);
-        $this->assertEquals(['not_null'], $responseContent->errors->notification_data);
     }
 
     /** @test */

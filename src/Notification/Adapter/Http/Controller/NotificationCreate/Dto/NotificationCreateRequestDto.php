@@ -19,9 +19,9 @@ class NotificationCreateRequestDto implements RequestDtoInterface
 
     public function __construct(Request $request)
     {
-        $this->userId = $request->request->get('users_id');
+        $this->userId = $request->request->all('users_id');
         $this->notificationType = $request->request->get('type');
-        $this->notificationData = $request->request->get('notification_data');
+        $this->notificationData = $request->request->all('notification_data');
         $this->systemKey = $request->request->get('system_key');
     }
 }

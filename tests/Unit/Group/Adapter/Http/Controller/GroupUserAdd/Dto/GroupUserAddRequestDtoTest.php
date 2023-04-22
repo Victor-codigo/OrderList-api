@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Group\Adapter\Http\Controller\GroupUserAdd\Dto;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 
 class GroupUserAddRequestDtoTest extends TestCase
@@ -31,7 +31,7 @@ class GroupUserAddRequestDtoTest extends TestCase
         }
 
         $request = new Request();
-        $request->request = new ParameterBag($requestAttributes);
+        $request->request = new InputBag($requestAttributes);
 
         return new GroupUserAddRequestDto($request);
     }
@@ -57,6 +57,6 @@ class GroupUserAddRequestDtoTest extends TestCase
     {
         $requestDto = $this->createRequest(null);
 
-        $this->assertNull($requestDto->users);
+        $this->assertEmpty($requestDto->users);
     }
 }

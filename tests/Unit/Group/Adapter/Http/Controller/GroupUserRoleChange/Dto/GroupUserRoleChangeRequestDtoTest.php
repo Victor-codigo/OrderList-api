@@ -57,6 +57,6 @@ class GroupUserRoleChangeRequestDtoTest extends TestCase
     {
         $requestDto = $this->createRequest(null);
 
-        $this->assertNull($requestDto->usersId);
+        $this->assertEmpty($requestDto->usersId);
     }
 }

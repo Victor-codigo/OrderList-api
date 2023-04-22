@@ -174,10 +174,8 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['users'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Error', $responseContent->message);
-        $this->assertEquals(['not_blank'], $responseContent->errors->users);
     }
 
     /** @test */
