@@ -24,6 +24,7 @@ services:
 
         bind:
             $appEnv: "%common.environment.app_env%"
+            $userActivationTimeExpiration: "%common.email_user_registration_confirmation_expire%"
 
     # Adapter
     Common\Adapter\:

@@ -6,6 +6,7 @@ namespace User\Domain\Port\Repository;
 
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Ports\Repository\RepositoryInterface;
 use User\Domain\Model\User;
 
@@ -16,6 +17,13 @@ interface UserRepositoryInterface extends RepositoryInterface
      * @throws DBConnectionException
      */
     public function save(User $user): void;
+
+    /**
+     * @param User[] $users
+     *
+     * @throws DBConnectionException
+     */
+    public function remove(array $users): void;
 
     /**
      * @throws DBNotFoundException
@@ -51,4 +59,9 @@ interface UserRepositoryInterface extends RepositoryInterface
      * @throws DBNotFoundException
      */
     public function findUsersByNameOrFail(array $usersName): array;
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findUsersTimeActivationExpiredOrFail(int $activationTime): PaginatorInterface;
 }

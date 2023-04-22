@@ -25,6 +25,7 @@ class UserRepositoryTest extends DataBaseTestCase
 
     private const USER_ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
     private const USER_EMAIL = 'email.already.exists@host.com';
+    private const USER_NOT_ACTIVE_ID = 'bd2cbad1-6ccf-48e3-bb92-bc9961bc011e';
 
     private UserRepository $userRepository;
 
@@ -54,7 +55,7 @@ class UserRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldFailDataBaseError(): void
+    public function itShouldFailSavingDataBaseError(): void
     {
         $this->expectException(DBConnectionException::class);
 
@@ -67,6 +68,32 @@ class UserRepositoryTest extends DataBaseTestCase
 
         $this->mockObjectManager($this->userRepository, $objectManagerMock);
         $this->userRepository->save($this->getNewUser());
+    }
+
+    /** @test */
+    public function itShouldRemoveTheUserInDataBase(): void
+    {
+        $userNew = $this->getNewUser();
+        $this->userRepository->remove([$userNew]);
+        $userRemoved = $this->userRepository->findOneBy(['id' => $userNew->getId()]);
+
+        $this->assertEmpty($userRemoved);
+    }
+
+    /** @test */
+    public function itShouldFailRemovingDataBaseError(): void
+    {
+        $this->expectException(DBConnectionException::class);
+
+        /** @var MockObject|ObjectManager $objectManagerMock */
+        $objectManagerMock = $this->createMock(ObjectManager::class);
+        $objectManagerMock
+            ->expects($this->once())
+            ->method('flush')
+            ->willThrowException(ConnectionException::driverRequired(''));
+
+        $this->mockObjectManager($this->userRepository, $objectManagerMock);
+        $this->userRepository->remove([$this->getNewUser()]);
     }
 
     /** @test */
@@ -199,12 +226,31 @@ class UserRepositoryTest extends DataBaseTestCase
         $this->userRepository->findUsersByNameOrFail($usersId);
     }
 
+    /** @test */
+    public function itShouldFindUsersNotActiveTimeActivationExpired(): void
+    {
+        $return = $this->userRepository->findUsersTimeActivationExpiredOrFail(0);
+
+        $this->assertCount(1, $return);
+
+        foreach ($return as $user) {
+            $this->assertEquals(self::USER_NOT_ACTIVE_ID, $user->getId());
+        }
+    }
+
+    /** @test */
+    public function itShouldFailFindingUsersNotActiveTimeActivationExpiredNoUsers(): void
+    {
+        $this->expectException(DBNotFoundException::class);
+        $this->userRepository->findUsersTimeActivationExpiredOrFail(100);
+    }
+
     private function getNewUser(): User
     {
         return User::fromPrimitives(
             '86c304df-a63e-4083-b1ee-add73be940a3',
             'new.user.email@host.com',
-            'this is my passorwd',
+            'this is my password',
             'Alfredo',
             [USER_ROLES::NOT_ACTIVE]
         );

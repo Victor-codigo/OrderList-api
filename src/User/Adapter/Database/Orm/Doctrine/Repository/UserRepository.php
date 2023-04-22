@@ -11,17 +11,21 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintE
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
+use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
 use User\Domain\Port\Repository\UserRepositoryInterface;
 
 class UserRepository extends RepositoryBase implements UserRepositoryInterface
 {
-    public function __construct(ManagerRegistry $managerRegistry)
-    {
+    public function __construct(
+        ManagerRegistry $managerRegistry,
+        private PaginatorInterface $paginator
+    ) {
         parent::__construct($managerRegistry, User::class);
     }
 
@@ -36,6 +40,24 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
             $this->objectManager->flush();
         } catch (UniqueConstraintViolationException $e) {
             throw DBUniqueConstraintException::fromEmail($user->getEmail()->getValue(), $e->getCode());
+        } catch (Exception $e) {
+            throw DBConnectionException::fromConnection($e->getCode());
+        }
+    }
+
+    /**
+     * @param User[] $users
+     *
+     * @throws DBConnectionException
+     */
+    public function remove(array $users): void
+    {
+        try {
+            foreach ($users as $user) {
+                $this->objectManager->remove($user);
+            }
+
+            $this->objectManager->flush();
         } catch (Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
@@ -128,5 +150,32 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
         }
 
         return $users;
+    }
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findUsersTimeActivationExpiredOrFail(int $activationTime): PaginatorInterface
+    {
+        $userEntity = User::class;
+        $dql = <<<DQL
+            SELECT user
+            FROM {$userEntity} user
+            WHERE JSON_CONTAINS(user.roles, :rol) = 1
+                AND user.createdOn + :activationTime < CURRENT_TIMESTAMP()
+        DQL;
+
+        $query = $this->entityManager->createQuery($dql)
+            ->setParameters([
+                'rol' => '"'.USER_ROLES::NOT_ACTIVE->value.'"',
+                'activationTime' => $activationTime,
+            ]);
+        $paginator = $this->paginator->createPaginator($query);
+
+        if (0 === $paginator->getItemsTotal()) {
+            throw DBNotFoundException::fromMessage('No users found');
+        }
+
+        return $paginator;
     }
 }
