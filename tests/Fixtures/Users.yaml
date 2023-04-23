@@ -197,47 +197,47 @@ Common\Domain\Model\ValueObject\String\Name:
 Common\Domain\Model\ValueObject\Object\Rol:
   user_rol_random:
     __construct:
-      value: <(User\Domain\Model\USER_ROLES::NOT_ACTIVE)>
+      value: <(Common\Domain\Validation\User\USER_ROLES::NOT_ACTIVE)>
 
   user_rol_active:
     __construct:
-      value: <(User\Domain\Model\USER_ROLES::USER)>
+      value: <(Common\Domain\Validation\User\USER_ROLES::USER)>
 
   user_rol_not_active:
     __construct:
-      value: <(User\Domain\Model\USER_ROLES::NOT_ACTIVE)>
+      value: <(Common\Domain\Validation\User\USER_ROLES::NOT_ACTIVE)>
 
   user_rol_deleted:
     __construct:
-      value: <(User\Domain\Model\USER_ROLES::DELETED)>
+      value: <(Common\Domain\Validation\User\USER_ROLES::DELETED)>
 
   user_rol_other:
     __construct:
-      value: <(User\Domain\Model\USER_ROLES::USER)>
+      value: <(Common\Domain\Validation\User\USER_ROLES::USER)>
 
   user_rol_other_2:
     __construct:
-      value: <(User\Domain\Model\USER_ROLES::USER)>
+      value: <(Common\Domain\Validation\User\USER_ROLES::USER)>
 
   user_rol_other_3:
     __construct:
-      value: <(User\Domain\Model\USER_ROLES::USER)>
+      value: <(Common\Domain\Validation\User\USER_ROLES::USER)>
 
   user_rol_other_4:
     __construct:
-      value: <(User\Domain\Model\USER_ROLES::USER)>
+      value: <(Common\Domain\Validation\User\USER_ROLES::USER)>
 
   user_rol_other_5:
     __construct:
-      value: <(User\Domain\Model\USER_ROLES::USER)>
+      value: <(Common\Domain\Validation\User\USER_ROLES::USER)>
 
   user_rol_other_6:
     __construct:
-      value: <(User\Domain\Model\USER_ROLES::USER)>
+      value: <(Common\Domain\Validation\User\USER_ROLES::USER)>
 
   user_rol_admin:
     __construct:
-      value: <(User\Domain\Model\USER_ROLES::ADMIN)>
+      value: <(Common\Domain\Validation\User\USER_ROLES::ADMIN)>
 
 Common\Domain\Model\ValueObject\Array\Roles:
   user_roles_random:

@@ -7,6 +7,7 @@ namespace User\Adapter\Http\Controller\UserRegister;
 use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Response\ResponseDto;
+use Common\Domain\Validation\User\USER_ROLES;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,7 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
 use User\Adapter\Http\Controller\UserRegister\Dto\UserRegisterRequestDto;
 use User\Application\UserRegister\Dto\UserRegisterInputDto;
 use User\Application\UserRegister\UserRegisterUseCase;
-use User\Domain\Model\USER_ROLES;
 
 #[OA\Tag('User')]
 #[OA\Post(

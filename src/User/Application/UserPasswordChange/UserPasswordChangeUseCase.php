@@ -13,6 +13,7 @@ use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
+use Common\Domain\Validation\User\USER_ROLES;
 use Common\Domain\Validation\ValidationInterface;
 use User\Application\UserPasswordChange\Dto\UserPasswordChangeInputDto;
 use User\Application\UserPasswordChange\Dto\UserPasswordChangeOutputDto;
@@ -22,7 +23,6 @@ use User\Application\UserPasswordChange\Exception\UserPasswordChangePasswordNewA
 use User\Application\UserPasswordChange\Exception\UserPasswordChangePasswordOldWrongException;
 use User\Application\UserPasswordChange\Exception\UserPasswordChangePermissionException;
 use User\Application\UserPasswordChange\Exception\UserPasswordChangeUserNotFoundException;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
 use User\Domain\Service\UserPasswordChange\Dto\UserPasswordChangeDto;
 use User\Domain\Service\UserPasswordChange\Exception\PasswordNewAndRepeatAreNotTheSameException;

@@ -9,11 +9,11 @@ use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Response\RESPONSE_STATUS;
+use Common\Domain\Validation\User\USER_ROLES;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 use User\Domain\Model\Profile;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
 
 class UserRegisterControllerTest extends WebClientTestCase

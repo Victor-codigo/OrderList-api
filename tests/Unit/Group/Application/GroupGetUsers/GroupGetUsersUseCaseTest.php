@@ -17,6 +17,7 @@ use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use Common\Domain\Service\Exception\DomainErrorException;
+use Common\Domain\Validation\User\USER_ROLES;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupGetUsers\Dto\GroupGetUsersInputDto;
 use Group\Application\GroupGetUsers\Dto\GroupGetUsersOutputDto;
@@ -29,7 +30,6 @@ use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
 
 class GroupGetUsersUseCaseTest extends TestCase

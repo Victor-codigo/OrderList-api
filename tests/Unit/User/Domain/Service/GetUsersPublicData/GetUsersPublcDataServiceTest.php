@@ -8,9 +8,9 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Struct\SCOPE;
+use Common\Domain\Validation\User\USER_ROLES;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
 use User\Domain\Port\Repository\UserRepositoryInterface;
 use User\Domain\Service\GetUsersPublicData\Dto\GetUsersPublicDataDto;

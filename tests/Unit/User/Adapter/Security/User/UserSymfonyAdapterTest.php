@@ -6,11 +6,11 @@ namespace Test\Unit\User\Adapter\Security\User;
 
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Validation\User\USER_ROLES;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use User\Adapter\Security\User\UserSymfonyAdapter;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
 
 class UserSymfonyAdapterTest extends TestCase

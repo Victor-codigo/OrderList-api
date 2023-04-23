@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Test\Functional\User\Adapter\Http\Controller\UserGetByNameController;
 
 use Common\Domain\Response\RESPONSE_STATUS;
+use Common\Domain\Validation\User\USER_ROLES;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 use User\Adapter\Http\Controller\UserGetByName\UserGetByNameController;
 use User\Domain\Model\User;
-use User\Domain\Model\USER_ROLES;
 
 class UserGetByNameControllerTest extends WebClientTestCase
 {

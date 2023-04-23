@@ -12,11 +12,11 @@ use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use Common\Domain\Validation\User\USER_ROLES;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
 use User\Domain\Port\Repository\UserRepositoryInterface;
 

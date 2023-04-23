@@ -9,7 +9,7 @@ use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Service\Exception\DomainErrorException;
-use User\Domain\Model\USER_ROLES;
+use Common\Domain\Validation\User\USER_ROLES;
 use User\Domain\Model\User;
 use User\Domain\Port\Repository\UserRepositoryInterface;
 use User\Domain\Service\UserCreateGroup\Dto\UserCreateGroupDto;

@@ -9,9 +9,9 @@ use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Object\Rol;
+use Common\Domain\Validation\User\USER_ROLES;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\USER_ROLES;
 
 class RolesTypeTest extends TestCase
 {

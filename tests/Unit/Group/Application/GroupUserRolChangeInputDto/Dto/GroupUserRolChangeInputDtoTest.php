@@ -6,11 +6,11 @@ namespace Test\Unit\Group\Application\GroupUserRolChangeInputDto\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
+use Common\Domain\Validation\User\USER_ROLES;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserRoleChange\Dto\GroupUserRoleChangeInputDto;
 use Group\Domain\Model\GROUP_ROLES;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
 
 class GroupUserRolChangeInputDtoTest extends TestCase

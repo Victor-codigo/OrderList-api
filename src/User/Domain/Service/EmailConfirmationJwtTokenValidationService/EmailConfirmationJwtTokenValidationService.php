@@ -12,7 +12,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\JwtToken;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\JwtToken\JwtHS256Interface;
-use User\Domain\Model\USER_ROLES;
+use Common\Domain\Validation\User\USER_ROLES;
 use User\Domain\Model\User;
 use User\Domain\Port\Repository\UserRepositoryInterface;
 use User\Domain\Service\EmailConfirmationJwtTokenValidationService\Dto\EmailConfirmationJwtTokenValidationDto;

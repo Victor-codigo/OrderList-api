@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Domain\Exception;
 
-use User\Domain\Model\USER_ROLES;
+use Common\Domain\Validation\User\USER_ROLES;
 
 class PermissionDeniedException extends DomainException
 {

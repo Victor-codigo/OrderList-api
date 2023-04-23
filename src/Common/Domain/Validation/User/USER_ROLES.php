@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace User\Domain\Model;
+namespace Common\Domain\Validation\User;
 
 enum USER_ROLES: string
 {

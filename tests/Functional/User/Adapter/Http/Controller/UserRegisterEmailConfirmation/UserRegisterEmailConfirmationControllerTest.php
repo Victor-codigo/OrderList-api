@@ -6,11 +6,11 @@ namespace Test\Functional\User\Adapter\Http\Controller\UserRegisterEmailConfirma
 
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Validation\User\USER_ROLES;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
 
 class UserRegisterEmailConfirmationControllerTest extends WebClientTestCase

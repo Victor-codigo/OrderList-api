@@ -7,12 +7,12 @@ namespace Test\Unit\Group\Application\GroupModify\Dto;
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
+use Common\Domain\Validation\User\USER_ROLES;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupModify\Dto\GroupModifyInputDto;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints\BuiltInFunctionsReturn;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
 
 require_once 'tests/BuiltinFunctions/SymfonyComponentValidatorConstraints.php';

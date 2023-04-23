@@ -7,11 +7,11 @@ namespace Tests\Unit\User\Application\UserPasswordChange\Dto;
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
+use Common\Domain\Validation\User\USER_ROLES;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints\BuiltInFunctionsReturn;
 use User\Application\UserModify\Dto\UserModifyInputDto;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
 
 require_once 'tests/BuiltinFunctions/SymfonyComponentValidatorConstraints.php';

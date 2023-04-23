@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Common\Domain\Model\ValueObject\Constraints;
 
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
+use Common\Domain\Validation\User\USER_ROLES;
 use Group\Domain\Model\GROUP_ROLES;
 use Group\Domain\Model\GROUP_TYPE;
-use User\Domain\Model\USER_ROLES;
 
 final class VALUE_OBJECTS_CONSTRAINTS
 {

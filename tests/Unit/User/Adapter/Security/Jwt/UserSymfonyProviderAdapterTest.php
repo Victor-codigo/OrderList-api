@@ -6,6 +6,7 @@ namespace Test\Unit\User\Adapter\Security\Jwt;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Validation\User\USER_ROLES;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\UserNotFoundException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -14,7 +15,6 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Test\Unit\User\Adapter\Security\Jwt\Fixtures\UserAdapter;
 use User\Adapter\Security\Jwt\UserSymfonyProviderAdapter;
 use User\Adapter\Security\User\UserSymfonyAdapter;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
 use User\Domain\Port\Repository\UserRepositoryInterface;
 use User\Domain\Port\User\UserInterface;

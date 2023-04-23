@@ -7,11 +7,11 @@ namespace Test\Unit\Group\Application\GroupUserAdd\Dto;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
+use Common\Domain\Validation\User\USER_ROLES;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserAdd\Dto\GroupUserAddInputDto;
 use Group\Domain\Model\GROUP_ROLES;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
 
 class GroupUserAddInputDtoTest extends TestCase

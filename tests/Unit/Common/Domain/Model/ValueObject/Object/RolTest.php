@@ -9,9 +9,9 @@ use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
+use Common\Domain\Validation\User\USER_ROLES;
 use Group\Domain\Model\GROUP_ROLES;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\USER_ROLES;
 
 class RolTest extends TestCase
 {

@@ -7,7 +7,7 @@ namespace Common\Domain\Model\ValueObject\Array;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\ConstraintFactory;
-use User\Domain\Model\USER_ROLES;
+use Common\Domain\Validation\User\USER_ROLES;
 
 class Roles extends ArrayValueObject
 {

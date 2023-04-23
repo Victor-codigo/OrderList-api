@@ -10,6 +10,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Validation\User\USER_ROLES;
 use User\Domain\Event\UserPreRegistered\UserPreRegisteredEvent;
 
 class User

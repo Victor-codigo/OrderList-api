@@ -10,13 +10,13 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintE
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Validation\User\USER_ROLES;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\Persistence\ObjectManager;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\Unit\DataBaseTestCase;
 use User\Adapter\Database\Orm\Doctrine\Repository\UserRepository;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Model\User;
 
 class UserRepositoryTest extends DataBaseTestCase

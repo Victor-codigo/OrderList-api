@@ -6,7 +6,7 @@ namespace User\Domain\Service\UserRemove;
 
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use User\Domain\Model\USER_ROLES;
+use Common\Domain\Validation\User\USER_ROLES;
 use User\Domain\Model\User;
 use User\Domain\Port\Repository\UserRepositoryInterface;
 use User\Domain\Service\UserRemove\Dto\UserRemoveDto;

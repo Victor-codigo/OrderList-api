@@ -10,7 +10,7 @@ use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Struct\SCOPE;
-use User\Domain\Model\USER_ROLES;
+use Common\Domain\Validation\User\USER_ROLES;
 use User\Domain\Model\User;
 use User\Domain\Port\Repository\UserRepositoryInterface;
 use User\Domain\Service\GetUsersPublicData\Dto\GetUsersPublicDataDto;

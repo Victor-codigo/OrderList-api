@@ -6,8 +6,8 @@ namespace User\Domain\Service\UserPasswordChange;
 
 use Common\Domain\Exception\PermissionDeniedException;
 use Common\Domain\Model\ValueObject\Object\Rol;
+use Common\Domain\Validation\User\USER_ROLES;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
-use User\Domain\Model\USER_ROLES;
 use User\Domain\Port\PasswordHasher\PasswordHasherInterface;
 use User\Domain\Port\Repository\UserRepositoryInterface;
 use User\Domain\Port\User\UserInterface;

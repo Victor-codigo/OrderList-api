@@ -8,8 +8,8 @@ use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\ConstraintFactory;
+use Common\Domain\Validation\User\USER_ROLES;
 use Group\Domain\Model\GROUP_ROLES;
-use User\Domain\Model\USER_ROLES;
 
 class Rol extends ObjectValueObject
 {
