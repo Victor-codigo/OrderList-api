@@ -1,3 +1,4 @@
-
-imports:    
-    - { resource: '../../src/Common/Adapter/Framework/Config/Packages/doctrine.yaml' }
+imports:
+    - {
+          resource: "../../src/Common/Adapter/Framework/Config/Packages/doctrine.yaml",
+      }
