@@ -8,7 +8,6 @@ use Common\Adapter\Database\Orm\Doctrine\Repository\Paginator\DoctrinePaginatorA
 use Common\Adapter\Database\Orm\Doctrine\Repository\Paginator\Exception\PaginatorPageException;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Exception\LogicException;
-use DG\BypassFinals;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -33,8 +32,6 @@ class DoctrinePaginatorAdapterTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        BypassFinals::enable();
 
         $this->connection = $this->createMock(Connection::class);
         $this->entityManager = $this->createMock(EntityManager::class);
