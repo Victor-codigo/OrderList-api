@@ -1,6 +1,9 @@
 parameters:
     user.image.path: "%env(string:USER_IMAGE_PATH)%"
     user.public.image.path: "%env(string:USER_IMAGE_PUBLIC_PATH)%"
+    user.email_user_registration_confirmation_expire: "%env(int:EMAIL_REGISTRATION_CONFIRM_EXPIRE)%"
+    user.email_user_password_remember_expire: "%env(int:EMAIL_PASSWORD_REMEMBER_EXPIRE)%"
+    user.admin_email: "%env(string:ADMIN_EMAIL)%"
 
 services:
     _defaults:
@@ -8,12 +11,13 @@ services:
         autoconfigure: true
         bind:
             $appName: "%common.app_name%"
-            $adminEmail: "%common.admin_email%"
-            $emailUserRegistrationConfirmationExpire: "%common.email_user_registration_confirmation_expire%"
-            $emailUserPasswordRememberExpire: "%common.email_user_password_remember_expire%"
+            $adminEmail: "%user.admin_email%"
+            $emailUserRegistrationConfirmationExpire: "%user.email_user_registration_confirmation_expire%"
+            $emailUserPasswordRememberExpire: "%user.email_user_password_remember_expire%"
             $userImagePath: "%user.image.path%"
             $userPublicImagePath: "%user.public.image.path%"
             $systemKey: "%common.system.key%"
+            $userActivationTimeExpiration: "%user.email_user_registration_confirmation_expire%"
 
     # Adapter
     User\Adapter\:

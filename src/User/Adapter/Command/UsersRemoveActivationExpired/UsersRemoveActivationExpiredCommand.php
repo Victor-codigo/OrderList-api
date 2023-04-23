@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Common\Adapter\Command\UsersRemoveActivationExpired;
+namespace User\Adapter\Command\UsersRemoveActivationExpired;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Symfony\Component\Console\Attribute\AsCommand;

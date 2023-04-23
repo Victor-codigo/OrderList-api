@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Common\Adapter\Command\UsersRemoveActivationExpired;
+namespace Test\Functional\User\Adapter\Command\UsersRemoveActivationExpired;
 
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\Console\Application;

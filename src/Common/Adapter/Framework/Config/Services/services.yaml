@@ -11,9 +11,6 @@ imports:
 parameters:
     common.environment.app_env: "%env(string:APP_ENV)%"
     common.app_name: "%env(string:APP_NAME)%"
-    common.admin_email: "%env(string:ADMIN_EMAIL)%"
-    common.email_user_registration_confirmation_expire: "%env(int:EMAIL_REGISTRATION_CONFIRM_EXPIRE)%"
-    common.email_user_password_remember_expire: "%env(int:EMAIL_PASSWORD_REMEMBER_EXPIRE)%"
     common.system.key: "%env(string:SYSTEM_KEY)%"
     user.jwt_key: "%env(file:resolve:JWT_SECRET_KEY)%"
 
@@ -24,7 +21,6 @@ services:
 
         bind:
             $appEnv: "%common.environment.app_env%"
-            $userActivationTimeExpiration: "%common.email_user_registration_confirmation_expire%"
 
     # Adapter
     Common\Adapter\:

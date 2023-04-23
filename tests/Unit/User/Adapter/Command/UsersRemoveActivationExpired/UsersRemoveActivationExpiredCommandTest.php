@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Command\UsersRemoveActivationExpired;
 
-use Common\Adapter\Command\UsersRemoveActivationExpired\UsersRemoveActivationExpiredCommand;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -13,6 +12,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use User\Adapter\Command\UsersRemoveActivationExpired\UsersRemoveActivationExpiredCommand;
 use User\Domain\Model\User;
 use User\Domain\Port\Repository\UserRepositoryInterface;
 
