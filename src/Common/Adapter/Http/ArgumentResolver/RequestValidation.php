@@ -76,7 +76,7 @@ class RequestValidation
         $contentType = $this->getContentType($request);
 
         if (!REQUEST_ALLOWED_CONTENT::allowed($contentType)) {
-            throw InvalidMimeTypeException::fromMessage(sprintf('Content-Type [%s] is not allowed. Only [%s] are allowed.', $request->getContentType(), implode(', ', array_column(REQUEST_ALLOWED_CONTENT::cases(), 'value'))));
+            throw InvalidMimeTypeException::fromMessage(sprintf('Content-Type [%s] is not allowed. Only [%s] are allowed.', $request->getContentTypeFormat(), implode(', ', array_column(REQUEST_ALLOWED_CONTENT::cases(), 'value'))));
         }
     }
 }
