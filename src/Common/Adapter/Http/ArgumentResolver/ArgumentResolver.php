@@ -7,18 +7,28 @@ namespace Common\Adapter\Http\ArgumentResolver;
 use Common\Adapter\Http\Dto\RequestDtoInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
-use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
+use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 
-class ArgumentResolver implements ArgumentValueResolverInterface
+class ArgumentResolver implements ValueResolverInterface
 {
-    private RequestValidation $requestValidation;
-
-    public function __construct(RequestValidation $requestValidation)
-    {
-        $this->requestValidation = $requestValidation;
+    public function __construct(
+        private RequestValidation $requestValidation
+    ) {
     }
 
-    public function supports(Request $request, ArgumentMetadata $argument): bool
+    public function resolve(Request $request, ArgumentMetadata $argument): \Generator
+    {
+        if (!$this->supports($argument)) {
+            return new \ArrayIterator();
+        }
+
+        $this->requestValidation->__invoke($request);
+        $requestDto = $argument->getType();
+
+        yield new $requestDto($request);
+    }
+
+    private function supports(ArgumentMetadata $argument): bool
     {
         if (null === $argument->getType()) {
             return false;
@@ -27,13 +37,5 @@ class ArgumentResolver implements ArgumentValueResolverInterface
         $requestReflection = new \ReflectionClass($argument->getType());
 
         return $requestReflection->implementsInterface(RequestDtoInterface::class);
-    }
-
-    public function resolve(Request $request, ArgumentMetadata $argument): \Generator
-    {
-        $this->requestValidation->__invoke($request);
-        $requestDto = $argument->getType();
-
-        yield new $requestDto($request);
     }
 }

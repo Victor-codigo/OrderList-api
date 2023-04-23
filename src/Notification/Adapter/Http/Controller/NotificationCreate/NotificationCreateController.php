@@ -13,9 +13,9 @@ use Notification\Application\NotificationCreate\Dto\NotificationCreateOutputDto;
 use Notification\Application\NotificationCreate\NotificationCreateUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Security;
 use User\Adapter\Security\User\UserSymfonyAdapter;
 
 #[OA\Tag('Notification')]

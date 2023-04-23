@@ -6,8 +6,8 @@ namespace User\Adapter\Security\Jwt\Listener;
 
 use Common\Domain\Ports\Event\EventDispatcherInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use User\Adapter\Security\User\UserSymfonyAdapter;
 use User\Domain\Event\UserLogin\UserLoginEvent;

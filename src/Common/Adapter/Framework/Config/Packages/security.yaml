@@ -2,14 +2,12 @@ security:
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
 
-    enable_authenticator_manager: true
-
     providers:
         user_provider:
             id: User\Adapter\Security\Jwt\UserSymfonyProviderAdapter
 
     firewalls:
-        
+
         login:
             pattern: ^/api/v1/users/login
             stateless: true
@@ -32,7 +30,7 @@ security:
 
         # User remember password
         - { path: ^/api/v1/users/remember$, roles: PUBLIC_ACCESS }
-        
+
         # User password remember confirm
         - { path: ^/api/v1/users/password-remember$, roles: PUBLIC_ACCESS }
 

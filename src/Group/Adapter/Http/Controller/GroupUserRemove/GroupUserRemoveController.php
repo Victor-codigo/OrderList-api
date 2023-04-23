@@ -13,9 +13,9 @@ use Group\Application\GroupUserRemove\Dto\GroupUserRemoveOutputDto;
 use Group\Application\GroupUserRemove\GroupUserRemoveUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Security;
 use Test\Unit\User\Adapter\Security\Jwt\Fixtures\UserAdapter;
 
 #[OA\Tag('Group')]

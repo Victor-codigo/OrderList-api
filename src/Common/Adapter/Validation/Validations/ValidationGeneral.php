@@ -35,7 +35,6 @@ class ValidationGeneral extends ValidationConstraintBase
     {
         $emailModes = [
             EMAIL_TYPES::HTML5->value => Email::VALIDATION_MODE_HTML5,
-            EMAIL_TYPES::LOOSE->value => Email::VALIDATION_MODE_LOOSE,
             EMAIL_TYPES::STRICT->value => Email::VALIDATION_MODE_STRICT,
         ];
 

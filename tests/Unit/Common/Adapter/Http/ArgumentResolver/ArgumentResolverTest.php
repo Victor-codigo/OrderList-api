@@ -13,6 +13,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Test\Unit\Common\Adapter\Http\ArgumentResolver\Fixtures\CustomRequestDto;
+use Test\Unit\Common\Adapter\Http\ArgumentResolver\Fixtures\CustomRequestNoInterfaceDto;
 
 class ArgumentResolverTest extends TestCase
 {
@@ -30,36 +31,49 @@ class ArgumentResolverTest extends TestCase
     }
 
     /** @test */
-    public function supportsRequestOk(): void
-    {
-        $this->argumentMetaData
-            ->expects($this->exactly(2))
-            ->method('getType')
-            ->willReturn(CustomRequestDto::class);
-
-        $return = $this->object->supports($this->request, $this->argumentMetaData);
-
-        $this->assertTrue($return);
-    }
-
-    /** @test */
-    public function supportsRequestError(): void
+    public function resolveRequestSupportError(): void
     {
         $this->argumentMetaData
             ->expects($this->exactly(2))
             ->method('getType')
             ->willReturn(\stdClass::class);
 
-        $return = $this->object->supports($this->request, $this->argumentMetaData);
+        $return = $this->object->resolve($this->request, $this->argumentMetaData);
 
-        $this->assertFalse($return);
+        $this->assertEmpty(iterator_to_array($return));
+    }
+
+    /** @test */
+    public function resolveRequestSupportGetTypeNullError(): void
+    {
+        $this->argumentMetaData
+            ->expects($this->exactly(1))
+            ->method('getType')
+            ->willReturn(null);
+
+        $return = $this->object->resolve($this->request, $this->argumentMetaData);
+
+        $this->assertEmpty(iterator_to_array($return));
+    }
+
+    /** @test */
+    public function resolveRequestSupportInterfaceError(): void
+    {
+        $this->argumentMetaData
+            ->expects($this->exactly(2))
+            ->method('getType')
+            ->willReturn(CustomRequestNoInterfaceDto::class);
+
+        $return = $this->object->resolve($this->request, $this->argumentMetaData);
+
+        $this->assertEmpty(iterator_to_array($return));
     }
 
     /** @test */
     public function resolveValidationOk(): void
     {
         $this->argumentMetaData
-            ->expects($this->once())
+            ->expects($this->exactly(3))
             ->method('getType')
             ->willReturn(CustomRequestDto::class);
 
@@ -73,6 +87,11 @@ class ArgumentResolverTest extends TestCase
     /** @test */
     public function resolveValidationError(): void
     {
+        $this->argumentMetaData
+            ->expects($this->exactly(2))
+            ->method('getType')
+            ->willReturn(CustomRequestDto::class);
+
         $this->expectException(InvalidMimeTypeException::class);
 
         $this->request->headers->set('Content-Type', 'application/html');
@@ -83,6 +102,11 @@ class ArgumentResolverTest extends TestCase
     /** @test */
     public function resolveValidationAllowedContentNull(): void
     {
+        $this->argumentMetaData
+            ->expects($this->exactly(2))
+            ->method('getType')
+            ->willReturn(CustomRequestDto::class);
+
         $this->expectException(InvalidMimeTypeException::class);
 
         $this->request->headers->set('Content-Type', null);
@@ -93,6 +117,11 @@ class ArgumentResolverTest extends TestCase
     /** @test */
     public function resolveValidationContentJsonInvalid(): void
     {
+        $this->argumentMetaData
+            ->expects($this->exactly(2))
+            ->method('getType')
+            ->willReturn(CustomRequestDto::class);
+
         $this->expectException(InvalidJsonException::class);
 
         $this->request = Request::create('', 'POST', [], [], [], [], '{"key":"va');
@@ -108,7 +137,7 @@ class ArgumentResolverTest extends TestCase
         $this->request->headers->set('Content-Type', null);
 
         $this->argumentMetaData
-            ->expects($this->once())
+            ->expects($this->exactly(3))
             ->method('getType')
             ->willReturn(CustomRequestDto::class);
 
