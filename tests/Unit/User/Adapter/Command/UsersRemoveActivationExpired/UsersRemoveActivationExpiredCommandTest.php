@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Common\Adapter\Command\UsersRemoveActivationExpired;
+namespace Test\Unit\User\Adapter\Command\UsersRemoveActivationExpired;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
