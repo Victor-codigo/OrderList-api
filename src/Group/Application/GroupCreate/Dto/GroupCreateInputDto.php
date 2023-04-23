@@ -12,8 +12,8 @@ use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Group\GROUP_TYPE;
 use Common\Domain\Validation\ValidationInterface;
-use Group\Domain\Model\GROUP_TYPE;
 
 class GroupCreateInputDto implements ServiceInputDtoInterface
 {

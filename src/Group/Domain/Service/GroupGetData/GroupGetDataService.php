@@ -6,7 +6,7 @@ namespace Group\Domain\Service\GroupGetData;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Object\GroupType;
-use Group\Domain\Model\GROUP_TYPE;
+use Common\Domain\Validation\Group\GROUP_TYPE;
 use Group\Domain\Model\Group;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Service\GroupGetData\Dto\GroupGetDataDto;

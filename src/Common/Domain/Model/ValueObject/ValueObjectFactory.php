@@ -31,8 +31,8 @@ use Common\Domain\Model\ValueObject\String\Url;
 use Common\Domain\Model\ValueObject\String\ValueObjectStringFactory;
 use Common\Domain\Model\ValueObject\String\ValueObjectStringFactoryInterface;
 use Common\Domain\Ports\FileUpload\FileInterface;
+use Common\Domain\Validation\Group\GROUP_TYPE;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
-use Group\Domain\Model\GROUP_TYPE;
 
 final class ValueObjectFactory implements ValueObjectStringFactoryInterface, ValueObjectArrayFactoryInterface, ValueObjectObjectFactoryInterface
 {

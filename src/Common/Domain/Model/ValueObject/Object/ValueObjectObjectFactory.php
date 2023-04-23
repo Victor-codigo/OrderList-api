@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Common\Domain\Model\ValueObject\Object;
 
 use Common\Domain\Ports\FileUpload\FileInterface;
+use Common\Domain\Validation\Group\GROUP_TYPE;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
-use Group\Domain\Model\GROUP_TYPE;
 
 class ValueObjectObjectFactory
 {

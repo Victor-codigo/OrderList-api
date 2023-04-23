@@ -11,7 +11,7 @@ use Common\Domain\FileUpload\Exception\FileUploadException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
-use Group\Domain\Model\GROUP_TYPE;
+use Common\Domain\Validation\Group\GROUP_TYPE;
 use Group\Domain\Model\Group;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Service\GroupModify\BuiltInFunctionsReturn;

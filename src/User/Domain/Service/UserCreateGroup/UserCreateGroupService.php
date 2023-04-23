@@ -9,7 +9,7 @@ use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
-use Group\Domain\Model\GROUP_TYPE;
+use Common\Domain\Validation\Group\GROUP_TYPE;
 use User\Domain\Service\UserCreateGroup\Dto\UserCreateGroupDto;
 use User\Domain\Service\UserCreateGroup\Exception\UserCreateGroupUserException;
 

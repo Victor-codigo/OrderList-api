@@ -64,11 +64,11 @@ Common\Domain\Model\ValueObject\String\Description:
 Common\Domain\Model\ValueObject\Object\GroupType:
   group_type_group:
     __construct:
-      value: <(Group\Domain\Model\GROUP_TYPE::GROUP)>
+      value: <(Common\Domain\Validation\Group\GROUP_TYPE::GROUP)>
 
   group_type_user:
     __construct:
-      value: <(Group\Domain\Model\GROUP_TYPE::USER)>
+      value: <(Common\Domain\Validation\Group\GROUP_TYPE::USER)>
 
 Common\Domain\Model\ValueObject\String\Path:
   group_image_random-{1..100}:

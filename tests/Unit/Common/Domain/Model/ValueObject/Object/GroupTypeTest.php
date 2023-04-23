@@ -7,7 +7,7 @@ namespace Test\Unit\Common\Domain\Model\ValueObject\Object;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\GroupType;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
-use Group\Domain\Model\GROUP_TYPE;
+use Common\Domain\Validation\Group\GROUP_TYPE;
 use PHPUnit\Framework\TestCase;
 
 class GroupTypeTest extends TestCase

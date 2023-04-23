@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\Group\Domain\Service\GroupGetData;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
-use Group\Domain\Model\GROUP_TYPE;
+use Common\Domain\Validation\Group\GROUP_TYPE;
 use Group\Domain\Model\Group;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Service\GroupGetData\Dto\GroupGetDataDto;

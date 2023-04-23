@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Group\Domain\Model;
+namespace Common\Domain\Validation\Group;
 
 enum GROUP_TYPE: string
 {

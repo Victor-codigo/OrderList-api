@@ -11,8 +11,8 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
+use Common\Domain\Validation\Group\GROUP_TYPE;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
-use Group\Domain\Model\GROUP_TYPE;
 
 class ModuleCommunicationFactory
 {

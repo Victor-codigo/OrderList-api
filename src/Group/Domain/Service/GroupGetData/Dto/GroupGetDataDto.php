@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Domain\Service\GroupGetData\Dto;
 
-use Group\Domain\Model\GROUP_TYPE;
+use Common\Domain\Validation\Group\GROUP_TYPE;
 
 class GroupGetDataDto
 {

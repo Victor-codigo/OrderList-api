@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupUserGetGroups;
 
 use Common\Domain\Response\RESPONSE_STATUS;
-use Group\Domain\Model\GROUP_TYPE;
+use Common\Domain\Validation\Group\GROUP_TYPE;
 use Group\Domain\Model\Group;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
