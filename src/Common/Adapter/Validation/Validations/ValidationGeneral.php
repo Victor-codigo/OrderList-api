@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Validation\Validations;
 
-use Common\Domain\Validation\EMAIL_TYPES;
 use Common\Domain\Validation\TYPES;
+use Common\Domain\Validation\User\EMAIL_TYPES;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
