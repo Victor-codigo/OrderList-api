@@ -10,9 +10,9 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
-use Test\KernelTestCaseBase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-abstract class DataBaseTestCase extends KernelTestCaseBase
+abstract class DataBaseTestCase extends KernelTestCase
 {
     protected EntityManagerInterface|null $entityManager;
 
