@@ -7,7 +7,7 @@ namespace Test\Unit\Common\Domain\Model\ValueObject\Object;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\UserImage;
 use Common\Domain\Ports\FileUpload\FileInterface;
-use Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\File;

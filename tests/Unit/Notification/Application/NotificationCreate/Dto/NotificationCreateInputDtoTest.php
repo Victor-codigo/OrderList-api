@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Test\Unit\Notification\Application\NotificationCreate\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
-use Common\Domain\Validation\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use Notification\Application\NotificationCreate\Dto\NotificationCreateInputDto;
 use PHPUnit\Framework\MockObject\MockObject;

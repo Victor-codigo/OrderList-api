@@ -6,7 +6,7 @@ namespace Test\Unit\Notification\Application\NotificationRemove\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use Notification\Application\NotificationRemove\Dto\NotificationRemoveInputDto;
 use PHPUnit\Framework\MockObject\MockObject;

@@ -6,7 +6,7 @@ namespace Tests\Unit\User\Application\UserPasswordChange\Dto;
 
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
-use Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints\BuiltInFunctionsReturn;

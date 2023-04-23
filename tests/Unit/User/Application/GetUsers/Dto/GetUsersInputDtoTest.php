@@ -6,7 +6,7 @@ namespace Test\Unit\User\Application\GetUsers\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use PHPUnit\Framework\TestCase;
 use User\Application\GetUsers\Dto\GetUsersInputDto;

@@ -6,7 +6,7 @@ namespace Test\Unit\Group\Application\GroupModify\Dto;
 
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
-use Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupModify\Dto\GroupModifyInputDto;
 use PHPUnit\Framework\TestCase;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\User\Application\UserPasswordRememberChange\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
-use Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use PHPUnit\Framework\TestCase;
 use User\Application\UserPasswordRememberChange\Dto\UserPasswordRememberChangeInputDto as DtoUserPasswordRememberChangeInputDto;

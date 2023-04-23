@@ -6,8 +6,8 @@ namespace Test\Unit\Common\Domain\Model\ValueObject\Object;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\NotificationType;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
-use Common\Domain\Validation\VALIDATION_ERRORS;
 use PHPUnit\Framework\TestCase;
 
 class NotificationTypeTest extends TestCase

@@ -6,7 +6,7 @@ namespace Test\Unit\User\Application\UserEmailChange\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use PHPUnit\Framework\TestCase;
 use User\Application\UserEmailChange\Dto\UserEmailChangeInputDto;

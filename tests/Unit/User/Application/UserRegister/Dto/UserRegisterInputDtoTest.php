@@ -6,7 +6,7 @@ namespace Test\Unit\User\Application\UserRegister\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\Rol;
-use Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use PHPUnit\Framework\TestCase;
 use User\Application\UserRegister\Dto\UserRegisterInputDto;
 use User\Domain\Model\USER_ROLES;

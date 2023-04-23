@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\Group\Application\GroupUserRolChangeInputDto\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
-use Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserRoleChange\Dto\GroupUserRoleChangeInputDto;
 use Group\Domain\Model\GROUP_ROLES;

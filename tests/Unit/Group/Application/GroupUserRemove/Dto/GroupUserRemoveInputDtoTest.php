@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Test\Unit\Group\Application\GroupUserRemove\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
-use Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserRemove\Dto\GroupUserRemoveInputDto;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\User;
 use User\Domain\Model\USER_ROLES;
+use User\Domain\Model\User;
 
 class GroupUserRemoveInputDtoTest extends TestCase
 {

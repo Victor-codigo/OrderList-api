@@ -7,7 +7,7 @@ namespace Common\Domain\Validation\Exception;
 use Common\Domain\Exception\DomainExceptionOutput;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\RESPONSE_STATUS_HTTP;
-use Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 
 class ValueObjectValidationException extends DomainExceptionOutput implements ValidationExceptionInterface
 {

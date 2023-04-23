@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\Group\Application\GroupGetUsers\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
-use Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupGetUsers\Dto\GroupGetUsersInputDto;
 use PHPUnit\Framework\MockObject\MockObject;

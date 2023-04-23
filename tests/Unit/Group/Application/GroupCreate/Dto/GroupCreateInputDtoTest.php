@@ -7,7 +7,7 @@ namespace Test\Unit\Group\Application\GroupCreate\Dto;
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupCreate\Dto\GroupCreateInputDto;
 use PHPUnit\Framework\TestCase;

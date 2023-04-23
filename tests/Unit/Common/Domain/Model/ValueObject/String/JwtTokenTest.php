@@ -7,7 +7,7 @@ namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 use Common\Adapter\Jwt\JwtLexikAdapter;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\JwtToken;
-use Common\Domain\Validation\VALIDATION_ERRORS;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use PHPUnit\Framework\TestCase;
 
