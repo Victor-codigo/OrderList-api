@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Test\Unit\Common\Adapter\Command\HexFileStructure;
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
+use Test\KernelTestCaseBase;
 
-class HexFileStructureCommandTest extends KernelTestCase
+class HexFileStructureCommandTest extends KernelTestCaseBase
 {
     public const OUTPUT_PATH = 'tests/Unit/Common/Adapter/Command/HexFileStructure/Fixtures/Output/FileStructure/';
     public const OUTPUT_PATH_ALTERNATIVE = 'tests/Unit/Common/Adapter/Command/HexFileStructure/Fixtures/Output/FileStructure/Alternative/';

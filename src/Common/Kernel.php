@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Common;
 
 use Common\Adapter\Compiler\KernelCustom;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;

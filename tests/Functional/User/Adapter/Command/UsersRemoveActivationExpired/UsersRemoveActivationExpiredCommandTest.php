@@ -6,11 +6,11 @@ namespace Test\Functional\User\Adapter\Command\UsersRemoveActivationExpired;
 
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
+use Test\KernelTestCaseBase;
 
-class UsersRemoveActivationExpiredCommandTest extends KernelTestCase
+class UsersRemoveActivationExpiredCommandTest extends KernelTestCaseBase
 {
     use ReloadDatabaseTrait;
 

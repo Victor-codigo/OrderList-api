@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Test\Unit;
 
 use Common\Domain\Exception\LogicException;
+use Common\Kernel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
-use ReflectionClass;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Test\KernelTestCaseBase;
 
-abstract class DataBaseTestCase extends KernelTestCase
+abstract class DataBaseTestCase extends KernelTestCaseBase
 {
     protected EntityManagerInterface|null $entityManager;
 
@@ -40,9 +40,14 @@ abstract class DataBaseTestCase extends KernelTestCase
         $this->entityManager = null;
     }
 
+    protected static function getKernelClass(): string
+    {
+        return Kernel::class;
+    }
+
     protected function mockObjectManager(ServiceEntityRepositoryInterface $repository, MockObject|ObjectManager $objectManagerMock): void
     {
-        $userRepositoryReflection = new ReflectionClass($repository);
+        $userRepositoryReflection = new \ReflectionClass($repository);
         $objectManagerProperty = $userRepositoryReflection->getProperty('objectManager');
         $objectManagerProperty->setValue($repository, $objectManagerMock);
     }
