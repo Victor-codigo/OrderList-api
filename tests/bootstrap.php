@@ -16,3 +16,7 @@ BypassFinals::setWhitelist([
     '*/Doctrine/ORM/Query.php',
 ]);
 BypassFinals::enable();
+
+if ($_SERVER['APP_DEBUG']) {
+    umask(0000);
+}
