@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Group\Domain\Service\UserHasGroupAdminGrants;
 
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Group\Domain\Model\GROUP_ROLES;
+use Common\Domain\Validation\Group\GROUP_ROLES;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use User\Domain\Model\User;

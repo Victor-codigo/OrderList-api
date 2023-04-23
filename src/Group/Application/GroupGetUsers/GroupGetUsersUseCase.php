@@ -17,12 +17,12 @@ use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Service\Exception\DomainErrorException;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
+use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupGetUsers\Dto\GroupGetUsersInputDto;
 use Group\Application\GroupGetUsers\Dto\GroupGetUsersOutputDto;
 use Group\Application\GroupGetUsers\Exception\GroupGetUsersGroupNotFoundException;
 use Group\Application\GroupGetUsers\Exception\GroupGetUsersUserNotInTheGroupException;
-use Group\Domain\Model\GROUP_ROLES;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 

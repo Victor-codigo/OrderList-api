@@ -8,8 +8,8 @@ use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\ValidationInterface;
-use Group\Domain\Model\GROUP_ROLES;
 use User\Domain\Model\User;
 
 class GroupUserRoleChangeInputDto implements ServiceInputDtoInterface

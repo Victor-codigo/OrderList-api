@@ -9,8 +9,8 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\ValidationInterface;
-use Group\Domain\Model\GROUP_ROLES;
 use User\Domain\Model\User;
 
 class GroupUserAddInputDto implements ServiceInputDtoInterface

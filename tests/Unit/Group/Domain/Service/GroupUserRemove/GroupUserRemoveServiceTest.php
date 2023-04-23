@@ -6,7 +6,7 @@ namespace Test\Unit\Group\Domain\Service\GroupUserRemove;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Group\Domain\Model\GROUP_ROLES;
+use Common\Domain\Validation\Group\GROUP_ROLES;
 use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;

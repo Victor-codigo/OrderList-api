@@ -7,8 +7,8 @@ namespace Group\Domain\Port\Repository;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Ports\Repository\RepositoryInterface;
+use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\Group\GROUP_TYPE;
-use Group\Domain\Model\GROUP_ROLES;
 
 interface UserGroupRepositoryInterface extends RepositoryInterface
 {

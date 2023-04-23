@@ -1,11 +1,11 @@
 Common\Domain\Model\ValueObject\Object\Rol:
   groupuser_rol_admin:
     __construct:
-      value: <(Group\Domain\Model\GROUP_ROLES::ADMIN)>
+      value: <(Common\Domain\Validation\Group\GROUP_ROLES::ADMIN)>
 
   groupuser_rol_user:
     __construct:
-      value: <(Group\Domain\Model\GROUP_ROLES::USER)>
+      value: <(Common\Domain\Validation\Group\GROUP_ROLES::USER)>
 
 Common\Domain\Model\ValueObject\Array\Roles:
   groupuser_roles_admin:
