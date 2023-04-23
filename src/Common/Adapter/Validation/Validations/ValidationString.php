@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Common\Adapter\Validation\Validations;
 
 use Common\Adapter\Validation\Constraints\Alphanumeric\Alphanumeric;
-use Common\Domain\Validation\PROTOCOLS;
+use Common\Domain\Validation\Common\PROTOCOLS;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use Symfony\Component\Validator\Constraints\Json;
 use Symfony\Component\Validator\Constraints\Language;

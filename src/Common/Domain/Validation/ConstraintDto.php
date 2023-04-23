@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Common\Domain\Validation;
 
+use Common\Domain\Validation\Common\CONSTRAINTS_NAMES;
+
 class ConstraintDto
 {
     public readonly CONSTRAINTS_NAMES $type;

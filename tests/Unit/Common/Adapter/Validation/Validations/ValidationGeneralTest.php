@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\Common\Adapter\Validation\Validations;
 
 use Common\Adapter\Validation\ValidationChain;
-use Common\Domain\Validation\TYPES;
+use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\User\EMAIL_TYPES;
 use Common\Domain\Validation\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;

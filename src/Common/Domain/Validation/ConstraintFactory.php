@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Common\Domain\Validation;
 
+use Common\Domain\Validation\Common\CONSTRAINTS_NAMES;
+use Common\Domain\Validation\Common\PROTOCOLS;
+use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\User\EMAIL_TYPES;
 
 class ConstraintFactory

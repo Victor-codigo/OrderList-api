@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Common\Adapter\Validation;
 
 use Common\Adapter\Validation\Validations\ValidationConstraint;
-use Common\Domain\Validation\CONSTRAINTS_NAMES;
+use Common\Domain\Validation\Common\CONSTRAINTS_NAMES;
 use Common\Domain\Validation\ValidationInterface;
 use Common\Domain\Validation\ValueObjectValidationInterface;
 use Symfony\Component\Validator\ConstraintViolationList;

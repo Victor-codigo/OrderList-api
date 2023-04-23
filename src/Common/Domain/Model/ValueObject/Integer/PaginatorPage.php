@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Integer;
 
+use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\ConstraintFactory;
-use Common\Domain\Validation\TYPES;
 
 class PaginatorPage extends IntegerValueObject
 {

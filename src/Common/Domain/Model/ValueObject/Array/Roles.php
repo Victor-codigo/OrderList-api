@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Common\Domain\Model\ValueObject\Array;
 
 use Common\Domain\Model\ValueObject\Object\Rol;
+use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\ConstraintFactory;
-use Common\Domain\Validation\TYPES;
 use User\Domain\Model\USER_ROLES;
 
 class Roles extends ArrayValueObject
