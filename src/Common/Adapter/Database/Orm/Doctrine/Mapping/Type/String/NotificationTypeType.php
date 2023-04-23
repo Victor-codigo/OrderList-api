@@ -7,9 +7,9 @@ namespace Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\TypeBase;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Model\ValueObject\Object\NotificationType;
+use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Error;
-use Notification\Domain\Model\NOTIFICATION_TYPE;
 
 class NotificationTypeType extends TypeBase
 {

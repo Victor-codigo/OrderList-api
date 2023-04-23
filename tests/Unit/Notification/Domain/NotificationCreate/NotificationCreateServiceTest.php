@@ -8,7 +8,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionExcepti
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\Array\NotificationData;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Notification\Domain\Model\NOTIFICATION_TYPE;
+use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Notification\Domain\Model\Notification;
 use Notification\Domain\Ports\Notification\NotificationRepositoryInterface;
 use Notification\Domain\Service\NotificationCreate\Dto\NotificationCreateDto;

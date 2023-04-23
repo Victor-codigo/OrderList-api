@@ -7,7 +7,7 @@ namespace Test\Unit\Notification\Domain\NotificationRemove;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
-use Notification\Domain\Model\NOTIFICATION_TYPE;
+use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Notification\Domain\Model\Notification;
 use Notification\Domain\Ports\Notification\NotificationRepositoryInterface;
 use Notification\Domain\Service\NotificationRemove\Dto\NotificationRemoveDto;

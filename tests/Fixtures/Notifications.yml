@@ -30,11 +30,11 @@ Common\Domain\Model\ValueObject\String\Identifier:
 Common\Domain\Model\ValueObject\Object\NotificationType:
   notification_type_user_registered:
     __construct:
-      value: <(Notification\Domain\Model\NOTIFICATION_TYPE::USER_REGISTERED)>
+      value: <(Common\Domain\Validation\Notification\NOTIFICATION_TYPE::USER_REGISTERED)>
 
   notification_type_group_user_added:
     __construct:
-      value: <(Notification\Domain\Model\NOTIFICATION_TYPE::GROUP_USER_ADDED)>
+      value: <(Common\Domain\Validation\Notification\NOTIFICATION_TYPE::GROUP_USER_ADDED)>
 
 Common\Domain\Model\ValueObject\Array\NotificationData:
   notification_data_user_registered:

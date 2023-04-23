@@ -9,8 +9,8 @@ use Common\Domain\Model\ValueObject\Object\NotificationType;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Common\Domain\Validation\ValidationInterface;
-use Notification\Domain\Model\NOTIFICATION_TYPE;
 use User\Domain\Model\User;
 
 class NotificationCreateInputDto implements ServiceInputDtoInterface

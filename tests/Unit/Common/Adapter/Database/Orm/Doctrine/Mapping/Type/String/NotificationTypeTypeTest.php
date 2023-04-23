@@ -7,8 +7,8 @@ namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\NotificationTypeType;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Notification\Domain\Model\NOTIFICATION_TYPE;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

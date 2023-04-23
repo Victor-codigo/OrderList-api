@@ -10,7 +10,7 @@ use Common\Domain\Model\ValueObject\Object\NotificationType;
 use Common\Domain\Model\ValueObject\String\Language;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Ports\Translator\TranslatorInterface;
-use Notification\Domain\Model\NOTIFICATION_TYPE;
+use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Notification\Domain\Ports\Notification\NotificationRepositoryInterface;
 use Notification\Domain\Service\NotificationGetData\Dto\NotificationGetDataDto;
 

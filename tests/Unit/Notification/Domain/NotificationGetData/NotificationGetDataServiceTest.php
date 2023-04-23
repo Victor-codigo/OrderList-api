@@ -8,7 +8,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Ports\Translator\TranslatorInterface;
-use Notification\Domain\Model\NOTIFICATION_TYPE;
+use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Notification\Domain\Model\Notification;
 use Notification\Domain\Ports\Notification\NotificationRepositoryInterface;
 use Notification\Domain\Service\NotificationGetData\Dto\NotificationGetDataDto;

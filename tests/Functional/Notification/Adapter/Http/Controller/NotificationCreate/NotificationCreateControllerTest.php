@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Test\Functional\Notification\Adapter\Http\Controller\NotificationCreate;
 
 use Common\Domain\Response\RESPONSE_STATUS;
+use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
-use Notification\Domain\Model\NOTIFICATION_TYPE;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 

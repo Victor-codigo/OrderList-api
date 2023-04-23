@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Notification\Domain\Model;
+namespace Common\Domain\Validation\Notification;
 
 enum NOTIFICATION_TYPE: string
 {
