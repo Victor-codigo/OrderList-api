@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupCreate;
 
 use Common\Domain\Response\RESPONSE_STATUS;
-use Hautelook\AliceBundle\PhpUnit\RecreateDatabaseTrait;
+use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
 class GroupCreateControllerTest extends WebClientTestCase
 {
-    use RecreateDatabaseTrait;
+    use ReloadDatabaseTrait;
 
     private const ENDPOINT = '/api/v1/groups';
     private const METHOD = 'POST';
