@@ -8,6 +8,9 @@ use Common\Domain\Model\ValueObject\Array\NotificationData;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Array\ValueObjectArrayFactoryInterface;
 use Common\Domain\Model\ValueObject\Array\valueObjectArrayFactory;
+use Common\Domain\Model\ValueObject\Float\Amount;
+use Common\Domain\Model\ValueObject\Float\Money;
+use Common\Domain\Model\ValueObject\Float\ValueObjectFloatFactory;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
 use Common\Domain\Model\ValueObject\Integer\ValueObjectIntegerFactory;
@@ -127,6 +130,16 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
     public static function createPaginatorPageItems(int|null $pageItems): PaginatorPageItems
     {
         return ValueObjectIntegerFactory::createPaginatorPageItems($pageItems);
+    }
+
+    public static function createMoney(float|null $money): Money
+    {
+        return ValueObjectFloatFactory::createMoney($money);
+    }
+
+    public static function createAmount(float|null $amount): Amount
+    {
+        return ValueObjectFloatFactory::createAmount($amount);
     }
 
     public static function createNotificationType(NOTIFICATION_TYPE|null $type): NotificationType
