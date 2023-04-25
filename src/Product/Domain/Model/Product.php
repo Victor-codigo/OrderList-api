@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Product\Domain\Model;
 
-use  Common\Domain\Model\ValueObject\Float\Money;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
@@ -17,7 +16,6 @@ final class Product
 {
     private Identifier $id;
     private Name $name;
-    private Money $price;
     private Description $description;
     private Path $image;
     private \DateTime $createdOn;
@@ -45,18 +43,6 @@ final class Product
     public function setName($name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getPrice(): Money
-    {
-        return $this->price;
-    }
-
-    public function setPrice($price): self
-    {
-        $this->price = $price;
 
         return $this;
     }
@@ -113,11 +99,10 @@ final class Product
         return $this->orders;
     }
 
-    public function __construct(Identifier $id, Name $name, Money $price, Description $description, Path $image)
+    public function __construct(Identifier $id, Name $name, Description $description, Path $image)
     {
         $this->id = $id;
         $this->name = $name;
-        $this->price = $price;
         $this->description = $description;
         $this->image = $image;
         $this->createdOn = new \DateTime();
@@ -125,12 +110,11 @@ final class Product
         $this->shops = new ArrayCollection();
     }
 
-    public static function fromPrimitives(string $id, string $name, float $price, string $description, string $image): self
+    public static function fromPrimitives(string $id, string $name, string $description, string $image): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),
             ValueObjectFactory::createName($name),
-            ValueObjectFactory::createMoney($price),
             ValueObjectFactory::createDescription($description),
             ValueObjectFactory::createPath($image),
         );

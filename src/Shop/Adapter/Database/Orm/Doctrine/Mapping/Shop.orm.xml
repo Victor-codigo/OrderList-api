@@ -1,45 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping">
 
-    <entity name="Shop\Domain\Model\Shop"
-            table="Shops"
-            repository-class="Shop\Adapter\Database\Orm\Doctrine\Repository\ShopRepository">
+       <entity name="Shop\Domain\Model\Shop"
+               table="Shops"
+               repository-class="Shop\Adapter\Database\Orm\Doctrine\Repository\ShopRepository">
 
-        <id name="id"
-            type="IdentifierType"
-            column-definition="CHAR(36) NOT NULL"/>
+              <id name="id"
+                  type="IdentifierType"
+                  column-definition="CHAR(36) NOT NULL"/>
 
-        <field name="groupId"
-               column="group_id"
-               type="IdentifierType"
-               column-definition="CHAR(36) NOT NULL"/>
+              <field name="groupId"
+                     column="group_id"
+                     type="IdentifierType"
+                     column-definition="CHAR(36) NOT NULL"/>
 
-        <field name="name"
-               type="NameType"
-               length="50"/>
+              <field name="name"
+                     type="NameType"
+                     length="50"/>
 
-        <field name="description"
-               type="DescriptionType"
-               length="500"
-               nullable="true"/>
+              <field name="price"
+                     type="MoneyType"
+                     unique="true"/>
 
-        <field name="createdOn"
-               column="created_on"
-               type="datetime"/>
+              <field name="image"
+                     type="PathType"
+                     length="50"/>
 
-        <indexes>
-            <index name="idx_shop_id"
-                   columns="id"/>
+              <field name="description"
+                     type="DescriptionType"
+                     length="500"
+                     nullable="true"/>
 
-            <index name="idx_shop_group_id"
-                   columns="group_id"/>
+              <field name="createdOn"
+                     column="created_on"
+                     type="datetime"/>
 
-        </indexes>
+              <indexes>
+                     <index name="idx_shop_id"
+                            columns="id"/>
 
-        <unique-constraints>
-            <unique-constraint name="u_shops_id"
-                               columns="name"/>
+                     <index name="idx_shop_group_id"
+                            columns="group_id"/>
 
-        </unique-constraints>
-    </entity>
+              </indexes>
+
+              <unique-constraints>
+                     <unique-constraint name="u_shops_id"
+                                        columns="name"/>
+
+              </unique-constraints>
+       </entity>
 </doctrine-mapping>

@@ -13,10 +13,6 @@
                length="50"
                unique="true"/>
 
-        <field name="price"
-               type="MoneyType"
-               unique="true"/>
-
         <field name="description"
                type="DescriptionType"
                length="500"
