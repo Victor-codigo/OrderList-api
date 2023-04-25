@@ -1,56 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping">
-    <entity name="Product\Domain\Model\Product" 
-            table="Products">
+    <entity name="Product\Domain\Model\Product"
+            table="Products"
+            repository-class="Product\Adapter\Database\Orm\Doctrine\Repository\ProductRepository">>
 
         <id name="id"
-            type="string"
+            type="IdentifierType"
             column-definition="CHAR(36) NOT NULL"/>
 
         <field name="name"
-               type="string"
+               type="NameType"
                length="50"
                unique="true"/>
 
+        <field name="price"
+               type="MoneyType"
+               unique="true"/>
+
         <field name="description"
-               type="string"
-               column-definition="TEXT"
+               type="DescriptionType"
+               length="500"
+               nullable="true"/>
+
+        <field name="image"
+               type="PathType"
+               length="256"
                nullable="true"/>
 
         <field name="createdOn"
                columm="created_on"
                type="datetime"/>
 
+        <indexes>
+              <index name="IDX_product_id"
+                     columns="id"/>
+
+              <index name="IDX_product_name"
+                     columns="name"/>
+
+       </indexes>
+
+       <unique-constraints>
+            <unique-constraint name="u_products_id"
+                               columns="id"/>
+
+        </unique-constraints>
+
         <!-- Products - Shops -->
-        <many-to-many field="shops" 
+        <many-to-many field="shops"
                       target-entity="Shop\Domain\Model\Shop">
 
             <join-table name="Products_shops">
                 <join-columns>
-
-                    <join-column name="product_id" 
+                    <join-column name="product_id"
                                  referenced-column-name="id" />
+
                 </join-columns>
                 <inverse-join-columns>
-
-                    <join-column name="shop_id" 
+                    <join-column name="shop_id"
                                  referenced-column-name="id" />
+
                 </inverse-join-columns>
             </join-table>
         </many-to-many>
 
-        <!-- Product - Group -->
-        <many-to-one field="group" target-entity="Group\Domain\Model\Group" inversed-by="products">
-            <join-column name="group_id" referenced-column-name="id" />
-        </many-to-one>
-        
-        <unique-constraints>
-            
-            <unique-constraint name="u_products_id" 
-                               columns="id"/>
+        <!-- Product - Order -->
+        <one-to-many field="orders"
+                     target-entity="Order\Domain\Model\Order"
+                     mapped-by="product" />
 
-            <unique-constraint name="u_products_name" 
-                               columns="name"/>
-        </unique-constraints>
     </entity>
 </doctrine-mapping>

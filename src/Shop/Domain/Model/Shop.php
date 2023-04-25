@@ -4,24 +4,39 @@ declare(strict_types=1);
 
 namespace Shop\Domain\Model;
 
-use Common\Adapter\IdGenerator\IdGenerator;
-use DateTime;
+use Common\Domain\Model\ValueObject\String\Description;
+use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Group\Domain\Model\Group;
 
 final class Shop
 {
-    private string $id;
-    private string $name;
-    private string|null $description = null;
-    private DateTime $createdOn;
+    private Identifier $id;
+    private Identifier $groupId;
+    private Name $name;
+    private Description $description;
+    private \DateTime $createdOn;
     private Group $group;
 
-    public function getId(): string
+    public function getId(): Identifier
     {
         return $this->id;
     }
 
-    public function getName(): string
+    public function getGroupId(): Identifier
+    {
+        return $this->groupId;
+    }
+
+    public function setGroupId(Identifier $groupId): self
+    {
+        $this->groupId = $groupId;
+
+        return $this;
+    }
+
+    public function getName(): Name
     {
         return $this->name;
     }
@@ -33,7 +48,7 @@ final class Shop
         return $this;
     }
 
-    public function getDescription(): string
+    public function getDescription(): Description
     {
         return $this->description;
     }
@@ -50,23 +65,22 @@ final class Shop
         return $this->group;
     }
 
-    public function __construct(Group $group, string $name, string $description)
+    public function __construct(Identifier $id, Identifier $groupId, Name $name, Description $description)
     {
-        $this->id = IdGenerator::createId();
+        $this->id = $id;
+        $this->groupId = $groupId;
         $this->name = $name;
         $this->description = $description;
-        $this->createdOn = new DateTime();
-        $this->group = $group;
+        $this->createdOn = new \DateTime();
     }
 
-    public function toArray(): array
+    public static function fromPrimitives(string $id, string $groupId, string $name, string $description): self
     {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'description' => $this->description,
-            'createdOn' => $this->createdOn,
-            'group' => $this->group->toArray(),
-        ];
+        return new self(
+            ValueObjectFactory::createIdentifier($id),
+            ValueObjectFactory::createIdentifier($groupId),
+            ValueObjectFactory::createName($name),
+            ValueObjectFactory::createDescription($description),
+        );
     }
 }

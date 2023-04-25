@@ -1,27 +1,43 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Product\Domain\Model;
 
-use Common\Adapter\IdGenerator\IdGenerator;
-use DateTime;
-use Group\Domain\Model\Group;
-use Shop\Domain\Model\Shop;
+use  Common\Domain\Model\ValueObject\Float\Money;
+use Common\Domain\Model\ValueObject\String\Description;
+use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\Path;
+use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 final class Product
 {
-    private string $id;
-    private string $name;
-    private string $description;
-    private DateTime $createdOn;
-    private array $shops;
-    private Group $group;
+    private Identifier $id;
+    private Name $name;
+    private Money $price;
+    private Description $description;
+    private Path $image;
+    private \DateTime $createdOn;
 
-    public function getId(): string
+    /**
+     * @var Collection<Order>
+     */
+    private Collection $orders;
+
+    /**
+     * @var Collection<Shop>
+     */
+    private Collection $shops;
+
+    public function getId(): Identifier
     {
         return $this->id;
     }
 
-    public function getName(): string
+    public function getName(): Name
     {
         return $this->name;
     }
@@ -33,7 +49,19 @@ final class Product
         return $this;
     }
 
-    public function getDescription(): string
+    public function getPrice(): Money
+    {
+        return $this->price;
+    }
+
+    public function setPrice($price): self
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    public function getDescription(): Description
     {
         return $this->description;
     }
@@ -45,7 +73,19 @@ final class Product
         return $this;
     }
 
-    public function getCreatedOn(): DateTime
+    public function getImage(): Path
+    {
+        return $this->image;
+    }
+
+    public function setImage($image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getCreatedOn(): \DateTime
     {
         return $this->createdOn;
     }
@@ -57,35 +97,42 @@ final class Product
         return $this;
     }
 
-    public function getShops(): iterable
+    /**
+     * @return Collection<Shop>
+     */
+    public function getShops(): Collection
     {
         return $this->shops;
     }
 
-    public function getGroups(): Group
+    /**
+     * @return Collection<Order>
+     */
+    public function getOrders(): Collection
     {
-        return $this->group;
+        return $this->orders;
     }
 
-    public function __construct(Group $group, string $name, string $description)
+    public function __construct(Identifier $id, Name $name, Money $price, Description $description, Path $image)
     {
-        $this->id = IdGenerator::createId();
+        $this->id = $id;
         $this->name = $name;
+        $this->price = $price;
         $this->description = $description;
-        $this->createdOn = new DateTime();
-        $this->shops = [];
-        $this->group = $group;
+        $this->image = $image;
+        $this->createdOn = new \DateTime();
+        $this->orders = new ArrayCollection();
+        $this->shops = new ArrayCollection();
     }
 
-    public function toArray(): array
+    public static function fromPrimitives(string $id, string $name, float $price, string $description, string $image): self
     {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'description' => $this->description,
-            'createdOn' => $this->createdOn->format(DateTime::RFC3339),
-            'shops' => array_map(fn (Shop $i) => $i->toArray(), $this->shops),
-            'group' => $this->group->toArray(),
-        ];
+        return new self(
+            ValueObjectFactory::createIdentifier($id),
+            ValueObjectFactory::createName($name),
+            ValueObjectFactory::createMoney($price),
+            ValueObjectFactory::createDescription($description),
+            ValueObjectFactory::createPath($image),
+        );
     }
 }

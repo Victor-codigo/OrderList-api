@@ -4,10 +4,9 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         mappings:
-
-            # Order:
-            #     is_bundle: false
-            #     type: xml
-            #     dir: '%kernel.project_dir%/src/Order/Adapter/Database/Orm/Doctrine/Mapping'
-            #     prefix: 'Order\Domain\Model'
-            #     alias: Order
+            Order:
+                is_bundle: false
+                type: xml
+                dir: "%kernel.project_dir%/src/Order/Adapter/Database/Orm/Doctrine/Mapping"
+                prefix: 'Order\Domain\Model'
+                alias: Order

@@ -1,27 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping">
-    <entity name="Order\Domain\Model\Order" 
-            table="Orders">
-        
-        <id name="id"
-            type="string"
+    <entity name="Order\Domain\Model\Order"
+            table="Orders"
+            repository-class="Order\Adapter\Database\Orm\Doctrine\Repository\OrderRepository">
+
+       <id name="id"
+            type="IdentifierType"
             column-definition="CHAR(36) NOT NULL"/>
 
-        <field name="deleted"
-               type="boolean"/>
+       <field name="userId"
+              column="user_id"
+              type="IdentifierType"
+              column-definition="CHAR(36) NOT NULL"/>
 
-        <field name="price"
-               type="float"
-               nullable="true"/>
+       <field name="groupId"
+              column="group_id"
+              type="IdentifierType"
+              column-definition="CHAR(36) NOT NULL"/>
+
+       <field name="productId"
+              column="product_id"
+              type="IdentifierType"
+              column-definition="CHAR(36) NOT NULL"/>
 
         <field name="amount"
-               type="float"
+               type="AmountType"
                nullable="true"/>
 
         <field name="description"
-               type="string"
-               nullable="true"
-               column-definition="TEXT"/>
+               type="DescriptionType"
+               length="500"
+               nullable="true"/>
 
         <field name="createdOn"
                column="created_on"
@@ -32,38 +41,40 @@
                type="datetime"
                nullable="true"/>
 
-        <field name="buyOn"
-               column="buy_on"
+        <field name="dateToBuy"
+               column="date_to_buy"
                type="datetime"
                nullable="true"/>
 
        <indexes>
-              <index name="IDX_user_id" 
+              <index name="IDX_user_id"
                      columns="user_id"/>
 
-              <index name="IDX_user_group" 
+              <index name="IDX_group_id"
                      columns="group_id"/>
+
+              <index name="IDX_product_id"
+                     columns="product_id"/>
+
        </indexes>
 
-       <many-to-one field="userId" 
-                    target-entity="User\Domain\Model\User">
-       
-              <join-column name="user_id" 
-                           referenced-column-name="id" />
+       <unique-constraints>
+            <unique-constraint name="u_order_id"
+                               columns="id"/>
+
+        </unique-constraints>
+
+
+       <!-- Order - Product -->
+       <many-to-one field="product"
+                    target-entity="Product\Domain\Model\Product"
+                    inversed-by="orders">
+
+            <join-column name="product_id"
+                         referenced-column-name="id" />
+
        </many-to-one>
 
-       <many-to-one field="productId" 
-                    target-entity="Product\Domain\Model\Product">
-       
-              <join-column name="product_id" 
-                           referenced-column-name="id" />
-       </many-to-one>
 
-       <many-to-one field="groupId" 
-                    target-entity="Group\Domain\Model\Group">
-       
-              <join-column name="group_id" 
-                           referenced-column-name="id" />
-       </many-to-one>
     </entity>
 </doctrine-mapping>

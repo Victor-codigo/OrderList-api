@@ -1,69 +1,50 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Order\Domain\Model;
 
-use Common\Adapter\IdGenerator\IdGenerator;
-use DateTime;
+use Common\Domain\Model\ValueObject\Float\Amount;
+use Common\Domain\Model\ValueObject\String\Description;
+use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Product\Domain\Model\Product;
 
 final class Order
 {
-    private string $id;
-    private string $userId;
-    private string $groupId;
-    private string $productId;
-    private bool $deleted;
-    private float|null $price;
-    private float|null $amount;
-    private string|null $description;
-    private DateTime $createdOn;
-    private DateTime|null $boughtOn;
-    private DateTime|null $buyOn;
+    private Identifier $id;
+    private Identifier $userId;
+    private Identifier $groupId;
+    private Identifier $productId;
+    private Amount $amount;
+    private Description $description;
+    private \DateTime $createdOn;
+    private \DateTime|null $boughtOn;
+    private \DateTime|null $dateToBuy;
 
-    public function getId(): string
+    private Product $product;
+
+    public function getId(): Identifier
     {
         return $this->id;
     }
 
-    public function getUserId(): string
+    public function getUserId(): Identifier
     {
         return $this->userId;
     }
 
-    public function getGroupId(): string
+    public function getGroupId(): Identifier
     {
         return $this->groupId;
     }
 
-    public function getProductId(): string
+    public function getProductId(): Identifier
     {
         return $this->productId;
     }
 
-    public function getDeleted(): string
-    {
-        return $this->deleted;
-    }
-
-    public function setDeleted($deleted): self
-    {
-        $this->deleted = $deleted;
-
-        return $this;
-    }
-
-    public function getPrice(): float|null
-    {
-        return $this->price;
-    }
-
-    public function setPrice($price): self
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    public function getAmount(): float|null
+    public function getAmount(): Amount
     {
         return $this->amount;
     }
@@ -75,7 +56,7 @@ final class Order
         return $this;
     }
 
-    public function getDescription(): string|null
+    public function getDescription(): Description
     {
         return $this->description;
     }
@@ -87,7 +68,12 @@ final class Order
         return $this;
     }
 
-    public function getBoughtOn(): DateTime
+    public function getCreatedOn(): \DateTime
+    {
+        return $this->createdOn;
+    }
+
+    public function getBoughtOn(): \DateTime
     {
         return $this->boughtOn;
     }
@@ -99,42 +85,46 @@ final class Order
         return $this;
     }
 
-    public function getBuyOn(): DateTime
+    public function getDataToBuy(): \DateTime
     {
-        return $this->buyOn;
+        return $this->dateToBuy;
     }
 
-    public function setBuyOn($buyOn): self
+    public function setDateToBuy($dateToBuy): self
     {
-        $this->buyOn = $buyOn;
+        $this->dateToBuy = $dateToBuy;
 
         return $this;
     }
 
-    public function __construct(string $userId, string $groupId, string $productId, bool $deleted)
+    public function getProducts(): Product
     {
-        $this->id = IdGenerator::createId();
+        return $this->product;
+    }
+
+    public function __construct(Identifier $id, Identifier $userId, Identifier $groupId, Identifier $productId, Amount $amount, \DateTime $dateToBuy, Description $description)
+    {
+        $this->id = $id;
         $this->userId = $userId;
         $this->groupId = $groupId;
         $this->productId = $productId;
-        $this->deleted = $deleted;
-        $this->createdOn = new DateTime();
+        $this->amount = $amount;
+        $this->dateToBuy = $dateToBuy;
+        $this->description = $description;
+        $this->createdOn = new \DateTime();
     }
 
-    public function toArray(): array
+    public static function fromPrimitives(string $id, string $userId, string $groupId, string $productId, float $amount, \DateTime $dateToBuy, string $description): self
     {
-        return [
-            'id' => $this->id,
-            'userId' => $this->userId,
-            'groupId' => $this->groupId,
-            'productId' => $this->productId,
-            'deleted' => $this->deleted,
-            'price' => $this->price,
-            'amount' => $this->amount,
-            'description' => $this->description,
-            'createdOn' => $this->createdOn->format(DateTime::RFC3339),
-            'buyOn' => $this->buyOn->format(DateTime::RFC3339),
-            'boughtOn' => $this->boughtOn->format(DateTime::RFC3339),
-        ];
+        return new self(
+            ValueObjectFactory::createIdentifier($id),
+            ValueObjectFactory::createIdentifier($userId),
+            ValueObjectFactory::createIdentifier($groupId),
+            ValueObjectFactory::createIdentifier($productId),
+            ValueObjectFactory::createAmount($amount),
+            $dateToBuy,
+            ValueObjectFactory::createDescription($description),
+            new \DateTime()
+        );
     }
 }
