@@ -12,6 +12,8 @@ interface ValueObjectStringFactoryInterface
 
     public static function createName(string|null $name): Name;
 
+    public static function createNameWithSpaces(string|null $name): NameWithSpaces;
+
     public static function createDescription(string|null $description): Description;
 
     public static function createPassword(string|null $password): Password;

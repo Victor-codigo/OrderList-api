@@ -21,6 +21,11 @@ class ValueObjectStringFactory
         return new Name($name);
     }
 
+    public static function createNameWithSpaces(string|null $name): NameWithSpaces
+    {
+        return new NameWithSpaces($name);
+    }
+
     public static function createDescription(string|null $description): Description
     {
         return new Description($description);

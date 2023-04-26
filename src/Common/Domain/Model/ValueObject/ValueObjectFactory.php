@@ -28,6 +28,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\JwtToken;
 use Common\Domain\Model\ValueObject\String\Language;
 use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\String\Url;
@@ -70,6 +71,11 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
     public static function createName(string|null $name): Name
     {
         return ValueObjectStringFactory::createName($name);
+    }
+
+    public static function createNameWithSpaces(string|null $name): NameWithSpaces
+    {
+        return ValueObjectStringFactory::createNameWithSpaces($name);
     }
 
     public static function createDescription(string|null $description): Description

@@ -17,7 +17,7 @@ class NameWithSpaces extends StringValueObject
             ->setConstraint(ConstraintFactory::notNull())
             ->setConstraint(ConstraintFactory::type(TYPES::STRING))
             ->setConstraint(ConstraintFactory::alphanumericWithWhiteSpace())
-            ->setConstraint(ConstraintFactory::stringRange(VALUE_OBJECTS_CONSTRAINTS::NAME_MIN_LENGTH, VALUE_OBJECTS_CONSTRAINTS::NAME_MAX_LENGTH));
+            ->setConstraint(ConstraintFactory::stringRange(VALUE_OBJECTS_CONSTRAINTS::NAME_WITH_SPACES_MIN_LENGTH, VALUE_OBJECTS_CONSTRAINTS::NAME_WITH_SPACES_MAX_LENGTH));
     }
 
     public function __toString()

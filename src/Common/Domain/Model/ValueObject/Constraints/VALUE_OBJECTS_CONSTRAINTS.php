@@ -25,6 +25,10 @@ final class VALUE_OBJECTS_CONSTRAINTS
     public const NAME_MAX_LENGTH = 50;
     public const NAME_TYPE = 'string';
 
+    public const NAME_WITH_SPACES_MIN_LENGTH = self::NAME_MIN_LENGTH;
+    public const NAME_WITH_SPACES_MAX_LENGTH = self::NAME_MAX_LENGTH;
+    public const NAME_WITH_SPACES_TYPE = self::NAME_TYPE;
+
     public const ROLES_LENGTH = 50;
     public const ROLES_TYPE = 'json';
     public const ROLES_VALUES = [USER_ROLES::ADMIN, USER_ROLES::USER, USER_ROLES::NOT_ACTIVE];
