@@ -10,10 +10,11 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use stdClass;
 
 class AlphanumericValidatorTest extends TestCase
 {
+    private const PATTERN = '/^[a-zA-Z0-9_]+$/i';
+
     private AlphanumericValidator $object;
     private MockObject|Alphanumeric $alphanumeric;
     private MockObject|Constraint $constraint;
@@ -28,7 +29,7 @@ class AlphanumericValidatorTest extends TestCase
     }
 
     /** @test */
-    public function valueIsNotClassAlphanumericValidator(): void
+    public function itShouldFailValueIsNotClassAlphanumericValidator(): void
     {
         $this->expectException(UnexpectedTypeException::class);
 
@@ -36,7 +37,7 @@ class AlphanumericValidatorTest extends TestCase
     }
 
     /** @test */
-    public function valueIsNull(): void
+    public function itShouldValueIsNull(): void
     {
         $return = $this->object->validate(null, $this->alphanumeric);
 
@@ -44,7 +45,7 @@ class AlphanumericValidatorTest extends TestCase
     }
 
     /** @test */
-    public function valueIsEmptyString(): void
+    public function itShouldValueIsEmptyString(): void
     {
         $return = $this->object->validate('', $this->alphanumeric);
 
@@ -52,10 +53,28 @@ class AlphanumericValidatorTest extends TestCase
     }
 
     /** @test */
-    public function valueCantBeComvertedToString(): void
+    public function itShouldValueCantBeConvertedToString(): void
     {
         $this->expectException(UnexpectedTypeException::class);
 
-        $this->object->validate(new stdClass(), $this->alphanumeric);
+        $this->object->validate(new \stdClass(), $this->alphanumeric);
+    }
+
+    /** @test */
+    public function itShouldValueIsStringAlphanumeric(): void
+    {
+        $this->alphanumeric->pattern = self::PATTERN;
+
+        $this->expectNotToPerformAssertions();
+        $this->object->validate('lola_hello22', $this->alphanumeric);
+    }
+
+    /** @test */
+    public function itShouldValueIsStringNotAlphanumeric(): void
+    {
+        $this->alphanumeric->pattern = self::PATTERN;
+
+        $this->expectException(\Error::class);
+        $this->object->validate('hello.22', $this->alphanumeric);
     }
 }
