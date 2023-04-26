@@ -88,6 +88,11 @@ class ConstraintFactory
         return new ConstraintDto(CONSTRAINTS_NAMES::ALPHANUMERIC, null);
     }
 
+    public static function alphanumericWithWhiteSpace(): ConstraintDto
+    {
+        return new ConstraintDto(CONSTRAINTS_NAMES::ALPHANUMERIC_WITH_WHITESPACE, null);
+    }
+
     /**
      * @param PROTOCOLS[] $protocols
      */

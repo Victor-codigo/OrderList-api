@@ -36,6 +36,7 @@ enum CONSTRAINTS_NAMES: string
 
     case REGEX = 'regEx';
     case ALPHANUMERIC = 'alphanumeric';
+    case ALPHANUMERIC_WITH_WHITESPACE = 'alphanumericWithWhiteSpace';
 
     case DATE = 'date';
     case DATETIME = 'dateTime';

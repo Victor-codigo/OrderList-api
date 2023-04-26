@@ -53,6 +53,8 @@ interface ValidationInterface
 
     public function alphanumeric(): self;
 
+    public function alphanumericWithWhiteSpace(): self;
+
     /**
      * @param PROTOCOLS[] $protocols
      */
