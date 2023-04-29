@@ -6,7 +6,7 @@ namespace Product\Domain\Model;
 
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -15,7 +15,8 @@ use Doctrine\Common\Collections\Collection;
 final class Product
 {
     private Identifier $id;
-    private Name $name;
+    private Identifier $groupId;
+    private NameWithSpaces $name;
     private Description $description;
     private Path $image;
     private \DateTime $createdOn;
@@ -35,7 +36,12 @@ final class Product
         return $this->id;
     }
 
-    public function getName(): Name
+    public function getGroupId(): Identifier
+    {
+        return $this->groupId;
+    }
+
+    public function getName(): NameWithSpaces
     {
         return $this->name;
     }
@@ -99,9 +105,10 @@ final class Product
         return $this->orders;
     }
 
-    public function __construct(Identifier $id, Name $name, Description $description, Path $image)
+    public function __construct(Identifier $id, identifier $groupId, NameWithSpaces $name, Description $description, Path $image)
     {
         $this->id = $id;
+        $this->groupId = $groupId;
         $this->name = $name;
         $this->description = $description;
         $this->image = $image;
@@ -110,11 +117,12 @@ final class Product
         $this->shops = new ArrayCollection();
     }
 
-    public static function fromPrimitives(string $id, string $name, string $description, string $image): self
+    public static function fromPrimitives(string $id, string $groupId, string $name, string|null $description = null, string|null $image = null): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),
-            ValueObjectFactory::createName($name),
+            ValueObjectFactory::createIdentifier($groupId),
+            ValueObjectFactory::createNameWithSpaces($name),
             ValueObjectFactory::createDescription($description),
             ValueObjectFactory::createPath($image),
         );

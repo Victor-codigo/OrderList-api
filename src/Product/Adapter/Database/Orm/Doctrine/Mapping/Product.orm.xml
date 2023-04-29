@@ -4,30 +4,34 @@
             table="Products"
             repository-class="Product\Adapter\Database\Orm\Doctrine\Repository\ProductRepository">>
 
-        <id name="id"
-            type="IdentifierType"
-            column-definition="CHAR(36) NOT NULL"/>
+       <id name="id"
+           type="IdentifierType"
+           column-definition="CHAR(36) NOT NULL"/>
 
-        <field name="name"
-               type="NameType"
-               length="50"
-               unique="true"/>
+       <field name="groupId"
+              columm="group_id"
+              type="IdentifierType"
+              column-definition="CHAR(36) NOT NULL"/>
 
-        <field name="description"
-               type="DescriptionType"
-               length="500"
-               nullable="true"/>
+       <field name="name"
+              type="NameWithSpacesType"
+              length="50"/>
 
-        <field name="image"
-               type="PathType"
-               length="256"
-               nullable="true"/>
+       <field name="description"
+              type="DescriptionType"
+              length="500"
+              nullable="true"/>
 
-        <field name="createdOn"
-               columm="created_on"
-               type="datetime"/>
+       <field name="image"
+              type="PathType"
+              length="256"
+              nullable="true"/>
 
-        <indexes>
+       <field name="createdOn"
+              columm="created_on"
+              type="datetime"/>
+
+       <indexes>
               <index name="IDX_product_id"
                      columns="id"/>
 
