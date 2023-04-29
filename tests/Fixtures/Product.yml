@@ -1,0 +1,108 @@
+Common\Domain\Model\ValueObject\String\Identifier:
+  product_id_random-{1..50}:
+    __construct:
+      value: <uuid()>
+
+  product_group_id_random-{1..50}:
+    __construct:
+      value: <uuid()>
+
+  product_id_group_exists:
+    __construct:
+      value: "afc62bc9-c42c-4c4d-8098-09ce51414a92"
+
+  product_id_group_exists_2:
+    __construct:
+      value: "8b6d650b-7bb7-4850-bf25-36cda9bce801"
+
+  product_id_group_exists_3:
+    __construct:
+      value: "ca10c90a-c7e6-4594-89e9-71d2f5e74710"
+
+  product_group_id_group_exists:
+    __construct:
+      value: "4b513296-14ac-4fb1-a574-05bc9b1dbe3f"
+
+Common\Domain\Model\ValueObject\String\NameWithSpaces:
+  product_name_random-{1..50}:
+    __construct:
+      value: <name()>
+
+  product_name_group_exists:
+    __construct:
+      value: "Maluela"
+
+  product_name_group_exists_2:
+    __construct:
+      value: "Juan Carlos"
+
+  product_name_group_exists_3:
+    __construct:
+      value: "Perico"
+
+Common\Domain\Model\ValueObject\String\Description:
+  product_description_random-{1..50}:
+    __construct:
+      value: <text(500)>
+
+  product_description_group_exists:
+    __construct:
+      value: <text(500)>
+
+  product_description_group_exists_2:
+    __construct:
+      value: <text(500)>
+
+  product_description_group_exists_3:
+    __construct:
+      value: <text(500)>
+
+Common\Domain\Model\ValueObject\String\Path:
+  product_image_random-{1..50}:
+    __construct:
+      value: <text(256)>
+
+  product_image_group_exists:
+    __construct:
+      value: null
+
+  product_image_group_exists_2:
+    __construct:
+      value: null
+
+  product_image_group_exists_3:
+    __construct:
+      value: null
+
+Product\Domain\Model\Product:
+  entity-product_random-{1..50}:
+    __construct:
+      id: "@product_id_random-<current()>"
+      groupId: "@product_group_id_random-<current()>"
+      name: "@product_name_random-<current()>"
+      description: "@product_description_random-<current()>"
+      image: "@product_image_random-<current()>"
+
+  entity-product_group_exists:
+    __construct:
+      id: "@product_id_group_exists"
+      groupId: "@product_group_id_group_exists"
+      name: "@product_name_group_exists"
+      description: "@product_description_group_exists"
+      image: "@product_image_group_exists"
+
+  entity-product_group_exists_2:
+    __construct:
+      id: "@product_id_group_exists_2"
+      groupId: "@product_group_id_group_exists"
+      name: "@product_name_group_exists_2"
+      description: "@product_description_group_exists_2"
+      image: "@product_image_group_exists_2"
+
+  entity-product_group_exists_3:
+    __construct:
+      id: "@product_id_group_exists_3"
+      groupId: "@product_group_id_group_exists"
+      name: "@product_name_group_exists_3"
+      description: "@product_description_group_exists_3"
+      image: "@product_image_group_exists_3"

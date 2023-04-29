@@ -1,0 +1,24 @@
+parameters:
+  product.image.path: "%env(string:PRODUCT_IMAGE_PATH)%"
+  product.public.image.path: "%env(string:PRODUCT_IMAGE_PUBLIC_PATH)%"
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+    bind:
+      $productImagePath: "%product.image.path%"
+      # $productPublicImagePath: "%product.public.image.path%"
+
+  # Adapter
+  Product\Adapter\:
+    resource: "../../../../../Product/Adapter/"
+
+  # Application
+  Product\Application\:
+    resource: "../../../../../Product/Application/"
+
+  # Domain
+  Product\Domain\:
+    resource: "../../../../../Product/Domain/"

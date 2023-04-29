@@ -11,7 +11,7 @@
     <php>
         <ini name="display_errors" value="1" />
         <ini name="error_reporting" value="-1" />
-        <ini name="memory_limit" value="1024M" />
+        <ini name="memory_limit" value="512M" />
         <server name="APP_ENV" value="test" force="true" />
         <env name="APP_ENV" value="test" force="true" />
         <server name="SHELL_VERBOSITY" value="-1" />
@@ -29,6 +29,9 @@
         <testsuite name="unit">
             <directory suffix="Test.php">tests/Unit</directory>
         </testsuite>
+        <testsuite name="unitUser">
+            <directory suffix="Test.php">tests/Unit/User</directory>
+        </testsuite>
         <testsuite name="functionalUser">
             <directory suffix="Test.php">tests/Functional/User</directory>
         </testsuite>
@@ -37,6 +40,9 @@
         </testsuite>
         <testsuite name="functionalNotification">
             <directory suffix="Test.php">tests/Functional/Notification</directory>
+        </testsuite>
+        <testsuite name="functionalProduct">
+            <directory suffix="Test.php">tests/Functional/Product</directory>
         </testsuite>
     </testsuites>
 

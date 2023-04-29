@@ -6,3 +6,6 @@ Group:
 
 Notification:
   resource: "../../../../../Notification/Adapter/Framework/Config/routes/routes.yaml"
+
+Product:
+  resource: "../../../../../Product/Adapter/Framework/Config/routes/routes.yaml"

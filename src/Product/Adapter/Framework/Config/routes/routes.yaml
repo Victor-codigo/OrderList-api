@@ -1,0 +1,8 @@
+# -------------------------------------------------------------
+# PRODUCT CREATE
+product_create:
+  path: /api/v{api_version}/products
+  methods: POST
+  controller: Product\Adapter\Http\Controller\ProductCreate\ProductCreateController
+  requirements:
+    api_version: '\d+[.\d]?'

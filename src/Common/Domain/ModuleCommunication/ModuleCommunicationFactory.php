@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Common\Domain\ModuleCommunication;
 
 use Common\Domain\Config\AppConfig;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -123,6 +125,59 @@ class ModuleCommunicationFactory
             $files,
             self::CONTENT_TYPE_APPLICATION_FORM,
             $content,
+            [],
+            true
+        );
+    }
+
+    /**
+     * @param Identifier[] $groupsId
+     */
+    public static function groupGetData(array $groupsId): ModuleCommunicationConfigDto
+    {
+        $groupsIdPlain = array_map(
+            fn (Identifier $groupId) => $groupId->getValue(),
+            $groupsId
+        );
+
+        $attributes = [
+            'api_version' => static::API_VERSION,
+            'groups_id' => implode(',', $groupsIdPlain),
+        ];
+
+        return new ModuleCommunicationConfigDto(
+            'group_get_data',
+            'GET',
+            $attributes,
+            [],
+            [],
+            self::CONTENT_TYPE_APPLICATION_FORM,
+            [],
+            [],
+            true
+        );
+    }
+
+    public static function groupGetUsers(Identifier $groupsId, PaginatorPage $page, PaginatorPageItems $pageItems): ModuleCommunicationConfigDto
+    {
+        $attributes = [
+            'api_version' => static::API_VERSION,
+            'group_id' => $groupsId,
+        ];
+
+        $query = [
+            'page' => $page->getValue(),
+            'page_items' => $pageItems->getValue(),
+        ];
+
+        return new ModuleCommunicationConfigDto(
+            'group_group_get_users',
+            'GET',
+            $attributes,
+            $query,
+            [],
+            self::CONTENT_TYPE_APPLICATION_FORM,
+            [],
             [],
             true
         );
