@@ -49,7 +49,7 @@ class GroupCreateUseCaseTest extends TestCase
     }
 
     /** @test */
-    public function itShouldCreateTheGroup22(): void
+    public function itShouldCreateTheGroup(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
         $groupId = ValueObjectFactory::createIdentifier('group id');
