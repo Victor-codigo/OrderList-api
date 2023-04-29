@@ -21,4 +21,6 @@ interface ValueObjectObjectFactoryInterface
     public static function createGroupType(GROUP_TYPE|null $type): GroupType;
 
     public static function createNotificationType(NOTIFICATION_TYPE|null $type): NotificationType;
+
+    public static function createProductImage(FileInterface|null $file): ProductImage;
 }

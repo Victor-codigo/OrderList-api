@@ -39,4 +39,9 @@ class ValueObjectObjectFactory
     {
         return new NotificationType($type);
     }
+
+    public static function createProductImage(FileInterface|null $file): ProductImage
+    {
+        return new ProductImage($file);
+    }
 }

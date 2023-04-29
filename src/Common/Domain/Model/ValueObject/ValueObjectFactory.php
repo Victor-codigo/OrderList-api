@@ -18,6 +18,7 @@ use Common\Domain\Model\ValueObject\Object\File;
 use Common\Domain\Model\ValueObject\Object\GroupImage;
 use Common\Domain\Model\ValueObject\Object\GroupType;
 use Common\Domain\Model\ValueObject\Object\NotificationType;
+use Common\Domain\Model\ValueObject\Object\ProductImage;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\Object\UserImage;
 use Common\Domain\Model\ValueObject\Object\ValueObjectObjectFactory;
@@ -151,5 +152,10 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
     public static function createNotificationType(NOTIFICATION_TYPE|null $type): NotificationType
     {
         return ValueObjectObjectFactory::createNotificationType($type);
+    }
+
+    public static function createProductImage(FileInterface|null $type): ProductImage
+    {
+        return ValueObjectObjectFactory::createProductImage($type);
     }
 }

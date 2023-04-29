@@ -117,4 +117,26 @@ final class VALUE_OBJECTS_CONSTRAINTS
         NOTIFICATION_TYPE::GROUP_USER_ADDED,
         NOTIFICATION_TYPE::GROUP_USER_REMOVED,
     ];
+
+    /**
+     * File size in Bytes.
+     */
+    public const FILE_PRODUCT_IMAGE_MAX_FILE_SIZE = 2 * 1_000_000;
+    public const FILE_PRODUCT_IMAGE_MIN_WITH = null;
+    public const FILE_PRODUCT_IMAGE_MAX_WITH = null;
+    public const FILE_PRODUCT_IMAGE_MIN_HEIGH = null;
+    public const FILE_PRODUCT_IMAGE_MAX_HEIGH = null;
+    public const FILE_PRODUCT_IMAGE_MIN_PIXELS = null;
+    public const FILE_PRODUCT_IMAGE_MAX_PIXELS = null;
+    public const FILE_PRODUCT_IMAGE_MIN_ASPECT_RATIO = null;
+    public const FILE_PRODUCT_IMAGE_MAX_ASPECT_RATIO = null;
+    public const FILE_PRODUCT_IMAGE_ALLOW_LANDSCAPE = true;
+    public const FILE_PRODUCT_IMAGE_ALLOW_PORTRAIT = true;
+    public const FILE_PRODUCT_IMAGE_ALLOW_SQUARE_IMAGE = true;
+    public const FILE_PRODUCT_IMAGE_DETECT_CORRUPTED = false;
+    public const FILE_PRODUCT_IMAGE_MIME_TYPES = [
+        'image/jpeg',
+        'image/png',
+        'image/bmp',
+    ];
 }
