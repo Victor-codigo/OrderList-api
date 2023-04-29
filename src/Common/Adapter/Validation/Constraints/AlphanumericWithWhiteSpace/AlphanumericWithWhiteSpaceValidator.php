@@ -16,7 +16,7 @@ class AlphanumericWithWhiteSpaceValidator extends RegexValidator
      */
     public function validate(mixed $value, Constraint $constraint): void
     {
-        if (!$constraint instanceof AlphanumericWithWhitespace) {
+        if (!$constraint instanceof AlphanumericWithWhiteSpace) {
             throw new UnexpectedTypeException($constraint, Alphanumeric::class);
         }
 
@@ -33,7 +33,7 @@ class AlphanumericWithWhiteSpaceValidator extends RegexValidator
         if ($constraint->match xor preg_match($constraint->pattern, $value)) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ value }}', $this->formatValue($value))
-                ->setCode(AlphanumericWithWhitespace::ALPHANUMERIC_WITH_WHITESPACE_FAILED_ERROR)
+                ->setCode(AlphanumericWithWhiteSpace::ALPHANUMERIC_WITH_WHITESPACE_FAILED_ERROR)
                 ->addViolation();
         }
     }

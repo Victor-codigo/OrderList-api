@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation\Constraints;
 
+use Common\Adapter\Validation\Constraints\AlphanumericWithWhiteSpace\AlphanumericWithWhiteSpace;
 use Common\Adapter\Validation\Constraints\AlphanumericWithWhiteSpace\AlphanumericWithWhiteSpaceValidator;
-use Common\Adapter\Validation\Constraints\AlphanumericWithWhiteSpace\AlphanumericWithWhitespace;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraint;
@@ -16,14 +16,14 @@ class AlphanumericWithWhiteSpaceValidatorTest extends TestCase
     private const PATTERN = '/^[a-zA-Z0-9_\s]+$/i';
 
     private AlphanumericWithWhiteSpaceValidator $object;
-    private MockObject|AlphanumericWithWhitespace $alphanumericWithWhiteSpace;
+    private MockObject|AlphanumericWithWhiteSpace $alphanumericWithWhiteSpace;
     private MockObject|Constraint $constraint;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->alphanumericWithWhiteSpace = $this->createMock(AlphanumericWithWhitespace::class);
+        $this->alphanumericWithWhiteSpace = $this->createMock(AlphanumericWithWhiteSpace::class);
         $this->constraint = $this->createMock(Constraint::class);
         $this->object = new AlphanumericWithWhiteSpaceValidator();
     }

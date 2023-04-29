@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Validation\Validations;
 
+use Common\Adapter\Validation\Constraints\AlphanumericWithWhiteSpace\AlphanumericWithWhiteSpace;
 use Common\Adapter\Validation\Constraints\Alphanumeric\Alphanumeric;
 use Common\Domain\Validation\Common\PROTOCOLS;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -67,6 +68,14 @@ class ValidationString extends ValidationConstraintBase
         return $this->createConstraint(
             new Alphanumeric(),
             [Alphanumeric::ALPHANUMERIC_FAILED_ERROR => VALIDATION_ERRORS::ALPHANUMERIC]
+        );
+    }
+
+    public function alphanumericWithWhiteSpace(): ValidationConstraint
+    {
+        return $this->createConstraint(
+            new AlphanumericWithWhiteSpace(),
+            [AlphanumericWithWhiteSpace::ALPHANUMERIC_WITH_WHITESPACE_FAILED_ERROR => VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE]
         );
     }
 

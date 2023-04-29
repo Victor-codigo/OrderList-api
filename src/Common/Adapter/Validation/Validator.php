@@ -183,6 +183,7 @@ class Validator
             CONSTRAINTS_NAMES::UUID->value => $this->validationChain->uuId(...),
             CONSTRAINTS_NAMES::REGEX->value => $this->validationChain->regEx(...),
             CONSTRAINTS_NAMES::ALPHANUMERIC->value => $this->validationChain->alphanumeric(...),
+            CONSTRAINTS_NAMES::ALPHANUMERIC_WITH_WHITESPACE->value => $this->validationChain->alphanumericWithWhiteSpace(...),
             CONSTRAINTS_NAMES::URL->value => $this->validationChain->url(...),
             CONSTRAINTS_NAMES::LANGUAGE->value => $this->validationChain->language(...),
             CONSTRAINTS_NAMES::JSON->value => $this->validationChain->json(...),

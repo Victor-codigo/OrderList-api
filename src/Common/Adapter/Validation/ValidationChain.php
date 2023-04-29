@@ -160,6 +160,13 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    public function alphanumericWithWhiteSpace(): self
+    {
+        $this->validator->setConstraint($this->string->alphanumericWithWhiteSpace());
+
+        return $this;
+    }
+
     /**
      * @param PROTOCOLS[] $protocols
      */

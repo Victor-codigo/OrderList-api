@@ -106,6 +106,7 @@ enum VALIDATION_ERRORS
     case REGEX_FAIL;
 
     case ALPHANUMERIC;
+    case ALPHANUMERIC_WITH_WHITESPACE;
 
     case URL;
 
