@@ -29,6 +29,9 @@ class NotificationRepositoryTest extends DataBaseTestCase
     private const NOTIFICATION_SAVED_2 = '2d208936-a7e9-32c1-963f-0df7f57ae463';
     private const NOTIFICATION_SAVED_3 = 'b04cb546-da1c-31d5-a4f2-00a7a2e85e89';
     private const NOTIFICATION_USER_ID_ACTIVE = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
+    private const NOTIFICATION_IN_DATABASE_1 = '84a08f7c-30a6-4bd5-8e5b-b2d49948e72c';
+    private const NOTIFICATION_IN_DATABASE_2 = '38dac117-2d4f-4057-8bc6-c972b5f439c6';
+    private const NOTIFICATION_IN_DATABASE_3 = 'f79ddff5-486b-4b5f-af64-b99fe9154fc1';
 
     private NotificationRepository $object;
 
@@ -147,9 +150,9 @@ class NotificationRepositoryTest extends DataBaseTestCase
     public function itShouldGetNotificationsById(): void
     {
         $notificationsId = [
-            ValueObjectFactory::createIdentifier(self::NOTIFICATION_SAVED_1),
-            ValueObjectFactory::createIdentifier(self::NOTIFICATION_SAVED_2),
-            ValueObjectFactory::createIdentifier(self::NOTIFICATION_SAVED_3),
+            ValueObjectFactory::createIdentifier(self::NOTIFICATION_IN_DATABASE_1),
+            ValueObjectFactory::createIdentifier(self::NOTIFICATION_IN_DATABASE_2),
+            ValueObjectFactory::createIdentifier(self::NOTIFICATION_IN_DATABASE_3),
         ];
 
         $return = $this->object->getNotificationsByIdOrFail($notificationsId);
