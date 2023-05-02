@@ -11,26 +11,32 @@ use Common\Domain\HttpClient\Exception\Error500Exception;
 use Common\Domain\HttpClient\Exception\NetworkException;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\DI\DIInterface;
+use Common\Domain\Ports\FileUpload\UploadedFileInterface;
 use Common\Domain\Ports\HttpClient\HttpClientInterface;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
+use Lexik\Bundle\JWTAuthenticationBundle\TokenExtractor\TokenExtractorInterface;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class ModuleCommunication implements ModuleCommunicationInterface
 {
-    private const API_REQUEST_TOKEN_EXPIRATION_TIME = AppConfig::API_TOKEN_REQUEST_EXPIRE_TIME;
+    private const COMMUNICATION_CONFIG = [
+        'proxy' => AppConfig::MODULE_COMMUNICATION_REQUEST_PROXY,
+        'verify_peer' => AppConfig::MODULE_COMMUNICATION_REQUEST_HTTPS['verify_peer'],
+        'verify_host' => AppConfig::MODULE_COMMUNICATION_REQUEST_HTTPS['verify_host'],
+    ];
+
     private const DEV_QUERY_STRING = 'XDEBUG_SESSION=VSCODE';
     private const TEST_QUERY_STRING = 'env=test';
 
     public function __construct(
         private HttpClientInterface $httpClient,
         private DIInterface $DI,
-        private JWTTokenManagerInterface $jwtManager,
-        private Security $security,
+        private TokenExtractorInterface $jwtTokenExtractor,
+        private RequestStack $request,
         private string $appEnv
     ) {
     }
@@ -45,7 +51,7 @@ class ModuleCommunication implements ModuleCommunicationInterface
             $response = $this->httpClient->request(
                 $routeConfig->method,
                 $this->getRequestUrl($routeConfig->route, array_merge($routeConfig->attributes, $routeConfig->query)),
-                $this->getOptions($routeConfig->contentType, $routeConfig->content, $routeConfig->files, $routeConfig->authentication)
+                $this->getOptions($routeConfig->authentication, $routeConfig->contentType, $routeConfig->content, $routeConfig->files, $routeConfig->cookies, $routeConfig->headers)
             );
 
             $responseContent = $response->getContent();
@@ -86,15 +92,6 @@ class ModuleCommunication implements ModuleCommunicationInterface
         );
     }
 
-    private function getConfiguration(): array
-    {
-        return [
-            'proxy' => 'http://proxy:80',
-            'verify_peer' => false,
-            'verify_host' => false,
-        ];
-    }
-
     private function getRequestUrl(string $route, array $attributes): string
     {
         $sessionDebug = '';
@@ -110,48 +107,56 @@ class ModuleCommunication implements ModuleCommunicationInterface
         return $this->DI->getUrlRouteAbsoluteDomain($route, $attributes).$sessionDebug;
     }
 
-    private function json(array $data = null, string $tokenSession = null): array
+    /**
+     * @param Cookie[] $cookies
+     * @param string[] $headers
+     */
+    private function json(string $tokenSession = null, array $data = [], array $cookies = [], array $headers = []): array
     {
-        $json = $this->getConfiguration();
+        $json = self::COMMUNICATION_CONFIG;
 
-        null === $data ?: $json['json'] = $data;
+        empty($data) ?: $json['json'] = $data;
         null === $tokenSession ?: $json['auth_bearer'] = $tokenSession;
+        empty($headers) && empty($cookies) ?: $json['headers'] = array_merge($headers, $cookies);
 
         return $json;
     }
 
-    private function form(array $data = null, array $files = null, string $tokenSession = null): array
+    /**
+     * @param UploadedFileInterface[] $files
+     * @param Cookie[]                $cookies
+     * @param string[]                $headers
+     */
+    private function form(string $tokenSession = null, array $data = [], array $files = [], array $cookies = [], array $headers = []): array
     {
-        $form = $this->getConfiguration();
+        $form = self::COMMUNICATION_CONFIG;
+        $formFields = [];
 
         null === $tokenSession ?: $form['auth_bearer'] = $tokenSession;
+        empty($data) ?: $formFields = $data;
+        empty($files) ?: $formFields = array_merge($formFields, $files);
 
-        null === $data ?: $formFields = $data;
-        null === $files ?: $formFields = array_merge($formFields, $files);
         $formData = new FormDataPart($formFields);
         $form['body'] = $formData->bodyToIterable();
-        $form['headers'] = $formData->getPreparedHeaders()->toArray();
+        $form['headers'] = array_merge($headers, $cookies, $formData->getPreparedHeaders()->toArray());
 
         return $form;
     }
 
-    private function createTokenSession(UserInterface $userSession): string
-    {
-        return $this->jwtManager->createFromPayload($userSession, [
-            'exp' => time() + static::API_REQUEST_TOKEN_EXPIRATION_TIME,
-        ]);
-    }
-
-    private function getOptions(string $contentType, array $content = [], array $files = [], bool $authentication = false): array
+    /**
+     * @param UploadedFileInterface[] $files
+     * @param Cookie                  $cookies
+     */
+    private function getOptions(bool $authentication, string $contentType, array $content = [], array $files = [], array $cookies = [], array $headers = []): array
     {
         $tokenSession = null;
         if ($authentication) {
-            $tokenSession = $this->createTokenSession($this->security->getUser());
+            $tokenSession = $this->jwtTokenExtractor->extract($this->request->getCurrentRequest());
         }
 
         return match ($contentType) {
-            'application/json' => $this->json($content, $tokenSession),
-            'multipart/form-data' => $this->form($content, $files, $tokenSession)
+            'application/json' => $this->json($tokenSession, $content, $cookies, $headers),
+            'multipart/form-data' => $this->form($tokenSession, $content, $files, $cookies, $headers)
         };
     }
 }

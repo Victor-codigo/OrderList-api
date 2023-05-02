@@ -10,6 +10,7 @@ use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\JwtToken;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
@@ -19,6 +20,7 @@ use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 class ModuleCommunicationFactory
 {
     private const API_VERSION = AppConfig::API_VERSION;
+    private const COOKIE_SESSION_NAME = AppConfig::COOKIE_SESSION_NAME;
     private const CONTENT_TYPE_APPLICATION_JSON = 'application/json';
     private const CONTENT_TYPE_APPLICATION_FORM = 'multipart/form-data';
 
@@ -36,13 +38,14 @@ class ModuleCommunicationFactory
         return new ModuleCommunicationConfigDto(
             'user_login',
             'POST',
+            false,
             $attributes,
             [],
             [],
             self::CONTENT_TYPE_APPLICATION_JSON,
             $content,
             [],
-            false
+            [],
         );
     }
 
@@ -64,13 +67,47 @@ class ModuleCommunicationFactory
         return new ModuleCommunicationConfigDto(
             'user_get',
             'GET',
+            true,
             $attributes,
             [],
             [],
             self::CONTENT_TYPE_APPLICATION_JSON,
             [],
             [],
-            true
+            []
+        );
+    }
+
+    /**
+     * @param Identifier[] $usersId
+     */
+    public static function userGetWithToken(array $usersId, JwtToken $sessionToken): ModuleCommunicationConfigDto
+    {
+        $usersIdPlain = array_map(
+            fn (Identifier $userId) => $userId->getValue(),
+            $usersId
+        );
+
+        $attributes = [
+            'api_version' => static::API_VERSION,
+            'users_id' => implode(',', $usersIdPlain),
+        ];
+
+        $cookies = [
+            self::COOKIE_SESSION_NAME => $sessionToken->getValue(),
+        ];
+
+        return new ModuleCommunicationConfigDto(
+            'user_get',
+            'GET',
+            true,
+            $attributes,
+            [],
+            [],
+            self::CONTENT_TYPE_APPLICATION_JSON,
+            [],
+            $cookies,
+            []
         );
     }
 
@@ -92,13 +129,14 @@ class ModuleCommunicationFactory
         return new ModuleCommunicationConfigDto(
             'user_get_by_name',
             'GET',
+            true,
             $attributes,
             [],
             [],
             self::CONTENT_TYPE_APPLICATION_JSON,
             [],
             [],
-            true
+            []
         );
     }
 
@@ -120,13 +158,14 @@ class ModuleCommunicationFactory
         return new ModuleCommunicationConfigDto(
             'group_create',
             'POST',
+            true,
             $attributes,
             [],
             $files,
             self::CONTENT_TYPE_APPLICATION_FORM,
             $content,
             [],
-            true
+            []
         );
     }
 
@@ -148,13 +187,14 @@ class ModuleCommunicationFactory
         return new ModuleCommunicationConfigDto(
             'group_get_data',
             'GET',
+            true,
             $attributes,
             [],
             [],
             self::CONTENT_TYPE_APPLICATION_FORM,
             [],
             [],
-            true
+            []
         );
     }
 
@@ -173,13 +213,14 @@ class ModuleCommunicationFactory
         return new ModuleCommunicationConfigDto(
             'group_group_get_users',
             'GET',
+            true,
             $attributes,
             $query,
             [],
             self::CONTENT_TYPE_APPLICATION_FORM,
             [],
             [],
-            true
+            []
         );
     }
 
@@ -325,13 +366,14 @@ class ModuleCommunicationFactory
         return new ModuleCommunicationConfigDto(
             'notification_create',
             'POST',
+            true,
             $attributes,
             [],
             [],
             self::CONTENT_TYPE_APPLICATION_JSON,
             $content,
             [],
-            true
+            []
         );
     }
 }

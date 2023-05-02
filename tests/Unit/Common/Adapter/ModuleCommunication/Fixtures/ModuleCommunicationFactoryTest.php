@@ -11,7 +11,7 @@ class ModuleCommunicationFactoryTest
     /**
      * @param string[] $usersId
      */
-    public static function json(array $content = [], array $query = [], array $cookies = [], $authentication = false): ModuleCommunicationConfigDto
+    public static function json(bool $authentication, array $content = [], array $query = [], array $files = [], array $cookies = [], array $headers = []): ModuleCommunicationConfigDto
     {
         $attributes = [
             'api_version' => 1,
@@ -20,20 +20,21 @@ class ModuleCommunicationFactoryTest
         return new ModuleCommunicationConfigDto(
             'user_get',
             'GET',
+            $authentication,
             $attributes,
             $query,
-            [],
+            $files,
             'application/json',
             $content,
             $cookies,
-            $authentication
+            $headers
         );
     }
 
     /**
      * @param UploadedFileInterface[] $files
      */
-    public static function form(array $content = [], array $query = [], array $files = [], array $cookies = [], $authentication = false): ModuleCommunicationConfigDto
+    public static function form(bool $authentication, array $content = [], array $query = [], array $files = [], array $cookies = [], array $headers = []): ModuleCommunicationConfigDto
     {
         $attributes = [
             'api_version' => 1,
@@ -42,13 +43,14 @@ class ModuleCommunicationFactoryTest
         return new ModuleCommunicationConfigDto(
             'route',
             'POST',
+            $authentication,
             $attributes,
             $query,
             $files,
             'multipart/form-data',
             $content,
             $cookies,
-            $authentication
+            $headers
         );
     }
 }
