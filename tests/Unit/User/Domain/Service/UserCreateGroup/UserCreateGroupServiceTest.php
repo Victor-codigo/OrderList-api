@@ -34,6 +34,7 @@ class UserCreateGroupServiceTest extends TestCase
         return new ModuleCommunicationConfigDto(
             'group_create',
             'POST',
+            true,
             ['api_version' => 1],
             [],
             [],
@@ -44,7 +45,7 @@ class UserCreateGroupServiceTest extends TestCase
                 'type' => GROUP_TYPE::USER->value,
             ],
             [],
-            true
+            []
         );
     }
 
