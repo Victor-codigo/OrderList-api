@@ -4,18 +4,20 @@ namespace User\Domain\Model;
 
 use Common\Domain\Event\EventRegisterTrait;
 use Common\Domain\Model\ValueObject\Array\Roles;
-use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Model\ValueObject\String\Password;
+use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Security\UserRolesGetterSetterTrait;
 use Common\Domain\Validation\User\USER_ROLES;
 use User\Domain\Event\UserPreRegistered\UserPreRegisteredEvent;
 
 class User
 {
     use EventRegisterTrait;
+    use UserRolesGetterSetterTrait;
 
     private Identifier $id;
     private Email $email;
@@ -35,6 +37,11 @@ class User
     public function getUserPreRegisteredEventData(): UserPreRegisteredEvent|null
     {
         return $this->userPreRegisteredEventData;
+    }
+
+    public function getId(): Identifier
+    {
+        return $this->id;
     }
 
     public function getEmail(): Email
@@ -66,21 +73,21 @@ class User
         return $this->password;
     }
 
-     public function setPassword(Password $password): self
-     {
-         $this->password = $password;
+    public function setPassword(Password $password): self
+    {
+        $this->password = $password;
 
-         return $this;
-     }
+        return $this;
+    }
+
+    public function getImage(): Path
+    {
+        return $this->profile->getImage();
+    }
 
     public function getCreatedOn(): \DateTime
     {
         return $this->createdOn;
-    }
-
-    public function getId(): Identifier
-    {
-        return $this->id;
     }
 
     public function getProfile(): Profile
@@ -91,27 +98,6 @@ class User
     public function setProfile(Profile $profile): self
     {
         $this->profile = $profile;
-
-        return $this;
-    }
-
-    public function getRoles(): Roles
-    {
-        $roles = $this->roles->getValue();
-        $rolSearched = new Rol(USER_ROLES::USER);
-        $rolNotActive = new Rol(USER_ROLES::NOT_ACTIVE);
-        $rolDeleted = new Rol(USER_ROLES::DELETED);
-
-        if (!$this->roles->has($rolSearched) && !$this->roles->has($rolNotActive) && !$this->roles->has($rolDeleted)) {
-            $roles[] = $rolSearched;
-        }
-
-        return ValueObjectFactory::createRoles($roles);
-    }
-
-    public function setRoles(Roles $roles): self
-    {
-        $this->roles = $roles;
 
         return $this;
     }
