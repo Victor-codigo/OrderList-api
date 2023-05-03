@@ -15,7 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use User\Adapter\Security\User\UserSymfonyAdapter;
 
 #[OA\Tag('Group')]
 #[OA\Post(
@@ -133,11 +132,11 @@ class GroupUserAddController extends AbstractController
 
     private function createGroupUserAddInputDto(string|null $groupId, array|null $users, string|null $identifierType, bool|null $admin): GroupUserAddInputDto
     {
-        /** @var UserSymfonyAdapter */
-        $userAdapter = $this->security->getUser();
+        /** @var UserSharedSymfonyAdapter userSharedAdapter */
+        $userSharedAdapter = $this->security->getUser();
 
         return new GroupUserAddInputDto(
-            $userAdapter->getUser(),
+            $userSharedAdapter->getUser(),
             $groupId,
             $users,
             $identifierType,

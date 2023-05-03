@@ -9,6 +9,7 @@ use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserRemove\Dto\GroupUserRemoveInputDto;
@@ -21,7 +22,6 @@ use Group\Domain\Service\GroupUserRemove\GroupUserRemoveService;
 use Group\Domain\Service\UserHasGroupAdminGrants\UserHasGroupAdminGrantsService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\User;
 
 class GroupUserRemoveUseCaseTest extends TestCase
 {
@@ -33,7 +33,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
     private MockObject|GroupUserRemoveService $groupUserRemoveService;
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|GroupRepositoryInterface $groupRepository;
-    private MockObject|User $userSession;
+    private MockObject|UserShared $userSession;
     private MockObject|Group $group;
 
     protected function setUp(): void
@@ -45,7 +45,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $this->groupUserRemoveService = $this->createMock(GroupUserRemoveService::class);
         $this->moduleCommunication = $this->createMock(ModuleCommunicationInterface::class);
         $this->groupRepository = $this->createMock(GroupRepositoryInterface::class);
-        $this->userSession = $this->createMock(User::class);
+        $this->userSession = $this->createMock(UserShared::class);
         $this->group = $this->createMock(Group::class);
         $this->object = new GroupUserRemoveUseCase(
             $this->validator,

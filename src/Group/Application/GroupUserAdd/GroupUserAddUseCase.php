@@ -13,6 +13,7 @@ use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Service\Exception\DomainErrorException;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
@@ -34,7 +35,6 @@ use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersAlreadyInTheGroupEx
 use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersMaxNumberExceededException;
 use Group\Domain\Service\GroupUserAdd\GroupUserAddService;
 use Group\Domain\Service\UserHasGroupAdminGrants\UserHasGroupAdminGrantsService;
-use User\Domain\Model\User;
 
 class GroupUserAddUseCase extends ServiceBase
 {
@@ -158,7 +158,7 @@ class GroupUserAddUseCase extends ServiceBase
     /**
      * @param UserGroup[] $usersGroupToNotify
      */
-    private function createNotificationGroupUserAdded(array $usersGroupToNotify, Group $group, User $userSession, string $systemKey): void
+    private function createNotificationGroupUserAdded(array $usersGroupToNotify, Group $group, UserShared $userSession, string $systemKey): void
     {
         $notificationData = ModuleCommunicationFactory::notificationCreateGroupUserAdded(
             array_map(fn (UserGroup $userGroup) => $userGroup->getUserId(), $usersGroupToNotify),

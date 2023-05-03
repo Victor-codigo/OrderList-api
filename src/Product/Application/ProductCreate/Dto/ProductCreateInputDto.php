@@ -10,19 +10,19 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
 use Common\Domain\Validation\ValidationInterface;
-use User\Domain\Model\User;
 
 class ProductCreateInputDto implements ServiceInputDtoInterface
 {
-    public readonly User $userSession;
+    public readonly UserShared $userSession;
     public readonly Identifier $groupId;
     public readonly NameWithSpaces $name;
     public readonly Description $description;
     public readonly ProductImage $image;
 
-    public function __construct(User $userSession, string|null $groupId, string|null $name, string|null $description, UploadedFileInterface|null $image)
+    public function __construct(UserShared $userSession, string|null $groupId, string|null $name, string|null $description, UploadedFileInterface|null $image)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);

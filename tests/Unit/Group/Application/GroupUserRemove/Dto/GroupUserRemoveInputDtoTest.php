@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Test\Unit\Group\Application\GroupUserRemove\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\User\USER_ROLES;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserRemove\Dto\GroupUserRemoveInputDto;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\User;
 
 class GroupUserRemoveInputDtoTest extends TestCase
 {
@@ -30,9 +30,9 @@ class GroupUserRemoveInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    private function getUserSession(): User
+    private function getUserSession(): UserShared
     {
-        return User::fromPrimitives('', '', '', '', [USER_ROLES::USER]);
+        return UserShared::fromPrimitives('', '', '', [USER_ROLES::USER], null, new \DateTime());
     }
 
     /** @test */

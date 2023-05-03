@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Test\Unit\Group\Application\GroupUserRolChangeInputDto\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\User\USER_ROLES;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserRoleChange\Dto\GroupUserRoleChangeInputDto;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\User;
 
 class GroupUserRolChangeInputDtoTest extends TestCase
 {
@@ -25,19 +25,20 @@ class GroupUserRolChangeInputDtoTest extends TestCase
      ];
 
     private ValidationInterface $validator;
-    private User $usersSesion;
+    private UserShared $usersSesion;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->validator = new ValidationChain();
-        $this->usersSesion = User::fromPrimitives(
+        $this->usersSesion = UserShared::fromPrimitives(
             self::GROUP_USER_ADMIN_ID,
             'email@host.com',
-            'password',
             'name',
-            [USER_ROLES::USER]
+            [USER_ROLES::USER],
+            null,
+            new \DateTime()
         );
     }
 

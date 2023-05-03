@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Notification\Adapter\Http\Controller\NotificationRemove;
 
+use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
@@ -16,7 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use User\Adapter\Security\User\UserSymfonyAdapter;
 
 #[OA\Tag('Notification')]
 #[OA\Delete(
@@ -94,10 +94,10 @@ class NotificationRemoveController extends AbstractController
      */
     private function createNotificationRemoveInputDto(array|null $notificationsId): NotificationRemoveInputDto
     {
-        /** @var UserSymfonyAdapter $userAdapter */
-        $userAdapter = $this->security->getUser();
+        /** @var UserSharedSymfonyAdapter $userSharedAdapter */
+        $userSharedAdapter = $this->security->getUser();
 
-        return new NotificationRemoveInputDto($userAdapter->getUser(), $notificationsId);
+        return new NotificationRemoveInputDto($userSharedAdapter->getUser(), $notificationsId);
     }
 
     private function createResponse(NotificationRemoveOutputDto $notifications): JsonResponse

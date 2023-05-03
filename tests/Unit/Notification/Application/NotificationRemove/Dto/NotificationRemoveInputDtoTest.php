@@ -6,12 +6,12 @@ namespace Test\Unit\Notification\Application\NotificationRemove\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use Notification\Application\NotificationRemove\Dto\NotificationRemoveInputDto;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\User;
 
 class NotificationRemoveInputDtoTest extends TestCase
 {
@@ -20,13 +20,13 @@ class NotificationRemoveInputDtoTest extends TestCase
     private const NOTIFICATION_ID_3 = '79a674c7-e109-3094-b8d5-c19cc00f5519';
 
     private ValidationInterface $validator;
-    private MockObject|User $userSession;
+    private MockObject|UserShared $userSession;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->userSession = $this->createMock(User::class);
+        $this->userSession = $this->createMock(UserShared::class);
         $this->validator = new ValidationChain();
     }
 

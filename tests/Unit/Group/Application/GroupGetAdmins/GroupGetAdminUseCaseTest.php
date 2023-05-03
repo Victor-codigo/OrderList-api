@@ -8,6 +8,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\Group\GROUP_ROLES;
@@ -22,7 +23,6 @@ use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use User\Domain\Model\User;
 
 class GroupGetAdminUseCaseTest extends TestCase
 {
@@ -30,7 +30,7 @@ class GroupGetAdminUseCaseTest extends TestCase
     private MockObject|ValidatorInterface $validator;
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;
     private MockObject|PaginatorInterface $paginator;
-    private MockObject|User $userSession;
+    private MockObject|UserShared $userSession;
 
     protected function setUp(): void
     {
@@ -38,7 +38,7 @@ class GroupGetAdminUseCaseTest extends TestCase
 
         $this->validator = $this->createMock(ValidationInterface::class);
         $this->userGroupRepository = $this->createMock(UserGroupRepositoryInterface::class);
-        $this->userSession = $this->createMock(User::class);
+        $this->userSession = $this->createMock(UserShared::class);
         $this->paginator = $this->createMock(PaginatorInterface::class);
         $this->object = new GroupGetAdminsUseCase($this->validator, $this->userGroupRepository);
     }

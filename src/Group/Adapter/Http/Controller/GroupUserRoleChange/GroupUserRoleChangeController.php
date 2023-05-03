@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Group\Adapter\Http\Controller\GroupUserRoleChange;
 
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Ports\Security\UserSharedInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use Group\Adapter\Http\Controller\GroupUserRoleChange\Dto\GroupUserRoleChangeRequestDto;
@@ -15,7 +16,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use User\Domain\Port\User\UserInterface;
 
 #[OA\Tag('Group')]
 #[OA\Put(
@@ -135,10 +135,10 @@ class GroupUserRoleChangeController extends AbstractController
      */
     private function createGroupUserRoleChangeInputDto(string|null $groupId, array|null $usersId, bool|null $admin): GroupUserRoleChangeInputDto
     {
-        /** @var UserInterface $userAdapter */
-        $userAdapter = $this->security->getUser();
+        /** @var UserSharedInterface $userSharedAdapter */
+        $userSharedAdapter = $this->security->getUser();
 
-        return new GroupUserRoleChangeInputDto($userAdapter->getUser(), $groupId, $usersId, $admin);
+        return new GroupUserRoleChangeInputDto($userSharedAdapter->getUser(), $groupId, $usersId, $admin);
     }
 
     /**

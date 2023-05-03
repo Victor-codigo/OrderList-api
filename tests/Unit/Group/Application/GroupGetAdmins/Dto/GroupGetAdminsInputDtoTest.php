@@ -5,24 +5,24 @@ declare(strict_types=1);
 namespace Test\Unit\Group\Application\GroupGetAdmins\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupGetAdmins\Dto\GroupGetAdminsInputDto;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\User;
 
 class GroupGetAdminsInputDtoTest extends TestCase
 {
     private ValidationInterface $validator;
-    private MockObject|User $userSession;
+    private MockObject|UserShared $userSession;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->validator = new ValidationChain();
-        $this->userSession = $this->createMock(User::class);
+        $this->userSession = $this->createMock(UserShared::class);
     }
 
     /** @test */

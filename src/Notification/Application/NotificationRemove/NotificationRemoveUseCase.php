@@ -8,6 +8,7 @@ use Common\Domain\Config\AppConfig;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
@@ -18,7 +19,6 @@ use Notification\Domain\Model\Notification;
 use Notification\Domain\Ports\Notification\NotificationRepositoryInterface;
 use Notification\Domain\Service\NotificationRemove\Dto\NotificationRemoveDto;
 use Notification\Domain\Service\NotificationRemove\NotificationRemoveService;
-use User\Domain\Model\User;
 
 class NotificationRemoveUseCase extends ServiceBase
 {
@@ -67,7 +67,7 @@ class NotificationRemoveUseCase extends ServiceBase
      *
      * @return Notification[]
      */
-    private function getValidNotificationsToDelete(User $userSession, PaginatorInterface $notificationsToDelete): array
+    private function getValidNotificationsToDelete(UserShared $userSession, PaginatorInterface $notificationsToDelete): array
     {
         $userSessionId = $userSession->getId();
 

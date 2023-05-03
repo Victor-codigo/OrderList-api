@@ -16,6 +16,7 @@ use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Service\Exception\DomainErrorException;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\User\USER_ROLES;
@@ -30,7 +31,6 @@ use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\User;
 
 class GroupGetUsersUseCaseTest extends TestCase
 {
@@ -51,9 +51,9 @@ class GroupGetUsersUseCaseTest extends TestCase
         $this->object = new GroupGetUsersUseCase($this->userGroupRepository, $this->moduleCommunication, $this->validator);
     }
 
-    private function getUserSession(): User
+    private function getUserSession(): UserShared
     {
-        return User::fromPrimitives('2606508b-4516-45d6-93a6-c7cb416b7f3f', 'user@emil.com', 'password', 'UserName', [USER_ROLES::USER]);
+        return UserShared::fromPrimitives('2606508b-4516-45d6-93a6-c7cb416b7f3f', 'user@emil.com', 'UserName', [USER_ROLES::USER], null, new \DateTime());
     }
 
     private function getUsersGroup(): MockObject|PaginatorInterface

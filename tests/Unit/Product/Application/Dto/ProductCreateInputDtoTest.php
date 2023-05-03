@@ -7,6 +7,7 @@ namespace Test\Unit\Product\Application\Dto;
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -14,7 +15,6 @@ use PHPUnit\Framework\TestCase;
 use Product\Application\ProductCreate\Dto\ProductCreateInputDto;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints\BuiltInFunctionsReturn;
-use User\Domain\Model\User;
 
 require_once 'tests/BuiltinFunctions/SymfonyComponentValidatorConstraints.php';
 
@@ -26,14 +26,14 @@ class ProductCreateInputDtoTest extends TestCase
 
     private ValidationInterface $validator;
     private MockObject|UploadedFileInterface $productImageFile;
-    private MockObject|User $userSession;
+    private MockObject|UserShared $userSession;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->productImageFile = $this->createMock(UploadedFileInterface::class);
-        $this->userSession = $this->createMock(User::class);
+        $this->userSession = $this->createMock(UserShared::class);
         $this->validator = new ValidationChain();
     }
 

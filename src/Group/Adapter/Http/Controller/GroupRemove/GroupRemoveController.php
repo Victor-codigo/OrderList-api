@@ -15,7 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use User\Adapter\Security\User\UserSymfonyAdapter;
 
 #[OA\Tag('Group')]
 #[OA\Delete(
@@ -100,10 +99,10 @@ class GroupRemoveController extends AbstractController
 
     private function createGroupRemoveInputDto(string|null $groupId): GroupRemoveInputDto
     {
-        /** @var UserSymfonyAdapter $userAdapter */
-        $userAdapter = $this->security->getUser();
+        /** @var UserSharedSymfonyAdapter $userSharedAdapter */
+        $userSharedAdapter = $this->security->getUser();
 
-        return new GroupRemoveInputDto($userAdapter->getUser(), $groupId);
+        return new GroupRemoveInputDto($userSharedAdapter->getUser(), $groupId);
     }
 
     private function createResponse(Identifier $groupRemovedId): JsonResponse

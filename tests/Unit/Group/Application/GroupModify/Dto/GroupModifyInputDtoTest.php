@@ -6,6 +6,7 @@ namespace Test\Unit\Group\Application\GroupModify\Dto;
 
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\User\USER_ROLES;
 use Common\Domain\Validation\ValidationInterface;
@@ -13,7 +14,6 @@ use Group\Application\GroupModify\Dto\GroupModifyInputDto;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints\BuiltInFunctionsReturn;
-use User\Domain\Model\User;
 
 require_once 'tests/BuiltinFunctions/SymfonyComponentValidatorConstraints.php';
 class GroupModifyInputDtoTest extends TestCase
@@ -43,9 +43,9 @@ class GroupModifyInputDtoTest extends TestCase
         BuiltInFunctionsReturn::$imagecreatefromstring = null;
     }
 
-    private function getUser(): User
+    private function getUser(): UserShared
     {
-        return User::fromPrimitives(self::GROUP_USER_ID, 'email@domain.com', 'password', 'UserName', [USER_ROLES::USER]);
+        return UserShared::fromPrimitives(self::GROUP_USER_ID, 'email@domain.com', 'UserName', [USER_ROLES::USER], null, new \DateTime());
     }
 
     private function getUploadedImage(string $path, string $originalName, string $mimeType, int $error): UploadedFileSymfonyAdapter

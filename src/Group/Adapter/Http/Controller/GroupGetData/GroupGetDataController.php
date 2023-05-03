@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Adapter\Http\Controller\GroupGetData;
 
+use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use Group\Adapter\Http\Controller\GroupGetData\Dto\GroupGetDataRequestDto;
@@ -15,7 +16,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use User\Adapter\Security\User\UserSymfonyAdapter;
 
 #[OA\Tag('Group')]
 #[OA\Get(
@@ -119,10 +119,10 @@ class GroupGetDataController extends AbstractController
 
     private function createGroupGetDataInputDto(array|null $groupsId): GroupGetDataInputDto
     {
-        /** @var UserSymfonyAdapter $userAdapter */
-        $userAdapter = $this->security->getUser();
+        /** @var UserSharedSymfonyAdapter $userSharedAdapter */
+        $userSharedAdapter = $this->security->getUser();
 
-        return new GroupGetDataInputDto($userAdapter->getUser(), $groupsId);
+        return new GroupGetDataInputDto($userSharedAdapter->getUser(), $groupsId);
     }
 
     private function createResponse(GroupGetDataOutputDto $groupsData): JsonResponse

@@ -5,25 +5,25 @@ declare(strict_types=1);
 namespace Test\Unit\Group\Application\GroupGetUsers\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupGetUsers\Dto\GroupGetUsersInputDto;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\User;
 
 class GroupGetUsersInputDtoTest extends TestCase
 {
     private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
 
-    private MockObject|User $userSession;
+    private MockObject|UserShared $userSession;
     private MockObject|ValidationInterface $validator;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->userSession = $this->createMock(User::class);
+        $this->userSession = $this->createMock(UserShared::class);
         $this->validator = new ValidationChain();
     }
 

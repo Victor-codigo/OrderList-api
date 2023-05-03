@@ -7,6 +7,7 @@ namespace Group\Application\GroupUserRoleChange\Dto;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\ValidationInterface;
@@ -14,7 +15,7 @@ use User\Domain\Model\User;
 
 class GroupUserRoleChangeInputDto implements ServiceInputDtoInterface
 {
-    public readonly User $userSession;
+    public readonly UserShared $userSession;
     public readonly Identifier $groupId;
     /**
      * @var Identifier[]
@@ -22,7 +23,7 @@ class GroupUserRoleChangeInputDto implements ServiceInputDtoInterface
     public readonly array $usersId;
     public readonly Rol $rol;
 
-    public function __construct(User $userSession, string|null $groupId, array|null $usersId, bool|null $admin)
+    public function __construct(UserShared $userSession, string|null $groupId, array|null $usersId, bool|null $admin)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);

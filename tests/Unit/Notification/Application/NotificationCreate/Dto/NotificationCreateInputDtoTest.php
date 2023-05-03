@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Test\Unit\Notification\Application\NotificationCreate\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Common\Domain\Validation\ValidationInterface;
 use Notification\Application\NotificationCreate\Dto\NotificationCreateInputDto;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\User;
 
 class NotificationCreateInputDtoTest extends TestCase
 {
@@ -19,13 +19,13 @@ class NotificationCreateInputDtoTest extends TestCase
     private const SYSTEM_KEY = 'system key';
 
     private ValidationInterface $validator;
-    private MockObject|User $user;
+    private MockObject|UserShared $user;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->user = $this->createMock(User::class);
+        $this->user = $this->createMock(UserShared::class);
         $this->validator = new ValidationChain();
     }
 

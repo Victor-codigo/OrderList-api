@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Group\Adapter\Http\Controller\GroupModify;
 
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
+use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Response\RESPONSE_STATUS;
@@ -17,7 +18,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use User\Adapter\Security\User\UserSymfonyAdapter;
 
 #[OA\Tag('Group')]
 #[OA\Put(
@@ -106,11 +106,11 @@ class GroupModifyController extends AbstractController
 
     private function createGroupModifyInputDto(GroupModifyRequestDto $request): GroupModifyInputDto
     {
-        /** @var UserSymfonyAdapter $userAdapter */
-        $userAdapter = $this->security->getUser();
+        /** @var UserSharedSymfonyAdapter $userSharedAdapter */
+        $userSharedAdapter = $this->security->getUser();
 
         return new GroupModifyInputDto(
-            $userAdapter->getUser(),
+            $userSharedAdapter->getUser(),
             $request->groupId,
             $request->name,
             $request->description,

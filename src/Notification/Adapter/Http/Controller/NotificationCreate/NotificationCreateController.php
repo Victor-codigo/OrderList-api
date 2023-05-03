@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Notification\Adapter\Http\Controller\NotificationCreate;
 
+use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
@@ -16,7 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use User\Adapter\Security\User\UserSymfonyAdapter;
 
 #[OA\Tag('Notification')]
 #[OA\Post(
@@ -92,10 +92,10 @@ class NotificationCreateController extends AbstractController
      */
     private function createNotificationCreateInputDto(array|null $userId, string|null $notificationType, array|null $notificationData, string|null $systemKey): NotificationCreateInputDto
     {
-        /** @var UserSymfonyAdapter $userAdapter */
-        $userAdapter = $this->security->getUser();
+        /** @var UserSharedSymfonyAdapter $userSharedAdapter */
+        $userSharedAdapter = $this->security->getUser();
 
-        return new NotificationCreateInputDto($userAdapter->getUser(), $userId, $notificationType, $notificationData, $systemKey);
+        return new NotificationCreateInputDto($userSharedAdapter->getUser(), $userId, $notificationType, $notificationData, $systemKey);
     }
 
     private function createResponse(NotificationCreateOutputDto $notificationOutput): JsonResponse

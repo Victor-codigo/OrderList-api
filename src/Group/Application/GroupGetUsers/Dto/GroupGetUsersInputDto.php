@@ -9,20 +9,20 @@ use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
 use Common\Domain\Validation\ValidationInterface;
-use User\Domain\Model\User;
 
 class GroupGetUsersInputDto implements ServiceInputDtoInterface
 {
     private const LIMIT_USERS_MAX = AppConfig::ENDPOINT_GROUP_GET_USERS_MAX_USERS;
 
-    public readonly User $userSession;
+    public readonly UserShared $userSession;
     public readonly Identifier $groupId;
     public readonly PaginatorPage $page;
     public readonly PaginatorPageItems $pageItems;
 
-    public function __construct(User $userSession, string|null $groupId, int|null $page, int|null $pageItems)
+    public function __construct(UserShared $userSession, string|null $groupId, int|null $page, int|null $pageItems)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);

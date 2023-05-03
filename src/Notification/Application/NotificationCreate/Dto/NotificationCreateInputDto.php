@@ -8,14 +8,14 @@ use Common\Domain\Model\ValueObject\Array\NotificationData;
 use Common\Domain\Model\ValueObject\Object\NotificationType;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Common\Domain\Validation\ValidationInterface;
-use User\Domain\Model\User;
 
 class NotificationCreateInputDto implements ServiceInputDtoInterface
 {
-    public readonly User $userSession;
+    public readonly UserShared $userSession;
     /**
      * @var Identifier[]
      */
@@ -27,7 +27,7 @@ class NotificationCreateInputDto implements ServiceInputDtoInterface
     /**
      * @param string[]|null $userId
      */
-    public function __construct(User $userSession, array|null $usersId, string|null $notificationType, array|null $notificationData, string|null $systemKey)
+    public function __construct(UserShared $userSession, array|null $usersId, string|null $notificationType, array|null $notificationData, string|null $systemKey)
     {
         $this->systemKey = null === $systemKey ? '' : $systemKey;
         $this->notificationData = ValueObjectFactory::createNotificationData($notificationData);

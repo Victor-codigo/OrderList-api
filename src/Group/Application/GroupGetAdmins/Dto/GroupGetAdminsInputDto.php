@@ -6,16 +6,16 @@ namespace Group\Application\GroupGetAdmins\Dto;
 
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
 use Common\Domain\Validation\ValidationInterface;
-use User\Domain\Model\User;
 
 class GroupGetAdminsInputDto implements ServiceInputDtoInterface
 {
-    public readonly User $userSession;
+    public readonly UserShared $userSession;
     public readonly Identifier $groupId;
 
-    public function __construct(User $userSession, string|null $groupId)
+    public function __construct(UserShared $userSession, string|null $groupId)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);

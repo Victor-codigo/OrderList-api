@@ -18,7 +18,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use User\Adapter\Security\User\UserSymfonyAdapter;
 
 #[OA\Tag('Product')]
 #[OA\Post(
@@ -91,7 +90,7 @@ class ProductCreateController extends AbstractController
 
     private function createProductCreateInputDto(string|null $groupId, string|null $name, string|null $description, UploadedFile|null $image): ProductCreateInputDto
     {
-        /** @var UserSymfonyAdapter $userAdapterSymfony */
+        /** @var UserSharedSymfonyAdapter $userAdapterSymfony */
         $userAdapterSymfony = $this->security->getUser();
 
         return new ProductCreateInputDto(

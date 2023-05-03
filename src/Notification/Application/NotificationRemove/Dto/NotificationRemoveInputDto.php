@@ -6,19 +6,19 @@ namespace Notification\Application\NotificationRemove\Dto;
 
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
 use Common\Domain\Validation\ValidationInterface;
-use User\Domain\Model\User;
 
 class NotificationRemoveInputDto implements ServiceInputDtoInterface
 {
-    public readonly User $userSession;
+    public readonly UserShared $userSession;
     /**
      * @var Identifier[]
      */
     public readonly array $notificationIds;
 
-    public function __construct(User $userSession, array|null $notificationsId)
+    public function __construct(UserShared $userSession, array|null $notificationsId)
     {
         $this->userSession = $userSession;
         $this->notificationIds = null === $notificationsId

@@ -6,13 +6,13 @@ namespace Test\Unit\Group\Application\GroupUserAdd\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\User\USER_ROLES;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserAdd\Dto\GroupUserAddInputDto;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\User;
 
 class GroupUserAddInputDtoTest extends TestCase
 {
@@ -24,19 +24,20 @@ class GroupUserAddInputDtoTest extends TestCase
     ];
 
     private ValidationInterface $validator;
-    private User $userSession;
+    private UserShared $userSession;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->validator = new ValidationChain();
-        $this->userSession = User::fromPrimitives(
+        $this->userSession = UserShared::fromPrimitives(
             'f34a442c-b3d9-4ba9-b958-d406e3e94415',
             'user@email.com',
-            'password',
             'UserName',
-            [USER_ROLES::USER]
+            [USER_ROLES::USER],
+            null,
+            new \DateTime()
         );
     }
 

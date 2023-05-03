@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Group\Adapter\Http\Controller\GroupCreate;
 
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
+use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Response\RESPONSE_STATUS;
@@ -18,7 +19,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use User\Adapter\Security\User\UserSymfonyAdapter;
 
 #[OA\Tag('Group')]
 #[OA\Post(
@@ -91,11 +91,11 @@ class GroupCreateController extends AbstractController
 
     private function createGroupCreateInputDto(string|null $name, string|null $description, string|null $type, UploadedFile|null $image): GroupCreateInputDto
     {
-        /** @var UserSymfonyAdapter $userAdapter */
-        $userAdapter = $this->security->getUser();
+        /** @var UserSharedSymfonyAdapter $userSharedAdapter */
+        $userSharedAdapter = $this->security->getUser();
 
         return new GroupCreateInputDto(
-            $userAdapter->getUser()->getId(),
+            $userSharedAdapter->getUser()->getId(),
             $name,
             $description,
             $type,

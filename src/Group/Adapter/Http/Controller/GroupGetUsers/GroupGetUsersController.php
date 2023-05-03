@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Adapter\Http\Controller\GroupGetUsers;
 
+use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Config\AppConfig;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
@@ -16,7 +17,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use User\Adapter\Security\User\UserSymfonyAdapter;
 
 #[OA\Tag('Group')]
 #[OA\Get(
@@ -130,7 +130,7 @@ class GroupGetUsersController extends AbstractController
 
     private function createGroupGetUsersInputDto(string|null $groupId, int $page, int $pageItems): GroupGetUsersInputDto
     {
-        /** @var UserSymfonyAdapter $userAdapter */
+        /** @var UserSharedSymfonyAdapter $userAdapter */
         $userAdapter = $this->security->getUser();
 
         return new GroupGetUsersInputDto($userAdapter->getUser(), $groupId, $page, $pageItems);

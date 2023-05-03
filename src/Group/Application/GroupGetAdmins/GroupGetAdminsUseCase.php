@@ -8,6 +8,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\Group\GROUP_ROLES;
@@ -18,7 +19,6 @@ use Group\Application\GroupGetAdmins\Exception\GroupGetAdminsGroupNotFoundExcept
 use Group\Application\GroupGetAdmins\Exception\GroupGetAdminsGroupNotPermissionsException;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
-use User\Domain\Model\User;
 
 class GroupGetAdminsUseCase extends ServiceBase
 {
@@ -65,7 +65,7 @@ class GroupGetAdminsUseCase extends ServiceBase
     /**
      * @throws GroupGetAdminsGroupNotPermissionsException
      */
-    private function validateUserSessionBelongsToTheGroup(PaginatorInterface $usersGroup, User $userSession): void
+    private function validateUserSessionBelongsToTheGroup(PaginatorInterface $usersGroup, UserShared $userSession): void
     {
         $userGroup = array_filter(
             iterator_to_array($usersGroup),
@@ -90,12 +90,12 @@ class GroupGetAdminsUseCase extends ServiceBase
         );
     }
 
-    private function userSessionIsAdmin(array $groupAdminsIds, User $userSession): bool
+    private function userSessionIsAdmin(array $groupAdminsIds, UserShared $userSession): bool
     {
         return in_array($userSession->getId()->getValue(), $groupAdminsIds);
     }
 
-    private function createGroupGetAdminsOutputDto(array $groupAdminsIds, User $userSession): GroupGetAdminsOutputDto
+    private function createGroupGetAdminsOutputDto(array $groupAdminsIds, UserShared $userSession): GroupGetAdminsOutputDto
     {
         return new GroupGetAdminsOutputDto(
             $this->userSessionIsAdmin($groupAdminsIds, $userSession),
