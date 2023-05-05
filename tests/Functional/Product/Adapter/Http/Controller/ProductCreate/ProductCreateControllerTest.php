@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Functional\Group\Adapter\Http\Controller\ProductCreate;
+namespace Test\Functional\Product\Adapter\Http\Controller\ProductCreate;
 
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
