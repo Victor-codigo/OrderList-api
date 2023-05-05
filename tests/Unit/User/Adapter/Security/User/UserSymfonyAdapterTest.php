@@ -66,6 +66,19 @@ class UserSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
+    public function eraseCredentials(): void
+    {
+        $user = $this->createMock(User::class);
+        $object = new UserSymfonyAdapter($this->passwordHAsher, $user);
+        $user
+            ->expects($this->once())
+            ->method('setPassword')
+            ->with(ValueObjectFactory::createPassword(null));
+
+        $object->eraseCredentials();
+    }
+
+    /** @test */
     public function getTheIdentifier(): void
     {
         $email = ValueObjectFactory::createEmail('test@email.com');
@@ -148,9 +161,9 @@ class UserSymfonyAdapterTest extends TestCase
             ->with($this->object)
             ->willReturn(true);
 
-        $resturn = $this->object->passwordNeedsRehash();
+        $return = $this->object->passwordNeedsRehash();
 
-        $this->assertTrue($resturn);
+        $this->assertTrue($return);
     }
 
     /** @test */
@@ -177,9 +190,9 @@ class UserSymfonyAdapterTest extends TestCase
             ->with($this->object, $plainPassword)
             ->willReturn(true);
 
-        $resturn = $this->object->passwordIsValid($plainPassword);
+        $return = $this->object->passwordIsValid($plainPassword);
 
-        $this->assertTrue($resturn);
+        $this->assertTrue($return);
     }
 
     /** @test */
@@ -203,9 +216,9 @@ class UserSymfonyAdapterTest extends TestCase
             ->with($this->object, $plainPassword)
             ->willReturn(true);
 
-        $resturn = $this->object->passwordIsValid($plainPassword);
+        $return = $this->object->passwordIsValid($plainPassword);
 
-        $this->assertTrue($resturn);
+        $this->assertTrue($return);
     }
 
     /** @test */
@@ -227,8 +240,8 @@ class UserSymfonyAdapterTest extends TestCase
             ->with($this->object, $plainPassword)
             ->willReturn(false);
 
-        $resturn = $this->object->passwordIsValid($plainPassword);
+        $return = $this->object->passwordIsValid($plainPassword);
 
-        $this->assertFalse($resturn);
+        $this->assertFalse($return);
     }
 }
