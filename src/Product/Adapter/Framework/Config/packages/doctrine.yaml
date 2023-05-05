@@ -10,3 +10,10 @@ doctrine:
                 dir: "%kernel.project_dir%/src/Product/Adapter/Database/Orm/Doctrine/Mapping"
                 prefix: 'Product\Domain\Model'
                 alias: Product
+
+            ProductsShops:
+                is_bundle: false
+                type: xml
+                dir: "%kernel.project_dir%/src/Product/Adapter/Database/Orm/Doctrine/Mapping"
+                prefix: 'Product\Domain\Model'
+                alias: ProductShop

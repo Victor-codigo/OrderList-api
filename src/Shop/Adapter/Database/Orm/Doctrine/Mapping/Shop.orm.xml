@@ -18,13 +18,10 @@
                      type="NameWithSpacesType"
                      length="50"/>
 
-              <field name="price"
-                     type="MoneyType"
-                     unique="true"/>
-
               <field name="image"
                      type="PathType"
-                     length="50"/>
+                     length="250"
+                     nullable="true"/>
 
               <field name="description"
                      type="DescriptionType"
@@ -42,12 +39,21 @@
                      <index name="idx_shop_group_id"
                             columns="group_id"/>
 
+                     <index name="idx_shop_name"
+                            columns="name"/>
+
               </indexes>
 
               <unique-constraints>
                      <unique-constraint name="u_shops_id"
-                                        columns="name"/>
+                                        columns="id"/>
 
               </unique-constraints>
+
+              <!-- Shops - ProductsShops -->
+              <one-to-many field="productShop"
+                           target-entity="Product\Domain\Model\ProductShop"
+                           mapped-by="shop" />
+
        </entity>
 </doctrine-mapping>

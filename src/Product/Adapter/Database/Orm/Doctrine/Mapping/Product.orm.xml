@@ -35,39 +35,34 @@
               <index name="IDX_product_id"
                      columns="id"/>
 
+              <index name="IDX_group_id"
+                     columns="group_id"/>
+
               <index name="IDX_product_name"
                      columns="name"/>
 
        </indexes>
 
        <unique-constraints>
-            <unique-constraint name="u_products_id"
-                               columns="id"/>
+              <unique-constraint name="u_products_id"
+                                 columns="id"/>
 
-        </unique-constraints>
+       </unique-constraints>
 
-        <!-- Products - Shops -->
-        <many-to-many field="shops"
-                      target-entity="Shop\Domain\Model\Shop">
+       <!-- Products - ProductsShops -->
+       <one-to-many field="productShop"
+                    target-entity="Product\Domain\Model\ProductShop"
+                    mapped-by="product" >
 
-            <join-table name="Products_shops">
-                <join-columns>
-                    <join-column name="product_id"
-                                 referenced-column-name="id" />
+              <cascade>
+                     <cascade-all/>
+              </cascade>
+       </one-to-many>
 
-                </join-columns>
-                <inverse-join-columns>
-                    <join-column name="shop_id"
-                                 referenced-column-name="id" />
-
-                </inverse-join-columns>
-            </join-table>
-        </many-to-many>
-
-        <!-- Product - Order -->
-        <one-to-many field="orders"
-                     target-entity="Order\Domain\Model\Order"
-                     mapped-by="product" />
+       <!-- Product - Order -->
+       <one-to-many field="orders"
+                    target-entity="Order\Domain\Model\Order"
+                    mapped-by="product" />
 
     </entity>
 </doctrine-mapping>

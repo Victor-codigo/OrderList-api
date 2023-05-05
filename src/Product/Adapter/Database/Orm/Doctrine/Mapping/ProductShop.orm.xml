@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping">
+    <entity name="Product\Domain\Model\ProductShop"
+            table="Products_Shops"
+            repository-class="Product\Adapter\Database\Orm\Doctrine\Repository\ProductShopRepository">
+
+       <id name="id"
+            type="integer">
+
+            <generator strategy="AUTO" />
+        </id>
+
+       <field name="productId"
+              columm="product_id"
+              type="IdentifierType"
+              column-definition="CHAR(36) NOT NULL"/>
+
+       <field name="shopId"
+              columm="shop_id"
+              type="IdentifierType"
+              column-definition="CHAR(36) NOT NULL"/>
+
+       <field name="price"
+              columm="price"
+              type="MoneyType"
+              nullable="true"/>
+
+       <indexes>
+              <index name="IDX_id"
+                     columns="id"/>
+
+              <index name="IDX_product_id"
+                     columns="product_id"/>
+
+              <index name="IDX_shop_id"
+                     columns="shop_id"/>
+
+       </indexes>
+
+       <unique-constraints>
+              <unique-constraint name="u_id"
+                                 columns="id"/>
+
+        </unique-constraints>
+
+       <!-- ProductsShops - Product -->
+       <many-to-one field="product"
+                    target-entity="Product\Domain\Model\Product"
+                    inversed-by="productShop">
+
+              <join-column name="product_id"
+                           referenced-column-name="id"
+                           on-delete="CASCADE"/>
+
+       </many-to-one>
+
+       <!-- ProductsShops - Shop -->
+       <many-to-one field="shop"
+                    target-entity="Shop\Domain\Model\Shop"
+                    inversed-by="productShop">
+
+              <join-column name="shop_id"
+                           referenced-column-name="id"
+                           on-delete="CASCADE" />
+
+       </many-to-one>
+
+    </entity>
+</doctrine-mapping>

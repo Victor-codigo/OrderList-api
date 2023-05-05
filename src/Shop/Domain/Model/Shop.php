@@ -4,25 +4,27 @@ declare(strict_types=1);
 
 namespace Shop\Domain\Model;
 
-use Common\Domain\Model\ValueObject\Float\Money;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Group\Domain\Model\Group;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
-final class Shop
+class Shop
 {
     private Identifier $id;
     private Identifier $groupId;
-    private Name $name;
-    private Money $price;
+    private NameWithSpaces $name;
     private Description $description;
     private Path $image;
     private \DateTime $createdOn;
 
-    private Group $group;
+    /**
+     * @var Collection<ProductShop>
+     */
+    private Collection $productShop;
 
     public function getId(): Identifier
     {
@@ -34,35 +36,9 @@ final class Shop
         return $this->groupId;
     }
 
-    public function setGroupId(Identifier $groupId): self
-    {
-        $this->groupId = $groupId;
-
-        return $this;
-    }
-
-    public function getName(): Name
+    public function getName(): NameWithSpaces
     {
         return $this->name;
-    }
-
-    public function setName($name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getPrice(): Money
-    {
-        return $this->price;
-    }
-
-    public function setPrice($price): self
-    {
-        $this->price = $price;
-
-        return $this;
     }
 
     public function getDescription(): Description
@@ -70,36 +46,47 @@ final class Shop
         return $this->description;
     }
 
-    public function setDescription($description): self
+    public function setDescription(Description $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getGroup(): Group
+    public function getImage(): Path
     {
-        return $this->group;
+        return $this->image;
     }
 
-    public function __construct(Identifier $id, Identifier $groupId, Name $name, Money $price, Description $description, Path $image)
+    public function setImage(Path $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getProductShop(): Collection
+    {
+        return $this->productShop;
+    }
+
+    public function __construct(Identifier $id, Identifier $groupId, NameWithSpaces $name, Description $description, Path $image)
     {
         $this->id = $id;
         $this->groupId = $groupId;
         $this->name = $name;
-        $this->price = $price;
         $this->description = $description;
         $this->image = $image;
         $this->createdOn = new \DateTime();
+        $this->productShop = new ArrayCollection();
     }
 
-    public static function fromPrimitives(string $id, string $groupId, string $name, string|null $price = null, string|null $description = null, string|null $image = null): self
+    public static function fromPrimitives(string $id, string $groupId, string $name, string|null $description = null, string|null $image = null): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),
             ValueObjectFactory::createIdentifier($groupId),
-            ValueObjectFactory::createName($name),
-            ValueObjectFactory::createMoney($price),
+            ValueObjectFactory::createNameWithSpaces($name),
             ValueObjectFactory::createDescription($description),
             ValueObjectFactory::createPath($image),
         );

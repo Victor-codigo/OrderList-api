@@ -25,11 +25,10 @@ final class Product
      * @var Collection<Order>
      */
     private Collection $orders;
-
     /**
-     * @var Collection<Shop>
+     * @var Collection<ProductShop>
      */
-    private Collection $shops;
+    private Collection $productShop;
 
     public function getId(): Identifier
     {
@@ -46,19 +45,12 @@ final class Product
         return $this->name;
     }
 
-    public function setName($name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
     public function getDescription(): Description
     {
         return $this->description;
     }
 
-    public function setDescription($description): self
+    public function setDescription(Description $description): self
     {
         $this->description = $description;
 
@@ -70,7 +62,7 @@ final class Product
         return $this->image;
     }
 
-    public function setImage($image): self
+    public function setImage(Path $image): self
     {
         $this->image = $image;
 
@@ -82,30 +74,12 @@ final class Product
         return $this->createdOn;
     }
 
-    public function setCreatedOn($createdOn): self
-    {
-        $this->createdOn = $createdOn;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<Shop>
-     */
-    public function getShops(): Collection
-    {
-        return $this->shops;
-    }
-
-    /**
-     * @return Collection<Order>
-     */
     public function getOrders(): Collection
     {
         return $this->orders;
     }
 
-    public function __construct(Identifier $id, identifier $groupId, NameWithSpaces $name, Description $description, Path $image)
+    public function __construct(Identifier $id, Identifier $groupId, NameWithSpaces $name, Description $description, Path $image)
     {
         $this->id = $id;
         $this->groupId = $groupId;
@@ -113,8 +87,8 @@ final class Product
         $this->description = $description;
         $this->image = $image;
         $this->createdOn = new \DateTime();
+        $this->productShop = new ArrayCollection();
         $this->orders = new ArrayCollection();
-        $this->shops = new ArrayCollection();
     }
 
     public static function fromPrimitives(string $id, string $groupId, string $name, string|null $description = null, string|null $image = null): self
