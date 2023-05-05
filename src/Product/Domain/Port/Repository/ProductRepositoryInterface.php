@@ -19,12 +19,21 @@ interface ProductRepositoryInterface extends RepositoryInterface
     public function save(Product $product): void;
 
     /**
+     * @param Product[] $products
+     *
      * @throws DBConnectionException
      */
-    public function remove(Product $product): void;
+    public function remove(array $products): void;
 
     /**
      * @throws DBNotFoundException
      */
     public function findProductsByGroupAndNameOrFail(Identifier $groupId, NameWithSpaces $name): PaginatorInterface;
+
+    /**
+     * @param Identifier[]|null $productId
+     *
+     * @throws DBNotFoundException
+     */
+    public function findProductsOrFail(array|null $productId = null, Identifier|null $groupId = null, Identifier|null $shopId = null): PaginatorInterface;
 }

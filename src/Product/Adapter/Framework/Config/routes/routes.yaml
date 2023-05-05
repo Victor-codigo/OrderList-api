@@ -6,3 +6,13 @@ product_create:
   controller: Product\Adapter\Http\Controller\ProductCreate\ProductCreateController
   requirements:
     api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# PRODUCT REMOVE
+# -------------------------------------------------------------
+product_remove:
+  path: /api/v{api_version}/products
+  methods: DELETE
+  controller: Product\Adapter\Http\Controller\ProductRemove\ProductRemoveController
+  requirements:
+    api_version: '\d+[.\d]?'

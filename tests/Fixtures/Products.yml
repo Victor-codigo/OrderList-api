@@ -1,0 +1,86 @@
+Common\Domain\Model\ValueObject\String\Identifier:
+  # GROUP
+  product_group_id_group_exists:
+    __construct:
+      value: "4b513296-14ac-4fb1-a574-05bc9b1dbe3f"
+
+  # PRODUCT
+  product_id:
+    __construct:
+      value: "afc62bc9-c42c-4c4d-8098-09ce51414a92"
+
+  product_id_2:
+    __construct:
+      value: "8b6d650b-7bb7-4850-bf25-36cda9bce801"
+
+  product_id_3:
+    __construct:
+      value: "ca10c90a-c7e6-4594-89e9-71d2f5e74710"
+
+  product_id_4:
+    __construct:
+      value: "7e3021d4-2d02-4386-8bbe-887cfe8697a8"
+
+Common\Domain\Model\ValueObject\String\NameWithSpaces:
+  product_name:
+    __construct:
+      value: "Maluela"
+
+  product_name_2:
+    __construct:
+      value: "Juan Carlos"
+
+  product_name_3:
+    __construct:
+      value: "Perico"
+
+  product_name_4:
+    __construct:
+      value: "Juanola"
+
+Common\Domain\Model\ValueObject\String\Description:
+  product_description:
+    __construct:
+      value: <text(500)>
+
+  product_description_null:
+    __construct:
+      value: null
+
+Common\Domain\Model\ValueObject\String\Path:
+  product_image_null:
+    __construct:
+      value: null
+
+Product\Domain\Model\Product:
+  entity-product:
+    __construct:
+      id: "@product_id"
+      groupId: "@product_group_id_group_exists"
+      name: "@product_name"
+      description: "@product_description"
+      image: "@product_image_null"
+
+  entity-product_2:
+    __construct:
+      id: "@product_id_2"
+      groupId: "@product_group_id_group_exists"
+      name: "@product_name_2"
+      description: "@product_description_null"
+      image: "@product_image_null"
+
+  entity-product_3:
+    __construct:
+      id: "@product_id_3"
+      groupId: "@product_group_id_group_exists"
+      name: "@product_name_3"
+      description: "@product_description"
+      image: "@product_image_null"
+
+  entity-product_4:
+    __construct:
+      id: "@product_id_4"
+      groupId: "@product_group_id_group_exists"
+      name: "@product_name_4"
+      description: "@product_description"
+      image: "@product_image_null"

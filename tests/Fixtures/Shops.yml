@@ -1,0 +1,64 @@
+Common\Domain\Model\ValueObject\String\Identifier:
+  shop_id:
+    __construct:
+      value: "e6c1d350-f010-403c-a2d4-3865c14630ec"
+
+  shop_id_2:
+    __construct:
+      value: "f6ae3da3-c8f2-4ccb-9143-0f361eec850e"
+
+  shop_id_3:
+    __construct:
+      value: "b9b1c541-d41e-4751-9ecb-4a1d823c0405"
+
+Common\Domain\Model\ValueObject\String\NameWithSpaces:
+  shop_name:
+    __construct:
+      value: "Shop name 1"
+
+  shop_name_2:
+    __construct:
+      value: "Shop name 2"
+
+  shop_name_3:
+    __construct:
+      value: "Shop name 3"
+
+Common\Domain\Model\ValueObject\String\Description:
+  shop_description:
+    __construct:
+      value: <text(500)>
+
+  shop_description_null:
+    __construct:
+      value: null
+
+Common\Domain\Model\ValueObject\String\Path:
+  shop_image_null:
+    __construct:
+      value: null
+
+Shop\Domain\Model\Shop:
+  entity-shop:
+    __construct:
+      id: "@shop_id"
+      groupId: "@product_group_id_group_exists"
+      name: "@shop_name"
+      description: "@shop_description"
+      image: "@shop_image_null"
+
+  entity-shop_2:
+    __construct:
+      id: "@shop_id_2"
+      groupId: "@product_group_id_group_exists"
+      name: "@shop_name_2"
+      description: "@shop_description"
+      image: "@shop_image_null"
+
+  entity-shop_3:
+    __construct:
+      id: "@shop_id_3"
+      groupId: "@product_group_id_group_exists"
+      name: "@shop_name_3"
+      description: "@shop_description_null"
+      image: "@shop_image_null"

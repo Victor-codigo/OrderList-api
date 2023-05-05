@@ -1,0 +1,37 @@
+Common\Domain\Model\ValueObject\Float\Money:
+  productsShops_price:
+    __construct:
+      value: 10.5
+
+  productsShops_price_2:
+    __construct:
+      value: 20.3
+
+  productsShops_price_null:
+    __construct:
+      value: null
+
+Product\Domain\Model\ProductShop:
+  entity-productsShops:
+    __construct:
+      product: "@entity-product"
+      shop: "@entity-shop"
+      price: "@productsShops_price"
+
+  entity-productsShops_2:
+    __construct:
+      product: "@entity-product_2"
+      shop: "@entity-shop_2"
+      price: "@productsShops_price_2"
+
+  entity-productsShops_3:
+    __construct:
+      product: "@entity-product_3"
+      shop: "@entity-shop_3"
+      price: "@productsShops_price_null"
+
+  entity-productsShops_4:
+    __construct:
+      product: "@entity-product_4"
+      shop: "@entity-shop"
+      price: "@productsShops_price_null"

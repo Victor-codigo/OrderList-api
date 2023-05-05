@@ -12,9 +12,12 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 use Product\Domain\Model\Product;
+use Product\Domain\Model\ProductShop;
 use Product\Domain\Port\Repository\ProductRepositoryInterface;
+use Shop\Domain\Model\Shop;
 
 class ProductRepository extends RepositoryBase implements ProductRepositoryInterface
 {
@@ -42,12 +45,17 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
     }
 
     /**
+     * @param Product[] $products
+     *
      * @throws DBConnectionException
      */
-    public function remove(Product $product): void
+    public function remove(array $products): void
     {
         try {
-            $this->objectManager->remove($product);
+            foreach ($products as $product) {
+                $this->objectManager->remove($product);
+            }
+
             $this->objectManager->flush();
         } catch (\Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
@@ -73,6 +81,47 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
         }
 
         $paginator = $this->paginator->createPaginator($queryBuilder);
+
+        if (0 === $paginator->getItemsTotal()) {
+            throw DBNotFoundException::fromMessage('Products not found');
+        }
+
+        return $paginator;
+    }
+
+    /**
+     * @param Identifier[]|null $productId
+     *
+     * @throws DBNotFoundException
+     */
+    public function findProductsOrFail(array|null $productId = null, Identifier|null $groupId = null, Identifier|null $shopId = null): PaginatorInterface
+    {
+        $query = $this->entityManager
+            ->createQueryBuilder()
+            ->select('product')
+            ->from(Product::class, 'product');
+
+        if (null !== $productId) {
+            $query
+                ->where('product.id IN (:productId)')
+                ->setParameter('productId', $productId);
+        }
+
+        if (null !== $groupId) {
+            $query
+                ->andWhere('product.groupId = :groupId')
+                ->setParameter('groupId', $groupId);
+        }
+
+        if (null !== $shopId) {
+            $query
+                ->leftJoin(ProductShop::class, 'productShop', Join::WITH, 'product.id = productShop.productId')
+                ->leftJoin(Shop::class, 'shop', Join::WITH, 'productShop.shopId = shop.id')
+                ->andWhere('shop.id = :shopId')
+                ->setParameter('shopId', $shopId);
+        }
+
+        $paginator = $this->paginator->createPaginator($query);
 
         if (0 === $paginator->getItemsTotal()) {
             throw DBNotFoundException::fromMessage('Products not found');
