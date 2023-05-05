@@ -7,8 +7,6 @@ namespace Product\Application\ProductRemove;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
@@ -19,13 +17,16 @@ use Product\Application\ProductRemove\Exception\ProductRemoveGroupOrUserNotValid
 use Product\Application\ProductRemove\Exception\ProductRemoveProductNotFoundException;
 use Product\Domain\Service\ProductRemove\Dto\ProductRemoveDto;
 use Product\Domain\Service\ProductRemove\ProductRemoveService;
+use Product\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
+use Product\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
 
 class ProductRemoveUseCase extends ServiceBase
 {
     public function __construct(
         private ProductRemoveService $productRemoveService,
         private ModuleCommunicationInterface $moduleCommunication,
-        private ValidationInterface $validator
+        private ValidationInterface $validator,
+        private ValidateGroupAndUserService $validateGroupAndUserService
     ) {
     }
 
@@ -34,6 +35,8 @@ class ProductRemoveUseCase extends ServiceBase
         $this->validation($input);
 
         try {
+            $this->validateGroupAndUserService->__invoke($input->groupId);
+
             $productRemovedId = $this->productRemoveService->__invoke(
                 $this->createProductRemoveDto($input->groupId, $input->productId, $input->shopId)
             );
@@ -41,6 +44,8 @@ class ProductRemoveUseCase extends ServiceBase
             return $this->createProductRemoveOutputDto($productRemovedId);
         } catch (DBNotFoundException) {
             throw ProductRemoveProductNotFoundException::fromMessage('Product not found');
+        } catch (ValidateGroupAndUserException) {
+            throw ProductRemoveGroupOrUserNotValidException::fromMessage('You have not permissions');
         } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
@@ -56,25 +61,6 @@ class ProductRemoveUseCase extends ServiceBase
 
         if (!empty($errorList)) {
             throw ValueObjectValidationException::fromArray('Error', $errorList);
-        }
-
-        $this->validateGroupAndUser($input->groupId, $input->userSession->getId());
-    }
-
-    /**
-     * @throws ProductRemoveGroupOrUserNotValidException
-     */
-    private function validateGroupAndUser(Identifier $groupId, Identifier $userSessionId): void
-    {
-        $page = ValueObjectFactory::createPaginatorPage(1);
-        $pageItems = ValueObjectFactory::createPaginatorPageItems(1);
-
-        $response = $this->moduleCommunication->__invoke(
-            ModuleCommunicationFactory::groupGetUsers($groupId, $page, $pageItems)
-        );
-
-        if (!empty($response->getErrors()) || !$response->hasContent()) {
-            throw ProductRemoveGroupOrUserNotValidException::fromMessage('You have not permissions');
         }
     }
 

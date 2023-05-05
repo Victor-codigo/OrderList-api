@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace Product\Application\ProductCreate;
 
-use Common\Domain\Config\AppConfig;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\FileUpload\Exception\FileUploadException;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
@@ -22,21 +19,24 @@ use Product\Application\ProductCreate\Exception\ProductCreateNameAlreadyExistsEx
 use Product\Domain\Service\ProductCreate\Dto\ProductCreateDto;
 use Product\Domain\Service\ProductCreate\Exception\ProductCreateNameAlreadyExistsException as ProductCreateNameAlreadyExistsExceptionService;
 use Product\Domain\Service\ProductCreate\ProductCreateService;
+use Product\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
+use Product\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
 
 class ProductCreateUseCase extends ServiceBase
 {
-    private const GROUP_USERS_MAX = AppConfig::GROUP_USERS_MAX;
-
     public function __construct(
         private ProductCreateService $ProductCreateService,
         private ValidationInterface $validator,
         private ModuleCommunicationInterface $moduleCommunication,
+        private ValidateGroupAndUserService $validateGroupAndUserService,
     ) {
     }
 
     /**
      * @throws ValueObjectValidationException
      * @throws ProductCreateGroupException
+     * @throws ProductCreateNameAlreadyExistsException
+     * @throws ProductCreateCanNotUploadFileException
      * @throws DomainInternalErrorException
      */
     public function __invoke(ProductCreateInputDto $input): ProductCreateOutputDto
@@ -44,6 +44,8 @@ class ProductCreateUseCase extends ServiceBase
         $this->validation($input);
 
         try {
+            $this->validateGroupAndUserService->__invoke($input->groupId);
+
             $product = $this->ProductCreateService->__invoke(
                 $this->createProductCreateDto($input)
             );
@@ -53,6 +55,8 @@ class ProductCreateUseCase extends ServiceBase
             throw ProductCreateNameAlreadyExistsException::fromMessage('Product name already exists');
         } catch (FileUploadException) {
             throw ProductCreateCanNotUploadFileException::fromMessage('An error occurred while file was uploading');
+        } catch (ValidateGroupAndUserException) {
+            throw ProductCreateGroupException::fromMessage('Error validating the group');
         } catch (\Exception $e) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
@@ -68,25 +72,6 @@ class ProductCreateUseCase extends ServiceBase
 
         if (!empty($errorList)) {
             throw ValueObjectValidationException::fromArray('Error', $errorList);
-        }
-
-        $this->validateGroup($input->groupId, $input->userSession->getId());
-    }
-
-    /**
-     * @throws ProductCreateGroupException
-     */
-    private function validateGroup(Identifier $groupId, Identifier $userSessionId): void
-    {
-        $page = ValueObjectFactory::createPaginatorPage(1);
-        $pageItems = ValueObjectFactory::createPaginatorPageItems(self::GROUP_USERS_MAX);
-
-        $response = $this->moduleCommunication->__invoke(
-            ModuleCommunicationFactory::groupGetUsers($groupId, $page, $pageItems)
-        );
-
-        if (!empty($response->getErrors()) || !$response->hasContent()) {
-            throw ProductCreateGroupException::fromMessage('Error validating the group');
         }
     }
 
