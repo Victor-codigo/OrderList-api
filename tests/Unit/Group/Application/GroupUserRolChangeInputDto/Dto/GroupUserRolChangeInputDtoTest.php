@@ -25,14 +25,14 @@ class GroupUserRolChangeInputDtoTest extends TestCase
      ];
 
     private ValidationInterface $validator;
-    private UserShared $usersSesion;
+    private UserShared $userSesion;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->validator = new ValidationChain();
-        $this->usersSesion = UserShared::fromPrimitives(
+        $this->userSesion = UserShared::fromPrimitives(
             self::GROUP_USER_ADMIN_ID,
             'email@host.com',
             'name',
@@ -46,7 +46,7 @@ class GroupUserRolChangeInputDtoTest extends TestCase
     public function itShouldValidateTheInput(): void
     {
         $object = new GroupUserRoleChangeInputDto(
-            $this->usersSesion,
+            $this->userSesion,
             self::GROUP_ID,
             self::USERS_ID,
             true
@@ -61,7 +61,7 @@ class GroupUserRolChangeInputDtoTest extends TestCase
     public function itShouldFailGroupIdIsNull(): void
     {
         $object = new GroupUserRoleChangeInputDto(
-            $this->usersSesion,
+            $this->userSesion,
             null,
             self::USERS_ID,
             true
@@ -76,7 +76,7 @@ class GroupUserRolChangeInputDtoTest extends TestCase
     public function itShouldFailGroupIdIsNotValid(): void
     {
         $object = new GroupUserRoleChangeInputDto(
-            $this->usersSesion,
+            $this->userSesion,
             'not valid id',
             self::USERS_ID,
             true
@@ -91,7 +91,7 @@ class GroupUserRolChangeInputDtoTest extends TestCase
     public function itShouldFailUsersIdIsNull(): void
     {
         $object = new GroupUserRoleChangeInputDto(
-            $this->usersSesion,
+            $this->userSesion,
             self::GROUP_ID,
             null,
             true
@@ -105,7 +105,7 @@ class GroupUserRolChangeInputDtoTest extends TestCase
     public function itShouldFailUsersIdNotValid(): void
     {
         $object = new GroupUserRoleChangeInputDto(
-            $this->usersSesion,
+            $this->userSesion,
             self::GROUP_ID,
             ['not valid id', 'not valid id'],
             true
@@ -120,7 +120,7 @@ class GroupUserRolChangeInputDtoTest extends TestCase
     public function itShouldFailAdminIsNull(): void
     {
         $object = new GroupUserRoleChangeInputDto(
-            $this->usersSesion,
+            $this->userSesion,
             self::GROUP_ID,
             self::USERS_ID,
             null
@@ -136,7 +136,7 @@ class GroupUserRolChangeInputDtoTest extends TestCase
     public function itShouldFailAdminIsFalse(): void
     {
         $object = new GroupUserRoleChangeInputDto(
-            $this->usersSesion,
+            $this->userSesion,
             self::GROUP_ID,
             self::USERS_ID,
             false
@@ -152,7 +152,7 @@ class GroupUserRolChangeInputDtoTest extends TestCase
     public function itShouldFailAdminIsTrue(): void
     {
         $object = new GroupUserRoleChangeInputDto(
-            $this->usersSesion,
+            $this->userSesion,
             self::GROUP_ID,
             self::USERS_ID,
             true

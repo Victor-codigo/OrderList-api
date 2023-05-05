@@ -146,13 +146,13 @@ class GroupUserRoleChangeController extends AbstractController
      */
     private function createResponse(array $usersId): JsonResponse
     {
-        $resposeData = new ResponseDto(
+        $responseData = new ResponseDto(
             ['id' => array_map(fn (Identifier $id) => $id->getValue(), $usersId)],
             [],
             'Users roles has been changed',
             RESPONSE_STATUS::OK
         );
 
-        return new JsonResponse($resposeData, Response::HTTP_OK);
+        return new JsonResponse($responseData, Response::HTTP_OK);
     }
 }
