@@ -139,42 +139,28 @@ class ProductRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    // public function itShouldGetTheProductsOfAGroup(): void
-    // {
-    //     $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
-    //     $return = $this->object->findProductsByGroupAndNameOrFail($groupId);
+    public function itShouldGetTheProductsOfAGroupWhitAName(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $productName = ValueObjectFactory::createNameWithSpaces('Juanola');
+        $return = $this->object->findProductsByGroupAndNameOrFail($groupId, $productName);
 
-    //     $this->assertCount(3, $return);
+        $this->assertCount(1, $return);
 
-    //     foreach ($return as $product) {
-    //         $this->assertEquals($groupId, $product->getGroupId());
-    //     }
-    // }
-
-    /** @test */
-    // public function itShouldGetTheProductOfAGroupWithAName(): void
-    // {
-    //     $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
-    //     $productName = ValueObjectFactory::createNameWithSpaces(self::PRODUCT_NAME_EXISTS);
-    //     $return = $this->object->findProductsByGroupAndNameOrFail($groupId, $productName);
-
-    //     $this->assertCount(1, $return);
-
-    //     foreach ($return as $product) {
-    //         $this->assertEquals($groupId, $product->getGroupId());
-    //         $this->assertEquals($productName, $product->getName());
-    //     }
-    // }
+        foreach ($return as $product) {
+            $this->assertEquals($groupId, $product->getGroupId());
+        }
+    }
 
     /** @test */
-    // public function itShouldFailGettingTheProductOfAGroupWithANameNoProduct(): void
-    // {
-    //     $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
-    //     $productName = ValueObjectFactory::createNameWithSpaces('product that not exists');
+    public function itShouldFailGettingTheProductOfAGroupWithANameNoProduct(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $productName = ValueObjectFactory::createNameWithSpaces('product that not exists');
 
-    //     $this->expectException(DBNotFoundException::class);
-    //     $this->object->findProductsByGroupAndNameOrFail($groupId, $productName);
-    // }
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findProductsByGroupAndNameOrFail($groupId, $productName);
+    }
 
     /** @test */
     public function itShouldGetAllProducts(): void
