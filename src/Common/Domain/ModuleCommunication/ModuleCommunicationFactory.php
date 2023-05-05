@@ -202,7 +202,7 @@ class ModuleCommunicationFactory
     {
         $attributes = [
             'api_version' => static::API_VERSION,
-            'group_id' => $groupsId,
+            'group_id' => $groupsId->getValue(),
         ];
 
         $query = [
