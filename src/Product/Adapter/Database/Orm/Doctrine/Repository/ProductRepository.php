@@ -65,7 +65,7 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
     /**
      * @throws DBNotFoundException
      */
-    public function findProductsByGroupAndNameOrFail(Identifier $groupId, NameWithSpaces|null $name = null): PaginatorInterface
+    public function findProductsByGroupAndNameOrFail(Identifier $groupId, NameWithSpaces $name): PaginatorInterface
     {
         $queryBuilder = $this->entityManager
             ->createQueryBuilder()
