@@ -8,6 +8,7 @@ use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Ports\Security\UserSharedInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
+use OpenApi\Attributes as OA;
 use Product\Adapter\Http\Controller\ProductRemove\Dto\ProductRemoveRequestDto;
 use Product\Application\ProductRemove\Dto\ProductRemoveInputDto;
 use Product\Application\ProductRemove\ProductRemoveUseCase;
@@ -16,6 +17,57 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
+#[OA\Tag('Product')]
+#[OA\Delete(
+    description: 'Removes a product',
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: [
+            new OA\MediaType(
+                mediaType: 'application/json',
+                schema: new OA\Schema(
+                    properties: [
+                        new OA\Property(property: 'group_id', type: 'string', description: 'Group\'s id', example: 'fdb242b4-bac8-4463-88d0-0941bb0beee0'),
+                        new OA\Property(property: 'product_id', type: 'string', description: 'Product\'s id', example: 'fdb242b4-bac8-4463-88d0-0941bb0beee0'),
+                        new OA\Property(property: 'shop_id', type: 'string', description: 'Shop\'s id', example: 'fdb242b4-bac8-4463-88d0-0941bb0beee0'),
+                    ]
+                )
+            ),
+        ]
+    ),
+    responses: [
+        new OA\Response(
+            response: Response::HTTP_OK,
+            description: 'The product has been removed',
+            content: new OA\MediaType(
+                mediaType: 'application/json',
+                schema: new OA\Schema(
+                    properties: [
+                        new OA\Property(property: 'status', type: 'string', example: 'ok'),
+                        new OA\Property(property: 'message', type: 'string', example: 'Group removed'),
+                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(default: '<id, string>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),
+                    ]
+                )
+            )
+        ),
+        new OA\Response(
+            response: Response::HTTP_BAD_REQUEST,
+            description: 'The product could not be removed',
+            content: new OA\MediaType(
+                mediaType: 'application/json',
+                schema: new OA\Schema(
+                    properties: [
+                        new OA\Property(property: 'status', type: 'string', example: 'error'),
+                        new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
+                        new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|product_id|shop_id|product_not_found|permissions, string|array>')),
+                    ]
+                )
+            )
+        ),
+    ]
+)]
 class ProductRemoveController extends AbstractController
 {
     public function __construct(
