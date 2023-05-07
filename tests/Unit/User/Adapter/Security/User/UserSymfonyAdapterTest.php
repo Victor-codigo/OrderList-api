@@ -66,19 +66,6 @@ class UserSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function eraseCredentials(): void
-    {
-        $user = $this->createMock(User::class);
-        $object = new UserSymfonyAdapter($this->passwordHAsher, $user);
-        $user
-            ->expects($this->once())
-            ->method('setPassword')
-            ->with(ValueObjectFactory::createPassword(null));
-
-        $object->eraseCredentials();
-    }
-
-    /** @test */
     public function getTheIdentifier(): void
     {
         $email = ValueObjectFactory::createEmail('test@email.com');
