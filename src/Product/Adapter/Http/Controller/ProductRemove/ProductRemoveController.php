@@ -44,7 +44,7 @@ use Symfony\Component\HttpFoundation\Response;
                 schema: new OA\Schema(
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'ok'),
-                        new OA\Property(property: 'message', type: 'string', example: 'Group removed'),
+                        new OA\Property(property: 'message', type: 'string', example: 'Product removed'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items(default: '<id, string>')),
                         new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),
                     ]
