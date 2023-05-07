@@ -91,20 +91,21 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
 
     /**
      * @param Identifier[]|null $productId
+     * @param Identifier[]|null $shops
      *
      * @throws DBNotFoundException
      */
-    public function findProductsOrFail(array|null $productId = null, Identifier|null $groupId = null, Identifier|null $shopId = null): PaginatorInterface
+    public function findProductsOrFail(array|null $productsId = null, Identifier|null $groupId = null, array|null $shopsId = null, string|null $productNameStartsWith = null): PaginatorInterface
     {
         $query = $this->entityManager
             ->createQueryBuilder()
             ->select('product')
             ->from(Product::class, 'product');
 
-        if (null !== $productId) {
+        if (null !== $productsId) {
             $query
                 ->where('product.id IN (:productId)')
-                ->setParameter('productId', $productId);
+                ->setParameter('productId', $productsId);
         }
 
         if (null !== $groupId) {
@@ -113,12 +114,18 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
                 ->setParameter('groupId', $groupId);
         }
 
-        if (null !== $shopId) {
+        if (null !== $shopsId) {
             $query
                 ->leftJoin(ProductShop::class, 'productShop', Join::WITH, 'product.id = productShop.productId')
                 ->leftJoin(Shop::class, 'shop', Join::WITH, 'productShop.shopId = shop.id')
-                ->andWhere('shop.id = :shopId')
-                ->setParameter('shopId', $shopId);
+                ->andWhere('shop.id IN (:shopId)')
+                ->setParameter('shopId', $shopsId);
+        }
+
+        if (null !== $productNameStartsWith) {
+            $query
+                ->andWhere('product.name LIKE :productStartsWith')
+                ->setParameter('productStartsWith', "{$productNameStartsWith}%");
         }
 
         $paginator = $this->paginator->createPaginator($query);

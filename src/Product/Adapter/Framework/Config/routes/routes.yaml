@@ -16,3 +16,13 @@ product_remove:
   controller: Product\Adapter\Http\Controller\ProductRemove\ProductRemoveController
   requirements:
     api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# PRODUCT GET DATA
+# -------------------------------------------------------------
+product_get_data:
+  path: /api/v{api_version}/products
+  methods: GET
+  controller: Product\Adapter\Http\Controller\ProductGetData\ProductGetDataController
+  requirements:
+    api_version: '\d+[.\d]?'

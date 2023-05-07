@@ -39,6 +39,16 @@ class AppConfig
     public const ENDPOINT_NOTIFICATION_REMOVE_MAX = 100;
 
     /**
+     * Maximum number of products can be removed per request.
+     */
+    public const ENDPOINT_PRODUCT_GET_PRODUCTS_MAX = 100;
+
+    /**
+     * Maximum number of shops can be removed per request.
+     */
+    public const ENDPOINT_PRODUCT_GET_SHOPS_MAX = 100;
+
+    /**
      * Version of the api used.
      */
     public const API_VERSION = 1;

@@ -199,7 +199,7 @@ class ProductRepositoryTest extends DataBaseTestCase
     {
         $shopId = ValueObjectFactory::createIdentifier(self::SHOP_ID);
 
-        $return = $this->object->findProductsOrFail(null, null, $shopId);
+        $return = $this->object->findProductsOrFail(null, null, [$shopId]);
 
         $this->assertCount(2, $return);
 
@@ -219,12 +219,47 @@ class ProductRepositoryTest extends DataBaseTestCase
         $shopId = ValueObjectFactory::createIdentifier(self::SHOP_ID);
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
 
-        $return = $this->object->findProductsOrFail(null, $groupId, $shopId);
+        $return = $this->object->findProductsOrFail(null, $groupId, [$shopId]);
 
         $this->assertCount(2, $return);
 
         $expectedProductsId = [
             self::PRODUCT_ID,
+            self::PRODUCT_ID_4,
+        ];
+
+        foreach ($return as $product) {
+            $this->assertContains($product->getId()->getValue(), $expectedProductsId);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetAllProductsOfAGroupAndThatStartsWith(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $return = $this->object->findProductsOrFail(null, $groupId, null, 'Ju');
+
+        $this->assertCount(2, $return);
+
+        $expectedProductsId = [
+            self::PRODUCT_ID_2,
+            self::PRODUCT_ID_4,
+        ];
+
+        foreach ($return as $product) {
+            $this->assertContains($product->getId()->getValue(), $expectedProductsId);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetAllProductsThatStartsWith(): void
+    {
+        $return = $this->object->findProductsOrFail(null, null, null, 'Ju');
+
+        $this->assertCount(2, $return);
+
+        $expectedProductsId = [
+            self::PRODUCT_ID_2,
             self::PRODUCT_ID_4,
         ];
 
@@ -240,7 +275,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         $groupId = ValueObjectFactory::createIdentifier('fc4f5962-02d1-4d80-b3ae-8aeffbcb6268');
 
         $this->expectException(DBNotFoundException::class);
-        $this->object->findProductsOrFail(null, $groupId, $shopId);
+        $this->object->findProductsOrFail(null, $groupId, [$shopId]);
     }
 
     /** @test */
@@ -250,7 +285,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
 
         $this->expectException(DBNotFoundException::class);
-        $this->object->findProductsOrFail(null, $groupId, $shopId);
+        $this->object->findProductsOrFail(null, $groupId, [$shopId]);
     }
 
     /** @test */
