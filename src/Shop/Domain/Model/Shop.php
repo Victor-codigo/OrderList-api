@@ -65,6 +65,11 @@ class Shop
         return $this;
     }
 
+    public function getCreatedOn(): \DateTime
+    {
+        return $this->createdOn;
+    }
+
     public function getProductShop(): Collection
     {
         return $this->productShop;

@@ -1,0 +1,69 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Shop\Application\ShopGetData;
+
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Exception\DomainInternalErrorException;
+use Common\Domain\Service\ServiceBase;
+use Common\Domain\Validation\Exception\ValueObjectValidationException;
+use Common\Domain\Validation\ValidationInterface;
+use Product\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
+use Product\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
+use Shop\Application\ShopGetData\Dto\ShopGetDataInputDto;
+use Shop\Application\ShopGetData\Dto\ShopGetDataOutputDto;
+use Shop\Application\ShopGetData\Exception\ShopGetDataShopsNotFoundException;
+use Shop\Application\ShopGetData\Exception\ShopGetDataValidateGroupAndUserException;
+use Shop\Domain\Service\ShopGetData\Dto\ShopGetDataDto;
+use Shop\Domain\Service\ShopGetData\ShopGetDataService;
+
+class ShopGetDataUseCase extends ServiceBase
+{
+    public function __construct(
+        private ShopGetDataService $shopGetDataService,
+        private ValidationInterface $validator,
+        private ValidateGroupAndUserService $validateGroupAndUserService
+    ) {
+    }
+
+    public function __invoke(ShopGetDataInputDto $input): ShopGetDataOutputDto
+    {
+        $this->validation($input);
+
+        try {
+            $this->validateGroupAndUserService->__invoke($input->groupId);
+
+            $shopsData = $this->shopGetDataService->__invoke(
+                $this->createShopGetDataDto($input)
+            );
+
+            return $this->createShopGetDataOutputDto($shopsData);
+        } catch (ValidateGroupAndUserException) {
+            throw ShopGetDataValidateGroupAndUserException::fromMessage('You have not permissions');
+        } catch (DBNotFoundException) {
+            throw ShopGetDataShopsNotFoundException::fromMessage('No shops found');
+        } catch (\Throwable $e) {
+            throw DomainInternalErrorException::fromMessage('An error has been occurred');
+        }
+    }
+
+    private function validation(ShopGetDataInputDto $input): void
+    {
+        $errorList = $input->validate($this->validator);
+
+        if (!empty($errorList)) {
+            throw ValueObjectValidationException::fromArray('Error', $errorList);
+        }
+    }
+
+    private function createShopGetDataDto(ShopGetDataInputDto $input): ShopGetDataDto
+    {
+        return new ShopGetDataDto($input->groupId, $input->shopsId, $input->productsId, $input->shopNameStartsWith);
+    }
+
+    private function createShopGetDataOutputDto(array $shopsData): ShopGetDataOutputDto
+    {
+        return new ShopGetDataOutputDto($shopsData);
+    }
+}

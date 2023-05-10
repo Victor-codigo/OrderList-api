@@ -17,3 +17,13 @@ shop_remove:
   controller: Shop\Adapter\Http\Controller\ShopRemove\ShopRemoveController
   requirements:
     api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# SHOP GET DATA
+# -------------------------------------------------------------
+shop_get_data:
+  path: /api/v{api_version}/shops
+  methods: GET
+  controller: Shop\Adapter\Http\Controller\ShopGetData\ShopGetDataController
+  requirements:
+    api_version: '\d+[.\d]?'

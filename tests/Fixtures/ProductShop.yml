@@ -35,3 +35,9 @@ Product\Domain\Model\ProductShop:
       product: "@entity-product_4"
       shop: "@entity-shop"
       price: "@productsShops_price_null"
+
+  entity-productsShops_5:
+    __construct:
+      product: "@entity-product_4"
+      shop: "@entity-shop_2"
+      price: "@productsShops_price_null"
