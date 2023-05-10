@@ -44,4 +44,9 @@ class ValueObjectObjectFactory
     {
         return new ProductImage($file);
     }
+
+    public static function createShopImage(FileInterface|null $file): ShopImage
+    {
+        return new ShopImage($file);
+    }
 }

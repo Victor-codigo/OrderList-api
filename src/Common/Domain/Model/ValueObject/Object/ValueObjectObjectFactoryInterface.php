@@ -23,4 +23,6 @@ interface ValueObjectObjectFactoryInterface
     public static function createNotificationType(NOTIFICATION_TYPE|null $type): NotificationType;
 
     public static function createProductImage(FileInterface|null $file): ProductImage;
+
+    public static function createShopImage(FileInterface|null $file): ShopImage;
 }
