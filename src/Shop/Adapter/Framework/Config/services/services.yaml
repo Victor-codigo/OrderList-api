@@ -1,0 +1,23 @@
+parameters:
+  shop.image.path: "%env(string:SHOP_IMAGE_PATH)%"
+  shop.public.image.path: "%env(string:SHOP_IMAGE_PUBLIC_PATH)%"
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+    bind:
+      $shopImagePath: "%shop.image.path%"
+
+  # Adapter
+  Shop\Adapter\:
+    resource: "../../../../../Shop/Adapter/"
+
+  # Application
+  Shop\Application\:
+    resource: "../../../../../Shop/Application/"
+
+  # Domain
+  Shop\Domain\:
+    resource: "../../../../../Shop/Domain/"

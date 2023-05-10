@@ -9,3 +9,6 @@ Notification:
 
 Product:
   resource: "../../../../../Product/Adapter/Framework/Config/routes/routes.yaml"
+
+Shop:
+  resource: "../../../../../Shop/Adapter/Framework/Config/routes/routes.yaml"
