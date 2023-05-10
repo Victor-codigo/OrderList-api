@@ -358,7 +358,7 @@ class ProductCreateControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailGroupNameAlreadyExists22(): void
+    public function itShouldFailProductNameAlreadyExists(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $this->createImageTestPath();
