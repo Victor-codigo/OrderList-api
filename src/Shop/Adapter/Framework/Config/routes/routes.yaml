@@ -1,8 +1,19 @@
 # -------------------------------------------------------------
 # SHOP CREATE
+
 shop_create:
   path: /api/v{api_version}/shops
   methods: POST
   controller: Shop\Adapter\Http\Controller\ShopCreate\ShopCreateController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# SHOP REMOVE
+# -------------------------------------------------------------
+shop_remove:
+  path: /api/v{api_version}/shops
+  methods: DELETE
+  controller: Shop\Adapter\Http\Controller\ShopRemove\ShopRemoveController
   requirements:
     api_version: '\d+[.\d]?'
