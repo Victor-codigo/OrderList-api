@@ -6,7 +6,6 @@ namespace Test\Unit\Product\Application\ProductCreate\Dto;
 
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
-use Common\Domain\Ports\FileUpload\UploadedFileInterface;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
@@ -25,14 +24,12 @@ class ProductCreateInputDtoTest extends TestCase
     private const PATH_FILE = 'tests/Fixtures/Files/file.txt';
 
     private ValidationInterface $validator;
-    private MockObject|UploadedFileInterface $productImageFile;
     private MockObject|UserShared $userSession;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->productImageFile = $this->createMock(UploadedFileInterface::class);
         $this->userSession = $this->createMock(UserShared::class);
         $this->validator = new ValidationChain();
     }
@@ -47,7 +44,6 @@ class ProductCreateInputDtoTest extends TestCase
     /** @test */
     public function itShouldValidate(): void
     {
-        $userSessionId = 'user session id';
         $groupId = self::GROUP_ID;
         $name = 'product name';
         $description = 'product description';
@@ -62,7 +58,6 @@ class ProductCreateInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailGroupIdIsNull(): void
     {
-        $userSessionId = 'user session id';
         $groupId = null;
         $name = 'product name';
         $description = 'product description';
@@ -77,7 +72,6 @@ class ProductCreateInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailGroupIdIsWrong(): void
     {
-        $userSessionId = 'user session id';
         $groupId = 'group id wrong';
         $name = 'product name';
         $description = 'product description';
@@ -92,7 +86,6 @@ class ProductCreateInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailNameIsNull(): void
     {
-        $userSessionId = 'user session id';
         $groupId = self::GROUP_ID;
         $name = null;
         $description = 'product description';
@@ -107,7 +100,6 @@ class ProductCreateInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailNameIsWrong(): void
     {
-        $userSessionId = 'user session id';
         $groupId = self::GROUP_ID;
         $name = 'product-name';
         $description = 'product description';
@@ -122,7 +114,6 @@ class ProductCreateInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailDescriptionWrong(): void
     {
-        $userSessionId = 'user session id';
         $groupId = self::GROUP_ID;
         $name = 'product name';
         $description = str_pad('', 501, 'f');
@@ -137,7 +128,6 @@ class ProductCreateInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailDescriptionIsNull(): void
     {
-        $userSessionId = 'user session id';
         $groupId = self::GROUP_ID;
         $name = 'product name';
         $description = null;
@@ -152,7 +142,6 @@ class ProductCreateInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailImageWrong(): void
     {
-        $userSessionId = 'user session id';
         $groupId = self::GROUP_ID;
         $name = 'product name';
         $description = 'product description';
@@ -167,7 +156,6 @@ class ProductCreateInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailImageIsNull(): void
     {
-        $userSessionId = 'user session id';
         $groupId = self::GROUP_ID;
         $name = 'product name';
         $description = 'product description';
@@ -182,7 +170,6 @@ class ProductCreateInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailAllParamsAreWrong(): void
     {
-        $userSessionId = 'user session id';
         $groupId = 'group id wrong';
         $name = 'product-name';
         $description = str_pad('', 501, 'f');
@@ -204,7 +191,6 @@ class ProductCreateInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailProductImageMimeTypeNotAllowed(): void
     {
-        $userSessionId = 'user session id';
         $groupId = self::GROUP_ID;
         $name = 'product name';
         $description = 'product description';
@@ -219,7 +205,6 @@ class ProductCreateInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailProductImageSizeFormTooLarge(): void
     {
-        $userSessionId = 'user session id';
         $groupId = self::GROUP_ID;
         $name = 'product name';
         $description = 'product description';
@@ -235,7 +220,6 @@ class ProductCreateInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailProductImageSizeIniTooLarge(): void
     {
-        $userSessionId = 'user session id';
         $groupId = self::GROUP_ID;
         $name = 'product name';
         $description = 'product description';
@@ -251,7 +235,6 @@ class ProductCreateInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailProductImageNoUploaded(): void
     {
-        $userSessionId = 'user session id';
         $groupId = self::GROUP_ID;
         $name = 'product name';
         $description = 'product description';
@@ -266,7 +249,6 @@ class ProductCreateInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailProductImagePartiallyUploaded(): void
     {
-        $userSessionId = 'user session id';
         $groupId = self::GROUP_ID;
         $name = 'product name';
         $description = 'product description';
@@ -281,7 +263,6 @@ class ProductCreateInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailProductImageCantWrite(): void
     {
-        $userSessionId = 'user session id';
         $groupId = self::GROUP_ID;
         $name = 'product name';
         $description = 'product description';
@@ -296,7 +277,6 @@ class ProductCreateInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailProductImageErrorExtension(): void
     {
-        $userSessionId = 'user session id';
         $groupId = self::GROUP_ID;
         $name = 'product name';
         $description = 'product description';
@@ -311,7 +291,6 @@ class ProductCreateInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailProductImageErrorTmpDir(): void
     {
-        $userSessionId = 'user session id';
         $groupId = self::GROUP_ID;
         $name = 'product name';
         $description = 'product description';
