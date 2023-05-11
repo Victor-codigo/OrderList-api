@@ -44,21 +44,25 @@ class ListOrdersOrders
         return $this;
     }
 
-    public function __construct(Identifier $id, Identifier $orderId, Identifier $listOrderId, bool $bought = false)
+    public function __construct(Identifier $id, Identifier $orderId, Identifier $listOrderId, bool $bought, ListOrders $listOrder, Order $order)
     {
         $this->id = $id;
         $this->orderId = $orderId;
         $this->listOrderId = $listOrderId;
         $this->bought = $bought;
+        $this->listOrder = $listOrder;
+        $this->order = $order;
     }
 
-    public static function fromPrimitives(string $id, string $orderId, string $listOrderId, bool $bought): self
+    public static function fromPrimitives(string $id, string $orderId, string $listOrderId, bool $bought, ListOrders $listOrders, Order $order): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),
             ValueObjectFactory::createIdentifier($orderId),
             ValueObjectFactory::createIdentifier($listOrderId),
-            $bought
+            $bought,
+            $listOrders,
+            $order
         );
     }
 }

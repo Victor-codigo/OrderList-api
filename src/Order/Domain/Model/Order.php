@@ -87,7 +87,7 @@ final class Order
         return $this->product;
     }
 
-    public function __construct(Identifier $id, Identifier $userId, Identifier $groupId, Identifier $productId, Identifier $shopId, Description $description, Amount $amount)
+    public function __construct(Identifier $id, Identifier $userId, Identifier $groupId, Identifier $productId, Identifier $shopId, Description $description, Amount $amount, Product $product, Shop $shop)
     {
         $this->id = $id;
         $this->userId = $userId;
@@ -98,10 +98,12 @@ final class Order
         $this->amount = $amount;
         $this->createdOn = new \DateTime();
 
+        $this->product = $product;
+        $this->shop = $shop;
         $this->listOrders = new ArrayCollection();
     }
 
-    public static function fromPrimitives(string $id, string $userId, string $groupId, string $productId, string $shopId, float $amount, string $description): self
+    public static function fromPrimitives(string $id, string $userId, string $groupId, string $productId, string $shopId, float $amount, string $description, Product $product, Shop $shop): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),
@@ -110,7 +112,9 @@ final class Order
             ValueObjectFactory::createIdentifier($productId),
             ValueObjectFactory::createIdentifier($shopId),
             ValueObjectFactory::createDescription($description),
-            ValueObjectFactory::createAmount($amount)
+            ValueObjectFactory::createAmount($amount),
+            $product,
+            $shop
         );
     }
 }
