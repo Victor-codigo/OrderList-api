@@ -20,6 +20,9 @@ class ListOrders
     private \DateTime $dateToBuy;
     private \DateTime $createdOn;
 
+    /**
+     * @var Collection<Order>
+     */
     private Collection $orders;
 
     public function getId(): Identifier
@@ -71,6 +74,28 @@ class ListOrders
     public function getCreatedOn(): \DateTime
     {
         return $this->createdOn;
+    }
+
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    /**
+     * @param Order[] $orders
+     */
+    public function setOrders(array $orders): self
+    {
+        $this->orders = new ArrayCollection($orders);
+
+        return $this;
+    }
+
+    public function addOrder(Order $order): self
+    {
+        $this->orders->add($order);
+
+        return $this;
     }
 
     public function __construct(Identifier $id, Identifier $userId, NameWithSpaces $name, Description $description, \DateTime $dateToBuy)

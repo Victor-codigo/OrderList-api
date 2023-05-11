@@ -23,6 +23,10 @@ class Group
     private Path $image;
     private \DateTime $createdOn;
     private GroupType $type;
+
+    /**
+     * @var Collection<User>
+     */
     private Collection $users;
 
     public function getId(): Identifier

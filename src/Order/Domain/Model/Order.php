@@ -26,6 +26,9 @@ final class Order
 
     private Product $product;
     private Shop $shop;
+    /**
+     * @var Collection<ListOrders>
+     */
     private Collection $listOrders;
 
     public function getId(): Identifier
@@ -85,6 +88,52 @@ final class Order
     public function getProducts(): Product
     {
         return $this->product;
+    }
+
+    public function getProduct(): Product
+    {
+        return $this->product;
+    }
+
+    public function setProduct(Product $product): self
+    {
+        $this->product = $product;
+
+        return $this;
+    }
+
+    public function getShop(): shop
+    {
+        return $this->shop;
+    }
+
+    public function setShop(Shop $shop): self
+    {
+        $this->shop = $shop;
+
+        return $this;
+    }
+
+    public function getListOrder(): Collection
+    {
+        return $this->listOrders;
+    }
+
+    /**
+     * @param Order[] $orders
+     */
+    public function setListOrder(array $orders): self
+    {
+        $this->listOrders = new ArrayCollection($orders);
+
+        return $this;
+    }
+
+    public function addListOrder(Order $order): self
+    {
+        $this->listOrders->add($order);
+
+        return $this;
     }
 
     public function __construct(Identifier $id, Identifier $userId, Identifier $groupId, Identifier $productId, Identifier $shopId, Description $description, Amount $amount, Product $product, Shop $shop)

@@ -50,9 +50,23 @@ class ProductShop
         return $this->product;
     }
 
+    public function setProduct(Product $product): self
+    {
+        $this->product = $product;
+
+        return $this;
+    }
+
     public function getShop(): Shop
     {
         return $this->shop;
+    }
+
+    public function setShop(Shop $shop): self
+    {
+        $this->shop = $shop;
+
+        return $this;
     }
 
     public function __construct(Product $product, Shop $shop, Money $price)

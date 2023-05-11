@@ -11,6 +11,8 @@ use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Order\Domain\Model\Order;
+use Product\Domain\Model\ProductShop;
 
 class Shop
 {
@@ -77,6 +79,45 @@ class Shop
     public function getProductShop(): Collection
     {
         return $this->productShop;
+    }
+
+    /**
+     * @param ProductShop[] $productShops
+     */
+    public function setProductShops(array $productShops): self
+    {
+        $this->productShop = new ArrayCollection($productShops);
+
+        return $this;
+    }
+
+    public function addProductShop(ProductShop $productShop): self
+    {
+        $this->productShop->add($productShop);
+
+        return $this;
+    }
+
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    /**
+     * @param Order[] $order
+     */
+    public function setOrders(array $orders): self
+    {
+        $this->orders = new ArrayCollection($orders);
+
+        return $this;
+    }
+
+    public function addOrder(Order $order): self
+    {
+        $this->orders->add($order);
+
+        return $this;
     }
 
     public function __construct(Identifier $id, Identifier $groupId, NameWithSpaces $name, Description $description, Path $image)

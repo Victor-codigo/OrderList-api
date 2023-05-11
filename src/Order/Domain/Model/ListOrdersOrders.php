@@ -44,6 +44,30 @@ class ListOrdersOrders
         return $this;
     }
 
+    public function getListOrder(): ListOrders
+    {
+        return $this->listOrder;
+    }
+
+    public function setListOrder(ListOrders $listOrder): self
+    {
+        $this->listOrder = $listOrder;
+
+        return $this;
+    }
+
+    public function getOrder(): Order
+    {
+        return $this->order;
+    }
+
+    public function setOrder(Order $order): self
+    {
+        $this->order = $order;
+
+        return $this;
+    }
+
     public function __construct(Identifier $id, Identifier $orderId, Identifier $listOrderId, bool $bought, ListOrders $listOrder, Order $order)
     {
         $this->id = $id;
