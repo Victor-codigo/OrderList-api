@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Product\Adapter\Http\Dto;
+namespace Test\Unit\Product\Adapter\Http\ProductGetData\Dto;
 
 use PHPUnit\Framework\TestCase;
 use Product\Adapter\Http\Controller\ProductGetData\Dto\ProductGetDataRequestDto;
