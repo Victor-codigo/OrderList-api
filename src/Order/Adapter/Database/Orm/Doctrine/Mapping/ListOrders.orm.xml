@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping">
+    <entity name="Order\Domain\Model\ListOrders"
+            table="List_Orders"
+            repository-class="Order\Adapter\Database\Orm\Doctrine\Repository\ListOrdersRepository">
+
+       <id name="id"
+            type="IdentifierType"
+            column-definition="CHAR(36) NOT NULL"/>
+
+       <field name="userId"
+              column="user_id"
+              type="IdentifierType"
+              column-definition="CHAR(36) NOT NULL"/>
+
+       <field name="name"
+              column="name"
+              type="NameWithSpacesType"
+              column-definition="CHAR(36) NOT NULL"/>
+
+       <field name="description"
+              type="DescriptionType"
+              length="500"
+              nullable="true"/>
+
+       <field name="dateToBuy"
+              column="date_to_buy"
+              type="datetime"
+              nullable="true"/>
+
+       <field name="createdOn"
+              column="created_on"
+              type="datetime"/>
+
+       <indexes>
+              <index name="IDX_id"
+                     columns="id"/>
+
+              <index name="IDX_user_id"
+                     columns="user_id"/>
+
+              <index name="IDX_name"
+                     columns="name"/>
+
+       </indexes>
+
+       <unique-constraints>
+            <unique-constraint name="u_list_order_id"
+                               columns="id"/>
+
+        </unique-constraints>
+
+
+       <!-- List_Orders - LostOrders_Orders -->
+       <one-to-many field="orders"
+                    target-entity="Order\Domain\Model\ListOrdersOrders"
+                    mapped-by="listOrder" />
+
+    </entity>
+</doctrine-mapping>

@@ -8,7 +8,10 @@ use Common\Domain\Model\ValueObject\Float\Amount;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Product\Domain\Model\Product;
+use Shop\Domain\Model\Shop;
 
 final class Order
 {
@@ -16,13 +19,14 @@ final class Order
     private Identifier $userId;
     private Identifier $groupId;
     private Identifier $productId;
-    private Amount $amount;
+    private Identifier $shopId;
     private Description $description;
+    private Amount $amount;
     private \DateTime $createdOn;
-    private \DateTime|null $boughtOn;
-    private \DateTime|null $dateToBuy;
 
     private Product $product;
+    private Shop $shop;
+    private Collection $listOrders;
 
     public function getId(): Identifier
     {
@@ -44,16 +48,9 @@ final class Order
         return $this->productId;
     }
 
-    public function getAmount(): Amount
+    public function getShopId(): Identifier
     {
-        return $this->amount;
-    }
-
-    public function setAmount($amount): self
-    {
-        $this->amount = $amount;
-
-        return $this;
+        return $this->shopId;
     }
 
     public function getDescription(): Description
@@ -68,33 +65,21 @@ final class Order
         return $this;
     }
 
+    public function getAmount(): Amount
+    {
+        return $this->amount;
+    }
+
+    public function setAmount($amount): self
+    {
+        $this->amount = $amount;
+
+        return $this;
+    }
+
     public function getCreatedOn(): \DateTime
     {
         return $this->createdOn;
-    }
-
-    public function getBoughtOn(): \DateTime
-    {
-        return $this->boughtOn;
-    }
-
-    public function setBoughtOn($boughtOn): self
-    {
-        $this->boughtOn = $boughtOn;
-
-        return $this;
-    }
-
-    public function getDataToBuy(): \DateTime
-    {
-        return $this->dateToBuy;
-    }
-
-    public function setDateToBuy($dateToBuy): self
-    {
-        $this->dateToBuy = $dateToBuy;
-
-        return $this;
     }
 
     public function getProducts(): Product
@@ -102,29 +87,30 @@ final class Order
         return $this->product;
     }
 
-    public function __construct(Identifier $id, Identifier $userId, Identifier $groupId, Identifier $productId, Amount $amount, \DateTime $dateToBuy, Description $description)
+    public function __construct(Identifier $id, Identifier $userId, Identifier $groupId, Identifier $productId, Identifier $shopId, Description $description, Amount $amount)
     {
         $this->id = $id;
         $this->userId = $userId;
         $this->groupId = $groupId;
         $this->productId = $productId;
-        $this->amount = $amount;
-        $this->dateToBuy = $dateToBuy;
+        $this->shopId = $shopId;
         $this->description = $description;
+        $this->amount = $amount;
         $this->createdOn = new \DateTime();
+
+        $this->listOrders = new ArrayCollection();
     }
 
-    public static function fromPrimitives(string $id, string $userId, string $groupId, string $productId, float $amount, \DateTime $dateToBuy, string $description): self
+    public static function fromPrimitives(string $id, string $userId, string $groupId, string $productId, string $shopId, float $amount, string $description): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),
             ValueObjectFactory::createIdentifier($userId),
             ValueObjectFactory::createIdentifier($groupId),
             ValueObjectFactory::createIdentifier($productId),
-            ValueObjectFactory::createAmount($amount),
-            $dateToBuy,
+            ValueObjectFactory::createIdentifier($shopId),
             ValueObjectFactory::createDescription($description),
-            new \DateTime()
+            ValueObjectFactory::createAmount($amount)
         );
     }
 }

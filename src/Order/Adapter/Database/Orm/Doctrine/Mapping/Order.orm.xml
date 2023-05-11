@@ -23,28 +23,23 @@
               type="IdentifierType"
               column-definition="CHAR(36) NOT NULL"/>
 
-        <field name="amount"
-               type="AmountType"
-               nullable="true"/>
+       <field name="shopId"
+              column="shop_id"
+              type="IdentifierType"
+              column-definition="CHAR(36) NOT NULL"/>
 
-        <field name="description"
-               type="DescriptionType"
-               length="500"
+       <field name="description"
+              type="DescriptionType"
+              length="500"
+              nullable="true"/>
+
+       <field name="amount"
+               type="AmountType"
                nullable="true"/>
 
         <field name="createdOn"
                column="created_on"
                type="datetime"/>
-
-        <field name="boughtOn"
-               columm="bought_on"
-               type="datetime"
-               nullable="true"/>
-
-        <field name="dateToBuy"
-               column="date_to_buy"
-               type="datetime"
-               nullable="true"/>
 
        <indexes>
               <index name="IDX_user_id"
@@ -55,6 +50,9 @@
 
               <index name="IDX_product_id"
                      columns="product_id"/>
+
+              <index name="IDX_shop_id"
+                     columns="shop_id"/>
 
        </indexes>
 
@@ -73,6 +71,20 @@
             <join-column name="product_id"
                          referenced-column-name="id" />
 
+       </many-to-one>
+
+       <!-- Orders - ListOrders_Orders -->
+       <one-to-many field="listOrders"
+                    target-entity="Order\Domain\Model\ListOrdersOrders"
+                    mapped-by="order" />
+
+       <!-- Orders - Shops -->
+       <many-to-one field="shop"
+                    target-entity="Shop\Domain\Model\Shop"
+                    inversed-by="orders">
+
+              <join-column name="shop_id"
+                           referenced-column-name="id" />
        </many-to-one>
 
 

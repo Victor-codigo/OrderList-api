@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping">
+    <entity name="Order\Domain\Model\ListOrdersOrders"
+            table="ListOrders_Orders"
+            repository-class="Order\Adapter\Database\Orm\Doctrine\Repository\ListOrdersOrdersRepository">
+
+       <id name="id"
+            type="IdentifierType"
+            column-definition="CHAR(36) NOT NULL"/>
+
+       <field name="orderId"
+              column="order_id"
+              type="IdentifierType"
+              column-definition="CHAR(36) NOT NULL"/>
+
+       <field name="listOrderId"
+              column="list_order_id"
+              type="IdentifierType"
+              column-definition="CHAR(36) NOT NULL"/>
+
+       <field name="bought"
+              column="bought"
+              type="boolean"/>
+
+       <indexes>
+              <index name="IDX_id"
+                     columns="id"/>
+
+              <index name="IDX_order_id"
+                     columns="order_id"/>
+
+              <index name="IDX_list_order_id"
+                     columns="list_order_id"/>
+
+       </indexes>
+
+       <unique-constraints>
+            <unique-constraint name="u_list_order_id"
+                               columns="id"/>
+
+        </unique-constraints>
+
+
+       <!-- ListOrders_Orders - List_Orders -->
+       <many-to-one field="listOrder"
+                    target-entity="Order\Domain\Model\ListOrders"
+                    inversed-by="orders">
+
+            <join-column name="list_order_id"
+                         referenced-column-name="id"
+                         on-delete="CASCADE" />
+
+        </many-to-one>
+
+       <!-- ListOrders_Orders - Orders -->
+       <many-to-one field="order"
+                    target-entity="Order\Domain\Model\Order"
+                    inversed-by="listOrders">
+
+            <join-column name="order_id"
+                         referenced-column-name="id"
+                         on-delete="CASCADE" />
+
+        </many-to-one>
+
+    </entity>
+</doctrine-mapping>

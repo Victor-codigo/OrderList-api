@@ -2,32 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Shop\Domain\Model;
+namespace Order\Domain\Model;
 
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
-use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
-class Shop
+class ListOrders
 {
     private Identifier $id;
-    private Identifier $groupId;
+    private Identifier $userId;
     private NameWithSpaces $name;
     private Description $description;
-    private Path $image;
+    private \DateTime $dateToBuy;
     private \DateTime $createdOn;
 
-    /**
-     * @var Collection<ProductShop>
-     */
-    private Collection $productShop;
-    /**
-     * @var Collection<Shop>
-     */
     private Collection $orders;
 
     public function getId(): Identifier
@@ -35,14 +27,21 @@ class Shop
         return $this->id;
     }
 
-    public function getGroupId(): Identifier
+    public function getUserId(): Identifier
     {
-        return $this->groupId;
+        return $this->userId;
     }
 
     public function getName(): NameWithSpaces
     {
         return $this->name;
+    }
+
+    public function setName(NameWithSpaces $name): self
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     public function getDescription(): Description
@@ -57,14 +56,14 @@ class Shop
         return $this;
     }
 
-    public function getImage(): Path
+    public function getDateToBuy(): \DateTime
     {
-        return $this->image;
+        return $this->dateToBuy;
     }
 
-    public function setImage(Path $image): self
+    public function setDateToBuy(\DateTime $date): self
     {
-        $this->image = $image;
+        $this->dateToBuy = $date;
 
         return $this;
     }
@@ -74,32 +73,26 @@ class Shop
         return $this->createdOn;
     }
 
-    public function getProductShop(): Collection
-    {
-        return $this->productShop;
-    }
-
-    public function __construct(Identifier $id, Identifier $groupId, NameWithSpaces $name, Description $description, Path $image)
+    public function __construct(Identifier $id, Identifier $userId, NameWithSpaces $name, Description $description, \DateTime $dateToBuy)
     {
         $this->id = $id;
-        $this->groupId = $groupId;
+        $this->userId = $userId;
         $this->name = $name;
         $this->description = $description;
-        $this->image = $image;
+        $this->dateToBuy = $dateToBuy;
         $this->createdOn = new \DateTime();
 
-        $this->productShop = new ArrayCollection();
         $this->orders = new ArrayCollection();
     }
 
-    public static function fromPrimitives(string $id, string $groupId, string $name, string|null $description = null, string|null $image = null): self
+    public static function fromPrimitives(string $id, string $userId, string $name, string $description, \DateTime $dateToBuy)
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),
-            ValueObjectFactory::createIdentifier($groupId),
+            ValueObjectFactory::createIdentifier($userId),
             ValueObjectFactory::createNameWithSpaces($name),
             ValueObjectFactory::createDescription($description),
-            ValueObjectFactory::createPath($image),
+            $dateToBuy,
         );
     }
 }

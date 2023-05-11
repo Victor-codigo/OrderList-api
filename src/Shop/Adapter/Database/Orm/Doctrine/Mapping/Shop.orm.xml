@@ -55,5 +55,10 @@
                            target-entity="Product\Domain\Model\ProductShop"
                            mapped-by="shop" />
 
+              <!-- Shops - Orders -->
+              <one-to-many field="orders"
+                           target-entity="Order\Domain\Model\Order"
+                           mapped-by="shop" />
+
        </entity>
 </doctrine-mapping>
