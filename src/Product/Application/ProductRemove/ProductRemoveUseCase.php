@@ -9,6 +9,8 @@ use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Service\ServiceBase;
+use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
+use Common\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use Product\Application\ProductRemove\Dto\ProductRemoveInputDto;
@@ -17,8 +19,6 @@ use Product\Application\ProductRemove\Exception\ProductRemoveGroupOrUserNotValid
 use Product\Application\ProductRemove\Exception\ProductRemoveProductNotFoundException;
 use Product\Domain\Service\ProductRemove\Dto\ProductRemoveDto;
 use Product\Domain\Service\ProductRemove\ProductRemoveService;
-use Product\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
-use Product\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
 
 class ProductRemoveUseCase extends ServiceBase
 {

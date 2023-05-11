@@ -10,8 +10,8 @@ use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\ResponseDto;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Product\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
-use Product\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
+use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
+use Common\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
 
 class ValidateGroupAndUserServiceTest extends TestCase
 {

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Product\Domain\Service\ValidateGroupAndUser;
+namespace Common\Domain\Service\ValidateGroupAndUser;
 
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
-use Product\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
+use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
 
 class ValidateGroupAndUserService
 {

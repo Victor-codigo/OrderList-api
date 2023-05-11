@@ -7,6 +7,8 @@ namespace Product\Application\ProductGetData;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Service\ServiceBase;
+use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
+use Common\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use Product\Application\ProductGetData\Dto\ProductGetDataInputDto;
@@ -15,8 +17,6 @@ use Product\Application\ProductGetData\Exception\ProductGetDataProductsNotFoundE
 use Product\Application\ProductGetData\Exception\ProductGetDataValidateGroupAndUserException;
 use Product\Domain\Service\ProductGetData\Dto\ProductGetDataDto;
 use Product\Domain\Service\ProductGetData\ProductGetDataService;
-use Product\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
-use Product\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
 
 class ProductGetDataUseCase extends ServiceBase
 {

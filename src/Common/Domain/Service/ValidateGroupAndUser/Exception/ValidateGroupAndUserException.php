@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Product\Domain\Service\ValidateGroupAndUser\Exception;
+namespace Common\Domain\Service\ValidateGroupAndUser\Exception;
 
 use Common\Domain\Exception\DomainException;
 
