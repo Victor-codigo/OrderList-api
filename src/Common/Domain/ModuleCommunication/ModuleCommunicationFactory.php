@@ -224,6 +224,72 @@ class ModuleCommunicationFactory
         );
     }
 
+    public static function productGetData(Identifier $groupsId, array $productsId, array $shopsId = [], string $productNameStartsWith = ''): ModuleCommunicationConfigDto
+    {
+        $query = [
+            'api_version' => static::API_VERSION,
+            'group_id' => $groupsId->getValue(),
+        ];
+
+        if (!empty($productsId)) {
+            $query['products_id'] = implode(',', $productsId);
+        }
+
+        if (!empty($shopsId)) {
+            $query['shops_id'] = implode(',', $shopsId);
+        }
+
+        if (!empty($productNameStartsWith)) {
+            $query['product_name_starts_with'] = $productNameStartsWith;
+        }
+
+        return new ModuleCommunicationConfigDto(
+            'product_get_data',
+            'GET',
+            true,
+            [],
+            $query,
+            [],
+            self::CONTENT_TYPE_APPLICATION_FORM,
+            [],
+            [],
+            []
+        );
+    }
+
+    public static function shopGetData(Identifier $groupsId, array $shopsId, array $productsId = [], string $shopNameStartsWith = ''): ModuleCommunicationConfigDto
+    {
+        $query = [
+            'api_version' => static::API_VERSION,
+            'group_id' => $groupsId->getValue(),
+        ];
+
+        if (!empty($productsId)) {
+            $query['products_id'] = implode(',', $productsId);
+        }
+
+        if (!empty($shopsId)) {
+            $query['shops_id'] = implode(',', $shopsId);
+        }
+
+        if (!empty($shopNameStartsWith)) {
+            $query['shop_name_starts_with'] = $shopNameStartsWith;
+        }
+
+        return new ModuleCommunicationConfigDto(
+            'shop_get_data',
+            'GET',
+            true,
+            [],
+            $query,
+            [],
+            self::CONTENT_TYPE_APPLICATION_FORM,
+            [],
+            [],
+            []
+        );
+    }
+
     public static function notificationCreateUserRegistered(Identifier $recipientUserId, Name $userName, string $domainName, string $systemKey): ModuleCommunicationConfigDto
     {
         $content = [
