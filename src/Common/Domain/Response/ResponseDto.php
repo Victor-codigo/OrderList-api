@@ -92,4 +92,29 @@ class ResponseDto
             'hasContent' => $this->hasContent,
         ];
     }
+
+    public function to(callable $callbackTransformTo, bool $multidimensional = true): mixed
+    {
+        if (!$multidimensional) {
+            return $callbackTransformTo($this->data);
+        }
+
+        return array_map(
+            fn (mixed $data) => $callbackTransformTo($data),
+            $this->data
+        );
+    }
+
+    public function validate(bool $content = true): bool
+    {
+        if (!empty($this->errors)) {
+            return false;
+        }
+
+        if ($content && !$this->hasContent) {
+            return false;
+        }
+
+        return true;
+    }
 }
