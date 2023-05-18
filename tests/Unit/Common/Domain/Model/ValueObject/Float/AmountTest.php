@@ -32,6 +32,16 @@ class AmountTest extends TestCase
     }
 
     /** @test */
+    public function itShouldValidateAmountIsNull(): void
+    {
+        $object = ValueObjectFactory::createAmount(null);
+
+        $return = $this->validator->validateValueObject($object);
+
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
     public function itShouldFailLessThanZero(): void
     {
         $object = ValueObjectFactory::createAmount(-0.1);
