@@ -4,6 +4,7 @@ doctrine:
 
         types:
             IdentifierType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\IdentifierType
+            IdentifierNullableType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\IdentifierNullableType
             EmailType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\EmailType
             PasswordType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\PasswordType
             NameType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\NameType
