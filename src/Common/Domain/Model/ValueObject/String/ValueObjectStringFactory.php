@@ -16,6 +16,11 @@ class ValueObjectStringFactory
         return new Identifier($id);
     }
 
+    public static function createIdentifierNullAble(string|null $id): IdentifierNullable
+    {
+        return new IdentifierNullable($id);
+    }
+
     public static function createName(string|null $name): Name
     {
         return new Name($name);

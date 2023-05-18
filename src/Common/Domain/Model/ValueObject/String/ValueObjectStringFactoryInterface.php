@@ -10,6 +10,8 @@ interface ValueObjectStringFactoryInterface
 
     public static function createIdentifier(string|null $id): Identifier;
 
+    public static function createIdentifierNullAble(string|null $id): IdentifierNullable;
+
     public static function createName(string|null $name): Name;
 
     public static function createNameWithSpaces(string|null $name): NameWithSpaces;

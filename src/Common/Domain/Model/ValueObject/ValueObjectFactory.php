@@ -27,6 +27,7 @@ use Common\Domain\Model\ValueObject\Object\ValueObjectObjectFactoryInterface;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\IdentifierNullable;
 use Common\Domain\Model\ValueObject\String\JwtToken;
 use Common\Domain\Model\ValueObject\String\Language;
 use Common\Domain\Model\ValueObject\String\Name;
@@ -68,6 +69,11 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
     public static function createIdentifier(string|null $id): Identifier
     {
         return ValueObjectStringFactory::createIdentifier($id);
+    }
+
+    public static function createIdentifierNullable(string|null $id): IdentifierNullable
+    {
+        return ValueObjectStringFactory::createIdentifierNullAble($id);
     }
 
     public static function createName(string|null $name): Name
