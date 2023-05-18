@@ -94,17 +94,23 @@ class ModuleCommunication implements ModuleCommunicationInterface
 
     private function getRequestUrl(string $route, array $attributes): string
     {
-        $sessionDebug = '';
+        $url = $this->DI->getUrlRouteAbsoluteDomain($route, $attributes);
 
-        if ('dev' === $this->appEnv || 'test' === $this->appEnv) {
-            $sessionDebug = '?'.static::DEV_QUERY_STRING;
+        if ('dev' !== $this->appEnv && 'test' !== $this->appEnv) {
+            return $url;
         }
 
-        if ('test' == $this->appEnv) {
+        $sessionDebug = static::DEV_QUERY_STRING;
+
+        if ('test' === $this->appEnv) {
             $sessionDebug .= '&'.static::TEST_QUERY_STRING;
         }
 
-        return $this->DI->getUrlRouteAbsoluteDomain($route, $attributes).$sessionDebug;
+        if (str_contains($url, '?')) {
+            return str_replace('?', '?'.$sessionDebug.'&', $url);
+        }
+
+        return "{$url}?{$sessionDebug}";
     }
 
     /**

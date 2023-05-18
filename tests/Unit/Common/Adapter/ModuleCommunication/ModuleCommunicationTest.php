@@ -92,13 +92,52 @@ class ModuleCommunicationTest extends TestCase
             ->setErrors($responseDto['errors']);
     }
 
-    private function mockRequestMethod(ModuleCommunicationConfigDto $routeConfig, \DomainException $requestException = null): void
+    private function assertRequestOptionsIsOk(array $options, ModuleCommunicationConfigDto $routeConfig): void
+    {
+        if ('multipart/form-data' === $routeConfig->contentType) {
+            $this->assertArrayHasKey('body', $options);
+            $this->assertArrayHasKey('headers', $options);
+            $this->assertInstanceOf(\Generator::class, $options['body']);
+            $this->assertEquals('Content-Type: multipart/form-data', explode(';', end($options['headers']))[0]);
+            $this->assertCount(1 + count($routeConfig->headers) + count($routeConfig->cookies), $options['headers']);
+        }
+
+        if ('application/json' === $routeConfig->contentType) {
+            if (!empty($routeConfig->content)) {
+                $this->assertArrayHasKey('json', $options);
+                $this->assertEquals($routeConfig->content, $options['json']);
+            }
+
+            if (!empty($routeConfig->headers) || !empty($routeConfig->cookies)) {
+                $this->assertCount(count($routeConfig->headers) + count($routeConfig->cookies), $options['headers']);
+            }
+        }
+
+        foreach ($routeConfig->headers as $header) {
+            $this->assertContains($header, $options['headers']);
+        }
+
+        foreach ($routeConfig->cookies as $cookie) {
+            $this->assertContains($cookie, $options['headers']);
+        }
+
+        $this->assertArrayHasKey('proxy', $options);
+        $this->assertArrayHasKey('verify_peer', $options);
+        $this->assertArrayHasKey('verify_host', $options);
+        $this->assertArrayHasKey('auth_bearer', $options);
+        $this->assertEquals('http://proxy:80', $options['proxy']);
+        $this->assertFalse($options['verify_peer']);
+        $this->assertFalse($options['verify_host']);
+        $this->assertEquals(self::JWT_TOKEN, $options['auth_bearer']);
+    }
+
+    private function mockRequestMethod(ModuleCommunicationConfigDto $routeConfig, string $url, string $expectedUrl, \DomainException $requestException = null): void
     {
         $this->DI
             ->expects($this->once())
             ->method('getUrlRouteAbsoluteDomain')
             ->with($routeConfig->route, array_merge($routeConfig->attributes, $routeConfig->query))
-            ->willReturn(self::URL);
+            ->willReturn($url);
 
         $this->requestStack
             ->expects($this->once())
@@ -116,41 +155,9 @@ class ModuleCommunicationTest extends TestCase
             ->method('request')
             ->with(
                 $routeConfig->method,
-                self::URL,
-                $this->callback(function (array $options) use ($routeConfig) {
-                    if ('multipart/form-data' === $routeConfig->contentType) {
-                        $this->assertArrayHasKey('body', $options);
-                        $this->assertArrayHasKey('headers', $options);
-                        $this->assertInstanceOf(\Generator::class, $options['body']);
-                        $this->assertEquals('Content-Type: multipart/form-data', explode(';', end($options['headers']))[0]);
-                        $this->assertCount(1 + count($routeConfig->headers) + count($routeConfig->cookies), $options['headers']);
-                    }
-
-                    if ('application/json' === $routeConfig->contentType) {
-                        $this->assertArrayHasKey('json', $options);
-                        $this->assertEquals($routeConfig->content, $options['json']);
-                        $this->assertCount(count($routeConfig->headers) + count($routeConfig->cookies), $options['headers']);
-                    }
-
-                    foreach ($routeConfig->headers as $header) {
-                        $this->assertContains($header, $options['headers']);
-                    }
-
-                    foreach ($routeConfig->cookies as $cookie) {
-                        $this->assertContains($cookie, $options['headers']);
-                    }
-
-                    $this->assertArrayHasKey('proxy', $options);
-                    $this->assertArrayHasKey('verify_peer', $options);
-                    $this->assertArrayHasKey('verify_host', $options);
-                    $this->assertArrayHasKey('auth_bearer', $options);
-                    $this->assertEquals('http://proxy:80', $options['proxy']);
-                    $this->assertFalse($options['verify_peer']);
-                    $this->assertFalse($options['verify_host']);
-                    $this->assertEquals(self::JWT_TOKEN, $options['auth_bearer']);
-
-                    return true;
-                }))
+                $this->equalTo($expectedUrl),
+                $this->callback(fn (array $options) => $this->assertRequestOptionsIsOk($options, $routeConfig) || true)
+            )
             ->willReturn($this->httpClientResponse);
 
         $this->httpClientResponse
@@ -199,7 +206,7 @@ class ModuleCommunicationTest extends TestCase
         ];
 
         $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig);
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL);
 
         $return = $this->object->__invoke($routeConfig);
 
@@ -225,7 +232,7 @@ class ModuleCommunicationTest extends TestCase
             'header2',
         ];
         $routeConfig = ModuleCommunicationFactoryTest::form(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig);
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL);
 
         $return = $this->object->__invoke($routeConfig);
 
@@ -252,11 +259,80 @@ class ModuleCommunicationTest extends TestCase
             'header2',
         ];
         $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig);
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL);
 
         $return = $this->object->__invoke($routeConfig);
 
         $this->assertEquals($this->getResponseDtoFromString(''), $return);
+    }
+
+    /** @test */
+    public function itShouldCreateAValidRequestNoDevOrTestUrlWithoutQueryString(): void
+    {
+        $routeConfig = ModuleCommunicationFactoryTest::json(true);
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL);
+
+        $this->object->__invoke($routeConfig);
+    }
+
+    /** @test */
+    public function itShouldCreateAValidRequestDevUrlWithoutQueryString(): void
+    {
+        $url = self::URL;
+        $urlExpected = "{$url}?XDEBUG_SESSION=VSCODE";
+        $routeConfig = ModuleCommunicationFactoryTest::json(true);
+
+        $this->object = new ModuleCommunication(
+            $this->httpClient,
+            $this->DI,
+            $this->jwtTokenExtractor,
+            $this->requestStack,
+            'dev'
+        );
+
+        $this->mockRequestMethod($routeConfig, $url, $urlExpected);
+
+        $this->object->__invoke($routeConfig);
+    }
+
+    /** @test */
+    public function itShouldCreateAValidRequestTestUrlWithoutQueryString(): void
+    {
+        $url = self::URL;
+        $urlExpected = "{$url}?XDEBUG_SESSION=VSCODE&env=test";
+        $routeConfig = ModuleCommunicationFactoryTest::json(true);
+
+        $this->object = new ModuleCommunication(
+            $this->httpClient,
+            $this->DI,
+            $this->jwtTokenExtractor,
+            $this->requestStack,
+            'test'
+        );
+
+        $this->mockRequestMethod($routeConfig, $url, $urlExpected);
+
+        $this->object->__invoke($routeConfig);
+    }
+
+    /** @test */
+    public function itShouldCreateAValidRequestTestUrlWithQueryString(): void
+    {
+        $url = self::URL.'?param1=value1&param2=value2';
+        $urlExpected = self::URL.'?XDEBUG_SESSION=VSCODE&env=test&param1=value1&param2=value2';
+        $routeConfig = ModuleCommunicationFactoryTest::json(true);
+
+        $this->object = new ModuleCommunication(
+            $this->httpClient,
+            $this->DI,
+            $this->jwtTokenExtractor,
+            $this->requestStack,
+            'test'
+        );
+
+        $this->mockRequestMethod($routeConfig, $url, $urlExpected);
+
+        $this->object->__invoke($routeConfig);
     }
 
     /** @test */
@@ -279,7 +355,7 @@ class ModuleCommunicationTest extends TestCase
             'header2',
         ];
         $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig);
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL);
         $this->expectException(ModuleCommunicationException::class);
 
         $return = $this->object->__invoke($routeConfig);
@@ -309,7 +385,7 @@ class ModuleCommunicationTest extends TestCase
             'header2',
         ];
         $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig, Error400Exception::fromMessage('', $httpExceptionInterface));
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL, Error400Exception::fromMessage('', $httpExceptionInterface));
 
         $return = $this->object->__invoke($routeConfig);
 
@@ -338,7 +414,7 @@ class ModuleCommunicationTest extends TestCase
             'header2',
         ];
         $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig, Error500Exception::fromMessage('', $httpExceptionInterface));
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL, Error500Exception::fromMessage('', $httpExceptionInterface));
 
         $return = $this->object->__invoke($routeConfig);
 
@@ -368,7 +444,7 @@ class ModuleCommunicationTest extends TestCase
             'header2',
         ];
         $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig, NetworkException::fromMessage('', $httpExceptionInterface));
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL, NetworkException::fromMessage('', $httpExceptionInterface));
 
         $this->object->__invoke($routeConfig);
     }
