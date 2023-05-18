@@ -19,4 +19,9 @@ class AmountType extends TypeBase
     {
         return Amount::class;
     }
+
+    public function convertToPHPValue($value, AbstractPlatform $platform): mixed
+    {
+        return parent::convertToPHPValue((float) $value, $platform);
+    }
 }
