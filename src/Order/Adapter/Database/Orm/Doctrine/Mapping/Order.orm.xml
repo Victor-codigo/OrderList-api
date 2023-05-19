@@ -26,7 +26,8 @@
        <field name="shopId"
               column="shop_id"
               type="IdentifierType"
-              column-definition="CHAR(36) NOT NULL"/>
+              column-definition="CHAR(36) NOT NULL"
+              nullable="true"/>
 
        <field name="description"
               type="DescriptionType"
@@ -69,7 +70,8 @@
                     inversed-by="orders">
 
             <join-column name="product_id"
-                         referenced-column-name="id" />
+                         referenced-column-name="id"
+                         on-delete="CASCADE" />
 
        </many-to-one>
 
@@ -84,7 +86,8 @@
                     inversed-by="orders">
 
               <join-column name="shop_id"
-                           referenced-column-name="id" />
+                           referenced-column-name="id"
+                           on-delete="SET NULL" />
        </many-to-one>
 
 
