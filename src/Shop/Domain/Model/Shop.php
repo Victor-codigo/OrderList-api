@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shop\Domain\Model;
 
+use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
@@ -76,6 +77,9 @@ class Shop
         return $this->createdOn;
     }
 
+    /**
+     * @return Collection<ProductShop>
+     */
     public function getProductShop(): Collection
     {
         return $this->productShop;
@@ -98,6 +102,9 @@ class Shop
         return $this;
     }
 
+    /**
+     * @return Collection<Order>
+     */
     public function getOrders(): Collection
     {
         return $this->orders;
@@ -141,6 +148,23 @@ class Shop
             ValueObjectFactory::createNameWithSpaces($name),
             ValueObjectFactory::createDescription($description),
             ValueObjectFactory::createPath($image),
+        );
+    }
+
+    public static function fromPrimitiveArrayOfData(array $data): self
+    {
+        if (!isset($data['id'])
+        || !isset($data['group_id'])
+        || !isset($data['name'])) {
+            throw LogicException::fromMessage('Not enough data parameters to create a Shop');
+        }
+
+        return self::fromPrimitives(
+            $data['id'],
+            $data['group_id'],
+            $data['name'],
+            $data['description'] ?? null,
+            $data['image'] ?? null,
         );
     }
 }
