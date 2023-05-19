@@ -25,7 +25,7 @@ final class Order
     private \DateTime $createdOn;
 
     private Product $product;
-    private Shop $shop;
+    private Shop|null $shop;
     /**
      * @var Collection<ListOrders>
      */
@@ -107,7 +107,7 @@ final class Order
         return $this->shop;
     }
 
-    public function setShop(Shop $shop): self
+    public function setShop(Shop|null $shop): self
     {
         $this->shop = $shop;
 
@@ -136,13 +136,15 @@ final class Order
         return $this;
     }
 
-    public function __construct(Identifier $id, Identifier $userId, Identifier $groupId, Identifier $productId, Identifier $shopId, Description $description, Amount $amount, Product $product, Shop $shop)
+    public function __construct(Identifier $id, Identifier $userId, Identifier $groupId, Description $description, Amount $amount, Product $product, Shop|null $shop = null)
     {
         $this->id = $id;
         $this->userId = $userId;
         $this->groupId = $groupId;
-        $this->productId = $productId;
-        $this->shopId = $shopId;
+        $this->productId = $product->getId();
+        $this->shopId = null !== $shop
+            ? $shop->getId()
+            : ValueObjectFactory::createIdentifier(null);
         $this->description = $description;
         $this->amount = $amount;
         $this->createdOn = new \DateTime();
@@ -152,14 +154,12 @@ final class Order
         $this->listOrders = new ArrayCollection();
     }
 
-    public static function fromPrimitives(string $id, string $userId, string $groupId, string $productId, string $shopId, float $amount, string $description, Product $product, Shop $shop): self
+    public static function fromPrimitives(string $id, string $userId, string $groupId, float $amount, string $description, Product $product, Shop|null $shop = null): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),
             ValueObjectFactory::createIdentifier($userId),
             ValueObjectFactory::createIdentifier($groupId),
-            ValueObjectFactory::createIdentifier($productId),
-            ValueObjectFactory::createIdentifier($shopId),
             ValueObjectFactory::createDescription($description),
             ValueObjectFactory::createAmount($amount),
             $product,
