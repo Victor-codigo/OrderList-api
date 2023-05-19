@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Product\Domain\Model;
 
+use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
@@ -139,6 +140,23 @@ final class Product
             ValueObjectFactory::createNameWithSpaces($name),
             ValueObjectFactory::createDescription($description),
             ValueObjectFactory::createPath($image),
+        );
+    }
+
+    public static function fromPrimitiveArrayOfData(array $productData): self
+    {
+        if (!isset($productData['id'])
+        || !isset($productData['group_id'])
+        || !isset($productData['name'])) {
+            throw LogicException::fromMessage('Not enough data parameters to create a Product');
+        }
+
+        return self::fromPrimitives(
+            $productData['id'],
+            $productData['group_id'],
+            $productData['name'],
+            $productData['description'] ?? null,
+            $productData['image'] ?? null,
         );
     }
 }
