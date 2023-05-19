@@ -103,9 +103,13 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
             ->from(Shop::class, 'shop');
 
         if (null !== $shopsId) {
+            $shopsIdPlain = array_map(
+                fn (Identifier $shopId) => $shopId->getValue(),
+                $shopsId
+            );
             $query
                 ->where('shop.id IN (:shopsId)')
-                ->setParameter('shopsId', $shopsId);
+                ->setParameter('shopsId', $shopsIdPlain);
         }
 
         if (null !== $groupId) {
