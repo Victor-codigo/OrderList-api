@@ -44,6 +44,12 @@
         <testsuite name="functionalProduct">
             <directory suffix="Test.php">tests/Functional/Product</directory>
         </testsuite>
+        <testsuite name="functionalShop">
+            <directory suffix="Test.php">tests/Functional/Shop</directory>
+        </testsuite>
+        <testsuite name="functionalOrder">
+            <directory suffix="Test.php">tests/Functional/Order</directory>
+        </testsuite>
     </testsuites>
 
     <coverage processUncoveredFiles="true">

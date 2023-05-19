@@ -12,3 +12,6 @@ Product:
 
 Shop:
   resource: "../../../../../Shop/Adapter/Framework/Config/routes/routes.yaml"
+
+Order:
+  resource: "../../../../../Order/Adapter/Framework/Config/routes/routes.yaml"

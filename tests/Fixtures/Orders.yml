@@ -1,0 +1,132 @@
+Common\Domain\Model\ValueObject\String\Identifier:
+  # GROUP
+  order_group_id_group_exists:
+    __construct:
+      value: "4b513296-14ac-4fb1-a574-05bc9b1dbe3f"
+
+  # ORDER
+  order_id:
+    __construct:
+      value: "9a48ac5b-4571-43fd-ac80-28b08124ffb8"
+
+  order_id_2:
+    __construct:
+      value: "a0b4760a-9037-477a-8b84-d059ae5ee7e9"
+
+  order_id_3:
+    __construct:
+      value: "d351adba-c566-4fa5-bb5b-1a6f73b1d72f"
+
+  order_id_4:
+    __construct:
+      value: "c3734d1c-8b18-4bfd-95aa-06a261476d9d"
+
+  # PRODUCT
+  product_id:
+    __construct:
+      value: "afc62bc9-c42c-4c4d-8098-09ce51414a92"
+
+  product_id_2:
+    __construct:
+      value: "8b6d650b-7bb7-4850-bf25-36cda9bce801"
+
+  product_id_3:
+    __construct:
+      value: "ca10c90a-c7e6-4594-89e9-71d2f5e74710"
+
+  product_id_4:
+    __construct:
+      value: "7e3021d4-2d02-4386-8bbe-887cfe8697a8"
+
+  # SHOP
+  shop_id:
+    __construct:
+      value: "e6c1d350-f010-403c-a2d4-3865c14630ec"
+
+  shop_id_2:
+    __construct:
+      value: "f6ae3da3-c8f2-4ccb-9143-0f361eec850e"
+
+  shop_id_3:
+    __construct:
+      value: "b9b1c541-d41e-4751-9ecb-4a1d823c0405"
+
+  shop_id_4:
+    __construct:
+      value: "cc7f5dd6-02ba-4bd9-b5c1-5b65d81e59a0"
+
+  # USER
+  user_id_active:
+    __construct:
+      value: "2606508b-4516-45d6-93a6-c7cb416b7f3f"
+
+  user_id_admin:
+    __construct:
+      value: "6df60afd-f7c3-4c2c-b920-e265f266c560"
+
+Common\Domain\Model\ValueObject\String\Description:
+  order_description:
+    __construct:
+      value: <text(500)>
+
+  order_description_null:
+    __construct:
+      value: null
+
+Common\Domain\Model\ValueObject\Float\Amount:
+  order_amount_10:
+    __construct:
+      value: 10.20
+
+  order_amount_20:
+    __construct:
+      value: 20.05
+
+  order_amount_30:
+    __construct:
+      value: 30.15
+
+  order_amount_40:
+    __construct:
+      value: 40
+
+Order\Domain\Model\Order:
+  entity-order:
+    __construct:
+      id: "@order_id"
+      userId: "@entity-user_active->getId"
+      groupId: "@order_group_id_group_exists"
+      description: "@order_description"
+      amount: "@order_amount_10"
+      product: "@entity-product"
+      shop: "@entity-shop"
+
+  entity-order_2:
+    __construct:
+      id: "@order_id_2"
+      userId: "@entity-user_active->getId"
+      groupId: "@order_group_id_group_exists"
+      description: "@order_description_null"
+      amount: "@order_amount_20"
+      product: "@entity-product_2"
+      shop: "@entity-shop"
+
+  entity-order_3:
+    __construct:
+      id: "@order_id_3"
+      userId: "@entity-user_admin->getId"
+      groupId: "@order_group_id_group_exists"
+      description: "@order_description"
+      amount: "@order_amount_30"
+      product: "@entity-product_3"
+      shop: "@entity-shop"
+
+  entity-order_4:
+    __construct:
+      id: "@order_id_4"
+      userId: "@entity-user_admin->getId"
+      groupId: "@order_group_id_group_exists"
+      description: "@order_description"
+      amount: "@order_amount_40"
+      product: "@entity-product_4"
+      shop: "@entity-shop_2"
