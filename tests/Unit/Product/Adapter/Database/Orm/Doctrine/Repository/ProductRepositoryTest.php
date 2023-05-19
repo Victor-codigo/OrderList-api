@@ -125,7 +125,7 @@ class ProductRepositoryTest extends DataBaseTestCase
     {
         $this->expectException(DBConnectionException::class);
 
-        $group = $this->getNewProduct();
+        $product = $this->getNewProduct();
 
         /** @var MockObject|ObjectManager $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManager::class);
@@ -135,7 +135,7 @@ class ProductRepositoryTest extends DataBaseTestCase
             ->willThrowException(ConnectionException::driverRequired(''));
 
         $this->mockObjectManager($this->object, $objectManagerMock);
-        $this->object->remove([$group]);
+        $this->object->remove([$product]);
     }
 
     /** @test */
