@@ -46,7 +46,7 @@ class OrderCreateUseCase extends ServiceBase
 
             return $this->createOrderCreateOutputDto($orders);
         } catch (ValidateGroupAndUserException) {
-            throw OrderCreateGroupAndUserValidationException::fromMessage('You not belongs to the group');
+            throw OrderCreateGroupAndUserValidationException::fromMessage('You not belong to the group');
         } catch (OrderCreateServiceProductNotFoundException) {
             throw OrderCreateProductNotFoundException::fromMessage('Product or products not found');
         } catch (\Exception $e) {
