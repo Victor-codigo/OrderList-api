@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\Order\Adapter\Database\Orm\Doctrine\Repository;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Doctrine\DBAL\Exception\ConnectionException;
@@ -159,5 +160,43 @@ class OrderRepositoryTest extends DataBaseTestCase
 
         $this->mockObjectManager($this->object, $objectManagerMock);
         $this->object->remove([$order]);
+    }
+
+    /** @test */
+    public function itShouldGetOrdersByIdAndGroup(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $ordersId = [
+            'id' => [
+                '9a48ac5b-4571-43fd-ac80-28b08124ffb8',
+                'a0b4760a-9037-477a-8b84-d059ae5ee7e9',
+            ],
+        ];
+
+        $expectedOrders = $this->object->findBy($ordersId);
+
+        $ordersPaginator = $this->object->findOrdersByIdOrFail($ordersId, $groupId);
+        $ordersDb = iterator_to_array($ordersPaginator);
+
+        $this->assertCount(count($ordersDb), $ordersDb);
+
+        foreach ($ordersPaginator as $order) {
+            $this->assertContainsEquals($order, $expectedOrders);
+        }
+    }
+
+    /** @test */
+    public function itShouldFailGettingOrdersByIdAndGroupNotFound(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $ordersId = [
+            'id' => [
+                'f1f309b4-6afb-4733-b823-b31914be12bd',
+                'e15586d2-24b2-47b4-97cc-508a4cb259ec',
+            ],
+        ];
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findOrdersByIdOrFail($ordersId, $groupId);
     }
 }

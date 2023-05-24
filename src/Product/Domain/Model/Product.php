@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Order\Domain\Model\Order;
 
-final class Product
+class Product
 {
     private Identifier $id;
     private Identifier $groupId;

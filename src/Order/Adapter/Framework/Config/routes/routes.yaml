@@ -6,3 +6,13 @@ order_create:
   controller: Order\Adapter\Http\Controller\OrderCreate\OrderCreateController
   requirements:
     api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# ORDER REMOVE
+# -------------------------------------------------------------
+order_remove:
+  path: /api/v{api_version}/orders
+  methods: DELETE
+  controller: Order\Adapter\Http\Controller\OrderRemove\OrderRemoveController
+  requirements:
+    api_version: '\d+[.\d]?'

@@ -6,7 +6,9 @@ namespace Order\Adapter\Database\Orm\Doctrine\Repository;
 
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -59,5 +61,36 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
         } catch (\Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
+    }
+
+    /**
+     * @param Identifier[] $ordersId
+     *
+     * @throws DBNotFoundException
+     */
+    public function findOrdersByIdOrFail(array $ordersId, Identifier $groupId): PaginatorInterface
+    {
+        $orderEntity = Order::class;
+        $dql = <<<DQL
+            SELECT orders
+            FROM {$orderEntity} orders
+            WHERE orders.groupId = :groupId
+                AND orders.id IN (:ordersId)
+        DQL;
+
+        $query = $this->entityManager
+            ->createQuery($dql)
+            ->setParameters([
+                'groupId' => $groupId,
+                'ordersId' => $ordersId,
+            ]);
+
+        $paginator = $this->paginator->createPaginator($query);
+
+        if (0 === $paginator->getItemsTotal()) {
+            throw DBNotFoundException::fromMessage('No orders found');
+        }
+
+        return $paginator;
     }
 }
