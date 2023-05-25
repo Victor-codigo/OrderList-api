@@ -68,22 +68,20 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
      *
      * @throws DBNotFoundException
      */
-    public function findOrdersByIdOrFail(array $ordersId, Identifier $groupId): PaginatorInterface
+    public function findOrdersByIdOrFail(array $ordersId, Identifier|null $groupId = null): PaginatorInterface
     {
-        $orderEntity = Order::class;
-        $dql = <<<DQL
-            SELECT orders
-            FROM {$orderEntity} orders
-            WHERE orders.groupId = :groupId
-                AND orders.id IN (:ordersId)
-        DQL;
-
         $query = $this->entityManager
-            ->createQuery($dql)
-            ->setParameters([
-                'groupId' => $groupId,
-                'ordersId' => $ordersId,
-            ]);
+            ->createQueryBuilder()
+            ->select('orders')
+            ->from(Order::class, 'orders')
+            ->where('orders.id IN (:ordersId)')
+            ->setParameter('ordersId', $ordersId);
+
+        if (null !== $groupId) {
+            $query
+                ->andWhere('orders.groupId = :groupId')
+                ->setParameter('groupId', $groupId);
+        }
 
         $paginator = $this->paginator->createPaginator($query);
 

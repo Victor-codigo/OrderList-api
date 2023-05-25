@@ -186,6 +186,28 @@ class OrderRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
+    public function itShouldGetOrdersById(): void
+    {
+        $ordersId = [
+            'id' => [
+                '9a48ac5b-4571-43fd-ac80-28b08124ffb8',
+                'a0b4760a-9037-477a-8b84-d059ae5ee7e9',
+            ],
+        ];
+
+        $expectedOrders = $this->object->findBy($ordersId);
+
+        $ordersPaginator = $this->object->findOrdersByIdOrFail($ordersId);
+        $ordersDb = iterator_to_array($ordersPaginator);
+
+        $this->assertCount(count($ordersDb), $ordersDb);
+
+        foreach ($ordersPaginator as $order) {
+            $this->assertContainsEquals($order, $expectedOrders);
+        }
+    }
+
+    /** @test */
     public function itShouldFailGettingOrdersByIdAndGroupNotFound(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);

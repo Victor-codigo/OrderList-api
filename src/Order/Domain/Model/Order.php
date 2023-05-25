@@ -41,6 +41,13 @@ final class Order
         return $this->userId;
     }
 
+    public function setUserId(Identifier $userId): self
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+
     public function getGroupId(): Identifier
     {
         return $this->groupId;
@@ -61,7 +68,7 @@ final class Order
         return $this->description;
     }
 
-    public function setDescription($description): self
+    public function setDescription(Description $description): self
     {
         $this->description = $description;
 
@@ -73,7 +80,7 @@ final class Order
         return $this->amount;
     }
 
-    public function setAmount($amount): self
+    public function setAmount(Amount $amount): self
     {
         $this->amount = $amount;
 
@@ -83,6 +90,13 @@ final class Order
     public function getCreatedOn(): \DateTime
     {
         return $this->createdOn;
+    }
+
+    public function setCreatedOn(\DateTime $date): self
+    {
+        $this->createdOn = $date;
+
+        return $this;
     }
 
     public function getProducts(): Product

@@ -8,6 +8,16 @@ order_create:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
+# ORDER MODIFY
+# -------------------------------------------------------------
+order_modify:
+  path: /api/v{api_version}/orders
+  methods: PUT
+  controller: Order\Adapter\Http\Controller\OrderModify\OrderModifyController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
 # ORDER REMOVE
 # -------------------------------------------------------------
 order_remove:
