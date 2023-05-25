@@ -304,7 +304,7 @@ class OrderCreateControllerTest extends WebClientTestCase
 
         $this->assertResponseStructureIsOk($response, [], ['group_error'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('You not belongs to the group', $responseContent->message);
+        $this->assertSame('You not belong to the group', $responseContent->message);
         $this->assertEquals('You not belongs to the group', $responseContent->errors->group_error);
     }
 }
