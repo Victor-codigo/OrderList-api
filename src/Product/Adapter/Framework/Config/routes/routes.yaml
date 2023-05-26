@@ -26,3 +26,13 @@ product_get_data:
   controller: Product\Adapter\Http\Controller\ProductGetData\ProductGetDataController
   requirements:
     api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# PRODUCT GET DATA
+# -------------------------------------------------------------
+product_set_price:
+  path: /api/v{api_version}/products/price
+  methods: PATCH
+  controller: Product\Adapter\Http\Controller\ProductSetShopPrice\ProductSetShopPriceController
+  requirements:
+    api_version: '\d+[.\d]?'

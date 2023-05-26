@@ -13,7 +13,7 @@ class DBUniqueConstraintException extends DomainException implements DBException
         return new static(sprintf('The email [%s], already exists', $email), $code);
     }
 
-    public static function fromId(string $id, int $code = 0): static
+    public static function fromId(string|int $id, int $code = 0): static
     {
         return new static(sprintf('The id [%s], already exists', $id), $code);
     }

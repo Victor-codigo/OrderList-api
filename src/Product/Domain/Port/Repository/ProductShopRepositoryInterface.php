@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace Product\Domain\Port\Repository;
 
+use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Ports\Repository\RepositoryInterface;
-use Product\Domain\Model\Product;
+use Product\Domain\Model\ProductShop;
 
 interface ProductShopRepositoryInterface extends RepositoryInterface
 {
     /**
-     * @throws DBUniqueConstraintException
      * @throws DBConnectionException
      */
-    public function save(Product $product): void;
+    public function save(ProductShop $ProductShop): void;
 
     /**
-     * @throws DBConnectionException
+     * @throws DBNotFoundException
      */
-    public function remove(Product $product): void;
+    public function findProductsAndShopsOrFail(Identifier|null $productId = null, Identifier|null $shopId = null, Identifier|null $groupId = null): PaginatorInterface;
 }
