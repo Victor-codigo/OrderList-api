@@ -28,11 +28,21 @@ product_get_data:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
-# PRODUCT GET DATA
+# PRODUCT SET PRICE
 # -------------------------------------------------------------
 product_set_price:
   path: /api/v{api_version}/products/price
   methods: PATCH
   controller: Product\Adapter\Http\Controller\ProductSetShopPrice\ProductSetShopPriceController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# PRODUCT GET PRICE
+# -------------------------------------------------------------
+product_get_price:
+  path: /api/v{api_version}/products/price
+  methods: GET
+  controller: Product\Adapter\Http\Controller\ProductGetShopPrice\ProductGetShopPriceController
   requirements:
     api_version: '\d+[.\d]?'

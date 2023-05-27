@@ -6,6 +6,7 @@ namespace Product\Domain\Model;
 
 use Common\Domain\Model\ValueObject\Float\Money;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Shop\Domain\Model\Shop;
 
 class ProductShop
@@ -76,5 +77,14 @@ class ProductShop
         $this->productId = $product->getId();
         $this->shopId = $shop->getId();
         $this->price = $price;
+    }
+
+    public static function fromPrimitives(Product $product, Shop $shop, float|null $price = null): self
+    {
+        return new self(
+            $product,
+            $shop,
+            ValueObjectFactory::createMoney($price)
+        );
     }
 }
