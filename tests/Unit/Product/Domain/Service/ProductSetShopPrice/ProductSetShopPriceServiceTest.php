@@ -44,7 +44,7 @@ class ProductSetShopPriceServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('findProductsAndShopsOrFail')
-            ->with($productId, $shopId, $groupId)
+            ->with([$productId], [$shopId], $groupId)
             ->willReturn($this->paginator);
 
         $this->productShopRepository
@@ -79,7 +79,7 @@ class ProductSetShopPriceServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('findProductsAndShopsOrFail')
-            ->with($productId, $shopId, $groupId)
+            ->with([$productId], [$shopId], $groupId)
             ->willThrowException(new DBNotFoundException());
 
         $this->productShopRepository
@@ -110,7 +110,7 @@ class ProductSetShopPriceServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('findProductsAndShopsOrFail')
-            ->with($productId, $shopId, $groupId)
+            ->with([$productId], [$shopId], $groupId)
             ->willReturn($this->paginator);
 
         $this->productShopRepository

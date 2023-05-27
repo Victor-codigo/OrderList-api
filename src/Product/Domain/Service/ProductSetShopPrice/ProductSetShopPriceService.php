@@ -22,7 +22,7 @@ class ProductSetShopPriceService
     {
         /** @var ProductShop $productShop */
         $productShop = iterator_to_array(
-            $this->productShopRepository->findProductsAndShopsOrFail($input->productId, $input->shopId, $input->groupId)
+            $this->productShopRepository->findProductsAndShopsOrFail([$input->productId], [$input->shopId], $input->groupId)
         )[0];
 
         $productShop->setPrice($input->price);
