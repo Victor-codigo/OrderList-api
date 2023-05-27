@@ -22,6 +22,10 @@ class MoneyType extends TypeBase
 
     public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
-        return parent::convertToPHPValue((float) $value, $platform);
+        if (null !== $value) {
+            $value = (float) $value;
+        }
+
+        return parent::convertToPHPValue($value, $platform);
     }
 }

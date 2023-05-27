@@ -52,4 +52,15 @@ class MoneyTypeTest extends TestCase
         $this->assertInstanceOf(Money::class, $return);
         $this->assertEquals($value, $return->getValue());
     }
+
+    /** @test */
+    public function itShouldReturnAValidPhpValuePassedNull(): void
+    {
+        $value = null;
+        $object = new MoneyType($value);
+        $return = $object->convertToPHPValue($value, $this->abstractPlatform);
+
+        $this->assertInstanceOf(Money::class, $return);
+        $this->assertNull($return->getValue());
+    }
 }
