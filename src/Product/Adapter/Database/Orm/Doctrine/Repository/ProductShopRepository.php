@@ -40,7 +40,7 @@ class ProductShopRepository extends RepositoryBase implements ProductShopReposit
     /**
      * @throws DBNotFoundException
      */
-    public function findProductsAndShopsOrFail(Identifier|null $productId = null, Identifier|null $shopId = null, Identifier|null $groupId = null): PaginatorInterface
+    public function findProductsAndShopsOrFail(array|null $productsId = null, array|null $shopsId = null, Identifier|null $groupId = null): PaginatorInterface
     {
         $query = $this->entityManager->createQueryBuilder()
             ->select('productShops')
@@ -53,16 +53,16 @@ class ProductShopRepository extends RepositoryBase implements ProductShopReposit
                 ->setParameter('groupId', $groupId);
         }
 
-        if (null !== $productId) {
+        if (!empty($productsId)) {
             $query
-                ->andWhere('productShops.productId = :productId')
-                ->setParameter('productId', $productId);
+                ->andWhere('productShops.productId IN (:productsId)')
+                ->setParameter('productsId', $productsId);
         }
 
-        if (null !== $shopId) {
+        if (!empty($shopsId)) {
             $query
-                ->andWhere('productShops.shopId = :shopId')
-                ->setParameter('shopId', $shopId);
+                ->andWhere('productShops.shopId IN (:shopsId)')
+                ->setParameter('shopsId', $shopsId);
         }
 
         $paginator = $this->paginator->createPaginator($query);

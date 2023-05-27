@@ -74,7 +74,7 @@ class ProductShopRepositoryTest extends DataBaseTestCase
     {
         $productId = ValueObjectFactory::createIdentifier(self::PRODUCT_ID);
         $return = iterator_to_array(
-            $this->object->findProductsAndShopsOrFail($productId)
+            $this->object->findProductsAndShopsOrFail([$productId])
         )[0];
 
         $productExpected = $this->object->findOneBy(['productId' => $productId]);
@@ -87,7 +87,7 @@ class ProductShopRepositoryTest extends DataBaseTestCase
     {
         $shopId = ValueObjectFactory::createIdentifier(self::SHOP_ID);
         $return = iterator_to_array(
-            $this->object->findProductsAndShopsOrFail(null, $shopId)
+            $this->object->findProductsAndShopsOrFail(null, [$shopId])
         )[0];
 
         $shopExpected = $this->object->findOneBy(['shopId' => $shopId]);
@@ -101,7 +101,7 @@ class ProductShopRepositoryTest extends DataBaseTestCase
         $productId = ValueObjectFactory::createIdentifier(self::PRODUCT_ID);
         $shopId = ValueObjectFactory::createIdentifier(self::SHOP_ID);
         $return = iterator_to_array(
-            $this->object->findProductsAndShopsOrFail($productId, $shopId)
+            $this->object->findProductsAndShopsOrFail([$productId], [$shopId])
         )[0];
 
         $shopExpected = $this->object->findOneBy([
@@ -119,7 +119,7 @@ class ProductShopRepositoryTest extends DataBaseTestCase
         $shopId = ValueObjectFactory::createIdentifier(self::SHOP_ID);
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
         $return = iterator_to_array(
-            $this->object->findProductsAndShopsOrFail($productId, $shopId, $groupId)
+            $this->object->findProductsAndShopsOrFail([$productId], [$shopId], $groupId)
         )[0];
 
         $shopExpected = $this->object->findOneBy([
@@ -138,6 +138,6 @@ class ProductShopRepositoryTest extends DataBaseTestCase
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_OTHER_ID);
 
         $this->expectException(DBNotFoundException::class);
-        $this->object->findProductsAndShopsOrFail($productId, $shopId, $groupId);
+        $this->object->findProductsAndShopsOrFail([$productId], [$shopId], $groupId);
     }
 }
