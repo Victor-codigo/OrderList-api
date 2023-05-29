@@ -201,11 +201,12 @@ class ShopRepositoryTest extends DataBaseTestCase
 
         $return = $this->object->findShopsOrFail(null, null, [$productId]);
 
-        $this->assertCount(2, $return);
+        $this->assertCount(3, $return);
 
         $expectedShopsId = [
             self::SHOP_ID,
-            'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
+            self::SHOP_ID_2,
+            self::SHOP_ID_3,
         ];
 
         foreach ($return as $shop) {
@@ -221,11 +222,12 @@ class ShopRepositoryTest extends DataBaseTestCase
 
         $return = $this->object->findShopsOrFail(null, $groupId, [$productId]);
 
-        $this->assertCount(2, $return);
+        $this->assertCount(3, $return);
 
         $expectedShopsId = [
             self::SHOP_ID,
-            'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
+            self::SHOP_ID_2,
+            self::SHOP_ID_3,
         ];
 
         foreach ($return as $shop) {

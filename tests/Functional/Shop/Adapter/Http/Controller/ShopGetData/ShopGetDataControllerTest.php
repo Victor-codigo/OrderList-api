@@ -19,6 +19,8 @@ class ShopGetDataControllerTest extends WebClientTestCase
     private const USER_HAS_NO_GROUP_PASSWORD = '123456';
     private const GROUP_EXISTS_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const SHOP_EXISTS_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
+    private const SHOP_EXISTS_ID_2 = 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e';
+    private const SHOP_EXISTS_ID_3 = 'b9b1c541-d41e-4751-9ecb-4a1d823c0405';
     private const PRODUCT_EXISTS_ID = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
 
     private function assertShopDataIsOk(array $shopsDataExpected, object $shopDataActual): void
@@ -150,10 +152,18 @@ class ShopGetDataControllerTest extends WebClientTestCase
                 'created_on' => '',
             ],
             [
-                'id' => 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
+                'id' => self::SHOP_EXISTS_ID_2,
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Shop name 2',
                 'description' => 'Dolorem omnis accusamus iusto qui rerum eligendi. Ipsa omnis autem totam est vero qui. Voluptas quisquam cumque dolorem ut debitis recusandae veniam. Quam repellendus est sed enim doloremque eum eius. Ut est odio est. Voluptates dolorem et nisi voluptatum. Voluptas vitae deserunt mollitia consequuntur eos. Suscipit recusandae hic cumque voluptatem officia. Exercitationem quibusdam ea qui laudantium est non quis. Vero dicta et voluptas explicabo.',
+                'image' => null,
+                'created_on' => '',
+            ],
+            [
+                'id' => self::SHOP_EXISTS_ID_3,
+                'group_id' => self::GROUP_EXISTS_ID,
+                'name' => 'Shop name 3',
+                'description' => null,
                 'image' => null,
                 'created_on' => '',
             ],
@@ -169,7 +179,7 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [0, 1], [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, [0, 1, 2], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Shops data', $responseContent->message);
 
@@ -292,10 +302,18 @@ class ShopGetDataControllerTest extends WebClientTestCase
                 'created_on' => '',
             ],
             [
-                'id' => 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
+                'id' => self::SHOP_EXISTS_ID_2,
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Shop name 2',
                 'description' => 'Quae suscipit ea sit est exercitationem aliquid nobis. Qui quidem aut non quia cupiditate. Neque sunt aperiam cum quis quia aspernatur quia. Ratione enim eos rerum et. Ducimus voluptatem nam porro et est molestiae. Rerum perspiciatis et distinctio totam culpa et quaerat temporibus. Suscipit occaecati rerum molestiae voluptas odio eos. Sunt labore quia asperiores laborum. Unde explicabo et aspernatur vel odio modi qui. Ipsa recusandae eveniet doloribus quisquam. Nam aut ut omnis qui possimus.',
+                'image' => null,
+                'created_on' => '',
+            ],
+            [
+                'id' => self::SHOP_EXISTS_ID_3,
+                'group_id' => self::GROUP_EXISTS_ID,
+                'name' => 'Shop name 3',
+                'description' => null,
                 'image' => null,
                 'created_on' => '',
             ],
@@ -311,7 +329,7 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [0, 1], [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, [0, 1, 2], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Shops data', $responseContent->message);
 
