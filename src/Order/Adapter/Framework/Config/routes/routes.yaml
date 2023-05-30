@@ -26,3 +26,13 @@ order_remove:
   controller: Order\Adapter\Http\Controller\OrderRemove\OrderRemoveController
   requirements:
     api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# ORDER GET DATA
+# -------------------------------------------------------------
+order_get_data:
+  path: /api/v{api_version}/orders
+  methods: GET
+  controller: Order\Adapter\Http\Controller\OrderGetData\OrderGetDataController
+  requirements:
+    api_version: '\d+[.\d]?'
