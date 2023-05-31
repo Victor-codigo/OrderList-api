@@ -17,6 +17,9 @@ imports:
     - {
           resource: "../../../../../Order/Adapter/Framework/Config/services/services.yaml",
       }
+    - {
+          resource: "../../../../../ListOrders/Adapter/Framework/Config/services/services.yaml",
+      }
 parameters:
     common.environment.app_env: "%env(string:APP_ENV)%"
     common.app_name: "%env(string:APP_NAME)%"

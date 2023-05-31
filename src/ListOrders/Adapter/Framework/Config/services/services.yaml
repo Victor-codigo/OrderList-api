@@ -1,0 +1,18 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+    bind:
+
+  # Adapter
+  ListOrders\Adapter\:
+    resource: "../../../../../ListOrders/Adapter/"
+
+  # Application
+  ListOrders\Application\:
+    resource: "../../../../../ListOrders/Application/"
+
+  # Domain
+  ListOrders\Domain\:
+    resource: "../../../../../ListOrders/Domain/"

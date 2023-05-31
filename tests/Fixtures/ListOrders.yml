@@ -1,0 +1,105 @@
+Common\Domain\Model\ValueObject\String\Identifier:
+  # LIST ORDERS ID
+  listOrders_id:
+    __construct:
+      value: "ba6bed75-4c6e-4ac3-8787-5bded95dac8d"
+
+  listOrders_id_2:
+    __construct:
+      value: "d446eab9-5199-48d0-91f5-0407a86bcb4f"
+
+  listOrders_id_3:
+    __construct:
+      value: "f2980f67-4eb9-41ca-b452-ffa2c7da6a37"
+
+  listOrders_id_4:
+    __construct:
+      value: "f1559a23-2f92-4660-a335-b1052d7395da"
+
+Common\Domain\Model\ValueObject\String\NameWithSpaces:
+  listOrder_name:
+    __construct:
+      value: "List order name 1"
+
+  listOrder_name_2:
+    __construct:
+      value: "List order name 2"
+
+  listOrder_name_3:
+    __construct:
+      value: "List order name 3"
+
+  listOrder_name_4:
+    __construct:
+      value: "List order name 4"
+
+Common\Domain\Model\ValueObject\String\Description:
+  listOrder_description:
+    __construct:
+      value: "List order description 1"
+
+  listOrder_description_2:
+    __construct:
+      value: "List order description 2"
+
+  listOrder_description_3:
+    __construct:
+      value: "List order description 3"
+
+  listOrder_description_4:
+    __construct:
+      value: null
+
+Common\Domain\Model\ValueObject\Date\DateNowToFuture:
+  listOrder_dateToBuy:
+    __construct:
+      value: "<dateTime('2023-5-29 10:20:15')>"
+
+  listOrder_dateToBuy_2:
+    __construct:
+      value: "<dateTime('2023-5-28 10:20:15')>"
+
+  listOrder_dateToBuy_3:
+    __construct:
+      value: "<dateTime('2023-5-27 10:20:15')>"
+
+  listOrder_dateToBuy_4:
+    __construct:
+      value: null
+
+ListOrders\Domain\Model\ListOrders:
+  entity-listOrder:
+    __construct:
+      id: "@listOrders_id"
+      userId: "@entity-user_active->getId"
+      groupId: "@entity-group_users_100->getId"
+      name: "@listOrder_name"
+      description: "@listOrder_description"
+      dateToBuy: "@listOrder_dateToBuy"
+
+  entity-listOrder_2:
+    __construct:
+      id: "@listOrders_id_2"
+      userId: "@entity-user_active->getId"
+      groupId: "@entity-group_users_100->getId"
+      name: "@listOrder_name_2"
+      description: "@listOrder_description_2"
+      dateToBuy: "@listOrder_dateToBuy_2"
+
+  entity-listOrder_3:
+    __construct:
+      id: "@listOrders_id_3"
+      userId: "@entity-user_active->getId"
+      groupId: "@entity-group_users_100->getId"
+      name: "@listOrder_name_3"
+      description: "@listOrder_description_3"
+      dateToBuy: "@listOrder_dateToBuy_3"
+
+  entity-listOrder_4:
+    __construct:
+      id: "@listOrders_id_4"
+      userId: "@entity-user_active->getId"
+      groupId: "@entity-group_users_100->getId"
+      name: "@listOrder_name_4"
+      description: "@listOrder_description_4"
+      dateToBuy: "@listOrder_dateToBuy_4"

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping">
-    <entity name="Order\Domain\Model\ListOrdersOrders"
+    <entity name="ListOrders\Domain\Model\ListOrdersOrders"
             table="ListOrders_Orders"
-            repository-class="Order\Adapter\Database\Orm\Doctrine\Repository\ListOrdersOrdersRepository">
+            repository-class="ListOrders\Adapter\Database\Orm\Doctrine\Repository\ListOrdersOrdersRepository">
 
        <id name="id"
             type="IdentifierType"
@@ -13,7 +13,7 @@
               type="IdentifierType"
               column-definition="CHAR(36) NOT NULL"/>
 
-       <field name="listOrderId"
+       <field name="listOrdersId"
               column="list_order_id"
               type="IdentifierType"
               column-definition="CHAR(36) NOT NULL"/>
@@ -42,8 +42,8 @@
 
 
        <!-- ListOrders_Orders - List_Orders -->
-       <many-to-one field="listOrder"
-                    target-entity="Order\Domain\Model\ListOrders"
+       <many-to-one field="listOrders"
+                    target-entity="ListOrders\Domain\Model\ListOrders"
                     inversed-by="orders">
 
             <join-column name="list_order_id"

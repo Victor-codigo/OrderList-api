@@ -1,0 +1,8 @@
+# -------------------------------------------------------------
+# LIST ORDERS CREATE
+order_create:
+  path: /api/v{api_version}/list-orders
+  methods: POST
+  controller: ListOrders\Adapter\Http\Controller\ListOrdersCreate\ListOrdersCreateController
+  requirements:
+    api_version: '\d+[.\d]?'

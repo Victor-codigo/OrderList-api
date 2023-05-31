@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <doctrine-mapping xmlns="https://doctrine-project.org/schemas/orm/doctrine-mapping">
-    <entity name="Order\Domain\Model\ListOrders"
+    <entity name="ListOrders\Domain\Model\ListOrders"
             table="List_Orders"
-            repository-class="Order\Adapter\Database\Orm\Doctrine\Repository\ListOrdersRepository">
+            repository-class="ListOrders\Adapter\Database\Orm\Doctrine\Repository\ListOrdersRepository">
 
        <id name="id"
             type="IdentifierType"
@@ -13,10 +13,15 @@
               type="IdentifierType"
               column-definition="CHAR(36) NOT NULL"/>
 
+       <field name="groupId"
+              column="group_id"
+              type="IdentifierType"
+              column-definition="CHAR(36) NOT NULL"/>
+
        <field name="name"
               column="name"
               type="NameWithSpacesType"
-              column-definition="CHAR(36) NOT NULL"/>
+              length="50" />
 
        <field name="description"
               type="DescriptionType"
@@ -25,7 +30,7 @@
 
        <field name="dateToBuy"
               column="date_to_buy"
-              type="datetime"
+              type="DateNowToFutureType"
               nullable="true"/>
 
        <field name="createdOn"
@@ -45,16 +50,19 @@
        </indexes>
 
        <unique-constraints>
-            <unique-constraint name="u_list_order_id"
-                               columns="id"/>
+              <unique-constraint name="u_list_order_id"
+                                 columns="id"/>
+
+              <unique-constraint name="u_list_order_name"
+                                 columns="name"/>
 
         </unique-constraints>
 
 
        <!-- List_Orders - LostOrders_Orders -->
        <one-to-many field="orders"
-                    target-entity="Order\Domain\Model\ListOrdersOrders"
-                    mapped-by="listOrder" />
+                    target-entity="ListOrders\Domain\Model\ListOrdersOrders"
+                    mapped-by="listOrders" />
 
     </entity>
 </doctrine-mapping>

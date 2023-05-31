@@ -69,6 +69,7 @@
             "Test\\": "tests/",
             "Group\\": "src/Group/",
             "Order\\": "src/Order/",
+            "ListOrders\\": "src/ListOrders/",
             "Product\\": "src/Product/",
             "Shop\\": "src/Shop/",
             "User\\": "src/User/",
@@ -80,6 +81,7 @@
         "psr-4": {
             "Group\\Test\\Unit\\": "src/tests/Unit/Group/",
             "Order\\Test\\Unit\\": "src/tests/Unit/Order/",
+            "ListOrders\\Test\\Unit\\": "src/test/Unit/ListOrders/",
             "Product\\Test\\Unit\\": "src/tests/Unit/Product/",
             "Shop\\Test\\Unit\\": "src/tests/Unit/Shop/",
             "User\\Test\\Unit\\": "src/tests/Unit/User/",

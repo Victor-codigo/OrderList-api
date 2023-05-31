@@ -2,19 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Order\Domain\Model;
+namespace ListOrders\Domain\Model;
 
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Order\Domain\Model\Order;
 
 class ListOrdersOrders
 {
     private Identifier $id;
     private Identifier $orderId;
-    private Identifier $listOrderId;
+    private Identifier $listOrdersId;
     private bool $bought;
 
-    private ListOrders $listOrder;
+    private ListOrders $listOrders;
     private Order $order;
 
     public function getId(): Identifier
@@ -27,9 +28,9 @@ class ListOrdersOrders
         return $this->orderId;
     }
 
-    public function getListOrderId(): Identifier
+    public function getListOrdersId(): Identifier
     {
-        return $this->listOrderId;
+        return $this->listOrdersId;
     }
 
     public function getBought(): bool
@@ -44,14 +45,14 @@ class ListOrdersOrders
         return $this;
     }
 
-    public function getListOrder(): ListOrders
+    public function getListOrders(): ListOrders
     {
-        return $this->listOrder;
+        return $this->listOrders;
     }
 
-    public function setListOrder(ListOrders $listOrder): self
+    public function setListOrders(ListOrders $listOrders): self
     {
-        $this->listOrder = $listOrder;
+        $this->listOrders = $listOrders;
 
         return $this;
     }
@@ -68,22 +69,22 @@ class ListOrdersOrders
         return $this;
     }
 
-    public function __construct(Identifier $id, Identifier $orderId, Identifier $listOrderId, bool $bought, ListOrders $listOrder, Order $order)
+    public function __construct(Identifier $id, Identifier $orderId, Identifier $listOrdersId, bool $bought, ListOrders $listOrders, Order $order)
     {
         $this->id = $id;
         $this->orderId = $orderId;
-        $this->listOrderId = $listOrderId;
+        $this->listOrdersId = $listOrdersId;
         $this->bought = $bought;
-        $this->listOrder = $listOrder;
+        $this->listOrders = $listOrders;
         $this->order = $order;
     }
 
-    public static function fromPrimitives(string $id, string $orderId, string $listOrderId, bool $bought, ListOrders $listOrders, Order $order): self
+    public static function fromPrimitives(string $id, string $orderId, string $listOrdersId, bool $bought, ListOrders $listOrders, Order $order): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),
             ValueObjectFactory::createIdentifier($orderId),
-            ValueObjectFactory::createIdentifier($listOrderId),
+            ValueObjectFactory::createIdentifier($listOrdersId),
             $bought,
             $listOrders,
             $order

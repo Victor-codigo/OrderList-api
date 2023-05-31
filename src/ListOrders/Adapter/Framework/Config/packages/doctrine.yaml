@@ -1,0 +1,19 @@
+doctrine:
+    orm:
+        auto_generate_proxy_classes: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: true
+        mappings:
+            ListOrders:
+                is_bundle: false
+                type: xml
+                dir: "%kernel.project_dir%/src/ListOrders/Adapter/Database/Orm/Doctrine/Mapping"
+                prefix: 'ListOrders\Domain\Model'
+                alias: ListOrders
+
+            ListOrdersOrders:
+                is_bundle: false
+                type: xml
+                dir: "%kernel.project_dir%/src/ListOrders/Adapter/Database/Orm/Doctrine/Mapping"
+                prefix: 'ListOrders\Domain\Model'
+                alias: ListOrdersOrders

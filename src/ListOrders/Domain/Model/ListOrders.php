@@ -2,22 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Order\Domain\Model;
+namespace ListOrders\Domain\Model;
 
+use Common\Domain\Model\ValueObject\Date\DateNowToFuture;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Order\Domain\Model\Order;
 
 class ListOrders
 {
     private Identifier $id;
     private Identifier $userId;
+    private Identifier $groupId;
     private NameWithSpaces $name;
     private Description $description;
-    private \DateTime $dateToBuy;
+    private DateNowToFuture $dateToBuy;
     private \DateTime $createdOn;
 
     /**
@@ -33,6 +36,11 @@ class ListOrders
     public function getUserId(): Identifier
     {
         return $this->userId;
+    }
+
+    public function getGroupId(): Identifier
+    {
+        return $this->groupId;
     }
 
     public function getName(): NameWithSpaces
@@ -59,7 +67,7 @@ class ListOrders
         return $this;
     }
 
-    public function getDateToBuy(): \DateTime
+    public function getDateToBuy(): DateNowToFuture
     {
         return $this->dateToBuy;
     }
@@ -98,10 +106,11 @@ class ListOrders
         return $this;
     }
 
-    public function __construct(Identifier $id, Identifier $userId, NameWithSpaces $name, Description $description, \DateTime $dateToBuy)
+    public function __construct(Identifier $id, Identifier $groupId, Identifier $userId, NameWithSpaces $name, Description $description, DateNowToFuture $dateToBuy)
     {
         $this->id = $id;
         $this->userId = $userId;
+        $this->groupId = $groupId;
         $this->name = $name;
         $this->description = $description;
         $this->dateToBuy = $dateToBuy;
@@ -110,14 +119,15 @@ class ListOrders
         $this->orders = new ArrayCollection();
     }
 
-    public static function fromPrimitives(string $id, string $userId, string $name, string $description, \DateTime $dateToBuy)
+    public static function fromPrimitives(string $id, string $groupId, string $userId, string $name, string $description, \DateTime $dateToBuy)
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),
             ValueObjectFactory::createIdentifier($userId),
+            ValueObjectFactory::createIdentifier($groupId),
             ValueObjectFactory::createNameWithSpaces($name),
             ValueObjectFactory::createDescription($description),
-            $dateToBuy,
+            ValueObjectFactory::createDateNowToFuture($dateToBuy),
         );
     }
 }
