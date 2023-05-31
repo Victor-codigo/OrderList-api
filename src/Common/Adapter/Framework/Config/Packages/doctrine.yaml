@@ -19,6 +19,7 @@ doctrine:
             NotificationDataType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array\NotificationDataType
             AmountType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Float\AmountType
             MoneyType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Float\MoneyType
+            DateNowToFutureType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Date\DateNowToFutureType
 
     orm:
         dql:
@@ -61,6 +62,9 @@ imports:
       }
     - {
           resource: "../../../../../Order/Adapter/Framework/Config/packages/doctrine.yaml",
+      }
+    - {
+          resource: "../../../../../ListOrders/Adapter/Framework/Config/packages/doctrine.yaml",
       }
     - {
           resource: "../../../../../Product/Adapter/Framework/Config/packages/doctrine.yaml",

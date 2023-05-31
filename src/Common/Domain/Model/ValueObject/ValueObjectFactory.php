@@ -8,12 +8,17 @@ use Common\Domain\Model\ValueObject\Array\NotificationData;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Array\ValueObjectArrayFactoryInterface;
 use Common\Domain\Model\ValueObject\Array\valueObjectArrayFactory;
+use Common\Domain\Model\ValueObject\Date\DateNowToFuture;
+use Common\Domain\Model\ValueObject\Date\ValueObjectDateFactory;
+use Common\Domain\Model\ValueObject\Date\ValueObjectDateFactoryInterface;
 use Common\Domain\Model\ValueObject\Float\Amount;
 use Common\Domain\Model\ValueObject\Float\Money;
 use Common\Domain\Model\ValueObject\Float\ValueObjectFloatFactory;
+use Common\Domain\Model\ValueObject\Float\ValueObjectFloatFactoryInterface;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
 use Common\Domain\Model\ValueObject\Integer\ValueObjectIntegerFactory;
+use Common\Domain\Model\ValueObject\Integer\ValueObjectIntegerFactoryInterface;
 use Common\Domain\Model\ValueObject\Object\File;
 use Common\Domain\Model\ValueObject\Object\GroupImage;
 use Common\Domain\Model\ValueObject\Object\GroupType;
@@ -41,7 +46,7 @@ use Common\Domain\Ports\FileUpload\FileInterface;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 
-final class ValueObjectFactory implements ValueObjectStringFactoryInterface, ValueObjectArrayFactoryInterface, ValueObjectObjectFactoryInterface
+final class ValueObjectFactory implements ValueObjectStringFactoryInterface, ValueObjectArrayFactoryInterface, ValueObjectObjectFactoryInterface, ValueObjectIntegerFactoryInterface, ValueObjectFloatFactoryInterface, ValueObjectDateFactoryInterface
 {
     /**
      * @param Rol[]|null $roles
@@ -169,5 +174,10 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
     public static function createShopImage(FileInterface|null $type): ShopImage
     {
         return ValueObjectObjectFactory::createShopImage($type);
+    }
+
+    public static function createDateNowToFuture(\DateTime|null $date): DateNowToFuture
+    {
+        return ValueObjectDateFactory::createDateNowToFuture($date);
     }
 }
