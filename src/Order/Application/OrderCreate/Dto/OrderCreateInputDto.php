@@ -53,7 +53,7 @@ class OrderCreateInputDto implements ServiceInputDtoInterface
             $ordersDataArrayError = ['orders_empty' => $ordersDataArrayError];
         }
 
-        $errorListOrder = array_filter(array_map(
+        $errorListOrders = array_filter(array_map(
             fn (OrderDataDto $order) => $validator->validateValueObjectArray([
                 'product_id' => $order->productId,
                 'shop_id' => $order->shopId,
@@ -68,6 +68,6 @@ class OrderCreateInputDto implements ServiceInputDtoInterface
             $errorListGroupId = ['group_id' => $errorListGroupId];
         }
 
-        return array_merge($ordersDataArrayError, $errorListOrder, $errorListGroupId);
+        return array_merge($ordersDataArrayError, $errorListOrders, $errorListGroupId);
     }
 }

@@ -128,7 +128,7 @@ final class Order
         return $this;
     }
 
-    public function getListOrder(): Collection
+    public function getListOrders(): Collection
     {
         return $this->listOrders;
     }
@@ -136,14 +136,14 @@ final class Order
     /**
      * @param Order[] $orders
      */
-    public function setListOrder(array $orders): self
+    public function setListOrders(array $orders): self
     {
         $this->listOrders = new ArrayCollection($orders);
 
         return $this;
     }
 
-    public function addListOrder(Order $order): self
+    public function addListOrders(Order $order): self
     {
         $this->listOrders->add($order);
 
