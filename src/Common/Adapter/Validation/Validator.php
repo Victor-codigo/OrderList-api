@@ -126,7 +126,7 @@ class Validator
     }
 
     /**
-     * @param array<string, ValueObjectValidationInterface> $valueObject
+     * @param array<string, ValueObjectValidationInterface> $valueObjects
      *
      * @return array<string, VALIDATION_ERRORS[]>
      */
@@ -190,7 +190,7 @@ class Validator
             CONSTRAINTS_NAMES::DATE->value => $this->validationChain->date(...),
             CONSTRAINTS_NAMES::DATETIME->value => $this->validationChain->dateTime(...),
             CONSTRAINTS_NAMES::TIME->value => $this->validationChain->time(...),
-            CONSTRAINTS_NAMES::DATETIME->value => $this->validationChain->timeZone(...),
+            CONSTRAINTS_NAMES::TIMEZONE->value => $this->validationChain->timeZone(...),
             CONSTRAINTS_NAMES::FILE->value => $this->validationChain->file(...),
             CONSTRAINTS_NAMES::FILE_IMAGE->value => $this->validationChain->image(...),
             CONSTRAINTS_NAMES::CHOICE->value => $this->validationChain->choice(...),
