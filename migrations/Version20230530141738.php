@@ -7,20 +7,17 @@ namespace DoctrineMigrations;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
-/**
- * Auto-generated Migration: Please modify to your needs!
- */
-final class Version20230517092419 extends AbstractMigration
+final class Version20230530141738 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return 'Creates tables List_Orders, ListOrders_Orders, Orders, Products, Products_Shops and Shops';
+        return 'Create tables ListOrders, ListOrders_Orders, Orders, Products, Products_shops, Shops, Orders,';
     }
 
     public function up(Schema $schema): void
     {
         $this->addSql('CREATE TABLE ListOrders_Orders (id CHAR(36) NOT NULL, order_id CHAR(36) NOT NULL, list_order_id CHAR(36) NOT NULL, bought TINYINT(1) NOT NULL, INDEX IDX_order_id (order_id), INDEX IDX_list_order_id (list_order_id), UNIQUE INDEX u_list_order_id (id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE List_Orders (id CHAR(36) NOT NULL, user_id CHAR(36) NOT NULL, name CHAR(36) NOT NULL, description VARCHAR(500) DEFAULT NULL, date_to_buy DATETIME DEFAULT NULL, created_on DATETIME NOT NULL, INDEX IDX_user_id (user_id), INDEX IDX_name (name), UNIQUE INDEX u_list_order_id (id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE List_Orders (id CHAR(36) NOT NULL, user_id CHAR(36) NOT NULL, group_id CHAR(36) NOT NULL, name VARCHAR(50) NOT NULL, description VARCHAR(500) DEFAULT NULL, date_to_buy DATETIME DEFAULT NULL, created_on DATETIME NOT NULL, INDEX IDX_user_id (user_id), UNIQUE INDEX u_list_order_name (name), UNIQUE INDEX u_list_order_id (id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE Orders (id CHAR(36) NOT NULL, product_id CHAR(36) NOT NULL, shop_id CHAR(36), user_id CHAR(36) NOT NULL, group_id CHAR(36) NOT NULL, description VARCHAR(500) DEFAULT NULL, amount DECIMAL(10,3) DEFAULT NULL, created_on DATETIME NOT NULL, INDEX IDX_user_id (user_id), INDEX IDX_group_id (group_id), INDEX IDX_product_id (product_id), INDEX IDX_shop_id (shop_id), UNIQUE INDEX u_order_id (id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE Products (id CHAR(36) NOT NULL, group_id CHAR(36) NOT NULL, name VARCHAR(50) NOT NULL, description VARCHAR(500) DEFAULT NULL, image VARCHAR(256) DEFAULT NULL, created_on DATETIME NOT NULL, INDEX IDX_group_id (group_id), INDEX IDX_product_name (name), UNIQUE INDEX u_products_id (id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE Products_Shops (id INT AUTO_INCREMENT NOT NULL, product_id CHAR(36) NOT NULL, shop_id CHAR(36) NOT NULL, price DECIMAL(10,2) DEFAULT NULL, INDEX IDX_product_id (product_id), INDEX IDX_shop_id (shop_id), UNIQUE INDEX u_id (id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
