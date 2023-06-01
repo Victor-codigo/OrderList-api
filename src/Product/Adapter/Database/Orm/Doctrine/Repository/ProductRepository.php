@@ -23,9 +23,9 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
 {
     public function __construct(
         ManagerRegistry $managerRegistry,
-        private PaginatorInterface $paginator
+        PaginatorInterface $paginator
     ) {
-        parent::__construct($managerRegistry, Product::class);
+        parent::__construct($managerRegistry, Product::class, $paginator);
     }
 
     /**
@@ -90,8 +90,8 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
     }
 
     /**
-     * @param Identifier[]|null $productId
-     * @param Identifier[]|null $shops
+     * @param Identifier[]|null $productsId
+     * @param Identifier[]|null $shopsId
      *
      * @throws DBNotFoundException
      */

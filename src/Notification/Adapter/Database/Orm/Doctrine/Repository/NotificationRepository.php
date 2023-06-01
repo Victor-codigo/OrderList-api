@@ -17,11 +17,9 @@ use Notification\Domain\Ports\Notification\NotificationRepositoryInterface;
 
 class NotificationRepository extends RepositoryBase implements NotificationRepositoryInterface
 {
-    private PaginatorInterface $paginator;
-
     public function __construct(ManagerRegistry $managerRegistry, PaginatorInterface $paginator)
     {
-        parent::__construct($managerRegistry, Notification::class);
+        parent::__construct($managerRegistry, Notification::class, $paginator);
 
         $this->paginator = $paginator;
     }
@@ -103,7 +101,7 @@ class NotificationRepository extends RepositoryBase implements NotificationRepos
     }
 
     /**
-     * @param Identifier[] $notificationsId
+     * @param Identifier[] $userId
      *
      * @throws DBNotFoundException
      */

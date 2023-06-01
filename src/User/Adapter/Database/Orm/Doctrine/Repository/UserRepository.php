@@ -24,9 +24,9 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
 {
     public function __construct(
         ManagerRegistry $managerRegistry,
-        private PaginatorInterface $paginator
+        PaginatorInterface $paginator
     ) {
-        parent::__construct($managerRegistry, User::class);
+        parent::__construct($managerRegistry, User::class, $paginator);
     }
 
     /**
@@ -117,7 +117,7 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
     }
 
     /**
-     * @param Identifier[] $usersId
+     * @param Identifier[] $id
      *
      * @return Users[]
      *

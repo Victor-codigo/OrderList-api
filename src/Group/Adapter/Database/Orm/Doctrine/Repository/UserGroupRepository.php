@@ -22,9 +22,9 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
 {
     public function __construct(
         ManagerRegistry $managerRegistry,
-        private PaginatorInterface $paginator
+        PaginatorInterface $paginator
     ) {
-        parent::__construct($managerRegistry, UserGroup::class);
+        parent::__construct($managerRegistry, UserGroup::class, $paginator);
     }
 
     /**

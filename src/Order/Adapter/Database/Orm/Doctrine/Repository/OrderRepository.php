@@ -19,9 +19,9 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
 {
     public function __construct(
         ManagerRegistry $managerRegistry,
-        private PaginatorInterface $paginator
+        PaginatorInterface $paginator
     ) {
-        parent::__construct($managerRegistry, Order::class);
+        parent::__construct($managerRegistry, Order::class, $paginator);
     }
 
     /**

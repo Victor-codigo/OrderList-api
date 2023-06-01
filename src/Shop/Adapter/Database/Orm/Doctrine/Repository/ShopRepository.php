@@ -23,9 +23,9 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
 {
     public function __construct(
         ManagerRegistry $managerRegistry,
-        private PaginatorInterface $paginator
+        PaginatorInterface $paginator
     ) {
-        parent::__construct($managerRegistry, Shop::class);
+        parent::__construct($managerRegistry, Shop::class, $paginator);
     }
 
     /**

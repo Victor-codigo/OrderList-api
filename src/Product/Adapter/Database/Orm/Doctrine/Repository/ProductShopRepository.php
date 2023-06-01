@@ -19,9 +19,9 @@ class ProductShopRepository extends RepositoryBase implements ProductShopReposit
 {
     public function __construct(
         ManagerRegistry $managerRegistry,
-        private PaginatorInterface $paginator
+        PaginatorInterface $paginator
     ) {
-        parent::__construct($managerRegistry, ProductShop::class);
+        parent::__construct($managerRegistry, ProductShop::class, $paginator);
     }
 
     /**

@@ -34,7 +34,7 @@ interface NotificationRepositoryInterface extends RepositoryInterface
     public function getNotificationsByIdOrFail(array $notificationsId): PaginatorInterface;
 
     /**
-     * @param Identifier[] $notificationsId
+     * @param Identifier[] $userId
      *
      * @throws DBNotFoundException
      */

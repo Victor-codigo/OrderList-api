@@ -31,8 +31,8 @@ interface ProductRepositoryInterface extends RepositoryInterface
     public function findProductsByGroupAndNameOrFail(Identifier $groupId, NameWithSpaces $name): PaginatorInterface;
 
     /**
-     * @param Identifier[]|null $productId
-     * @param Identifier[]|null $shops
+     * @param Identifier[]|null $productsId
+     * @param Identifier[]|null $shopsId
      *
      * @throws DBNotFoundException
      */
