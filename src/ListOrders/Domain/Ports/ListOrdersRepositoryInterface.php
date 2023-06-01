@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ListOrders\Domain\Ports;
 
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Ports\Repository\RepositoryInterface;
 use ListOrders\Domain\Model\ListOrders;
@@ -26,10 +27,10 @@ interface ListOrdersRepositoryInterface extends RepositoryInterface
      *
      * @throws DBNotFoundException
      */
-    public function findListOrderByIdOrFail(array $ListsOrdersId): PaginatorInterface;
+    public function findListOrderByIdOrFail(array $ListsOrdersId, Identifier|null $groupId = null): PaginatorInterface;
 
     /**
      * @throws DBNotFoundException
      */
-    public function findListOrderByNameStarsWithOrFail(string $listsOrdersNameStarsWith): PaginatorInterface;
+    public function findListOrderByNameStarsWithOrFail(string $listsOrdersNameStarsWith, Identifier|null $groupId = null): PaginatorInterface;
 }

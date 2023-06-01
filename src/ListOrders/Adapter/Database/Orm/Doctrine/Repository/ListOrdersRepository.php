@@ -6,7 +6,9 @@ namespace ListOrders\Adapter\Database\Orm\Doctrine\Repository;
 
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,9 +19,9 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
 {
     public function __construct(
         ManagerRegistry $managerRegistry,
-        private PaginatorInterface $paginator
+        PaginatorInterface $paginator
     ) {
-        parent::__construct($managerRegistry, ListOrders::class);
+        parent::__construct($managerRegistry, ListOrders::class, $paginator);
     }
 
     /**
@@ -51,5 +53,49 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
         } catch (\Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
+    }
+
+    /**
+     * @param Identifier[] $ListsOrdersId
+     *
+     * @throws DBNotFoundException
+     */
+    public function findListOrderByIdOrFail(array $ListsOrdersId, Identifier|null $groupId = null): PaginatorInterface
+    {
+        $query = $this->entityManager
+            ->createQueryBuilder()
+            ->select('listOrders')
+            ->from(ListOrders::class, 'listOrders')
+            ->where('listOrders.id IN (:listOrdersId)')
+            ->setParameter('listOrdersId', $ListsOrdersId);
+
+        if (null !== $groupId) {
+            $query
+                ->andWhere('listOrders.groupId = :groupId')
+                ->setParameter('groupId', $groupId);
+        }
+
+        return $this->queryPaginationOrFail($query);
+    }
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findListOrderByNameStarsWithOrFail(string $listsOrdersNameStarsWith, Identifier|null $groupId = null): PaginatorInterface
+    {
+        $query = $this->entityManager
+            ->createQueryBuilder()
+            ->select('listOrders')
+            ->from(ListOrders::class, 'listOrders')
+            ->where('listOrders.name LIKE :listOrdersNameStartsWith')
+            ->setParameter('listOrdersNameStartsWith', $listsOrdersNameStarsWith.'%');
+
+        if (null !== $groupId) {
+            $query
+                ->andWhere('listOrders.groupId = :groupId')
+                ->setParameter('groupId', $groupId);
+        }
+
+        return $this->queryPaginationOrFail($query);
     }
 }

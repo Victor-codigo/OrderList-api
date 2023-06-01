@@ -38,6 +38,13 @@ class ListOrders
         return $this->userId;
     }
 
+    public function setUserId(Identifier $userId): self
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+
     public function getGroupId(): Identifier
     {
         return $this->groupId;
@@ -72,7 +79,7 @@ class ListOrders
         return $this->dateToBuy;
     }
 
-    public function setDateToBuy(\DateTime $date): self
+    public function setDateToBuy(DateNowToFuture $date): self
     {
         $this->dateToBuy = $date;
 
