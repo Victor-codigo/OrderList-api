@@ -24,7 +24,6 @@ class RepositoryBaseTest extends DataBaseTestCase
     private MockObject|ObjectManager $objectManager;
     private MockObject|ClassMetadata $classMetadata;
     private MockObject|PaginatorInterface $paginator;
-    private MockObject|Query $query;
 
     protected function setUp(): void
     {
@@ -34,7 +33,6 @@ class RepositoryBaseTest extends DataBaseTestCase
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $this->objectManager = $this->createMock(ObjectManager::class);
         $this->classMetadata = $this->createMock(ClassMetadata::class);
-        $this->query = $this->createMock(Query::class);
         $this->paginator = $this->createMock(PaginatorInterface::class);
 
         $this->managerRegistry
@@ -108,6 +106,40 @@ class RepositoryBaseTest extends DataBaseTestCase
         $return = $this->invokeProtectedMethod($this->object, 'dqlPaginationOrFail', [
             $dql,
             $dqlParameters,
+        ]);
+
+        $this->assertEquals($this->paginator, $return);
+    }
+
+    /** @test */
+    public function itShouldCreateAPaginatorWithADqlWithoutParameters(): void
+    {
+        $dql = 'SELECT * FROM Users';
+
+        $queryExpected = new Query($this->entityManager);
+        $queryExpected->setDQL($dql);
+
+        $queryEntityManager = clone $queryExpected;
+
+        $this->entityManagerMock
+            ->expects($this->once())
+            ->method('createQuery')
+            ->with($dql)
+            ->willReturn($queryEntityManager);
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('createPaginator')
+            ->with($this->callback(fn (Query $queryActual) => $this->assertQueryIsOk($queryExpected, $queryActual) || true))
+            ->willReturn($this->paginator);
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('getItemsTotal')
+            ->willReturn(1);
+
+        $return = $this->invokeProtectedMethod($this->object, 'dqlPaginationOrFail', [
+            $dql,
         ]);
 
         $this->assertEquals($this->paginator, $return);

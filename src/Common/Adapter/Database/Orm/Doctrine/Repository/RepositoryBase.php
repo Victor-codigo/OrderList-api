@@ -8,6 +8,8 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Uid\Uuid;
@@ -52,11 +54,11 @@ abstract class RepositoryBase extends ServiceEntityRepository
     /**
      * @throws DBNotFoundException
      */
-    protected function dqlPaginationOrFail(string $dql, array $parameters): PaginatorInterface
+    protected function queryPaginationOrFail(Query|QueryBuilder $query, array $parameters = []): PaginatorInterface
     {
-        $query = $this->entityManager
-            ->createQuery($dql)
-            ->setParameters($parameters);
+        if (!empty($parameters)) {
+            $query->setParameters($parameters);
+        }
 
         $pagination = $this->paginator->createPaginator($query);
 
@@ -65,5 +67,15 @@ abstract class RepositoryBase extends ServiceEntityRepository
         }
 
         return $pagination;
+    }
+
+    /**
+     * @throws DBNotFoundException
+     */
+    protected function dqlPaginationOrFail(string $dql, array $parameters = []): PaginatorInterface
+    {
+        $query = $this->entityManager->createQuery($dql);
+
+        return $this->queryPaginationOrFail($query, $parameters);
     }
 }
