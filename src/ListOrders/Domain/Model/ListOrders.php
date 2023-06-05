@@ -126,7 +126,7 @@ class ListOrders
         $this->orders = new ArrayCollection();
     }
 
-    public static function fromPrimitives(string $id, string $groupId, string $userId, string $name, string $description, \DateTime $dateToBuy)
+    public static function fromPrimitives(string $id, string $groupId, string $userId, string $name, string|null $description, \DateTime|null $dateToBuy)
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),

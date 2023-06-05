@@ -16,3 +16,13 @@ list_orders_modify:
   controller: ListOrders\Adapter\Http\Controller\ListOrdersModify\ListOrdersModifyController
   requirements:
     api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# LIST ORDERS REMOVE
+# -------------------------------------------------------------
+list_orders_remove:
+  path: /api/v{api_version}/list-orders
+  methods: DELETE
+  controller: ListOrders\Adapter\Http\Controller\ListOrdersRemove\ListOrdersRemoveController
+  requirements:
+    api_version: '\d+[.\d]?'
