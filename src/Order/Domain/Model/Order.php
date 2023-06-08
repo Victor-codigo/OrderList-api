@@ -13,7 +13,7 @@ use Doctrine\Common\Collections\Collection;
 use Product\Domain\Model\Product;
 use Shop\Domain\Model\Shop;
 
-final class Order
+class Order
 {
     private Identifier $id;
     private Identifier $userId;

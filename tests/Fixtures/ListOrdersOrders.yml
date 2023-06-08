@@ -1,0 +1,41 @@
+Common\Domain\Model\ValueObject\String\Identifier:
+  # LIST ORDERS ORDERS
+  listOrdersOrders_id:
+    __construct:
+      value: "36810398-3503-4ec4-9018-1f2607face0b"
+
+  listOrdersOrders_id_2:
+    __construct:
+      value: "218ee820-fd4b-4a4c-abc3-0e26ac437dd9"
+
+  listOrdersOrders_id_3:
+    __construct:
+      value: "3fc1a0c4-2e17-480d-a423-d2c1c47b139e"
+
+ListOrders\Domain\Model\ListOrdersOrders:
+  entity-listOrdersOrders:
+    __construct:
+      id: "@listOrdersOrders_id"
+      orderId: "@entity-order->getId"
+      listOrdersId: "@entity-listOrder->getId"
+      bought: true
+      listOrders: "@entity-listOrder"
+      order: "@entity-order"
+
+  entity-listOrdersOrders_2:
+    __construct:
+      id: "@listOrdersOrders_id_2"
+      orderId: "@entity-order_2->getId"
+      listOrdersId: "@entity-listOrder->getId"
+      bought: true
+      listOrders: "@entity-listOrder"
+      order: "@entity-order_2"
+
+  entity-listOrdersOrders_3:
+    __construct:
+      id: "@listOrdersOrders_id_3"
+      orderId: "@entity-order_3->getId"
+      listOrdersId: "@entity-listOrder_2->getId"
+      bought: false
+      listOrders: "@entity-listOrder_2"
+      order: "@entity-order_3"

@@ -69,6 +69,11 @@ class AppConfig
     public const ENDPOINT_ORDER_REMOVE_MAX = 100;
 
     /**
+     * Maximum number of orders can added to a list of orders per request.
+     */
+    public const ENDPOINT_LIST_ORDERS_ADD_ORDERS_MAX = 100;
+
+    /**
      * Version of the api used.
      */
     public const API_VERSION = 1;
