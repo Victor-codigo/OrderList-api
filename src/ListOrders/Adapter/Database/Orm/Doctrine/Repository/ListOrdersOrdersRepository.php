@@ -10,6 +10,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintE
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 use ListOrders\Domain\Model\ListOrders;
 use ListOrders\Domain\Model\ListOrdersOrders;
@@ -64,23 +65,28 @@ class ListOrdersOrdersRepository extends RepositoryBase implements ListOrdersOrd
     }
 
     /**
+     * @param Identifier $ordersId
+     *
      * @throws DBNotFoundException
      */
-    public function findListOrderOrdersByIdOrFail(Identifier $listOrdersId, Identifier $groupId): PaginatorInterface
+    public function findListOrderOrdersByIdOrFail(Identifier $listOrdersId, Identifier $groupId, array $ordersId = []): PaginatorInterface
     {
-        $listOrdersEntity = ListOrders::class;
-        $listOrdersOrdersEntity = ListOrdersOrders::class;
-        $dql = <<<DQL
-            SELECT listOrdersOrders
-            FROM {$listOrdersOrdersEntity} listOrdersOrders
-                LEFT JOIN {$listOrdersEntity} listOrders WITH listOrdersOrders.listOrdersId = listOrders.id
-            WHERE listOrders.groupId = :groupId
-                AND listOrdersOrders.listOrdersId = :listOrdersId
-        DQL;
+        $query = $this->entityManager
+            ->createQueryBuilder()
+            ->select('listOrdersOrders')
+            ->from(ListOrdersOrders::class, 'listOrdersOrders')
+            ->leftJoin(ListOrders::class, 'listOrders', Join::WITH, 'listOrdersOrders.listOrdersId = listOrders.id')
+            ->where('listOrders.groupId = :groupId')
+            ->andWhere('listOrdersOrders.listOrdersId = :listOrdersId')
+            ->setParameter('listOrdersId', $listOrdersId)
+            ->setParameter('groupId', $groupId);
 
-        return $this->dqlPaginationOrFail($dql, [
-            'groupId' => $groupId,
-            'listOrdersId' => $listOrdersId,
-        ]);
+        if (!empty($ordersId)) {
+            $query
+                ->andWhere('listOrdersOrders.orderId In (:ordersId)')
+                ->setParameter('ordersId', $ordersId);
+        }
+
+        return $this->queryPaginationOrFail($query);
     }
 }

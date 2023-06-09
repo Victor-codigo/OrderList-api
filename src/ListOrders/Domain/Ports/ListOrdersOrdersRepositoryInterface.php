@@ -27,7 +27,9 @@ interface ListOrdersOrdersRepositoryInterface extends RepositoryInterface
     public function remove(array $listOrdersOrders): void;
 
     /**
+     * @param Identifier $ordersId
+     *
      * @throws DBNotFoundException
      */
-    public function findListOrderOrdersByIdOrFail(Identifier $listOrdersId, Identifier $groupId): PaginatorInterface;
+    public function findListOrderOrdersByIdOrFail(Identifier $listOrdersId, Identifier $groupId, array $ordersId = []): PaginatorInterface;
 }
