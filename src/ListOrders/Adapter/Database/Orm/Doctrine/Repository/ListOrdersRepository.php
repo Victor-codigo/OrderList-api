@@ -9,6 +9,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionExcepti
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
@@ -81,7 +82,7 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     /**
      * @throws DBNotFoundException
      */
-    public function findListOrderByNameStarsWithOrFail(string $listsOrdersNameStarsWith, Identifier|null $groupId = null): PaginatorInterface
+    public function findListOrderByNameStarsWithOrFail(NameWithSpaces $listsOrdersNameStarsWith, Identifier|null $groupId = null): PaginatorInterface
     {
         $query = $this->entityManager
             ->createQueryBuilder()

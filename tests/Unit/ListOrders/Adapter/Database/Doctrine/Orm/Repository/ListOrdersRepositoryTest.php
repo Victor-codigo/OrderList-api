@@ -184,7 +184,9 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     /** @test */
     public function itShouldFindListOrdersByNameStarsWith(): void
     {
-        $return = $this->object->findListOrderByNameStarsWithOrFail('List');
+        $return = $this->object->findListOrderByNameStarsWithOrFail(
+            ValueObjectFactory::createNameWithSpaces('List')
+        );
 
         $listOrdersExpected = $this->object->findBy(['id' => self::LIST_ORDERS_ID]);
         $listOrdersActual = iterator_to_array($return);
@@ -197,10 +199,10 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldFindListOrdersByNameStarsWithGroupId(): void
+    public function itShouldFindListOrdersByNameStarsWithGroupId22(): void
     {
         $return = $this->object->findListOrderByNameStarsWithOrFail(
-            'List',
+            ValueObjectFactory::createNameWithSpaces('List'),
             ValueObjectFactory::createIdentifier(self::GROUP_ID)
         );
 
@@ -217,7 +219,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     /** @test */
     public function itShouldFailFindListOrdersByNameStarsWithNotFound(): void
     {
-        $nameStartsWith = 'not found';
+        $nameStartsWith = ValueObjectFactory::createNameWithSpaces('not found');
 
         $this->expectException(DBNotFoundException::class);
         $this->object->findListOrderByNameStarsWithOrFail($nameStartsWith);
@@ -226,7 +228,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     /** @test */
     public function itShouldFailFindListOrdersByNameStarsWithGroupIdNotFound(): void
     {
-        $nameStartsWith = 'not found';
+        $nameStartsWith = ValueObjectFactory::createNameWithSpaces('not found');
         $groupId = ValueObjectFactory::createIdentifier('not found id');
 
         $this->expectException(DBNotFoundException::class);
