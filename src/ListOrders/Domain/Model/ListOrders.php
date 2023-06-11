@@ -130,8 +130,8 @@ class ListOrders
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),
-            ValueObjectFactory::createIdentifier($userId),
             ValueObjectFactory::createIdentifier($groupId),
+            ValueObjectFactory::createIdentifier($userId),
             ValueObjectFactory::createNameWithSpaces($name),
             ValueObjectFactory::createDescription($description),
             ValueObjectFactory::createDateNowToFuture($dateToBuy),
