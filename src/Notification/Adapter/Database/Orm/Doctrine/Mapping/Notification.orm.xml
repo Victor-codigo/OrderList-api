@@ -8,22 +8,23 @@
             type="IdentifierType"
             column-definition="CHAR(36) NOT NULL"/>
 
-       <field name="userId"
+        <field name="userId"
                column="user_id"
                type="IdentifierType"
                column-definition="CHAR(36) NOT NULL"/>
 
-       <field name="type"
+        <field name="type"
                type="NotificationTypeType"
                length="50"/>
 
-       <field name="data"
-               type="NotificationDataType"/>
+        <field name="data"
+               type="NotificationDataType"
+               nullable="true"/>
 
-       <field name="viewed"
+        <field name="viewed"
                type="boolean"/>
 
-       <field name="createdOn"
+        <field name="createdOn"
                columm="created_on"
                type="datetime"/>
 
