@@ -71,7 +71,19 @@ Common\Domain\Model\ValueObject\String\Identifier:
 Common\Domain\Model\ValueObject\String\Description:
   order_description:
     __construct:
-      value: <text(500)>
+      value: "order description"
+
+  order_description_2:
+    __construct:
+      value: "order description 2"
+
+  order_description_3:
+    __construct:
+      value: "order description 3"
+
+  order_description_4:
+    __construct:
+      value: "order description 4"
 
   order_description_null:
     __construct:
@@ -110,7 +122,7 @@ Order\Domain\Model\Order:
       id: "@order_id_2"
       userId: "@entity-user_active->getId"
       groupId: "@order_group_id_group_exists"
-      description: "@order_description_null"
+      description: "@order_description_2"
       amount: "@order_amount_20"
       product: "@entity-product_2"
       shop: "@entity-shop_2"
@@ -120,7 +132,7 @@ Order\Domain\Model\Order:
       id: "@order_id_3"
       userId: "@entity-user_admin->getId"
       groupId: "@order_group_id_group_exists"
-      description: "@order_description"
+      description: "@order_description_3"
       amount: "@order_amount_30"
       product: "@entity-product_3"
       shop: "@entity-shop_3"
@@ -130,7 +142,7 @@ Order\Domain\Model\Order:
       id: "@order_id_4"
       userId: "@entity-user_admin->getId"
       groupId: "@order_group_id_group_exists"
-      description: "@order_description"
+      description: "@order_description_4"
       amount: "@order_amount_40"
       product: "@entity-product_4"
       shop: "@entity-shop_2"
