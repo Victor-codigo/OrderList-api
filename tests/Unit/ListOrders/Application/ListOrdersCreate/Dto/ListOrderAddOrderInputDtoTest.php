@@ -7,7 +7,6 @@ namespace Test\Unit\ListOrders\Application\ListOrdersCreate\Dto;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
-use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use ListOrders\Application\ListOrdersAddOrder\Dto\ListOrdersAddOrderInputDto;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -149,8 +148,9 @@ class ListOrderAddOrderInputDtoTest extends TestCase
             ],
         ];
 
-        $this->expectException(ValueObjectValidationException::class);
-        new ListOrdersAddOrderInputDto($this->userSession, $listOrdersId, $groupId, $orders);
+        $object = new ListOrdersAddOrderInputDto($this->userSession, $listOrdersId, $groupId, $orders);
+
+        $this->assertNull($object->ordersBought[0]->orderId->getValue());
     }
 
     /** @test */
@@ -164,8 +164,9 @@ class ListOrderAddOrderInputDtoTest extends TestCase
             ],
         ];
 
-        $this->expectException(ValueObjectValidationException::class);
-        new ListOrdersAddOrderInputDto($this->userSession, $listOrdersId, $groupId, $orders);
+        $object = new ListOrdersAddOrderInputDto($this->userSession, $listOrdersId, $groupId, $orders);
+
+        $this->assertEquals(false, $object->ordersBought[0]->bought);
     }
 
     /** @test */
