@@ -30,8 +30,23 @@ class ShopCreateInputDtoTest extends TestCase
     {
         parent::setUp();
 
+        $this->resetBuiltInFunctions();
         $this->userSession = $this->createMock(UserShared::class);
         $this->validator = new ValidationChain();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->resetBuiltInFunctions();
+    }
+
+    private function resetBuiltInFunctions(): void
+    {
+        BuiltInFunctionsReturn::$is_readable = null;
+        BuiltInFunctionsReturn::$filesize = null;
+        BuiltInFunctionsReturn::$getimagesize = null;
+        BuiltInFunctionsReturn::$unlink = null;
+        BuiltInFunctionsReturn::$imagecreatefromstring = null;
     }
 
     private function getUploadedImage(string $path, string $originalName, string $mimeType, int $error): UploadedFileSymfonyAdapter
