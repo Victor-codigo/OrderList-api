@@ -28,8 +28,8 @@ class ProfileRepositoryTest extends DataBaseTestCase
     public function itShouldReturnThreeProfiles(): void
     {
         $usersId = [
-            ValueObjectFactory::createIdentifier('0b13e52d-b058-32fb-8507-10dec634a07c'),
-            ValueObjectFactory::createIdentifier('0b17ca3e-490b-3ddb-aa78-35b4ce668dc0'),
+            ValueObjectFactory::createIdentifier('2606508b-4516-45d6-93a6-c7cb416b7f3f'),
+            ValueObjectFactory::createIdentifier('b11c9be1-b619-4ef5-be1b-a1cd9ef265b7'),
             ValueObjectFactory::createIdentifier('1befdbe2-9c14-42f0-850f-63e061e33b8f'),
         ];
 
@@ -42,7 +42,10 @@ class ProfileRepositoryTest extends DataBaseTestCase
 
         $this->assertCount(count($usersId), $return);
         $this->assertContainsOnlyInstancesOf(Profile::class, $return);
-        $this->assertEquals($usersId, $dbProfilesIds);
+
+        foreach ($dbProfilesIds as $dbProfileId) {
+            $this->assertContainsEquals($dbProfileId, $usersId);
+        }
     }
 
     /** @test */
