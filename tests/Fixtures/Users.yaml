@@ -50,7 +50,7 @@ Common\Domain\Model\ValueObject\String\Identifier:
 Common\Domain\Model\ValueObject\String\Email:
   user_email_random-{1..100}:
     __construct:
-      value: <email()>
+      value (unique): <email()>
 
   user_email_random-0:
     __construct:
@@ -148,7 +148,7 @@ Common\Domain\Model\ValueObject\String\Password:
 Common\Domain\Model\ValueObject\String\Name:
   user_name_random-{1..100}:
     __construct:
-      value: <name()>
+      value (unique): <name()>
 
   user_name_random-0:
     __construct:
