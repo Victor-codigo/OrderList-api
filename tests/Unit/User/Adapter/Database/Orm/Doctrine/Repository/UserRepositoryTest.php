@@ -232,7 +232,7 @@ class UserRepositoryTest extends DataBaseTestCase
     /** @test */
     public function itShouldFindUsersNotActiveTimeActivationExpired(): void
     {
-        $return = $this->userRepository->findUsersTimeActivationExpiredOrFail(0);
+        $return = $this->userRepository->findUsersTimeActivationExpiredOrFail(-1);
 
         $this->assertCount(1, $return);
 
