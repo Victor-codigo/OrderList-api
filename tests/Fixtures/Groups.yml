@@ -22,7 +22,7 @@ Common\Domain\Model\ValueObject\String\Identifier:
 Common\Domain\Model\ValueObject\String\Name:
   group_name_random-{1..100}:
     __construct:
-      value: <name()>
+      value (unique): <name()>
 
   group_name_type_group:
     __construct:
