@@ -6,6 +6,7 @@ namespace ListOrders\Adapter\Database\Orm\Doctrine\Repository;
 
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -15,6 +16,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use ListOrders\Domain\Model\ListOrders;
 use ListOrders\Domain\Model\ListOrdersOrders;
 use ListOrders\Domain\Ports\ListOrdersOrdersRepositoryInterface;
+use Order\Domain\Model\Order;
 
 class ListOrdersOrdersRepository extends RepositoryBase implements ListOrdersOrdersRepositoryInterface
 {
@@ -88,5 +90,29 @@ class ListOrdersOrdersRepository extends RepositoryBase implements ListOrdersOrd
         }
 
         return $this->queryPaginationOrFail($query);
+    }
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findListOrderOrdersDataByIdOrFail(Identifier $listOrdersId, Identifier $groupId): PaginatorInterface
+    {
+        $ordersEntity = Order::class;
+        $listOrdersOrdersEntity = ListOrdersOrders::class;
+        $dql = <<<DQL
+            SELECT orders
+            FROM {$ordersEntity} orders
+                LEFT JOIN {$listOrdersOrdersEntity} listOrdersOrders WITH orders.id = listOrdersOrders.orderId
+            WHERE listOrdersOrders.listOrdersId = :listOrdersId
+                AND orders.groupId = :groupId
+        DQL;
+
+        return $this->queryPaginationOrFail(
+            $this->entityManager->createQuery($dql),
+            [
+                'listOrdersId' => $listOrdersId,
+                'groupId' => $groupId,
+            ]
+        );
     }
 }

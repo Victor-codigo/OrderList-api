@@ -35,7 +35,11 @@ Common\Domain\Model\ValueObject\String\NameWithSpaces:
 Common\Domain\Model\ValueObject\String\Description:
   shop_description:
     __construct:
-      value: <text(500)>
+      value: "Shop description 1"
+
+  shop_description_2:
+    __construct:
+      value: "Shop description 2"
 
   shop_description_null:
     __construct:
@@ -60,7 +64,7 @@ Shop\Domain\Model\Shop:
       id: "@shop_id_2"
       groupId: "@product_group_id_group_exists"
       name: "@shop_name_2"
-      description: "@shop_description"
+      description: "@shop_description_2"
       image: "@shop_image_null"
 
   entity-shop_3:

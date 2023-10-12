@@ -231,4 +231,58 @@ class ListOrdersOrdersRepositoryTest extends DataBaseTestCase
             ValueObjectFactory::createIdentifier(self::GROUP_ID)
         );
     }
+
+    /** @test */
+    public function itShouldFindListOrderOrdersByListOrderId(): void
+    {
+        $listOrderId = ValueObjectFactory::createIdentifier(self::LIST_ORDERS_EXISTS_ID);
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+
+        $listOrderOrdersDataPaginator = $this->object->findListOrderOrdersDataByIdOrFail($listOrderId, $groupId);
+        $listOrderOrdersData = iterator_to_array($listOrderOrdersDataPaginator);
+
+        $this->assertListOrdersOrdersAreOk($listOrderOrdersData);
+    }
+
+    /** @test */
+    public function itShouldFailFindingListOrderOrdersByListOrderIdNotFound(): void
+    {
+        $listOrderId = ValueObjectFactory::createIdentifier('id not found');
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findListOrderOrdersDataByIdOrFail($listOrderId, $groupId);
+    }
+
+    /** @test */
+    public function itShouldFailFindingListOrderOrdersByListOrderIdNotFoundInTheGroup(): void
+    {
+        $listOrderId = ValueObjectFactory::createIdentifier(self::LIST_ORDERS_EXISTS_ID);
+        $groupId = ValueObjectFactory::createIdentifier('wrong id');
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findListOrderOrdersDataByIdOrFail($listOrderId, $groupId);
+    }
+
+    private function assertListOrdersOrdersAreOk(array $listOrderOrdersData): void
+    {
+        $this->assertCount(2, $listOrderOrdersData);
+        $this->assertContainsOnlyInstancesOf(Order::class, $listOrderOrdersData);
+
+        $this->assertEquals('a0b4760a-9037-477a-8b84-d059ae5ee7e9', $listOrderOrdersData[0]->getId());
+        $this->assertEquals('8b6d650b-7bb7-4850-bf25-36cda9bce801', $listOrderOrdersData[0]->getProductId());
+        $this->assertEquals('f6ae3da3-c8f2-4ccb-9143-0f361eec850e', $listOrderOrdersData[0]->getShopId());
+        $this->assertEquals('2606508b-4516-45d6-93a6-c7cb416b7f3f', $listOrderOrdersData[0]->getUserId());
+        $this->assertEquals('4b513296-14ac-4fb1-a574-05bc9b1dbe3f', $listOrderOrdersData[0]->getGroupId());
+        $this->assertEquals('order description 2', $listOrderOrdersData[0]->getDescription()->getValue());
+        $this->assertEquals('20.050', $listOrderOrdersData[0]->getAmount()->getvalue());
+
+        $this->assertEquals('9a48ac5b-4571-43fd-ac80-28b08124ffb8', $listOrderOrdersData[1]->getId());
+        $this->assertEquals('afc62bc9-c42c-4c4d-8098-09ce51414a92', $listOrderOrdersData[1]->getProductId());
+        $this->assertEquals('e6c1d350-f010-403c-a2d4-3865c14630ec', $listOrderOrdersData[1]->getShopId());
+        $this->assertEquals('2606508b-4516-45d6-93a6-c7cb416b7f3f', $listOrderOrdersData[1]->getUserId());
+        $this->assertEquals('4b513296-14ac-4fb1-a574-05bc9b1dbe3f', $listOrderOrdersData[1]->getGroupId());
+        $this->assertEquals('order description', $listOrderOrdersData[1]->getDescription()->getValue());
+        $this->assertEquals('10.200', $listOrderOrdersData[1]->getAmount()->getvalue());
+    }
 }

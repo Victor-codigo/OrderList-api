@@ -41,7 +41,7 @@ Common\Domain\Model\ValueObject\String\NameWithSpaces:
 Common\Domain\Model\ValueObject\String\Description:
   product_description:
     __construct:
-      value: <text(500)>
+      value: "Product description 1"
 
   product_description_null:
     __construct:
