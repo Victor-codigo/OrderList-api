@@ -8,7 +8,7 @@ use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
-use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\Name;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use Group\Domain\Model\Group;
@@ -51,8 +51,6 @@ class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
     }
 
     /**
-     * @param Identifier[] $ids
-     *
      * @return Group[]
      *
      * @throws DBNotFoundException
@@ -67,5 +65,19 @@ class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
         }
 
         return $groups;
+    }
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findGroupByNameOrFail(Name $groupName): Group
+    {
+        $groupData = $this->findBy(['name' => $groupName], null, 1);
+
+        if (empty($groupData)) {
+            throw DBNotFoundException::fromMessage('Group not found');
+        }
+
+        return $groupData[0];
     }
 }

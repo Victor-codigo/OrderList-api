@@ -167,4 +167,22 @@ class GroupRepositoryTest extends DataBaseTestCase
 
         $this->object->findGroupsByIdOrFail([ValueObjectFactory::createIdentifier('0b13e52d-b058-32fb-8507-10dec634a07A')]);
     }
+
+    /** @test */
+    public function itShouldFindAGroupByName(): void
+    {
+        $groupName = ValueObjectFactory::createName('GroupOne');
+        $return = $this->object->findGroupByNameOrFail($groupName);
+        $returnExpected = $this->object->findBy(['name' => $groupName]);
+
+        $this->assertEquals($returnExpected[0], $return);
+    }
+
+    /** @test */
+    public function itShouldFailFindingAGroupByNameNotFound(): void
+    {
+        $this->expectException(DBNotFoundException::class);
+
+        $this->object->findGroupsByIdOrFail([ValueObjectFactory::createName('namNotFound')]);
+    }
 }

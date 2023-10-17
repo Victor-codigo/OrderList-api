@@ -69,6 +69,16 @@ group_get_data:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
+# GROUP GET DATA BY NAME
+# -------------------------------------------------------------
+group_get_data_by_name:
+  path: /api/v{api_version}/groups/data/name/{group_name}
+  methods: GET
+  controller: Group\Adapter\Http\Controller\GroupGetDataByName\GroupGetDataByNameController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
 # GROUP USER ADD
 # -------------------------------------------------------------
 group_user_add:
