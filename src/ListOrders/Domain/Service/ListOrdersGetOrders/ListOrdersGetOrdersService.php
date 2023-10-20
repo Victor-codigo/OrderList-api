@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ListOrders\Domain\Service\ListOrdersGetOrders;
 
+use Common\Domain\Exception\LogicException;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use ListOrders\Domain\Ports\ListOrdersOrdersRepositoryInterface;
 use ListOrders\Domain\Service\ListOrdersGetOrders\Dto\ListOrdersGetOrdersDto;
@@ -11,6 +12,8 @@ use Order\Domain\Model\Order;
 
 class ListOrdersGetOrdersService
 {
+    private PaginatorInterface $listOrderOrdersPaginator;
+
     public function __construct(
         private ListOrdersOrdersRepositoryInterface $listOrdersOrdersRepository
     ) {
@@ -21,10 +24,22 @@ class ListOrdersGetOrdersService
      */
     public function __invoke(ListOrdersGetOrdersDto $input): array
     {
-        $listOrderOrdersPaginator = $this->listOrdersOrdersRepository->findListOrderOrdersDataByIdOrFail($input->listOrderId, $input->groupId);
-        $listOrderOrdersPaginator->setPagination($input->page->getValue(), $input->pageItems->getValue());
+        $this->listOrderOrdersPaginator = $this->listOrdersOrdersRepository->findListOrderOrdersDataByIdOrFail($input->listOrderId, $input->groupId);
+        $this->listOrderOrdersPaginator->setPagination($input->page->getValue(), $input->pageItems->getValue());
 
-        return $this->getOrderData($listOrderOrdersPaginator);
+        return $this->getOrderData($this->listOrderOrdersPaginator);
+    }
+
+    /**
+     * @throws LogicException
+     */
+    public function getPaginationTotalPages(): int
+    {
+        if (!isset($this->listOrderOrdersPaginator)) {
+            throw LogicException::fromMessage('Paginator is not initialized. Call first method __invoke.');
+        }
+
+        return $this->listOrderOrdersPaginator->getPagesTotal();
     }
 
     private function getOrderData(PaginatorInterface $listOrderOrdersPaginator): array

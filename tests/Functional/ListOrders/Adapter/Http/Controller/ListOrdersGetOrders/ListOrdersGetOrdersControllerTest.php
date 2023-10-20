@@ -134,14 +134,16 @@ class ListOrdersGetOrdersControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [0, 1], [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'orders'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Orders list orders data', $responseContent->message);
 
-        $this->assertCount(2, $responseContent->data);
+        $this->assertEquals(1, $responseContent->data->page);
+        $this->assertEquals(1, $responseContent->data->pages_total);
+        $this->assertCount(2, $responseContent->data->orders);
         $productsExpected = $this->getOrdersData();
 
-        foreach ($responseContent->data as $orderActual) {
+        foreach ($responseContent->data->orders as $orderActual) {
             $orderActual = (array) $orderActual;
             $orderActual['product'] = (array) $orderActual['product'];
             $orderActual['shop'] = (array) $orderActual['shop'];
@@ -166,18 +168,20 @@ class ListOrdersGetOrdersControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [0], [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'orders'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Orders list orders data', $responseContent->message);
 
-        $this->assertCount(1, $responseContent->data);
-        $productsExpeceted = $this->getOrdersData();
+        $this->assertEquals(1, $responseContent->data->page);
+        $this->assertEquals(2, $responseContent->data->pages_total);
+        $this->assertCount(1, $responseContent->data->orders);
+        $productsExpected = $this->getOrdersData();
 
-        $orderActual = (array) $responseContent->data[0];
+        $orderActual = (array) $responseContent->data->orders[0];
         $orderActual['product'] = (array) $orderActual['product'];
         $orderActual['shop'] = (array) $orderActual['shop'];
-        $this->assertArrayHasKey($orderActual['id'], $productsExpeceted);
-        $this->assertOrderIsOk($productsExpeceted[$orderActual['id']], $orderActual);
+        $this->assertArrayHasKey($orderActual['id'], $productsExpected);
+        $this->assertOrderIsOk($productsExpected[$orderActual['id']], $orderActual);
     }
 
     /** @test */

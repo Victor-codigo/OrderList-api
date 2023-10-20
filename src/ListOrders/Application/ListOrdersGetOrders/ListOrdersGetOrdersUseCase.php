@@ -37,7 +37,11 @@ class ListOrdersGetOrdersUseCase extends ServiceBase
                 $this->createListOrdersGetOrdersDto($input)
             );
 
-            return $this->createListOrdersGetOrdersOutputDto($listOrderOrdersData);
+            return $this->createListOrdersGetOrdersOutputDto(
+                $listOrderOrdersData,
+                $input->page->getValue(),
+                $this->listOrdersGetOrdersService->getPaginationTotalPages()
+            );
         } catch (ValidateGroupAndUserException) {
             throw ListOrdersGetOrdersValidateUserAndGroupException::fromMessage('You not belong to the group');
         } catch (DBNotFoundException) {
@@ -61,8 +65,8 @@ class ListOrdersGetOrdersUseCase extends ServiceBase
         return new ListOrdersGetOrdersDto($input->listOrderId, $input->groupId, $input->page, $input->pageItems);
     }
 
-    private function createListOrdersGetOrdersOutputDto(array $listOrderOrdersData): ListOrdersGetOrdersOutputDto
+    private function createListOrdersGetOrdersOutputDto(array $listOrderOrdersData, int $paginationCurrentPage, int $paginationTotalPages): ListOrdersGetOrdersOutputDto
     {
-        return new ListOrdersGetOrdersOutputDto($listOrderOrdersData);
+        return new ListOrdersGetOrdersOutputDto($listOrderOrdersData, $paginationCurrentPage, $paginationTotalPages);
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersGetOrders;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use ListOrders\Domain\Ports\ListOrdersOrdersRepositoryInterface;
@@ -190,5 +191,50 @@ class ListOrdersGetOrdersServiceTest extends TestCase
 
         $this->expectException(DBNotFoundException::class);
         $this->object->__invoke($input);
+    }
+
+    /** @test */
+    public function itShouldReturnPaginationTotalPages(): void
+    {
+        $ordersExpected = $this->getOrdersData();
+        $input = new ListOrdersGetOrdersDto(
+            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID),
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(100)
+        );
+
+        $this->listOrdersOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrderOrdersDataByIdOrFail')
+            ->with($input->listOrderId)
+            ->willReturn($this->paginator);
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with($input->page->getValue(), $input->pageItems->getValue());
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($ordersExpected));
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('getPagesTotal')
+            ->willReturn(5);
+
+        $this->object->__invoke($input);
+        $return = $this->object->getPaginationTotalPages();
+
+        $this->assertEquals(5, $return);
+    }
+
+    /** @test */
+    public function itShouldReturnNullListOrderPaginatorNotInitialized(): void
+    {
+        $this->expectException(LogicException::class);
+        $this->object->getPaginationTotalPages();
     }
 }
