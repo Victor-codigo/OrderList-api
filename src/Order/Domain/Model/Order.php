@@ -150,7 +150,7 @@ class Order
         return $this;
     }
 
-    public function __construct(Identifier $id, Identifier $userId, Identifier $groupId, Description $description, Amount $amount, Product $product, Shop|null $shop = null)
+    public function __construct(Identifier $id, Identifier $userId, Identifier $groupId, Description $description, Amount $amount, Product $product, Shop $shop = null)
     {
         $this->id = $id;
         $this->userId = $userId;
@@ -168,7 +168,7 @@ class Order
         $this->listOrders = new ArrayCollection();
     }
 
-    public static function fromPrimitives(string $id, string $userId, string $groupId, float $amount, string $description, Product $product, Shop|null $shop = null): self
+    public static function fromPrimitives(string $id, string $userId, string $groupId, float $amount, string|null $description, Product $product, Shop $shop = null): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),
