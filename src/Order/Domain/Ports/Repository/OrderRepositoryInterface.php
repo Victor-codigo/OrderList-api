@@ -30,5 +30,10 @@ interface OrderRepositoryInterface extends RepositoryInterface
      *
      * @throws DBNotFoundException
      */
-    public function findOrdersByIdOrFail(array $ordersId, Identifier|null $groupId = null): PaginatorInterface;
+    public function findOrdersByIdOrFail(array $ordersId, Identifier $groupId = null): PaginatorInterface;
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findOrdersGroupOrFail(Identifier $groupId): PaginatorInterface;
 }

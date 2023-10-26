@@ -36,3 +36,13 @@ order_get_data:
   controller: Order\Adapter\Http\Controller\OrderGetData\OrderGetDataController
   requirements:
     api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# ORDERS GROUP GET DATA
+# -------------------------------------------------------------
+orders_group_get_data:
+  path: /api/v{api_version}/orders/group/{group_id}
+  methods: GET
+  controller: Order\Adapter\Http\Controller\OrdersGroupGetData\OrdersGroupGetDataController
+  requirements:
+    api_version: '\d+[.\d]?'

@@ -221,4 +221,24 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->expectException(DBNotFoundException::class);
         $this->object->findOrdersByIdOrFail($ordersId, $groupId);
     }
+
+    /** @test */
+    public function itShouldFindOrdersOfAGroup(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+
+        $return = $this->object->findOrdersGroupOrFail($groupId);
+        $ordersExpected = $this->object->findBy(['groupId' => $groupId]);
+
+        $this->assertEquals($ordersExpected, iterator_to_array($return));
+    }
+
+    /** @test */
+    public function itShouldFailFindingOrdersOfAGroupGroupNotExists(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier('id group not exists');
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findOrdersGroupOrFail($groupId);
+    }
 }
