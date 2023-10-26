@@ -105,7 +105,7 @@ use openApi\Attributes as OA;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|permissions|list_order_id|orders_not_found, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|page|page_items|permissions|list_order_id|orders_not_found, string|array>')),
                     ]
                 )
             )
