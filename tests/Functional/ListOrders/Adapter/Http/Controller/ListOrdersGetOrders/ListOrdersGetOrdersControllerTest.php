@@ -298,6 +298,96 @@ class ListOrdersGetOrdersControllerTest extends WebClientTestCase
     }
 
     /** @test */
+    public function itShouldFailGetListOrdersOrderListPageIsNull(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                .'?group_id='.self::GROUP_ID
+                .'&list_order_id='.self::LIST_ORDERS_ID
+                .'&page_items=100'
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['page'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['greater_than'], $responseContent->errors->page);
+    }
+
+    /** @test */
+    public function itShouldFailGetListOrdersOrderListPageWrong(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                .'?group_id='.self::GROUP_ID
+                .'&list_order_id='.self::LIST_ORDERS_ID
+                .'&page=-1'
+                .'&page_items=100'
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['page'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['greater_than'], $responseContent->errors->page);
+    }
+
+    /** @test */
+    public function itShouldFailGetListOrdersOrderListPageItemsIsNull(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                .'?group_id='.self::GROUP_ID
+                .'&list_order_id='.self::LIST_ORDERS_ID
+                .'&page=1'
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['page_items'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['greater_than'], $responseContent->errors->page_items);
+    }
+
+    /** @test */
+    public function itShouldFailGetListOrdersOrderListPageItemsWrong(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                .'?group_id='.self::GROUP_ID
+                .'&list_order_id='.self::LIST_ORDERS_ID
+                .'&page=1'
+                .'&page_items=-1'
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['page_items'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['greater_than'], $responseContent->errors->page_items);
+    }
+
+    /** @test */
     public function itShouldFailGetListOrdersOrderListOrdersDoNotBelongsToTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
