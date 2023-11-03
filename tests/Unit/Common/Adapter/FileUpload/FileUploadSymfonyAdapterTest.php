@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\FileUpload;
 
+use Common\Adapter\FileUpload\BuiltInFunctionsReturn;
 use Common\Adapter\FileUpload\FileUploadSymfonyAdapter;
 use Common\Domain\Exception\LogicException;
 use Common\Domain\FileUpload\Exception\FileUploadCanNotWriteException;
@@ -12,6 +13,7 @@ use Common\Domain\FileUpload\Exception\FileUploadExtensionFileException;
 use Common\Domain\FileUpload\Exception\FileUploadIniSizeException;
 use Common\Domain\FileUpload\Exception\FileUploadNoFileException;
 use Common\Domain\FileUpload\Exception\FileUploadPartialFileException;
+use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\FileUpload\Exception\FileUploadSizeException;
 use Common\Domain\FileUpload\Exception\FileUploadTmpDirFileException;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
@@ -24,6 +26,8 @@ use Symfony\Component\HttpFoundation\File\Exception\IniSizeFileException;
 use Symfony\Component\HttpFoundation\File\Exception\NoFileException;
 use Symfony\Component\HttpFoundation\File\Exception\NoTmpDirFileException;
 use Symfony\Component\HttpFoundation\File\Exception\PartialFileException;
+
+require_once 'tests/BuiltinFunctions/FileUploadSymfonyAdapter.php';
 
 class FileUploadSymfonyAdapterTest extends TestCase
 {
@@ -76,10 +80,6 @@ class FileUploadSymfonyAdapterTest extends TestCase
             ->method('move')
             ->with($pathToSaveFile, $slugFileName)
             ->willReturnCallback(fn () => $moveReturn instanceof \Throwable ? throw $moveReturn : $moveReturn);
-        $this->file
-            ->expects($this->once())
-            ->method('getClientOriginalExtension')
-            ->willReturn($originalFileName);
 
         $this->file
             ->expects($this->once())
@@ -110,6 +110,82 @@ class FileUploadSymfonyAdapterTest extends TestCase
         $this->mock__invokeStubs($originalFileName, $safeFileName, $slugFileName, $pathToSaveFile, $uniqid, $file);
 
         $this->object->__invoke($this->file, $pathToSaveFile);
+    }
+
+    /** @test */
+    public function itShouldUploadTheFileAndRemoveFileToReplace(): void
+    {
+        $pathToSaveFile = 'path/to/save/file';
+        $pathToReplaceFile = 'path/to/replace/file';
+        $originalFileName = 'file.txt';
+        $safeFileName = 'safe_file';
+        $uniqid = 'uniqid';
+        $slugFileName = sprintf('%s-%s.%s', $safeFileName, $uniqid, null);
+
+        $file = $this->createMock(UploadedFileInterface::class);
+        $this->mock__invokeStubs($originalFileName, $safeFileName, $slugFileName, $pathToSaveFile, $uniqid, $file);
+
+        BuiltInFunctionsReturn::$file_exists = true;
+        BuiltInFunctionsReturn::$unlink = true;
+        $this->object->__invoke($this->file, $pathToSaveFile, $pathToReplaceFile);
+    }
+
+    /** @test */
+    public function itShouldUploadTheFileAndRemoveFileToReplaceFileToReplaceNotExists(): void
+    {
+        $pathToSaveFile = 'path/to/save/file';
+        $pathToReplaceFile = 'path/to/replace/file';
+        $originalFileName = 'file.txt';
+        $safeFileName = 'safe_file';
+        $uniqid = 'uniqid';
+        $slugFileName = sprintf('%s-%s.%s', $safeFileName, $uniqid, null);
+
+        $file = $this->createMock(UploadedFileInterface::class);
+        $this->mock__invokeStubs($originalFileName, $safeFileName, $slugFileName, $pathToSaveFile, $uniqid, $file);
+
+        BuiltInFunctionsReturn::$file_exists = false;
+        BuiltInFunctionsReturn::$unlink = true;
+        $this->object->__invoke($this->file, $pathToSaveFile, $pathToReplaceFile);
+    }
+
+    /** @test */
+    public function itShouldThrowFileUploadReplaceException(): void
+    {
+        $pathToSaveFile = 'path/to/save/file';
+        $pathToReplaceFile = 'path/to/replace/file';
+        $originalFileName = 'file.txt';
+        $safeFileName = 'safe_file';
+        $uniqid = 'uniqid';
+
+        $this->file
+            ->expects($this->once())
+            ->method('getClientOriginalExtension')
+            ->willReturn($originalFileName);
+
+        $this->file
+            ->expects($this->never())
+            ->method('move');
+
+        $this->file
+            ->expects($this->once())
+            ->method('guessExtension')
+            ->willReturn(null);
+
+        $this->object
+            ->expects($this->once())
+            ->method('uniqid')
+            ->willReturn($uniqid);
+
+        $this->object
+            ->expects($this->once())
+            ->method('slug')
+            ->willReturn($safeFileName);
+
+        BuiltInFunctionsReturn::$file_exists = true;
+        BuiltInFunctionsReturn::$unlink = false;
+
+        $this->expectException(FileUploadReplaceException::class);
+        $this->object->__invoke($this->file, $pathToSaveFile, $pathToReplaceFile);
     }
 
     /** @test */

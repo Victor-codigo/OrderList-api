@@ -11,6 +11,7 @@ use Common\Domain\FileUpload\Exception\FileUploadExtensionFileException;
 use Common\Domain\FileUpload\Exception\FileUploadIniSizeException;
 use Common\Domain\FileUpload\Exception\FileUploadNoFileException;
 use Common\Domain\FileUpload\Exception\FileUploadPartialFileException;
+use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\FileUpload\Exception\FileUploadSizeException;
 use Common\Domain\FileUpload\Exception\FileUploadTmpDirFileException;
 use Common\Domain\FileUpload\Exception\File\FileException;
@@ -48,6 +49,8 @@ class FileUploadSymfonyAdapter implements FileUploadInterface
     }
 
     /**
+     * @param string $fileNameToReplace Name of the file. File must be in "$pathToSaveFile" path.
+     *
      * @throws FileUploadCanNotWriteException
      * @throws FileUploadExtensionFileException
      * @throws FileUploadException
@@ -56,11 +59,16 @@ class FileUploadSymfonyAdapter implements FileUploadInterface
      * @throws FileUploadNoFileException
      * @throws FileUploadTmpDirFileException
      * @throws FileUploadPartialFileException
+     * @throws FileUploadReplaceException
      */
-    public function __invoke(UploadedFileInterface $file, string $pathToSaveFile): FileInterface
+    public function __invoke(UploadedFileInterface $file, string $pathToSaveFile, string $fileNameToReplace = null): FileInterface
     {
         try {
             $this->fileName = $this->generateFileName($file);
+
+            if (null !== $fileNameToReplace) {
+                $this->removeImage($pathToSaveFile, $fileNameToReplace);
+            }
 
             return $file->move($pathToSaveFile, $this->fileName);
         } catch (CannotWriteFileException) {
@@ -98,7 +106,7 @@ class FileUploadSymfonyAdapter implements FileUploadInterface
     /**
      * This method exits, just because phpunit error: eval emits an error that shows in console all code of the class.
      */
-    protected function slug(string $string, string $separator = '-', string|null $locale = null): string
+    protected function slug(string $string, string $separator = '-', string $locale = null): string
     {
         return (string) $this->slugger->slug($string, $separator, $locale);
     }
@@ -106,5 +114,21 @@ class FileUploadSymfonyAdapter implements FileUploadInterface
     public function getNewInstance(): static
     {
         return new static($this->slugger);
+    }
+
+    /**
+     * @throws FileUploadReplaceException
+     */
+    private function removeImage(string $imagesPath, string $fileName): void
+    {
+        $file = "{$imagesPath}/{$fileName}";
+
+        if (!file_exists($file)) {
+            return;
+        }
+
+        if (!unlink($file)) {
+            throw FileUploadReplaceException::fromMessage(sprintf('File [%s] could not be Replaced', $file));
+        }
     }
 }

@@ -12,6 +12,8 @@ interface FileUploadInterface
     public function getFileName(): string;
 
     /**
+     * @param string $fileNameToReplace Name of the file. File must be in "$pathToSaveFile" path.
+     *
      * @throws FileUploadCanNotWriteException
      * @throws FileUploadExtensionFileException
      * @throws FileUploadException
@@ -20,7 +22,7 @@ interface FileUploadInterface
      * @throws FileUploadNoFileException
      * @throws FileUploadTmpDirFileException
      * @throws FileUploadPartialFileException
-     * @throws FileException
+     * @throws FileUploadReplaceException
      */
-    public function __invoke(UploadedFileInterface $file, string $pathToSaveFile): FileInterface;
+    public function __invoke(UploadedFileInterface $file, string $pathToSaveFile, string $fileNameToReplace = null): FileInterface;
 }
