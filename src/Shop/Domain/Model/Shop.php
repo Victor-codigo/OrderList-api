@@ -48,6 +48,13 @@ class Shop
         return $this->name;
     }
 
+    public function setName(NameWithSpaces $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
     public function getDescription(): Description
     {
         return $this->description;
@@ -110,9 +117,6 @@ class Shop
         return $this->orders;
     }
 
-    /**
-     * @param Order[] $order
-     */
     public function setOrders(array $orders): self
     {
         $this->orders = new ArrayCollection($orders);
@@ -140,7 +144,7 @@ class Shop
         $this->orders = new ArrayCollection();
     }
 
-    public static function fromPrimitives(string $id, string $groupId, string $name, string|null $description = null, string|null $image = null): self
+    public static function fromPrimitives(string $id, string $groupId, string $name, string $description = null, string $image = null): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),
