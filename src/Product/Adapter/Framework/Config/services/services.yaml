@@ -9,7 +9,6 @@ services:
 
     bind:
       $productImagePath: "%product.image.path%"
-      # $productPublicImagePath: "%product.public.image.path%"
 
   # Adapter
   Product\Adapter\:

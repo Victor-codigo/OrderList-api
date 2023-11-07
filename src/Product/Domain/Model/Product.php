@@ -10,11 +10,12 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Service\Image\UploadImage\EntityImageModifyInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Order\Domain\Model\Order;
 
-class Product
+class Product implements EntityImageModifyInterface
 {
     private Identifier $id;
     private Identifier $groupId;
@@ -45,6 +46,13 @@ class Product
     public function getName(): NameWithSpaces
     {
         return $this->name;
+    }
+
+    public function setName(NameWithSpaces $name): self
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     public function getDescription(): Description
@@ -132,7 +140,7 @@ class Product
         $this->orders = new ArrayCollection();
     }
 
-    public static function fromPrimitives(string $id, string $groupId, string $name, string|null $description = null, string|null $image = null): self
+    public static function fromPrimitives(string $id, string $groupId, string $name, string $description = null, string $image = null): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),

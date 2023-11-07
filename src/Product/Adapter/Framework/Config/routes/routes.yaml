@@ -8,6 +8,16 @@ product_create:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
+# PRODUCT MODIFY
+# -------------------------------------------------------------
+product_modify:
+  path: /api/v{api_version}/products
+  methods: PUT
+  controller: Product\Adapter\Http\Controller\ProductModify\ProductModifyController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
 # PRODUCT REMOVE
 # -------------------------------------------------------------
 product_remove:
