@@ -38,9 +38,22 @@ class ProductShopRepository extends RepositoryBase implements ProductShopReposit
     }
 
     /**
+     * @throws DBConnectionException
+     */
+    public function remove(ProductShop $productShop): void
+    {
+        try {
+            $this->objectManager->remove($productShop);
+            $this->objectManager->flush();
+        } catch (\Throwable $e) {
+            throw DBConnectionException::fromConnection($e->getCode());
+        }
+    }
+
+    /**
      * @throws DBNotFoundException
      */
-    public function findProductsAndShopsOrFail(array|null $productsId = null, array|null $shopsId = null, Identifier|null $groupId = null): PaginatorInterface
+    public function findProductsAndShopsOrFail(array $productsId = null, array $shopsId = null, Identifier $groupId = null): PaginatorInterface
     {
         $query = $this->entityManager->createQueryBuilder()
             ->select('productShops')

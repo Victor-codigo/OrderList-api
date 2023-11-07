@@ -17,10 +17,15 @@ interface ProductShopRepositoryInterface extends RepositoryInterface
     public function save(ProductShop $ProductShop): void;
 
     /**
+     * @throws DBConnectionException
+     */
+    public function remove(ProductShop $ProductShop): void;
+
+    /**
      * @param Identifier[] $productId
      * @param Identifier[] $shopId
      *
      * @throws DBNotFoundException
      */
-    public function findProductsAndShopsOrFail(array|null $productId = null, array|null $shopId = null, Identifier|null $groupId = null): PaginatorInterface;
+    public function findProductsAndShopsOrFail(array $productId = null, array $shopId = null, Identifier $groupId = null): PaginatorInterface;
 }
