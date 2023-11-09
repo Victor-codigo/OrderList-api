@@ -46,6 +46,14 @@ class ShopModifyServiceTest extends TestCase
         $this->object = new ShopModifyService($this->shopRepository, $this->fileUpload, self::SHOP_IMAGE_PATH);
     }
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        BuiltInFunctionsReturn::$file_exists = null;
+        BuiltInFunctionsReturn::$unlink = null;
+    }
+
     private function getShop(): Shop
     {
         return Shop::fromPrimitives(

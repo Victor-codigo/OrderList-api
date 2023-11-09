@@ -42,6 +42,14 @@ class FileUploadSymfonyAdapterTest extends TestCase
         $this->object = $this->createPartialMock(FileUploadSymfonyAdapter::class, ['uniqid', 'slug']);
     }
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        BuiltInFunctionsReturn::$file_exists = null;
+        BuiltInFunctionsReturn::$unlink = null;
+    }
+
     /** @test */
     public function istShouldThrowLogicExceptionGettingTheFileName(): void
     {

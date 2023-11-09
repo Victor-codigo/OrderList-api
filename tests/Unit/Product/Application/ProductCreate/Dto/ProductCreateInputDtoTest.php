@@ -34,6 +34,17 @@ class ProductCreateInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        BuiltInFunctionsReturn::$is_readable = null;
+        BuiltInFunctionsReturn::$filesize = null;
+        BuiltInFunctionsReturn::$getimagesize = null;
+        BuiltInFunctionsReturn::$imagecreatefromstring = null;
+        BuiltInFunctionsReturn::$unlink = null;
+    }
+
     private function getUploadedImage(string $path, string $originalName, string $mimeType, int $error): UploadedFileSymfonyAdapter
     {
         return new UploadedFileSymfonyAdapter(

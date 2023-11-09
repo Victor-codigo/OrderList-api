@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Service\Image\UploadImage;
 
-use Common\Domain\FileUpload\Exception\File\FileException;
 use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
+use Common\Domain\FileUpload\Exception\File\FileException;
 use Common\Domain\Model\ValueObject\Object\ObjectValueObject;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -39,6 +39,14 @@ class UploadImageServiceTest extends TestCase
         $this->imageUploaded = $this->createMock(ObjectValueObject::class);
         $this->uploadedFile = $this->createMock(UploadedFileInterface::class);
         $this->object = new UploadImageService($this->fileUpload);
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        BuiltInFunctionsReturn::$file_exists = null;
+        BuiltInFunctionsReturn::$unlink = null;
     }
 
     /** @test */

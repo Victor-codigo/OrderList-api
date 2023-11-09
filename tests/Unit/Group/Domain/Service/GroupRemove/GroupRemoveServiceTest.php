@@ -34,6 +34,14 @@ class GroupRemoveServiceTest extends TestCase
         $this->object = new GroupRemoveService($this->groupRepository, self::PATH_GROUP_IMAGES);
     }
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        BuiltInFunctionsReturn::$file_exists = null;
+        BuiltInFunctionsReturn::$unlink = null;
+    }
+
     private function getGroup(): Group
     {
         return Group::fromPrimitives(self::GROUP_ID, 'group', GROUP_TYPE::GROUP, 'description', null);

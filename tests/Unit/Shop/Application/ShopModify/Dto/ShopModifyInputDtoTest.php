@@ -35,6 +35,17 @@ class ShopModifyInputDtoTest extends TestCase
         $this->userSession = $this->createMock(UserShared::class);
     }
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        BuiltInFunctionsReturn::$filesize = null;
+        BuiltInFunctionsReturn::$getimagesize = null;
+        BuiltInFunctionsReturn::$imagecreatefromstring = null;
+        BuiltInFunctionsReturn::$is_readable = null;
+        BuiltInFunctionsReturn::$unlink = null;
+    }
+
     private function getUploadedImage(string $path, string $originalName, string $mimeType, int $error): UploadedFileSymfonyAdapter
     {
         return new UploadedFileSymfonyAdapter(

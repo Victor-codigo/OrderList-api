@@ -36,6 +36,14 @@ class UserRemoveServiceTest extends TestCase
         $this->object = new UserRemoveService($this->userRepository, self::USER_IMAGE_PATH);
     }
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        BuiltInFunctionsReturn::$file_exists = null;
+        BuiltInFunctionsReturn::$unlink = null;
+    }
+
     private function setUserAsDeleted(User $user): void
     {
         $user->setEmail(ValueObjectFactory::createEmail(''));

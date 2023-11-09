@@ -6,9 +6,9 @@ namespace User\Application\UserModify;
 
 class BuiltInFunctionsReturn
 {
-    public static $unlink = null;
-    public static $is_readable = null;
-    public static $file_exists = null;
+    public static bool|null $unlink = null;
+    public static bool|null $is_readable = null;
+    public static bool|null $file_exists = null;
 }
 
 function is_readable(string $path): bool

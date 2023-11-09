@@ -36,6 +36,14 @@ class ProductRemoveServiceTest extends TestCase
         $this->object = new ProductRemoveService($this->productRepository, self::PRODUCT_IMAGE_PATH);
     }
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        BuiltInFunctionsReturn::$file_exists = null;
+        BuiltInFunctionsReturn::$unlink = null;
+    }
+
     private function getProduct(Identifier $productId, Identifier $groupId, Identifier $shopId, string $image = null): Product
     {
         return new Product(
