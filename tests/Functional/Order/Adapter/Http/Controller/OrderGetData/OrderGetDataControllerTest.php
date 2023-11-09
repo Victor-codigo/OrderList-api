@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Functional\Order\Adapter\Http\Controller\OrderGetData;
 
 use Common\Domain\Response\RESPONSE_STATUS;
+use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
@@ -37,6 +38,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
                 'group_id' => '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 'description' => 'order description',
                 'amount' => 10.200,
+                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
                 'created_on' => '2023-05-29 13:35:10',
                 'price' => 10.50,
              ],
@@ -48,6 +50,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
                 'group_id' => '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 'description' => 'order description 2',
                 'amount' => 20.050,
+                'unit' => UNIT_MEASURE_TYPE::KG->value,
                 'created_on' => '2023-05-29 13:35:10',
                 'price' => 20.30,
             ],
@@ -63,6 +66,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $this->assertTrue(property_exists($orderDataActual, 'group_id'));
         $this->assertTrue(property_exists($orderDataActual, 'description'));
         $this->assertTrue(property_exists($orderDataActual, 'amount'));
+        $this->assertTrue(property_exists($orderDataActual, 'unit'));
         $this->assertTrue(property_exists($orderDataActual, 'created_on'));
         $this->assertTrue(property_exists($orderDataActual, 'price'));
 
@@ -73,6 +77,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $this->assertEquals($orderExpected['group_id'], $orderDataActual->group_id);
         $this->assertEquals($orderExpected['description'], $orderDataActual->description);
         $this->assertEquals($orderExpected['amount'], $orderDataActual->amount);
+        $this->assertEquals($orderExpected['unit'], $orderDataActual->unit);
         $this->assertIsString($orderDataActual->created_on);
         $this->assertEquals($orderExpected['price'], $orderDataActual->price);
     }

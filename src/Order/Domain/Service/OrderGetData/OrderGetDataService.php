@@ -74,6 +74,7 @@ class OrderGetDataService
             'group_id' => $order->getGroupId()->getValue(),
             'description' => $order->getDescription()->getValue(),
             'amount' => $order->getAmount()->getValue(),
+            'unit' => $order->getUnit()->getValue(),
             'created_on' => $order->getCreatedOn()->format('Y-m-d H:i:s'),
             'price' => $price->getValue(),
         ];
