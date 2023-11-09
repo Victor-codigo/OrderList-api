@@ -70,6 +70,7 @@ use openApi\Attributes as OA;
                                 new OA\Property(property: 'group_id', type: 'string'),
                                 new OA\Property(property: 'description', type: 'string'),
                                 new OA\Property(property: 'amount', type: 'float'),
+                                new OA\Property(property: 'unit', type: 'string'),
                                 new OA\Property(property: 'created_on', type: 'datetime'),
                                 new OA\Property(property: 'product', type: 'array', items: new OA\Items(
                                     properties: [

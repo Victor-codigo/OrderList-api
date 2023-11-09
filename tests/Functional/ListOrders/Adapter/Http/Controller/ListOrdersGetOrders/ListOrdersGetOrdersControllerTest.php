@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Functional\ListOrders\Adapter\Http\Controller\ListOrdersGetOrders;
 
 use Common\Domain\Response\RESPONSE_STATUS;
+use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Order\Domain\Model\Order;
 use Product\Domain\Model\Product;
@@ -102,6 +103,7 @@ class ListOrdersGetOrdersControllerTest extends WebClientTestCase
                 '2606508b-4516-45d6-93a6-c7cb416b7f3f',
                 '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 20.050,
+                UNIT_MEASURE_TYPE::KG,
                 'order description 2',
                 $product1,
                 $shop1
@@ -111,6 +113,7 @@ class ListOrdersGetOrdersControllerTest extends WebClientTestCase
                 '2606508b-4516-45d6-93a6-c7cb416b7f3f',
                 '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 10.200,
+                UNIT_MEASURE_TYPE::UNITS,
                 'order description',
                 $product2,
                 $shop2
