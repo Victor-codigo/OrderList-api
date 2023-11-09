@@ -126,6 +126,7 @@ class OrderCreateService
             $groupId,
             $order->description,
             $order->amount,
+            $order->unit,
             $products[$order->productId->getValue()],
             $shopId
         );

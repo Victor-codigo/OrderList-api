@@ -65,8 +65,6 @@ class OrderCreateUseCase extends ServiceBase
 
     /**
      * @param OrderDataDto[] $ordersData
-     * @param Identifier[]   $productsId
-     * @param Identifier[]   $shopsId
      */
     private function createOrderCreateDto(Identifier $groupId, array $ordersData): OrderCreateDto
     {
@@ -77,7 +75,8 @@ class OrderCreateUseCase extends ServiceBase
                 $order->userId,
                 $order->shopId,
                 $order->description,
-                $order->amount
+                $order->amount,
+                $order->unit
             );
         }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Functional\Order\Adapter\Http\Controller\OrderCreate;
 
 use Common\Domain\Response\RESPONSE_STATUS;
+use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
@@ -46,24 +47,27 @@ class OrderCreateControllerTest extends WebClientTestCase
                 'shop_id' => 'e6c1d350-f010-403c-a2d4-3865c14630ec',
                 'description' => 'order 1 description',
                 'amount' => 10.56,
+                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ],
             [
                 'product_id' => '7e3021d4-2d02-4386-8bbe-887cfe8697a8',
                 'shop_id' => 'e6c1d350-f010-403c-a2d4-3865c14630ec',
                 'description' => 'order 2 description',
                 'amount' => 20.56,
+                'unit' => UNIT_MEASURE_TYPE::KG->value,
             ],
             [
                 'product_id' => '8b6d650b-7bb7-4850-bf25-36cda9bce801',
                 'shop_id' => 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
                 'description' => 'order 3 description',
                 'amount' => 30.56,
+                'unit' => UNIT_MEASURE_TYPE::CM->value,
             ],
         ];
     }
 
     /** @test */
-    public function itShouldCreateOrders(): void
+    public function itShouldCreateOrders22(): void
     {
         $ordersData = $this->getOrdersData();
         $client = $this->getNewClientAuthenticatedUser();
@@ -87,15 +91,18 @@ class OrderCreateControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldCreateOrdersDescriptionAndAmountIsNull(): void
+    public function itShouldCreateOrdersDescriptionAndAmountUnitAreNull(): void
     {
         $ordersData = $this->getOrdersData();
         $ordersData[0]['description'] = null;
         $ordersData[0]['amount'] = null;
+        $ordersData[0]['unit'] = null;
         $ordersData[1]['description'] = null;
         $ordersData[1]['amount'] = null;
+        $ordersData[1]['unit'] = null;
         $ordersData[2]['description'] = null;
         $ordersData[2]['amount'] = null;
+        $ordersData[2]['unit'] = null;
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
