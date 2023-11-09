@@ -22,7 +22,7 @@ class NotificationTypeTest extends TestCase
     }
 
     /** @test */
-    public function itShouldValidateTheGUserRegisteredType(): void
+    public function itShouldValidateTheNotificationType(): void
     {
         $object = new NotificationType(NOTIFICATION_TYPE::USER_REGISTERED);
         $return = $this->validation->validateValueObject($object);
