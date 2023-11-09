@@ -48,6 +48,7 @@ class OrderModifyService
 
         $order
             ->setAmount($input->amount)
+            ->setUnit($input->unit)
             ->setDescription($input->description)
             ->setUserId($input->userId)
             ->setProduct($product)

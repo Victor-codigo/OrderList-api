@@ -8,6 +8,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Order\Domain\Model\Order;
 use Order\Domain\Ports\Repository\OrderRepositoryInterface;
 use Order\Domain\Service\OrderModify\Dto\OrderModifyDto;
@@ -76,6 +77,7 @@ class OrderModifyServiceTest extends TestCase
             $input->groupId,
             $input->description,
             $input->amount,
+            $input->unit,
             $product,
             $shop,
         );
@@ -89,6 +91,7 @@ class OrderModifyServiceTest extends TestCase
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             ValueObjectFactory::createDescription('order description'),
             ValueObjectFactory::createAmount(null),
+            ValueObjectFactory::createUnit(UNIT_MEASURE_TYPE::UNITS),
             $product,
             $shop
         );
@@ -103,6 +106,7 @@ class OrderModifyServiceTest extends TestCase
         $this->assertEquals($orderExpected->getGroupId(), $order->getGroupId());
         $this->assertEquals($orderExpected->getDescription(), $order->getDescription());
         $this->assertEquals($orderExpected->getAmount(), $order->getAmount());
+        $this->assertEquals($orderExpected->getUnit(), $order->getUnit());
     }
 
     /** @test */
@@ -119,6 +123,7 @@ class OrderModifyServiceTest extends TestCase
             ValueObjectFactory::createIdentifier(self::USER_ID),
             ValueObjectFactory::createDescription('order description modified'),
             ValueObjectFactory::createAmount(10.3),
+            ValueObjectFactory::createUnit(UNIT_MEASURE_TYPE::UNITS),
         );
         $orderExpected = $this->getOrderFromInput($input, $product, $shop);
 
@@ -175,6 +180,7 @@ class OrderModifyServiceTest extends TestCase
             ValueObjectFactory::createIdentifier(self::USER_ID),
             ValueObjectFactory::createDescription('order description modified'),
             ValueObjectFactory::createAmount(10.3),
+            ValueObjectFactory::createUnit(UNIT_MEASURE_TYPE::UNITS),
         );
 
         $this->productRepository
@@ -215,6 +221,7 @@ class OrderModifyServiceTest extends TestCase
             ValueObjectFactory::createIdentifier(self::USER_ID),
             ValueObjectFactory::createDescription('order description modified'),
             ValueObjectFactory::createAmount(10.3),
+            ValueObjectFactory::createUnit(UNIT_MEASURE_TYPE::UNITS),
         );
 
         $this->productRepository
@@ -259,6 +266,7 @@ class OrderModifyServiceTest extends TestCase
             ValueObjectFactory::createIdentifier(self::USER_ID),
             ValueObjectFactory::createDescription('order description modified'),
             ValueObjectFactory::createAmount(10.3),
+            ValueObjectFactory::createUnit(UNIT_MEASURE_TYPE::UNITS),
         );
 
         $this->productRepository
@@ -309,6 +317,7 @@ class OrderModifyServiceTest extends TestCase
             ValueObjectFactory::createIdentifier(self::USER_ID),
             ValueObjectFactory::createDescription('order description modified'),
             ValueObjectFactory::createAmount(10.3),
+            ValueObjectFactory::createUnit(UNIT_MEASURE_TYPE::UNITS),
         );
 
         $this->productRepository

@@ -33,6 +33,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'shop_id', type: 'string', description: 'Shop id', example: '0290bf7e-2e68-4698-ba2e-d2394c239572'),
                         new OA\Property(property: 'description', type: 'string', description: 'Order description'),
                         new OA\Property(property: 'amount', type: 'float', description: 'Order amount of product'),
+                        new OA\Property(property: 'unit', type: 'string', description: 'Order unit of measure of the product', example: 'Kg'),
                     ]
                 )
             ),
@@ -64,7 +65,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<order_id|group_id|product_id|shop_id|description|amount|order_not_found|product_not_found|shop_not_found|group_error, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<order_id|group_id|product_id|shop_id|description|amount|unit|order_not_found|product_not_found|shop_not_found|group_error, string|array>')),
                     ]
                 )
             )
@@ -88,19 +89,29 @@ class OrderModifyController extends AbstractController
                 $request->productId,
                 $request->shopId,
                 $request->description,
-                $request->amount
+                $request->amount,
+                $request->unit
             )
         );
 
         return $this->createResponse($orderModify);
     }
 
-    private function createOrderModifyInputDto(string|null $orderId, string|null $groupId, string|null $productId, string|null $shopId, string|null $description, float|null $amount): OrderModifyInputDto
+    private function createOrderModifyInputDto(string|null $orderId, string|null $groupId, string|null $productId, string|null $shopId, string|null $description, float|null $amount, string|null $unit): OrderModifyInputDto
     {
         /** @var UserSharedSymfonyAdapter $userAdapter */
         $userAdapter = $this->security->getUser();
 
-        return new OrderModifyInputDto($userAdapter->getUser(), $orderId, $groupId, $productId, $shopId, $description, $amount);
+        return new OrderModifyInputDto(
+            $userAdapter->getUser(),
+            $orderId,
+            $groupId,
+            $productId,
+            $shopId,
+            $description,
+            $amount,
+            $unit
+        );
     }
 
     private function createResponse(ApplicationOutputInterface $orderModify): JsonResponse

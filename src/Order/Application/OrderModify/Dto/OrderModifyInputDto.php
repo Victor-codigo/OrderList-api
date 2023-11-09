@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Order\Application\OrderModify\Dto;
 
 use Common\Domain\Model\ValueObject\Float\Amount;
+use Common\Domain\Model\ValueObject\Object\UnitMeasure;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\IdentifierNullable;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Common\Domain\Validation\ValidationInterface;
 
 class OrderModifyInputDto implements ServiceInputDtoInterface
@@ -22,6 +24,7 @@ class OrderModifyInputDto implements ServiceInputDtoInterface
     public readonly IdentifierNullable $shopId;
     public readonly Description $description;
     public readonly Amount $amount;
+    public readonly UnitMeasure $unit;
 
     public function __construct(
         UserShared $userSession,
@@ -30,7 +33,8 @@ class OrderModifyInputDto implements ServiceInputDtoInterface
         string|null $productId,
         string|null $shopId,
         string|null $description,
-        float|null $amount
+        float|null $amount,
+        string|null $unit
     ) {
         $this->userSession = $userSession;
         $this->orderId = ValueObjectFactory::createIdentifier($orderId);
@@ -39,6 +43,9 @@ class OrderModifyInputDto implements ServiceInputDtoInterface
         $this->shopId = ValueObjectFactory::createIdentifierNullable($shopId);
         $this->description = ValueObjectFactory::createDescription($description);
         $this->amount = ValueObjectFactory::createAmount($amount);
+        $this->unit = ValueObjectFactory::createUnit(
+            null !== $unit ? UNIT_MEASURE_TYPE::tryFrom($unit) : null
+        );
     }
 
     public function validate(ValidationInterface $validator): array
@@ -50,6 +57,7 @@ class OrderModifyInputDto implements ServiceInputDtoInterface
             'shop_id' => $this->shopId,
             'description' => $this->description,
             'amount' => $this->amount,
+            'unit' => $this->unit,
         ]);
     }
 }
