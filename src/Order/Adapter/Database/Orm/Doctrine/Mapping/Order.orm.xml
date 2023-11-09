@@ -35,12 +35,17 @@
               nullable="true"/>
 
        <field name="amount"
-               type="AmountType"
-               nullable="true"/>
+              type="AmountType"
+              nullable="true"/>
 
-        <field name="createdOn"
-               column="created_on"
-               type="datetime"/>
+       <field name="unit"
+              type="UnitMeasureType"
+              length="5"
+              nullable="true"/>
+
+       <field name="createdOn"
+              column="created_on"
+              type="datetime"/>
 
        <indexes>
               <index name="IDX_user_id"

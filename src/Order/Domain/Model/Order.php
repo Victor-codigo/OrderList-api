@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Order\Domain\Model;
 
 use Common\Domain\Model\ValueObject\Float\Amount;
+use Common\Domain\Model\ValueObject\Object\UnitMeasure;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Product\Domain\Model\Product;
@@ -22,6 +24,7 @@ class Order
     private Identifier $shopId;
     private Description $description;
     private Amount $amount;
+    private UnitMeasure $unit;
     private \DateTime $createdOn;
 
     private Product $product;
@@ -83,6 +86,18 @@ class Order
     public function setAmount(Amount $amount): self
     {
         $this->amount = $amount;
+
+        return $this;
+    }
+
+    public function getUnit(): UnitMeasure
+    {
+        return $this->unit;
+    }
+
+    public function setUnit(UnitMeasure $unit): self
+    {
+        $this->unit = $unit;
 
         return $this;
     }
@@ -150,7 +165,7 @@ class Order
         return $this;
     }
 
-    public function __construct(Identifier $id, Identifier $userId, Identifier $groupId, Description $description, Amount $amount, Product $product, Shop $shop = null)
+    public function __construct(Identifier $id, Identifier $userId, Identifier $groupId, Description $description, Amount $amount, UnitMeasure $unit, Product $product, Shop $shop = null)
     {
         $this->id = $id;
         $this->userId = $userId;
@@ -161,6 +176,7 @@ class Order
             : ValueObjectFactory::createIdentifier(null);
         $this->description = $description;
         $this->amount = $amount;
+        $this->unit = $unit;
         $this->createdOn = new \DateTime();
 
         $this->product = $product;
@@ -168,7 +184,7 @@ class Order
         $this->listOrders = new ArrayCollection();
     }
 
-    public static function fromPrimitives(string $id, string $userId, string $groupId, float $amount, string|null $description, Product $product, Shop $shop = null): self
+    public static function fromPrimitives(string $id, string $userId, string $groupId, float $amount, UNIT_MEASURE_TYPE $unit, string|null $description, Product $product, Shop $shop = null): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),
@@ -176,6 +192,7 @@ class Order
             ValueObjectFactory::createIdentifier($groupId),
             ValueObjectFactory::createDescription($description),
             ValueObjectFactory::createAmount($amount),
+            ValueObjectFactory::createUnit($unit),
             $product,
             $shop
         );
