@@ -7,6 +7,7 @@ namespace Common\Domain\Model\ValueObject\Object;
 use Common\Domain\Ports\FileUpload\FileInterface;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
+use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 
 class ValueObjectObjectFactory
 {
@@ -38,6 +39,11 @@ class ValueObjectObjectFactory
     public static function createNotificationType(NOTIFICATION_TYPE|null $type): NotificationType
     {
         return new NotificationType($type);
+    }
+
+    public static function createUnit(UNIT_MEASURE_TYPE|null $type): UnitMeasure
+    {
+        return new UnitMeasure($type);
     }
 
     public static function createProductImage(FileInterface|null $file): ProductImage

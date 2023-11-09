@@ -7,6 +7,7 @@ namespace Common\Domain\Model\ValueObject\Constraints;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
+use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Common\Domain\Validation\User\USER_ROLES;
 
 final class VALUE_OBJECTS_CONSTRAINTS
@@ -116,6 +117,16 @@ final class VALUE_OBJECTS_CONSTRAINTS
         NOTIFICATION_TYPE::GROUP_REMOVED,
         NOTIFICATION_TYPE::GROUP_USER_ADDED,
         NOTIFICATION_TYPE::GROUP_USER_REMOVED,
+    ];
+
+    public const UNIT_MEASURE_TYPES = [
+        UNIT_MEASURE_TYPE::UNITS,
+        UNIT_MEASURE_TYPE::KG,
+        UNIT_MEASURE_TYPE::G,
+        UNIT_MEASURE_TYPE::M,
+        UNIT_MEASURE_TYPE::DM,
+        UNIT_MEASURE_TYPE::CM,
+        UNIT_MEASURE_TYPE::MM,
     ];
 
     /**

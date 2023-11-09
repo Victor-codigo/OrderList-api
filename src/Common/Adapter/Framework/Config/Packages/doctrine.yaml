@@ -17,6 +17,7 @@ doctrine:
             GroupTypeType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\GroupTypeType
             NotificationTypeType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\NotificationTypeType
             NotificationDataType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array\NotificationDataType
+            UnitMeasureType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\UnitMeasureType
             AmountType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Float\AmountType
             MoneyType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Float\MoneyType
             DateNowToFutureType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Date\DateNowToFutureType

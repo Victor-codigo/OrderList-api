@@ -7,6 +7,7 @@ namespace Common\Domain\Model\ValueObject\Object;
 use Common\Domain\Ports\FileUpload\FileInterface;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
+use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 
 interface ValueObjectObjectFactoryInterface
 {
@@ -21,6 +22,8 @@ interface ValueObjectObjectFactoryInterface
     public static function createGroupType(GROUP_TYPE|null $type): GroupType;
 
     public static function createNotificationType(NOTIFICATION_TYPE|null $type): NotificationType;
+
+    public static function createUnit(UNIT_MEASURE_TYPE|null $type): UnitMeasure;
 
     public static function createProductImage(FileInterface|null $file): ProductImage;
 

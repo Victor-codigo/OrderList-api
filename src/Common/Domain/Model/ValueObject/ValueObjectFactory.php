@@ -6,8 +6,8 @@ namespace Common\Domain\Model\ValueObject;
 
 use Common\Domain\Model\ValueObject\Array\NotificationData;
 use Common\Domain\Model\ValueObject\Array\Roles;
-use Common\Domain\Model\ValueObject\Array\ValueObjectArrayFactoryInterface;
 use Common\Domain\Model\ValueObject\Array\valueObjectArrayFactory;
+use Common\Domain\Model\ValueObject\Array\ValueObjectArrayFactoryInterface;
 use Common\Domain\Model\ValueObject\Date\DateNowToFuture;
 use Common\Domain\Model\ValueObject\Date\ValueObjectDateFactory;
 use Common\Domain\Model\ValueObject\Date\ValueObjectDateFactoryInterface;
@@ -26,6 +26,7 @@ use Common\Domain\Model\ValueObject\Object\NotificationType;
 use Common\Domain\Model\ValueObject\Object\ProductImage;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\Object\ShopImage;
+use Common\Domain\Model\ValueObject\Object\UnitMeasure;
 use Common\Domain\Model\ValueObject\Object\UserImage;
 use Common\Domain\Model\ValueObject\Object\ValueObjectObjectFactory;
 use Common\Domain\Model\ValueObject\Object\ValueObjectObjectFactoryInterface;
@@ -45,6 +46,7 @@ use Common\Domain\Model\ValueObject\String\ValueObjectStringFactoryInterface;
 use Common\Domain\Ports\FileUpload\FileInterface;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
+use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 
 final class ValueObjectFactory implements ValueObjectStringFactoryInterface, ValueObjectArrayFactoryInterface, ValueObjectObjectFactoryInterface, ValueObjectIntegerFactoryInterface, ValueObjectFloatFactoryInterface, ValueObjectDateFactoryInterface
 {
@@ -164,6 +166,11 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
     public static function createNotificationType(NOTIFICATION_TYPE|null $type): NotificationType
     {
         return ValueObjectObjectFactory::createNotificationType($type);
+    }
+
+    public static function createUnit(UNIT_MEASURE_TYPE|null $type): UnitMeasure
+    {
+        return ValueObjectObjectFactory::createUnit($type);
     }
 
     public static function createProductImage(FileInterface|null $type): ProductImage
