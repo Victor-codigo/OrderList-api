@@ -7,6 +7,7 @@ namespace Test\Unit\ListOrders\Domain\Service\ListOrdersAddOrder;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use ListOrders\Application\ListOrdersAddOrder\Dto\OrderBoughtDto;
 use ListOrders\Domain\Model\ListOrders;
 use ListOrders\Domain\Model\ListOrdersOrders;
@@ -85,6 +86,7 @@ class ListOrdersAddOrderServiceTest extends TestCase
                 'user id '.$orderNumber,
                 'group id '.$orderNumber,
                 125.6,
+                UNIT_MEASURE_TYPE::UNITS,
                 'order description '.$orderNumber,
                 $product,
                 null
