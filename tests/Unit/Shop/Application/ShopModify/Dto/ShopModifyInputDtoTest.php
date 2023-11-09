@@ -267,7 +267,7 @@ class ShopModifyInputDtoTest extends TestCase
         BuiltInFunctionsReturn::$filesize = 2 * 1_000_000 + 1;
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_USER_IMAGE_TOO_LARGE]], $return);
+        $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_IMAGE_TOO_LARGE]], $return);
     }
 
     /** @test */

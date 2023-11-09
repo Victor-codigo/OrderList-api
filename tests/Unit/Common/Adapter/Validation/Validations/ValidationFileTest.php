@@ -207,7 +207,7 @@ class ValidationFileTest extends TestCase
             )
             ->validate();
 
-        $this->assertEquals([VALIDATION_ERRORS::FILE_USER_IMAGE_TOO_LARGE], $return);
+        $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_TOO_LARGE], $return);
     }
 
     /** @test */
@@ -259,7 +259,7 @@ class ValidationFileTest extends TestCase
             )
             ->validate();
 
-        $this->assertEquals([VALIDATION_ERRORS::FILE_USER_IMAGE_TOO_NARROW], $return);
+        $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_TOO_NARROW], $return);
     }
 
     /** @test */
@@ -285,7 +285,7 @@ class ValidationFileTest extends TestCase
             )
             ->validate();
 
-        $this->assertEquals([VALIDATION_ERRORS::FILE_USER_IMAGE_TOO_WIDE], $return);
+        $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_TOO_WIDE], $return);
     }
 
     /** @test */
@@ -311,7 +311,7 @@ class ValidationFileTest extends TestCase
             )
             ->validate();
 
-        $this->assertEquals([VALIDATION_ERRORS::FILE_USER_IMAGE_TOO_LOW], $return);
+        $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_TOO_LOW], $return);
     }
 
     /** @test */
@@ -337,7 +337,7 @@ class ValidationFileTest extends TestCase
             )
             ->validate();
 
-        $this->assertEquals([VALIDATION_ERRORS::FILE_USER_IMAGE_TOO_HIGH], $return);
+        $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_TOO_HIGH], $return);
     }
 
     /** @test */
@@ -363,7 +363,7 @@ class ValidationFileTest extends TestCase
             )
             ->validate();
 
-        $this->assertEquals([VALIDATION_ERRORS::FILE_USER_IMAGE_TOO_FEW_PIXEL], $return);
+        $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_TOO_FEW_PIXEL], $return);
     }
 
     /** @test */
@@ -389,7 +389,7 @@ class ValidationFileTest extends TestCase
             )
             ->validate();
 
-        $this->assertEquals([VALIDATION_ERRORS::FILE_USER_IMAGE_TOO_MANY_PIXEL], $return);
+        $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_TOO_MANY_PIXEL], $return);
     }
 
     /** @test */
@@ -415,7 +415,7 @@ class ValidationFileTest extends TestCase
             )
             ->validate();
 
-        $this->assertEquals([VALIDATION_ERRORS::FILE_USER_IMAGE_RATIO_TOO_SMALL], $return);
+        $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_RATIO_TOO_SMALL], $return);
     }
 
     /** @test */
@@ -441,7 +441,7 @@ class ValidationFileTest extends TestCase
             )
             ->validate();
 
-        $this->assertEquals([VALIDATION_ERRORS::FILE_USER_IMAGE_RATIO_TOO_BIG], $return);
+        $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_RATIO_TOO_BIG], $return);
     }
 
     /** @test */
@@ -467,7 +467,7 @@ class ValidationFileTest extends TestCase
             )
             ->validate();
 
-        $this->assertEquals([VALIDATION_ERRORS::FILE_USER_IMAGE_LANDSCAPE_NOT_ALLOWED], $return);
+        $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_LANDSCAPE_NOT_ALLOWED], $return);
     }
 
     /** @test */
@@ -493,7 +493,7 @@ class ValidationFileTest extends TestCase
             )
             ->validate();
 
-        $this->assertEquals([VALIDATION_ERRORS::FILE_USER_IMAGE_SQUARE_NOT_ALLOWED], $return);
+        $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_SQUARE_NOT_ALLOWED], $return);
     }
 
     /** @test */
@@ -519,7 +519,7 @@ class ValidationFileTest extends TestCase
             )
             ->validate();
 
-        $this->assertEquals([VALIDATION_ERRORS::FILE_USER_IMAGE_PORTRAIT_NOT_ALLOWED], $return);
+        $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_PORTRAIT_NOT_ALLOWED], $return);
     }
 
     /** @test */

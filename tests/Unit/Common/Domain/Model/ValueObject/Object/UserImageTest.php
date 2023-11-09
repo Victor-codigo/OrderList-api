@@ -161,7 +161,7 @@ class UserImageTest extends TestCase
 
         $return = $this->validator->validateValueObject($this->object);
 
-        $this->assertEquals([VALIDATION_ERRORS::FILE_USER_IMAGE_TOO_LARGE], $return);
+        $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_TOO_LARGE], $return);
     }
 
     /** @test */
