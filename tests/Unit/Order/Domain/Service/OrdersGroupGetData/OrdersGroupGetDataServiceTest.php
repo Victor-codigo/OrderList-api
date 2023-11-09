@@ -8,6 +8,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Order\Domain\Model\Order;
 use Order\Domain\Ports\Repository\OrderRepositoryInterface;
 use Order\Domain\Service\OrdersGroupGetData\Dto\OrdersGroupGetDataDto;
@@ -41,6 +42,7 @@ class OrdersGroupGetDataServiceTest extends TestCase
         $this->assertArrayHasKey('group_id', $orderActual);
         $this->assertArrayHasKey('description', $orderActual);
         $this->assertArrayHasKey('amount', $orderActual);
+        $this->assertArrayHasKey('unit', $orderActual);
         $this->assertArrayHasKey('created_on', $orderActual);
         $this->assertArrayHasKey('product', $orderActual);
         $this->assertArrayHasKey('shop', $orderActual);
@@ -62,6 +64,7 @@ class OrdersGroupGetDataServiceTest extends TestCase
         $this->assertEquals($orderExpected->getGroupId()->getValue(), $orderActual['group_id']);
         $this->assertEquals($orderExpected->getDescription()->getValue(), $orderActual['description']);
         $this->assertEquals($orderExpected->getAmount()->getvalue(), $orderActual['amount']);
+        $this->assertEquals($orderExpected->getUnit()->getvalue(), $orderActual['unit']);
 
         $product = $orderExpected->getProduct();
         $this->assertEquals($product->getId()->getvalue(), $orderActual['product']['id']);
@@ -114,6 +117,7 @@ class OrdersGroupGetDataServiceTest extends TestCase
                 '2606508b-4516-45d6-93a6-c7cb416b7f3f',
                 '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 20.050,
+                UNIT_MEASURE_TYPE::UNITS,
                 'order description 2',
                 $product1,
                 $shop1
@@ -123,6 +127,7 @@ class OrdersGroupGetDataServiceTest extends TestCase
                 '2606508b-4516-45d6-93a6-c7cb416b7f3f',
                 '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 10.200,
+                UNIT_MEASURE_TYPE::KG,
                 'order description',
                 $product2,
                 $shop2

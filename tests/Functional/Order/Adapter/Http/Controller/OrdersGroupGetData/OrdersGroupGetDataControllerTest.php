@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Functional\Order\Adapter\Http\Controller\OrdersGroupGetData;
 
 use Common\Domain\Response\RESPONSE_STATUS;
+use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Order\Domain\Model\Order;
 use Product\Domain\Model\Product;
@@ -29,6 +30,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
         $this->assertArrayHasKey('group_id', $orderActual);
         $this->assertArrayHasKey('description', $orderActual);
         $this->assertArrayHasKey('amount', $orderActual);
+        $this->assertArrayHasKey('unit', $orderActual);
         $this->assertArrayHasKey('created_on', $orderActual);
         $this->assertArrayHasKey('product', $orderActual);
         $this->assertArrayHasKey('shop', $orderActual);
@@ -50,6 +52,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
         $this->assertEquals($orderExpected->getGroupId()->getValue(), $orderActual['group_id']);
         $this->assertEquals($orderExpected->getDescription()->getValue(), $orderActual['description']);
         $this->assertEquals($orderExpected->getAmount()->getvalue(), $orderActual['amount']);
+        $this->assertEquals($orderExpected->getUnit()->getvalue()->value, $orderActual['unit']);
 
         $product = $orderExpected->getProduct();
         $this->assertEquals($product->getId()->getvalue(), $orderActual['product']['id']);
@@ -137,6 +140,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
                 '2606508b-4516-45d6-93a6-c7cb416b7f3f',
                 '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 20.050,
+                UNIT_MEASURE_TYPE::KG,
                 'order description 2',
                 $product1,
                 $shop1
@@ -146,6 +150,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
                 '2606508b-4516-45d6-93a6-c7cb416b7f3f',
                 '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 10.200,
+                UNIT_MEASURE_TYPE::UNITS,
                 'order description',
                 $product2,
                 $shop2
@@ -155,6 +160,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
                 '2606508b-4516-45d6-93a6-c7cb416b7f3f',
                 '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 20.050,
+                UNIT_MEASURE_TYPE::UNITS,
                 null,
                 $product3,
                 $shop3
@@ -164,6 +170,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
                 '6df60afd-f7c3-4c2c-b920-e265f266c560',
                 '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 40.000,
+                UNIT_MEASURE_TYPE::UNITS,
                 'order description 4',
                 $product4,
                 $shop3
@@ -173,6 +180,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
                 '6df60afd-f7c3-4c2c-b920-e265f266c560',
                 '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 30.150,
+                UNIT_MEASURE_TYPE::CM,
                 'order description 3',
                 $product5,
                 $shop4
