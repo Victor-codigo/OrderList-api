@@ -18,6 +18,7 @@
 coverage.xml
 public/code-coverage
 src/User/Adapter/Framework/Config/JwtKeys/JwtFirebaseHS256/key.pem
+public/assets/img
 ###> friendsofphp/php-cs-fixer ###
 /.php-cs-fixer.php
 /.php-cs-fixer.cache
