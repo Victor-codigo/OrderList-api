@@ -96,7 +96,7 @@ class ShopModifyService
     private function isValidShopName(Identifier $groupId, NameWithSpaces $shopName): void
     {
         try {
-            $this->shopRepository->findShopsOrFail(null, $groupId, null, $shopName->getValue());
+            $this->shopRepository->findShopsOrFail(null, $groupId, null, $shopName);
 
             throw ShopModifyNameIsAlreadyInDataBaseException::fromMessage('Shop name is already in data base');
         } catch (DBNotFoundException) {

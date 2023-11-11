@@ -8,6 +8,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\FileUpload\Exception\File\FileException;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
@@ -139,7 +140,7 @@ class ShopModifyServiceTest extends TestCase
         $this->shopRepository
             ->expects($shopRepositoryInvocationCounter)
             ->method('findShopsOrFail')
-            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
+            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, NameWithSpaces|null $shopName, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
                 match ($shopRepositoryInvocationCounter->getInvocationCount()) {
                     1 => [
                         $this->assertEquals([$input->shopId], $shopsId),
@@ -198,7 +199,7 @@ class ShopModifyServiceTest extends TestCase
         $this->shopRepository
             ->expects($shopRepositoryInvocationCounter)
             ->method('findShopsOrFail')
-            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
+            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, NameWithSpaces|null $shopName, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
                 match ($shopRepositoryInvocationCounter->getInvocationCount()) {
                     1 => [
                         $this->assertEquals([$input->shopId], $shopsId),
@@ -260,7 +261,7 @@ class ShopModifyServiceTest extends TestCase
         $this->shopRepository
             ->expects($shopRepositoryInvocationCounter)
             ->method('findShopsOrFail')
-            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
+            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, NameWithSpaces|null $shopName, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
                 match ($shopRepositoryInvocationCounter->getInvocationCount()) {
                     1 => [
                         $this->assertEquals([$input->shopId], $shopsId),
@@ -321,7 +322,7 @@ class ShopModifyServiceTest extends TestCase
         $this->shopRepository
             ->expects($shopRepositoryInvocationCounter)
             ->method('findShopsOrFail')
-            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
+            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, NameWithSpaces|null $shopName, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
                 match ($shopRepositoryInvocationCounter->getInvocationCount()) {
                     1 => [
                         $this->assertEquals([$input->shopId], $shopsId),
@@ -382,7 +383,7 @@ class ShopModifyServiceTest extends TestCase
         $this->shopRepository
             ->expects($shopRepositoryInvocationCounter)
             ->method('findShopsOrFail')
-            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
+            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, NameWithSpaces|null $shopName, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
                 match ($shopRepositoryInvocationCounter->getInvocationCount()) {
                     1 => [
                         $this->assertEquals([$input->shopId], $shopsId),
@@ -541,7 +542,7 @@ class ShopModifyServiceTest extends TestCase
         $this->shopRepository
             ->expects($shopRepositoryInvocationCounter)
             ->method('findShopsOrFail')
-            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
+            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, NameWithSpaces|null $shopName, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
                 match ($shopRepositoryInvocationCounter->getInvocationCount()) {
                     1 => [
                         $this->assertEquals([$input->shopId], $shopsId),
@@ -551,7 +552,8 @@ class ShopModifyServiceTest extends TestCase
                         $this->assertEquals(null, $shopsId),
                         $this->assertEquals($input->groupId, $groupId),
                         $this->assertEquals(null, $productId),
-                        $this->assertEquals($input->name->getValue(), $shopNameStarsWith),
+                        $this->assertEquals($input->name, $shopName),
+                        $this->assertEquals(null, $shopNameStarsWith),
                     ]
                 };
 
@@ -654,7 +656,7 @@ class ShopModifyServiceTest extends TestCase
         $this->shopRepository
             ->expects($shopRepositoryInvocationCounter)
             ->method('findShopsOrFail')
-            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
+            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, NameWithSpaces|null $shopName, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
                 match ($shopRepositoryInvocationCounter->getInvocationCount()) {
                     1 => [
                         $this->assertEquals([$input->shopId], $shopsId),

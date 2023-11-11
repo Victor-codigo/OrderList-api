@@ -210,7 +210,7 @@ class OrderCreateServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldCreateOrders(): void
+    public function itShouldCreateOrders22(): void
     {
         $orders = $this->getOrders();
         $ordersData = $this->getOrdersData();
