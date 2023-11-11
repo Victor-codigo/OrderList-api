@@ -20,7 +20,7 @@ abstract class RepositoryBase extends ServiceEntityRepository
     protected EntityManagerInterface $entityManager;
     protected PaginatorInterface|null $paginator;
 
-    public function __construct(ManagerRegistry $managerRegistry, string $entityClass, PaginatorInterface|null $paginator = null)
+    public function __construct(ManagerRegistry $managerRegistry, string $entityClass, PaginatorInterface $paginator = null)
     {
         parent::__construct($managerRegistry, $entityClass);
 
@@ -37,18 +37,6 @@ abstract class RepositoryBase extends ServiceEntityRepository
     public function isValidUuid(string $id)
     {
         return Uuid::isValid($id);
-    }
-
-    protected function getClassUnqualifiedName(string $qualifiedName): string
-    {
-        $qualifiedNameArray = explode('\\', $qualifiedName);
-
-        return end($qualifiedNameArray);
-    }
-
-    protected function getString(string|int $constant): string
-    {
-        return (string) $constant;
     }
 
     /**

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Group\Adapter\Database\Orm\Doctrine\Repository;
 
-use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\IdentifierType;
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
@@ -81,9 +80,10 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
      */
     public function findGroupUsersByRol(Identifier $groupId, GROUP_ROLES $groupRol): array
     {
+        $userGroupEntity = UserGroup::class;
         $dql = <<<DQL
             SELECT userGroup
-            FROM {$this->getString(UserGroup::class)} userGroup
+            FROM {$userGroupEntity} userGroup
             WHERE userGroup.groupId = :group_id
                 AND JSON_CONTAINS(userGroup.roles, :rol) = 1
         DQL;
@@ -107,7 +107,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
     /**
      * @throws DBNotFoundException
      */
-    public function findUserGroupsById(Identifier $userId, GROUP_ROLES|null $groupRol = null, GROUP_TYPE|null $groupType = null): PaginatorInterface
+    public function findUserGroupsById(Identifier $userId, GROUP_ROLES $groupRol = null, GROUP_TYPE $groupType = null): PaginatorInterface
     {
         $queryBuilder = $this->entityManager
             ->createQueryBuilder()
@@ -143,15 +143,16 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
      */
     public function findGroupUsersNumberOrFail(Identifier $groupId): int
     {
+        $userGroupEntity = UserGroup::class;
         $sql = <<<SQL
             SELECT COUNT(userGroup)
-            FROM {$this->getString(UserGroup::class)} userGroup
+            FROM {$userGroupEntity} userGroup
             WHERE userGroup.groupId = :group_id
         SQL;
 
         $query = $this->entityManager
             ->createQuery($sql)
-            ->setParameter('group_id', $groupId, $this->getClassUnqualifiedName(IdentifierType::class));
+            ->setParameter('group_id', $groupId);
 
         $result = $query->getOneOrNullResult();
 
