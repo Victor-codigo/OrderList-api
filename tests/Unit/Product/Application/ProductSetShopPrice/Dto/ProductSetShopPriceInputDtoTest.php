@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Product\Application\ProductSetShopPrice;
+namespace Test\Unit\Product\Application\ProductSetShopPrice\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
