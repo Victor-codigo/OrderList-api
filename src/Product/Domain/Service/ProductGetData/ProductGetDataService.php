@@ -25,6 +25,7 @@ class ProductGetDataService
             empty($input->productsId) ? null : $input->productsId,
             $input->groupId->isNull() ? null : $input->groupId,
             empty($input->shopsId) ? null : $input->shopsId,
+            $input->productName,
             empty($input->productNameStartsWith) ? null : $input->productNameStartsWith
         );
 

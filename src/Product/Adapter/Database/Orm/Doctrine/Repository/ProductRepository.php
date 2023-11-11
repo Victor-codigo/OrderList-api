@@ -95,7 +95,7 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
      *
      * @throws DBNotFoundException
      */
-    public function findProductsOrFail(array|null $productsId = null, Identifier|null $groupId = null, array|null $shopsId = null, string|null $productNameStartsWith = null): PaginatorInterface
+    public function findProductsOrFail(array $productsId = null, Identifier $groupId = null, array $shopsId = null, NameWithSpaces $productName = null, string $productNameStartsWith = null): PaginatorInterface
     {
         $query = $this->entityManager
             ->createQueryBuilder()
@@ -122,10 +122,14 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
                 ->setParameter('shopId', $shopsId);
         }
 
-        if (null !== $productNameStartsWith) {
+        if (null !== $productNameStartsWith && (null === $productName || $productName->isNull())) {
             $query
-                ->andWhere('product.name LIKE :productStartsWith')
-                ->setParameter('productStartsWith', "{$productNameStartsWith}%");
+                ->andWhere('product.name LIKE :productNameStartsWith')
+                ->setParameter('productNameStartsWith', "{$productNameStartsWith}%");
+        } elseif (null !== $productName && !$productName->isNull()) {
+            $query
+                ->andWhere('product.name = :productName')
+                ->setParameter('productName', $productName);
         }
 
         $paginator = $this->paginator->createPaginator($query);

@@ -59,7 +59,7 @@ class ProductGetDataUseCase extends ServiceBase
 
     private function createProductGetDataDto(ProductGetDataInputDto $input): ProductGetDataDto
     {
-        return new ProductGetDataDto($input->groupId, $input->productId, $input->shopId, $input->productNameStartsWith);
+        return new ProductGetDataDto($input->groupId, $input->productId, $input->shopId, $input->productNameStartsWith, $input->productName);
     }
 
     private function createProductGetDataOutputDto(array $productsData): ProductGetDataOutputDto

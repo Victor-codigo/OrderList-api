@@ -163,6 +163,20 @@ class ProductRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
+    public function itShouldGetTheProductsOfAGroupWhitANameAndProductNameStartsWith(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $productName = ValueObjectFactory::createNameWithSpaces('Juanola');
+        $return = $this->object->findProductsByGroupAndNameOrFail($groupId, $productName, 'Ju');
+
+        $this->assertCount(1, $return);
+
+        foreach ($return as $product) {
+            $this->assertEquals($groupId, $product->getGroupId());
+        }
+    }
+
+    /** @test */
     public function itShouldGetAllProducts(): void
     {
         $productIds = [
@@ -234,10 +248,28 @@ class ProductRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
+    public function itShouldGetProductsOfAGroupAndWithName(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $productName = ValueObjectFactory::createNameWithSpaces('Juan Carlos');
+        $return = $this->object->findProductsOrFail(null, $groupId, null, $productName);
+
+        $this->assertCount(1, $return);
+
+        $expectedProductsId = [
+            self::PRODUCT_ID_2,
+        ];
+
+        foreach ($return as $product) {
+            $this->assertContains($product->getId()->getValue(), $expectedProductsId);
+        }
+    }
+
+    /** @test */
     public function itShouldGetAllProductsOfAGroupAndThatStartsWith(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
-        $return = $this->object->findProductsOrFail(null, $groupId, null, 'Ju');
+        $return = $this->object->findProductsOrFail(null, $groupId, null, null, 'Ju');
 
         $this->assertCount(2, $return);
 
@@ -252,9 +284,26 @@ class ProductRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
+    public function itShouldGetProductWithName(): void
+    {
+        $productName = ValueObjectFactory::createNameWithSpaces('Juan Carlos');
+        $return = $this->object->findProductsOrFail(null, null, null, $productName);
+
+        $this->assertCount(1, $return);
+
+        $expectedProductsId = [
+            self::PRODUCT_ID_2,
+        ];
+
+        foreach ($return as $product) {
+            $this->assertContains($product->getId()->getValue(), $expectedProductsId);
+        }
+    }
+
+    /** @test */
     public function itShouldGetAllProductsThatStartsWith(): void
     {
-        $return = $this->object->findProductsOrFail(null, null, null, 'Ju');
+        $return = $this->object->findProductsOrFail(null, null, null, null, 'Ju');
 
         $this->assertCount(2, $return);
 

@@ -17,6 +17,7 @@ class ProductGetDataRequestDto implements RequestDtoInterface
     public readonly array|null $productsId;
     public readonly array|null $shopsId;
     public readonly string|null $productNameStartsWith;
+    public readonly string|null $productName;
 
     public function __construct(Request $request)
     {
@@ -24,6 +25,7 @@ class ProductGetDataRequestDto implements RequestDtoInterface
         $this->productsId = $this->removeOverflow($request->query->get('products_id'), self::PRODUCTS_NUM_MAX);
         $this->shopsId = $this->removeOverflow($request->query->get('shops_id'), self::SHOPS_NUM_MAX);
         $this->productNameStartsWith = $request->query->get('product_name_starts_with');
+        $this->productName = $request->query->get('product_name');
     }
 
     private function removeOverflow(string|null $itemsId, int $numMax): array|null

@@ -6,6 +6,7 @@ namespace Product\Application\ProductGetData\Dto;
 
 use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\ServiceInputDtoInterface;
 use Common\Domain\Validation\ValidationInterface;
@@ -24,11 +25,13 @@ class ProductGetDataInputDto implements ServiceInputDtoInterface
      */
     public readonly array $shopId;
     public readonly string|null $productNameStartsWith;
+    public readonly NameWithSpaces $productName;
 
-    public function __construct(string|null $groupId, array|null $productsId, array|null $shopsId, string|null $productNameStartsWith)
+    public function __construct(string|null $groupId, array|null $productsId, array|null $shopsId, string|null $productNameStartsWith, string|null $productName)
     {
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
         $this->productNameStartsWith = $productNameStartsWith;
+        $this->productName = ValueObjectFactory::createNameWithSpaces($productName);
         $this->productId = array_map(
             fn (string $productId) => ValueObjectFactory::createIdentifier($productId),
             $productsId ?? []
@@ -47,9 +50,16 @@ class ProductGetDataInputDto implements ServiceInputDtoInterface
 
         if (null !== $this->productNameStartsWith) {
             $errorListProductNameStartsWith = $validator
-                ->setValue($this->productNameStartsWith)
-                ->stringMax(self::PRODUCT_NAME_STARTS_BY_LENGTH_MAX)
-                ->validate();
+            ->setValue($this->productNameStartsWith)
+            ->stringMax(self::PRODUCT_NAME_STARTS_BY_LENGTH_MAX)
+            ->validate();
+        }
+        if (!$this->productName->isNull()) {
+            $errorListProductName = $validator->validateValueObject($this->productName);
+        }
+
+        if (!empty($errorListProductName)) {
+            $errorList['product_name'] = $errorListProductName;
         }
 
         if (!empty($errorListProductsId)) {

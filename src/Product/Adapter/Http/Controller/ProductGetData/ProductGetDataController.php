@@ -51,6 +51,14 @@ use Symfony\Component\HttpFoundation\Response;
             example: 'Ju',
             schema: new OA\Schema(type: 'string')
         ),
+        new OA\Parameter(
+            name: 'product_name',
+            in: 'query',
+            required: false,
+            description: 'Product name',
+            example: 'Shop name',
+            schema: new OA\Schema(type: 'string')
+        ),
     ],
     responses: [
         new OA\Response(
@@ -103,15 +111,15 @@ class ProductGetDataController extends AbstractController
     public function __invoke(ProductGetDataRequestDto $request): JsonResponse
     {
         $products = $this->productGetDataUseCase->__invoke(
-            $this->createProductGetDataInputDto($request->groupId, $request->productsId, $request->shopsId, $request->productNameStartsWith)
+            $this->createProductGetDataInputDto($request->groupId, $request->productsId, $request->shopsId, $request->productNameStartsWith, $request->productName)
         );
 
         return $this->createResponse($products);
     }
 
-    private function createProductGetDataInputDto(string|null $groupId, array|null $productsId, array|null $shopsId, string|null $productNameStartsWith): ProductGetDataInputDto
+    private function createProductGetDataInputDto(string|null $groupId, array|null $productsId, array|null $shopsId, string|null $productNameStartsWith, string|null $productName): ProductGetDataInputDto
     {
-        return new ProductGetDataInputDto($groupId, $productsId, $shopsId, $productNameStartsWith);
+        return new ProductGetDataInputDto($groupId, $productsId, $shopsId, $productNameStartsWith, $productName);
     }
 
     private function createResponse(ApplicationOutputInterface $products): JsonResponse

@@ -90,6 +90,7 @@ class ProductGetDataServiceTest extends TestCase
         $products = $this->getProducts();
         $productNameStartsWith = null;
         $productsMaxNumber = 100;
+        $productName = ValueObjectFactory::createNameWithSpaces('product name');
         $groupId = ValueObjectFactory::createIdentifier('group id');
         $productsId = [
             ValueObjectFactory::createIdentifier('product 1 id'),
@@ -97,12 +98,12 @@ class ProductGetDataServiceTest extends TestCase
         $shopsId = [
             ValueObjectFactory::createIdentifier('shop 1 id'),
         ];
-        $input = new ProductGetDataDto($groupId, $productsId, $shopsId, $productNameStartsWith);
+        $input = new ProductGetDataDto($groupId, $productsId, $shopsId, $productNameStartsWith, $productName);
 
         $this->productRepository
             ->expects($this->once())
             ->method('findProductsOrFail')
-            ->with($productsId, $groupId, $shopsId, $productNameStartsWith)
+            ->with($productsId, $groupId, $shopsId, $productName, $productNameStartsWith)
             ->willReturn($this->paginator);
 
         $this->paginator
@@ -128,15 +129,16 @@ class ProductGetDataServiceTest extends TestCase
     public function itShouldGetProductsDataAllInputsAreNull(): void
     {
         $productNameStartsWith = null;
+        $productName = ValueObjectFactory::createNameWithSpaces(null);
         $groupId = ValueObjectFactory::createIdentifier(null);
         $productsId = [];
         $shopsId = [];
-        $input = new ProductGetDataDto($groupId, $productsId, $shopsId, $productNameStartsWith);
+        $input = new ProductGetDataDto($groupId, $productsId, $shopsId, $productNameStartsWith, $productName);
 
         $this->productRepository
             ->expects($this->once())
             ->method('findProductsOrFail')
-            ->with(null, null, null, null)
+            ->with(null, null, null, $productName, null)
             ->willThrowException(new DBNotFoundException());
 
         $this->paginator
@@ -155,6 +157,7 @@ class ProductGetDataServiceTest extends TestCase
     public function itShouldFailGetProductsDataNoProductsFound(): void
     {
         $productNameStartsWith = null;
+        $productName = ValueObjectFactory::createNameWithSpaces(null);
         $groupId = ValueObjectFactory::createIdentifier('group id');
         $productsId = [
             ValueObjectFactory::createIdentifier('product 1 id'),
@@ -162,12 +165,12 @@ class ProductGetDataServiceTest extends TestCase
         $shopsId = [
             ValueObjectFactory::createIdentifier('shop 1 id'),
         ];
-        $input = new ProductGetDataDto($groupId, $productsId, $shopsId, $productNameStartsWith);
+        $input = new ProductGetDataDto($groupId, $productsId, $shopsId, $productNameStartsWith, $productName);
 
         $this->productRepository
             ->expects($this->once())
             ->method('findProductsOrFail')
-            ->with($productsId, $groupId, $shopsId, $productNameStartsWith)
+            ->with($productsId, $groupId, $shopsId, $productName, $productNameStartsWith)
             ->willThrowException(new DBNotFoundException());
 
         $this->paginator
