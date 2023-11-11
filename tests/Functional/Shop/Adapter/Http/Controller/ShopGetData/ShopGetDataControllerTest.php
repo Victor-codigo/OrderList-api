@@ -84,7 +84,11 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?group_id={$groupId}&shops_id={$shopsId}&products_id={$productsId}&shop_name_starts_with={$shopNameStartsWith}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shops_id={$shopsId}"
+                ."&products_id={$productsId}"
+                ."&shop_name_starts_with={$shopNameStartsWith}",
             content: json_encode([])
         );
 
@@ -101,7 +105,7 @@ class ShopGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldGetShopsWithShop(): void
+    public function itShouldGetShopsWithShopId(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
         $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
@@ -120,7 +124,9 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?group_id={$groupId}&shops_id={$shopsId}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shops_id={$shopsId}",
             content: json_encode([])
         );
 
@@ -172,7 +178,9 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?group_id={$groupId}&products_id={$productsId}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&products_id={$productsId}",
             content: json_encode([])
         );
 
@@ -180,6 +188,42 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $responseContent = json_decode($response->getContent());
 
         $this->assertResponseStructureIsOk($response, [0, 1, 2], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Shops data', $responseContent->message);
+
+        foreach ($responseContent->data as $shopData) {
+            $this->assertShopDataIsOk($shopDataExpected, $shopData);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetShopsShopName(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $shopName = 'Shop name 2';
+
+        $shopDataExpected = [[
+            'id' => 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
+            'group_id' => self::GROUP_EXISTS_ID,
+            'name' => 'Shop name 2',
+            'description' => 'Quae suscipit ea sit est exercitationem aliquid nobis. Qui quidem aut non quia cupiditate. Neque sunt aperiam cum quis quia aspernatur quia. Ratione enim eos rerum et. Ducimus voluptatem nam porro et est molestiae. Rerum perspiciatis et distinctio totam culpa et quaerat temporibus. Suscipit occaecati rerum molestiae voluptas odio eos. Sunt labore quia asperiores laborum. Unde explicabo et aspernatur vel odio modi qui. Ipsa recusandae eveniet doloribus quisquam. Nam aut ut omnis qui possimus.',
+            'image' => null,
+            'created_on' => '',
+        ]];
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shop_name={$shopName}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [0], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Shops data', $responseContent->message);
 
@@ -232,7 +276,9 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?group_id={$groupId}&shop_name_starts_with={$shopNameStartsWith}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shop_name_starts_with={$shopNameStartsWith}",
             content: json_encode([])
         );
 
@@ -249,7 +295,7 @@ class ShopGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldGetShopsWithProductsAndShops(): void
+    public function itShouldGetShopsWithProductsAndShopsId(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
         $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
@@ -269,7 +315,48 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?group_id={$groupId}&shops_id={$shopsId}&products_id={$productsId}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shops_id={$shopsId}"
+                ."&products_id={$productsId}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [0], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Shops data', $responseContent->message);
+
+        foreach ($responseContent->data as $shopData) {
+            $this->assertShopDataIsOk($shopDataExpected, $shopData);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetShopsWithProductsAndShopName(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
+        $shopNameStartsWith = 'Shop name 2';
+
+        $shopDataExpected = [[
+                'id' => self::SHOP_EXISTS_ID_2,
+                'group_id' => self::GROUP_EXISTS_ID,
+                'name' => 'Shop name 2',
+                'description' => 'Quae suscipit ea sit est exercitationem aliquid nobis. Qui quidem aut non quia cupiditate. Neque sunt aperiam cum quis quia aspernatur quia. Ratione enim eos rerum et. Ducimus voluptatem nam porro et est molestiae. Rerum perspiciatis et distinctio totam culpa et quaerat temporibus. Suscipit occaecati rerum molestiae voluptas odio eos. Sunt labore quia asperiores laborum. Unde explicabo et aspernatur vel odio modi qui. Ipsa recusandae eveniet doloribus quisquam. Nam aut ut omnis qui possimus.',
+                'image' => null,
+                'created_on' => '',
+        ]];
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&products_id={$productsId}"
+                ."&shop_name={$shopNameStartsWith}",
             content: json_encode([])
         );
 
@@ -322,7 +409,10 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?group_id={$groupId}&products_id={$productsId}&shop_name_starts_with={$shopNameStartsWith}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&products_id={$productsId}"
+                ."&shop_name_starts_with={$shopNameStartsWith}",
             content: json_encode([])
         );
 
@@ -339,6 +429,26 @@ class ShopGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
+    public function itShouldFailNoShopsFoundWinShopName(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $shopName = 'shop name not exists';
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shop_name={$shopName}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+    }
+
+    /** @test */
     public function itShouldFailNoShopsFound(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -349,7 +459,11 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?group_id={$groupId}&shops_id={$shopsId}&products_id={$productsId}&shop_name_starts_with={$shopNameStartsWith}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shops_id={$shopsId}"
+                ."&products_id={$productsId}"
+                ."&shop_name_starts_with={$shopNameStartsWith}",
             content: json_encode([])
         );
 
@@ -369,7 +483,11 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedAdmin();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?group_id={$groupId}&shops_id={$shopsId}&products_id={$productsId}&shop_name_starts_with={$shopNameStartsWith}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shops_id={$shopsId}"
+                ."&products_id={$productsId}"
+                ."&shop_name_starts_with={$shopNameStartsWith}",
             content: json_encode([])
         );
 
@@ -392,7 +510,11 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?group_id={$groupId}&shops_id={$shopsId}&products_id={$productsId}&shop_name_starts_with={$shopNameStartsWith}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shops_id={$shopsId}"
+                ."&products_id={$productsId}"
+                ."&shop_name_starts_with={$shopNameStartsWith}",
             content: json_encode([])
         );
 
@@ -416,7 +538,11 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?group_id={$groupId}&shops_id={$shopsId}&products_id={$productsId}&shop_name_starts_with={$shopNameStartsWith}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shops_id={$shopsId}"
+                ."&products_id={$productsId}"
+                ."&shop_name_starts_with={$shopNameStartsWith}",
             content: json_encode([])
         );
 
@@ -440,7 +566,11 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?group_id={$groupId}&shops_id={$shopsId}&products_id={$productsId}&shop_name_starts_with={$shopNameStartsWith}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shops_id={$shopsId}"
+                ."&products_id={$productsId}"
+                ."&shop_name_starts_with={$shopNameStartsWith}",
             content: json_encode([])
         );
 
@@ -454,6 +584,34 @@ class ShopGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
+    public function itShouldFailShopNameIsWrong(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
+        $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
+        $shopName = 'shop name-';
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shops_id={$shopsId}"
+                ."&products_id={$productsId}"
+                ."&shop_name={$shopName}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['shop_name'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertSame(['alphanumeric_with_whitespace'], $responseContent->errors->shop_name);
+    }
+
+    /** @test */
     public function itShouldFailShopNameStartsWithIsToolLong(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -464,7 +622,11 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?group_id={$groupId}&shops_id={$shopsId}&products_id={$productsId}&shop_name_starts_with={$shopNameStartsWith}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shops_id={$shopsId}"
+                ."&products_id={$productsId}"
+                ."&shop_name_starts_with={$shopNameStartsWith}",
             content: json_encode([])
         );
 

@@ -239,7 +239,7 @@ class ShopRepositoryTest extends DataBaseTestCase
     public function itShouldGetAllShopsOfAGroupAndThatStartsWith(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
-        $return = $this->object->findShopsOrFail(null, $groupId, null, 'Sho');
+        $return = $this->object->findShopsOrFail(null, $groupId, null, null, 'Sho');
 
         $this->assertCount(4, $return);
 
@@ -258,7 +258,7 @@ class ShopRepositoryTest extends DataBaseTestCase
     /** @test */
     public function itShouldGetAllShopsThatStartsWith(): void
     {
-        $return = $this->object->findShopsOrFail(null, null, null, 'Sho');
+        $return = $this->object->findShopsOrFail(null, null, null, null, 'Sho');
 
         $this->assertCount(4, $return);
 
@@ -267,6 +267,52 @@ class ShopRepositoryTest extends DataBaseTestCase
             self::SHOP_ID_2,
             self::SHOP_ID_3,
             self::SHOP_ID_4,
+        ];
+
+        foreach ($return as $shop) {
+            $this->assertContains($shop->getId()->getValue(), $expectedShopsId);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetShopOfAGroupWithAName(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $return = $this->object->findShopsOrFail(
+            null,
+            $groupId,
+            null,
+            ValueObjectFactory::createNameWithSpaces('Shop name 3'),
+            null,
+        );
+
+        $this->assertCount(1, $return);
+
+        $expectedShopsId = [
+            self::SHOP_ID_3,
+        ];
+
+        foreach ($return as $shop) {
+            $this->assertContains($shop->getId()->getValue(), $expectedShopsId);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetShopOfAGroupWithANameShopNameStartsWithAndShopNameAreSet(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $return = $this->object->findShopsOrFail(
+            null,
+            $groupId,
+            null,
+            ValueObjectFactory::createNameWithSpaces('Shop name 3'),
+            'Shop name 4',
+        );
+
+        $this->assertCount(1, $return);
+
+        $expectedShopsId = [
+            self::SHOP_ID_3,
         ];
 
         foreach ($return as $shop) {

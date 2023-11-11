@@ -95,7 +95,7 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
      *
      * @throws DBNotFoundException
      */
-    public function findShopsOrFail(array|null $shopsId = null, Identifier|null $groupId = null, array|null $productsId = null, string|null $shopNameStartsWith = null): PaginatorInterface
+    public function findShopsOrFail(array $shopsId = null, Identifier $groupId = null, array $productsId = null, NameWithSpaces $shopName = null, string $shopNameStartsWith = null): PaginatorInterface
     {
         $query = $this->entityManager
             ->createQueryBuilder()
@@ -126,10 +126,14 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
                 ->setParameter('productsId', $productsId);
         }
 
-        if (null !== $shopNameStartsWith) {
+        if (null !== $shopNameStartsWith && (null === $shopName || $shopName->isNull())) {
             $query
                 ->andWhere('shop.name LIKE :shopStartsWith')
                 ->setParameter('shopStartsWith', "{$shopNameStartsWith}%");
+        } elseif (null !== $shopName && !$shopName->isNull()) {
+            $query
+                ->andWhere('shop.name = :shopName')
+                ->setParameter('shopName', $shopName);
         }
 
         $paginator = $this->paginator->createPaginator($query);

@@ -51,6 +51,14 @@ use Symfony\Component\HttpFoundation\Response;
             example: 'Ju',
             schema: new OA\Schema(type: 'string')
         ),
+        new OA\Parameter(
+            name: 'shop_name',
+            in: 'query',
+            required: false,
+            description: 'Name of the shop',
+            example: 'shop name',
+            schema: new OA\Schema(type: 'string')
+        ),
     ],
     responses: [
         new OA\Response(
@@ -103,15 +111,15 @@ class ShopGetDataController extends AbstractController
     public function __invoke(ShopGetDataRequestDto $request): JsonResponse
     {
         $shops = $this->shopGetDataUseCase->__invoke(
-            $this->createShopGetDataInputDto($request->groupId, $request->shopsId, $request->productsId, $request->shopNameStartsWith)
+            $this->createShopGetDataInputDto($request->groupId, $request->shopsId, $request->productsId, $request->shopNameStartsWith, $request->shopName)
         );
 
         return $this->createResponse($shops);
     }
 
-    private function createShopGetDataInputDto(string|null $groupId, array|null $shopsId, array|null $productsId, string|null $shopNameStartsWith): ShopGetDataInputDto
+    private function createShopGetDataInputDto(string|null $groupId, array|null $shopsId, array|null $productsId, string|null $shopNameStartsWith, string|null $shopName): ShopGetDataInputDto
     {
-        return new ShopGetDataInputDto($groupId, $shopsId, $productsId, $shopNameStartsWith);
+        return new ShopGetDataInputDto($groupId, $shopsId, $productsId, $shopNameStartsWith, $shopName);
     }
 
     private function createResponse(ApplicationOutputInterface $shops): JsonResponse

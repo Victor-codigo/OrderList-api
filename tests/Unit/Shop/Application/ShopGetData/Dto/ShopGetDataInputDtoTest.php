@@ -35,7 +35,8 @@ class ShopGetDataInputDtoTest extends TestCase
     public function itShouldValidate(): void
     {
         $shopNameStartsWith = 'jp';
-        $object = new ShopGetDataInputDto(self::GROUP_ID, self::SHOPS_ID, self::PRODUCTS_ID, $shopNameStartsWith);
+        $shopName = 'shop name';
+        $object = new ShopGetDataInputDto(self::GROUP_ID, self::SHOPS_ID, self::PRODUCTS_ID, $shopNameStartsWith, $shopName);
 
         $return = $object->validate($this->validator);
 
@@ -46,7 +47,8 @@ class ShopGetDataInputDtoTest extends TestCase
     public function itShouldValidateShopsIdIsNull(): void
     {
         $shopNameStartsWith = 'jp';
-        $object = new ShopGetDataInputDto(self::GROUP_ID, null, self::PRODUCTS_ID, $shopNameStartsWith);
+        $shopName = 'shop name';
+        $object = new ShopGetDataInputDto(self::GROUP_ID, null, self::PRODUCTS_ID, $shopNameStartsWith, $shopName);
 
         $return = $object->validate($this->validator);
 
@@ -57,7 +59,8 @@ class ShopGetDataInputDtoTest extends TestCase
     public function itShouldValidateProductsIdIsNull(): void
     {
         $shopNameStartsWith = 'jp';
-        $object = new ShopGetDataInputDto(self::GROUP_ID, self::SHOPS_ID, null, $shopNameStartsWith);
+        $shopName = 'shop name';
+        $object = new ShopGetDataInputDto(self::GROUP_ID, self::SHOPS_ID, null, $shopNameStartsWith, $shopName);
 
         $return = $object->validate($this->validator);
 
@@ -67,7 +70,19 @@ class ShopGetDataInputDtoTest extends TestCase
     /** @test */
     public function itShouldValidateShopNameStartsWithIsNull(): void
     {
-        $object = new ShopGetDataInputDto(self::GROUP_ID, self::SHOPS_ID, self::PRODUCTS_ID, null);
+        $shopName = 'shop name';
+        $object = new ShopGetDataInputDto(self::GROUP_ID, self::SHOPS_ID, self::PRODUCTS_ID, null, $shopName);
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function itShouldValidateShopNameIsNull(): void
+    {
+        $shopName = null;
+        $object = new ShopGetDataInputDto(self::GROUP_ID, self::SHOPS_ID, self::PRODUCTS_ID, null, $shopName);
 
         $return = $object->validate($this->validator);
 
@@ -78,7 +93,8 @@ class ShopGetDataInputDtoTest extends TestCase
     public function itShouldFailGroupIdIsNull(): void
     {
         $shopNameStartsWith = 'jp';
-        $object = new ShopGetDataInputDto(null, self::SHOPS_ID, self::PRODUCTS_ID, $shopNameStartsWith);
+        $shopName = 'shop name';
+        $object = new ShopGetDataInputDto(null, self::SHOPS_ID, self::PRODUCTS_ID, $shopNameStartsWith, $shopName);
 
         $return = $object->validate($this->validator);
 
@@ -89,7 +105,8 @@ class ShopGetDataInputDtoTest extends TestCase
     public function itShouldFailGroupIdIsWrong(): void
     {
         $shopNameStartsWith = 'jp';
-        $object = new ShopGetDataInputDto('wrong id', self::SHOPS_ID, self::PRODUCTS_ID, $shopNameStartsWith);
+        $shopName = 'shop name';
+        $object = new ShopGetDataInputDto('wrong id', self::SHOPS_ID, self::PRODUCTS_ID, $shopNameStartsWith, $shopName);
 
         $return = $object->validate($this->validator);
 
@@ -100,11 +117,12 @@ class ShopGetDataInputDtoTest extends TestCase
     public function itShouldFailShopsIdAreWrong(): void
     {
         $shopNameStartsWith = 'jp';
+        $shopName = 'shop name';
         $shopsId = [
             'wrong id 1',
             'wrong id 2',
         ];
-        $object = new ShopGetDataInputDto(self::GROUP_ID, $shopsId, self::PRODUCTS_ID, $shopNameStartsWith);
+        $object = new ShopGetDataInputDto(self::GROUP_ID, $shopsId, self::PRODUCTS_ID, $shopNameStartsWith, $shopName);
 
         $return = $object->validate($this->validator);
 
@@ -115,11 +133,12 @@ class ShopGetDataInputDtoTest extends TestCase
     public function itShouldFailProductsIdAreWrong(): void
     {
         $shopNameStartsWith = 'jp';
+        $shopName = 'shop name';
         $productsId = [
             'wrong id 1',
             'wrong id 2',
         ];
-        $object = new ShopGetDataInputDto(self::GROUP_ID, self::SHOPS_ID, $productsId, $shopNameStartsWith);
+        $object = new ShopGetDataInputDto(self::GROUP_ID, self::SHOPS_ID, $productsId, $shopNameStartsWith, $shopName);
 
         $return = $object->validate($this->validator);
 
@@ -127,10 +146,23 @@ class ShopGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
+    public function itShouldFailShopNameIsWrong(): void
+    {
+        $shopNameStartsWith = 'jp';
+        $shopName = 'shop name-';
+        $object = new ShopGetDataInputDto(self::GROUP_ID, self::SHOPS_ID, self::PRODUCTS_ID, $shopNameStartsWith, $shopName);
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['shop_name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE]], $return);
+    }
+
+    /** @test */
     public function itShouldFailShopNameStartsWith(): void
     {
+        $shopName = 'shop name';
         $shopNameStartsWith = str_pad('', 51, 'p');
-        $object = new ShopGetDataInputDto(self::GROUP_ID, self::SHOPS_ID, self::PRODUCTS_ID, $shopNameStartsWith);
+        $object = new ShopGetDataInputDto(self::GROUP_ID, self::SHOPS_ID, self::PRODUCTS_ID, $shopNameStartsWith, $shopName);
 
         $return = $object->validate($this->validator);
 
@@ -140,6 +172,7 @@ class ShopGetDataInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailAllInputsAreWrong(): void
     {
+        $shopName = 'shop name-';
         $shopNameStartsWith = str_pad('', 51, 'p');
         $groupId = 'wrong id';
         $shopsId = [
@@ -150,7 +183,7 @@ class ShopGetDataInputDtoTest extends TestCase
             'wrong id 1',
             'wrong id 2',
         ];
-        $object = new ShopGetDataInputDto($groupId, $shopsId, $productsId, $shopNameStartsWith);
+        $object = new ShopGetDataInputDto($groupId, $shopsId, $productsId, $shopNameStartsWith, $shopName);
 
         $return = $object->validate($this->validator);
 
@@ -159,6 +192,7 @@ class ShopGetDataInputDtoTest extends TestCase
                 'shops_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS], [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]],
                 'products_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS], [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]],
                 'shop_name_starts_with' => [VALIDATION_ERRORS::STRING_TOO_LONG],
+                'shop_name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
             ],
             $return
         );

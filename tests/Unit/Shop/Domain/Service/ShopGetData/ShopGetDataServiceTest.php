@@ -90,6 +90,7 @@ class ShopGetDataServiceTest extends TestCase
         $shops = $this->getShops();
         $shopNameStartsWith = null;
         $shopsMaxNumber = 100;
+        $shopName = ValueObjectFactory::createNameWithSpaces('Shop name');
         $groupId = ValueObjectFactory::createIdentifier('group id');
         $shopsId = [
             ValueObjectFactory::createIdentifier('shop 1 id'),
@@ -97,12 +98,12 @@ class ShopGetDataServiceTest extends TestCase
         $productsId = [
             ValueObjectFactory::createIdentifier('product 1 id'),
         ];
-        $input = new ShopGetDataDto($groupId, $shopsId, $productsId, $shopNameStartsWith);
+        $input = new ShopGetDataDto($groupId, $shopsId, $productsId, $shopNameStartsWith, $shopName);
 
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with($shopsId, $groupId, $productsId, $shopNameStartsWith)
+            ->with($shopsId, $groupId, $productsId, $shopName, $shopNameStartsWith)
             ->willReturn($this->paginator);
 
         $this->paginator
@@ -128,15 +129,16 @@ class ShopGetDataServiceTest extends TestCase
     public function itShouldGetShopsDataAllInputsAreNull(): void
     {
         $shopNameStartsWith = null;
+        $shopName = ValueObjectFactory::createNameWithSpaces(null);
         $groupId = ValueObjectFactory::createIdentifier(null);
         $shopsId = [];
         $shopsId = [];
-        $input = new ShopGetDataDto($groupId, $shopsId, $shopsId, $shopNameStartsWith);
+        $input = new ShopGetDataDto($groupId, $shopsId, $shopsId, $shopNameStartsWith, $shopName);
 
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with(null, null, null, null)
+            ->with(null, null, null, $shopName, null)
             ->willThrowException(new DBNotFoundException());
 
         $this->paginator
@@ -155,6 +157,7 @@ class ShopGetDataServiceTest extends TestCase
     public function itShouldFailGetShopsDataNoShopsFound(): void
     {
         $shopNameStartsWith = null;
+        $shopName = ValueObjectFactory::createNameWithSpaces(null);
         $groupId = ValueObjectFactory::createIdentifier('group id');
         $shopsId = [
             ValueObjectFactory::createIdentifier('shop 1 id'),
@@ -162,12 +165,12 @@ class ShopGetDataServiceTest extends TestCase
         $shopsId = [
             ValueObjectFactory::createIdentifier('shop 1 id'),
         ];
-        $input = new ShopGetDataDto($groupId, $shopsId, $shopsId, $shopNameStartsWith);
+        $input = new ShopGetDataDto($groupId, $shopsId, $shopsId, $shopNameStartsWith, $shopName);
 
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with($shopsId, $groupId, $shopsId, $shopNameStartsWith)
+            ->with($shopsId, $groupId, $shopsId, $shopName, $shopNameStartsWith)
             ->willThrowException(new DBNotFoundException());
 
         $this->paginator
