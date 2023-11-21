@@ -29,7 +29,6 @@ use Symfony\Component\HttpFoundation\Response;
                     properties: [
                         new OA\Property(property: 'group_id', type: 'string', description: 'Group\'s id', example: 'fdb242b4-bac8-4463-88d0-0941bb0beee0'),
                         new OA\Property(property: 'shop_id', type: 'string', description: 'Shop\'s id', example: 'fdb242b4-bac8-4463-88d0-0941bb0beee0'),
-                        new OA\Property(property: 'product_id', type: 'string', description: 'Product\'s id', example: 'fdb242b4-bac8-4463-88d0-0941bb0beee0'),
                     ]
                 )
             ),
@@ -61,7 +60,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|shop_id|shop_id|shop_not_found|permissions, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|shop_id|shop_not_found|permissions, string|array>')),
                     ]
                 )
             )
@@ -79,18 +78,18 @@ class ShopRemoveController extends AbstractController
     public function __invoke(ShopRemoveRequestDto $request): JsonResponse
     {
         $shopRemoved = $this->shopRemoveUseCase->__invoke(
-            $this->createShopRemoveInputDto($request->groupId, $request->shopId, $request->productId)
+            $this->createShopRemoveInputDto($request->groupId, $request->shopId)
         );
 
         return $this->createResponse($shopRemoved);
     }
 
-    private function createShopRemoveInputDto(string|null $groupId, string|null $shopId, string|null $productId): ShopRemoveInputDto
+    private function createShopRemoveInputDto(string|null $groupId, string|null $shopId): ShopRemoveInputDto
     {
         /** @var UserSharedInterface $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();
 
-        return new ShopRemoveInputDto($userSharedAdapter->getUser(), $groupId, $shopId, $productId);
+        return new ShopRemoveInputDto($userSharedAdapter->getUser(), $groupId, $shopId);
     }
 
     private function createResponse(ApplicationOutputInterface $shopRemoved): JsonResponse

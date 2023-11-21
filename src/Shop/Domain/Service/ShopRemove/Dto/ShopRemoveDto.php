@@ -11,7 +11,6 @@ class ShopRemoveDto
     public function __construct(
         public readonly Identifier $shopId,
         public readonly Identifier $groupId,
-        public readonly Identifier $productId
     ) {
     }
 }

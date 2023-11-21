@@ -26,7 +26,7 @@ class ShopRemoveService
      */
     public function __invoke(ShopRemoveDto $input): Identifier
     {
-        $shopsToRemove = $this->shopRepository->findShopsOrFail([$input->shopId], $input->groupId, [$input->productId]);
+        $shopsToRemove = $this->shopRepository->findShopsOrFail([$input->shopId], $input->groupId);
         /** @var Shop $shopToRemove */
         $shopToRemove = iterator_to_array($shopsToRemove)[0];
         $this->removeImage($shopToRemove->getImage());
