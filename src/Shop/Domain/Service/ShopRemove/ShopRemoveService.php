@@ -20,20 +20,29 @@ class ShopRemoveService
     }
 
     /**
+     * @return Identifier[]
+     *
      * @throws DBNotFoundException
      * @throws DomainInternalErrorException
      * @throws DBConnectionException
      */
-    public function __invoke(ShopRemoveDto $input): Identifier
+    public function __invoke(ShopRemoveDto $input): array
     {
-        $shopsToRemove = $this->shopRepository->findShopsOrFail([$input->shopId], $input->groupId);
-        /** @var Shop $shopToRemove */
-        $shopToRemove = iterator_to_array($shopsToRemove)[0];
-        $this->removeImage($shopToRemove->getImage());
+        $shopsToRemove = $this->shopRepository->findShopsOrFail($input->shopsId, $input->groupId);
+        /** @var Shop[] $shopsToRemove */
+        $shopsToRemove = iterator_to_array($shopsToRemove);
 
-        $this->shopRepository->remove([$shopToRemove]);
+        array_map(
+            fn (Shop $shop) => $this->removeImage($shop->getImage()),
+            $shopsToRemove
+        );
 
-        return $shopToRemove->getId();
+        $this->shopRepository->remove($shopsToRemove);
+
+        return array_map(
+            fn (Shop $shop) => $shop->getId(),
+            $shopsToRemove
+        );
     }
 
     /**

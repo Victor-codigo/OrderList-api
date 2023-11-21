@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 #[OA\Tag('Shop')]
 #[OA\Delete(
-    description: 'Removes a shop',
+    description: 'Removes shops',
     requestBody: new OA\RequestBody(
         required: true,
         content: [
@@ -28,7 +28,7 @@ use Symfony\Component\HttpFoundation\Response;
                 schema: new OA\Schema(
                     properties: [
                         new OA\Property(property: 'group_id', type: 'string', description: 'Group\'s id', example: 'fdb242b4-bac8-4463-88d0-0941bb0beee0'),
-                        new OA\Property(property: 'shop_id', type: 'string', description: 'Shop\'s id', example: 'fdb242b4-bac8-4463-88d0-0941bb0beee0'),
+                        new OA\Property(property: 'shops_id', type: 'array', description: 'Shop\'s id', items: new OA\Items(type: 'string')),
                     ]
                 )
             ),
@@ -37,14 +37,14 @@ use Symfony\Component\HttpFoundation\Response;
     responses: [
         new OA\Response(
             response: Response::HTTP_OK,
-            description: 'The shop has been removed',
+            description: 'The shops have been removed',
             content: new OA\MediaType(
                 mediaType: 'application/json',
                 schema: new OA\Schema(
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'ok'),
-                        new OA\Property(property: 'message', type: 'string', example: 'Shop removed'),
-                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(default: '<id, string>')),
+                        new OA\Property(property: 'message', type: 'string', example: 'Shops removed'),
+                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(default: '<id, array>')),
                         new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),
                     ]
                 )
@@ -52,7 +52,7 @@ use Symfony\Component\HttpFoundation\Response;
         ),
         new OA\Response(
             response: Response::HTTP_BAD_REQUEST,
-            description: 'The shop could not be removed',
+            description: 'The shops could not be removed',
             content: new OA\MediaType(
                 mediaType: 'application/json',
                 schema: new OA\Schema(
@@ -78,24 +78,24 @@ class ShopRemoveController extends AbstractController
     public function __invoke(ShopRemoveRequestDto $request): JsonResponse
     {
         $shopRemoved = $this->shopRemoveUseCase->__invoke(
-            $this->createShopRemoveInputDto($request->groupId, $request->shopId)
+            $this->createShopRemoveInputDto($request->groupId, $request->shopsId)
         );
 
         return $this->createResponse($shopRemoved);
     }
 
-    private function createShopRemoveInputDto(string|null $groupId, string|null $shopId): ShopRemoveInputDto
+    private function createShopRemoveInputDto(string|null $groupId, array|null $shopsId): ShopRemoveInputDto
     {
         /** @var UserSharedInterface $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();
 
-        return new ShopRemoveInputDto($userSharedAdapter->getUser(), $groupId, $shopId);
+        return new ShopRemoveInputDto($userSharedAdapter->getUser(), $groupId, $shopsId);
     }
 
     private function createResponse(ApplicationOutputInterface $shopRemoved): JsonResponse
     {
         $responseDto = (new ResponseDto())
-            ->setMessage('Shop removed')
+            ->setMessage('Shops removed')
             ->setStatus(RESPONSE_STATUS::OK)
             ->setData($shopRemoved->toArray());
 

@@ -44,7 +44,7 @@ class ShopRemoveServiceTest extends TestCase
         BuiltInFunctionsReturn::$unlink = null;
     }
 
-    private function getShop(Identifier $shopId, Identifier $groupId, Identifier $productId, string $image = null): Shop
+    private function getShop(Identifier $shopId, Identifier $groupId, string $image = null): Shop
     {
         return new Shop(
             $shopId,
@@ -60,13 +60,12 @@ class ShopRemoveServiceTest extends TestCase
     {
         $shopId = ValueObjectFactory::createIdentifier('shop id');
         $groupId = ValueObjectFactory::createIdentifier('group id');
-        $productId = ValueObjectFactory::createIdentifier('product id');
-        $shop = $this->getShop($shopId, $groupId, $shopId);
+        $shop = $this->getShop($shopId, $groupId);
 
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with([$shopId], $groupId, [$productId])
+            ->with([$shopId], $groupId)
             ->willReturn($this->paginator);
 
         $this->shopRepository
@@ -79,11 +78,47 @@ class ShopRemoveServiceTest extends TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayObject([$shop]));
 
-        $input = new ShopRemoveDto($shopId, $groupId, $productId);
+        $input = new ShopRemoveDto([$shopId], $groupId);
 
         $return = $this->object->__invoke($input);
 
-        $this->assertEquals($shopId, $return);
+        $this->assertEqualsCanonicalizing([$shopId], $return);
+    }
+
+    /** @test */
+    public function itShouldRemoveManyShops(): void
+    {
+        $shopsId = [
+            ValueObjectFactory::createIdentifier('shop id'),
+            ValueObjectFactory::createIdentifier('shop id'),
+        ];
+        $groupId = ValueObjectFactory::createIdentifier('group id');
+        $shops = [
+            $this->getShop($shopsId[0], $groupId),
+            $this->getShop($shopsId[1], $groupId),
+        ];
+
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('findShopsOrFail')
+            ->with($shopsId, $groupId)
+            ->willReturn($this->paginator);
+
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('remove')
+            ->with($shops);
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayObject($shops));
+
+        $input = new ShopRemoveDto($shopsId, $groupId);
+
+        $return = $this->object->__invoke($input);
+
+        $this->assertEqualsCanonicalizing($shopsId, $return);
     }
 
     /** @test */
@@ -91,13 +126,12 @@ class ShopRemoveServiceTest extends TestCase
     {
         $shopId = ValueObjectFactory::createIdentifier('shop id');
         $groupId = ValueObjectFactory::createIdentifier('group id');
-        $productId = ValueObjectFactory::createIdentifier('product id');
-        $shop = $this->getShop($shopId, $groupId, $productId, self::SHOP_IMAGE_PATH);
+        $shop = $this->getShop($shopId, $groupId, self::SHOP_IMAGE_PATH);
 
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with([$shopId], $groupId, [$productId])
+            ->with([$shopId], $groupId)
             ->willReturn($this->paginator);
 
         $this->shopRepository
@@ -110,13 +144,13 @@ class ShopRemoveServiceTest extends TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayObject([$shop]));
 
-        $input = new ShopRemoveDto($shopId, $groupId, $productId);
+        $input = new ShopRemoveDto([$shopId], $groupId);
 
         BuiltInFunctionsReturn::$file_exists = true;
         BuiltInFunctionsReturn::$unlink = true;
         $return = $this->object->__invoke($input);
 
-        $this->assertEquals($shopId, $return);
+        $this->assertEquals([$shopId], $return);
     }
 
     /** @test */
@@ -124,13 +158,12 @@ class ShopRemoveServiceTest extends TestCase
     {
         $shopId = ValueObjectFactory::createIdentifier('shop id');
         $groupId = ValueObjectFactory::createIdentifier('group id');
-        $productId = ValueObjectFactory::createIdentifier('shop id');
-        $shop = $this->getShop($shopId, $groupId, $productId, self::SHOP_IMAGE_PATH);
+        $shop = $this->getShop($shopId, $groupId, self::SHOP_IMAGE_PATH);
 
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with([$shopId], $groupId, [$productId])
+            ->with([$shopId], $groupId)
             ->willReturn($this->paginator);
 
         $this->shopRepository
@@ -143,12 +176,12 @@ class ShopRemoveServiceTest extends TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayObject([$shop]));
 
-        $input = new ShopRemoveDto($shopId, $groupId, $productId);
+        $input = new ShopRemoveDto([$shopId], $groupId);
 
         $return = $this->object->__invoke($input);
 
         BuiltInFunctionsReturn::$file_exists = false;
-        $this->assertEquals($shopId, $return);
+        $this->assertEquals([$shopId], $return);
     }
 
     /** @test */
@@ -156,12 +189,11 @@ class ShopRemoveServiceTest extends TestCase
     {
         $shopId = ValueObjectFactory::createIdentifier('shop id');
         $groupId = ValueObjectFactory::createIdentifier('group id');
-        $productId = ValueObjectFactory::createIdentifier('product id');
 
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with([$shopId], $groupId, [$productId])
+            ->with([$shopId], $groupId)
             ->willThrowException(new DBNotFoundException());
 
         $this->shopRepository
@@ -172,7 +204,7 @@ class ShopRemoveServiceTest extends TestCase
             ->expects($this->never())
             ->method('getIterator');
 
-        $input = new ShopRemoveDto($shopId, $groupId, $productId);
+        $input = new ShopRemoveDto([$shopId], $groupId);
 
         $this->expectException(DBNotFoundException::class);
         $this->object->__invoke($input);
@@ -183,13 +215,12 @@ class ShopRemoveServiceTest extends TestCase
     {
         $shopId = ValueObjectFactory::createIdentifier('shop id');
         $groupId = ValueObjectFactory::createIdentifier('group id');
-        $productId = ValueObjectFactory::createIdentifier('product id');
-        $shop = $this->getShop($shopId, $groupId, $productId, self::SHOP_IMAGE_PATH);
+        $shop = $this->getShop($shopId, $groupId, self::SHOP_IMAGE_PATH);
 
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with([$shopId], $groupId, [$productId])
+            ->with([$shopId], $groupId)
             ->willReturn($this->paginator);
 
         $this->shopRepository
@@ -201,7 +232,7 @@ class ShopRemoveServiceTest extends TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayObject([$shop]));
 
-        $input = new ShopRemoveDto($shopId, $groupId, $productId);
+        $input = new ShopRemoveDto([$shopId], $groupId);
 
         BuiltInFunctionsReturn::$file_exists = true;
         BuiltInFunctionsReturn::$unlink = false;

@@ -8,8 +8,11 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 
 class ShopRemoveDto
 {
+    /**
+     * @param array<int, Identifier> $shopsId
+     */
     public function __construct(
-        public readonly Identifier $shopId,
+        public readonly array $shopsId,
         public readonly Identifier $groupId,
     ) {
     }

@@ -9,15 +9,23 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 
 class ShopRemoveOutputDto implements ApplicationOutputInterface
 {
+    /**
+     * @param Identifier[] $shopsId
+     */
     public function __construct(
-        public readonly Identifier $shopId
+        public readonly array $shopsId
     ) {
     }
 
     public function toArray(): array
     {
+        $shopsIds = array_map(
+            fn (Identifier $shopId) => $shopId->getValue(),
+            $this->shopsId
+        );
+
         return [
-            'id' => $this->shopId->getValue(),
+            'id' => $shopsIds,
         ];
     }
 }

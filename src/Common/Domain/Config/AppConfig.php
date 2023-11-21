@@ -59,6 +59,11 @@ class AppConfig
     public const ENDPOINT_SHOP_GET_PRODUCTS_MAX = 100;
 
     /**
+     * Maximum number of shops can be removed per request.
+     */
+    public const ENDPOINT_SHOP_REMOVE_MAX = 100;
+
+    /**
      * Maximum number of orders can be obtained per request.
      */
     public const ENDPOINT_ORDER_GET_MAX = 100;

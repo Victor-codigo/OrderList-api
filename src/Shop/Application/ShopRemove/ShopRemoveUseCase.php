@@ -38,7 +38,7 @@ class ShopRemoveUseCase extends ServiceBase
             $this->validateGroupAndUserService->__invoke($input->groupId);
 
             $shopRemovedId = $this->shopRemoveService->__invoke(
-                $this->createShopRemoveDto($input->groupId, $input->shopId)
+                $this->createShopRemoveDto($input->groupId, $input->shopsId)
             );
 
             return $this->createShopRemoveOutputDto($shopRemovedId);
@@ -64,12 +64,18 @@ class ShopRemoveUseCase extends ServiceBase
         }
     }
 
-    private function createShopRemoveDto(Identifier $groupId, Identifier $shopId): ShopRemoveDto
+    /**
+     * @param Identifier[] $shopsId
+     */
+    private function createShopRemoveDto(Identifier $groupId, array $shopsId): ShopRemoveDto
     {
-        return new ShopRemoveDto($shopId, $groupId);
+        return new ShopRemoveDto($shopsId, $groupId);
     }
 
-    private function createShopRemoveOutputDto(Identifier $shopRemovedId): ShopRemoveOutputDto
+    /**
+     * @param Identifier[] $shopRemovedId
+     */
+    private function createShopRemoveOutputDto(array $shopRemovedId): ShopRemoveOutputDto
     {
         return new ShopRemoveOutputDto($shopRemovedId);
     }
