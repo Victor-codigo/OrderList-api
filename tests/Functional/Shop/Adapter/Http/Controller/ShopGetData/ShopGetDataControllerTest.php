@@ -32,33 +32,10 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $this->assertTrue(property_exists($shopDataActual, 'image'));
         $this->assertTrue(property_exists($shopDataActual, 'created_on'));
 
-        $this->assertContainsEquals(
-            $shopDataActual->id,
-            array_map(
-                fn (array $shop) => $shop['id'],
-                $shopsDataExpected
-            )
-        );
-        $this->assertContainsEquals(
-            $shopDataActual->group_id,
-            array_map(
-                fn (array $shop) => $shop['group_id'],
-                $shopsDataExpected
-            )
-        );
-        $this->assertContainsEquals(
-            $shopDataActual->name,
-            array_map(
-                fn (array $shop) => $shop['name'],
-                $shopsDataExpected
-            )
-        );
-        $this->assertContainsEquals(
-            $shopDataActual->image, array_map(
-                fn (array $shop) => $shop['image'],
-                $shopsDataExpected
-            )
-        );
+        $this->assertEquals($shopsDataExpected['id'], $shopDataActual->id);
+        $this->assertEquals($shopsDataExpected['group_id'], $shopDataActual->group_id);
+        $this->assertEquals($shopsDataExpected['name'], $shopDataActual->name);
+        $this->assertEquals($shopsDataExpected['image'], $shopDataActual->image);
         $this->assertIsString($shopDataActual->created_on);
     }
 
@@ -69,16 +46,15 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
         $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
         $shopNameStartsWith = 'Sho';
+        $orderAsc = true;
 
         $shopDataExpected = [
-            [
-                'id' => self::SHOP_EXISTS_ID,
-                'group_id' => self::GROUP_EXISTS_ID,
-                'name' => 'Shop name 1',
-                'description' => 'Dolorem omnis accusamus iusto qui rerum eligendi. Ipsa omnis autem totam est vero qui. Voluptas quisquam cumque dolorem ut debitis recusandae veniam. Quam repellendus est sed enim doloremque eum eius. Ut est odio est. Voluptates dolorem et nisi voluptatum. Voluptas vitae deserunt mollitia consequuntur eos. Suscipit recusandae hic cumque voluptatem officia. Exercitationem quibusdam ea qui laudantium est non quis. Vero dicta et voluptas explicabo.',
-                'image' => null,
-                'created_on' => '',
-            ],
+            'id' => self::SHOP_EXISTS_ID,
+            'group_id' => self::GROUP_EXISTS_ID,
+            'name' => 'Shop name 1',
+            'description' => 'Dolorem omnis accusamus iusto qui rerum eligendi. Ipsa omnis autem totam est vero qui. Voluptas quisquam cumque dolorem ut debitis recusandae veniam. Quam repellendus est sed enim doloremque eum eius. Ut est odio est. Voluptates dolorem et nisi voluptatum. Voluptas vitae deserunt mollitia consequuntur eos. Suscipit recusandae hic cumque voluptatem officia. Exercitationem quibusdam ea qui laudantium est non quis. Vero dicta et voluptas explicabo.',
+            'image' => null,
+            'created_on' => '',
         ];
 
         $client = $this->getNewClientAuthenticatedUser();
@@ -88,7 +64,8 @@ class ShopGetDataControllerTest extends WebClientTestCase
                 ."?group_id={$groupId}"
                 ."&shops_id={$shopsId}"
                 ."&products_id={$productsId}"
-                ."&shop_name_starts_with={$shopNameStartsWith}",
+                ."&shop_name_starts_with={$shopNameStartsWith}"
+                ."&order_asc={$orderAsc}",
             content: json_encode([])
         );
 
@@ -111,14 +88,12 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
 
         $shopDataExpected = [
-            [
                 'id' => self::SHOP_EXISTS_ID,
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Shop name 1',
                 'description' => 'Dolorem omnis accusamus iusto qui rerum eligendi. Ipsa omnis autem totam est vero qui. Voluptas quisquam cumque dolorem ut debitis recusandae veniam. Quam repellendus est sed enim doloremque eum eius. Ut est odio est. Voluptates dolorem et nisi voluptatum. Voluptas vitae deserunt mollitia consequuntur eos. Suscipit recusandae hic cumque voluptatem officia. Exercitationem quibusdam ea qui laudantium est non quis. Vero dicta et voluptas explicabo.',
                 'image' => null,
                 'created_on' => '',
-            ],
         ];
 
         $client = $this->getNewClientAuthenticatedUser();
@@ -143,10 +118,11 @@ class ShopGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldGetShopsWithProducts(): void
+    public function itShouldGetShopsWithProductsOrderAsc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
         $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
+        $orderArc = true;
 
         $shopDataExpected = [
             [
@@ -180,7 +156,8 @@ class ShopGetDataControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT
                 ."?group_id={$groupId}"
-                ."&products_id={$productsId}",
+                ."&products_id={$productsId}"
+                ."&order_asc={$orderArc}",
             content: json_encode([])
         );
 
@@ -191,8 +168,8 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Shops data', $responseContent->message);
 
-        foreach ($responseContent->data as $shopData) {
-            $this->assertShopDataIsOk($shopDataExpected, $shopData);
+        foreach ($responseContent->data as $key => $shopData) {
+            $this->assertShopDataIsOk($shopDataExpected[$key], $shopData);
         }
     }
 
@@ -202,14 +179,14 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $groupId = self::GROUP_EXISTS_ID;
         $shopName = 'Shop name 2';
 
-        $shopDataExpected = [[
+        $shopDataExpected = [
             'id' => 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
             'group_id' => self::GROUP_EXISTS_ID,
             'name' => 'Shop name 2',
             'description' => 'Quae suscipit ea sit est exercitationem aliquid nobis. Qui quidem aut non quia cupiditate. Neque sunt aperiam cum quis quia aspernatur quia. Ratione enim eos rerum et. Ducimus voluptatem nam porro et est molestiae. Rerum perspiciatis et distinctio totam culpa et quaerat temporibus. Suscipit occaecati rerum molestiae voluptas odio eos. Sunt labore quia asperiores laborum. Unde explicabo et aspernatur vel odio modi qui. Ipsa recusandae eveniet doloribus quisquam. Nam aut ut omnis qui possimus.',
             'image' => null,
             'created_on' => '',
-        ]];
+        ];
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -233,25 +210,18 @@ class ShopGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldGetShopsShopNameStartsWith(): void
+    public function itShouldGetShopsShopNameStartsWithOrderDesc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
         $shopNameStartsWith = 'Sho';
+        $orderAsc = false;
 
         $shopDataExpected = [
             [
-                'id' => 'e6c1d350-f010-403c-a2d4-3865c14630ec',
+                'id' => 'cc7f5dd6-02ba-4bd9-b5c1-5b65d81e59a0',
                 'group_id' => self::GROUP_EXISTS_ID,
-                'name' => 'Shop name 1',
-                'description' => 'Quae suscipit ea sit est exercitationem aliquid nobis. Qui quidem aut non quia cupiditate. Neque sunt aperiam cum quis quia aspernatur quia. Ratione enim eos rerum et. Ducimus voluptatem nam porro et est molestiae. Rerum perspiciatis et distinctio totam culpa et quaerat temporibus. Suscipit occaecati rerum molestiae voluptas odio eos. Sunt labore quia asperiores laborum. Unde explicabo et aspernatur vel odio modi qui. Ipsa recusandae eveniet doloribus quisquam. Nam aut ut omnis qui possimus.',
-                'image' => null,
-                'created_on' => '',
-            ],
-            [
-                'id' => 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
-                'group_id' => self::GROUP_EXISTS_ID,
-                'name' => 'Shop name 2',
-                'description' => 'Quae suscipit ea sit est exercitationem aliquid nobis. Qui quidem aut non quia cupiditate. Neque sunt aperiam cum quis quia aspernatur quia. Ratione enim eos rerum et. Ducimus voluptatem nam porro et est molestiae. Rerum perspiciatis et distinctio totam culpa et quaerat temporibus. Suscipit occaecati rerum molestiae voluptas odio eos. Sunt labore quia asperiores laborum. Unde explicabo et aspernatur vel odio modi qui. Ipsa recusandae eveniet doloribus quisquam. Nam aut ut omnis qui possimus.',
+                'name' => 'Shop name 4',
+                'description' => null,
                 'image' => null,
                 'created_on' => '',
             ],
@@ -264,10 +234,18 @@ class ShopGetDataControllerTest extends WebClientTestCase
                 'created_on' => '',
             ],
             [
-                'id' => 'cc7f5dd6-02ba-4bd9-b5c1-5b65d81e59a0',
+                'id' => 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
                 'group_id' => self::GROUP_EXISTS_ID,
-                'name' => 'Shop name 4',
-                'description' => null,
+                'name' => 'Shop name 2',
+                'description' => 'Quae suscipit ea sit est exercitationem aliquid nobis. Qui quidem aut non quia cupiditate. Neque sunt aperiam cum quis quia aspernatur quia. Ratione enim eos rerum et. Ducimus voluptatem nam porro et est molestiae. Rerum perspiciatis et distinctio totam culpa et quaerat temporibus. Suscipit occaecati rerum molestiae voluptas odio eos. Sunt labore quia asperiores laborum. Unde explicabo et aspernatur vel odio modi qui. Ipsa recusandae eveniet doloribus quisquam. Nam aut ut omnis qui possimus.',
+                'image' => null,
+                'created_on' => '',
+            ],
+            [
+                'id' => 'e6c1d350-f010-403c-a2d4-3865c14630ec',
+                'group_id' => self::GROUP_EXISTS_ID,
+                'name' => 'Shop name 1',
+                'description' => 'Quae suscipit ea sit est exercitationem aliquid nobis. Qui quidem aut non quia cupiditate. Neque sunt aperiam cum quis quia aspernatur quia. Ratione enim eos rerum et. Ducimus voluptatem nam porro et est molestiae. Rerum perspiciatis et distinctio totam culpa et quaerat temporibus. Suscipit occaecati rerum molestiae voluptas odio eos. Sunt labore quia asperiores laborum. Unde explicabo et aspernatur vel odio modi qui. Ipsa recusandae eveniet doloribus quisquam. Nam aut ut omnis qui possimus.',
                 'image' => null,
                 'created_on' => '',
             ],
@@ -278,7 +256,8 @@ class ShopGetDataControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT
                 ."?group_id={$groupId}"
-                ."&shop_name_starts_with={$shopNameStartsWith}",
+                ."&shop_name_starts_with={$shopNameStartsWith}"
+                ."&order_asc={$orderAsc}",
             content: json_encode([])
         );
 
@@ -289,8 +268,8 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Shops data', $responseContent->message);
 
-        foreach ($responseContent->data as $shopData) {
-            $this->assertShopDataIsOk($shopDataExpected, $shopData);
+        foreach ($responseContent->data as $key => $shopData) {
+            $this->assertShopDataIsOk($shopDataExpected[$key], $shopData);
         }
     }
 
@@ -302,14 +281,12 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
 
         $shopDataExpected = [
-            [
-                'id' => self::SHOP_EXISTS_ID,
-                'group_id' => self::GROUP_EXISTS_ID,
-                'name' => 'Shop name 1',
-                'description' => 'Quae suscipit ea sit est exercitationem aliquid nobis. Qui quidem aut non quia cupiditate. Neque sunt aperiam cum quis quia aspernatur quia. Ratione enim eos rerum et. Ducimus voluptatem nam porro et est molestiae. Rerum perspiciatis et distinctio totam culpa et quaerat temporibus. Suscipit occaecati rerum molestiae voluptas odio eos. Sunt labore quia asperiores laborum. Unde explicabo et aspernatur vel odio modi qui. Ipsa recusandae eveniet doloribus quisquam. Nam aut ut omnis qui possimus.',
-                'image' => null,
-                'created_on' => '',
-            ],
+            'id' => self::SHOP_EXISTS_ID,
+            'group_id' => self::GROUP_EXISTS_ID,
+            'name' => 'Shop name 1',
+            'description' => 'Quae suscipit ea sit est exercitationem aliquid nobis. Qui quidem aut non quia cupiditate. Neque sunt aperiam cum quis quia aspernatur quia. Ratione enim eos rerum et. Ducimus voluptatem nam porro et est molestiae. Rerum perspiciatis et distinctio totam culpa et quaerat temporibus. Suscipit occaecati rerum molestiae voluptas odio eos. Sunt labore quia asperiores laborum. Unde explicabo et aspernatur vel odio modi qui. Ipsa recusandae eveniet doloribus quisquam. Nam aut ut omnis qui possimus.',
+            'image' => null,
+            'created_on' => '',
         ];
 
         $client = $this->getNewClientAuthenticatedUser();
@@ -341,14 +318,14 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
         $shopNameStartsWith = 'Shop name 2';
 
-        $shopDataExpected = [[
-                'id' => self::SHOP_EXISTS_ID_2,
-                'group_id' => self::GROUP_EXISTS_ID,
-                'name' => 'Shop name 2',
-                'description' => 'Quae suscipit ea sit est exercitationem aliquid nobis. Qui quidem aut non quia cupiditate. Neque sunt aperiam cum quis quia aspernatur quia. Ratione enim eos rerum et. Ducimus voluptatem nam porro et est molestiae. Rerum perspiciatis et distinctio totam culpa et quaerat temporibus. Suscipit occaecati rerum molestiae voluptas odio eos. Sunt labore quia asperiores laborum. Unde explicabo et aspernatur vel odio modi qui. Ipsa recusandae eveniet doloribus quisquam. Nam aut ut omnis qui possimus.',
-                'image' => null,
-                'created_on' => '',
-        ]];
+        $shopDataExpected = [
+            'id' => self::SHOP_EXISTS_ID_2,
+            'group_id' => self::GROUP_EXISTS_ID,
+            'name' => 'Shop name 2',
+            'description' => 'Quae suscipit ea sit est exercitationem aliquid nobis. Qui quidem aut non quia cupiditate. Neque sunt aperiam cum quis quia aspernatur quia. Ratione enim eos rerum et. Ducimus voluptatem nam porro et est molestiae. Rerum perspiciatis et distinctio totam culpa et quaerat temporibus. Suscipit occaecati rerum molestiae voluptas odio eos. Sunt labore quia asperiores laborum. Unde explicabo et aspernatur vel odio modi qui. Ipsa recusandae eveniet doloribus quisquam. Nam aut ut omnis qui possimus.',
+            'image' => null,
+            'created_on' => '',
+        ];
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -373,11 +350,12 @@ class ShopGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldGetShopsWithProductsAndShopNameStartsWith(): void
+    public function itShouldGetShopsWithProductsAndShopNameStartsWithOrderAsc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
         $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
         $shopNameStartsWith = 'Sho';
+        $orderAsc = true;
 
         $shopDataExpected = [
             [
@@ -412,7 +390,8 @@ class ShopGetDataControllerTest extends WebClientTestCase
             uri: self::ENDPOINT
                 ."?group_id={$groupId}"
                 ."&products_id={$productsId}"
-                ."&shop_name_starts_with={$shopNameStartsWith}",
+                ."&shop_name_starts_with={$shopNameStartsWith}"
+                ."&order_asc={$orderAsc}",
             content: json_encode([])
         );
 
@@ -423,8 +402,8 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Shops data', $responseContent->message);
 
-        foreach ($responseContent->data as $shopData) {
-            $this->assertShopDataIsOk($shopDataExpected, $shopData);
+        foreach ($responseContent->data as $key => $shopData) {
+            $this->assertShopDataIsOk($shopDataExpected[$key], $shopData);
         }
     }
 

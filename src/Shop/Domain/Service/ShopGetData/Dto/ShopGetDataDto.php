@@ -18,7 +18,8 @@ class ShopGetDataDto
         public readonly array $productsId,
         public readonly string|null $shopNameStartsWith,
         public readonly NameWithSpaces $shopName,
-        public readonly int $shopsMaxNumber = 100
+        public readonly int $shopsMaxNumber = 100,
+        public readonly bool $orderAsc = true
     ) {
     }
 }

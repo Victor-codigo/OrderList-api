@@ -95,9 +95,9 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
      *
      * @throws DBNotFoundException
      */
-    public function findShopsOrFail(array $shopsId = null, Identifier $groupId = null, array $productsId = null, NameWithSpaces $shopName = null, string $shopNameStartsWith = null): PaginatorInterface
+    public function findShopsOrFail(array $shopsId = null, Identifier $groupId = null, array $productsId = null, NameWithSpaces $shopName = null, string $shopNameStartsWith = null, bool $orderAsc = true): PaginatorInterface
     {
-        $query = $this->entityManager
+        $queryBuilder = $this->entityManager
             ->createQueryBuilder()
             ->select('shop')
             ->from(Shop::class, 'shop');
@@ -107,19 +107,19 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
                 fn (Identifier $shopId) => $shopId->getValue(),
                 $shopsId
             );
-            $query
+            $queryBuilder
                 ->where('shop.id IN (:shopsId)')
                 ->setParameter('shopsId', $shopsIdPlain);
         }
 
         if (null !== $groupId) {
-            $query
+            $queryBuilder
                 ->andWhere('shop.groupId = :groupId')
                 ->setParameter('groupId', $groupId);
         }
 
         if (null !== $productsId) {
-            $query
+            $queryBuilder
                 ->leftJoin(ProductShop::class, 'productShop', Join::WITH, 'shop.id = productShop.shopId')
                 ->leftJoin(Product::class, 'product', Join::WITH, 'productShop.productId = product.id')
                 ->andWhere('product.id IN (:productsId)')
@@ -127,21 +127,21 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
         }
 
         if (null !== $shopNameStartsWith && (null === $shopName || $shopName->isNull())) {
-            $query
+            $queryBuilder
                 ->andWhere('shop.name LIKE :shopStartsWith')
                 ->setParameter('shopStartsWith', "{$shopNameStartsWith}%");
         } elseif (null !== $shopName && !$shopName->isNull()) {
-            $query
+            $queryBuilder
                 ->andWhere('shop.name = :shopName')
                 ->setParameter('shopName', $shopName);
         }
 
-        $paginator = $this->paginator->createPaginator($query);
-
-        if (0 === $paginator->getItemsTotal()) {
-            throw DBNotFoundException::fromMessage('Shops not found');
+        if ($orderAsc) {
+            $queryBuilder->addOrderBy('shop.name', 'ASC');
+        } else {
+            $queryBuilder->addOrderBy('shop.name', 'DESC');
         }
 
-        return $paginator;
+        return $this->queryPaginationOrFail($queryBuilder);
     }
 }

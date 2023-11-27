@@ -59,7 +59,7 @@ class ShopGetDataUseCase extends ServiceBase
 
     private function createShopGetDataDto(ShopGetDataInputDto $input): ShopGetDataDto
     {
-        return new ShopGetDataDto($input->groupId, $input->shopsId, $input->productsId, $input->shopNameStartsWith, $input->shopName);
+        return new ShopGetDataDto($input->groupId, $input->shopsId, $input->productsId, $input->shopNameStartsWith, $input->shopName, 100, $input->orderAsc);
     }
 
     private function createShopGetDataOutputDto(array $shopsData): ShopGetDataOutputDto

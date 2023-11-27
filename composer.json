@@ -120,12 +120,12 @@
         }
     },
     "require-dev": {
-        "dg/bypass-finals": "^1.4",
-        "friendsofphp/php-cs-fixer": "^3.16",
-        "hautelook/alice-bundle": "^2.12",
-        "nelmio/api-doc-bundle": "^v4.11.1",
-        "phpunit/phpunit": "^9.6",
-        "symfony/browser-kit": "6.2.*",
+        "dg/bypass-finals": "^v1.5.1",
+        "friendsofphp/php-cs-fixer": "^v3.40.0",
+        "hautelook/alice-bundle": "^2.12.2",
+        "nelmio/api-doc-bundle": "v4.12.0",
+        "phpunit/phpunit": "^9.6.13",
+        "symfony/browser-kit": "v6.2.7",
         "symfony/css-selector": "6.2.*",
         "symfony/debug-bundle": "6.2.*",
         "symfony/maker-bundle": "^1.48",

@@ -27,6 +27,7 @@ class ShopGetDataService
             empty($input->productsId) ? null : $input->productsId,
             $input->shopName,
             empty($input->shopNameStartsWith) ? null : $input->shopNameStartsWith,
+            $input->orderAsc
         );
 
         return $this->getShopsData($shops, $input->shopsMaxNumber);

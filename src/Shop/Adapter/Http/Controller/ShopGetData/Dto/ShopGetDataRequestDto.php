@@ -18,6 +18,7 @@ class ShopGetDataRequestDto implements RequestDtoInterface
     public readonly array|null $productsId;
     public readonly string|null $shopNameStartsWith;
     public readonly string|null $shopName;
+    public readonly bool|null $orderArc;
 
     public function __construct(Request $request)
     {
@@ -26,6 +27,7 @@ class ShopGetDataRequestDto implements RequestDtoInterface
         $this->productsId = $this->removeOverflow($request->query->get('products_id'), self::PRODUCTS_NUM_MAX);
         $this->shopNameStartsWith = $request->query->get('shop_name_starts_with');
         $this->shopName = $request->query->get('shop_name');
+        $this->orderArc = $request->query->getBoolean('order_asc', true);
     }
 
     private function removeOverflow(string|null $itemsId, int $numMax): array|null

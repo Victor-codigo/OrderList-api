@@ -24,9 +24,9 @@ class ShopRepositoryTest extends DataBaseTestCase
 
     private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const PRODUCT_ID = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
-    private const SHOP_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
-    private const SHOP_ID_2 = 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e';
-    private const SHOP_ID_3 = 'b9b1c541-d41e-4751-9ecb-4a1d823c0405';
+    private const SHOP_ID = 'b9b1c541-d41e-4751-9ecb-4a1d823c0405';
+    private const SHOP_ID_3 = 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e';
+    private const SHOP_ID_2 = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
     private const SHOP_ID_4 = 'cc7f5dd6-02ba-4bd9-b5c1-5b65d81e59a0';
     private const SHOP_NAME_EXISTS = 'Perico';
 
@@ -163,20 +163,50 @@ class ShopRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldGetAllShops(): void
+    public function itShouldGetAllShopsOrderByNameAsc(): void
     {
         $shopIds = [
             ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createIdentifier(self::SHOP_ID_2),
             ValueObjectFactory::createIdentifier(self::SHOP_ID_3),
         ];
+        $shopNames = [
+            ValueObjectFactory::createNameWithSpaces('Shop name 1'),
+            ValueObjectFactory::createNameWithSpaces('Shop name 2'),
+            ValueObjectFactory::createNameWithSpaces('Shop name 3'),
+        ];
 
-        $return = $this->object->findShopsOrFail($shopIds);
+        $return = $this->object->findShopsOrFail(shopsId: $shopIds, orderAsc: true);
+        $return = iterator_to_array($return);
 
         $this->assertCount(3, $return);
 
-        foreach ($return as $shop) {
-            $this->assertContainsEquals($shop->getId(), $shopIds);
+        foreach ($shopNames as $key => $shopNamesExpected) {
+            $this->assertEquals($shopNamesExpected, $return[$key]->getName());
+        }
+    }
+
+    /** @test */
+    public function itShouldGetAllShopsOrderByNameDesc(): void
+    {
+        $shopIds = [
+            ValueObjectFactory::createIdentifier(self::SHOP_ID),
+            ValueObjectFactory::createIdentifier(self::SHOP_ID_2),
+            ValueObjectFactory::createIdentifier(self::SHOP_ID_3),
+        ];
+        $shopNames = [
+            ValueObjectFactory::createNameWithSpaces('Shop name 3'),
+            ValueObjectFactory::createNameWithSpaces('Shop name 2'),
+            ValueObjectFactory::createNameWithSpaces('Shop name 1'),
+        ];
+
+        $return = $this->object->findShopsOrFail(shopsId: $shopIds, orderAsc: false);
+        $return = iterator_to_array($return);
+
+        $this->assertCount(3, $return);
+
+        foreach ($shopNames as $key => $shopNamesExpected) {
+            $this->assertEquals($shopNamesExpected, $return[$key]->getName());
         }
     }
 
@@ -289,7 +319,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         $this->assertCount(1, $return);
 
         $expectedShopsId = [
-            self::SHOP_ID_3,
+            self::SHOP_ID,
         ];
 
         foreach ($return as $shop) {
@@ -312,7 +342,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         $this->assertCount(1, $return);
 
         $expectedShopsId = [
-            self::SHOP_ID_3,
+            self::SHOP_ID,
         ];
 
         foreach ($return as $shop) {

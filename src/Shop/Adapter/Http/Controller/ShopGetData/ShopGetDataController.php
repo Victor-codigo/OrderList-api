@@ -59,6 +59,14 @@ use Symfony\Component\HttpFoundation\Response;
             example: 'shop name',
             schema: new OA\Schema(type: 'string')
         ),
+        new OA\Parameter(
+            name: 'order_asc',
+            in: 'query',
+            required: false,
+            description: 'TRUE if you want to order by asc, otherwise FALSE',
+            example: 'true',
+            schema: new OA\Schema(type: 'boolean')
+        ),
     ],
     responses: [
         new OA\Response(
@@ -111,15 +119,15 @@ class ShopGetDataController extends AbstractController
     public function __invoke(ShopGetDataRequestDto $request): JsonResponse
     {
         $shops = $this->shopGetDataUseCase->__invoke(
-            $this->createShopGetDataInputDto($request->groupId, $request->shopsId, $request->productsId, $request->shopNameStartsWith, $request->shopName)
+            $this->createShopGetDataInputDto($request->groupId, $request->shopsId, $request->productsId, $request->shopNameStartsWith, $request->shopName, $request->orderArc)
         );
 
         return $this->createResponse($shops);
     }
 
-    private function createShopGetDataInputDto(string|null $groupId, array|null $shopsId, array|null $productsId, string|null $shopNameStartsWith, string|null $shopName): ShopGetDataInputDto
+    private function createShopGetDataInputDto(string|null $groupId, array|null $shopsId, array|null $productsId, string|null $shopNameStartsWith, string|null $shopName, bool|null $orderAsc): ShopGetDataInputDto
     {
-        return new ShopGetDataInputDto($groupId, $shopsId, $productsId, $shopNameStartsWith, $shopName);
+        return new ShopGetDataInputDto($groupId, $shopsId, $productsId, $shopNameStartsWith, $shopName, $orderAsc);
     }
 
     private function createResponse(ApplicationOutputInterface $shops): JsonResponse

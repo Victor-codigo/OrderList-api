@@ -26,8 +26,9 @@ class ShopGetDataInputDto implements ServiceInputDtoInterface
     public readonly array $productsId;
     public readonly string|null $shopNameStartsWith;
     public readonly NameWithSpaces|null $shopName;
+    public readonly bool $orderAsc;
 
-    public function __construct(string|null $groupId, array|null $shopsId, array|null $productsId, string|null $shopNameStartsWith, string|null $shopName)
+    public function __construct(string|null $groupId, array|null $shopsId, array|null $productsId, string|null $shopNameStartsWith, string|null $shopName, bool|null $orderAsc = true)
     {
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
         $this->shopNameStartsWith = $shopNameStartsWith;
@@ -40,6 +41,7 @@ class ShopGetDataInputDto implements ServiceInputDtoInterface
             fn (string $productId) => ValueObjectFactory::createIdentifier($productId),
             $productsId ?? []
         );
+        $this->orderAsc = $orderAsc ?? true;
     }
 
     public function validate(ValidationInterface $validator): array

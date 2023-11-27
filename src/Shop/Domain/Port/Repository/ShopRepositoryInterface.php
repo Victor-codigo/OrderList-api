@@ -35,5 +35,5 @@ interface ShopRepositoryInterface extends RepositoryInterface
      *
      * @throws DBNotFoundException
      */
-    public function findShopsOrFail(array $shopsId = null, Identifier $groupId = null, array $productId = null, NameWithSpaces $shopName = null, string $shopNameStartsWith = null): PaginatorInterface;
+    public function findShopsOrFail(array $shopsId = null, Identifier $groupId = null, array $productId = null, NameWithSpaces $shopName = null, string $shopNameStartsWith = null, bool $orderAsc = true): PaginatorInterface;
 }
