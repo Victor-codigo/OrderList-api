@@ -18,4 +18,16 @@ trait RequestDataValidation
 
         return $values;
     }
+
+    private function validateCsvOverflow(string|null $values, int $valuesMax): array|null
+    {
+        if (null === $values) {
+            return null;
+        }
+
+        return $this->validateArrayOverflow(
+            explode(',', $values, $valuesMax + 1),
+            $valuesMax
+        );
+    }
 }
