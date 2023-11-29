@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Object;
 
+use Common\Domain\Model\ValueObject\Object\Filter\FilterDbLikeComparison;
 use Common\Domain\Ports\FileUpload\FileInterface;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
@@ -54,5 +55,10 @@ class ValueObjectObjectFactory
     public static function createShopImage(FileInterface|null $file): ShopImage
     {
         return new ShopImage($file);
+    }
+
+    public static function createFilterDbLikeComparison(\BackedEnum|null $filter): FilterDbLikeComparison
+    {
+        return new FilterDbLikeComparison($filter);
     }
 }

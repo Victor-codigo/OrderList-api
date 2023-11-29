@@ -6,8 +6,8 @@ namespace Common\Domain\Model\ValueObject;
 
 use Common\Domain\Model\ValueObject\Array\NotificationData;
 use Common\Domain\Model\ValueObject\Array\Roles;
-use Common\Domain\Model\ValueObject\Array\valueObjectArrayFactory;
 use Common\Domain\Model\ValueObject\Array\ValueObjectArrayFactoryInterface;
+use Common\Domain\Model\ValueObject\Array\valueObjectArrayFactory;
 use Common\Domain\Model\ValueObject\Date\DateNowToFuture;
 use Common\Domain\Model\ValueObject\Date\ValueObjectDateFactory;
 use Common\Domain\Model\ValueObject\Date\ValueObjectDateFactoryInterface;
@@ -15,11 +15,16 @@ use Common\Domain\Model\ValueObject\Float\Amount;
 use Common\Domain\Model\ValueObject\Float\Money;
 use Common\Domain\Model\ValueObject\Float\ValueObjectFloatFactory;
 use Common\Domain\Model\ValueObject\Float\ValueObjectFloatFactoryInterface;
+use Common\Domain\Model\ValueObject\Group\Filter;
+use Common\Domain\Model\ValueObject\Group\ValueObjectGroupFactory;
+use Common\Domain\Model\ValueObject\Group\ValueObjectGroupFactoryInterface;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
 use Common\Domain\Model\ValueObject\Integer\ValueObjectIntegerFactory;
 use Common\Domain\Model\ValueObject\Integer\ValueObjectIntegerFactoryInterface;
 use Common\Domain\Model\ValueObject\Object\File;
+use Common\Domain\Model\ValueObject\Object\Filter\FilterDbLikeComparison;
+use Common\Domain\Model\ValueObject\Object\Filter\ValueObjectFilterInterface;
 use Common\Domain\Model\ValueObject\Object\GroupImage;
 use Common\Domain\Model\ValueObject\Object\GroupType;
 use Common\Domain\Model\ValueObject\Object\NotificationType;
@@ -48,7 +53,7 @@ use Common\Domain\Validation\Group\GROUP_TYPE;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 
-final class ValueObjectFactory implements ValueObjectStringFactoryInterface, ValueObjectArrayFactoryInterface, ValueObjectObjectFactoryInterface, ValueObjectIntegerFactoryInterface, ValueObjectFloatFactoryInterface, ValueObjectDateFactoryInterface
+final class ValueObjectFactory implements ValueObjectStringFactoryInterface, ValueObjectArrayFactoryInterface, ValueObjectObjectFactoryInterface, ValueObjectIntegerFactoryInterface, ValueObjectFloatFactoryInterface, ValueObjectDateFactoryInterface, ValueObjectGroupFactoryInterface
 {
     /**
      * @param Rol[]|null $roles
@@ -186,5 +191,15 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
     public static function createDateNowToFuture(\DateTime|null $date): DateNowToFuture
     {
         return ValueObjectDateFactory::createDateNowToFuture($date);
+    }
+
+    public static function createFilterDbLikeComparison(\BackedEnum|null $filter): FilterDbLikeComparison
+    {
+        return ValueObjectObjectFactory::createFilterDbLikeComparison($filter);
+    }
+
+    public static function createFilter(string $id, ValueObjectBase&ValueObjectFilterInterface $type, ValueObjectBase $value): Filter
+    {
+        return ValueObjectGroupFactory::createFilter($id, $type, $value);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Constraints;
 
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
@@ -171,5 +172,12 @@ final class VALUE_OBJECTS_CONSTRAINTS
         'image/jpeg',
         'image/png',
         'image/bmp',
+    ];
+
+    public const FILTER_STRING_COMPARISON_TYPES = [
+        FILTER_STRING_COMPARISON::STARTS_WITH,
+        FILTER_STRING_COMPARISON::ENDS_WITH,
+        FILTER_STRING_COMPARISON::CONTAINS,
+        FILTER_STRING_COMPARISON::EQUALS,
     ];
 }
