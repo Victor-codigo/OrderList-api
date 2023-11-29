@@ -19,17 +19,25 @@ class ShopGetDataRequestDto implements RequestDtoInterface
     public readonly string|null $groupId;
     public readonly array|null $shopsId;
     public readonly array|null $productsId;
-    public readonly string|null $shopNameStartsWith;
+    public readonly string|null $shopNameFilterName;
+    public readonly string|null $shopNameFilterType;
+    public readonly string|float|int|null $shopNameFilterValue;
     public readonly string|null $shopName;
     public readonly bool|null $orderArc;
+    public readonly int|null $page;
+    public readonly int|null $pageItems;
 
     public function __construct(Request $request)
     {
         $this->groupId = $request->query->get('group_id');
         $this->shopsId = $this->validateCsvOverflow($request->query->get('shops_id'), self::SHOPS_NUM_MAX);
         $this->productsId = $this->validateCsvOverflow($request->query->get('products_id'), self::PRODUCTS_NUM_MAX);
-        $this->shopNameStartsWith = $request->query->get('shop_name_starts_with');
+        $this->shopNameFilterName = $request->query->get('shop_name_filter_name');
+        $this->shopNameFilterType = $request->query->get('shop_name_filter_type');
+        $this->shopNameFilterValue = $request->query->get('shop_name_filter_value');
         $this->shopName = $request->query->get('shop_name');
         $this->orderArc = $request->query->getBoolean('order_asc', true);
+        $this->page = $request->query->getInt('page');
+        $this->pageItems = $request->query->getInt('page_items');
     }
 }

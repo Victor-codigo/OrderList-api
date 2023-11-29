@@ -8,6 +8,7 @@ use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
+use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -95,7 +96,7 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
      *
      * @throws DBNotFoundException
      */
-    public function findShopsOrFail(array $shopsId = null, Identifier $groupId = null, array $productsId = null, NameWithSpaces $shopName = null, string $shopNameStartsWith = null, bool $orderAsc = true): PaginatorInterface
+    public function findShopsOrFail_old(array $shopsId = null, Identifier $groupId = null, array $productsId = null, NameWithSpaces $shopName = null, string $shopNameStartsWith = null, bool $orderAsc = true): PaginatorInterface
     {
         $queryBuilder = $this->entityManager
             ->createQueryBuilder()
@@ -130,6 +131,68 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
             $queryBuilder
                 ->andWhere('shop.name LIKE :shopStartsWith')
                 ->setParameter('shopStartsWith', "{$shopNameStartsWith}%");
+        } elseif (null !== $shopName && !$shopName->isNull()) {
+            $queryBuilder
+                ->andWhere('shop.name = :shopName')
+                ->setParameter('shopName', $shopName);
+        }
+
+        if ($orderAsc) {
+            $queryBuilder->addOrderBy('shop.name', 'ASC');
+        } else {
+            $queryBuilder->addOrderBy('shop.name', 'DESC');
+        }
+
+        return $this->queryPaginationOrFail($queryBuilder);
+    }
+
+    /**
+     * @param Identifier[]|null $shopsId
+     * @param Identifier[]|null $productsId
+     *
+     * @throws DBNotFoundException
+     */
+    public function findShopsOrFail(
+        array $shopsId = null,
+        Identifier $groupId = null,
+        array $productsId = null,
+        NameWithSpaces $shopName = null,
+        Filter $shopFilter = null,
+        bool $orderAsc = true
+    ): PaginatorInterface {
+        $queryBuilder = $this->entityManager
+            ->createQueryBuilder()
+            ->select('shop')
+            ->from(Shop::class, 'shop');
+
+        if (null !== $shopsId) {
+            $shopsIdPlain = array_map(
+                fn (Identifier $shopId) => $shopId->getValue(),
+                $shopsId
+            );
+            $queryBuilder
+                ->where('shop.id IN (:shopsId)')
+                ->setParameter('shopsId', $shopsIdPlain);
+        }
+
+        if (null !== $groupId) {
+            $queryBuilder
+                ->andWhere('shop.groupId = :groupId')
+                ->setParameter('groupId', $groupId);
+        }
+
+        if (null !== $productsId) {
+            $queryBuilder
+                ->leftJoin(ProductShop::class, 'productShop', Join::WITH, 'shop.id = productShop.shopId')
+                ->leftJoin(Product::class, 'product', Join::WITH, 'productShop.productId = product.id')
+                ->andWhere('product.id IN (:productsId)')
+                ->setParameter('productsId', $productsId);
+        }
+
+        if (null !== $shopFilter && !$shopFilter->isNull() && (null === $shopName || $shopName->isNull())) {
+            $queryBuilder
+                ->andWhere('shop.name LIKE :shopNameFilter')
+                ->setParameter('shopNameFilter', $shopFilter->getValueWithFilter());
         } elseif (null !== $shopName && !$shopName->isNull()) {
             $queryBuilder
                 ->andWhere('shop.name = :shopName')

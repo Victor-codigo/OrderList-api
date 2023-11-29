@@ -6,9 +6,11 @@ namespace Test\Unit\Shop\Application\ShopGetData\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\ValidationInterface;
 use PHPUnit\Framework\TestCase;
 use Shop\Application\ShopGetData\Dto\ShopGetDataInputDto;
+use Shop\Application\ShopGetData\SHOP_GET_DATA_FILTER;
 
 class ShopGetDataInputDtoTest extends TestCase
 {
@@ -34,9 +36,18 @@ class ShopGetDataInputDtoTest extends TestCase
     /** @test */
     public function itShouldValidate(): void
     {
-        $shopNameStartsWith = 'jp';
-        $shopName = 'shop name';
-        $object = new ShopGetDataInputDto(self::GROUP_ID, self::SHOPS_ID, self::PRODUCTS_ID, $shopNameStartsWith, $shopName);
+        $object = new ShopGetDataInputDto(
+            self::GROUP_ID,
+            self::SHOPS_ID,
+            self::PRODUCTS_ID,
+            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
+            FILTER_STRING_COMPARISON::STARTS_WITH->value,
+            'Shop',
+            'shop name',
+            true,
+            1,
+            100
+        );
 
         $return = $object->validate($this->validator);
 
@@ -46,9 +57,18 @@ class ShopGetDataInputDtoTest extends TestCase
     /** @test */
     public function itShouldValidateShopsIdIsNull(): void
     {
-        $shopNameStartsWith = 'jp';
-        $shopName = 'shop name';
-        $object = new ShopGetDataInputDto(self::GROUP_ID, null, self::PRODUCTS_ID, $shopNameStartsWith, $shopName);
+        $object = new ShopGetDataInputDto(
+            self::GROUP_ID,
+            null,
+            self::PRODUCTS_ID,
+            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
+            FILTER_STRING_COMPARISON::STARTS_WITH->value,
+            'Shop',
+            'shop name',
+            true,
+            1,
+            100
+        );
 
         $return = $object->validate($this->validator);
 
@@ -58,9 +78,18 @@ class ShopGetDataInputDtoTest extends TestCase
     /** @test */
     public function itShouldValidateProductsIdIsNull(): void
     {
-        $shopNameStartsWith = 'jp';
-        $shopName = 'shop name';
-        $object = new ShopGetDataInputDto(self::GROUP_ID, self::SHOPS_ID, null, $shopNameStartsWith, $shopName);
+        $object = new ShopGetDataInputDto(
+            self::GROUP_ID,
+            self::SHOPS_ID,
+            null,
+            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
+            FILTER_STRING_COMPARISON::STARTS_WITH->value,
+            'Shop',
+            'shop name',
+            true,
+            1,
+            100
+        );
 
         $return = $object->validate($this->validator);
 
@@ -68,21 +97,20 @@ class ShopGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldValidateShopNameStartsWithIsNull(): void
+    public function itShouldValidateNoFilter(): void
     {
-        $shopName = 'shop name';
-        $object = new ShopGetDataInputDto(self::GROUP_ID, self::SHOPS_ID, self::PRODUCTS_ID, null, $shopName);
-
-        $return = $object->validate($this->validator);
-
-        $this->assertEmpty($return);
-    }
-
-    /** @test */
-    public function itShouldValidateShopNameIsNull(): void
-    {
-        $shopName = null;
-        $object = new ShopGetDataInputDto(self::GROUP_ID, self::SHOPS_ID, self::PRODUCTS_ID, null, $shopName);
+        $object = new ShopGetDataInputDto(
+            self::GROUP_ID,
+            self::SHOPS_ID,
+            self::PRODUCTS_ID,
+            null,
+            null,
+            null,
+            'shop name',
+            true,
+            1,
+            100
+        );
 
         $return = $object->validate($this->validator);
 
@@ -92,9 +120,18 @@ class ShopGetDataInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailGroupIdIsNull(): void
     {
-        $shopNameStartsWith = 'jp';
-        $shopName = 'shop name';
-        $object = new ShopGetDataInputDto(null, self::SHOPS_ID, self::PRODUCTS_ID, $shopNameStartsWith, $shopName);
+        $object = new ShopGetDataInputDto(
+            null,
+            self::SHOPS_ID,
+            self::PRODUCTS_ID,
+            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
+            FILTER_STRING_COMPARISON::STARTS_WITH->value,
+            'Shop',
+            'shop name',
+            true,
+            1,
+            100
+        );
 
         $return = $object->validate($this->validator);
 
@@ -104,9 +141,18 @@ class ShopGetDataInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailGroupIdIsWrong(): void
     {
-        $shopNameStartsWith = 'jp';
-        $shopName = 'shop name';
-        $object = new ShopGetDataInputDto('wrong id', self::SHOPS_ID, self::PRODUCTS_ID, $shopNameStartsWith, $shopName);
+        $object = new ShopGetDataInputDto(
+            'wrong id',
+            self::SHOPS_ID,
+            self::PRODUCTS_ID,
+            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
+            FILTER_STRING_COMPARISON::STARTS_WITH->value,
+            'Shop',
+            'shop name',
+            true,
+            1,
+            100
+        );
 
         $return = $object->validate($this->validator);
 
@@ -116,13 +162,21 @@ class ShopGetDataInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailShopsIdAreWrong(): void
     {
-        $shopNameStartsWith = 'jp';
-        $shopName = 'shop name';
-        $shopsId = [
-            'wrong id 1',
-            'wrong id 2',
-        ];
-        $object = new ShopGetDataInputDto(self::GROUP_ID, $shopsId, self::PRODUCTS_ID, $shopNameStartsWith, $shopName);
+        $object = new ShopGetDataInputDto(
+            self::GROUP_ID,
+            [
+                'wrong id 1',
+                'wrong id 2',
+            ],
+            self::PRODUCTS_ID,
+            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
+            FILTER_STRING_COMPARISON::STARTS_WITH->value,
+            'Shop',
+            'shop name',
+            true,
+            1,
+            100
+        );
 
         $return = $object->validate($this->validator);
 
@@ -132,13 +186,21 @@ class ShopGetDataInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailProductsIdAreWrong(): void
     {
-        $shopNameStartsWith = 'jp';
-        $shopName = 'shop name';
-        $productsId = [
-            'wrong id 1',
-            'wrong id 2',
-        ];
-        $object = new ShopGetDataInputDto(self::GROUP_ID, self::SHOPS_ID, $productsId, $shopNameStartsWith, $shopName);
+        $object = new ShopGetDataInputDto(
+            self::GROUP_ID,
+            self::SHOPS_ID,
+            [
+                'wrong id 1',
+                'wrong id 2',
+            ],
+            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
+            FILTER_STRING_COMPARISON::STARTS_WITH->value,
+            'Shop',
+            'shop name',
+            true,
+            1,
+            100
+        );
 
         $return = $object->validate($this->validator);
 
@@ -146,11 +208,146 @@ class ShopGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailShopNameIsWrong(): void
+    public function itShouldFailShopFilterNameIsNull(): void
     {
-        $shopNameStartsWith = 'jp';
-        $shopName = 'shop name-';
-        $object = new ShopGetDataInputDto(self::GROUP_ID, self::SHOPS_ID, self::PRODUCTS_ID, $shopNameStartsWith, $shopName);
+        $object = new ShopGetDataInputDto(
+            self::GROUP_ID,
+            self::SHOPS_ID,
+            self::PRODUCTS_ID,
+            null,
+            FILTER_STRING_COMPARISON::STARTS_WITH->value,
+            'Shop',
+            null,
+            true,
+            1,
+            100
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['shop_filter_name' => [VALIDATION_ERRORS::CHOICE_NOT_SUCH]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailShopFilterNameIsWrong(): void
+    {
+        $object = new ShopGetDataInputDto(
+            self::GROUP_ID,
+            self::SHOPS_ID,
+            self::PRODUCTS_ID,
+            'wong name',
+            FILTER_STRING_COMPARISON::STARTS_WITH->value,
+            'Shop',
+            null,
+            true,
+            1,
+            100
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['shop_filter_name' => [VALIDATION_ERRORS::CHOICE_NOT_SUCH]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailShopNameFilterTypeIsNull(): void
+    {
+        $object = new ShopGetDataInputDto(
+            self::GROUP_ID,
+            self::SHOPS_ID,
+            self::PRODUCTS_ID,
+            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
+            null,
+            'shop',
+            'shop name',
+            true,
+            1,
+            100
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['shop_filter_type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailShopNameFilterTypeIsWrong(): void
+    {
+        $object = new ShopGetDataInputDto(
+            self::GROUP_ID,
+            self::SHOPS_ID,
+            self::PRODUCTS_ID,
+            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
+            'wrong filter',
+            'Shop',
+            'shop name',
+            true,
+            1,
+            100
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['shop_filter_type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailShopNameFilterValueIsNull(): void
+    {
+        $object = new ShopGetDataInputDto(
+            self::GROUP_ID,
+            self::SHOPS_ID,
+            self::PRODUCTS_ID,
+            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
+            FILTER_STRING_COMPARISON::STARTS_WITH->value,
+            null,
+            'shop name',
+            true,
+            1,
+            100
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['shop_filter_value' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailShopFilterValueIsWrong(): void
+    {
+        $object = new ShopGetDataInputDto(
+            self::GROUP_ID,
+            self::SHOPS_ID,
+            self::PRODUCTS_ID,
+            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
+            FILTER_STRING_COMPARISON::STARTS_WITH->value,
+            str_pad('', 51, 'p'),
+            'shop name',
+            true,
+            1,
+            100
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['shop_filter_value' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailShopValueIsWrong(): void
+    {
+        $object = new ShopGetDataInputDto(
+            self::GROUP_ID,
+            self::SHOPS_ID,
+            self::PRODUCTS_ID,
+            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
+            FILTER_STRING_COMPARISON::STARTS_WITH->value,
+            'Shop',
+            'shop name-',
+            true,
+            1,
+            100
+        );
 
         $return = $object->validate($this->validator);
 
@@ -158,32 +355,110 @@ class ShopGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailShopNameStartsWith(): void
+    public function itShouldFailPageIsNull(): void
     {
-        $shopName = 'shop name';
-        $shopNameStartsWith = str_pad('', 51, 'p');
-        $object = new ShopGetDataInputDto(self::GROUP_ID, self::SHOPS_ID, self::PRODUCTS_ID, $shopNameStartsWith, $shopName);
+        $object = new ShopGetDataInputDto(
+            self::GROUP_ID,
+            self::SHOPS_ID,
+            self::PRODUCTS_ID,
+            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
+            FILTER_STRING_COMPARISON::STARTS_WITH->value,
+            'Shop',
+            'shop name',
+            true,
+            null,
+            100
+        );
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['shop_name_starts_with' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
+        $this->assertEquals(['page' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailPageIsWrong(): void
+    {
+        $object = new ShopGetDataInputDto(
+            self::GROUP_ID,
+            self::SHOPS_ID,
+            self::PRODUCTS_ID,
+            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
+            FILTER_STRING_COMPARISON::STARTS_WITH->value,
+            'Shop',
+            'shop name',
+            true,
+            -1,
+            100
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['page' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailPageItemsIsNull(): void
+    {
+        $object = new ShopGetDataInputDto(
+            self::GROUP_ID,
+            self::SHOPS_ID,
+            self::PRODUCTS_ID,
+            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
+            FILTER_STRING_COMPARISON::STARTS_WITH->value,
+            'Shop',
+            'shop name',
+            true,
+            1,
+            null
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['page_items' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailPageItemsIsWrong(): void
+    {
+        $object = new ShopGetDataInputDto(
+            self::GROUP_ID,
+            self::SHOPS_ID,
+            self::PRODUCTS_ID,
+            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
+            FILTER_STRING_COMPARISON::STARTS_WITH->value,
+            'Shop',
+            'shop name',
+            true,
+            1,
+            -1
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['page_items' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
     }
 
     /** @test */
     public function itShouldFailAllInputsAreWrong(): void
     {
-        $shopName = 'shop name-';
-        $shopNameStartsWith = str_pad('', 51, 'p');
-        $groupId = 'wrong id';
-        $shopsId = [
-            'wrong id 1',
-            'wrong id 2',
-        ];
-        $productsId = [
-            'wrong id 1',
-            'wrong id 2',
-        ];
-        $object = new ShopGetDataInputDto($groupId, $shopsId, $productsId, $shopNameStartsWith, $shopName);
+        $object = new ShopGetDataInputDto(
+            'wrong id',
+            [
+                'wrong id 1',
+                'wrong id 2',
+            ],
+            [
+                'wrong id 1',
+                'wrong id 2',
+            ],
+            'wrong name',
+            null,
+            'Shop -',
+            'shop name-',
+            true,
+            -1,
+            101
+        );
 
         $return = $object->validate($this->validator);
 
@@ -191,8 +466,12 @@ class ShopGetDataInputDtoTest extends TestCase
                 'group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
                 'shops_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS], [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]],
                 'products_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS], [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]],
-                'shop_name_starts_with' => [VALIDATION_ERRORS::STRING_TOO_LONG],
+                'shop_filter_name' => [VALIDATION_ERRORS::CHOICE_NOT_SUCH],
+                'shop_filter_type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
+                'shop_filter_value' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
                 'shop_name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
+                'page' => [VALIDATION_ERRORS::GREATER_THAN],
+                'page_items' => [VALIDATION_ERRORS::LESS_THAN_OR_EQUAL],
             ],
             $return
         );

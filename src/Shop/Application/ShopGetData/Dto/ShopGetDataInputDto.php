@@ -4,17 +4,20 @@ declare(strict_types=1);
 
 namespace Shop\Application\ShopGetData\Dto;
 
-use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
+use Common\Domain\Model\ValueObject\Group\Filter;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\ValidationInterface;
+use Shop\Application\ShopGetData\SHOP_GET_DATA_FILTER;
 
 class ShopGetDataInputDto implements ServiceInputDtoInterface
 {
-    private const SHOP_NAME_STARTS_BY_LENGTH_MAX = VALUE_OBJECTS_CONSTRAINTS::NAME_WITH_SPACES_MAX_LENGTH;
-
     public readonly Identifier $groupId;
     /**
      * @var Identifier[]
@@ -24,14 +27,25 @@ class ShopGetDataInputDto implements ServiceInputDtoInterface
      * @var Identifier[]
      */
     public readonly array $productsId;
-    public readonly string|null $shopNameStartsWith;
     public readonly NameWithSpaces|null $shopName;
+    public readonly Filter|null $shopFilter;
+    public readonly PaginatorPage $page;
+    public readonly PaginatorPageItems $pageItems;
     public readonly bool $orderAsc;
 
-    public function __construct(string|null $groupId, array|null $shopsId, array|null $productsId, string|null $shopNameStartsWith, string|null $shopName, bool|null $orderAsc = true)
-    {
+    public function __construct(
+        string|null $groupId,
+        array|null $shopsId,
+        array|null $productsId,
+        string|null $shopNameFilterName,
+        string|null $shopNameFilterType,
+        string|null $shopNameFilterValue,
+        string|null $shopName,
+        bool|null $orderAsc,
+        int|null $page,
+        int|null $pageItems
+    ) {
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
-        $this->shopNameStartsWith = $shopNameStartsWith;
         $this->shopName = ValueObjectFactory::createNameWithSpaces($shopName);
         $this->shopsId = array_map(
             fn (string $shopId) => ValueObjectFactory::createIdentifier($shopId),
@@ -41,7 +55,15 @@ class ShopGetDataInputDto implements ServiceInputDtoInterface
             fn (string $productId) => ValueObjectFactory::createIdentifier($productId),
             $productsId ?? []
         );
+
+        $this->page = ValueObjectFactory::createPaginatorPage($page);
+        $this->pageItems = ValueObjectFactory::createPaginatorPageItems($pageItems);
         $this->orderAsc = $orderAsc ?? true;
+        $this->shopFilter = ValueObjectFactory::createFilter(
+            $shopNameFilterName ?? '',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::tryFrom($shopNameFilterType ?? '')),
+            ValueObjectFactory::createNameWithSpaces($shopNameFilterValue)
+        );
     }
 
     public function validate(ValidationInterface $validator): array
@@ -49,13 +71,9 @@ class ShopGetDataInputDto implements ServiceInputDtoInterface
         $errorList = $validator->validateValueObjectArray(['group_id' => $this->groupId]);
         $errorListShopsId = $validator->validateValueObjectArray($this->shopsId);
         $errorListProductsId = $validator->validateValueObjectArray($this->productsId);
-
-        if (null !== $this->shopNameStartsWith) {
-            $errorListShopNameStartsWith = $validator
-                ->setValue($this->shopNameStartsWith)
-                ->stringMax(self::SHOP_NAME_STARTS_BY_LENGTH_MAX)
-                ->validate();
-        }
+        $errorListPage = $validator->validateValueObject($this->page);
+        $errorListPageItems = $validator->validateValueObject($this->pageItems);
+        $errorListShopNameFilter = $this->validateFilter($validator);
 
         if (!$this->shopName->isNull()) {
             $errorListShopName = $validator->validateValueObject($this->shopName);
@@ -73,8 +91,43 @@ class ShopGetDataInputDto implements ServiceInputDtoInterface
             $errorList['products_id'] = $errorListProductsId;
         }
 
-        if (isset($errorListShopNameStartsWith) && !empty($errorListShopNameStartsWith)) {
-            $errorList['shop_name_starts_with'] = $errorListShopNameStartsWith;
+        if (!empty($errorListPage)) {
+            $errorList['page'] = $errorListPage;
+        }
+        if (!empty($errorListPageItems)) {
+            $errorList['page_items'] = $errorListPageItems;
+        }
+
+        if (!empty($errorListShopNameFilter)) {
+            $errorList = array_merge($errorList, $errorListShopNameFilter);
+        }
+
+        return $errorList;
+    }
+
+    private function validateFilter(ValidationInterface $validator): array
+    {
+        if ('' === $this->shopFilter->id
+        && $this->shopFilter->getFilter()->isNull()
+        && $this->shopFilter->isNull()) {
+            return [];
+        }
+
+        $errorList = [];
+        if (null === SHOP_GET_DATA_FILTER::tryFrom($this->shopFilter->id)) {
+            $errorList['shop_filter_name'] = [VALIDATION_ERRORS::CHOICE_NOT_SUCH];
+        }
+
+        $errorListShopNameFilter = $this->shopFilter->validate($validator);
+
+        if (!empty($errorListShopNameFilter)
+        && array_key_exists('type', $errorListShopNameFilter)) {
+            $errorList['shop_filter_type'] = $errorListShopNameFilter['type'];
+        }
+
+        if (!empty($errorListShopNameFilter)
+        && array_key_exists('value', $errorListShopNameFilter)) {
+            $errorList['shop_filter_value'] = $errorListShopNameFilter['value'];
         }
 
         return $errorList;

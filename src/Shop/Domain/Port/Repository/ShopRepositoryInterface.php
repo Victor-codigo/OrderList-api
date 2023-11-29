@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shop\Domain\Port\Repository;
 
+use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -35,5 +36,5 @@ interface ShopRepositoryInterface extends RepositoryInterface
      *
      * @throws DBNotFoundException
      */
-    public function findShopsOrFail(array $shopsId = null, Identifier $groupId = null, array $productId = null, NameWithSpaces $shopName = null, string $shopNameStartsWith = null, bool $orderAsc = true): PaginatorInterface;
+    public function findShopsOrFail(array $shopsId = null, Identifier $groupId = null, array $productId = null, NameWithSpaces $shopName = null, Filter $shopFilter = null, bool $orderAsc = true): PaginatorInterface;
 }

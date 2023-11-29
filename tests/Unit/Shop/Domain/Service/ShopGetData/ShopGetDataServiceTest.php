@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Test\Unit\Shop\Domain\Service\ShopGetData;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shop\Domain\Model\Shop;
@@ -59,29 +61,38 @@ class ShopGetDataServiceTest extends TestCase
     public function itShouldGetShopsDataOrderByNameAsc(): void
     {
         $shops = $this->getShops();
-        $shopNameStartsWith = null;
-        $shopsMaxNumber = 100;
-        $orderAsc = true;
-        $shopName = ValueObjectFactory::createNameWithSpaces('Shop name');
-        $groupId = ValueObjectFactory::createIdentifier('group id');
-        $shopsId = [
-            ValueObjectFactory::createIdentifier('shop 1 id'),
-        ];
-        $productsId = [
-            ValueObjectFactory::createIdentifier('product 1 id'),
-        ];
-        $input = new ShopGetDataDto($groupId, $shopsId, $productsId, $shopNameStartsWith, $shopName, $shopsMaxNumber, $orderAsc);
+        $input = new ShopGetDataDto(
+            ValueObjectFactory::createIdentifier('group id'),
+            [ValueObjectFactory::createIdentifier('shop 1 id')],
+            [ValueObjectFactory::createIdentifier('product 1 id')],
+            new Filter(
+                'shop_name',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+                ValueObjectFactory::createNameWithSpaces(null)
+            ),
+            ValueObjectFactory::createNameWithSpaces('Shop name'),
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(100),
+            true,
+        );
 
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with($shopsId, $groupId, $productsId, $shopName, $shopNameStartsWith, $orderAsc)
+            ->with(
+                $input->shopsId,
+                $input->groupId,
+                $input->productsId,
+                $input->shopName,
+                $input->shopFilter,
+                $input->orderAsc
+            )
             ->willReturn($this->paginator);
 
         $this->paginator
             ->expects($this->once())
             ->method('setPagination')
-            ->with(1, $shopsMaxNumber);
+            ->with($input->page->getValue(), $input->pageItems->getValue());
 
         $this->paginator
             ->expects($this->once())
@@ -101,29 +112,38 @@ class ShopGetDataServiceTest extends TestCase
     public function itShouldGetShopsDataOrderByNameDesc(): void
     {
         $shops = $this->getShops();
-        $shopNameStartsWith = null;
-        $shopsMaxNumber = 100;
-        $orderAsc = false;
-        $shopName = ValueObjectFactory::createNameWithSpaces('Shop name');
-        $groupId = ValueObjectFactory::createIdentifier('group id');
-        $shopsId = [
-            ValueObjectFactory::createIdentifier('shop 1 id'),
-        ];
-        $productsId = [
-            ValueObjectFactory::createIdentifier('product 1 id'),
-        ];
-        $input = new ShopGetDataDto($groupId, $shopsId, $productsId, $shopNameStartsWith, $shopName, $shopsMaxNumber, $orderAsc);
+        $input = new ShopGetDataDto(
+            ValueObjectFactory::createIdentifier('group id'),
+            [ValueObjectFactory::createIdentifier('shop 1 id')],
+            [ValueObjectFactory::createIdentifier('product 1 id')],
+            new Filter(
+                'shop_name',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+                ValueObjectFactory::createNameWithSpaces(null)
+            ),
+            ValueObjectFactory::createNameWithSpaces('Shop name'),
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(100),
+            false
+        );
 
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with($shopsId, $groupId, $productsId, $shopName, $shopNameStartsWith, $orderAsc)
+            ->with(
+                $input->shopsId,
+                $input->groupId,
+                $input->productsId,
+                $input->shopName,
+                $input->shopFilter,
+                $input->orderAsc
+            )
             ->willReturn($this->paginator);
 
         $this->paginator
             ->expects($this->once())
             ->method('setPagination')
-            ->with(1, $shopsMaxNumber);
+            ->with($input->page->getValue(), $input->pageItems->getValue());
 
         $this->paginator
             ->expects($this->once())
@@ -140,19 +160,85 @@ class ShopGetDataServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldGetShopsDataAllInputsAreNull(): void
+    public function itShouldGetShopsDataWithFilterOrderByNameAsc(): void
     {
-        $shopNameStartsWith = null;
-        $shopName = ValueObjectFactory::createNameWithSpaces(null);
-        $groupId = ValueObjectFactory::createIdentifier(null);
-        $shopsId = [];
-        $shopsId = [];
-        $input = new ShopGetDataDto($groupId, $shopsId, $shopsId, $shopNameStartsWith, $shopName);
+        $shops = $this->getShops();
+        $input = new ShopGetDataDto(
+            ValueObjectFactory::createIdentifier('group id'),
+            [ValueObjectFactory::createIdentifier('shop 1 id')],
+            [ValueObjectFactory::createIdentifier('product 1 id')],
+            new Filter(
+                'shop_name',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+                ValueObjectFactory::createNameWithSpaces('Shop')
+            ),
+            ValueObjectFactory::createNameWithSpaces('Shop name'),
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(100),
+            true,
+        );
 
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with(null, null, null, $shopName, null)
+            ->with(
+                $input->shopsId,
+                $input->groupId,
+                $input->productsId,
+                $input->shopName,
+                $input->shopFilter,
+                $input->orderAsc
+            )
+            ->willReturn($this->paginator);
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with($input->page->getValue(), $input->pageItems->getValue());
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayObject($shops));
+
+        $return = $this->object->__invoke($input);
+
+        $this->assertCount(count($shops), $return);
+
+        foreach ($shops as $key => $shopExpected) {
+            $this->assertShopDataIsOk($shopExpected, $return[$key]);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetShopsDataAllInputsAreNull(): void
+    {
+        $input = new ShopGetDataDto(
+            ValueObjectFactory::createIdentifier(null),
+            [],
+            [],
+            new Filter(
+                'shop_name',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+                ValueObjectFactory::createNameWithSpaces(null)
+            ),
+            ValueObjectFactory::createNameWithSpaces(null),
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(100),
+            true
+        );
+
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('findShopsOrFail')
+            ->with(
+                null,
+                null,
+                null,
+                $input->shopName,
+                $input->shopFilter,
+                true
+            )
             ->willThrowException(new DBNotFoundException());
 
         $this->paginator
@@ -170,21 +256,32 @@ class ShopGetDataServiceTest extends TestCase
     /** @test */
     public function itShouldFailGetShopsDataNoShopsFound(): void
     {
-        $shopNameStartsWith = null;
-        $shopName = ValueObjectFactory::createNameWithSpaces(null);
-        $groupId = ValueObjectFactory::createIdentifier('group id');
-        $shopsId = [
-            ValueObjectFactory::createIdentifier('shop 1 id'),
-        ];
-        $shopsId = [
-            ValueObjectFactory::createIdentifier('shop 1 id'),
-        ];
-        $input = new ShopGetDataDto($groupId, $shopsId, $shopsId, $shopNameStartsWith, $shopName);
+        $input = new ShopGetDataDto(
+            ValueObjectFactory::createIdentifier('group id'),
+            [ValueObjectFactory::createIdentifier('shop 1 id')],
+            [ValueObjectFactory::createIdentifier('shop 1 id')],
+            new Filter(
+                'shop_name',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+                ValueObjectFactory::createNameWithSpaces(null)
+            ),
+            ValueObjectFactory::createNameWithSpaces(null),
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(100),
+            true
+        );
 
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with($shopsId, $groupId, $shopsId, $shopName, $shopNameStartsWith)
+            ->with(
+                $input->shopsId,
+                $input->groupId,
+                $input->productsId,
+                $input->shopName,
+                $input->shopFilter,
+                $input->orderAsc
+            )
             ->willThrowException(new DBNotFoundException());
 
         $this->paginator

@@ -7,7 +7,9 @@ namespace Test\Unit\Shop\Adapter\Database\Orm\Doctrine\Repository;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
+use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\Persistence\ObjectManager;
@@ -266,10 +268,87 @@ class ShopRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
+    public function itShouldGetAllShopsOfAGroupFilterValueIsNull(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $shopFilter = new Filter(
+            'shop_name',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            ValueObjectFactory::createNameWithSpaces(null)
+        );
+        $return = $this->object->findShopsOrFail(null, $groupId, null, null, $shopFilter);
+
+        $this->assertCount(4, $return);
+
+        $expectedShopsId = [
+            self::SHOP_ID,
+            self::SHOP_ID_2,
+            self::SHOP_ID_3,
+            self::SHOP_ID_4,
+        ];
+
+        foreach ($return as $shop) {
+            $this->assertContains($shop->getId()->getValue(), $expectedShopsId);
+        }
+    }
+
+    /** @test */
     public function itShouldGetAllShopsOfAGroupAndThatStartsWith(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
-        $return = $this->object->findShopsOrFail(null, $groupId, null, null, 'Sho');
+        $shopFilter = new Filter(
+            'shop_name',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            ValueObjectFactory::createNameWithSpaces('Shop')
+        );
+        $return = $this->object->findShopsOrFail(null, $groupId, null, null, $shopFilter);
+
+        $this->assertCount(4, $return);
+
+        $expectedShopsId = [
+            self::SHOP_ID,
+            self::SHOP_ID_2,
+            self::SHOP_ID_3,
+            self::SHOP_ID_4,
+        ];
+
+        foreach ($return as $shop) {
+            $this->assertContains($shop->getId()->getValue(), $expectedShopsId);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetAllShopsOfAGroupAndThatEndsWith(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $shopFilter = new Filter(
+            'shop_name',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::ENDS_WITH),
+            ValueObjectFactory::createNameWithSpaces('name 1')
+        );
+        $return = $this->object->findShopsOrFail(null, $groupId, null, null, $shopFilter);
+
+        $this->assertCount(1, $return);
+
+        $expectedShopsId = [
+            self::SHOP_ID_2,
+        ];
+
+        foreach ($return as $shop) {
+            $this->assertContains($shop->getId()->getValue(), $expectedShopsId);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetAllShopsOfAGroupAndThatContains(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $shopFilter = new Filter(
+            'shop_name',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::CONTAINS),
+            ValueObjectFactory::createNameWithSpaces('name')
+        );
+        $return = $this->object->findShopsOrFail(null, $groupId, null, null, $shopFilter);
 
         $this->assertCount(4, $return);
 
@@ -288,7 +367,12 @@ class ShopRepositoryTest extends DataBaseTestCase
     /** @test */
     public function itShouldGetAllShopsThatStartsWith(): void
     {
-        $return = $this->object->findShopsOrFail(null, null, null, null, 'Sho');
+        $shopFilter = new Filter(
+            'shop_name',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            ValueObjectFactory::createNameWithSpaces('Shop')
+        );
+        $return = $this->object->findShopsOrFail(null, null, null, null, $shopFilter);
 
         $this->assertCount(4, $return);
 
@@ -331,12 +415,17 @@ class ShopRepositoryTest extends DataBaseTestCase
     public function itShouldGetShopOfAGroupWithANameShopNameStartsWithAndShopNameAreSet(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $shopFilter = new Filter(
+            'Shop name',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            ValueObjectFactory::createNameWithSpaces('Shop name 4')
+        );
         $return = $this->object->findShopsOrFail(
             null,
             $groupId,
             null,
             ValueObjectFactory::createNameWithSpaces('Shop name 3'),
-            'Shop name 4',
+            $shopFilter,
         );
 
         $this->assertCount(1, $return);

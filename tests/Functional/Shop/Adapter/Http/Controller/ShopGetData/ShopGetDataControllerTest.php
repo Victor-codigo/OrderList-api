@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Test\Functional\Shop\Adapter\Http\Controller\ShopGetData;
 
 use Common\Domain\Response\RESPONSE_STATUS;
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use Shop\Application\ShopGetData\SHOP_GET_DATA_FILTER;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
@@ -45,8 +47,12 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $groupId = self::GROUP_EXISTS_ID;
         $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
         $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
-        $shopNameStartsWith = 'Sho';
+        $shopNameFilterName = SHOP_GET_DATA_FILTER::SHOP_NAME->value;
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $shopNameFilterValue = 'Sho';
         $orderAsc = true;
+        $page = 1;
+        $pageItems = 100;
 
         $shopDataExpected = [
             'id' => self::SHOP_EXISTS_ID,
@@ -64,8 +70,12 @@ class ShopGetDataControllerTest extends WebClientTestCase
                 ."?group_id={$groupId}"
                 ."&shops_id={$shopsId}"
                 ."&products_id={$productsId}"
-                ."&shop_name_starts_with={$shopNameStartsWith}"
-                ."&order_asc={$orderAsc}",
+                ."&shop_name_filter_name={$shopNameFilterName}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&order_asc={$orderAsc}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
@@ -86,6 +96,8 @@ class ShopGetDataControllerTest extends WebClientTestCase
     {
         $groupId = self::GROUP_EXISTS_ID;
         $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
+        $page = 1;
+        $pageItems = 100;
 
         $shopDataExpected = [
                 'id' => self::SHOP_EXISTS_ID,
@@ -101,7 +113,9 @@ class ShopGetDataControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT
                 ."?group_id={$groupId}"
-                ."&shops_id={$shopsId}",
+                ."&shops_id={$shopsId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
@@ -123,6 +137,8 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $groupId = self::GROUP_EXISTS_ID;
         $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
         $orderArc = true;
+        $page = 1;
+        $pageItems = 100;
 
         $shopDataExpected = [
             [
@@ -157,7 +173,9 @@ class ShopGetDataControllerTest extends WebClientTestCase
             uri: self::ENDPOINT
                 ."?group_id={$groupId}"
                 ."&products_id={$productsId}"
-                ."&order_asc={$orderArc}",
+                ."&order_asc={$orderArc}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
@@ -178,6 +196,8 @@ class ShopGetDataControllerTest extends WebClientTestCase
     {
         $groupId = self::GROUP_EXISTS_ID;
         $shopName = 'Shop name 2';
+        $page = 1;
+        $pageItems = 100;
 
         $shopDataExpected = [
             'id' => 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
@@ -193,7 +213,9 @@ class ShopGetDataControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT
                 ."?group_id={$groupId}"
-                ."&shop_name={$shopName}",
+                ."&shop_name={$shopName}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
@@ -210,11 +232,15 @@ class ShopGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldGetShopsShopNameStartsWithOrderDesc(): void
+    public function itShouldGetShopsShopNameFilterValueOrderDesc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
-        $shopNameStartsWith = 'Sho';
+        $shopNameFilterName = SHOP_GET_DATA_FILTER::SHOP_NAME->value;
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $shopNameFilterValue = 'Sho';
         $orderAsc = false;
+        $page = 1;
+        $pageItems = 100;
 
         $shopDataExpected = [
             [
@@ -256,8 +282,12 @@ class ShopGetDataControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT
                 ."?group_id={$groupId}"
-                ."&shop_name_starts_with={$shopNameStartsWith}"
-                ."&order_asc={$orderAsc}",
+                ."&shop_name_filter_name={$shopNameFilterName}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&order_asc={$orderAsc}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
@@ -279,6 +309,8 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $groupId = self::GROUP_EXISTS_ID;
         $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
         $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
+        $page = 1;
+        $pageItems = 100;
 
         $shopDataExpected = [
             'id' => self::SHOP_EXISTS_ID,
@@ -295,7 +327,9 @@ class ShopGetDataControllerTest extends WebClientTestCase
             uri: self::ENDPOINT
                 ."?group_id={$groupId}"
                 ."&shops_id={$shopsId}"
-                ."&products_id={$productsId}",
+                ."&products_id={$productsId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
@@ -316,7 +350,11 @@ class ShopGetDataControllerTest extends WebClientTestCase
     {
         $groupId = self::GROUP_EXISTS_ID;
         $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
-        $shopNameStartsWith = 'Shop name 2';
+        $shopNameFilterName = SHOP_GET_DATA_FILTER::SHOP_NAME->value;
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $shopNameFilterValue = 'Shop name 2';
+        $page = 1;
+        $pageItems = 100;
 
         $shopDataExpected = [
             'id' => self::SHOP_EXISTS_ID_2,
@@ -333,7 +371,11 @@ class ShopGetDataControllerTest extends WebClientTestCase
             uri: self::ENDPOINT
                 ."?group_id={$groupId}"
                 ."&products_id={$productsId}"
-                ."&shop_name={$shopNameStartsWith}",
+                ."&shop_name_filter_name={$shopNameFilterName}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
@@ -354,8 +396,12 @@ class ShopGetDataControllerTest extends WebClientTestCase
     {
         $groupId = self::GROUP_EXISTS_ID;
         $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
-        $shopNameStartsWith = 'Sho';
+        $shopNameFilterName = SHOP_GET_DATA_FILTER::SHOP_NAME->value;
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $shopNameFilterValue = 'Sho';
         $orderAsc = true;
+        $page = 1;
+        $pageItems = 100;
 
         $shopDataExpected = [
             [
@@ -390,8 +436,12 @@ class ShopGetDataControllerTest extends WebClientTestCase
             uri: self::ENDPOINT
                 ."?group_id={$groupId}"
                 ."&products_id={$productsId}"
-                ."&shop_name_starts_with={$shopNameStartsWith}"
-                ."&order_asc={$orderAsc}",
+                ."&shop_name_filter_name={$shopNameFilterName}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&order_asc={$orderAsc}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
@@ -408,17 +458,65 @@ class ShopGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailNoShopsFoundWinShopName(): void
+    public function itShouldGetShopsNoFilter(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
-        $shopName = 'shop name not exists';
+        $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
+        $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
+        $orderAsc = true;
+        $page = 1;
+        $pageItems = 100;
+
+        $shopDataExpected = [
+            'id' => self::SHOP_EXISTS_ID,
+            'group_id' => self::GROUP_EXISTS_ID,
+            'name' => 'Shop name 1',
+            'description' => 'Dolorem omnis accusamus iusto qui rerum eligendi. Ipsa omnis autem totam est vero qui. Voluptas quisquam cumque dolorem ut debitis recusandae veniam. Quam repellendus est sed enim doloremque eum eius. Ut est odio est. Voluptates dolorem et nisi voluptatum. Voluptas vitae deserunt mollitia consequuntur eos. Suscipit recusandae hic cumque voluptatem officia. Exercitationem quibusdam ea qui laudantium est non quis. Vero dicta et voluptas explicabo.',
+            'image' => null,
+            'created_on' => '',
+        ];
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
                 ."?group_id={$groupId}"
-                ."&shop_name={$shopName}",
+                ."&shops_id={$shopsId}"
+                ."&products_id={$productsId}"
+                ."&order_asc={$orderAsc}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [0], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Shops data', $responseContent->message);
+
+        foreach ($responseContent->data as $shopData) {
+            $this->assertShopDataIsOk($shopDataExpected, $shopData);
+        }
+    }
+
+    /** @test */
+    public function itShouldFailNoShopsFoundWinShopName(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $shopName = 'shop name not exists';
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shop_name={$shopName}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
@@ -433,7 +531,11 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $groupId = self::GROUP_EXISTS_ID;
         $shopsId = implode(',', ['f7d3f835-9c72-4dda-821c-73e4f3e878a5']);
         $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
-        $shopNameStartsWith = 'Ma';
+        $shopNameFilterName = SHOP_GET_DATA_FILTER::SHOP_NAME->value;
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $shopNameFilterValue = 'Ma';
+        $page = 1;
+        $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -442,7 +544,11 @@ class ShopGetDataControllerTest extends WebClientTestCase
                 ."?group_id={$groupId}"
                 ."&shops_id={$shopsId}"
                 ."&products_id={$productsId}"
-                ."&shop_name_starts_with={$shopNameStartsWith}",
+                ."&shop_name_filter_name={$shopNameFilterName}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
@@ -457,7 +563,11 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $groupId = self::GROUP_EXISTS_ID;
         $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
         $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
-        $shopNameStartsWith = 'Sho';
+        $shopNameFilterName = SHOP_GET_DATA_FILTER::SHOP_NAME->value;
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $shopNameFilterValue = 'Sho';
+        $page = 1;
+        $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedAdmin();
         $client->request(
@@ -466,7 +576,11 @@ class ShopGetDataControllerTest extends WebClientTestCase
                 ."?group_id={$groupId}"
                 ."&shops_id={$shopsId}"
                 ."&products_id={$productsId}"
-                ."&shop_name_starts_with={$shopNameStartsWith}",
+                ."&shop_name_filter_name={$shopNameFilterName}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
@@ -484,7 +598,11 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $groupId = null;
         $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
         $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
-        $shopNameStartsWith = 'Sho';
+        $shopNameFilterName = SHOP_GET_DATA_FILTER::SHOP_NAME->value;
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $shopNameFilterValue = 'Sho';
+        $page = 1;
+        $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -493,7 +611,11 @@ class ShopGetDataControllerTest extends WebClientTestCase
                 ."?group_id={$groupId}"
                 ."&shops_id={$shopsId}"
                 ."&products_id={$productsId}"
-                ."&shop_name_starts_with={$shopNameStartsWith}",
+                ."&shop_name_filter_name={$shopNameFilterName}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
@@ -507,12 +629,16 @@ class ShopGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailProducstIdIsWrong(): void
+    public function itShouldFailShopsIdIsWrong(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
         $shopsId = implode(',', ['wong id']);
         $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
-        $shopNameStartsWith = 'Ma';
+        $shopNameFilterName = SHOP_GET_DATA_FILTER::SHOP_NAME->value;
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $shopNameFilterValue = 'Sho';
+        $page = 1;
+        $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -521,7 +647,11 @@ class ShopGetDataControllerTest extends WebClientTestCase
                 ."?group_id={$groupId}"
                 ."&shops_id={$shopsId}"
                 ."&products_id={$productsId}"
-                ."&shop_name_starts_with={$shopNameStartsWith}",
+                ."&shop_name_filter_name={$shopNameFilterName}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
@@ -540,7 +670,11 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $groupId = self::GROUP_EXISTS_ID;
         $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
         $productsId = implode(',', ['wrong id']);
-        $shopNameStartsWith = 'Ma';
+        $shopNameFilterName = SHOP_GET_DATA_FILTER::SHOP_NAME->value;
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $shopNameFilterValue = 'Ma';
+        $page = 1;
+        $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -549,7 +683,11 @@ class ShopGetDataControllerTest extends WebClientTestCase
                 ."?group_id={$groupId}"
                 ."&shops_id={$shopsId}"
                 ."&products_id={$productsId}"
-                ."&shop_name_starts_with={$shopNameStartsWith}",
+                ."&shop_name_filter_name={$shopNameFilterName}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
@@ -569,6 +707,8 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
         $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
         $shopName = 'shop name-';
+        $page = 1;
+        $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -577,7 +717,9 @@ class ShopGetDataControllerTest extends WebClientTestCase
                 ."?group_id={$groupId}"
                 ."&shops_id={$shopsId}"
                 ."&products_id={$productsId}"
-                ."&shop_name={$shopName}",
+                ."&shop_name={$shopName}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
@@ -591,12 +733,15 @@ class ShopGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailShopNameStartsWithIsToolLong(): void
+    public function itShouldFailShopNameFilterValueIsNull(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
         $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
         $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
-        $shopNameStartsWith = str_pad('', 51, 'p');
+        $shopNameFilterName = SHOP_GET_DATA_FILTER::SHOP_NAME->value;
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $page = 1;
+        $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -605,16 +750,319 @@ class ShopGetDataControllerTest extends WebClientTestCase
                 ."?group_id={$groupId}"
                 ."&shops_id={$shopsId}"
                 ."&products_id={$productsId}"
-                ."&shop_name_starts_with={$shopNameStartsWith}",
+                ."&shop_name_filter_name={$shopNameFilterName}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['shop_name_starts_with'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['shop_filter_value'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertSame(['string_too_long'], $responseContent->errors->shop_name_starts_with);
+        $this->assertSame(['not_blank', 'not_null'], $responseContent->errors->shop_filter_value);
+    }
+
+    /** @test */
+    public function itShouldFailShopNameFilterValueIsToolLong(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
+        $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
+        $shopNameFilterName = SHOP_GET_DATA_FILTER::SHOP_NAME->value;
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $shopNameFilterValue = str_pad('', 51, 'p');
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shops_id={$shopsId}"
+                ."&products_id={$productsId}"
+                ."&shop_name_filter_name={$shopNameFilterName}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['shop_filter_value'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertSame(['string_too_long'], $responseContent->errors->shop_filter_value);
+    }
+
+    /** @test */
+    public function itShouldFailShopNameShopNameFilterTypeIsNull(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $shopNameFilterName = SHOP_GET_DATA_FILTER::SHOP_NAME->value;
+        $shopNameFilterValue = 'Sho';
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shop_name_filter_name={$shopNameFilterName}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['shop_filter_type'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertSame(['not_blank', 'not_null'], $responseContent->errors->shop_filter_type);
+    }
+
+    /** @test */
+    public function itShouldFailShopNameShopNameFilterTypeIsWrong(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $shopNameFilterName = SHOP_GET_DATA_FILTER::SHOP_NAME->value;
+        $shopNameFilterType = 'wrong filter type';
+        $shopNameFilterValue = 'Sho';
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shop_name_filter_name={$shopNameFilterName}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['shop_filter_type'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertSame(['not_blank', 'not_null'], $responseContent->errors->shop_filter_type);
+    }
+
+    /** @test */
+    public function itShouldFailShopNameShopNameFilterNameIsNull(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $shopNameFilterValue = 'Sho';
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['shop_filter_name'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertSame(['choice_not_such'], $responseContent->errors->shop_filter_name);
+    }
+
+    /** @test */
+    public function itShouldFailShopNameShopNameFilterNameIsWrong(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $shopNameFilterName = 'wrong filter name';
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $shopNameFilterValue = 'Sho';
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shop_name_filter_name={$shopNameFilterName}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['shop_filter_name'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertSame(['choice_not_such'], $responseContent->errors->shop_filter_name);
+    }
+
+    /** @test */
+    public function itShouldFailPageIsNull(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
+        $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
+        $shopNameFilterName = SHOP_GET_DATA_FILTER::SHOP_NAME->value;
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $shopNameFilterValue = str_pad('', 51, 'p');
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shops_id={$shopsId}"
+                ."&products_id={$productsId}"
+                ."&shop_name_filter_name={$shopNameFilterName}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['page'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertSame(['greater_than'], $responseContent->errors->page);
+    }
+
+    /** @test */
+    public function itShouldFailPageIsWrong(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
+        $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
+        $shopNameFilterName = SHOP_GET_DATA_FILTER::SHOP_NAME->value;
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $shopNameFilterValue = str_pad('', 51, 'p');
+        $page = -1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shops_id={$shopsId}"
+                ."&products_id={$productsId}"
+                ."&shop_name_filter_name={$shopNameFilterName}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['page'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertSame(['greater_than'], $responseContent->errors->page);
+    }
+
+    /** @test */
+    public function itShouldFailPageItemsIsNull(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
+        $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
+        $shopNameFilterName = SHOP_GET_DATA_FILTER::SHOP_NAME->value;
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $shopNameFilterValue = str_pad('', 51, 'p');
+        $page = 1;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shops_id={$shopsId}"
+                ."&products_id={$productsId}"
+                ."&shop_name_filter_name={$shopNameFilterName}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&page={$page}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['page_items'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertSame(['greater_than'], $responseContent->errors->page_items);
+    }
+
+    /** @test */
+    public function itShouldFailPageItemsIsWrong(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
+        $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
+        $shopNameFilterName = SHOP_GET_DATA_FILTER::SHOP_NAME->value;
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $shopNameFilterValue = str_pad('', 51, 'p');
+        $page = 1;
+        $pageItems = -1;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shops_id={$shopsId}"
+                ."&products_id={$productsId}"
+                ."&shop_name_filter_name={$shopNameFilterName}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['page_items'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertSame(['greater_than'], $responseContent->errors->page_items);
     }
 }

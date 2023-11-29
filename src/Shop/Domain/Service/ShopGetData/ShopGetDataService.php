@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Shop\Domain\Service\ShopGetData;
 
+use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Shop\Domain\Model\Shop;
 use Shop\Domain\Port\Repository\ShopRepositoryInterface;
@@ -21,35 +23,32 @@ class ShopGetDataService
      */
     public function __invoke(ShopGetDataDto $input): array
     {
-        $shops = $this->shopRepository->findShopsOrFail(
+        $shopsPaginator = $this->shopRepository->findShopsOrFail(
             empty($input->shopsId) ? null : $input->shopsId,
             $input->groupId->isNull() ? null : $input->groupId,
             empty($input->productsId) ? null : $input->productsId,
             $input->shopName,
-            empty($input->shopNameStartsWith) ? null : $input->shopNameStartsWith,
+            $input->shopFilter,
             $input->orderAsc
         );
 
-        return $this->getShopsData($shops, $input->shopsMaxNumber);
+        return $this->getShopsData($shopsPaginator, $input->page, $input->pageItems);
     }
 
-    private function getShopsData(PaginatorInterface $shops, int $shopsMaxNumber): array
+    private function getShopsData(PaginatorInterface $shopsPaginator, PaginatorPage $page, PaginatorPageItems $pageItems): array
     {
-        $shops->setPagination(1, $shopsMaxNumber);
-        $shopsData = [];
+        $shopsPaginator->setPagination($page->getValue(), $pageItems->getValue());
 
-        /** @var Shop $shop */
-        foreach ($shops as $shop) {
-            $shopsData[] = [
+        return array_map(
+            fn (Shop $shop) => [
                 'id' => $shop->getId()->getValue(),
                 'group_id' => $shop->getGroupId()->getValue(),
                 'name' => $shop->getName()->getValue(),
                 'description' => $shop->getDescription()->getValue(),
                 'image' => $shop->getImage()->getValue(),
                 'created_on' => $shop->getCreatedOn()->format('Y-m-d H:i:s'),
-            ];
-        }
-
-        return $shopsData;
+            ],
+            iterator_to_array($shopsPaginator)
+        );
     }
 }

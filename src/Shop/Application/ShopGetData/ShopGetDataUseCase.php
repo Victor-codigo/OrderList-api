@@ -43,7 +43,7 @@ class ShopGetDataUseCase extends ServiceBase
             throw ShopGetDataValidateGroupAndUserException::fromMessage('You have not permissions');
         } catch (DBNotFoundException) {
             throw ShopGetDataShopsNotFoundException::fromMessage('No shops found');
-        } catch (\Throwable $e) {
+        } catch (\Throwable) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }
@@ -59,7 +59,16 @@ class ShopGetDataUseCase extends ServiceBase
 
     private function createShopGetDataDto(ShopGetDataInputDto $input): ShopGetDataDto
     {
-        return new ShopGetDataDto($input->groupId, $input->shopsId, $input->productsId, $input->shopNameStartsWith, $input->shopName, 100, $input->orderAsc);
+        return new ShopGetDataDto(
+            $input->groupId,
+            $input->shopsId,
+            $input->productsId,
+            $input->shopFilter,
+            $input->shopName,
+            $input->page,
+            $input->pageItems,
+            $input->orderAsc
+        );
     }
 
     private function createShopGetDataOutputDto(array $shopsData): ShopGetDataOutputDto

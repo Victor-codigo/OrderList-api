@@ -7,9 +7,11 @@ namespace Shop\Adapter\Http\Controller\ShopGetData;
 use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use OpenApi\Attributes as OA;
 use Shop\Adapter\Http\Controller\ShopGetData\Dto\ShopGetDataRequestDto;
 use Shop\Application\ShopGetData\Dto\ShopGetDataInputDto;
+use Shop\Application\ShopGetData\SHOP_GET_DATA_FILTER;
 use Shop\Application\ShopGetData\ShopGetDataUseCase;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,6 +30,22 @@ use Symfony\Component\HttpFoundation\Response;
             schema: new OA\Schema(type: 'string')
         ),
         new OA\Parameter(
+            name: 'page',
+            in: 'query',
+            required: true,
+            description: 'Page number',
+            example: 1,
+            schema: new OA\Schema(type: 'int')
+        ),
+        new OA\Parameter(
+            name: 'page_items',
+            in: 'query',
+            required: true,
+            description: 'Number of items per page',
+            example: 100,
+            schema: new OA\Schema(type: 'int')
+        ),
+        new OA\Parameter(
             name: 'shops_id',
             in: 'query',
             required: false,
@@ -41,14 +59,6 @@ use Symfony\Component\HttpFoundation\Response;
             required: false,
             description: 'Products id separated by comas',
             example: '5483539d-52f7-4aa9-a91c-1aae11c3d17f,428e3645-91fb-4239-8b52-b49a056eb2e7',
-            schema: new OA\Schema(type: 'string')
-        ),
-        new OA\Parameter(
-            name: 'shop_name_starts_with',
-            in: 'query',
-            required: false,
-            description: 'String for what the shop name starts',
-            example: 'Ju',
             schema: new OA\Schema(type: 'string')
         ),
         new OA\Parameter(
@@ -66,6 +76,41 @@ use Symfony\Component\HttpFoundation\Response;
             description: 'TRUE if you want to order by asc, otherwise FALSE',
             example: 'true',
             schema: new OA\Schema(type: 'boolean')
+        ),
+        new OA\Parameter(
+            name: 'shop_name_filter_name',
+            in: 'query',
+            required: false,
+            description: 'Name of the filter to apply. It is mandatory to pass three shop_name_filter parameters, to apply filter',
+            example: SHOP_GET_DATA_FILTER::SHOP_NAME,
+            schema: new OA\Schema(
+                type: 'string',
+                enum: [SHOP_GET_DATA_FILTER::SHOP_NAME]
+            ),
+        ),
+        new OA\Parameter(
+            name: 'shop_name_filter_type',
+            in: 'query',
+            required: false,
+            description: 'Type of the filter to apply. It is mandatory to pass three shop_name_filter parameters, to apply filter',
+            example: FILTER_STRING_COMPARISON::STARTS_WITH,
+            schema: new OA\Schema(
+                type: 'string',
+                enum: [
+                    FILTER_STRING_COMPARISON::STARTS_WITH,
+                    FILTER_STRING_COMPARISON::ENDS_WITH,
+                    FILTER_STRING_COMPARISON::CONTAINS,
+                    FILTER_STRING_COMPARISON::EQUALS,
+                ]
+            ),
+        ),
+        new OA\Parameter(
+            name: 'shop_name_filter_value',
+            in: 'query',
+            required: false,
+            description: 'Value of the filter to apply. It is mandatory to pass three shop_name_filter parameters, to apply filter',
+            example: 'Shop',
+            schema: new OA\Schema(type: 'string'),
         ),
     ],
     responses: [
@@ -102,10 +147,14 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<permissions|group_id|shops_id|shops_id|shop_name_starts_with, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<permissions|group_id|shops_id|products_id|shop_name|shop_filter_value|shop_filter_type|shop_filter_name|page|page_items, string|array>')),
                     ]
                 )
             )
+        ),
+        new OA\Response(
+            response: Response::HTTP_NO_CONTENT,
+            description: 'Shops not be found',
         ),
     ]
 )]
@@ -119,15 +168,47 @@ class ShopGetDataController extends AbstractController
     public function __invoke(ShopGetDataRequestDto $request): JsonResponse
     {
         $shops = $this->shopGetDataUseCase->__invoke(
-            $this->createShopGetDataInputDto($request->groupId, $request->shopsId, $request->productsId, $request->shopNameStartsWith, $request->shopName, $request->orderArc)
+            $this->createShopGetDataInputDto(
+                $request->groupId,
+                $request->shopsId,
+                $request->productsId,
+                $request->shopNameFilterName,
+                $request->shopNameFilterType,
+                $request->shopNameFilterValue,
+                $request->shopName,
+                $request->orderArc,
+                $request->page,
+                $request->pageItems
+            )
         );
 
         return $this->createResponse($shops);
     }
 
-    private function createShopGetDataInputDto(string|null $groupId, array|null $shopsId, array|null $productsId, string|null $shopNameStartsWith, string|null $shopName, bool|null $orderAsc): ShopGetDataInputDto
-    {
-        return new ShopGetDataInputDto($groupId, $shopsId, $productsId, $shopNameStartsWith, $shopName, $orderAsc);
+    private function createShopGetDataInputDto(
+        string|null $groupId,
+        array|null $shopsId,
+        array|null $productsId,
+        string|null $shopNameFilterName,
+        string|null $shopNameFilterType,
+        string|int|float|null $shopNameFilterValue,
+        string|null $shopName,
+        bool|null $orderAsc,
+        int|null $page,
+        int|null $pageItems,
+    ): ShopGetDataInputDto {
+        return new ShopGetDataInputDto(
+            $groupId,
+            $shopsId,
+            $productsId,
+            $shopNameFilterName,
+            $shopNameFilterType,
+            $shopNameFilterValue,
+            $shopName,
+            $orderAsc,
+            $page,
+            $pageItems
+        );
     }
 
     private function createResponse(ApplicationOutputInterface $shops): JsonResponse
