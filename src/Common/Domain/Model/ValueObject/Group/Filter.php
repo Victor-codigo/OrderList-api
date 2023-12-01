@@ -6,6 +6,7 @@ namespace Common\Domain\Model\ValueObject\Group;
 
 use Common\Domain\Model\ValueObject\Object\Filter\ValueObjectFilterInterface;
 use Common\Domain\Model\ValueObject\ValueObjectBase;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 
 class Filter
@@ -17,9 +18,17 @@ class Filter
     ) {
     }
 
+    /**
+     * @return array<{
+     *   name: VALIDATION_ERRORS[]
+     *   type: VALIDATION_ERRORS[]
+     *   value: VALIDATION_ERRORS[]
+     * }>
+     */
     public function validate(ValidationInterface $validator): array
     {
-        $errorList = [];
+        $errorList = '' !== $this->id ? [] : ['name' => [VALIDATION_ERRORS::NOT_BLANK]];
+
         $errorListType = $validator->validateValueObject($this->type);
         $errorListValue = $validator->validateValueObject($this->value);
 

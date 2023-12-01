@@ -38,6 +38,20 @@ class FilterTest extends TestCase
     }
 
     /** @test */
+    public function itShouldFailNameIsEmpty(): void
+    {
+        $object = new Filter(
+            '',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            ValueObjectFactory::createName('Peter')
+        );
+
+        $return = $object->validate($this->validation);
+
+        $this->assertEquals(['name' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
+    }
+
+    /** @test */
     public function itShouldFailTypeIsNull(): void
     {
         $object = new Filter(
