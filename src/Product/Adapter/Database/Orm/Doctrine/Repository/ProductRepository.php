@@ -8,6 +8,7 @@ use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
+use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -95,23 +96,19 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
      *
      * @throws DBNotFoundException
      */
-    public function findProductsOrFail(array $productsId = null, Identifier $groupId = null, array $shopsId = null, NameWithSpaces $productName = null, string $productNameStartsWith = null): PaginatorInterface
+    public function findProductsOrFail(Identifier $groupId, array $productsId = null, array $shopsId = null, bool $orderAsc = true): PaginatorInterface
     {
         $query = $this->entityManager
             ->createQueryBuilder()
             ->select('product')
-            ->from(Product::class, 'product');
+            ->from(Product::class, 'product')
+            ->where('product.groupId = :groupId')
+            ->setParameter('groupId', $groupId);
 
         if (null !== $productsId) {
             $query
-                ->where('product.id IN (:productId)')
+                ->andWhere('product.id IN (:productId)')
                 ->setParameter('productId', $productsId);
-        }
-
-        if (null !== $groupId) {
-            $query
-                ->andWhere('product.groupId = :groupId')
-                ->setParameter('groupId', $groupId);
         }
 
         if (null !== $shopsId) {
@@ -122,22 +119,72 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
                 ->setParameter('shopId', $shopsId);
         }
 
-        if (null !== $productNameStartsWith && (null === $productName || $productName->isNull())) {
-            $query
-                ->andWhere('product.name LIKE :productNameStartsWith')
-                ->setParameter('productNameStartsWith', "{$productNameStartsWith}%");
-        } elseif (null !== $productName && !$productName->isNull()) {
-            $query
-                ->andWhere('product.name = :productName')
-                ->setParameter('productName', $productName);
-        }
+        $query->orderBy('product.name', $orderAsc ? 'ASC' : 'DESC');
 
-        $paginator = $this->paginator->createPaginator($query);
+        return $this->queryPaginationOrFail($query);
+    }
 
-        if (0 === $paginator->getItemsTotal()) {
-            throw DBNotFoundException::fromMessage('Products not found');
-        }
+    public function findProductsByProductNameOrFail(Identifier $groupId, NameWithSpaces $productName, bool $orderAsc = true): PaginatorInterface
+    {
+        $productEntity = Product::class;
+        $orderBy = $orderAsc ? 'ASC' : 'DESC';
+        $dql = <<<DQL
 
-        return $paginator;
+        SELECT product
+        FROM {$productEntity} product
+        WHERE product.groupId = :groupId
+            AND product.name = :productName
+        ORDER BY product.name {$orderBy}
+
+        DQL;
+
+        return $this->dqlPaginationOrFail($dql, [
+            'groupId' => $groupId,
+            'productName' => $productName,
+        ]);
+    }
+
+    public function findProductsByProductNameFilterOrFail(Identifier $groupId, Filter $productNameFilter, bool $orderAsc = true): PaginatorInterface
+    {
+        $productEntity = Product::class;
+        $orderBy = $orderAsc ? 'ASC' : 'DESC';
+        $dql = <<<DQL
+
+        SELECT product
+        FROM {$productEntity} product
+        WHERE product.groupId = :groupId
+            AND product.name LIKE :productNameFilter
+        ORDER BY product.name {$orderBy}
+
+        DQL;
+
+        return $this->dqlPaginationOrFail($dql, [
+            'groupId' => $groupId,
+            'productNameFilter' => $productNameFilter->getValueWithFilter(),
+        ]);
+    }
+
+    public function findProductsByShopNameFilterOrFail(Identifier $groupId, Filter $shopNameFilter, bool $orderAsc = true): PaginatorInterface
+    {
+        $productEntity = Product::class;
+        $productShopEntity = ProductShop::class;
+        $shopEntity = Shop::class;
+        $orderBy = $orderAsc ? 'ASC' : 'DESC';
+        $dql = <<<DQL
+
+        SELECT product
+        FROM {$productEntity} product
+            LEFT JOIN {$productShopEntity} productShop WITH product.id = productShop.productId
+            LEFT JOIN {$shopEntity} shop WITH productShop.shopId = shop.id
+        WHERE product.groupId = :groupId
+            AND shop.name LIKE :shopNameFilter
+        ORDER BY product.name {$orderBy}
+
+        DQL;
+
+        return $this->dqlPaginationOrFail($dql, [
+            'groupId' => $groupId,
+            'shopNameFilter' => $shopNameFilter->getValueWithFilter(),
+        ]);
     }
 }

@@ -7,7 +7,9 @@ namespace Test\Unit\Product\Adapter\Database\Orm\Doctrine\Repository;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
+use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\Persistence\ObjectManager;
@@ -177,29 +179,11 @@ class ProductRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldGetAllProducts(): void
-    {
-        $productIds = [
-            ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
-            ValueObjectFactory::createIdentifier(self::PRODUCT_ID_2),
-            ValueObjectFactory::createIdentifier(self::PRODUCT_ID_3),
-        ];
-
-        $return = $this->object->findProductsOrFail($productIds);
-
-        $this->assertCount(3, $return);
-
-        foreach ($return as $product) {
-            $this->assertContainsEquals($product->getId(), $productIds);
-        }
-    }
-
-    /** @test */
-    public function itShouldGetAllProductsOfAGroup(): void
+    public function itShouldGetAllProductsOfAGroupOrderAsc(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
 
-        $return = $this->object->findProductsOrFail(null, $groupId);
+        $return = $this->object->findProductsOrFail($groupId);
 
         $this->assertCount(4, $return);
 
@@ -209,106 +193,55 @@ class ProductRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldGetAllProductsOfAShop(): void
+    public function itShouldGetAllProductsOfAGroupProductsIdOrderAsc(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $productIds = [
+            ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
+            ValueObjectFactory::createIdentifier(self::PRODUCT_ID_2),
+            ValueObjectFactory::createIdentifier(self::PRODUCT_ID_3),
+        ];
+
+        $return = $this->object->findProductsOrFail($groupId, $productIds);
+
+        $this->assertCount(3, $return);
+
+        foreach ($return as $product) {
+            $this->assertContainsEquals($product->getId(), $productIds);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetAllProductsOfAGroupProductsIdOrderDesc(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $productIds = [
+            ValueObjectFactory::createIdentifier(self::PRODUCT_ID_3),
+            ValueObjectFactory::createIdentifier(self::PRODUCT_ID_2),
+            ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
+        ];
+
+        $return = $this->object->findProductsOrFail(groupId: $groupId, productsId: $productIds, orderAsc: false);
+
+        $this->assertCount(3, $return);
+
+        foreach ($return as $product) {
+            $this->assertContainsEquals($product->getId(), $productIds);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetAllProductsOfAGroupAndAShopsIdOrderAsc(): void
     {
         $shopId = ValueObjectFactory::createIdentifier(self::SHOP_ID);
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
 
-        $return = $this->object->findProductsOrFail(null, null, [$shopId]);
+        $return = $this->object->findProductsOrFail($groupId, null, [$shopId]);
 
         $this->assertCount(2, $return);
 
         $expectedProductsId = [
             self::PRODUCT_ID,
-            self::PRODUCT_ID_4,
-        ];
-
-        foreach ($return as $product) {
-            $this->assertContains($product->getId()->getValue(), $expectedProductsId);
-        }
-    }
-
-    /** @test */
-    public function itShouldGetAllProductsOfAGroupAndAShop(): void
-    {
-        $shopId = ValueObjectFactory::createIdentifier(self::SHOP_ID);
-        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
-
-        $return = $this->object->findProductsOrFail(null, $groupId, [$shopId]);
-
-        $this->assertCount(2, $return);
-
-        $expectedProductsId = [
-            self::PRODUCT_ID,
-            self::PRODUCT_ID_4,
-        ];
-
-        foreach ($return as $product) {
-            $this->assertContains($product->getId()->getValue(), $expectedProductsId);
-        }
-    }
-
-    /** @test */
-    public function itShouldGetProductsOfAGroupAndWithName(): void
-    {
-        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
-        $productName = ValueObjectFactory::createNameWithSpaces('Juan Carlos');
-        $return = $this->object->findProductsOrFail(null, $groupId, null, $productName);
-
-        $this->assertCount(1, $return);
-
-        $expectedProductsId = [
-            self::PRODUCT_ID_2,
-        ];
-
-        foreach ($return as $product) {
-            $this->assertContains($product->getId()->getValue(), $expectedProductsId);
-        }
-    }
-
-    /** @test */
-    public function itShouldGetAllProductsOfAGroupAndThatStartsWith(): void
-    {
-        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
-        $return = $this->object->findProductsOrFail(null, $groupId, null, null, 'Ju');
-
-        $this->assertCount(2, $return);
-
-        $expectedProductsId = [
-            self::PRODUCT_ID_2,
-            self::PRODUCT_ID_4,
-        ];
-
-        foreach ($return as $product) {
-            $this->assertContains($product->getId()->getValue(), $expectedProductsId);
-        }
-    }
-
-    /** @test */
-    public function itShouldGetProductWithName(): void
-    {
-        $productName = ValueObjectFactory::createNameWithSpaces('Juan Carlos');
-        $return = $this->object->findProductsOrFail(null, null, null, $productName);
-
-        $this->assertCount(1, $return);
-
-        $expectedProductsId = [
-            self::PRODUCT_ID_2,
-        ];
-
-        foreach ($return as $product) {
-            $this->assertContains($product->getId()->getValue(), $expectedProductsId);
-        }
-    }
-
-    /** @test */
-    public function itShouldGetAllProductsThatStartsWith(): void
-    {
-        $return = $this->object->findProductsOrFail(null, null, null, null, 'Ju');
-
-        $this->assertCount(2, $return);
-
-        $expectedProductsId = [
-            self::PRODUCT_ID_2,
             self::PRODUCT_ID_4,
         ];
 
@@ -320,29 +253,179 @@ class ProductRepositoryTest extends DataBaseTestCase
     /** @test */
     public function itShouldFailGettingAllProductsOfAGroupNotFound(): void
     {
-        $shopId = ValueObjectFactory::createIdentifier(self::SHOP_ID);
         $groupId = ValueObjectFactory::createIdentifier('fc4f5962-02d1-4d80-b3ae-8aeffbcb6268');
 
         $this->expectException(DBNotFoundException::class);
-        $this->object->findProductsOrFail(null, $groupId, [$shopId]);
+        $this->object->findProductsOrFail($groupId);
     }
 
     /** @test */
-    public function itShouldFailGettingAllProductsOfAShopNotFound(): void
+    public function itShouldGetProductsOfAGroupAndProductNameOrderAsc(): void
     {
-        $shopId = ValueObjectFactory::createIdentifier('fc4f5962-02d1-4d80-b3ae-8aeffbcb6268');
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $productName = ValueObjectFactory::createNameWithSpaces('Juanola');
+        $return = $this->object->findProductsByProductNameOrFail($groupId, $productName);
 
-        $this->expectException(DBNotFoundException::class);
-        $this->object->findProductsOrFail(null, $groupId, [$shopId]);
+        $this->assertCount(1, $return);
+
+        $expectedProductsId = [
+            self::PRODUCT_ID_4,
+        ];
+
+        foreach ($return as $product) {
+            $this->assertContains($product->getId()->getValue(), $expectedProductsId);
+        }
     }
 
     /** @test */
-    public function itShouldFailGettingProductsThereAreNot(): void
+    public function itShouldGetProductsOfAGroupWithProductNameOrderDesc(): void
     {
-        $productId = ValueObjectFactory::createIdentifier('product id');
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $productName = ValueObjectFactory::createNameWithSpaces('Juanola');
+        $return = $this->object->findProductsByProductNameOrFail($groupId, $productName, false);
+
+        $this->assertCount(1, $return);
+
+        $expectedProductsId = [
+            self::PRODUCT_ID_4,
+        ];
+
+        foreach ($return as $product) {
+            $this->assertContains($product->getId()->getValue(), $expectedProductsId);
+        }
+    }
+
+    /** @test */
+    public function itShouldFailGettingProductsOfAGroupAndProductNameNotFound(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $productName = ValueObjectFactory::createNameWithSpaces('Not exists');
 
         $this->expectException(DBNotFoundException::class);
-        $this->object->findProductsOrFail([$productId]);
+        $this->object->findProductsByProductNameOrFail($groupId, $productName);
+    }
+
+    /** @test */
+    public function itShouldGetAllProductsOfAGroupWithProductNameFilterOrderAsc(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $productNameFilter = new Filter(
+            'product_name',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            ValueObjectFactory::createNameWithSpaces('Ju')
+        );
+
+        $return = $this->object->findProductsByProductNameFilterOrFail($groupId, $productNameFilter);
+
+        $this->assertCount(2, $return);
+
+        $expectedProductsId = [
+            self::PRODUCT_ID_2,
+            self::PRODUCT_ID_4,
+        ];
+
+        foreach ($return as $product) {
+            $this->assertContains($product->getId()->getValue(), $expectedProductsId);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetAllProductsOfAGroupWithProductNameFilterOrderDesc(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $productNameFilter = new Filter(
+            'product_name',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            ValueObjectFactory::createNameWithSpaces('Ju')
+        );
+
+        $return = $this->object->findProductsByProductNameFilterOrFail($groupId, $productNameFilter, false);
+
+        $this->assertCount(2, $return);
+
+        $expectedProductsId = [
+            self::PRODUCT_ID_4,
+            self::PRODUCT_ID_2,
+        ];
+
+        foreach ($return as $product) {
+            $this->assertContains($product->getId()->getValue(), $expectedProductsId);
+        }
+    }
+
+    /** @test */
+    public function itShouldFailGettingAllProductsOfAGroupWithProductNameFilterNotFound(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $productNameFilter = new Filter(
+            'product_name',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            ValueObjectFactory::createNameWithSpaces('Not exists')
+        );
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findProductsByProductNameFilterOrFail($groupId, $productNameFilter);
+    }
+
+    /** @test */
+    public function itShouldGetAllProductsOfAGroupWithShopNameFilterOrderAsc(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $shopNameFilter = new Filter(
+            'product_name',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            ValueObjectFactory::createNameWithSpaces('Shop name 3')
+        );
+
+        $return = $this->object->findProductsByShopNameFilterOrFail($groupId, $shopNameFilter);
+
+        $this->assertCount(2, $return);
+
+        $expectedProductsId = [
+            self::PRODUCT_ID_4,
+            self::PRODUCT_ID_3,
+        ];
+
+        foreach ($return as $product) {
+            $this->assertContains($product->getId()->getValue(), $expectedProductsId);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetAllProductsOfAGroupWithShopNameFilterOrderDesc(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $shopNameFilter = new Filter(
+            'shop_name',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            ValueObjectFactory::createNameWithSpaces('Shop name 3')
+        );
+
+        $return = $this->object->findProductsByShopNameFilterOrFail($groupId, $shopNameFilter, false);
+
+        $this->assertCount(2, $return);
+
+        $expectedProductsId = [
+            self::PRODUCT_ID_3,
+            self::PRODUCT_ID_4,
+        ];
+
+        foreach ($return as $product) {
+            $this->assertContains($product->getId()->getValue(), $expectedProductsId);
+        }
+    }
+
+    /** @test */
+    public function itShouldFailGettingAllProductsOfAGroupWithShopNameFilterNotFound(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $shopNameFilter = new Filter(
+            'product_name',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            ValueObjectFactory::createNameWithSpaces('Not exists')
+        );
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findProductsByShopNameFilterOrFail($groupId, $shopNameFilter);
     }
 }

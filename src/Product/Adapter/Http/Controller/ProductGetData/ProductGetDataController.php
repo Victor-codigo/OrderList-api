@@ -111,15 +111,27 @@ class ProductGetDataController extends AbstractController
     public function __invoke(ProductGetDataRequestDto $request): JsonResponse
     {
         $products = $this->productGetDataUseCase->__invoke(
-            $this->createProductGetDataInputDto($request->groupId, $request->productsId, $request->shopsId, $request->productNameStartsWith, $request->productName)
+            $this->createProductGetDataInputDto($request)
         );
 
         return $this->createResponse($products);
     }
 
-    private function createProductGetDataInputDto(string|null $groupId, array|null $productsId, array|null $shopsId, string|null $productNameStartsWith, string|null $productName): ProductGetDataInputDto
+    private function createProductGetDataInputDto(ProductGetDataRequestDto $request): ProductGetDataInputDto
     {
-        return new ProductGetDataInputDto($groupId, $productsId, $shopsId, $productNameStartsWith, $productName);
+        return new ProductGetDataInputDto(
+            $request->groupId,
+            $request->productsId,
+            $request->shopsId,
+            $request->productName,
+            $request->productNameFilterType,
+            $request->productNameFilterValue,
+            $request->shopNameFilterType,
+            $request->shopNameFilterValue,
+            $request->orderAsc,
+            $request->page,
+            $request->pageItems,
+        );
     }
 
     private function createResponse(ApplicationOutputInterface $products): JsonResponse

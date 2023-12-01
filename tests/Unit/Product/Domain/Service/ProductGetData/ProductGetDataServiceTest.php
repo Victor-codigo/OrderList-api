@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ProductGetData;
 
-use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Exception\LogicException;
+use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Product\Domain\Model\Product;
@@ -85,36 +87,56 @@ class ProductGetDataServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldGetProductsData(): void
+    public function itShouldGetProductOfAGroupWithProductsIdAndShopsId(): void
     {
         $products = $this->getProducts();
-        $productNameStartsWith = null;
-        $productsMaxNumber = 100;
-        $productName = ValueObjectFactory::createNameWithSpaces('product name');
-        $groupId = ValueObjectFactory::createIdentifier('group id');
-        $productsId = [
-            ValueObjectFactory::createIdentifier('product 1 id'),
-        ];
-        $shopsId = [
-            ValueObjectFactory::createIdentifier('shop 1 id'),
-        ];
-        $input = new ProductGetDataDto($groupId, $productsId, $shopsId, $productNameStartsWith, $productName);
+        $input = new ProductGetDataDto(
+            ValueObjectFactory::createIdentifier('group id'),
+            [ValueObjectFactory::createIdentifier('product 1 id')],
+            [ValueObjectFactory::createIdentifier('shop 1 id')],
+            ValueObjectFactory::createNameWithSpaces(null),
+            new Filter(
+                'product_name',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+                ValueObjectFactory::createNameWithSpaces(null)
+            ),
+            new Filter(
+                'shop_name',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+                ValueObjectFactory::createNameWithSpaces(null)
+            ),
+            true,
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(100)
+        );
 
         $this->productRepository
             ->expects($this->once())
             ->method('findProductsOrFail')
-            ->with($productsId, $groupId, $shopsId, $productName, $productNameStartsWith)
+            ->with($input->groupId, $input->productsId, $input->shopsId, $input->orderAsc)
             ->willReturn($this->paginator);
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsByProductNameOrFail');
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsByProductNameFilterOrFail');
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsByShopNameFilterOrFail');
 
         $this->paginator
             ->expects($this->once())
             ->method('setPagination')
-            ->with(1, $productsMaxNumber);
+            ->with($input->page->getValue(), $input->pageItems->getValue());
 
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayObject($products));
+            ->willReturn(new \ArrayIterator($products));
 
         $return = $this->object->__invoke($input);
 
@@ -126,62 +148,238 @@ class ProductGetDataServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldGetProductsDataAllInputsAreNull(): void
+    public function itShouldGetProductOfAGroupWithProductName(): void
     {
-        $productNameStartsWith = null;
-        $productName = ValueObjectFactory::createNameWithSpaces(null);
-        $groupId = ValueObjectFactory::createIdentifier(null);
-        $productsId = [];
-        $shopsId = [];
-        $input = new ProductGetDataDto($groupId, $productsId, $shopsId, $productNameStartsWith, $productName);
+        $products = $this->getProducts();
+        $input = new ProductGetDataDto(
+            ValueObjectFactory::createIdentifier('group id'),
+            [],
+            [],
+            ValueObjectFactory::createNameWithSpaces('product name'),
+            new Filter(
+                'product_name',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+                ValueObjectFactory::createNameWithSpaces(null)
+            ),
+            new Filter(
+                'shop_name',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+                ValueObjectFactory::createNameWithSpaces(null)
+            ),
+            true,
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(100)
+        );
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsOrFail');
 
         $this->productRepository
             ->expects($this->once())
-            ->method('findProductsOrFail')
-            ->with(null, null, null, $productName, null)
-            ->willThrowException(new DBNotFoundException());
+            ->method('findProductsByProductNameOrFail')
+            ->with($input->groupId, $input->productName, $input->orderAsc)
+            ->willReturn($this->paginator);
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsByProductNameFilterOrFail');
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsByShopNameFilterOrFail');
 
         $this->paginator
-            ->expects($this->never())
-            ->method('setPagination');
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with($input->page->getValue(), $input->pageItems->getValue());
 
         $this->paginator
-            ->expects($this->never())
-            ->method('getIterator');
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($products));
 
-        $this->expectException(DBNotFoundException::class);
-        $this->object->__invoke($input);
+        $return = $this->object->__invoke($input);
+
+        $this->assertCount(count($products), $return);
+
+        foreach ($return as $product) {
+            $this->assertProductDataIsOk($products, $product);
+        }
     }
 
     /** @test */
-    public function itShouldFailGetProductsDataNoProductsFound(): void
+    public function itShouldGetProductOfAGroupWithProductNameFilter(): void
     {
-        $productNameStartsWith = null;
-        $productName = ValueObjectFactory::createNameWithSpaces(null);
-        $groupId = ValueObjectFactory::createIdentifier('group id');
-        $productsId = [
-            ValueObjectFactory::createIdentifier('product 1 id'),
-        ];
-        $shopsId = [
-            ValueObjectFactory::createIdentifier('shop 1 id'),
-        ];
-        $input = new ProductGetDataDto($groupId, $productsId, $shopsId, $productNameStartsWith, $productName);
+        $products = $this->getProducts();
+        $input = new ProductGetDataDto(
+            ValueObjectFactory::createIdentifier('group id'),
+            [],
+            [],
+            ValueObjectFactory::createNameWithSpaces(null),
+            new Filter(
+                'product_name',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+                ValueObjectFactory::createNameWithSpaces('product name filter')
+            ),
+            new Filter(
+                'shop_name',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+                ValueObjectFactory::createNameWithSpaces(null)
+            ),
+            true,
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(100)
+        );
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsOrFail');
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsByProductNameOrFail');
 
         $this->productRepository
             ->expects($this->once())
-            ->method('findProductsOrFail')
-            ->with($productsId, $groupId, $shopsId, $productName, $productNameStartsWith)
-            ->willThrowException(new DBNotFoundException());
+            ->method('findProductsByProductNameFilterOrFail')
+            ->with($input->groupId, $input->productNameFilter, $input->orderAsc)
+            ->willReturn($this->paginator);
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsByShopNameFilterOrFail');
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with($input->page->getValue(), $input->pageItems->getValue());
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($products));
+
+        $return = $this->object->__invoke($input);
+
+        $this->assertCount(count($products), $return);
+
+        foreach ($return as $product) {
+            $this->assertProductDataIsOk($products, $product);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetProductOfAGroupWithShopNameFilter(): void
+    {
+        $products = $this->getProducts();
+        $input = new ProductGetDataDto(
+            ValueObjectFactory::createIdentifier('group id'),
+            [],
+            [],
+            ValueObjectFactory::createNameWithSpaces(null),
+            new Filter(
+                'product_name',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+                ValueObjectFactory::createNameWithSpaces(null)
+            ),
+            new Filter(
+                'shop_name',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+                ValueObjectFactory::createNameWithSpaces('shop name filter')
+            ),
+            true,
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(100)
+        );
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsOrFail');
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsByProductNameOrFail');
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsByProductNameFilterOrFail');
+
+        $this->productRepository
+            ->expects($this->once())
+            ->method('findProductsByShopNameFilterOrFail')
+            ->with($input->groupId, $input->shopNameFilter, $input->orderAsc)
+            ->willReturn($this->paginator);
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with($input->page->getValue(), $input->pageItems->getValue());
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($products));
+
+        $return = $this->object->__invoke($input);
+
+        $this->assertCount(count($products), $return);
+
+        foreach ($return as $product) {
+            $this->assertProductDataIsOk($products, $product);
+        }
+    }
+
+    /** @test */
+    public function itShouldFailGettingProductOfAGroupNotEnoughParameters(): void
+    {
+        $products = $this->getProducts();
+        $input = new ProductGetDataDto(
+            ValueObjectFactory::createIdentifier(null),
+            [],
+            [],
+            ValueObjectFactory::createNameWithSpaces(null),
+            new Filter(
+                'product_name',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+                ValueObjectFactory::createNameWithSpaces(null)
+            ),
+            new Filter(
+                'shop_name',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+                ValueObjectFactory::createNameWithSpaces(null)
+            ),
+            true,
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(100)
+        );
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsOrFail');
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsByProductNameOrFail');
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsByProductNameFilterOrFail');
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsByShopNameFilterOrFail');
 
         $this->paginator
             ->expects($this->never())
-            ->method('setPagination');
+            ->method('setPagination')
+            ->with($input->page->getValue(), $input->pageItems->getValue());
 
         $this->paginator
             ->expects($this->never())
             ->method('getIterator');
 
-        $this->expectException(DBNotFoundException::class);
+        $this->expectException(LogicException::class);
         $this->object->__invoke($input);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Product\Domain\Port\Repository;
 
+use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -36,5 +37,11 @@ interface ProductRepositoryInterface extends RepositoryInterface
      *
      * @throws DBNotFoundException
      */
-    public function findProductsOrFail(array $productsId = null, Identifier $groupId = null, array $shopsId = null, NameWithSpaces $productName = null, string $productNameStartsWith = null): PaginatorInterface;
+    public function findProductsOrFail(Identifier $groupId, array $productsId = null, array $shopsId = null, bool $orderAsc = true): PaginatorInterface;
+
+    public function findProductsByProductNameOrFail(Identifier $groupId, NameWithSpaces $productName, bool $orderAsc): PaginatorInterface;
+
+    public function findProductsByProductNameFilterOrFail(Identifier $groupId, Filter $productNameFilter, bool $orderAsc): PaginatorInterface;
+
+    public function findProductsByShopNameFilterOrFail(Identifier $groupId, Filter $shopNameFilter, bool $orderAsc): PaginatorInterface;
 }

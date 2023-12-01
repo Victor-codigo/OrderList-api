@@ -6,6 +6,7 @@ namespace Product\Application\ProductGetData;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
 use Common\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
@@ -38,7 +39,7 @@ class ProductGetDataUseCase extends ServiceBase
                 $this->createProductGetDataDto($input)
             );
 
-            return $this->createProductGetDataOutputDto($productsData);
+            return $this->createProductGetDataOutputDto($productsData, $input->page, $this->productGetDataService->getPagesTotal());
         } catch (ValidateGroupAndUserException) {
             throw ProductGetDataValidateGroupAndUserException::fromMessage('You have not permissions');
         } catch (DBNotFoundException) {
@@ -59,11 +60,21 @@ class ProductGetDataUseCase extends ServiceBase
 
     private function createProductGetDataDto(ProductGetDataInputDto $input): ProductGetDataDto
     {
-        return new ProductGetDataDto($input->groupId, $input->productId, $input->shopId, $input->productNameStartsWith, $input->productName);
+        return new ProductGetDataDto(
+            $input->groupId,
+            $input->productId,
+            $input->shopId,
+            $input->productName,
+            $input->productNameFilter,
+            $input->shopNameFilter,
+            $input->orderAsc,
+            $input->page,
+            $input->pageItems
+        );
     }
 
-    private function createProductGetDataOutputDto(array $productsData): ProductGetDataOutputDto
+    private function createProductGetDataOutputDto(array $productsData, PaginatorPage $page, int $pagesTotal): ProductGetDataOutputDto
     {
-        return new ProductGetDataOutputDto($productsData);
+        return new ProductGetDataOutputDto($page, $pagesTotal, $productsData);
     }
 }

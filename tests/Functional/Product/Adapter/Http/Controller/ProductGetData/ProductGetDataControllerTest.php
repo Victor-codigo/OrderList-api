@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Functional\Product\Adapter\Http\Controller\ProductGetData;
 
 use Common\Domain\Response\RESPONSE_STATUS;
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
@@ -18,10 +19,33 @@ class ProductGetDataControllerTest extends WebClientTestCase
     private const USER_HAS_NO_GROUP_EMAIL = 'email.other_2.active@host.com';
     private const USER_HAS_NO_GROUP_PASSWORD = '123456';
     private const GROUP_EXISTS_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const PRODUCT_EXISTS_ID = 'afc62bc9-c42c-4c4d-8098-09ce51414a92';
-    private const SHOP_EXISTS_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
+    private const GROUP_ID_NOT_PERMISSIONS = '0dc4ec43-13c4-31cf-a3a3-aca81e96a4c8';
+    private const PRODUCTS_ID = [
+        '8b6d650b-7bb7-4850-bf25-36cda9bce801',
+        '7e3021d4-2d02-4386-8bbe-887cfe8697a8',
+        'afc62bc9-c42c-4c4d-8098-09ce51414a92',
+    ];
+    private const SHOPS_ID = [
+        'e6c1d350-f010-403c-a2d4-3865c14630ec',
+        'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
+    ];
 
-    private function assertProductDataIsOk(array $productsDataExpected, object $productDataActual): void
+    private function assertResponseDataIsOk(int $pageExpected, int $pagesTotalExpected, array $productDataExpected, object $responseActual): void
+    {
+        $this->assertTrue(property_exists($responseActual, 'page'));
+        $this->assertTrue(property_exists($responseActual, 'pages_total'));
+        $this->assertTrue(property_exists($responseActual, 'products'));
+
+        $this->assertCount(count($productDataExpected), $responseActual->products);
+        $this->assertEquals($pageExpected, $responseActual->page);
+        $this->assertEquals($pagesTotalExpected, $responseActual->pages_total);
+
+        foreach ($responseActual->products as $key => $productActual) {
+            $this->assertProductDataIsOk($productDataExpected[$key], $productActual);
+        }
+    }
+
+    private function assertProductDataIsOk(array $productDataExpected, object $productDataActual): void
     {
         $this->assertTrue(property_exists($productDataActual, 'id'));
         $this->assertTrue(property_exists($productDataActual, 'group_id'));
@@ -30,207 +54,16 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertTrue(property_exists($productDataActual, 'image'));
         $this->assertTrue(property_exists($productDataActual, 'created_on'));
 
-        $this->assertContainsEquals(
-            $productDataActual->id,
-            array_map(
-                fn (array $product) => $product['id'],
-                $productsDataExpected
-            )
-        );
-        $this->assertContainsEquals(
-            $productDataActual->group_id,
-            array_map(
-                fn (array $product) => $product['group_id'],
-                $productsDataExpected
-            )
-        );
-        $this->assertContainsEquals(
-            $productDataActual->name,
-            array_map(
-                fn (array $product) => $product['name'],
-                $productsDataExpected
-            )
-        );
-        $this->assertContainsEquals(
-            $productDataActual->image, array_map(
-                fn (array $product) => $product['image'],
-                $productsDataExpected
-            )
-        );
+        $this->assertEquals($productDataExpected['id'], $productDataActual->id);
+        $this->assertEquals($productDataExpected['group_id'], $productDataActual->group_id);
+        $this->assertEquals($productDataExpected['name'], $productDataActual->name);
+        $this->assertEquals($productDataExpected['image'], $productDataActual->image);
         $this->assertIsString($productDataActual->created_on);
     }
 
-    /** @test */
-    public function itShouldGetProducts(): void
+    private function getProductsData(): array
     {
-        $groupId = self::GROUP_EXISTS_ID;
-        $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
-        $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
-        $productNameStartsWith = 'Ma';
-
-        $productDataExpected = [
-            [
-                'id' => self::PRODUCT_EXISTS_ID,
-                'group_id' => self::GROUP_EXISTS_ID,
-                'name' => 'Maluela',
-                'description' => 'Dolorem omnis accusamus iusto qui rerum eligendi. Ipsa omnis autem totam est vero qui. Voluptas quisquam cumque dolorem ut debitis recusandae veniam. Quam repellendus est sed enim doloremque eum eius. Ut est odio est. Voluptates dolorem et nisi voluptatum. Voluptas vitae deserunt mollitia consequuntur eos. Suscipit recusandae hic cumque voluptatem officia. Exercitationem quibusdam ea qui laudantium est non quis. Vero dicta et voluptas explicabo.',
-                'image' => null,
-                'created_on' => '',
-            ],
-        ];
-
-        $client = $this->getNewClientAuthenticatedUser();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT
-                ."?group_id={$groupId}"
-                ."&products_id={$productsId}"
-                ."&shops_id={$shopsId}"
-                ."&product_name_starts_with={$productNameStartsWith}",
-            content: json_encode([])
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [0], [], Response::HTTP_OK);
-        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
-        $this->assertSame('Products data', $responseContent->message);
-
-        foreach ($responseContent->data as $productData) {
-            $this->assertProductDataIsOk($productDataExpected, $productData);
-        }
-    }
-
-    /** @test */
-    public function itShouldGetProductsWithProductId(): void
-    {
-        $groupId = self::GROUP_EXISTS_ID;
-        $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
-
-        $productDataExpected = [
-            [
-                'id' => self::PRODUCT_EXISTS_ID,
-                'group_id' => self::GROUP_EXISTS_ID,
-                'name' => 'Maluela',
-                'description' => 'Dolorem omnis accusamus iusto qui rerum eligendi. Ipsa omnis autem totam est vero qui. Voluptas quisquam cumque dolorem ut debitis recusandae veniam. Quam repellendus est sed enim doloremque eum eius. Ut est odio est. Voluptates dolorem et nisi voluptatum. Voluptas vitae deserunt mollitia consequuntur eos. Suscipit recusandae hic cumque voluptatem officia. Exercitationem quibusdam ea qui laudantium est non quis. Vero dicta et voluptas explicabo.',
-                'image' => null,
-                'created_on' => '',
-            ],
-        ];
-
-        $client = $this->getNewClientAuthenticatedUser();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT
-                ."?group_id={$groupId}"
-                ."&products_id={$productsId}",
-            content: json_encode([])
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [0], [], Response::HTTP_OK);
-        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
-        $this->assertSame('Products data', $responseContent->message);
-
-        foreach ($responseContent->data as $productData) {
-            $this->assertProductDataIsOk($productDataExpected, $productData);
-        }
-    }
-
-    /** @test */
-    public function itShouldGetProductsWithShopsId(): void
-    {
-        $groupId = self::GROUP_EXISTS_ID;
-        $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
-
-        $productDataExpected = [
-            [
-                'id' => self::PRODUCT_EXISTS_ID,
-                'group_id' => self::GROUP_EXISTS_ID,
-                'name' => 'Maluela',
-                'description' => 'Dolorem omnis accusamus iusto qui rerum eligendi. Ipsa omnis autem totam est vero qui. Voluptas quisquam cumque dolorem ut debitis recusandae veniam. Quam repellendus est sed enim doloremque eum eius. Ut est odio est. Voluptates dolorem et nisi voluptatum. Voluptas vitae deserunt mollitia consequuntur eos. Suscipit recusandae hic cumque voluptatem officia. Exercitationem quibusdam ea qui laudantium est non quis. Vero dicta et voluptas explicabo.',
-                'image' => null,
-                'created_on' => '',
-            ],
-            [
-                'id' => '7e3021d4-2d02-4386-8bbe-887cfe8697a8',
-                'group_id' => self::GROUP_EXISTS_ID,
-                'name' => 'Juanola',
-                'description' => 'Dolorem omnis accusamus iusto qui rerum eligendi. Ipsa omnis autem totam est vero qui. Voluptas quisquam cumque dolorem ut debitis recusandae veniam. Quam repellendus est sed enim doloremque eum eius. Ut est odio est. Voluptates dolorem et nisi voluptatum. Voluptas vitae deserunt mollitia consequuntur eos. Suscipit recusandae hic cumque voluptatem officia. Exercitationem quibusdam ea qui laudantium est non quis. Vero dicta et voluptas explicabo.',
-                'image' => null,
-                'created_on' => '',
-            ],
-        ];
-
-        $client = $this->getNewClientAuthenticatedUser();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT
-                ."?group_id={$groupId}"
-                ."&shops_id={$shopsId}",
-            content: json_encode([])
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [0, 1], [], Response::HTTP_OK);
-        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
-        $this->assertSame('Products data', $responseContent->message);
-
-        foreach ($responseContent->data as $productData) {
-            $this->assertProductDataIsOk($productDataExpected, $productData);
-        }
-    }
-
-    /** @test */
-    public function itShouldGetProductsProductName(): void
-    {
-        $groupId = self::GROUP_EXISTS_ID;
-        $productName = 'Juan Carlos';
-
-        $productDataExpected = [[
-                'id' => '8b6d650b-7bb7-4850-bf25-36cda9bce801',
-                'group_id' => self::GROUP_EXISTS_ID,
-                'name' => 'Juan Carlos',
-                'description' => null,
-                'image' => null,
-                'created_on' => '',
-            ]];
-
-        $client = $this->getNewClientAuthenticatedUser();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT
-                ."?group_id={$groupId}"
-                ."&product_name={$productName}",
-            content: json_encode([])
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [0], [], Response::HTTP_OK);
-        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
-        $this->assertSame('Products data', $responseContent->message);
-
-        $this->assertCount(1, $responseContent->data);
-
-        foreach ($responseContent->data as $productData) {
-            $this->assertProductDataIsOk($productDataExpected, $productData);
-        }
-    }
-
-    /** @test */
-    public function itShouldGetProductsProductNameStartsWith(): void
-    {
-        $groupId = self::GROUP_EXISTS_ID;
-        $productNameStartsWith = 'Ju';
-
-        $productDataExpected = [
+        return [
             [
                 'id' => '8b6d650b-7bb7-4850-bf25-36cda9bce801',
                 'group_id' => self::GROUP_EXISTS_ID,
@@ -243,50 +76,30 @@ class ProductGetDataControllerTest extends WebClientTestCase
                 'id' => '7e3021d4-2d02-4386-8bbe-887cfe8697a8',
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Juanola',
-                'description' => 'Dolorem omnis accusamus iusto qui rerum eligendi. Ipsa omnis autem totam est vero qui. Voluptas quisquam cumque dolorem ut debitis recusandae veniam. Quam repellendus est sed enim doloremque eum eius. Ut est odio est. Voluptates dolorem et nisi voluptatum. Voluptas vitae deserunt mollitia consequuntur eos. Suscipit recusandae hic cumque voluptatem officia. Exercitationem quibusdam ea qui laudantium est non quis. Vero dicta et voluptas explicabo.',
+                'description' => 'Product description 1',
                 'image' => null,
                 'created_on' => '',
             ],
-        ];
 
-        $client = $this->getNewClientAuthenticatedUser();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT
-                ."?group_id={$groupId}"
-                ."&product_name_starts_with={$productNameStartsWith}",
-            content: json_encode([])
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [0, 1], [], Response::HTTP_OK);
-        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
-        $this->assertSame('Products data', $responseContent->message);
-
-        foreach ($responseContent->data as $productData) {
-            $this->assertProductDataIsOk($productDataExpected, $productData);
-        }
-    }
-
-    /** @test */
-    public function itShouldGetProductsWithProductsAndShopsId(): void
-    {
-        $groupId = self::GROUP_EXISTS_ID;
-        $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
-        $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
-
-        $productDataExpected = [
             [
-                'id' => self::PRODUCT_EXISTS_ID,
+                'id' => 'afc62bc9-c42c-4c4d-8098-09ce51414a92',
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Maluela',
-                'description' => 'Dolorem omnis accusamus iusto qui rerum eligendi. Ipsa omnis autem totam est vero qui. Voluptas quisquam cumque dolorem ut debitis recusandae veniam. Quam repellendus est sed enim doloremque eum eius. Ut est odio est. Voluptates dolorem et nisi voluptatum. Voluptas vitae deserunt mollitia consequuntur eos. Suscipit recusandae hic cumque voluptatem officia. Exercitationem quibusdam ea qui laudantium est non quis. Vero dicta et voluptas explicabo.',
+                'description' => 'Product description 1',
                 'image' => null,
                 'created_on' => '',
             ],
         ];
+    }
+
+    /** @test */
+    public function itShouldGetProductsOfAGroupByProductIdOrderAsc(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $productsId = implode(',', self::PRODUCTS_ID);
+        $productDataExpected = $this->getProductsData();
+        $page = 1;
+        $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -294,37 +107,64 @@ class ProductGetDataControllerTest extends WebClientTestCase
             uri: self::ENDPOINT
                 ."?group_id={$groupId}"
                 ."&products_id={$productsId}"
-                ."&shops_id={$shopsId}",
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                .'&order_asc=true',
             content: json_encode([])
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [0], [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'products'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Products data', $responseContent->message);
 
-        foreach ($responseContent->data as $productData) {
-            $this->assertProductDataIsOk($productDataExpected, $productData);
-        }
+        $this->assertResponseDataIsOk($page, 1, $productDataExpected, $responseContent->data);
     }
 
     /** @test */
-    public function itShouldGetProductsWithShopsAndProductName(): void
+    public function itShouldGetProductsOfAGroupByProductIdOrderDesc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
-        $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
-        $productName = 'Maluela';
+        $productsId = implode(',', self::PRODUCTS_ID);
+        $productDataExpected = $this->getProductsData();
+        usort(
+            $productDataExpected,
+            fn (array $productA, array $productB) => strcmp($productA['name'], $productB['name'])
+        );
+        $page = 1;
+        $pageItems = 100;
 
-        $productDataExpected = [[
-            'id' => self::PRODUCT_EXISTS_ID,
-            'group_id' => self::GROUP_EXISTS_ID,
-            'name' => 'Maluela',
-            'description' => 'Dolorem omnis accusamus iusto qui rerum eligendi. Ipsa omnis autem totam est vero qui. Voluptas quisquam cumque dolorem ut debitis recusandae veniam. Quam repellendus est sed enim doloremque eum eius. Ut est odio est. Voluptates dolorem et nisi voluptatum. Voluptas vitae deserunt mollitia consequuntur eos. Suscipit recusandae hic cumque voluptatem officia. Exercitationem quibusdam ea qui laudantium est non quis. Vero dicta et voluptas explicabo.',
-            'image' => null,
-            'created_on' => '',
-        ]];
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&products_id={$productsId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'products'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Products data', $responseContent->message);
+
+        $this->assertResponseDataIsOk($page, 1, $productDataExpected, $responseContent->data);
+    }
+
+    /** @test */
+    public function itShouldGetProductsOfAGroupByShopIdOrderAsc(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $shopsId = implode(',', self::SHOPS_ID);
+        $productDataExpected = $this->getProductsData();
+        $page = 1;
+        $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -332,129 +172,300 @@ class ProductGetDataControllerTest extends WebClientTestCase
             uri: self::ENDPOINT
                 ."?group_id={$groupId}"
                 ."&shops_id={$shopsId}"
-                ."&product_name={$productName}",
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [0], [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'products'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Products data', $responseContent->message);
 
-        foreach ($responseContent->data as $productData) {
-            $this->assertProductDataIsOk($productDataExpected, $productData);
-        }
+        $this->assertResponseDataIsOk($page, 1, $productDataExpected, $responseContent->data);
     }
 
     /** @test */
-    public function itShouldGetProductsWithShopsAndProductNameStartsWith(): void
+    public function itShouldGetProductsOfAGroupByShopIdOrderDesc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
-        $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
-        $productNameStartsWith = 'Ma';
+        $shopsId = implode(',', self::SHOPS_ID);
+        $productDataExpected = $this->getProductsData();
+        usort(
+            $productDataExpected,
+            fn (array $productA, array $productB) => strcmp($productA['name'], $productB['name'])
+        );
+        $page = 1;
+        $pageItems = 100;
 
-        $productDataExpected = [
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shops_id={$shopsId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'products'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Products data', $responseContent->message);
+
+        $this->assertResponseDataIsOk($page, 1, $productDataExpected, $responseContent->data);
+    }
+
+    /** @test */
+    public function itShouldGetProductsOfAGroupByProductName(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $productName = 'Juanola';
+        $productDataExpected = $this->getProductsData();
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&product_name={$productName}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'products'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Products data', $responseContent->message);
+
+        $this->assertResponseDataIsOk($page, 1, [$productDataExpected[1]], $responseContent->data);
+    }
+
+    /** @test */
+    public function itShouldGetProductsOfAGroupByProductNameFilterOrderAsc(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $productNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $productNameFilterValue = 'Ju';
+        $productDataExpected = $this->getProductsData();
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&product_name_filter_type={$productNameFilterType}"
+                ."&product_name_filter_value={$productNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'products'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Products data', $responseContent->message);
+
+        $this->assertResponseDataIsOk(
+            $page,
+            1,
             [
-                'id' => self::PRODUCT_EXISTS_ID,
-                'group_id' => self::GROUP_EXISTS_ID,
-                'name' => 'Maluela',
-                'description' => 'Dolorem omnis accusamus iusto qui rerum eligendi. Ipsa omnis autem totam est vero qui. Voluptas quisquam cumque dolorem ut debitis recusandae veniam. Quam repellendus est sed enim doloremque eum eius. Ut est odio est. Voluptates dolorem et nisi voluptatum. Voluptas vitae deserunt mollitia consequuntur eos. Suscipit recusandae hic cumque voluptatem officia. Exercitationem quibusdam ea qui laudantium est non quis. Vero dicta et voluptas explicabo.',
-                'image' => null,
-                'created_on' => '',
+                $productDataExpected[0],
+                $productDataExpected[1],
             ],
-        ];
+            $responseContent->data
+        );
+    }
+
+    /** @test */
+    public function itShouldGetProductsOfAGroupByProductNameFilterOrderDesc(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $productNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $productNameFilterValue = 'Ju';
+        $productDataExpected = $this->getProductsData();
+        $page = 1;
+        $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
                 ."?group_id={$groupId}"
-                ."&shops_id={$shopsId}"
-                ."&product_name_starts_with={$productNameStartsWith}",
+                ."&product_name_filter_type={$productNameFilterType}"
+                ."&product_name_filter_value={$productNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                .'&order_asc=false',
             content: json_encode([])
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [0], [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'products'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Products data', $responseContent->message);
 
-        foreach ($responseContent->data as $productData) {
-            $this->assertProductDataIsOk($productDataExpected, $productData);
-        }
+        $this->assertResponseDataIsOk(
+            $page,
+            1,
+            [
+                $productDataExpected[1],
+                $productDataExpected[0],
+            ],
+            $responseContent->data
+        );
     }
 
     /** @test */
-    public function itShouldFailNoProductsFound(): void
+    public function itShouldGetProductsOfAGroupByShopNameFilterOrderAsc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
-        $productsId = implode(',', ['f7d3f835-9c72-4dda-821c-73e4f3e878a5']);
-        $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
-        $productNameStartsWith = 'Ma';
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $shopNameFilterValue = 'Shop name 1';
+        $productDataExpected = $this->getProductsData();
+        $page = 1;
+        $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
                 ."?group_id={$groupId}"
-                ."&products_id={$productsId}"
-                ."&shops_id={$shopsId}"
-                ."&product_name_starts_with={$productNameStartsWith}",
-            content: json_encode([])
-        );
-
-        $response = $client->getResponse();
-
-        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
-    }
-
-    /** @test */
-    public function itShouldFailNoPersmissionsInTheGroup(): void
-    {
-        $groupId = self::GROUP_EXISTS_ID;
-        $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
-        $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
-        $productNameStartsWith = 'Ma';
-
-        $client = $this->getNewClientAuthenticatedAdmin();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT
-                ."?group_id={$groupId}"
-                ."&products_id={$productsId}"
-                ."&shops_id={$shopsId}"
-                ."&product_name_starts_with={$productNameStartsWith}",
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['permissions'], Response::HTTP_BAD_REQUEST);
-        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('You have not permissions', $responseContent->message);
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'products'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Products data', $responseContent->message);
+
+        $this->assertResponseDataIsOk(
+            $page,
+            1,
+            [
+                $productDataExpected[1],
+                $productDataExpected[2],
+            ],
+            $responseContent->data
+        );
     }
 
     /** @test */
-    public function itShouldFailGroupIsNull(): void
+    public function itShouldGetProductsOfAGroupByShopNameFilterOrderDesc(): void
     {
-        $groupId = null;
-        $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
-        $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
-        $productNameStartsWith = 'Ma';
+        $groupId = self::GROUP_EXISTS_ID;
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $shopNameFilterValue = 'Shop name 1';
+        $productDataExpected = $this->getProductsData();
+        $page = 1;
+        $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
                 ."?group_id={$groupId}"
-                ."&products_id={$productsId}"
-                ."&shops_id={$shopsId}"
-                ."&product_name_starts_with={$productNameStartsWith}",
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                .'&order_asc=false',
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'products'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Products data', $responseContent->message);
+
+        $this->assertResponseDataIsOk(
+            $page,
+            1,
+            [
+                $productDataExpected[2],
+                $productDataExpected[1],
+            ],
+            $responseContent->data
+        );
+    }
+
+    /** @test */
+    public function itShouldGetProductsOfAGroupPagination(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $productNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $productNameFilterValue = 'Ju';
+        $productDataExpected = $this->getProductsData();
+        $page = 1;
+        $pageItems = 1;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&product_name_filter_type={$productNameFilterType}"
+                ."&product_name_filter_value={$productNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'products'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Products data', $responseContent->message);
+
+        $this->assertResponseDataIsOk(
+            $page,
+            2,
+            [
+                $productDataExpected[0],
+            ],
+            $responseContent->data
+        );
+    }
+
+    /** @test */
+    public function itShouldFailGettingProductsOfAGroupGroupIdIsNull(): void
+    {
+        $productId = 'f7d0840a-11c8-49ae-bf12-b29eb66afab4';
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?products_id={$productId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
@@ -464,25 +475,113 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertResponseStructureIsOk($response, [], ['group_id'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertSame(['not_blank'], $responseContent->errors->group_id);
+
+        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
     /** @test */
-    public function itShouldFailProducstIdIsWrong(): void
+    public function itShouldFailGettingProductsOfAGroupGroupIdIsWrong(): void
     {
-        $groupId = self::GROUP_EXISTS_ID;
-        $productsId = implode(',', ['wong id']);
-        $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
-        $productNameStartsWith = 'Ma';
+        $groupId = 'wrong group id';
+        $productId = 'f7d0840a-11c8-49ae-bf12-b29eb66afab4';
+        $page = 1;
+        $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
                 ."?group_id={$groupId}"
-                ."&products_id={$productsId}"
-                ."&shops_id={$shopsId}"
-                ."&product_name_starts_with={$productNameStartsWith}",
+                ."&products_id={$productId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['group_id'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
+    }
+
+    /** @test */
+    public function itShouldFailGettingProductsOfAGroupGroupIdNotFound(): void
+    {
+        $groupId = 'f7d0840a-11c8-49ae-bf12-b29eb66afab4';
+        $productId = 'f7d0840a-11c8-49ae-bf12-b29eb66afab4';
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&products_id={$productId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['permissions'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('You have not permissions', $responseContent->message);
+
+        $this->assertEquals('You have not permissions', $responseContent->errors->permissions);
+    }
+
+    /** @test */
+    public function itShouldFailGettingProductsOfAGroupGroupIdNotPermissions(): void
+    {
+        $groupId = self::GROUP_ID_NOT_PERMISSIONS;
+        $productId = 'f7d0840a-11c8-49ae-bf12-b29eb66afab4';
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&products_id={$productId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['permissions'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('You have not permissions', $responseContent->message);
+
+        $this->assertEquals('You have not permissions', $responseContent->errors->permissions);
+    }
+
+    /** @test */
+    public function itShouldFailGettingProductsOfAGroupProductIdIsWrong(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $productId = 'product id is wrong';
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&products_id={$productId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
@@ -492,25 +591,50 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertResponseStructureIsOk($response, [], ['products_id'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertSame([['uuid_invalid_characters']], $responseContent->errors->products_id);
+
+        $this->assertEquals([['uuid_invalid_characters']], $responseContent->errors->products_id);
     }
 
     /** @test */
-    public function itShouldFailShopsIdIsWrong(): void
+    public function itShouldFailGettingProductsOfAGroupProductIdNotFound(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
-        $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
-        $shopsId = implode(',', ['wrong id']);
-        $productNameStartsWith = 'Ma';
+        $productId = 'f7d0840a-11c8-49ae-bf12-b29eb66afab4';
+        $page = 1;
+        $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
                 ."?group_id={$groupId}"
-                ."&products_id={$productsId}"
+                ."&products_id={$productId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+    }
+
+    /** @test */
+    public function itShouldFailGettingProductsOfAGroupShopsIdIsWrong(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $shopsId = 'shop id is wrong';
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
                 ."&shops_id={$shopsId}"
-                ."&product_name_starts_with={$productNameStartsWith}",
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
@@ -520,25 +644,50 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertResponseStructureIsOk($response, [], ['shops_id'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertSame([['uuid_invalid_characters']], $responseContent->errors->shops_id);
+
+        $this->assertEquals([['uuid_invalid_characters']], $responseContent->errors->shops_id);
     }
 
     /** @test */
-    public function itShouldFailProductNameIsWrong(): void
+    public function itShouldFailGettingProductsOfAGroupShopsIdNotFound(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
-        $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
-        $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
-        $productName = 'product name wrong-';
+        $shopsId = 'f7d0840a-11c8-49ae-bf12-b29eb66afab4';
+        $page = 1;
+        $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
                 ."?group_id={$groupId}"
-                ."&products_id={$productsId}"
-                ."&shops_id={$shopsId}"
-                ."&product_name={$productName}",
+                ."&products_id={$shopsId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+    }
+
+    /** @test */
+    public function itShouldFailGettingProductsOfAGroupProductNameIsWrong(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $productName = 'product name is wrong-';
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&product_name={$productName}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
@@ -548,34 +697,377 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertResponseStructureIsOk($response, [], ['product_name'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertSame(['alphanumeric_with_whitespace'], $responseContent->errors->product_name);
+
+        $this->assertEquals(['alphanumeric_with_whitespace'], $responseContent->errors->product_name);
     }
 
     /** @test */
-    public function itShouldFailProductNameStartsWithIsToolLong(): void
+    public function itShouldFailGettingProductsOfAGroupProductNameIdNotFound(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
-        $productsId = implode(',', [self::PRODUCT_EXISTS_ID]);
-        $shopsId = implode(',', [self::SHOP_EXISTS_ID]);
-        $productNameStartsWith = str_pad('', 51, 'p');
+        $productName = 'product that not exists';
+        $page = 1;
+        $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
                 ."?group_id={$groupId}"
-                ."&products_id={$productsId}"
-                ."&shops_id={$shopsId}"
-                ."&product_name_starts_with={$productNameStartsWith}",
+                ."&product_name={$productName}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+    }
+
+    /** @test */
+    public function itShouldFailGettingProductsOfAGroupProductNameFilterTypeIsNull(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $productNameFilterValue = 'ju';
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&product_name_filter_value={$productNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['product_name_starts_with'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['product_name_filter_type'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertSame(['string_too_long'], $responseContent->errors->product_name_starts_with);
+
+        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->product_name_filter_type);
+    }
+
+    /** @test */
+    public function itShouldFailGettingProductsOfAGroupProductNameFilterTypeIsWrong(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $productNameFilterType = 'wrong type';
+        $productNameFilterValue = 'ju';
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&product_name_filter_type={$productNameFilterType}"
+                ."&product_name_filter_value={$productNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['product_name_filter_type'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->product_name_filter_type);
+    }
+
+    /** @test */
+    public function itShouldFailGettingProductsOfAGroupProductNameFilterValueIsNull(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $productNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&product_name_filter_type={$productNameFilterType}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['product_name_filter_value'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->product_name_filter_value);
+    }
+
+    /** @test */
+    public function itShouldFailGettingProductsOfAGroupProductNameFilterValueIsWrong(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $productNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $productNameFilterValue = 'ju-';
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&product_name_filter_type={$productNameFilterType}"
+                ."&product_name_filter_value={$productNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['product_name_filter_value'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['alphanumeric_with_whitespace'], $responseContent->errors->product_name_filter_value);
+    }
+
+    // ---
+
+    /** @test */
+    public function itShouldFailGettingProductsOfAGroupShopNameFilterTypeIsNull(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $shopNameFilterValue = 'ju';
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['shop_name_filter_type'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->shop_name_filter_type);
+    }
+
+    /** @test */
+    public function itShouldFailGettingProductsOfAGroupShopNameFilterTypeIsWrong(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $shopNameFilterType = 'wrong type';
+        $shopNameFilterValue = 'ju';
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['shop_name_filter_type'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->shop_name_filter_type);
+    }
+
+    /** @test */
+    public function itShouldFailGettingProductsOfAGroupShopNameFilterValueIsNull(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['shop_name_filter_value'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->shop_name_filter_value);
+    }
+
+    /** @test */
+    public function itShouldFailGettingProductsOfAGroupShopNameFilterValueIsWrong(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $shopNameFilterValue = 'ju-';
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&shop_name_filter_type={$shopNameFilterType}"
+                ."&shop_name_filter_value={$shopNameFilterValue}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['shop_name_filter_value'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['alphanumeric_with_whitespace'], $responseContent->errors->shop_name_filter_value);
+    }
+
+    /** @test */
+    public function itShouldFailGettingProductsOfAGroupPageIsNull(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['page'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['greater_than'], $responseContent->errors->page);
+    }
+
+    /** @test */
+    public function itShouldFailGettingProductsOfAGroupPageIsWrong(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $page = -1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['page'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['greater_than'], $responseContent->errors->page);
+    }
+
+    /** @test */
+    public function itShouldFailGettingProductsOfAGroupPageItemsIsNull(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $page = 1;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&page={$page}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['page_items'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['greater_than'], $responseContent->errors->page_items);
+    }
+
+    /** @test */
+    public function itShouldFailGettingProductsOfAGroupPageItemsIsWrong(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $page = 1;
+        $pageItems = -1;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['page_items'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['greater_than'], $responseContent->errors->page_items);
     }
 }
