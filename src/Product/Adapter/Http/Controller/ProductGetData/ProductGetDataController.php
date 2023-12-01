@@ -7,6 +7,7 @@ namespace Product\Adapter\Http\Controller\ProductGetData;
 use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use OpenApi\Attributes as OA;
 use Product\Adapter\Http\Controller\ProductGetData\Dto\ProductGetDataRequestDto;
 use Product\Application\ProductGetData\Dto\ProductGetDataInputDto;
@@ -28,6 +29,22 @@ use Symfony\Component\HttpFoundation\Response;
             schema: new OA\Schema(type: 'string')
         ),
         new OA\Parameter(
+            name: 'page',
+            in: 'query',
+            required: true,
+            description: 'Page number',
+            example: 1,
+            schema: new OA\Schema(type: 'int')
+        ),
+        new OA\Parameter(
+            name: 'page_items',
+            in: 'query',
+            required: true,
+            description: 'Number of items per page',
+            example: 100,
+            schema: new OA\Schema(type: 'int')
+        ),
+        new OA\Parameter(
             name: 'products_id',
             in: 'query',
             required: false,
@@ -43,14 +60,7 @@ use Symfony\Component\HttpFoundation\Response;
             example: '5483539d-52f7-4aa9-a91c-1aae11c3d17f,428e3645-91fb-4239-8b52-b49a056eb2e7',
             schema: new OA\Schema(type: 'string')
         ),
-        new OA\Parameter(
-            name: 'product_name_starts_with',
-            in: 'query',
-            required: false,
-            description: 'String for what the product name starts',
-            example: 'Ju',
-            schema: new OA\Schema(type: 'string')
-        ),
+
         new OA\Parameter(
             name: 'product_name',
             in: 'query',
@@ -58,6 +68,62 @@ use Symfony\Component\HttpFoundation\Response;
             description: 'Product name',
             example: 'Shop name',
             schema: new OA\Schema(type: 'string')
+        ),
+        new OA\Parameter(
+            name: 'order_asc',
+            in: 'query',
+            required: false,
+            description: 'TRUE if you want to order by asc, otherwise FALSE',
+            example: 'true',
+            schema: new OA\Schema(type: 'boolean')
+        ),
+        new OA\Parameter(
+            name: 'product_name_filter_type',
+            in: 'query',
+            required: false,
+            description: 'Type of the filter to apply to search by product name. It is mandatory to pass two shop_name_filter parameters, to apply filter',
+            example: FILTER_STRING_COMPARISON::STARTS_WITH,
+            schema: new OA\Schema(
+                type: 'string',
+                enum: [
+                    FILTER_STRING_COMPARISON::STARTS_WITH,
+                    FILTER_STRING_COMPARISON::ENDS_WITH,
+                    FILTER_STRING_COMPARISON::CONTAINS,
+                    FILTER_STRING_COMPARISON::EQUALS,
+                ]
+            ),
+        ),
+        new OA\Parameter(
+            name: 'product_name_filter_value',
+            in: 'query',
+            required: false,
+            description: 'Value of the filter to apply to search by product name. It is mandatory to pass two shop_name_filter parameters, to apply filter',
+            example: 'product name',
+            schema: new OA\Schema(type: 'string'),
+        ),
+        new OA\Parameter(
+            name: 'shop_name_filter_type',
+            in: 'query',
+            required: false,
+            description: 'Type of the filter to apply to search by shop name. It is mandatory to pass two shop_name_filter parameters, to apply filter',
+            example: FILTER_STRING_COMPARISON::STARTS_WITH,
+            schema: new OA\Schema(
+                type: 'string',
+                enum: [
+                    FILTER_STRING_COMPARISON::STARTS_WITH,
+                    FILTER_STRING_COMPARISON::ENDS_WITH,
+                    FILTER_STRING_COMPARISON::CONTAINS,
+                    FILTER_STRING_COMPARISON::EQUALS,
+                ]
+            ),
+        ),
+        new OA\Parameter(
+            name: 'shop_name_filter_value',
+            in: 'query',
+            required: false,
+            description: 'Value of the filter to apply to search by shop name. It is mandatory to pass two shop_name_filter parameters, to apply filter',
+            example: 'shop name',
+            schema: new OA\Schema(type: 'string'),
         ),
     ],
     responses: [
@@ -72,13 +138,20 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'message', type: 'string', example: 'Product\'s data'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items(
                             properties: [
-                                new OA\Property(property: 'id', type: 'string'),
-                                new OA\Property(property: 'group_id', type: 'string'),
-                                new OA\Property(property: 'name', type: 'string'),
-                                new OA\Property(property: 'description', type: 'string'),
-                                new OA\Property(property: 'image', type: 'string'),
-                                new OA\Property(property: 'created_on', type: 'string'),
-                            ])),
+                                new OA\Property(property: 'page', type: 'int'),
+                                new OA\Property(property: 'pages_total', type: 'int'),
+                                new OA\Property(property: 'products', type: 'array', items: new OA\Items(
+                                    properties: [
+                                        new OA\Property(property: 'id', type: 'string'),
+                                        new OA\Property(property: 'group_id', type: 'string'),
+                                        new OA\Property(property: 'name', type: 'string'),
+                                        new OA\Property(property: 'description', type: 'string'),
+                                        new OA\Property(property: 'image', type: 'string'),
+                                        new OA\Property(property: 'created_on', type: 'string'),
+                                    ]
+                                )),
+                            ]
+                        )),
                         new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),
                     ]
                 )
@@ -94,7 +167,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<permissions|group_id|products_id|shops_id|product_name_starts_with, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<permissions|group_id|products_id|shops_id|product_name|product_name_filter_type|product_name_filter_value|shop_name_filter_type|shop_name_filter_value|page|page_items, string|array>')),
                     ]
                 )
             )
