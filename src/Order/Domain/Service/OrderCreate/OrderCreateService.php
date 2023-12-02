@@ -64,7 +64,7 @@ class OrderCreateService
         );
 
         try {
-            $products = $this->productRepository->findProductsOrFail($productsId, $groupId);
+            $products = $this->productRepository->findProductsOrFail($groupId, $productsId);
             $products->setPagination(1);
             $productsArray = iterator_to_array($products);
 
@@ -94,7 +94,7 @@ class OrderCreateService
         );
 
         try {
-            $shops = $this->shopRepository->findShopsOrFail($shopsId, $groupId);
+            $shops = $this->shopRepository->findShopsOrFail($groupId, $shopsId);
             $shops->setPagination(1);
             $shopsArray = iterator_to_array($shops);
 

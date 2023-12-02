@@ -66,7 +66,7 @@ class OrderModifyService
     private function validateProduct(identifier $groupId, Identifier $productId): Product
     {
         try {
-            $productPagination = $this->productRepository->findProductsOrFail([$productId], $groupId);
+            $productPagination = $this->productRepository->findProductsOrFail($groupId, [$productId]);
 
             return iterator_to_array($productPagination)[0];
         } catch (DBNotFoundException) {
@@ -80,7 +80,7 @@ class OrderModifyService
     private function validateShopAndProductIsinAShop(Identifier $groupId, Identifier $shopId, Identifier $productId): Shop
     {
         try {
-            $shopPagination = $this->shopRepository->findShopsOrFail([$shopId], $groupId, [$productId]);
+            $shopPagination = $this->shopRepository->findShopsOrFail($groupId, [$shopId], [$productId]);
 
             return iterator_to_array($shopPagination)[0];
         } catch (DBNotFoundException) {

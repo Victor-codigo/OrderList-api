@@ -84,7 +84,7 @@ class ShopModifyService
      */
     private function getShopData(Identifier $shopId, Identifier $groupId): Shop
     {
-        $shopPagination = $this->shopRepository->findShopsOrFail([$shopId], $groupId);
+        $shopPagination = $this->shopRepository->findShopsOrFail($groupId, [$shopId]);
         $shopPagination->setPagination(1, 1);
 
         return iterator_to_array($shopPagination)[0];
@@ -96,7 +96,7 @@ class ShopModifyService
     private function isValidShopName(Identifier $groupId, NameWithSpaces $shopName): void
     {
         try {
-            $this->shopRepository->findShopsOrFail(null, $groupId, null, $shopName);
+            $this->shopRepository->findShopByShopNameOrFail($groupId, $shopName);
 
             throw ShopModifyNameIsAlreadyInDataBaseException::fromMessage('Shop name is already in data base');
         } catch (DBNotFoundException) {

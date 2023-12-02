@@ -28,7 +28,7 @@ class ShopRemoveService
      */
     public function __invoke(ShopRemoveDto $input): array
     {
-        $shopsToRemove = $this->shopRepository->findShopsOrFail($input->shopsId, $input->groupId);
+        $shopsToRemove = $this->shopRepository->findShopsOrFail($input->groupId, $input->shopsId);
         /** @var Shop[] $shopsToRemove */
         $shopsToRemove = iterator_to_array($shopsToRemove);
 

@@ -210,7 +210,7 @@ class OrderCreateServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldCreateOrders22(): void
+    public function itShouldCreateOrders(): void
     {
         $orders = $this->getOrders();
         $ordersData = $this->getOrdersData();
@@ -229,13 +229,13 @@ class OrderCreateServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('findProductsOrFail')
-            ->with($productsId, $this->groupId)
+            ->with($this->groupId, $productsId)
             ->willReturn($this->paginator);
 
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with($shopsId, $this->groupId)
+            ->with($this->groupId, $shopsId)
             ->willReturn($this->paginator);
 
         $this->paginator
@@ -298,13 +298,13 @@ class OrderCreateServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('findProductsOrFail')
-            ->with($productsId, $this->groupId)
+            ->with($this->groupId, $productsId)
             ->willReturn($this->paginator);
 
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with($shopsId, $this->groupId)
+            ->with($this->groupId, $shopsId)
             ->willThrowException(new DBNotFoundException());
 
         $this->paginator
@@ -362,7 +362,7 @@ class OrderCreateServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('findProductsOrFail')
-            ->with($productsId, $this->groupId)
+            ->with($this->groupId, $productsId)
             ->willThrowException(new DBNotFoundException());
 
         $this->shopRepository
@@ -404,7 +404,7 @@ class OrderCreateServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('findProductsOrFail')
-            ->with($productsId, $this->groupId)
+            ->with($this->groupId, $productsId)
             ->willReturn($this->paginator);
 
         $this->shopRepository
@@ -453,13 +453,13 @@ class OrderCreateServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('findProductsOrFail')
-            ->with($productsId, $this->groupId)
+            ->with($this->groupId, $productsId)
             ->willReturn($this->paginator);
 
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with($shopsId, $this->groupId)
+            ->with($this->groupId, $shopsId)
             ->willReturn($this->paginator);
 
         $this->paginator

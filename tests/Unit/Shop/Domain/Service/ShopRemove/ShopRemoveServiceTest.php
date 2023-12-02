@@ -65,7 +65,7 @@ class ShopRemoveServiceTest extends TestCase
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with([$shopId], $groupId)
+            ->with($groupId, [$shopId])
             ->willReturn($this->paginator);
 
         $this->shopRepository
@@ -101,7 +101,7 @@ class ShopRemoveServiceTest extends TestCase
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with($shopsId, $groupId)
+            ->with($groupId, $shopsId)
             ->willReturn($this->paginator);
 
         $this->shopRepository
@@ -131,7 +131,7 @@ class ShopRemoveServiceTest extends TestCase
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with([$shopId], $groupId)
+            ->with($groupId, [$shopId])
             ->willReturn($this->paginator);
 
         $this->shopRepository
@@ -163,7 +163,7 @@ class ShopRemoveServiceTest extends TestCase
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with([$shopId], $groupId)
+            ->with($groupId, [$shopId])
             ->willReturn($this->paginator);
 
         $this->shopRepository
@@ -193,7 +193,7 @@ class ShopRemoveServiceTest extends TestCase
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with([$shopId], $groupId)
+            ->with($groupId, [$shopId])
             ->willThrowException(new DBNotFoundException());
 
         $this->shopRepository
@@ -220,7 +220,7 @@ class ShopRemoveServiceTest extends TestCase
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with([$shopId], $groupId)
+            ->with($groupId, [$shopId])
             ->willReturn($this->paginator);
 
         $this->shopRepository

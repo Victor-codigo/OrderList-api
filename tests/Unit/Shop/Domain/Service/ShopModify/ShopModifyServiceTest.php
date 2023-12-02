@@ -7,8 +7,6 @@ namespace Test\Unit\Shop\Domain\Service\ShopModify;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\FileUpload\Exception\File\FileException;
-use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
@@ -88,7 +86,7 @@ class ShopModifyServiceTest extends TestCase
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with([$input->shopId], $input->groupId)
+            ->with($input->groupId, [$input->shopId])
             ->willReturn($this->paginator);
 
         $this->shopRepository
@@ -136,21 +134,17 @@ class ShopModifyServiceTest extends TestCase
             ->setDescription($input->description)
             ->setImage($shopFromDb->getImage());
 
-        $shopRepositoryInvocationCounter = $this->exactly(2);
         $this->shopRepository
-            ->expects($shopRepositoryInvocationCounter)
+            ->expects($this->once())
             ->method('findShopsOrFail')
-            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, NameWithSpaces|null $shopName, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
-                match ($shopRepositoryInvocationCounter->getInvocationCount()) {
-                    1 => [
-                        $this->assertEquals([$input->shopId], $shopsId),
-                        $this->assertEquals($input->groupId, $groupId),
-                    ],
-                    2 => throw new DBNotFoundException(),
-                };
+            ->with($input->groupId, [$input->shopId])
+            ->willReturn($this->paginator);
 
-                return $this->paginator;
-            });
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('findShopByShopNameOrFail')
+            ->with($input->groupId, $input->name)
+            ->willThrowException(new DBNotFoundException());
 
         $this->shopRepository
             ->expects($this->once())
@@ -195,21 +189,17 @@ class ShopModifyServiceTest extends TestCase
             ->setDescription($input->description)
             ->setImage(ValueObjectFactory::createPath(null));
 
-        $shopRepositoryInvocationCounter = $this->exactly(2);
         $this->shopRepository
-            ->expects($shopRepositoryInvocationCounter)
+            ->expects($this->once())
             ->method('findShopsOrFail')
-            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, NameWithSpaces|null $shopName, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
-                match ($shopRepositoryInvocationCounter->getInvocationCount()) {
-                    1 => [
-                        $this->assertEquals([$input->shopId], $shopsId),
-                        $this->assertEquals($input->groupId, $groupId),
-                    ],
-                    2 => throw new DBNotFoundException(),
-                };
+            ->with($input->groupId, [$input->shopId])
+            ->willReturn($this->paginator);
 
-                return $this->paginator;
-            });
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('findShopByShopNameOrFail')
+            ->with($input->groupId, $input->name)
+            ->willThrowException(new DBNotFoundException());
 
         $this->shopRepository
             ->expects($this->once())
@@ -257,21 +247,17 @@ class ShopModifyServiceTest extends TestCase
             ->setDescription($input->description)
             ->setImage(ValueObjectFactory::createPath(null));
 
-        $shopRepositoryInvocationCounter = $this->exactly(2);
         $this->shopRepository
-            ->expects($shopRepositoryInvocationCounter)
+            ->expects($this->once())
             ->method('findShopsOrFail')
-            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, NameWithSpaces|null $shopName, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
-                match ($shopRepositoryInvocationCounter->getInvocationCount()) {
-                    1 => [
-                        $this->assertEquals([$input->shopId], $shopsId),
-                        $this->assertEquals($input->groupId, $groupId),
-                    ],
-                    2 => throw new DBNotFoundException(),
-                };
+            ->with($input->groupId, [$input->shopId])
+            ->willReturn($this->paginator);
 
-                return $this->paginator;
-            });
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('findShopByShopNameOrFail')
+            ->with($input->groupId, $input->name)
+            ->willThrowException(new DBNotFoundException());
 
         $this->shopRepository
             ->expects($this->once())
@@ -318,21 +304,17 @@ class ShopModifyServiceTest extends TestCase
             ->setDescription($input->description)
             ->setImage(ValueObjectFactory::createPath(null));
 
-        $shopRepositoryInvocationCounter = $this->exactly(2);
         $this->shopRepository
-            ->expects($shopRepositoryInvocationCounter)
+            ->expects($this->once())
             ->method('findShopsOrFail')
-            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, NameWithSpaces|null $shopName, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
-                match ($shopRepositoryInvocationCounter->getInvocationCount()) {
-                    1 => [
-                        $this->assertEquals([$input->shopId], $shopsId),
-                        $this->assertEquals($input->groupId, $groupId),
-                    ],
-                    2 => throw new DBNotFoundException(),
-                };
+            ->with($input->groupId, [$input->shopId])
+            ->willReturn($this->paginator);
 
-                return $this->paginator;
-            });
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('findShopByShopNameOrFail')
+            ->with($input->groupId, $input->name)
+            ->willThrowException(new DBNotFoundException());
 
         $this->shopRepository
             ->expects($this->once())
@@ -379,21 +361,17 @@ class ShopModifyServiceTest extends TestCase
             ->setDescription($shopFromDb->getDescription())
             ->setImage($shopFromDb->getImage());
 
-        $shopRepositoryInvocationCounter = $this->exactly(2);
         $this->shopRepository
-            ->expects($shopRepositoryInvocationCounter)
+            ->expects($this->once())
             ->method('findShopsOrFail')
-            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, NameWithSpaces|null $shopName, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
-                match ($shopRepositoryInvocationCounter->getInvocationCount()) {
-                    1 => [
-                        $this->assertEquals([$input->shopId], $shopsId),
-                        $this->assertEquals($input->groupId, $groupId),
-                    ],
-                    2 => throw new DBNotFoundException(),
-                };
+            ->with($input->groupId, [$input->shopId])
+            ->willReturn($this->paginator);
 
-                return $this->paginator;
-            });
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('findShopByShopNameOrFail')
+            ->with($input->groupId, $input->name)
+            ->willThrowException(new DBNotFoundException());
 
         $this->shopRepository
             ->expects($this->once())
@@ -443,7 +421,7 @@ class ShopModifyServiceTest extends TestCase
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with([$input->shopId], $input->groupId)
+            ->with($input->groupId, [$input->shopId])
             ->willThrowException(new DBNotFoundException());
 
         $this->paginator
@@ -492,7 +470,7 @@ class ShopModifyServiceTest extends TestCase
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with([$input->shopId], $input->groupId)
+            ->with($input->groupId, [$input->shopId])
             ->willThrowException(new DBNotFoundException());
 
         $this->paginator
@@ -538,27 +516,17 @@ class ShopModifyServiceTest extends TestCase
             ->setDescription($input->description)
             ->setImage(ValueObjectFactory::createPath($fileUploadedName));
 
-        $shopRepositoryInvocationCounter = $this->exactly(2);
         $this->shopRepository
-            ->expects($shopRepositoryInvocationCounter)
+            ->expects($this->once())
             ->method('findShopsOrFail')
-            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, NameWithSpaces|null $shopName, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
-                match ($shopRepositoryInvocationCounter->getInvocationCount()) {
-                    1 => [
-                        $this->assertEquals([$input->shopId], $shopsId),
-                        $this->assertEquals($input->groupId, $groupId),
-                    ],
-                    2 => [
-                        $this->assertEquals(null, $shopsId),
-                        $this->assertEquals($input->groupId, $groupId),
-                        $this->assertEquals(null, $productId),
-                        $this->assertEquals($input->name, $shopName),
-                        $this->assertEquals(null, $shopNameStarsWith),
-                    ]
-                };
+            ->with($input->groupId, [$input->shopId])
+            ->willReturn($this->paginator);
 
-                return $this->paginator;
-            });
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('findShopByShopNameOrFail')
+            ->with($input->groupId, $input->name)
+            ->willReturn($this->paginator);
 
         $this->shopRepository
             ->expects($this->never())
@@ -608,7 +576,7 @@ class ShopModifyServiceTest extends TestCase
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with([$input->shopId], $input->groupId)
+            ->with($input->groupId, [$input->shopId])
             ->willReturn($this->paginator);
 
         $this->shopRepository
@@ -652,21 +620,17 @@ class ShopModifyServiceTest extends TestCase
             true
         );
 
-        $shopRepositoryInvocationCounter = $this->exactly(2);
         $this->shopRepository
-            ->expects($shopRepositoryInvocationCounter)
+            ->expects($this->once())
             ->method('findShopsOrFail')
-            ->willReturnCallback(function (array|null $shopsId, Identifier|null $groupId, array|null $productId, NameWithSpaces|null $shopName, string|null $shopNameStarsWith) use ($shopRepositoryInvocationCounter, $input) {
-                match ($shopRepositoryInvocationCounter->getInvocationCount()) {
-                    1 => [
-                        $this->assertEquals([$input->shopId], $shopsId),
-                        $this->assertEquals($input->groupId, $groupId),
-                    ],
-                    2 => throw new DBNotFoundException(),
-                };
+            ->with($input->groupId, [$input->shopId])
+            ->willReturn($this->paginator);
 
-                return $this->paginator;
-            });
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('findShopByShopNameOrFail')
+            ->with($input->groupId, $input->name)
+            ->willThrowException(new DBNotFoundException());
 
         $this->shopRepository
             ->expects($this->never())

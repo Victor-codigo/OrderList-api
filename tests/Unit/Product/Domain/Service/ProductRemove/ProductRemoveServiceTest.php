@@ -66,7 +66,7 @@ class ProductRemoveServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('findProductsOrFail')
-            ->with([$productId], $groupId, [$shopId])
+            ->with($groupId, [$productId], [$shopId])
             ->willReturn($this->paginator);
 
         $this->productRepository
@@ -97,7 +97,7 @@ class ProductRemoveServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('findProductsOrFail')
-            ->with([$productId], $groupId, [$shopId])
+            ->with($groupId, [$productId], [$shopId])
             ->willReturn($this->paginator);
 
         $this->productRepository
@@ -130,7 +130,7 @@ class ProductRemoveServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('findProductsOrFail')
-            ->with([$productId], $groupId, [$shopId])
+            ->with($groupId, [$productId], [$shopId])
             ->willReturn($this->paginator);
 
         $this->productRepository
@@ -161,7 +161,7 @@ class ProductRemoveServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('findProductsOrFail')
-            ->with([$productId], $groupId, [$shopId])
+            ->with($groupId, [$productId], [$shopId])
             ->willThrowException(new DBNotFoundException());
 
         $this->productRepository
@@ -189,7 +189,7 @@ class ProductRemoveServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('findProductsOrFail')
-            ->with([$productId], $groupId, [$shopId])
+            ->with($groupId, [$productId], [$shopId])
             ->willReturn($this->paginator);
 
         $this->productRepository

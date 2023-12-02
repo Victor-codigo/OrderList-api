@@ -129,14 +129,14 @@ class OrderModifyServiceTest extends TestCase
 
         $this->productRepository
             ->expects($this->once())
-            ->method('findProductsOrFail', $input->groupId)
-            ->with([$input->productId])
+            ->method('findProductsOrFail')
+            ->with($input->groupId, [$input->productId])
             ->willReturn($this->paginator);
 
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with([$input->shopId->toIdentifier()], $input->groupId)
+            ->with($input->groupId, [$input->shopId->toIdentifier()])
             ->willReturn($this->paginator);
 
         $this->orderRepository
@@ -186,7 +186,7 @@ class OrderModifyServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('findProductsOrFail')
-            ->with([$input->productId], $input->groupId)
+            ->with($input->groupId, [$input->productId])
             ->willThrowException(new DBNotFoundException());
 
         $this->shopRepository
@@ -227,13 +227,13 @@ class OrderModifyServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('findProductsOrFail')
-            ->with([$input->productId], $input->groupId)
+            ->with($input->groupId, [$input->productId])
             ->willReturn($this->paginator);
 
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with([$input->shopId->toIdentifier()], $input->groupId)
+            ->with($input->groupId, [$input->shopId->toIdentifier()])
             ->willThrowException(new DBNotFoundException());
 
         $this->orderRepository
@@ -272,13 +272,13 @@ class OrderModifyServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('findProductsOrFail')
-            ->with([$input->productId], $input->groupId)
+            ->with($input->groupId, [$input->productId])
             ->willReturn($this->paginator);
 
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with([$input->shopId->toIdentifier()], $input->groupId)
+            ->with($input->groupId, [$input->shopId->toIdentifier()])
             ->willReturn($this->paginator);
 
         $this->orderRepository
@@ -323,13 +323,13 @@ class OrderModifyServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('findProductsOrFail')
-            ->with([$input->productId], $input->groupId)
+            ->with($input->groupId, [$input->productId])
             ->willReturn($this->paginator);
 
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsOrFail')
-            ->with([$input->shopId->toIdentifier()], $input->groupId)
+            ->with($input->groupId, [$input->shopId->toIdentifier()])
             ->willReturn($this->paginator);
 
         $this->orderRepository

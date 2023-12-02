@@ -140,7 +140,7 @@ class ProductModifyService
      */
     private function getProduct(Identifier $productId, Identifier $groupId): Product
     {
-        $productPagination = $this->productRepository->findProductsOrFail([$productId], $groupId);
+        $productPagination = $this->productRepository->findProductsOrFail($groupId, [$productId]);
         $productPagination->setPagination(1, 1);
 
         return iterator_to_array($productPagination)[0];
@@ -156,7 +156,7 @@ class ProductModifyService
         }
 
         try {
-            $shopPagination = $this->shopRepository->findShopsOrFail([$shopId], $groupId);
+            $shopPagination = $this->shopRepository->findShopsOrFail($groupId, [$shopId]);
             $shopPagination->setPagination(1, 1);
 
             return iterator_to_array($shopPagination)[0];
