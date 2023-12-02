@@ -19,7 +19,7 @@ class ShopGetDataDto
         public readonly Identifier $groupId,
         public readonly array $shopsId,
         public readonly array $productsId,
-        public readonly Filter $shopFilter,
+        public readonly Filter $shopNameFilter,
         public readonly NameWithSpaces $shopName,
         public readonly PaginatorPage $page,
         public readonly PaginatorPageItems $pageItems,

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\Shop\Domain\Service\ShopGetData;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -58,7 +59,7 @@ class ShopGetDataServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldGetShopsDataOrderByNameAsc(): void
+    public function itShouldGetShopsDataOrderByShopIdAndProductIdAsc(): void
     {
         $shops = $this->getShops();
         $input = new ShopGetDataDto(
@@ -80,14 +81,20 @@ class ShopGetDataServiceTest extends TestCase
             ->expects($this->once())
             ->method('findShopsOrFail')
             ->with(
-                $input->shopsId,
                 $input->groupId,
+                $input->shopsId,
                 $input->productsId,
-                $input->shopName,
-                $input->shopFilter,
                 $input->orderAsc
             )
             ->willReturn($this->paginator);
+
+        $this->shopRepository
+            ->expects($this->never())
+            ->method('findShopByShopNameOrFail');
+
+        $this->shopRepository
+            ->expects($this->never())
+            ->method('findShopByShopNameFilterOrFail');
 
         $this->paginator
             ->expects($this->once())
@@ -97,7 +104,63 @@ class ShopGetDataServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayObject($shops));
+            ->willReturn(new \ArrayIterator($shops));
+
+        $return = $this->object->__invoke($input);
+
+        $this->assertCount(count($shops), $return);
+
+        foreach ($shops as $key => $shopExpected) {
+            $this->assertShopDataIsOk($shopExpected, $return[$key]);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetShopsDataOrderByNameAsc(): void
+    {
+        $shops = $this->getShops();
+        $input = new ShopGetDataDto(
+            ValueObjectFactory::createIdentifier('group id'),
+            [],
+            [],
+            new Filter(
+                'shop_name',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+                ValueObjectFactory::createNameWithSpaces(null)
+            ),
+            ValueObjectFactory::createNameWithSpaces('Shop name'),
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(100),
+            true,
+        );
+
+        $this->shopRepository
+            ->expects($this->never())
+            ->method('findShopsOrFail');
+
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('findShopByShopNameOrFail')
+            ->with(
+                $input->groupId,
+                $input->shopName,
+                $input->orderAsc
+            )
+            ->willReturn($this->paginator);
+
+        $this->shopRepository
+            ->expects($this->never())
+            ->method('findShopByShopNameFilterOrFail');
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with($input->page->getValue(), $input->pageItems->getValue());
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($shops));
 
         $return = $this->object->__invoke($input);
 
@@ -114,8 +177,8 @@ class ShopGetDataServiceTest extends TestCase
         $shops = $this->getShops();
         $input = new ShopGetDataDto(
             ValueObjectFactory::createIdentifier('group id'),
-            [ValueObjectFactory::createIdentifier('shop 1 id')],
-            [ValueObjectFactory::createIdentifier('product 1 id')],
+            [],
+            [],
             new Filter(
                 'shop_name',
                 ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
@@ -124,21 +187,26 @@ class ShopGetDataServiceTest extends TestCase
             ValueObjectFactory::createNameWithSpaces('Shop name'),
             ValueObjectFactory::createPaginatorPage(1),
             ValueObjectFactory::createPaginatorPageItems(100),
-            false
+            false,
         );
 
         $this->shopRepository
+            ->expects($this->never())
+            ->method('findShopsOrFail');
+
+        $this->shopRepository
             ->expects($this->once())
-            ->method('findShopsOrFail')
+            ->method('findShopByShopNameOrFail')
             ->with(
-                $input->shopsId,
                 $input->groupId,
-                $input->productsId,
                 $input->shopName,
-                $input->shopFilter,
                 $input->orderAsc
             )
             ->willReturn($this->paginator);
+
+        $this->shopRepository
+            ->expects($this->never())
+            ->method('findShopByShopNameFilterOrFail');
 
         $this->paginator
             ->expects($this->once())
@@ -148,7 +216,7 @@ class ShopGetDataServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayObject(array_reverse($shops)));
+            ->willReturn(new \ArrayIterator(array_reverse($shops)));
 
         $return = $this->object->__invoke($input);
 
@@ -165,28 +233,33 @@ class ShopGetDataServiceTest extends TestCase
         $shops = $this->getShops();
         $input = new ShopGetDataDto(
             ValueObjectFactory::createIdentifier('group id'),
-            [ValueObjectFactory::createIdentifier('shop 1 id')],
-            [ValueObjectFactory::createIdentifier('product 1 id')],
+            [],
+            [],
             new Filter(
                 'shop_name',
                 ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
                 ValueObjectFactory::createNameWithSpaces('Shop')
             ),
-            ValueObjectFactory::createNameWithSpaces('Shop name'),
+            ValueObjectFactory::createNameWithSpaces(null),
             ValueObjectFactory::createPaginatorPage(1),
             ValueObjectFactory::createPaginatorPageItems(100),
             true,
         );
 
         $this->shopRepository
+            ->expects($this->never())
+            ->method('findShopsOrFail');
+
+        $this->shopRepository
+            ->expects($this->never())
+            ->method('findShopByShopNameOrFail');
+
+        $this->shopRepository
             ->expects($this->once())
-            ->method('findShopsOrFail')
+            ->method('findShopByShopNameFilterOrFail')
             ->with(
-                $input->shopsId,
                 $input->groupId,
-                $input->productsId,
-                $input->shopName,
-                $input->shopFilter,
+                $input->shopNameFilter,
                 $input->orderAsc
             )
             ->willReturn($this->paginator);
@@ -229,17 +302,8 @@ class ShopGetDataServiceTest extends TestCase
         );
 
         $this->shopRepository
-            ->expects($this->once())
-            ->method('findShopsOrFail')
-            ->with(
-                null,
-                null,
-                null,
-                $input->shopName,
-                $input->shopFilter,
-                true
-            )
-            ->willThrowException(new DBNotFoundException());
+            ->expects($this->never())
+            ->method('findShopsOrFail');
 
         $this->paginator
             ->expects($this->never())
@@ -249,7 +313,7 @@ class ShopGetDataServiceTest extends TestCase
             ->expects($this->never())
             ->method('getIterator');
 
-        $this->expectException(DBNotFoundException::class);
+        $this->expectException(LogicException::class);
         $this->object->__invoke($input);
     }
 
@@ -275,11 +339,9 @@ class ShopGetDataServiceTest extends TestCase
             ->expects($this->once())
             ->method('findShopsOrFail')
             ->with(
-                $input->shopsId,
                 $input->groupId,
+                $input->shopsId,
                 $input->productsId,
-                $input->shopName,
-                $input->shopFilter,
                 $input->orderAsc
             )
             ->willThrowException(new DBNotFoundException());

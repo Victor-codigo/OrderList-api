@@ -11,7 +11,6 @@ use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use OpenApi\Attributes as OA;
 use Shop\Adapter\Http\Controller\ShopGetData\Dto\ShopGetDataRequestDto;
 use Shop\Application\ShopGetData\Dto\ShopGetDataInputDto;
-use Shop\Application\ShopGetData\SHOP_GET_DATA_FILTER;
 use Shop\Application\ShopGetData\ShopGetDataUseCase;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -78,21 +77,10 @@ use Symfony\Component\HttpFoundation\Response;
             schema: new OA\Schema(type: 'boolean')
         ),
         new OA\Parameter(
-            name: 'shop_name_filter_name',
-            in: 'query',
-            required: false,
-            description: 'Name of the filter to apply. It is mandatory to pass three shop_name_filter parameters, to apply filter',
-            example: SHOP_GET_DATA_FILTER::SHOP_NAME,
-            schema: new OA\Schema(
-                type: 'string',
-                enum: [SHOP_GET_DATA_FILTER::SHOP_NAME]
-            ),
-        ),
-        new OA\Parameter(
             name: 'shop_name_filter_type',
             in: 'query',
             required: false,
-            description: 'Type of the filter to apply. It is mandatory to pass three shop_name_filter parameters, to apply filter',
+            description: 'Type of the filter to apply. It is mandatory to pass two shop_name_filter parameters, to apply filter',
             example: FILTER_STRING_COMPARISON::STARTS_WITH,
             schema: new OA\Schema(
                 type: 'string',
@@ -108,7 +96,7 @@ use Symfony\Component\HttpFoundation\Response;
             name: 'shop_name_filter_value',
             in: 'query',
             required: false,
-            description: 'Value of the filter to apply. It is mandatory to pass three shop_name_filter parameters, to apply filter',
+            description: 'Value of the filter to apply. It is mandatory to pass two shop_name_filter parameters, to apply filter',
             example: 'Shop',
             schema: new OA\Schema(type: 'string'),
         ),
@@ -125,12 +113,17 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'message', type: 'string', example: 'Shop\'s data'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items(
                             properties: [
-                                new OA\Property(property: 'id', type: 'string'),
-                                new OA\Property(property: 'group_id', type: 'string'),
-                                new OA\Property(property: 'name', type: 'string'),
-                                new OA\Property(property: 'description', type: 'string'),
-                                new OA\Property(property: 'image', type: 'string'),
-                                new OA\Property(property: 'created_on', type: 'string'),
+                                new OA\Property(property: 'page', type: 'int'),
+                                new OA\Property(property: 'pages_total', type: 'int'),
+                                new OA\Property(property: 'shops', type: 'array', items: new OA\Items(
+                                    properties: [
+                                        new OA\Property(property: 'id', type: 'string'),
+                                        new OA\Property(property: 'group_id', type: 'string'),
+                                        new OA\Property(property: 'name', type: 'string'),
+                                        new OA\Property(property: 'description', type: 'string'),
+                                        new OA\Property(property: 'image', type: 'string'),
+                                        new OA\Property(property: 'created_on', type: 'string'),
+                                    ])),
                             ])),
                         new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),
                     ]
@@ -147,7 +140,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<permissions|group_id|shops_id|products_id|shop_name|shop_filter_value|shop_filter_type|shop_filter_name|page|page_items, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<not_enough_parameters|permissions|group_id|shops_id|products_id|shop_name|shop_filter_value|shop_filter_type|page|page_items, string|array>')),
                     ]
                 )
             )
@@ -172,7 +165,6 @@ class ShopGetDataController extends AbstractController
                 $request->groupId,
                 $request->shopsId,
                 $request->productsId,
-                $request->shopNameFilterName,
                 $request->shopNameFilterType,
                 $request->shopNameFilterValue,
                 $request->shopName,
@@ -189,7 +181,6 @@ class ShopGetDataController extends AbstractController
         string|null $groupId,
         array|null $shopsId,
         array|null $productsId,
-        string|null $shopNameFilterName,
         string|null $shopNameFilterType,
         string|int|float|null $shopNameFilterValue,
         string|null $shopName,
@@ -201,7 +192,6 @@ class ShopGetDataController extends AbstractController
             $groupId,
             $shopsId,
             $productsId,
-            $shopNameFilterName,
             $shopNameFilterType,
             $shopNameFilterValue,
             $shopName,

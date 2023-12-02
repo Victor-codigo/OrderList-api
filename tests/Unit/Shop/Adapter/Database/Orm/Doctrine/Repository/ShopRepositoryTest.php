@@ -141,104 +141,104 @@ class ShopRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldGetTheShopsOfAGroupWhitAName(): void
+    public function itShouldGetAllShopsOfAGroupOrderAsc(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
-        $shopName = ValueObjectFactory::createNameWithSpaces('Shop name 1');
-        $return = $this->object->findShopsByGroupAndNameOrFail($groupId, $shopName);
+        $shopNames = [
+            ValueObjectFactory::createNameWithSpaces('Shop name 1'),
+            ValueObjectFactory::createNameWithSpaces('Shop name 2'),
+            ValueObjectFactory::createNameWithSpaces('Shop name 3'),
+            ValueObjectFactory::createNameWithSpaces('Shop name 4'),
+        ];
+        $return = $this->object->findShopsOrFail($groupId, null, null, true);
+        $return = iterator_to_array($return);
+
+        $this->assertCount(4, $return);
+
+        foreach ($shopNames as $key => $shopNamesExpected) {
+            $this->assertEquals($shopNamesExpected, $return[$key]->getName());
+        }
+    }
+
+    /** @test */
+    public function itShouldGetAllShopsOfAGroupOrderDesc(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $shopNames = [
+            ValueObjectFactory::createNameWithSpaces('Shop name 4'),
+            ValueObjectFactory::createNameWithSpaces('Shop name 3'),
+            ValueObjectFactory::createNameWithSpaces('Shop name 2'),
+            ValueObjectFactory::createNameWithSpaces('Shop name 1'),
+        ];
+        $return = $this->object->findShopsOrFail($groupId, null, null, false);
+        $return = iterator_to_array($return);
+
+        $this->assertCount(4, $return);
+
+        foreach ($shopNames as $key => $shopNamesExpected) {
+            $this->assertEquals($shopNamesExpected, $return[$key]->getName());
+        }
+    }
+
+    /** @test */
+    public function itShouldGetShopsOfAGroupByShopIdOrderAsc(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $shopIds = [
+            ValueObjectFactory::createIdentifier(self::SHOP_ID),
+            ValueObjectFactory::createIdentifier(self::SHOP_ID_2),
+            ValueObjectFactory::createIdentifier(self::SHOP_ID_3),
+        ];
+        $shopNames = [
+            ValueObjectFactory::createNameWithSpaces('Shop name 1'),
+            ValueObjectFactory::createNameWithSpaces('Shop name 2'),
+            ValueObjectFactory::createNameWithSpaces('Shop name 3'),
+        ];
+
+        $return = $this->object->findShopsOrFail($groupId, $shopIds, null, true);
+        $return = iterator_to_array($return);
+
+        $this->assertCount(3, $return);
+
+        foreach ($shopNames as $key => $shopNamesExpected) {
+            $this->assertEquals($shopNamesExpected, $return[$key]->getName());
+        }
+    }
+
+    /** @test */
+    public function itShouldGetAllShopsOfAGroupByProductId(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $productId = ValueObjectFactory::createIdentifier(self::PRODUCT_ID);
+
+        $return = $this->object->findShopsOrFail($groupId, null, [$productId]);
+
+        $this->assertCount(3, $return);
+
+        $expectedShopsId = [
+            self::SHOP_ID,
+            self::SHOP_ID_2,
+            self::SHOP_ID_3,
+        ];
+
+        foreach ($return as $shop) {
+            $this->assertContains($shop->getId()->getValue(), $expectedShopsId);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetAllShopsOfGroupByShopIdANdProductId(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $shopId = ValueObjectFactory::createIdentifier(self::SHOP_ID_2);
+        $productId = ValueObjectFactory::createIdentifier(self::PRODUCT_ID);
+
+        $return = $this->object->findShopsOrFail($groupId, [$shopId], [$productId]);
 
         $this->assertCount(1, $return);
 
-        foreach ($return as $shop) {
-            $this->assertEquals($groupId, $shop->getGroupId());
-        }
-    }
-
-    /** @test */
-    public function itShouldFailGettingTheShopOfAGroupWithANameNoProduct(): void
-    {
-        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
-        $shopName = ValueObjectFactory::createNameWithSpaces('shop that not exists');
-
-        $this->expectException(DBNotFoundException::class);
-        $this->object->findShopsByGroupAndNameOrFail($groupId, $shopName);
-    }
-
-    /** @test */
-    public function itShouldGetAllShopsOrderByNameAsc(): void
-    {
-        $shopIds = [
-            ValueObjectFactory::createIdentifier(self::SHOP_ID),
-            ValueObjectFactory::createIdentifier(self::SHOP_ID_2),
-            ValueObjectFactory::createIdentifier(self::SHOP_ID_3),
-        ];
-        $shopNames = [
-            ValueObjectFactory::createNameWithSpaces('Shop name 1'),
-            ValueObjectFactory::createNameWithSpaces('Shop name 2'),
-            ValueObjectFactory::createNameWithSpaces('Shop name 3'),
-        ];
-
-        $return = $this->object->findShopsOrFail(shopsId: $shopIds, orderAsc: true);
-        $return = iterator_to_array($return);
-
-        $this->assertCount(3, $return);
-
-        foreach ($shopNames as $key => $shopNamesExpected) {
-            $this->assertEquals($shopNamesExpected, $return[$key]->getName());
-        }
-    }
-
-    /** @test */
-    public function itShouldGetAllShopsOrderByNameDesc(): void
-    {
-        $shopIds = [
-            ValueObjectFactory::createIdentifier(self::SHOP_ID),
-            ValueObjectFactory::createIdentifier(self::SHOP_ID_2),
-            ValueObjectFactory::createIdentifier(self::SHOP_ID_3),
-        ];
-        $shopNames = [
-            ValueObjectFactory::createNameWithSpaces('Shop name 3'),
-            ValueObjectFactory::createNameWithSpaces('Shop name 2'),
-            ValueObjectFactory::createNameWithSpaces('Shop name 1'),
-        ];
-
-        $return = $this->object->findShopsOrFail(shopsId: $shopIds, orderAsc: false);
-        $return = iterator_to_array($return);
-
-        $this->assertCount(3, $return);
-
-        foreach ($shopNames as $key => $shopNamesExpected) {
-            $this->assertEquals($shopNamesExpected, $return[$key]->getName());
-        }
-    }
-
-    /** @test */
-    public function itShouldGetAllShopsOfAGroup(): void
-    {
-        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
-
-        $return = $this->object->findShopsOrFail(null, $groupId);
-
-        $this->assertCount(4, $return);
-
-        foreach ($return as $shop) {
-            $this->assertEquals($shop->getGroupId(), $groupId);
-        }
-    }
-
-    /** @test */
-    public function itShouldGetAllShopsOfAProduct(): void
-    {
-        $productId = ValueObjectFactory::createIdentifier(self::PRODUCT_ID);
-
-        $return = $this->object->findShopsOrFail(null, null, [$productId]);
-
-        $this->assertCount(3, $return);
-
         $expectedShopsId = [
-            self::SHOP_ID,
             self::SHOP_ID_2,
-            self::SHOP_ID_3,
         ];
 
         foreach ($return as $shop) {
@@ -247,44 +247,19 @@ class ShopRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldGetAllShopsOfAGroupAndAProduct(): void
-    {
-        $productId = ValueObjectFactory::createIdentifier(self::PRODUCT_ID);
-        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
-
-        $return = $this->object->findShopsOrFail(null, $groupId, [$productId]);
-
-        $this->assertCount(3, $return);
-
-        $expectedShopsId = [
-            self::SHOP_ID,
-            self::SHOP_ID_2,
-            self::SHOP_ID_3,
-        ];
-
-        foreach ($return as $shop) {
-            $this->assertContains($shop->getId()->getValue(), $expectedShopsId);
-        }
-    }
-
-    /** @test */
-    public function itShouldGetAllShopsOfAGroupFilterValueIsNull(): void
+    public function itShouldGetShopsOfAGroupByName(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
-        $shopFilter = new Filter(
-            'shop_name',
-            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
-            ValueObjectFactory::createNameWithSpaces(null)
+        $return = $this->object->findShopByShopNameOrFail(
+            $groupId,
+            ValueObjectFactory::createNameWithSpaces('Shop name 3'),
+            true
         );
-        $return = $this->object->findShopsOrFail(null, $groupId, null, null, $shopFilter);
 
-        $this->assertCount(4, $return);
+        $this->assertCount(1, $return);
 
         $expectedShopsId = [
             self::SHOP_ID,
-            self::SHOP_ID_2,
-            self::SHOP_ID_3,
-            self::SHOP_ID_4,
         ];
 
         foreach ($return as $shop) {
@@ -293,15 +268,15 @@ class ShopRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldGetAllShopsOfAGroupAndThatStartsWith(): void
+    public function itShouldGetAllShopsOfAGroupThatNameStartsWith(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
-        $shopFilter = new Filter(
+        $shopNameFilter = new Filter(
             'shop_name',
             ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
             ValueObjectFactory::createNameWithSpaces('Shop')
         );
-        $return = $this->object->findShopsOrFail(null, $groupId, null, null, $shopFilter);
+        $return = $this->object->findShopByShopNameFilterOrFail($groupId, $shopNameFilter, true);
 
         $this->assertCount(4, $return);
 
@@ -318,15 +293,15 @@ class ShopRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldGetAllShopsOfAGroupAndThatEndsWith(): void
+    public function itShouldGetAllShopsOfAGroupThatNameEndsWith(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
-        $shopFilter = new Filter(
+        $shopNameFilter = new Filter(
             'shop_name',
             ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::ENDS_WITH),
             ValueObjectFactory::createNameWithSpaces('name 1')
         );
-        $return = $this->object->findShopsOrFail(null, $groupId, null, null, $shopFilter);
+        $return = $this->object->findShopByShopNameFilterOrFail($groupId, $shopNameFilter, true);
 
         $this->assertCount(1, $return);
 
@@ -343,12 +318,12 @@ class ShopRepositoryTest extends DataBaseTestCase
     public function itShouldGetAllShopsOfAGroupAndThatContains(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
-        $shopFilter = new Filter(
+        $shopNameFilter = new Filter(
             'shop_name',
             ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::CONTAINS),
             ValueObjectFactory::createNameWithSpaces('name')
         );
-        $return = $this->object->findShopsOrFail(null, $groupId, null, null, $shopFilter);
+        $return = $this->object->findShopByShopNameFilterOrFail($groupId, $shopNameFilter, true);
 
         $this->assertCount(4, $return);
 
@@ -357,81 +332,6 @@ class ShopRepositoryTest extends DataBaseTestCase
             self::SHOP_ID_2,
             self::SHOP_ID_3,
             self::SHOP_ID_4,
-        ];
-
-        foreach ($return as $shop) {
-            $this->assertContains($shop->getId()->getValue(), $expectedShopsId);
-        }
-    }
-
-    /** @test */
-    public function itShouldGetAllShopsThatStartsWith(): void
-    {
-        $shopFilter = new Filter(
-            'shop_name',
-            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
-            ValueObjectFactory::createNameWithSpaces('Shop')
-        );
-        $return = $this->object->findShopsOrFail(null, null, null, null, $shopFilter);
-
-        $this->assertCount(4, $return);
-
-        $expectedShopsId = [
-            self::SHOP_ID,
-            self::SHOP_ID_2,
-            self::SHOP_ID_3,
-            self::SHOP_ID_4,
-        ];
-
-        foreach ($return as $shop) {
-            $this->assertContains($shop->getId()->getValue(), $expectedShopsId);
-        }
-    }
-
-    /** @test */
-    public function itShouldGetShopOfAGroupWithAName(): void
-    {
-        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
-        $return = $this->object->findShopsOrFail(
-            null,
-            $groupId,
-            null,
-            ValueObjectFactory::createNameWithSpaces('Shop name 3'),
-            null,
-        );
-
-        $this->assertCount(1, $return);
-
-        $expectedShopsId = [
-            self::SHOP_ID,
-        ];
-
-        foreach ($return as $shop) {
-            $this->assertContains($shop->getId()->getValue(), $expectedShopsId);
-        }
-    }
-
-    /** @test */
-    public function itShouldGetShopOfAGroupWithANameShopNameStartsWithAndShopNameAreSet(): void
-    {
-        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
-        $shopFilter = new Filter(
-            'Shop name',
-            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
-            ValueObjectFactory::createNameWithSpaces('Shop name 4')
-        );
-        $return = $this->object->findShopsOrFail(
-            null,
-            $groupId,
-            null,
-            ValueObjectFactory::createNameWithSpaces('Shop name 3'),
-            $shopFilter,
-        );
-
-        $this->assertCount(1, $return);
-
-        $expectedShopsId = [
-            self::SHOP_ID,
         ];
 
         foreach ($return as $shop) {
@@ -442,29 +342,33 @@ class ShopRepositoryTest extends DataBaseTestCase
     /** @test */
     public function itShouldFailGettingAllShopsOfAGroupNotFound(): void
     {
-        $productId = ValueObjectFactory::createIdentifier(self::PRODUCT_ID);
         $groupId = ValueObjectFactory::createIdentifier('fc4f5962-02d1-4d80-b3ae-8aeffbcb6268');
 
         $this->expectException(DBNotFoundException::class);
-        $this->object->findShopsOrFail(null, $groupId, [$productId]);
+        $this->object->findShopsOrFail($groupId);
     }
 
     /** @test */
-    public function itShouldFailGettingAllShopsOfAShopNotFound(): void
+    public function itShouldFailGettingShopsOfAGroupByNameNotFound(): void
     {
-        $productId = ValueObjectFactory::createIdentifier('fc4f5962-02d1-4d80-b3ae-8aeffbcb6268');
+        $shopName = ValueObjectFactory::createNameWithSpaces('name not found');
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
 
         $this->expectException(DBNotFoundException::class);
-        $this->object->findShopsOrFail(null, $groupId, [$productId]);
+        $this->object->findShopByShopNameOrFail($groupId, $shopName, true);
     }
 
     /** @test */
-    public function itShouldFailGettingShopsThereAreNot(): void
+    public function itShouldFailGettingShopNameFilterNotFound(): void
     {
-        $shopId = ValueObjectFactory::createIdentifier('shop id');
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $shopNameFilter = new Filter(
+            'shop_name',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::CONTAINS),
+            ValueObjectFactory::createNameWithSpaces('shop name not found')
+        );
 
         $this->expectException(DBNotFoundException::class);
-        $this->object->findShopsOrFail([$shopId]);
+        $this->object->findShopByShopNameFilterOrFail($groupId, $shopNameFilter);
     }
 }

@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace Shop\Domain\Service\ShopGetData;
 
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Exception\LogicException;
+use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
+use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Shop\Domain\Model\Shop;
 use Shop\Domain\Port\Repository\ShopRepositoryInterface;
@@ -13,6 +18,8 @@ use Shop\Domain\Service\ShopGetData\Dto\ShopGetDataDto;
 
 class ShopGetDataService
 {
+    private PaginatorInterface|null $shopsPaginator;
+
     public function __construct(
         private ShopRepositoryInterface $shopRepository
     ) {
@@ -20,19 +27,68 @@ class ShopGetDataService
 
     /**
      * @throws DBNotFoundException
+     * @throws LogicException
      */
     public function __invoke(ShopGetDataDto $input): array
     {
-        $shopsPaginator = $this->shopRepository->findShopsOrFail(
-            empty($input->shopsId) ? null : $input->shopsId,
-            $input->groupId->isNull() ? null : $input->groupId,
-            empty($input->productsId) ? null : $input->productsId,
-            $input->shopName,
-            $input->shopFilter,
-            $input->orderAsc
-        );
+        $this->shopsPaginator = $this->getShopsByShopIdAndProductId($input->groupId, $input->shopsId, $input->productsId, $input->orderAsc);
+        $this->shopsPaginator ??= $this->getShopsByShopName($input->groupId, $input->shopName, $input->orderAsc);
+        $this->shopsPaginator ??= $this->getShopsByShopNameFilter($input->groupId, $input->shopNameFilter, $input->orderAsc);
 
-        return $this->getShopsData($shopsPaginator, $input->page, $input->pageItems);
+        if (null === $this->shopsPaginator) {
+            throw LogicException::fromMessage('Not enough parameters');
+        }
+
+        return $this->getShopsData($this->shopsPaginator, $input->page, $input->pageItems);
+    }
+
+    public function getPagesTotal(): int
+    {
+        return $this->shopsPaginator->getPagesTotal();
+    }
+
+    /**
+     * @param Identifier[] $shopsId
+     * @param Identifier[] $productsId
+     *
+     * @throws DBNotFoundException
+     */
+    private function getShopsByShopIdAndProductId(Identifier $groupId, array $shopsId, array $productsId, bool $orderAsc): PaginatorInterface|null
+    {
+        if (empty($shopsId) && empty($productsId)) {
+            return null;
+        }
+
+        return $this->shopRepository->findShopsOrFail(
+            $groupId,
+            empty($shopsId) ? null : $shopsId,
+            empty($productsId) ? null : $productsId,
+            $orderAsc
+        );
+    }
+
+    /**
+     * @throws DBNotFoundException
+     */
+    private function getShopsByShopName(Identifier $groupId, NameWithSpaces $shopName, bool $orderAsc): PaginatorInterface|null
+    {
+        if ($shopName->isNull()) {
+            return null;
+        }
+
+        return $this->shopRepository->findShopByShopNameOrFail($groupId, $shopName, $orderAsc);
+    }
+
+    /**
+     * @throws DBNotFoundException
+     */
+    private function getShopsByShopNameFilter(Identifier $groupId, Filter $shopNameFilter, bool $orderAsc): PaginatorInterface|null
+    {
+        if ($shopNameFilter->isNull()) {
+            return null;
+        }
+
+        return $this->shopRepository->findShopByShopNameFilterOrFail($groupId, $shopNameFilter, $orderAsc);
     }
 
     private function getShopsData(PaginatorInterface $shopsPaginator, PaginatorPage $page, PaginatorPageItems $pageItems): array

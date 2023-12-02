@@ -10,7 +10,6 @@ use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\ValidationInterface;
 use PHPUnit\Framework\TestCase;
 use Shop\Application\ShopGetData\Dto\ShopGetDataInputDto;
-use Shop\Application\ShopGetData\SHOP_GET_DATA_FILTER;
 
 class ShopGetDataInputDtoTest extends TestCase
 {
@@ -40,7 +39,6 @@ class ShopGetDataInputDtoTest extends TestCase
             self::GROUP_ID,
             self::SHOPS_ID,
             self::PRODUCTS_ID,
-            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
             FILTER_STRING_COMPARISON::STARTS_WITH->value,
             'Shop',
             'shop name',
@@ -61,7 +59,6 @@ class ShopGetDataInputDtoTest extends TestCase
             self::GROUP_ID,
             null,
             self::PRODUCTS_ID,
-            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
             FILTER_STRING_COMPARISON::STARTS_WITH->value,
             'Shop',
             'shop name',
@@ -82,7 +79,6 @@ class ShopGetDataInputDtoTest extends TestCase
             self::GROUP_ID,
             self::SHOPS_ID,
             null,
-            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
             FILTER_STRING_COMPARISON::STARTS_WITH->value,
             'Shop',
             'shop name',
@@ -105,7 +101,6 @@ class ShopGetDataInputDtoTest extends TestCase
             self::PRODUCTS_ID,
             null,
             null,
-            null,
             'shop name',
             true,
             1,
@@ -124,7 +119,6 @@ class ShopGetDataInputDtoTest extends TestCase
             null,
             self::SHOPS_ID,
             self::PRODUCTS_ID,
-            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
             FILTER_STRING_COMPARISON::STARTS_WITH->value,
             'Shop',
             'shop name',
@@ -145,7 +139,6 @@ class ShopGetDataInputDtoTest extends TestCase
             'wrong id',
             self::SHOPS_ID,
             self::PRODUCTS_ID,
-            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
             FILTER_STRING_COMPARISON::STARTS_WITH->value,
             'Shop',
             'shop name',
@@ -169,7 +162,6 @@ class ShopGetDataInputDtoTest extends TestCase
                 'wrong id 2',
             ],
             self::PRODUCTS_ID,
-            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
             FILTER_STRING_COMPARISON::STARTS_WITH->value,
             'Shop',
             'shop name',
@@ -193,7 +185,6 @@ class ShopGetDataInputDtoTest extends TestCase
                 'wrong id 1',
                 'wrong id 2',
             ],
-            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
             FILTER_STRING_COMPARISON::STARTS_WITH->value,
             'Shop',
             'shop name',
@@ -208,55 +199,12 @@ class ShopGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailShopFilterNameIsNull(): void
-    {
-        $object = new ShopGetDataInputDto(
-            self::GROUP_ID,
-            self::SHOPS_ID,
-            self::PRODUCTS_ID,
-            null,
-            FILTER_STRING_COMPARISON::STARTS_WITH->value,
-            'Shop',
-            null,
-            true,
-            1,
-            100
-        );
-
-        $return = $object->validate($this->validator);
-
-        $this->assertEquals(['shop_filter_name' => [VALIDATION_ERRORS::CHOICE_NOT_SUCH]], $return);
-    }
-
-    /** @test */
-    public function itShouldFailShopFilterNameIsWrong(): void
-    {
-        $object = new ShopGetDataInputDto(
-            self::GROUP_ID,
-            self::SHOPS_ID,
-            self::PRODUCTS_ID,
-            'wong name',
-            FILTER_STRING_COMPARISON::STARTS_WITH->value,
-            'Shop',
-            null,
-            true,
-            1,
-            100
-        );
-
-        $return = $object->validate($this->validator);
-
-        $this->assertEquals(['shop_filter_name' => [VALIDATION_ERRORS::CHOICE_NOT_SUCH]], $return);
-    }
-
-    /** @test */
     public function itShouldFailShopNameFilterTypeIsNull(): void
     {
         $object = new ShopGetDataInputDto(
             self::GROUP_ID,
             self::SHOPS_ID,
             self::PRODUCTS_ID,
-            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
             null,
             'shop',
             'shop name',
@@ -277,7 +225,6 @@ class ShopGetDataInputDtoTest extends TestCase
             self::GROUP_ID,
             self::SHOPS_ID,
             self::PRODUCTS_ID,
-            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
             'wrong filter',
             'Shop',
             'shop name',
@@ -298,7 +245,6 @@ class ShopGetDataInputDtoTest extends TestCase
             self::GROUP_ID,
             self::SHOPS_ID,
             self::PRODUCTS_ID,
-            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
             FILTER_STRING_COMPARISON::STARTS_WITH->value,
             null,
             'shop name',
@@ -319,7 +265,6 @@ class ShopGetDataInputDtoTest extends TestCase
             self::GROUP_ID,
             self::SHOPS_ID,
             self::PRODUCTS_ID,
-            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
             FILTER_STRING_COMPARISON::STARTS_WITH->value,
             str_pad('', 51, 'p'),
             'shop name',
@@ -340,7 +285,6 @@ class ShopGetDataInputDtoTest extends TestCase
             self::GROUP_ID,
             self::SHOPS_ID,
             self::PRODUCTS_ID,
-            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
             FILTER_STRING_COMPARISON::STARTS_WITH->value,
             'Shop',
             'shop name-',
@@ -361,7 +305,6 @@ class ShopGetDataInputDtoTest extends TestCase
             self::GROUP_ID,
             self::SHOPS_ID,
             self::PRODUCTS_ID,
-            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
             FILTER_STRING_COMPARISON::STARTS_WITH->value,
             'Shop',
             'shop name',
@@ -382,7 +325,6 @@ class ShopGetDataInputDtoTest extends TestCase
             self::GROUP_ID,
             self::SHOPS_ID,
             self::PRODUCTS_ID,
-            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
             FILTER_STRING_COMPARISON::STARTS_WITH->value,
             'Shop',
             'shop name',
@@ -403,7 +345,6 @@ class ShopGetDataInputDtoTest extends TestCase
             self::GROUP_ID,
             self::SHOPS_ID,
             self::PRODUCTS_ID,
-            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
             FILTER_STRING_COMPARISON::STARTS_WITH->value,
             'Shop',
             'shop name',
@@ -424,7 +365,6 @@ class ShopGetDataInputDtoTest extends TestCase
             self::GROUP_ID,
             self::SHOPS_ID,
             self::PRODUCTS_ID,
-            SHOP_GET_DATA_FILTER::SHOP_NAME->value,
             FILTER_STRING_COMPARISON::STARTS_WITH->value,
             'Shop',
             'shop name',
@@ -451,7 +391,6 @@ class ShopGetDataInputDtoTest extends TestCase
                 'wrong id 1',
                 'wrong id 2',
             ],
-            'wrong name',
             null,
             'Shop -',
             'shop name-',
@@ -466,7 +405,6 @@ class ShopGetDataInputDtoTest extends TestCase
                 'group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
                 'shops_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS], [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]],
                 'products_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS], [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]],
-                'shop_filter_name' => [VALIDATION_ERRORS::CHOICE_NOT_SUCH],
                 'shop_filter_type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
                 'shop_filter_value' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
                 'shop_name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],

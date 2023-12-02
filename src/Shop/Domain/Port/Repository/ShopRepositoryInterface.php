@@ -33,8 +33,19 @@ interface ShopRepositoryInterface extends RepositoryInterface
 
     /**
      * @param Identifier[]|null $shopsId
+     * @param Identifier[]|null $productsId
      *
      * @throws DBNotFoundException
      */
-    public function findShopsOrFail(array $shopsId = null, Identifier $groupId = null, array $productId = null, NameWithSpaces $shopName = null, Filter $shopFilter = null, bool $orderAsc = true): PaginatorInterface;
+    public function findShopsOrFail(Identifier $groupId, array $shopsId = null, array $productsId = null, bool $orderAsc = true): PaginatorInterface;
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findShopByShopNameOrFail(Identifier $groupId, NameWithSpaces $shopName, bool $orderAsc = true): PaginatorInterface;
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findShopByShopNameFilterOrFail(Identifier $groupId, Filter $shopNameFilter, bool $orderAsc = true): PaginatorInterface;
 }

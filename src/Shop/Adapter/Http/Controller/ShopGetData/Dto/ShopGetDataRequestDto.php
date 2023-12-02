@@ -19,7 +19,6 @@ class ShopGetDataRequestDto implements RequestDtoInterface
     public readonly string|null $groupId;
     public readonly array|null $shopsId;
     public readonly array|null $productsId;
-    public readonly string|null $shopNameFilterName;
     public readonly string|null $shopNameFilterType;
     public readonly string|float|int|null $shopNameFilterValue;
     public readonly string|null $shopName;
@@ -32,7 +31,6 @@ class ShopGetDataRequestDto implements RequestDtoInterface
         $this->groupId = $request->query->get('group_id');
         $this->shopsId = $this->validateCsvOverflow($request->query->get('shops_id'), self::SHOPS_NUM_MAX);
         $this->productsId = $this->validateCsvOverflow($request->query->get('products_id'), self::PRODUCTS_NUM_MAX);
-        $this->shopNameFilterName = $request->query->get('shop_name_filter_name');
         $this->shopNameFilterType = $request->query->get('shop_name_filter_type');
         $this->shopNameFilterValue = $request->query->get('shop_name_filter_value');
         $this->shopName = $request->query->get('shop_name');

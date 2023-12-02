@@ -11,10 +11,8 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\ServiceInputDtoInterface;
-use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\ValidationInterface;
-use Shop\Application\ShopGetData\SHOP_GET_DATA_FILTER;
 
 class ShopGetDataInputDto implements ServiceInputDtoInterface
 {
@@ -28,7 +26,7 @@ class ShopGetDataInputDto implements ServiceInputDtoInterface
      */
     public readonly array $productsId;
     public readonly NameWithSpaces|null $shopName;
-    public readonly Filter|null $shopFilter;
+    public readonly Filter|null $shopNameFilter;
     public readonly PaginatorPage $page;
     public readonly PaginatorPageItems $pageItems;
     public readonly bool $orderAsc;
@@ -37,7 +35,6 @@ class ShopGetDataInputDto implements ServiceInputDtoInterface
         string|null $groupId,
         array|null $shopsId,
         array|null $productsId,
-        string|null $shopNameFilterName,
         string|null $shopNameFilterType,
         string|null $shopNameFilterValue,
         string|null $shopName,
@@ -59,8 +56,8 @@ class ShopGetDataInputDto implements ServiceInputDtoInterface
         $this->page = ValueObjectFactory::createPaginatorPage($page);
         $this->pageItems = ValueObjectFactory::createPaginatorPageItems($pageItems);
         $this->orderAsc = $orderAsc ?? true;
-        $this->shopFilter = ValueObjectFactory::createFilter(
-            $shopNameFilterName ?? '',
+        $this->shopNameFilter = ValueObjectFactory::createFilter(
+            'shop_name',
             ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::tryFrom($shopNameFilterType ?? '')),
             ValueObjectFactory::createNameWithSpaces($shopNameFilterValue)
         );
@@ -107,18 +104,13 @@ class ShopGetDataInputDto implements ServiceInputDtoInterface
 
     private function validateFilter(ValidationInterface $validator): array
     {
-        if ('' === $this->shopFilter->id
-        && $this->shopFilter->getFilter()->isNull()
-        && $this->shopFilter->isNull()) {
+        if ($this->shopNameFilter->getFilter()->isNull()
+        && $this->shopNameFilter->isNull()) {
             return [];
         }
 
         $errorList = [];
-        if (null === SHOP_GET_DATA_FILTER::tryFrom($this->shopFilter->id)) {
-            $errorList['shop_filter_name'] = [VALIDATION_ERRORS::CHOICE_NOT_SUCH];
-        }
-
-        $errorListShopNameFilter = $this->shopFilter->validate($validator);
+        $errorListShopNameFilter = $this->shopNameFilter->validate($validator);
 
         if (!empty($errorListShopNameFilter)
         && array_key_exists('type', $errorListShopNameFilter)) {
