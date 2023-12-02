@@ -702,7 +702,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailGettingProductsOfAGroupProductNameIdNotFound(): void
+    public function itShouldFailGettingProductsOfAGroupProductNameNotFound(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
         $productName = 'product that not exists';
@@ -844,8 +844,6 @@ class ProductGetDataControllerTest extends WebClientTestCase
 
         $this->assertEquals(['alphanumeric_with_whitespace'], $responseContent->errors->product_name_filter_value);
     }
-
-    // ---
 
     /** @test */
     public function itShouldFailGettingProductsOfAGroupShopNameFilterTypeIsNull(): void
