@@ -62,4 +62,20 @@ class IdentifierTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::UUID_INVALID_CHARACTERS], $return,
             'It was expected that validation fail on notNull');
     }
+
+    public function testToString(): void
+    {
+        $object = $this->createIdentifier($this->validId);
+        $return = $object->__toString();
+
+        $this->assertEquals($this->validId, $return);
+    }
+
+    public function testToStringOnValueNull(): void
+    {
+        $object = $this->createIdentifier(null);
+        $return = $object->__toString();
+
+        $this->assertEquals('', $return);
+    }
 }

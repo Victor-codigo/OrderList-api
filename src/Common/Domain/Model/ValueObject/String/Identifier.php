@@ -18,8 +18,12 @@ class Identifier extends StringValueObject
             ->setConstraint(ConstraintFactory::uuId());
     }
 
-    public function __toString()
+    public function __toString(): string
     {
+        if ($this->isNull()) {
+            return '';
+        }
+
         return $this->getValue();
     }
 }
