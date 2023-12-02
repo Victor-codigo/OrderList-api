@@ -1070,4 +1070,29 @@ class ProductGetDataControllerTest extends WebClientTestCase
 
         $this->assertEquals(['greater_than'], $responseContent->errors->page_items);
     }
+
+    /** @test */
+    public function itShouldFailGettingProductsOfAGroupNotEnoughParameters(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['not_enough_parameters'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Not enough parameters', $responseContent->message);
+    }
 }

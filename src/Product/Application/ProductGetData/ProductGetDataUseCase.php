@@ -6,6 +6,7 @@ namespace Product\Application\ProductGetData;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
+use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
@@ -14,6 +15,7 @@ use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use Product\Application\ProductGetData\Dto\ProductGetDataInputDto;
 use Product\Application\ProductGetData\Dto\ProductGetDataOutputDto;
+use Product\Application\ProductGetData\Exception\ProductGetDataNotEnoughParametersException;
 use Product\Application\ProductGetData\Exception\ProductGetDataProductsNotFoundException;
 use Product\Application\ProductGetData\Exception\ProductGetDataValidateGroupAndUserException;
 use Product\Domain\Service\ProductGetData\Dto\ProductGetDataDto;
@@ -44,6 +46,8 @@ class ProductGetDataUseCase extends ServiceBase
             throw ProductGetDataValidateGroupAndUserException::fromMessage('You have not permissions');
         } catch (DBNotFoundException) {
             throw ProductGetDataProductsNotFoundException::fromMessage('No products found');
+        } catch (LogicException) {
+            throw ProductGetDataNotEnoughParametersException::fromMessage('Not enough parameters');
         } catch (\Throwable $e) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
