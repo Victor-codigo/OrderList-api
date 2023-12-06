@@ -87,6 +87,67 @@ class ProductGetDataServiceTest extends TestCase
     }
 
     /** @test */
+    public function itShouldGetProductOfAGroupOrderAsc(): void
+    {
+        $products = $this->getProducts();
+        $input = new ProductGetDataDto(
+            ValueObjectFactory::createIdentifier('group id'),
+            [],
+            [],
+            ValueObjectFactory::createNameWithSpaces(null),
+            new Filter(
+                'product_name',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+                ValueObjectFactory::createNameWithSpaces(null)
+            ),
+            new Filter(
+                'shop_name',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+                ValueObjectFactory::createNameWithSpaces(null)
+            ),
+            true,
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(100)
+        );
+
+        $this->productRepository
+            ->expects($this->once())
+            ->method('findProductsOrFail')
+            ->with($input->groupId, null, null, $input->orderAsc)
+            ->willReturn($this->paginator);
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsByProductNameOrFail');
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsByProductNameFilterOrFail');
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsByShopNameFilterOrFail');
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with($input->page->getValue(), $input->pageItems->getValue());
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($products));
+
+        $return = $this->object->__invoke($input);
+
+        $this->assertCount(count($products), $return);
+
+        foreach ($return as $product) {
+            $this->assertProductDataIsOk($products, $product);
+        }
+    }
+
+    /** @test */
     public function itShouldGetProductOfAGroupWithProductsIdAndShopsId(): void
     {
         $products = $this->getProducts();
@@ -333,7 +394,6 @@ class ProductGetDataServiceTest extends TestCase
     /** @test */
     public function itShouldFailGettingProductOfAGroupNotEnoughParameters(): void
     {
-        $products = $this->getProducts();
         $input = new ProductGetDataDto(
             ValueObjectFactory::createIdentifier(null),
             [],

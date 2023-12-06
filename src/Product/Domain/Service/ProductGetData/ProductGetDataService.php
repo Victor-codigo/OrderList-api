@@ -31,14 +31,15 @@ class ProductGetDataService
      */
     public function __invoke(ProductGetDataDto $input): array
     {
+        if ($input->groupId->isNull()) {
+            throw LogicException::fromMessage('Not enough parameters');
+        }
+
         $this->productsPaginator = $this->getProductsByProductIdOrShopsId($input->groupId, $input->productsId, $input->shopsId, $input->orderAsc);
         $this->productsPaginator ??= $this->getProductsByProductName($input->groupId, $input->productName, $input->orderAsc);
         $this->productsPaginator ??= $this->getProductByProductNameFilter($input->groupId, $input->productNameFilter, $input->orderAsc);
         $this->productsPaginator ??= $this->getProductByShopNameFilter($input->groupId, $input->shopNameFilter, $input->orderAsc);
-
-        if (null === $this->productsPaginator) {
-            throw LogicException::fromMessage('Not enough parameters');
-        }
+        $this->productsPaginator ??= $this->getProductsByGroupId($input->groupId, $input->orderAsc);
 
         return $this->getProductsData($this->productsPaginator, $input->page, $input->pageItems);
     }
@@ -64,6 +65,19 @@ class ProductGetDataService
             $groupId,
             empty($productsId) ? null : $productsId,
             empty($shopsId) ? null : $shopsId,
+            $orderAsc
+        );
+    }
+
+    /**
+     * @throws DBNotFoundException
+     */
+    private function getProductsByGroupId(Identifier $groupId, bool $orderAsc): PaginatorInterface
+    {
+        return $this->productRepository->findProductsOrFail(
+            $groupId,
+            null,
+            null,
             $orderAsc
         );
     }

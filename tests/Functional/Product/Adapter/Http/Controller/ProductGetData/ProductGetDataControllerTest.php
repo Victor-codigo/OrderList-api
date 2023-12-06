@@ -80,7 +80,6 @@ class ProductGetDataControllerTest extends WebClientTestCase
                 'image' => null,
                 'created_on' => '',
             ],
-
             [
                 'id' => 'afc62bc9-c42c-4c4d-8098-09ce51414a92',
                 'group_id' => self::GROUP_EXISTS_ID,
@@ -89,7 +88,73 @@ class ProductGetDataControllerTest extends WebClientTestCase
                 'image' => null,
                 'created_on' => '',
             ],
+            [
+                'id' => 'ca10c90a-c7e6-4594-89e9-71d2f5e74710',
+                'group_id' => self::GROUP_EXISTS_ID,
+                'name' => 'Perico',
+                'description' => 'Product description 1',
+                'image' => null,
+                'created_on' => '',
+            ],
         ];
+    }
+
+    /** @test */
+    public function itShouldGetProductsOfAGroupOrderAsc(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $productDataExpected = $this->getProductsData();
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                .'&order_asc=true',
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'products'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Products data', $responseContent->message);
+
+        $this->assertResponseDataIsOk($page, 1, $productDataExpected, $responseContent->data);
+    }
+
+    /** @test */
+    public function itShouldGetProductsOfAGroupOrderDesc(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $productDataExpected = $this->getProductsData();
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                .'&order_asc=false',
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'products'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Products data', $responseContent->message);
+
+        $this->assertResponseDataIsOk($page, 1, array_reverse($productDataExpected), $responseContent->data);
     }
 
     /** @test */
@@ -120,7 +185,16 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Products data', $responseContent->message);
 
-        $this->assertResponseDataIsOk($page, 1, $productDataExpected, $responseContent->data);
+        $this->assertResponseDataIsOk(
+            $page,
+            1,
+            [
+                $productDataExpected[0],
+                $productDataExpected[1],
+                $productDataExpected[2],
+            ],
+            $responseContent->data
+        );
     }
 
     /** @test */
@@ -154,7 +228,16 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Products data', $responseContent->message);
 
-        $this->assertResponseDataIsOk($page, 1, $productDataExpected, $responseContent->data);
+        $this->assertResponseDataIsOk(
+            $page,
+            1,
+            [
+              $productDataExpected[0],
+              $productDataExpected[1],
+              $productDataExpected[2],
+            ],
+            $responseContent->data
+        );
     }
 
     /** @test */
@@ -184,7 +267,15 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Products data', $responseContent->message);
 
-        $this->assertResponseDataIsOk($page, 1, $productDataExpected, $responseContent->data);
+        $this->assertResponseDataIsOk(
+            $page,
+            1, [
+                $productDataExpected[0],
+                $productDataExpected[1],
+                $productDataExpected[2],
+            ],
+            $responseContent->data
+        );
     }
 
     /** @test */
@@ -218,7 +309,16 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Products data', $responseContent->message);
 
-        $this->assertResponseDataIsOk($page, 1, $productDataExpected, $responseContent->data);
+        $this->assertResponseDataIsOk(
+            $page,
+            1,
+            [
+              $productDataExpected[0],
+              $productDataExpected[1],
+              $productDataExpected[2],
+            ],
+            $responseContent->data
+        );
     }
 
     /** @test */
@@ -1067,30 +1167,5 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
 
         $this->assertEquals(['greater_than'], $responseContent->errors->page_items);
-    }
-
-    /** @test */
-    public function itShouldFailGettingProductsOfAGroupNotEnoughParameters(): void
-    {
-        $groupId = self::GROUP_EXISTS_ID;
-        $page = 1;
-        $pageItems = 100;
-
-        $client = $this->getNewClientAuthenticatedUser();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT
-                ."?group_id={$groupId}"
-                ."&page={$page}"
-                ."&page_items={$pageItems}",
-            content: json_encode([])
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [], ['not_enough_parameters'], Response::HTTP_BAD_REQUEST);
-        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Not enough parameters', $responseContent->message);
     }
 }
