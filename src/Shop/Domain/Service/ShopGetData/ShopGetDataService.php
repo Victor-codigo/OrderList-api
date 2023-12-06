@@ -31,13 +31,14 @@ class ShopGetDataService
      */
     public function __invoke(ShopGetDataDto $input): array
     {
+        if ($input->groupId->isNull()) {
+            throw LogicException::fromMessage('Not enough parameters');
+        }
+
         $this->shopsPaginator = $this->getShopsByShopIdAndProductId($input->groupId, $input->shopsId, $input->productsId, $input->orderAsc);
         $this->shopsPaginator ??= $this->getShopsByShopName($input->groupId, $input->shopName, $input->orderAsc);
         $this->shopsPaginator ??= $this->getShopsByShopNameFilter($input->groupId, $input->shopNameFilter, $input->orderAsc);
-
-        if (null === $this->shopsPaginator) {
-            throw LogicException::fromMessage('Not enough parameters');
-        }
+        $this->shopsPaginator ??= $this->getShopsByGroupId($input->groupId, $input->orderAsc);
 
         return $this->getShopsData($this->shopsPaginator, $input->page, $input->pageItems);
     }
@@ -63,6 +64,19 @@ class ShopGetDataService
             $groupId,
             empty($shopsId) ? null : $shopsId,
             empty($productsId) ? null : $productsId,
+            $orderAsc
+        );
+    }
+
+    /**
+     * @throws DBNotFoundException
+     */
+    private function getShopsByGroupId(Identifier $groupId, bool $orderAsc): PaginatorInterface|null
+    {
+        return $this->shopRepository->findShopsOrFail(
+            $groupId,
+            null,
+            null,
             $orderAsc
         );
     }

@@ -6,7 +6,6 @@ namespace Shop\Application\ShopGetData;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
-use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
@@ -15,7 +14,6 @@ use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use Shop\Application\ShopGetData\Dto\ShopGetDataInputDto;
 use Shop\Application\ShopGetData\Dto\ShopGetDataOutputDto;
-use Shop\Application\ShopGetData\Exception\ShopGetDataShopsNotEnoughParametersException;
 use Shop\Application\ShopGetData\Exception\ShopGetDataShopsNotFoundException;
 use Shop\Application\ShopGetData\Exception\ShopGetDataValidateGroupAndUserException;
 use Shop\Domain\Service\ShopGetData\Dto\ShopGetDataDto;
@@ -46,8 +44,6 @@ class ShopGetDataUseCase extends ServiceBase
             throw ShopGetDataValidateGroupAndUserException::fromMessage('You have not permissions');
         } catch (DBNotFoundException) {
             throw ShopGetDataShopsNotFoundException::fromMessage('No shops found');
-        } catch (LogicException) {
-            throw ShopGetDataShopsNotEnoughParametersException::fromMessage('Not enough parameters');
         } catch (\Throwable) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }

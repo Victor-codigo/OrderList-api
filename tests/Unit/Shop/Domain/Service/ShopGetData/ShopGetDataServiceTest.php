@@ -116,7 +116,59 @@ class ShopGetDataServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldGetShopsDataOrderByNameAsc(): void
+    public function itShouldGetShopsDataOfAGroupOrderByNameAsc(): void
+    {
+        $shops = $this->getShops();
+        $input = new ShopGetDataDto(
+            ValueObjectFactory::createIdentifier('group id'),
+            [],
+            [],
+            new Filter(
+                'shop_name',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+                ValueObjectFactory::createNameWithSpaces(null)
+            ),
+            ValueObjectFactory::createNameWithSpaces(null),
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(100),
+            true,
+        );
+
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('findShopsOrFail')
+            ->with($input->groupId, null, null, $input->orderAsc)
+            ->willReturn($this->paginator);
+
+        $this->shopRepository
+            ->expects($this->never())
+            ->method('findShopByShopNameOrFail');
+
+        $this->shopRepository
+            ->expects($this->never())
+            ->method('findShopByShopNameFilterOrFail');
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with($input->page->getValue(), $input->pageItems->getValue());
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator(array_reverse($shops)));
+
+        $return = $this->object->__invoke($input);
+
+        $this->assertCount(count($shops), $return);
+
+        foreach (array_reverse($shops) as $key => $shopExpected) {
+            $this->assertShopDataIsOk($shopExpected, $return[$key]);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetShopsDataByShopNameOrderByNameAsc(): void
     {
         $shops = $this->getShops();
         $input = new ShopGetDataDto(
@@ -167,62 +219,6 @@ class ShopGetDataServiceTest extends TestCase
         $this->assertCount(count($shops), $return);
 
         foreach ($shops as $key => $shopExpected) {
-            $this->assertShopDataIsOk($shopExpected, $return[$key]);
-        }
-    }
-
-    /** @test */
-    public function itShouldGetShopsDataOrderByNameDesc(): void
-    {
-        $shops = $this->getShops();
-        $input = new ShopGetDataDto(
-            ValueObjectFactory::createIdentifier('group id'),
-            [],
-            [],
-            new Filter(
-                'shop_name',
-                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
-                ValueObjectFactory::createNameWithSpaces(null)
-            ),
-            ValueObjectFactory::createNameWithSpaces('Shop name'),
-            ValueObjectFactory::createPaginatorPage(1),
-            ValueObjectFactory::createPaginatorPageItems(100),
-            false,
-        );
-
-        $this->shopRepository
-            ->expects($this->never())
-            ->method('findShopsOrFail');
-
-        $this->shopRepository
-            ->expects($this->once())
-            ->method('findShopByShopNameOrFail')
-            ->with(
-                $input->groupId,
-                $input->shopName,
-                $input->orderAsc
-            )
-            ->willReturn($this->paginator);
-
-        $this->shopRepository
-            ->expects($this->never())
-            ->method('findShopByShopNameFilterOrFail');
-
-        $this->paginator
-            ->expects($this->once())
-            ->method('setPagination')
-            ->with($input->page->getValue(), $input->pageItems->getValue());
-
-        $this->paginator
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator(array_reverse($shops)));
-
-        $return = $this->object->__invoke($input);
-
-        $this->assertCount(count($shops), $return);
-
-        foreach (array_reverse($shops) as $key => $shopExpected) {
             $this->assertShopDataIsOk($shopExpected, $return[$key]);
         }
     }
@@ -304,6 +300,14 @@ class ShopGetDataServiceTest extends TestCase
         $this->shopRepository
             ->expects($this->never())
             ->method('findShopsOrFail');
+
+        $this->shopRepository
+            ->expects($this->never())
+            ->method('findShopByShopNameOrFail');
+
+        $this->shopRepository
+            ->expects($this->never())
+            ->method('findShopByShopNameFilterOrFail');
 
         $this->paginator
             ->expects($this->never())

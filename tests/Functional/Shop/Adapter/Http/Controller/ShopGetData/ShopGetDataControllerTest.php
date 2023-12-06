@@ -93,6 +93,66 @@ class ShopGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
+    public function itShouldGetShopsOfAGroupBOrdersAsc(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $orderAsc = true;
+        $page = 1;
+        $pageItems = 100;
+        $shopDataExpected = $this->getShops();
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&order_asc={$orderAsc}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'shops'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Shops data', $responseContent->message);
+
+        $this->assertResponseIsOk($shopDataExpected, $responseContent->data);
+    }
+
+    /** @test */
+    public function itShouldGetShopsOfAGroupBOrdersDesc(): void
+    {
+        $groupId = self::GROUP_EXISTS_ID;
+        $orderAsc = false;
+        $page = 1;
+        $pageItems = 100;
+        $shopDataExpected = $this->getShops();
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&order_asc={$orderAsc}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'shops'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Shops data', $responseContent->message);
+
+        $this->assertResponseIsOk(array_reverse($shopDataExpected), $responseContent->data);
+    }
+
+    /** @test */
     public function itShouldGetShopsOfAGroupByShopsIdOrdersAsc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -397,31 +457,6 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $response = $client->getResponse();
 
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
-    }
-
-    /** @test */
-    public function itShouldFailGettingShopsOfAGroupNotEnoughParameters(): void
-    {
-        $groupId = self::GROUP_EXISTS_ID;
-        $page = 1;
-        $pageItems = 100;
-
-        $client = $this->getNewClientAuthenticatedUser();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT
-                ."?group_id={$groupId}"
-                ."&page={$page}"
-                ."&page_items={$pageItems}",
-            content: json_encode([])
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [], ['not_enough_parameters'], Response::HTTP_BAD_REQUEST);
-        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Not enough parameters', $responseContent->message);
     }
 
     /** @test */
