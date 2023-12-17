@@ -1,9 +1,26 @@
 
 # ------------------- BASH CUSTOM --------------------- #
 parse_git_branch() {
-    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/git: \1 /'
+    # git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/git: \1 /'
+    gitBranch=$(git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1 /')
+
+    if [ -z "$gitBranch" ]
+    then
+        echo "No-Git"
+    else
+        echo $(parser_git_unicode)" "$gitBranch
+    fi
 }
-export PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00;37m\]:\[\033[01;34m\]\w \[\033[01;37m\]| \[\033[01;33m\]$(parse_git_branch)\[\033[00m\]\$ '
+
+parse_folder_unicode() {
+    echo -e "\U1F5C0"
+}
+
+parser_git_unicode(){
+    echo -e "\uE0A0"
+}
+
+export PS1='\[\e[38;5;243m\]\d \t | \[\e[38;5;243;3m\]\s at \[\e[23m\]<\[\e[38;5;154;1m\]\u\[\e[38;5;216m\]@\[\e[38;5;154m\]\h\[\e[0;38;5;243m\]> \[\e[3m\]in \[\e[23m\][\[\e[38;5;45;1m\]$(parse_folder_unicode)  \w\[\e[0;38;5;243m\]] \[\e[3m\]on git \[\e[23m\](\[\e[93;1m\]$(parse_git_branch)\[\e[0;38;5;243m\]) \n\[\e[97m\]❱ \[\e[0m\]'
 export XDEBUG_SESSION=VSCODE
 
 alias sf="bin/console"
