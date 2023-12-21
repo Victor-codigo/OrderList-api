@@ -96,6 +96,38 @@ class ProductModifyControllerTest extends WebClientTestCase
     }
 
     /** @test */
+    public function itShouldModifyTheProductNameIsTheSame(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'product_id' => self::PRODUCT_ID,
+                'group_id' => self::GROUP_ID,
+                'shop_id' => self::SHOP_ID,
+                'name' => 'Juanola',
+                'description' => 'product description modified',
+                'price' => 100.10,
+                'image_remove' => false,
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            ]
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Product modified', $responseContent->message);
+
+        $this->assertSame(self::PRODUCT_ID, $responseContent->data->id);
+    }
+
+    /** @test */
     public function itShouldModifyTheProductShopIdNameDescriptionPriceImageAreNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -279,6 +311,38 @@ class ProductModifyControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
 
         $this->assertSame(['alphanumeric_with_whitespace'], $responseContent->errors->name);
+    }
+
+    /** @test */
+    public function itShouldFailModifyingTheProductNameIsRepeated(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'product_id' => self::PRODUCT_ID,
+                'group_id' => self::GROUP_ID,
+                'shop_id' => self::SHOP_ID,
+                'name' => 'Juan Carlos',
+                'description' => 'product description modified',
+                'price' => 100.10,
+                'image_remove' => false,
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            ]
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['product_name_repeated'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Product name repeated', $responseContent->message);
+
+        $this->assertSame('Product name repeated', $responseContent->errors->product_name_repeated);
     }
 
     /** @test */

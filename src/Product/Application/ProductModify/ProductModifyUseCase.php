@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Product\Application\ProductModify;
 
 use Common\Domain\Exception\DomainInternalErrorException;
-use Common\Domain\FileUpload\Exception\File\FileException;
 use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
+use Common\Domain\FileUpload\Exception\File\FileException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
@@ -16,10 +16,12 @@ use Common\Domain\Validation\ValidationInterface;
 use Product\Application\ProductModify\Dto\ProductModifyInputDto;
 use Product\Application\ProductModify\Dto\ProductModifyOutputDto;
 use Product\Application\ProductModify\Exception\ProductModifyImageException;
+use Product\Application\ProductModify\Exception\ProductModifyProductNameRepeatedException;
 use Product\Application\ProductModify\Exception\ProductModifyProductNotFoundException;
 use Product\Application\ProductModify\Exception\ProductModifyShopNotFoundException;
 use Product\Application\ProductModify\Exception\ProductModifyValidateGroupAndUserException;
 use Product\Domain\Service\ProductModify\Dto\ProductModifyDto;
+use Product\Domain\Service\ProductModify\Exception\ProductModifyProductNameIsAlreadyInDataBaseException;
 use Product\Domain\Service\ProductModify\Exception\ProductModifyProductNotFoundException as ProductModifyProductNotFoundExceptionDomain;
 use Product\Domain\Service\ProductModify\Exception\ProductModifyShopNotFoundException as ProductModifyShopNotFoundExceptionDomain;
 use Product\Domain\Service\ProductModify\ProductModifyService;
@@ -46,6 +48,8 @@ class ProductModifyUseCase extends ServiceBase
             return $this->createProductModifyOutputDto($input->productId);
         } catch (ValidateGroupAndUserException) {
             throw ProductModifyValidateGroupAndUserException::fromMessage('User does not belong to the group');
+        } catch (ProductModifyProductNameIsAlreadyInDataBaseException) {
+            throw ProductModifyProductNameRepeatedException::fromMessage('Product name repeated');
         } catch (ProductModifyProductNotFoundExceptionDomain) {
             throw ProductModifyProductNotFoundException::fromMessage('Product not found');
         } catch (ProductModifyShopNotFoundExceptionDomain) {

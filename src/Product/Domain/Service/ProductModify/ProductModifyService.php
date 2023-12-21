@@ -26,6 +26,7 @@ use Common\Domain\Service\Image\UploadImage\UploadImageService;
 use Product\Domain\Model\Product;
 use Product\Domain\Port\Repository\ProductRepositoryInterface;
 use Product\Domain\Service\ProductModify\Dto\ProductModifyDto;
+use Product\Domain\Service\ProductModify\Exception\ProductModifyProductNameIsAlreadyInDataBaseException;
 use Product\Domain\Service\ProductModify\Exception\ProductModifyProductNotFoundException;
 use Product\Domain\Service\ProductModify\Exception\ProductModifyProductShopException;
 use Product\Domain\Service\ProductModify\Exception\ProductModifyShopNotFoundException;
@@ -47,6 +48,7 @@ class ProductModifyService
     }
 
     /**
+     * @throws ProductModifyProductNameIsAlreadyInDataBaseException
      * @throws ProductModifyProductNotFoundException
      * @throws ProductModifyProductShopException
      * @throws ProductModifyShopNotFoundException
@@ -65,6 +67,12 @@ class ProductModifyService
     {
         try {
             $productToModify = $this->getProduct($input->productId, $input->groupId);
+
+            if (!$input->name->isNull()
+            && !$input->name->equalTo($productToModify->getName())) {
+                $this->isValidProductName($input->groupId, $input->name);
+            }
+
             $shop = $this->getShop($input->shopId, $input->groupId);
 
             $this->productShopService->__invoke(
@@ -85,8 +93,6 @@ class ProductModifyService
             throw ProductModifyProductNotFoundException::fromMessage($e->getMessage());
         } catch (DBConnectionException $e) {
             throw ProductModifyProductShopException::fromMessage($e->getMessage());
-        } catch (FileException|FileUploadReplaceException $e) {
-            throw $e;
         }
     }
 
@@ -162,6 +168,20 @@ class ProductModifyService
             return iterator_to_array($shopPagination)[0];
         } catch (\Throwable) {
             throw ProductModifyShopNotFoundException::fromMessage('The Shop does not exists');
+        }
+    }
+
+    /**
+     * @throws ProductModifyProductNameIsAlreadyInDataBaseException
+     */
+    private function isValidProductName(Identifier $groupId, NameWithSpaces $productName): void
+    {
+        try {
+            $this->productRepository->findProductsByGroupAndNameOrFail($groupId, $productName);
+
+            throw ProductModifyProductNameIsAlreadyInDataBaseException::fromMessage('The product name is already in the database');
+        } catch (DBNotFoundException) {
+            return;
         }
     }
 }

@@ -17,6 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Product\Domain\Model\Product;
 use Product\Domain\Port\Repository\ProductRepositoryInterface;
 use Product\Domain\Service\ProductModify\Dto\ProductModifyDto;
+use Product\Domain\Service\ProductModify\Exception\ProductModifyProductNameIsAlreadyInDataBaseException;
 use Product\Domain\Service\ProductModify\Exception\ProductModifyProductNotFoundException;
 use Product\Domain\Service\ProductModify\Exception\ProductModifyProductShopException;
 use Product\Domain\Service\ProductModify\Exception\ProductModifyShopNotFoundException;
@@ -89,6 +90,10 @@ class ProductModifyServiceTest extends TestCase
 
         $this->productRepository
             ->expects($this->never())
+            ->method('findProductsByGroupAndNameOrFail');
+
+        $this->productRepository
+            ->expects($this->never())
             ->method('save');
 
         $this->productsPaginator
@@ -127,11 +132,191 @@ class ProductModifyServiceTest extends TestCase
             ->expects($this->never())
             ->method('setDescription');
 
+        $this->productFromDb
+            ->expects($this->never())
+            ->method('getName');
+
         $this->uploadImageService
             ->expects($this->never())
             ->method('__invoke');
 
         $this->expectException(ProductModifyProductNotFoundException::class);
+        $this->object->__invoke($input);
+    }
+
+    /** @test */
+    public function itShouldModifyProductNameIsEqualToProducts(): void
+    {
+        $input = new ProductModifyDto(
+            ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifier(self::SHOP_ID),
+            ValueObjectFactory::createNameWithSpaces('product name'),
+            ValueObjectFactory::createDescription('product description modified'),
+            ValueObjectFactory::createMoney(null),
+            $this->productImage,
+            false
+        );
+
+        $inputProductShopService = new ProductShopDto(
+            $this->productFromDb,
+            $this->shopFromDb,
+            $input->price,
+            $input->imageRemove
+        );
+
+        $inputUploadImage = new UploadImageDto(
+            $this->productFromDb,
+            ValueObjectFactory::createPath(self::PRODUCT_IMAGE_PATH),
+            $this->productImage,
+            $input->imageRemove
+        );
+
+        $this->productRepository
+            ->expects($this->once())
+            ->method('findProductsOrFail')
+            ->willReturn($this->productsPaginator);
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsByGroupAndNameOrFail');
+
+        $this->productRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($this->productFromDb);
+
+        $this->productsPaginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with(1, 1);
+
+        $this->productsPaginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$this->productFromDb]));
+
+        $this->productsPaginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with(1, 1);
+
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('findShopsOrFail')
+            ->willReturn($this->shopsPaginator);
+
+        $this->shopsPaginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with(1, 1);
+
+        $this->shopsPaginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$this->shopFromDb]));
+
+        $this->productShopService
+            ->expects($this->once())
+            ->method('__invoke')
+            ->with($inputProductShopService);
+
+        $this->productFromDb
+            ->expects($this->once())
+            ->method('setName')
+            ->with($input->name);
+
+        $this->productFromDb
+            ->expects($this->once())
+            ->method('getName')
+            ->willReturn($input->name);
+
+        $this->productFromDb
+            ->expects($this->once())
+            ->method('setDescription')
+            ->with($input->description);
+
+        $this->uploadImageService
+            ->expects($this->once())
+            ->method('__invoke')
+            ->with($inputUploadImage);
+        $this->object->__invoke($input);
+    }
+
+    /** @test */
+    public function itShouldFailProductNameRepeated(): void
+    {
+        $input = new ProductModifyDto(
+            ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifier(self::SHOP_ID),
+            ValueObjectFactory::createNameWithSpaces('product name modified'),
+            ValueObjectFactory::createDescription('product description modified'),
+            ValueObjectFactory::createMoney(null),
+            $this->productImage,
+            false
+        );
+
+        $this->productRepository
+            ->expects($this->once())
+            ->method('findProductsOrFail')
+            ->with($input->groupId, [$input->productId])
+            ->willReturn($this->productsPaginator);
+
+        $this->productRepository
+            ->expects($this->once())
+            ->method('findProductsByGroupAndNameOrFail')
+            ->with($input->groupId, $input->name)
+            ->willReturn($this->productsPaginator);
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('save');
+
+        $this->productsPaginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with(1, 1);
+
+        $this->productsPaginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$this->productFromDb]));
+
+        $this->shopRepository
+            ->expects($this->never())
+            ->method('findShopsOrFail');
+
+        $this->shopsPaginator
+            ->expects($this->never())
+            ->method('setPagination');
+
+        $this->shopsPaginator
+            ->expects($this->never())
+            ->method('getIterator');
+
+        $this->productShopService
+            ->expects($this->never())
+            ->method('__invoke');
+
+        $this->productFromDb
+            ->expects($this->never())
+            ->method('setName');
+
+        $this->productFromDb
+            ->expects($this->never())
+            ->method('setDescription');
+
+        $this->productFromDb
+            ->expects($this->once())
+            ->method('getName')
+            ->willReturn(ValueObjectFactory::createNameWithSpaces('Other product name'));
+
+        $this->uploadImageService
+            ->expects($this->never())
+            ->method('__invoke');
+
+        $this->expectException(ProductModifyProductNameIsAlreadyInDataBaseException::class);
         $this->object->__invoke($input);
     }
 
@@ -160,6 +345,12 @@ class ProductModifyServiceTest extends TestCase
             ->expects($this->once())
             ->method('findProductsOrFail')
             ->willReturn($this->productsPaginator);
+
+        $this->productRepository
+            ->expects($this->once())
+            ->method('findProductsByGroupAndNameOrFail')
+            ->with($input->groupId, $input->name)
+            ->willThrowException(new DBNotFoundException());
 
         $this->productRepository
             ->expects($this->once())
@@ -207,6 +398,11 @@ class ProductModifyServiceTest extends TestCase
             ->method('setDescription')
             ->with($input->description);
 
+        $this->productFromDb
+            ->expects($this->once())
+            ->method('getName')
+            ->willReturn(ValueObjectFactory::createNameWithSpaces('Other product name'));
+
         $this->uploadImageService
             ->expects($this->once())
             ->method('__invoke')
@@ -233,6 +429,12 @@ class ProductModifyServiceTest extends TestCase
             ->expects($this->once())
             ->method('findProductsOrFail')
             ->willReturn($this->productsPaginator);
+
+        $this->productRepository
+            ->expects($this->once())
+            ->method('findProductsByGroupAndNameOrFail')
+            ->with($input->groupId, $input->name)
+            ->willThrowException(new DBNotFoundException());
 
         $this->productRepository
             ->expects($this->never())
@@ -278,6 +480,11 @@ class ProductModifyServiceTest extends TestCase
             ->expects($this->never())
             ->method('setDescription');
 
+        $this->productFromDb
+            ->expects($this->once())
+            ->method('getName')
+            ->willReturn(ValueObjectFactory::createNameWithSpaces('Other product name'));
+
         $this->uploadImageService
             ->expects($this->never())
             ->method('__invoke');
@@ -311,6 +518,12 @@ class ProductModifyServiceTest extends TestCase
             ->expects($this->once())
             ->method('findProductsOrFail')
             ->willReturn($this->productsPaginator);
+
+        $this->productRepository
+            ->expects($this->once())
+            ->method('findProductsByGroupAndNameOrFail')
+            ->with($input->groupId, $input->name)
+            ->willThrowException(new DBNotFoundException());
 
         $this->productRepository
             ->expects($this->once())
@@ -358,6 +571,11 @@ class ProductModifyServiceTest extends TestCase
             ->method('setDescription')
             ->with($input->description);
 
+        $this->productFromDb
+            ->expects($this->once())
+            ->method('getName')
+            ->willReturn(ValueObjectFactory::createNameWithSpaces('Other product name'));
+
         $this->uploadImageService
             ->expects($this->once())
             ->method('__invoke')
@@ -391,6 +609,12 @@ class ProductModifyServiceTest extends TestCase
             ->expects($this->once())
             ->method('findProductsOrFail')
             ->willReturn($this->productsPaginator);
+
+        $this->productRepository
+            ->expects($this->once())
+            ->method('findProductsByGroupAndNameOrFail')
+            ->with($input->groupId, $input->name)
+            ->willThrowException(new DBNotFoundException());
 
         $this->productRepository
             ->expects($this->never())
@@ -440,6 +664,11 @@ class ProductModifyServiceTest extends TestCase
             ->expects($this->never())
             ->method('setDescription');
 
+        $this->productFromDb
+            ->expects($this->once())
+            ->method('getName')
+            ->willReturn(ValueObjectFactory::createNameWithSpaces('Other product name'));
+
         $this->uploadImageService
             ->expects($this->never())
             ->method('__invoke');
@@ -480,6 +709,12 @@ class ProductModifyServiceTest extends TestCase
             ->expects($this->once())
             ->method('findProductsOrFail')
             ->willReturn($this->productsPaginator);
+
+        $this->productRepository
+            ->expects($this->once())
+            ->method('findProductsByGroupAndNameOrFail')
+            ->with($input->groupId, $input->name)
+            ->willThrowException(new DBNotFoundException());
 
         $this->productRepository
             ->expects($this->once())
@@ -525,6 +760,11 @@ class ProductModifyServiceTest extends TestCase
             ->expects($this->once())
             ->method('setName')
             ->with($input->name);
+
+        $this->productFromDb
+            ->expects($this->once())
+            ->method('getName')
+            ->willReturn(ValueObjectFactory::createNameWithSpaces('Other product name'));
 
         $this->productFromDb
             ->expects($this->once())
@@ -573,6 +813,10 @@ class ProductModifyServiceTest extends TestCase
             ->willReturn($this->productsPaginator);
 
         $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsByGroupAndNameOrFail');
+
+        $this->productRepository
             ->expects($this->once())
             ->method('save')
             ->with($this->productFromDb);
@@ -619,8 +863,11 @@ class ProductModifyServiceTest extends TestCase
 
         $this->productFromDb
             ->expects($this->never())
-            ->method('setDescription')
-            ->with($input->description);
+            ->method('setDescription');
+
+        $this->productFromDb
+            ->expects($this->never())
+            ->method('getName');
 
         $this->uploadImageService
             ->expects($this->once())
@@ -662,6 +909,12 @@ class ProductModifyServiceTest extends TestCase
             ->expects($this->once())
             ->method('findProductsOrFail')
             ->willReturn($this->productsPaginator);
+
+        $this->productRepository
+            ->expects($this->once())
+            ->method('findProductsByGroupAndNameOrFail')
+            ->with($input->groupId, $input->name)
+            ->willThrowException(new DBNotFoundException());
 
         $this->productRepository
             ->expects($this->never())
@@ -709,8 +962,12 @@ class ProductModifyServiceTest extends TestCase
 
         $this->productFromDb
             ->expects($this->once())
-            ->method('setDescription')
-            ->with($input->description);
+            ->method('setDescription');
+
+        $this->productFromDb
+            ->expects($this->once())
+            ->method('getName')
+            ->willReturn(ValueObjectFactory::createNameWithSpaces('Other product name'));
 
         $this->uploadImageService
             ->expects($this->once())
@@ -754,6 +1011,12 @@ class ProductModifyServiceTest extends TestCase
             ->expects($this->once())
             ->method('findProductsOrFail')
             ->willReturn($this->productsPaginator);
+
+        $this->productRepository
+            ->expects($this->once())
+            ->method('findProductsByGroupAndNameOrFail')
+            ->with($input->groupId, $input->name)
+            ->willThrowException(new DBNotFoundException());
 
         $this->productRepository
             ->expects($this->once())
@@ -804,6 +1067,11 @@ class ProductModifyServiceTest extends TestCase
             ->expects($this->once())
             ->method('setDescription')
             ->with($input->description);
+
+        $this->productFromDb
+            ->expects($this->once())
+            ->method('getName')
+            ->willReturn(ValueObjectFactory::createNameWithSpaces('Other product name'));
 
         $this->uploadImageService
             ->expects($this->once())
