@@ -6,7 +6,7 @@ namespace Common\Domain\Service\Image\UploadImage\Dto;
 
 use Common\Domain\Model\ValueObject\Object\ObjectValueObject;
 use Common\Domain\Model\ValueObject\String\Path;
-use Common\Domain\Service\Image\UploadImage\EntityImageModifyInterface;
+use Common\Domain\Service\Image\EntityImageModifyInterface;
 
 class UploadImageDto
 {

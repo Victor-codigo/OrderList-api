@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Common\Domain\Service\Image\UploadImage;
+namespace Common\Domain\Service\Image;
+
 
 use Common\Domain\Model\ValueObject\String\Path;
 

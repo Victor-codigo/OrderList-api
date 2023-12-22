@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Domain\Service\Image\UploadImage;
 
-use Common\Domain\FileUpload\Exception\File\FileException;
 use Common\Domain\FileUpload\Exception\FileUploadCanNotWriteException;
 use Common\Domain\FileUpload\Exception\FileUploadException;
 use Common\Domain\FileUpload\Exception\FileUploadExtensionFileException;
@@ -13,9 +12,11 @@ use Common\Domain\FileUpload\Exception\FileUploadNoFileException;
 use Common\Domain\FileUpload\Exception\FileUploadPartialFileException;
 use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\FileUpload\Exception\FileUploadTmpDirFileException;
+use Common\Domain\FileUpload\Exception\File\FileException;
 use Common\Domain\Model\ValueObject\Object\ObjectValueObject;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
+use Common\Domain\Service\Image\EntityImageModifyInterface;
 use Common\Domain\Service\Image\UploadImage\Dto\UploadImageDto;
 use Symfony\Component\HttpFoundation\File\Exception\FormSizeFileException;
 

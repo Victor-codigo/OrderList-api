@@ -13,7 +13,7 @@ use Common\Domain\Ports\FileUpload\FileUploadInterface;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
 use Common\Domain\Service\Image\UploadImage\BuiltInFunctionsReturn;
 use Common\Domain\Service\Image\UploadImage\Dto\UploadImageDto;
-use Common\Domain\Service\Image\UploadImage\EntityImageModifyInterface;
+use Common\Domain\Service\Image\EntityImageModifyInterface;
 use Common\Domain\Service\Image\UploadImage\UploadImageService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
