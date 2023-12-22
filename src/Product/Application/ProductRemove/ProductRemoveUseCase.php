@@ -37,11 +37,11 @@ class ProductRemoveUseCase extends ServiceBase
         try {
             $this->validateGroupAndUserService->__invoke($input->groupId);
 
-            $productRemovedId = $this->productRemoveService->__invoke(
-                $this->createProductRemoveDto($input->groupId, $input->productId, $input->shopId)
+            $productsRemovedId = $this->productRemoveService->__invoke(
+                $this->createProductRemoveDto($input->groupId, $input->productsId, $input->shopsId)
             );
 
-            return $this->createProductRemoveOutputDto($productRemovedId);
+            return $this->createProductRemoveOutputDto($productsRemovedId);
         } catch (DBNotFoundException) {
             throw ProductRemoveProductNotFoundException::fromMessage('Product not found');
         } catch (ValidateGroupAndUserException) {
@@ -64,13 +64,20 @@ class ProductRemoveUseCase extends ServiceBase
         }
     }
 
-    private function createProductRemoveDto(Identifier $groupId, Identifier $productId, Identifier $shopId): ProductRemoveDto
+    /**
+     * @param Identifier[] $productsId
+     * @param Identifier[] $shopsId
+     */
+    private function createProductRemoveDto(Identifier $groupId, array $productsId, array $shopsId): ProductRemoveDto
     {
-        return new ProductRemoveDto($productId, $groupId, $shopId);
+        return new ProductRemoveDto($groupId, $productsId, $shopsId);
     }
 
-    private function createProductRemoveOutputDto(Identifier $productRemovedId): ProductRemoveOutputDto
+    /**
+     * @param Identifier[] $productsRemovedId
+     */
+    private function createProductRemoveOutputDto(array $productsRemovedId): ProductRemoveOutputDto
     {
-        return new ProductRemoveOutputDto($productRemovedId);
+        return new ProductRemoveOutputDto($productsRemovedId);
     }
 }

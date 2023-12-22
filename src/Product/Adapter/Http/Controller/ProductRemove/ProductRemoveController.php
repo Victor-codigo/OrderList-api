@@ -9,6 +9,7 @@ use Common\Domain\Ports\Security\UserSharedInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use OpenApi\Attributes as OA;
+use OpenApi\Attributes\Items;
 use Product\Adapter\Http\Controller\ProductRemove\Dto\ProductRemoveRequestDto;
 use Product\Application\ProductRemove\Dto\ProductRemoveInputDto;
 use Product\Application\ProductRemove\ProductRemoveUseCase;
@@ -28,8 +29,8 @@ use Symfony\Component\HttpFoundation\Response;
                 schema: new OA\Schema(
                     properties: [
                         new OA\Property(property: 'group_id', type: 'string', description: 'Group\'s id', example: 'fdb242b4-bac8-4463-88d0-0941bb0beee0'),
-                        new OA\Property(property: 'product_id', type: 'string', description: 'Product\'s id', example: 'fdb242b4-bac8-4463-88d0-0941bb0beee0'),
-                        new OA\Property(property: 'shop_id', type: 'string', description: 'Shop\'s id', example: 'fdb242b4-bac8-4463-88d0-0941bb0beee0'),
+                        new OA\Property(property: 'products_id', type: 'array', description: 'Product\'s ids', example: '[fdb242b4-bac8-4463-88d0-0941bb0beee0]', items: new Items('string')),
+                        new OA\Property(property: 'shops_id', type: 'array', description: 'Shop\'s ids', example: '[fdb242b4-bac8-4463-88d0-0941bb0beee0]', items: new Items('string')),
                     ]
                 )
             ),
@@ -79,18 +80,22 @@ class ProductRemoveController extends AbstractController
     public function __invoke(ProductRemoveRequestDto $request): JsonResponse
     {
         $productRemoved = $this->ProductRemoveUseCase->__invoke(
-            $this->createProductRemoveInputDto($request->groupId, $request->productId, $request->shopId)
+            $this->createProductRemoveInputDto($request->groupId, $request->productsId, $request->shopsId)
         );
 
         return $this->createResponse($productRemoved);
     }
 
-    private function createProductRemoveInputDto(string|null $groupId, string|null $productId, string|null $shopId): ProductRemoveInputDto
+    /**
+     * @param string[]|null $productsId
+     * @param string[]|null $shopsId    $name
+     */
+    private function createProductRemoveInputDto(string|null $groupId, array|null $productsId, array|null $shopsId): ProductRemoveInputDto
     {
         /** @var UserSharedInterface $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();
 
-        return new ProductRemoveInputDto($userSharedAdapter->getUser(), $groupId, $productId, $shopId);
+        return new ProductRemoveInputDto($userSharedAdapter->getUser(), $groupId, $productsId, $shopsId);
     }
 
     private function createResponse(ApplicationOutputInterface $productRemoved): JsonResponse

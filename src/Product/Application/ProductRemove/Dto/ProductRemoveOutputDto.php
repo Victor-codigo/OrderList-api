@@ -10,14 +10,17 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 class ProductRemoveOutputDto implements ApplicationOutputInterface
 {
     public function __construct(
-        public readonly Identifier $productId
+        public readonly array $productsId
     ) {
     }
 
     public function toArray(): array
     {
         return [
-            'id' => $this->productId->getValue(),
+            'id' => array_map(
+                fn (Identifier $productId) => $productId->getValue(),
+                $this->productsId
+            ),
         ];
     }
 }

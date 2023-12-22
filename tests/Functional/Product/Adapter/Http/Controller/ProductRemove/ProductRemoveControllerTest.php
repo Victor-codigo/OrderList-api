@@ -19,6 +19,7 @@ class ProductRemoveControllerTest extends WebClientTestCase
     private const USER_HAS_NO_GROUP_PASSWORD = '123456';
     private const GROUP_EXISTS_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const PRODUCT_EXISTS_ID = 'afc62bc9-c42c-4c4d-8098-09ce51414a92';
+    private const PRODUCT_EXISTS_2_ID = '8b6d650b-7bb7-4850-bf25-36cda9bce801';
     private const SHOP_EXISTS_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
 
     /** @test */
@@ -30,8 +31,8 @@ class ProductRemoveControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
-                'product_id' => self::PRODUCT_EXISTS_ID,
-                'shop_id' => self::SHOP_EXISTS_ID,
+                'products_id' => [self::PRODUCT_EXISTS_ID],
+                'shops_id' => [self::SHOP_EXISTS_ID],
             ])
         );
 
@@ -41,7 +42,32 @@ class ProductRemoveControllerTest extends WebClientTestCase
         $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Product removed', $responseContent->message);
-        $this->assertEquals(self::PRODUCT_EXISTS_ID, $responseContent->data->id);
+        $this->assertEquals([self::PRODUCT_EXISTS_ID], $responseContent->data->id);
+    }
+
+    /** @test */
+    public function itShouldRemoveManyProductWithoutShop(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_EXISTS_ID,
+                'products_id' => [
+                    self::PRODUCT_EXISTS_ID,
+                    self::PRODUCT_EXISTS_2_ID,
+                ],
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Product removed', $responseContent->message);
+        $this->assertEqualsCanonicalizing([self::PRODUCT_EXISTS_ID, self::PRODUCT_EXISTS_2_ID], $responseContent->data->id);
     }
 
     /** @test */
@@ -53,8 +79,8 @@ class ProductRemoveControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => null,
-                'product_id' => self::PRODUCT_EXISTS_ID,
-                'shop_id' => self::SHOP_EXISTS_ID,
+                'products_id' => [self::PRODUCT_EXISTS_ID],
+                'shops_id' => [self::SHOP_EXISTS_ID],
             ])
         );
 
@@ -68,6 +94,29 @@ class ProductRemoveControllerTest extends WebClientTestCase
     }
 
     /** @test */
+    public function itShouldFailRemovingAProductGroupIsWrong(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => 'group id wrong',
+                'products_id' => [self::PRODUCT_EXISTS_ID],
+                'shops_id' => [self::SHOP_EXISTS_ID],
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['group_id'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
+    }
+
+    /** @test */
     public function itShouldFailRemovingAProductGroupNotExists(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -76,8 +125,8 @@ class ProductRemoveControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => 'group not exists',
-                'product_id' => self::PRODUCT_EXISTS_ID,
-                'shop_id' => self::SHOP_EXISTS_ID,
+                'products_id' => [self::PRODUCT_EXISTS_ID],
+                'shops_id' => [self::SHOP_EXISTS_ID],
             ])
         );
 
@@ -99,22 +148,22 @@ class ProductRemoveControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
-                'product_id' => null,
-                'shop_id' => self::SHOP_EXISTS_ID,
+                'products_id' => null,
+                'shops_id' => [self::SHOP_EXISTS_ID],
             ])
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['product_id'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['products_id_empty'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->product_id);
+        $this->assertEquals(['not_blank'], $responseContent->errors->products_id_empty);
     }
 
     /** @test */
-    public function itShouldFailRemovingAProductProductNotExists(): void
+    public function itShouldFailRemovingAProductProductIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -122,22 +171,22 @@ class ProductRemoveControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
-                'product_id' => 'product not exists',
-                'shop_id' => self::SHOP_EXISTS_ID,
+                'products_id' => ['product not exists'],
+                'shops_id' => [self::SHOP_EXISTS_ID],
             ])
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['product_id'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['products_id'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->product_id);
+        $this->assertEquals([['uuid_invalid_characters']], $responseContent->errors->products_id);
     }
 
     /** @test */
-    public function itShouldFailRemovingAProductShopIsNull(): void
+    public function itShouldFailRemovingAProductNotExists(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -145,54 +194,8 @@ class ProductRemoveControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
-                'product_id' => self::PRODUCT_EXISTS_ID,
-                'shop_id' => null,
-            ])
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [], ['shop_id'], Response::HTTP_BAD_REQUEST);
-        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Error', $responseContent->message);
-        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->shop_id);
-    }
-
-    /** @test */
-    public function itShouldFailRemovingAProductShopNotExists(): void
-    {
-        $client = $this->getNewClientAuthenticatedUser();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT,
-            content: json_encode([
-                'group_id' => self::GROUP_EXISTS_ID,
-                'product_id' => self::PRODUCT_EXISTS_ID,
-                'shop_id' => 'shop not exists',
-            ])
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [], ['shop_id'], Response::HTTP_BAD_REQUEST);
-        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Error', $responseContent->message);
-        $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->shop_id);
-    }
-
-    /** @test */
-    public function itShouldFailRemovingAProductNotFound(): void
-    {
-        $client = $this->getNewClientAuthenticatedUser();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT,
-            content: json_encode([
-                'group_id' => self::GROUP_EXISTS_ID,
-                'product_id' => 'fc4f5962-02d1-4d80-b3ae-8aeffbcb6268',
-                'shop_id' => self::SHOP_EXISTS_ID,
+                'products_id' => ['fc4f5962-02d1-4d80-b3ae-8aeffbcb6268'],
+                'shops_id' => [self::SHOP_EXISTS_ID],
             ])
         );
 
@@ -206,26 +209,49 @@ class ProductRemoveControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailRemovingAProductGroupNotFound(): void
+    public function itShouldFailRemovingAProductShopIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'group_id' => 'fc4f5962-02d1-4d80-b3ae-8aeffbcb6268',
-                'product_id' => self::PRODUCT_EXISTS_ID,
-                'shop_id' => self::SHOP_EXISTS_ID,
+                'group_id' => self::GROUP_EXISTS_ID,
+                'products_id' => [self::PRODUCT_EXISTS_ID],
+                'shops_id' => ['shop not exists'],
             ])
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['permissions'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['shops_id'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('You have not permissions', $responseContent->message);
-        $this->assertEquals('You have not permissions', $responseContent->errors->permissions);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertEquals([['uuid_invalid_characters']], $responseContent->errors->shops_id);
+    }
+
+    /** @test */
+    public function itShouldFailRemovingAProductShopNotExists(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_EXISTS_ID,
+                'products_id' => [self::PRODUCT_EXISTS_ID],
+                'shops_id' => ['ff56889f-e8d7-4e80-88e0-6c3b5a4eff0d'],
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['product_not_found'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Product not found', $responseContent->message);
+        $this->assertEquals('Product not found', $responseContent->errors->product_not_found);
     }
 
     /** @test */
@@ -237,8 +263,8 @@ class ProductRemoveControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
-                'product_id' => self::PRODUCT_EXISTS_ID,
-                'shop_id' => 'fc4f5962-02d1-4d80-b3ae-8aeffbcb6268',
+                'products_id' => [self::PRODUCT_EXISTS_ID],
+                'shops_id' => ['fc4f5962-02d1-4d80-b3ae-8aeffbcb6268'],
             ])
         );
 
@@ -260,8 +286,8 @@ class ProductRemoveControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
-                'product_id' => self::PRODUCT_EXISTS_ID,
-                'shop_id' => self::SHOP_EXISTS_ID,
+                'products_id' => [self::PRODUCT_EXISTS_ID],
+                'shops_id' => [self::SHOP_EXISTS_ID],
             ])
         );
 

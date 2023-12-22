@@ -18,7 +18,6 @@ class ProductRemoveInputDtoTest extends TestCase
     private const PRODUCT_ID = '671bce77-d29d-46b9-8522-832527f496fa';
     private const SHOP_ID = 'de2cd24f-aaa6-46cd-9e60-875332f30d91';
 
-    private ProductRemoveInputDto $object;
     private ValidationInterface $validator;
     private MockObject|UserShared $userShared;
 
@@ -34,9 +33,41 @@ class ProductRemoveInputDtoTest extends TestCase
     public function itShouldValidate(): void
     {
         $groupId = self::GROUP_ID;
-        $productId = self::PRODUCT_ID;
-        $shopId = self::SHOP_ID;
-        $object = new ProductRemoveInputDto($this->userShared, $groupId, $productId, $shopId);
+        $productsId = [self::PRODUCT_ID];
+        $shopsId = [self::SHOP_ID];
+        $object = new ProductRemoveInputDto($this->userShared, $groupId, $productsId, $shopsId);
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function itShouldValidateManyProductsAndShopIds(): void
+    {
+        $groupId = self::GROUP_ID;
+        $productsId = [
+            self::PRODUCT_ID,
+            self::PRODUCT_ID,
+        ];
+        $shopsId = [
+            self::SHOP_ID,
+            self::SHOP_ID,
+        ];
+        $object = new ProductRemoveInputDto($this->userShared, $groupId, $productsId, $shopsId);
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function itShouldValidateShopsIdIsNull(): void
+    {
+        $groupId = self::GROUP_ID;
+        $productsId = [self::PRODUCT_ID];
+        $shopsId = null;
+        $object = new ProductRemoveInputDto($this->userShared, $groupId, $productsId, $shopsId);
 
         $return = $object->validate($this->validator);
 
@@ -47,9 +78,9 @@ class ProductRemoveInputDtoTest extends TestCase
     public function itShouldFailGroupIdIsNull(): void
     {
         $groupId = null;
-        $productId = self::PRODUCT_ID;
-        $shopId = self::SHOP_ID;
-        $object = new ProductRemoveInputDto($this->userShared, $groupId, $productId, $shopId);
+        $productsId = [self::PRODUCT_ID];
+        $shopsId = [self::SHOP_ID];
+        $object = new ProductRemoveInputDto($this->userShared, $groupId, $productsId, $shopsId);
 
         $return = $object->validate($this->validator);
 
@@ -60,9 +91,9 @@ class ProductRemoveInputDtoTest extends TestCase
     public function itShouldFailGroupIdIsWrong(): void
     {
         $groupId = 'wrong group id';
-        $productId = self::PRODUCT_ID;
-        $shopId = self::SHOP_ID;
-        $object = new ProductRemoveInputDto($this->userShared, $groupId, $productId, $shopId);
+        $productsId = [self::PRODUCT_ID];
+        $shopsId = [self::SHOP_ID];
+        $object = new ProductRemoveInputDto($this->userShared, $groupId, $productsId, $shopsId);
 
         $return = $object->validate($this->validator);
 
@@ -73,68 +104,54 @@ class ProductRemoveInputDtoTest extends TestCase
     public function itShouldFailProductIdIsNull(): void
     {
         $groupId = self::GROUP_ID;
-        $productId = null;
-        $shopId = self::SHOP_ID;
-        $object = new ProductRemoveInputDto($this->userShared, $groupId, $productId, $shopId);
+        $productsId = null;
+        $shopsId = [self::SHOP_ID];
+        $object = new ProductRemoveInputDto($this->userShared, $groupId, $productsId, $shopsId);
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['product_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
+        $this->assertEquals(['products_id_empty' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
     /** @test */
     public function itShouldFailProductIdIsWrong(): void
     {
         $groupId = self::GROUP_ID;
-        $productId = 'product id wrong';
-        $shopId = self::SHOP_ID;
-        $object = new ProductRemoveInputDto($this->userShared, $groupId, $productId, $shopId);
+        $productsId = ['product id wrong'];
+        $shopsId = [self::SHOP_ID];
+        $object = new ProductRemoveInputDto($this->userShared, $groupId, $productsId, $shopsId);
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['product_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
-    }
-
-    /** @test */
-    public function itShouldFailShopIdIsNull(): void
-    {
-        $groupId = self::GROUP_ID;
-        $productId = self::PRODUCT_ID;
-        $shopId = null;
-        $object = new ProductRemoveInputDto($this->userShared, $groupId, $productId, $shopId);
-
-        $return = $object->validate($this->validator);
-
-        $this->assertEquals(['shop_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
+        $this->assertEquals(['products_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
     }
 
     /** @test */
     public function itShouldFailShopIdIsWrong(): void
     {
         $groupId = self::GROUP_ID;
-        $productId = self::PRODUCT_ID;
-        $shopId = 'wrong shop id';
-        $object = new ProductRemoveInputDto($this->userShared, $groupId, $productId, $shopId);
+        $productsId = [self::PRODUCT_ID];
+        $shopsId = ['wrong shop id'];
+        $object = new ProductRemoveInputDto($this->userShared, $groupId, $productsId, $shopsId);
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['shop_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
+        $this->assertEquals(['shops_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
     }
 
     /** @test */
-    public function itShouldFailGroupIdProductShopIdAreNull(): void
+    public function itShouldFailGroupIdProductIdAreNull(): void
     {
         $groupId = null;
-        $productId = null;
-        $shopId = null;
-        $object = new ProductRemoveInputDto($this->userShared, $groupId, $productId, $shopId);
+        $productsId = null;
+        $shopsId = null;
+        $object = new ProductRemoveInputDto($this->userShared, $groupId, $productsId, $shopsId);
 
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
                 'group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
-                'product_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
-                'shop_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
+                'products_id_empty' => [VALIDATION_ERRORS::NOT_BLANK],
             ],
             $return);
     }

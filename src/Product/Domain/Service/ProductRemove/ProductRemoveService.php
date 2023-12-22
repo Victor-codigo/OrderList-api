@@ -6,7 +6,8 @@ namespace Product\Domain\Service\ProductRemove;
 
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\Path;
+use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Service\Image\EntityImageRemove\EntityImageRemoveService;
 use Product\Domain\Model\Product;
 use Product\Domain\Port\Repository\ProductRepositoryInterface;
 use Product\Domain\Service\ProductRemove\Dto\ProductRemoveDto;
@@ -15,46 +16,41 @@ class ProductRemoveService
 {
     public function __construct(
         private ProductRepositoryInterface $productRepository,
-        private string $productImagePath
+        private EntityImageRemoveService $entityImageRemoveService,
+        private string $productImagePath,
     ) {
     }
 
     /**
+     * @return Identifier[]
+     *
      * @throws DBNotFoundException
      * @throws DomainInternalErrorException
      * @throws DBConnectionException
      */
-    public function __invoke(ProductRemoveDto $input): Identifier
+    public function __invoke(ProductRemoveDto $input): array
     {
-        $productsToRemove = $this->productRepository->findProductsOrFail($input->groupId, [$input->productId], [$input->shopId]);
-        /** @var Product $productToRemove */
-        $productToRemove = iterator_to_array($productsToRemove)[0];
-        $this->removeImage($productToRemove->getImage());
+        $productsPaginator = $this->productRepository->findProductsOrFail($input->groupId, $input->productsId, $input->shopsId);
+        /** @var Product[] $productsToRemove */
+        $productsToRemove = iterator_to_array($productsPaginator);
 
-        $this->productRepository->remove([$productToRemove]);
+        $this->removeImages($productsToRemove);
+        $this->productRepository->remove($productsToRemove);
 
-        return $productToRemove->getId();
+        return array_map(
+            fn (Product $product) => $product->getId(),
+            $productsToRemove
+        );
     }
 
     /**
-     * @throws DomainInternalErrorException
+     * @param Product[] $productsToRemove
      */
-    private function removeImage(Path $image): void
+    private function removeImages(array $productsToRemove): void
     {
-        $imagePath = $image->getValue();
-
-        if (null === $imagePath) {
-            return;
-        }
-
-        $imagePath = $this->productImagePath."/{$imagePath}";
-
-        if (!file_exists($imagePath)) {
-            return;
-        }
-
-        if (!unlink($imagePath)) {
-            throw DomainInternalErrorException::fromMessage('The image cannot be deleted');
-        }
+        array_map(
+            fn (Product $product) => $this->entityImageRemoveService->__invoke($product, ValueObjectFactory::createPath($this->productImagePath)),
+            $productsToRemove
+        );
     }
 }

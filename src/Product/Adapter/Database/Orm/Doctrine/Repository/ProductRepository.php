@@ -105,13 +105,13 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
             ->where('product.groupId = :groupId')
             ->setParameter('groupId', $groupId);
 
-        if (null !== $productsId) {
+        if (!empty($productsId)) {
             $query
                 ->andWhere('product.id IN (:productId)')
                 ->setParameter('productId', $productsId);
         }
 
-        if (null !== $shopsId) {
+        if (!empty($shopsId)) {
             $query
                 ->leftJoin(ProductShop::class, 'productShop', Join::WITH, 'product.id = productShop.productId')
                 ->leftJoin(Shop::class, 'shop', Join::WITH, 'productShop.shopId = shop.id')
