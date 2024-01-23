@@ -32,13 +32,13 @@ class MoneyTest extends TestCase
     }
 
     /** @test */
-    public function itShouldValidateMoneyIsNull(): void
+    public function itShouldFailValidatingMoneyIsNull(): void
     {
         $object = ValueObjectFactory::createMoney(null);
 
         $return = $this->validator->validateValueObject($object);
 
-        $this->assertEmpty($return);
+        $this->assertEquals([VALIDATION_ERRORS::NOT_NULL], $return);
     }
 
     /** @test */
