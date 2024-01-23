@@ -18,12 +18,10 @@ use Product\Application\ProductModify\Dto\ProductModifyOutputDto;
 use Product\Application\ProductModify\Exception\ProductModifyImageException;
 use Product\Application\ProductModify\Exception\ProductModifyProductNameRepeatedException;
 use Product\Application\ProductModify\Exception\ProductModifyProductNotFoundException;
-use Product\Application\ProductModify\Exception\ProductModifyShopNotFoundException;
 use Product\Application\ProductModify\Exception\ProductModifyValidateGroupAndUserException;
 use Product\Domain\Service\ProductModify\Dto\ProductModifyDto;
 use Product\Domain\Service\ProductModify\Exception\ProductModifyProductNameIsAlreadyInDataBaseException;
 use Product\Domain\Service\ProductModify\Exception\ProductModifyProductNotFoundException as ProductModifyProductNotFoundExceptionDomain;
-use Product\Domain\Service\ProductModify\Exception\ProductModifyShopNotFoundException as ProductModifyShopNotFoundExceptionDomain;
 use Product\Domain\Service\ProductModify\ProductModifyService;
 
 class ProductModifyUseCase extends ServiceBase
@@ -52,8 +50,6 @@ class ProductModifyUseCase extends ServiceBase
             throw ProductModifyProductNameRepeatedException::fromMessage('Product name repeated');
         } catch (ProductModifyProductNotFoundExceptionDomain) {
             throw ProductModifyProductNotFoundException::fromMessage('Product not found');
-        } catch (ProductModifyShopNotFoundExceptionDomain) {
-            throw ProductModifyShopNotFoundException::fromMessage('Shop not found');
         } catch (FileException|FileUploadReplaceException) {
             throw ProductModifyImageException::fromMessage('Image error');
         } catch (\Throwable) {
@@ -75,10 +71,8 @@ class ProductModifyUseCase extends ServiceBase
         return new ProductModifyDto(
             $input->productId,
             $input->groupId,
-            $input->shopId,
             $input->name,
             $input->description,
-            $input->price,
             $input->image,
             $input->imageRemove
         );

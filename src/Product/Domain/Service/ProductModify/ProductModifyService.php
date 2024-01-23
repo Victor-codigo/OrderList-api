@@ -15,7 +15,6 @@ use Common\Domain\FileUpload\Exception\FileUploadPartialFileException;
 use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\FileUpload\Exception\FileUploadTmpDirFileException;
 use Common\Domain\FileUpload\Exception\File\FileException;
-use Common\Domain\Model\ValueObject\Float\Money;
 use Common\Domain\Model\ValueObject\Object\ProductImage;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -29,19 +28,12 @@ use Product\Domain\Service\ProductModify\Dto\ProductModifyDto;
 use Product\Domain\Service\ProductModify\Exception\ProductModifyProductNameIsAlreadyInDataBaseException;
 use Product\Domain\Service\ProductModify\Exception\ProductModifyProductNotFoundException;
 use Product\Domain\Service\ProductModify\Exception\ProductModifyProductShopException;
-use Product\Domain\Service\ProductModify\Exception\ProductModifyShopNotFoundException;
-use Product\Domain\Service\ProductShop\Dto\ProductShopDto;
-use Product\Domain\Service\ProductShop\ProductShopService;
-use Shop\Domain\Model\Shop;
-use Shop\Domain\Port\Repository\ShopRepositoryInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FormSizeFileException;
 
 class ProductModifyService
 {
     public function __construct(
         private ProductRepositoryInterface $productRepository,
-        private ShopRepositoryInterface $shopRepository,
-        private ProductShopService $productShopService,
         private UploadImageService $uploadImageService,
         private string $productImagePath
     ) {
@@ -51,7 +43,6 @@ class ProductModifyService
      * @throws ProductModifyProductNameIsAlreadyInDataBaseException
      * @throws ProductModifyProductNotFoundException
      * @throws ProductModifyProductShopException
-     * @throws ProductModifyShopNotFoundException
      * @throws FileUploadCanNotWriteException
      * @throws FileUploadExtensionFileException
      * @throws FileUploadException
@@ -73,19 +64,6 @@ class ProductModifyService
                 $this->isValidProductName($input->groupId, $input->name);
             }
 
-            $shop = $this->getShop($input->shopId, $input->groupId);
-
-            $this->productShopService->__invoke(
-                $this->createProductShopDto($productToModify, $shop, $input->price, $input->imageRemove)
-            );
-            $this->modifyProduct($productToModify, $input->name, $input->description, $input->image, $input->imageRemove);
-
-            return $productToModify;
-        } catch (ProductModifyShopNotFoundException) {
-            if (!$input->shopId->isNull()) {
-                throw ProductModifyShopNotFoundException::fromMessage('Shop not found');
-            }
-
             $this->modifyProduct($productToModify, $input->name, $input->description, $input->image, $input->imageRemove);
 
             return $productToModify;
@@ -94,16 +72,6 @@ class ProductModifyService
         } catch (DBConnectionException $e) {
             throw ProductModifyProductShopException::fromMessage($e->getMessage());
         }
-    }
-
-    private function createProductShopDto(Product $product, Shop $shop, Money $price, bool $remove): ProductShopDto
-    {
-        return new ProductShopDto(
-            $product,
-            $shop,
-            $price,
-            $remove,
-        );
     }
 
     /**
@@ -150,25 +118,6 @@ class ProductModifyService
         $productPagination->setPagination(1, 1);
 
         return iterator_to_array($productPagination)[0];
-    }
-
-    /**
-     * @throws ProductModifyShopNotFoundException
-     */
-    private function getShop(Identifier $shopId, Identifier $groupId): Shop|null
-    {
-        if ($shopId->isNull()) {
-            throw ProductModifyShopNotFoundException::fromMessage('The Shop does not exists');
-        }
-
-        try {
-            $shopPagination = $this->shopRepository->findShopsOrFail($groupId, [$shopId]);
-            $shopPagination->setPagination(1, 1);
-
-            return iterator_to_array($shopPagination)[0];
-        } catch (\Throwable) {
-            throw ProductModifyShopNotFoundException::fromMessage('The Shop does not exists');
-        }
     }
 
     /**

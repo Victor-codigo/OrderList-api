@@ -17,7 +17,6 @@ class ProductModifyControllerTest extends WebClientTestCase
     private const ENDPOINT = '/api/v1/products';
     private const METHOD = 'PUT';
     private const PRODUCT_ID = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
-    private const SHOP_ID = 'b9b1c541-d41e-4751-9ecb-4a1d823c0405';
     private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const USER_OTHER_GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
 
@@ -72,12 +71,10 @@ class ProductModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
                 'group_id' => self::GROUP_ID,
-                'shop_id' => self::SHOP_ID,
+                'product_id' => self::PRODUCT_ID,
                 'name' => 'Product name modified',
                 'description' => 'product description modified',
-                'price' => 100.10,
                 'image_remove' => false,
             ]),
             files: [
@@ -104,12 +101,10 @@ class ProductModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
                 'group_id' => self::GROUP_ID,
-                'shop_id' => self::SHOP_ID,
+                'product_id' => self::PRODUCT_ID,
                 'name' => 'Juanola',
                 'description' => 'product description modified',
-                'price' => 100.10,
                 'image_remove' => false,
             ]),
             files: [
@@ -128,7 +123,7 @@ class ProductModifyControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldModifyTheProductShopIdNameDescriptionPriceImageAreNull(): void
+    public function itShouldModifyTheProductNameDescriptionImageAreNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $this->createImageTestPath();
@@ -136,12 +131,10 @@ class ProductModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
                 'group_id' => self::GROUP_ID,
-                'shop_id' => null,
+                'product_id' => self::PRODUCT_ID,
                 'name' => null,
                 'description' => null,
-                'price' => null,
                 'image_remove' => false,
             ]),
         );
@@ -165,12 +158,10 @@ class ProductModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
                 'group_id' => self::GROUP_ID,
-                'shop_id' => null,
+                'product_id' => self::PRODUCT_ID,
                 'name' => null,
                 'description' => null,
-                'price' => null,
                 'image_remove' => true,
             ]),
         );
@@ -194,12 +185,10 @@ class ProductModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => null,
                 'group_id' => self::GROUP_ID,
-                'shop_id' => self::SHOP_ID,
+                'product_id' => null,
                 'name' => 'Product name modified',
                 'description' => 'product description modified',
-                'price' => 100.10,
                 'image_remove' => false,
             ]),
             files: [
@@ -226,12 +215,10 @@ class ProductModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
                 'group_id' => null,
-                'shop_id' => self::SHOP_ID,
+                'product_id' => self::PRODUCT_ID,
                 'name' => 'Product name modified',
                 'description' => 'product description modified',
-                'price' => 100.10,
                 'image_remove' => false,
             ]),
             files: [
@@ -250,38 +237,6 @@ class ProductModifyControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailModifyingTheShopIdNotFound(): void
-    {
-        $client = $this->getNewClientAuthenticatedUser();
-        $this->createImageTestPath();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT,
-            content: json_encode([
-                'product_id' => self::PRODUCT_ID,
-                'group_id' => self::GROUP_ID,
-                'shop_id' => '62e537aa-4fd1-42b1-89f5-be682aa3b4ea',
-                'name' => 'Product name modified',
-                'description' => 'product description modified',
-                'price' => 100.10,
-                'image_remove' => false,
-            ]),
-            files: [
-                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
-            ]
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [], ['shop_not_found'], Response::HTTP_BAD_REQUEST);
-        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Shop not found', $responseContent->message);
-
-        $this->assertSame('Shop not found', $responseContent->errors->shop_not_found);
-    }
-
-    /** @test */
     public function itShouldFailModifyingTheProductNameIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -290,12 +245,10 @@ class ProductModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
                 'group_id' => self::GROUP_ID,
-                'shop_id' => self::SHOP_ID,
+                'product_id' => self::PRODUCT_ID,
                 'name' => 'Product name wrong-',
                 'description' => 'product description modified',
-                'price' => 100.10,
                 'image_remove' => false,
             ]),
             files: [
@@ -322,12 +275,10 @@ class ProductModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
                 'group_id' => self::GROUP_ID,
-                'shop_id' => self::SHOP_ID,
+                'product_id' => self::PRODUCT_ID,
                 'name' => 'Juan Carlos',
                 'description' => 'product description modified',
-                'price' => 100.10,
                 'image_remove' => false,
             ]),
             files: [
@@ -354,12 +305,10 @@ class ProductModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
                 'group_id' => self::GROUP_ID,
-                'shop_id' => self::SHOP_ID,
+                'product_id' => self::PRODUCT_ID,
                 'name' => 'Product name modified',
                 'description' => str_pad('', 501, 'm'),
-                'price' => 100.10,
                 'image_remove' => false,
             ]),
             files: [
@@ -387,12 +336,10 @@ class ProductModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => '396e0152-d501-45d9-bf58-7498e11ea6c5',
                 'group_id' => self::GROUP_ID,
-                'shop_id' => self::SHOP_ID,
+                'product_id' => '396e0152-d501-45d9-bf58-7498e11ea6c5',
                 'name' => 'Product name modified',
                 'description' => 'Product description modified',
-                'price' => 100.10,
                 'image_remove' => false,
             ]),
             files: [
@@ -419,12 +366,10 @@ class ProductModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
                 'group_id' => self::USER_OTHER_GROUP_ID,
-                'shop_id' => self::SHOP_ID,
+                'product_id' => self::PRODUCT_ID,
                 'name' => 'Product name modified',
                 'description' => 'Product description modified',
-                'price' => 100.10,
                 'image_remove' => false,
             ]),
             files: [
@@ -451,12 +396,10 @@ class ProductModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
                 'group_id' => self::USER_OTHER_GROUP_ID,
-                'shop_id' => self::SHOP_ID,
+                'product_id' => self::PRODUCT_ID,
                 'name' => 'Product name modified',
                 'description' => 'Product description modified',
-                'price' => 100.10,
                 'image_remove' => false,
             ]),
             files: [
@@ -482,12 +425,10 @@ class ProductModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
                 'group_id' => self::USER_OTHER_GROUP_ID,
-                'shop_id' => self::SHOP_ID,
+                'product_id' => self::PRODUCT_ID,
                 'name' => 'Product name modified',
                 'description' => 'Product description modified',
-                'price' => 100.10,
                 'image_remove' => false,
             ]),
             files: [
@@ -513,12 +454,10 @@ class ProductModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
                 'group_id' => self::USER_OTHER_GROUP_ID,
-                'shop_id' => self::SHOP_ID,
+                'product_id' => self::PRODUCT_ID,
                 'name' => 'Product name modified',
                 'description' => 'Product description modified',
-                'price' => 100.10,
                 'image_remove' => false,
             ]),
             files: [
@@ -544,12 +483,10 @@ class ProductModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
                 'group_id' => self::USER_OTHER_GROUP_ID,
-                'shop_id' => self::SHOP_ID,
+                'product_id' => self::PRODUCT_ID,
                 'name' => 'Product name modified',
                 'description' => 'Product description modified',
-                'price' => 100.10,
                 'image_remove' => false,
             ]),
             files: [
@@ -575,12 +512,10 @@ class ProductModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
                 'group_id' => self::USER_OTHER_GROUP_ID,
-                'shop_id' => self::SHOP_ID,
+                'product_id' => self::PRODUCT_ID,
                 'name' => 'Product name modified',
                 'description' => 'Product description modified',
-                'price' => 100.10,
                 'image_remove' => false,
             ]),
             files: [
@@ -606,12 +541,10 @@ class ProductModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
                 'group_id' => self::USER_OTHER_GROUP_ID,
-                'shop_id' => self::SHOP_ID,
+                'product_id' => self::PRODUCT_ID,
                 'name' => 'Product name modified',
                 'description' => 'Product description modified',
-                'price' => 100.10,
                 'image_remove' => false,
             ]),
             files: [
@@ -637,12 +570,10 @@ class ProductModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
                 'group_id' => self::USER_OTHER_GROUP_ID,
-                'shop_id' => self::SHOP_ID,
+                'product_id' => self::PRODUCT_ID,
                 'name' => 'Product name modified',
                 'description' => 'Product description modified',
-                'price' => 100.10,
                 'image_remove' => false,
             ]),
             files: [
@@ -668,12 +599,10 @@ class ProductModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
                 'group_id' => self::USER_OTHER_GROUP_ID,
-                'shop_id' => self::SHOP_ID,
+                'product_id' => self::PRODUCT_ID,
                 'name' => 'Product name modified',
                 'description' => 'Product description modified',
-                'price' => 100.10,
                 'image_remove' => false,
             ]),
             files: [
@@ -699,12 +628,10 @@ class ProductModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
                 'group_id' => self::GROUP_ID,
-                'shop_id' => self::SHOP_ID,
+                'product_id' => self::PRODUCT_ID,
                 'name' => 'Product name modified',
                 'description' => 'Product description modified',
-                'price' => 100.10,
                 'image_remove' => false,
             ]),
             files: [

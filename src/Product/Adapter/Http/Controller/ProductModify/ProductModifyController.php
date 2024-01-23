@@ -31,10 +31,8 @@ use Symfony\Component\HttpFoundation\Response;
                     properties: [
                         new OA\Property(property: 'product_id', type: 'string', description: 'Product\'s id', example: '44640237-4ae5-4a10-b30b-d8aee64492b0'),
                         new OA\Property(property: 'group_id', type: 'string', description: 'Group\'s id', example: 'fdb242b4-bac8-4463-88d0-0941bb0beee0'),
-                        new OA\Property(property: 'shop_id', type: 'string', description: 'Shop\'s id', example: '396e0152-d501-45d9-bf58-7498e11ea6c5'),
                         new OA\Property(property: 'name', type: 'string', minLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MIN_LENGTH, maxLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MAX_LENGTH, description: 'Product\'s name', example: 'Product name'),
                         new OA\Property(property: 'description', type: 'string', maxLength: VALUE_OBJECTS_CONSTRAINTS::DESCRIPTION_MAX_LENGTH, description: 'Product description', example: 'This is the description of the product'),
-                        new OA\Property(property: 'price', type: 'float', description: 'Price of the product in the shop'),
                         new OA\Property(property: 'image', type: 'string', format: 'binary', description: 'Product image'),
                         new OA\Property(property: 'image_remove', type: 'boolean', description: 'TRUE if the product image is removed, FALSE no'),
                     ]
@@ -102,12 +100,10 @@ class ProductModifyController extends AbstractController
     {
         $productModified = $this->productModifyUseCase->__invoke(
             $this->createProductModifyInputDto(
-                $request->productId,
                 $request->groupId,
-                $request->shopId,
+                $request->productId,
                 $request->name,
                 $request->description,
-                $request->price,
                 $request->image,
                 $request->imageRemove
             )
@@ -116,19 +112,17 @@ class ProductModifyController extends AbstractController
         return $this->createResponse($productModified);
     }
 
-    private function createProductModifyInputDto(string|null $productId, string|null $groupId, string|null $shopId, string|null $name, string|null $description, float|null $price, UploadedFile|null $image, bool $imageRemove): ProductModifyInputDto
+    private function createProductModifyInputDto(string|null $groupId, string|null $productId, string|null $name, string|null $description, UploadedFile|null $image, bool $imageRemove): ProductModifyInputDto
     {
         /** @var UserSharedSymfonyAdapter $userAdapter */
         $userAdapter = $this->security->getUser();
 
         return new ProductModifyInputDto(
             $userAdapter->getUser(),
-            $productId,
             $groupId,
-            $shopId,
+            $productId,
             $name,
             $description,
-            $price,
             null === $image ? null : new UploadedFileSymfonyAdapter($image),
             $imageRemove
         );

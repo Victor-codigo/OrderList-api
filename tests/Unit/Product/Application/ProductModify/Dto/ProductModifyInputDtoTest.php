@@ -20,7 +20,6 @@ require_once 'tests/BuiltinFunctions/SymfonyComponentValidatorConstraints.php';
 class ProductModifyInputDtoTest extends TestCase
 {
     private const PRODUCT_ID = '9155b773-e59f-4b85-b5ca-f0fab1cdc613';
-    private const SHOP_ID = '9362730c-775e-4d7b-9a7f-f2757496e601';
     private const GROUP_ID = 'b31deb1b-2d2b-4846-9c2e-cf661ba4a51b';
     private const PATH_FILE = 'tests/Fixtures/Files/file.txt';
     private const PATH_IMAGE_UPLOAD = 'tests/Fixtures/Files/Image.png';
@@ -59,12 +58,10 @@ class ProductModifyInputDtoTest extends TestCase
     {
         $object = new ProductModifyInputDto(
             $this->userSession,
-            self::PRODUCT_ID,
             self::GROUP_ID,
-            self::SHOP_ID,
+            self::PRODUCT_ID,
             'Product name',
             'product description',
-            50,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK),
             false
         );
@@ -75,14 +72,12 @@ class ProductModifyInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldValidateNoNameShopIdPriceImageDescription(): void
+    public function itShouldValidateNoNameImageDescription(): void
     {
         $object = new ProductModifyInputDto(
             $this->userSession,
-            self::PRODUCT_ID,
             self::GROUP_ID,
-            null,
-            null,
+            self::PRODUCT_ID,
             null,
             null,
             null,
@@ -99,12 +94,10 @@ class ProductModifyInputDtoTest extends TestCase
     {
         $object = new ProductModifyInputDto(
             $this->userSession,
-            null,
             self::GROUP_ID,
-            self::SHOP_ID,
+            null,
             'Product name',
             'product description',
-            50,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK),
             false
         );
@@ -119,12 +112,10 @@ class ProductModifyInputDtoTest extends TestCase
     {
         $object = new ProductModifyInputDto(
             $this->userSession,
-            'product id wrong',
             self::GROUP_ID,
-            self::SHOP_ID,
+            'product id wrong',
             'Product name',
             'product description',
-            50,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK),
             false
         );
@@ -139,12 +130,10 @@ class ProductModifyInputDtoTest extends TestCase
     {
         $object = new ProductModifyInputDto(
             $this->userSession,
-            self::PRODUCT_ID,
             null,
-            self::SHOP_ID,
+            self::PRODUCT_ID,
             'Product name',
             'product description',
-            50,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK),
             false
         );
@@ -159,12 +148,10 @@ class ProductModifyInputDtoTest extends TestCase
     {
         $object = new ProductModifyInputDto(
             $this->userSession,
-            self::PRODUCT_ID,
             'group id is wrong',
-            self::SHOP_ID,
+            self::PRODUCT_ID,
             'Product name',
             'product description',
-            50,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK),
             false
         );
@@ -175,36 +162,14 @@ class ProductModifyInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailShopIdIsWrong(): void
-    {
-        $object = new ProductModifyInputDto(
-            $this->userSession,
-            self::PRODUCT_ID,
-            self::GROUP_ID,
-            'shop id is wrong',
-            'Product name',
-            'product description',
-            50,
-            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK),
-            false
-        );
-
-        $return = $object->validate($this->validator);
-
-        $this->assertEquals(['shop_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
-    }
-
-    /** @test */
     public function itShouldFailNameIsWrong(): void
     {
         $object = new ProductModifyInputDto(
             $this->userSession,
-            self::PRODUCT_ID,
             self::GROUP_ID,
-            self::SHOP_ID,
+            self::PRODUCT_ID,
             'Product name is wrong-',
             'product description',
-            50,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK),
             false
         );
@@ -219,12 +184,10 @@ class ProductModifyInputDtoTest extends TestCase
     {
         $object = new ProductModifyInputDto(
             $this->userSession,
-            self::PRODUCT_ID,
             self::GROUP_ID,
-            self::SHOP_ID,
+            self::PRODUCT_ID,
             'Product name',
             str_pad('', 501, 'm'),
-            50,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK),
             false
         );
@@ -235,36 +198,14 @@ class ProductModifyInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailPriceIsWrong(): void
-    {
-        $object = new ProductModifyInputDto(
-            $this->userSession,
-            self::PRODUCT_ID,
-            self::GROUP_ID,
-            self::SHOP_ID,
-            'Product name',
-            'product description',
-            -1,
-            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK),
-            false
-        );
-
-        $return = $object->validate($this->validator);
-
-        $this->assertEquals(['price' => [VALIDATION_ERRORS::POSITIVE_OR_ZERO]], $return);
-    }
-
-    /** @test */
     public function itShouldFailImageMimeTypeNotAllowed(): void
     {
         $object = new ProductModifyInputDto(
             $this->userSession,
-            self::PRODUCT_ID,
             self::GROUP_ID,
-            self::SHOP_ID,
+            self::PRODUCT_ID,
             'Product name',
             'product description',
-            50,
             $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_OK),
             false
         );
@@ -279,12 +220,10 @@ class ProductModifyInputDtoTest extends TestCase
     {
         $object = new ProductModifyInputDto(
             $this->userSession,
-            self::PRODUCT_ID,
             self::GROUP_ID,
-            self::SHOP_ID,
+            self::PRODUCT_ID,
             'Product name',
             'product description',
-            50,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'file.txt', 'text/plain', UPLOAD_ERR_OK),
             false
         );
@@ -300,12 +239,10 @@ class ProductModifyInputDtoTest extends TestCase
     {
         $object = new ProductModifyInputDto(
             $this->userSession,
-            self::PRODUCT_ID,
             self::GROUP_ID,
-            self::SHOP_ID,
+            self::PRODUCT_ID,
             'Product name',
             'product description',
-            50,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'file.txt', 'text/plain', UPLOAD_ERR_INI_SIZE),
             false
         );
@@ -321,12 +258,10 @@ class ProductModifyInputDtoTest extends TestCase
     {
         $object = new ProductModifyInputDto(
             $this->userSession,
-            self::PRODUCT_ID,
             self::GROUP_ID,
-            self::SHOP_ID,
+            self::PRODUCT_ID,
             'Product name',
             'product description',
-            50,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'file.txt', 'text/plain', UPLOAD_ERR_NO_FILE),
             false
         );
@@ -342,12 +277,10 @@ class ProductModifyInputDtoTest extends TestCase
     {
         $object = new ProductModifyInputDto(
             $this->userSession,
-            self::PRODUCT_ID,
             self::GROUP_ID,
-            self::SHOP_ID,
+            self::PRODUCT_ID,
             'Product name',
             'product description',
-            50,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'file.txt', 'text/plain', UPLOAD_ERR_PARTIAL),
             false
         );
@@ -363,12 +296,10 @@ class ProductModifyInputDtoTest extends TestCase
     {
         $object = new ProductModifyInputDto(
             $this->userSession,
-            self::PRODUCT_ID,
             self::GROUP_ID,
-            self::SHOP_ID,
+            self::PRODUCT_ID,
             'Product name',
             'product description',
-            50,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'file.txt', 'text/plain', UPLOAD_ERR_CANT_WRITE),
             false
         );

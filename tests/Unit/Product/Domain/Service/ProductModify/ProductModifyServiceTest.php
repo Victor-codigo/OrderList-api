@@ -20,12 +20,7 @@ use Product\Domain\Service\ProductModify\Dto\ProductModifyDto;
 use Product\Domain\Service\ProductModify\Exception\ProductModifyProductNameIsAlreadyInDataBaseException;
 use Product\Domain\Service\ProductModify\Exception\ProductModifyProductNotFoundException;
 use Product\Domain\Service\ProductModify\Exception\ProductModifyProductShopException;
-use Product\Domain\Service\ProductModify\Exception\ProductModifyShopNotFoundException;
 use Product\Domain\Service\ProductModify\ProductModifyService;
-use Product\Domain\Service\ProductShop\Dto\ProductShopDto;
-use Product\Domain\Service\ProductShop\ProductShopService;
-use Shop\Domain\Model\Shop;
-use Shop\Domain\Port\Repository\ShopRepositoryInterface;
 
 require_once 'tests/BuiltinFunctions/ProductModifyService.php';
 
@@ -33,37 +28,26 @@ class ProductModifyServiceTest extends TestCase
 {
     private const PRODUCT_ID = 'product id';
     private const GROUP_ID = 'group id';
-    private const SHOP_ID = 'shop id';
     private const PRODUCT_IMAGE_PATH = 'path\to\products\images';
 
     private ProductModifyService $object;
     private MockObject|ProductRepositoryInterface $productRepository;
-    private MockObject|ShopRepositoryInterface $shopRepository;
-    private MockObject|ProductShopService $productShopService;
     private MockObject|UploadImageService $uploadImageService;
     private MockObject|PaginatorInterface $productsPaginator;
-    private MockObject|PaginatorInterface $shopsPaginator;
     private MockObject|ProductImage $productImage;
     private MockObject|Product $productFromDb;
-    private MockObject|Shop $shopFromDb;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
-        $this->shopRepository = $this->createMock(ShopRepositoryInterface::class);
-        $this->productShopService = $this->createMock(ProductShopService::class);
         $this->uploadImageService = $this->createMock(UploadImageService::class);
         $this->productsPaginator = $this->createMock(PaginatorInterface::class);
-        $this->shopsPaginator = $this->createMock(PaginatorInterface::class);
         $this->productImage = $this->createMock(ProductImage::class);
         $this->productFromDb = $this->createMock(Product::class);
-        $this->shopFromDb = $this->createMock(Shop::class);
         $this->object = new ProductModifyService(
             $this->productRepository,
-            $this->shopRepository,
-            $this->productShopService,
             $this->uploadImageService,
             self::PRODUCT_IMAGE_PATH
         );
@@ -75,10 +59,8 @@ class ProductModifyServiceTest extends TestCase
         $input = new ProductModifyDto(
             ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
-            ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createNameWithSpaces('product name modified'),
             ValueObjectFactory::createDescription('product description modified'),
-            ValueObjectFactory::createMoney(null),
             $this->productImage,
             false
         );
@@ -108,22 +90,6 @@ class ProductModifyServiceTest extends TestCase
             ->expects($this->never())
             ->method('setPagination');
 
-        $this->shopRepository
-            ->expects($this->never())
-            ->method('findShopsOrFail');
-
-        $this->shopsPaginator
-            ->expects($this->never())
-            ->method('setPagination');
-
-        $this->shopsPaginator
-            ->expects($this->never())
-            ->method('getIterator');
-
-        $this->productShopService
-            ->expects($this->never())
-            ->method('__invoke');
-
         $this->productFromDb
             ->expects($this->never())
             ->method('setName');
@@ -150,19 +116,10 @@ class ProductModifyServiceTest extends TestCase
         $input = new ProductModifyDto(
             ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
-            ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createNameWithSpaces('product name'),
             ValueObjectFactory::createDescription('product description modified'),
-            ValueObjectFactory::createMoney(null),
             $this->productImage,
             false
-        );
-
-        $inputProductShopService = new ProductShopDto(
-            $this->productFromDb,
-            $this->shopFromDb,
-            $input->price,
-            $input->imageRemove
         );
 
         $inputUploadImage = new UploadImageDto(
@@ -201,26 +158,6 @@ class ProductModifyServiceTest extends TestCase
             ->method('setPagination')
             ->with(1, 1);
 
-        $this->shopRepository
-            ->expects($this->once())
-            ->method('findShopsOrFail')
-            ->willReturn($this->shopsPaginator);
-
-        $this->shopsPaginator
-            ->expects($this->once())
-            ->method('setPagination')
-            ->with(1, 1);
-
-        $this->shopsPaginator
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->shopFromDb]));
-
-        $this->productShopService
-            ->expects($this->once())
-            ->method('__invoke')
-            ->with($inputProductShopService);
-
         $this->productFromDb
             ->expects($this->once())
             ->method('setName')
@@ -249,10 +186,8 @@ class ProductModifyServiceTest extends TestCase
         $input = new ProductModifyDto(
             ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
-            ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createNameWithSpaces('product name modified'),
             ValueObjectFactory::createDescription('product description modified'),
-            ValueObjectFactory::createMoney(null),
             $this->productImage,
             false
         );
@@ -283,22 +218,6 @@ class ProductModifyServiceTest extends TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$this->productFromDb]));
 
-        $this->shopRepository
-            ->expects($this->never())
-            ->method('findShopsOrFail');
-
-        $this->shopsPaginator
-            ->expects($this->never())
-            ->method('setPagination');
-
-        $this->shopsPaginator
-            ->expects($this->never())
-            ->method('getIterator');
-
-        $this->productShopService
-            ->expects($this->never())
-            ->method('__invoke');
-
         $this->productFromDb
             ->expects($this->never())
             ->method('setName');
@@ -321,381 +240,15 @@ class ProductModifyServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldModifyTheProductWithoutShopId(): void
-    {
-        $input = new ProductModifyDto(
-            ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
-            ValueObjectFactory::createIdentifier(self::GROUP_ID),
-            ValueObjectFactory::createIdentifier(null),
-            ValueObjectFactory::createNameWithSpaces('product name modified'),
-            ValueObjectFactory::createDescription('product description modified'),
-            ValueObjectFactory::createMoney(null),
-            $this->productImage,
-            false
-        );
-
-        $inputUploadImage = new UploadImageDto(
-            $this->productFromDb,
-            ValueObjectFactory::createPath(self::PRODUCT_IMAGE_PATH),
-            $this->productImage,
-            $input->imageRemove
-        );
-
-        $this->productRepository
-            ->expects($this->once())
-            ->method('findProductsOrFail')
-            ->willReturn($this->productsPaginator);
-
-        $this->productRepository
-            ->expects($this->once())
-            ->method('findProductsByGroupAndNameOrFail')
-            ->with($input->groupId, $input->name)
-            ->willThrowException(new DBNotFoundException());
-
-        $this->productRepository
-            ->expects($this->once())
-            ->method('save')
-            ->with($this->productFromDb);
-
-        $this->productsPaginator
-            ->expects($this->once())
-            ->method('setPagination')
-            ->with(1, 1);
-
-        $this->productsPaginator
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->productFromDb]));
-
-        $this->productsPaginator
-            ->expects($this->once())
-            ->method('setPagination')
-            ->with(1, 1);
-
-        $this->shopRepository
-            ->expects($this->never())
-            ->method('findShopsOrFail');
-
-        $this->shopsPaginator
-            ->expects($this->never())
-            ->method('setPagination');
-
-        $this->shopsPaginator
-            ->expects($this->never())
-            ->method('getIterator');
-
-        $this->productShopService
-            ->expects($this->never())
-            ->method('__invoke');
-
-        $this->productFromDb
-            ->expects($this->once())
-            ->method('setName')
-            ->with($input->name);
-
-        $this->productFromDb
-            ->expects($this->once())
-            ->method('setDescription')
-            ->with($input->description);
-
-        $this->productFromDb
-            ->expects($this->once())
-            ->method('getName')
-            ->willReturn(ValueObjectFactory::createNameWithSpaces('Other product name'));
-
-        $this->uploadImageService
-            ->expects($this->once())
-            ->method('__invoke')
-            ->with($inputUploadImage);
-
-        $this->object->__invoke($input);
-    }
-
-    /** @test */
-    public function itShouldFailModifyingTheProductShopIdIsNotFound(): void
-    {
-        $input = new ProductModifyDto(
-            ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
-            ValueObjectFactory::createIdentifier(self::GROUP_ID),
-            ValueObjectFactory::createIdentifier(self::SHOP_ID),
-            ValueObjectFactory::createNameWithSpaces('product name modified'),
-            ValueObjectFactory::createDescription('product description modified'),
-            ValueObjectFactory::createMoney(null),
-            $this->productImage,
-            false
-        );
-
-        $this->productRepository
-            ->expects($this->once())
-            ->method('findProductsOrFail')
-            ->willReturn($this->productsPaginator);
-
-        $this->productRepository
-            ->expects($this->once())
-            ->method('findProductsByGroupAndNameOrFail')
-            ->with($input->groupId, $input->name)
-            ->willThrowException(new DBNotFoundException());
-
-        $this->productRepository
-            ->expects($this->never())
-            ->method('save');
-
-        $this->productsPaginator
-            ->expects($this->once())
-            ->method('setPagination')
-            ->with(1, 1);
-
-        $this->productsPaginator
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->productFromDb]));
-
-        $this->productsPaginator
-            ->expects($this->once())
-            ->method('setPagination')
-            ->with(1, 1);
-
-        $this->shopRepository
-            ->expects($this->once())
-            ->method('findShopsOrFail')
-            ->willThrowException(new DBNotFoundException());
-
-        $this->shopsPaginator
-            ->expects($this->never())
-            ->method('setPagination');
-
-        $this->shopsPaginator
-            ->expects($this->never())
-            ->method('getIterator');
-
-        $this->productShopService
-            ->expects($this->never())
-            ->method('__invoke');
-
-        $this->productFromDb
-            ->expects($this->never())
-            ->method('setName');
-
-        $this->productFromDb
-            ->expects($this->never())
-            ->method('setDescription');
-
-        $this->productFromDb
-            ->expects($this->once())
-            ->method('getName')
-            ->willReturn(ValueObjectFactory::createNameWithSpaces('Other product name'));
-
-        $this->uploadImageService
-            ->expects($this->never())
-            ->method('__invoke');
-
-        $this->expectException(ProductModifyShopNotFoundException::class);
-        $this->object->__invoke($input);
-    }
-
-    /** @test */
-    public function itShouldModifyTheProductShopIdIsNull(): void
-    {
-        $input = new ProductModifyDto(
-            ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
-            ValueObjectFactory::createIdentifier(self::GROUP_ID),
-            ValueObjectFactory::createIdentifier(null),
-            ValueObjectFactory::createNameWithSpaces('product name modified'),
-            ValueObjectFactory::createDescription('product description modified'),
-            ValueObjectFactory::createMoney(null),
-            $this->productImage,
-            false
-        );
-
-        $inputUploadImage = new UploadImageDto(
-            $this->productFromDb,
-            ValueObjectFactory::createPath(self::PRODUCT_IMAGE_PATH),
-            $this->productImage,
-            $input->imageRemove
-        );
-
-        $this->productRepository
-            ->expects($this->once())
-            ->method('findProductsOrFail')
-            ->willReturn($this->productsPaginator);
-
-        $this->productRepository
-            ->expects($this->once())
-            ->method('findProductsByGroupAndNameOrFail')
-            ->with($input->groupId, $input->name)
-            ->willThrowException(new DBNotFoundException());
-
-        $this->productRepository
-            ->expects($this->once())
-            ->method('save')
-            ->with($this->productFromDb);
-
-        $this->productsPaginator
-            ->expects($this->once())
-            ->method('setPagination')
-            ->with(1, 1);
-
-        $this->productsPaginator
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->productFromDb]));
-
-        $this->productsPaginator
-            ->expects($this->once())
-            ->method('setPagination')
-            ->with(1, 1);
-
-        $this->shopRepository
-            ->expects($this->never())
-            ->method('findShopsOrFail');
-
-        $this->shopsPaginator
-            ->expects($this->never())
-            ->method('setPagination');
-
-        $this->shopsPaginator
-            ->expects($this->never())
-            ->method('getIterator');
-
-        $this->productShopService
-            ->expects($this->never())
-            ->method('__invoke');
-
-        $this->productFromDb
-            ->expects($this->once())
-            ->method('setName')
-            ->with($input->name);
-
-        $this->productFromDb
-            ->expects($this->once())
-            ->method('setDescription')
-            ->with($input->description);
-
-        $this->productFromDb
-            ->expects($this->once())
-            ->method('getName')
-            ->willReturn(ValueObjectFactory::createNameWithSpaces('Other product name'));
-
-        $this->uploadImageService
-            ->expects($this->once())
-            ->method('__invoke')
-            ->with($inputUploadImage);
-
-        $this->object->__invoke($input);
-    }
-
-    /** @test */
-    public function itShouldFailModifyingProductProductShopServiceException(): void
-    {
-        $input = new ProductModifyDto(
-            ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
-            ValueObjectFactory::createIdentifier(self::GROUP_ID),
-            ValueObjectFactory::createIdentifier(self::SHOP_ID),
-            ValueObjectFactory::createNameWithSpaces('product name modified'),
-            ValueObjectFactory::createDescription('product description modified'),
-            ValueObjectFactory::createMoney(null),
-            $this->productImage,
-            false
-        );
-
-        $inputProductShopService = new ProductShopDto(
-            $this->productFromDb,
-            $this->shopFromDb,
-            $input->price,
-            $input->imageRemove
-        );
-
-        $this->productRepository
-            ->expects($this->once())
-            ->method('findProductsOrFail')
-            ->willReturn($this->productsPaginator);
-
-        $this->productRepository
-            ->expects($this->once())
-            ->method('findProductsByGroupAndNameOrFail')
-            ->with($input->groupId, $input->name)
-            ->willThrowException(new DBNotFoundException());
-
-        $this->productRepository
-            ->expects($this->never())
-            ->method('save');
-
-        $this->productsPaginator
-            ->expects($this->once())
-            ->method('setPagination')
-            ->with(1, 1);
-
-        $this->productsPaginator
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->productFromDb]));
-
-        $this->productsPaginator
-            ->expects($this->once())
-            ->method('setPagination')
-            ->with(1, 1);
-
-        $this->shopRepository
-            ->expects($this->once())
-            ->method('findShopsOrFail')
-            ->willReturn($this->shopsPaginator);
-
-        $this->shopsPaginator
-            ->expects($this->once())
-            ->method('setPagination')
-            ->with(1, 1);
-
-        $this->shopsPaginator
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->shopFromDb]));
-
-        $this->productShopService
-            ->expects($this->once())
-            ->method('__invoke')
-            ->with($inputProductShopService)
-            ->willThrowException(new DBConnectionException());
-
-        $this->productFromDb
-            ->expects($this->never())
-            ->method('setName');
-
-        $this->productFromDb
-            ->expects($this->never())
-            ->method('setDescription');
-
-        $this->productFromDb
-            ->expects($this->once())
-            ->method('getName')
-            ->willReturn(ValueObjectFactory::createNameWithSpaces('Other product name'));
-
-        $this->uploadImageService
-            ->expects($this->never())
-            ->method('__invoke');
-
-        $this->expectException(ProductModifyProductShopException::class);
-        $this->object->__invoke($input);
-    }
-
-    /** @test */
     public function itShouldModifyTheProductNameImageAndDescription(): void
     {
         $input = new ProductModifyDto(
             ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
-            ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createNameWithSpaces('product name modified'),
             ValueObjectFactory::createDescription('product description modified'),
-            ValueObjectFactory::createMoney(null),
             $this->productImage,
             false
-        );
-
-        $inputProductShopService = new ProductShopDto(
-            $this->productFromDb,
-            $this->shopFromDb,
-            $input->price,
-            $input->imageRemove
         );
 
         $inputUploadImage = new UploadImageDto(
@@ -735,26 +288,6 @@ class ProductModifyServiceTest extends TestCase
             ->expects($this->once())
             ->method('setPagination')
             ->with(1, 1);
-
-        $this->shopRepository
-            ->expects($this->once())
-            ->method('findShopsOrFail')
-            ->willReturn($this->shopsPaginator);
-
-        $this->shopsPaginator
-            ->expects($this->once())
-            ->method('setPagination')
-            ->with(1, 1);
-
-        $this->shopsPaginator
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->shopFromDb]));
-
-        $this->productShopService
-            ->expects($this->once())
-            ->method('__invoke')
-            ->with($inputProductShopService);
 
         $this->productFromDb
             ->expects($this->once())
@@ -785,19 +318,10 @@ class ProductModifyServiceTest extends TestCase
         $input = new ProductModifyDto(
             ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
-            ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createNameWithSpaces(null),
             ValueObjectFactory::createDescription(null),
-            ValueObjectFactory::createMoney(null),
             $this->productImage,
             false
-        );
-
-        $inputProductShopService = new ProductShopDto(
-            $this->productFromDb,
-            $this->shopFromDb,
-            $input->price,
-            $input->imageRemove
         );
 
         $inputUploadImage = new UploadImageDto(
@@ -836,26 +360,6 @@ class ProductModifyServiceTest extends TestCase
             ->method('setPagination')
             ->with(1, 1);
 
-        $this->shopRepository
-            ->expects($this->once())
-            ->method('findShopsOrFail')
-            ->willReturn($this->shopsPaginator);
-
-        $this->shopsPaginator
-            ->expects($this->once())
-            ->method('setPagination')
-            ->with(1, 1);
-
-        $this->shopsPaginator
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->shopFromDb]));
-
-        $this->productShopService
-            ->expects($this->once())
-            ->method('__invoke')
-            ->with($inputProductShopService);
-
         $this->productFromDb
             ->expects($this->never())
             ->method('setName')
@@ -883,19 +387,10 @@ class ProductModifyServiceTest extends TestCase
         $input = new ProductModifyDto(
             ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
-            ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createNameWithSpaces('product name modified'),
             ValueObjectFactory::createDescription('product description modified'),
-            ValueObjectFactory::createMoney(null),
             $this->productImage,
             true
-        );
-
-        $inputProductShopService = new ProductShopDto(
-            $this->productFromDb,
-            $this->shopFromDb,
-            $input->price,
-            $input->imageRemove
         );
 
         $inputUploadImage = new UploadImageDto(
@@ -934,26 +429,6 @@ class ProductModifyServiceTest extends TestCase
             ->expects($this->once())
             ->method('setPagination')
             ->with(1, 1);
-
-        $this->shopRepository
-            ->expects($this->once())
-            ->method('findShopsOrFail')
-            ->willReturn($this->shopsPaginator);
-
-        $this->shopsPaginator
-            ->expects($this->once())
-            ->method('setPagination')
-            ->with(1, 1);
-
-        $this->shopsPaginator
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->shopFromDb]));
-
-        $this->productShopService
-            ->expects($this->once())
-            ->method('__invoke')
-            ->with($inputProductShopService);
 
         $this->productFromDb
             ->expects($this->once())
@@ -985,19 +460,10 @@ class ProductModifyServiceTest extends TestCase
         $input = new ProductModifyDto(
             ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
-            ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createNameWithSpaces('product name modified'),
             ValueObjectFactory::createDescription('product description modified'),
-            ValueObjectFactory::createMoney(null),
             $this->productImage,
             true
-        );
-
-        $inputProductShopService = new ProductShopDto(
-            $this->productFromDb,
-            $this->shopFromDb,
-            $input->price,
-            $input->imageRemove
         );
 
         $inputUploadImage = new UploadImageDto(
@@ -1038,25 +504,79 @@ class ProductModifyServiceTest extends TestCase
             ->method('setPagination')
             ->with(1, 1);
 
-        $this->shopRepository
+        $this->productFromDb
             ->expects($this->once())
-            ->method('findShopsOrFail')
-            ->willReturn($this->shopsPaginator);
+            ->method('setName')
+            ->with($input->name);
 
-        $this->shopsPaginator
+        $this->productFromDb
+            ->expects($this->once())
+            ->method('setDescription')
+            ->with($input->description);
+
+        $this->productFromDb
+            ->expects($this->once())
+            ->method('getName')
+            ->willReturn(ValueObjectFactory::createNameWithSpaces('Other product name'));
+
+        $this->uploadImageService
+            ->expects($this->once())
+            ->method('__invoke')
+            ->with($inputUploadImage);
+
+        $this->object->__invoke($input);
+    }
+
+    /** @test */
+    public function itShouldFailModifyingTheProductNameDescriptionAndRemoveImageErrorOnSave(): void
+    {
+        $input = new ProductModifyDto(
+            ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createNameWithSpaces('product name modified'),
+            ValueObjectFactory::createDescription('product description modified'),
+            $this->productImage,
+            true
+        );
+
+        $inputUploadImage = new UploadImageDto(
+            $this->productFromDb,
+            ValueObjectFactory::createPath(self::PRODUCT_IMAGE_PATH),
+            $this->productImage,
+            $input->imageRemove
+        );
+
+        $this->productRepository
+            ->expects($this->once())
+            ->method('findProductsOrFail')
+            ->willReturn($this->productsPaginator);
+
+        $this->productRepository
+            ->expects($this->once())
+            ->method('findProductsByGroupAndNameOrFail')
+            ->with($input->groupId, $input->name)
+            ->willThrowException(new DBNotFoundException());
+
+        $this->productRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($this->productFromDb)
+            ->willThrowException(new DBConnectionException());
+
+        $this->productsPaginator
             ->expects($this->once())
             ->method('setPagination')
             ->with(1, 1);
 
-        $this->shopsPaginator
+        $this->productsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->shopFromDb]));
+            ->willReturn(new \ArrayIterator([$this->productFromDb]));
 
-        $this->productShopService
+        $this->productsPaginator
             ->expects($this->once())
-            ->method('__invoke')
-            ->with($inputProductShopService);
+            ->method('setPagination')
+            ->with(1, 1);
 
         $this->productFromDb
             ->expects($this->once())
@@ -1078,6 +598,7 @@ class ProductModifyServiceTest extends TestCase
             ->method('__invoke')
             ->with($inputUploadImage);
 
+        $this->expectException(ProductModifyProductShopException::class);
         $this->object->__invoke($input);
     }
 }
