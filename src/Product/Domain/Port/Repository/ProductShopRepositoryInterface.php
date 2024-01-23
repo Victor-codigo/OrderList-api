@@ -12,14 +12,18 @@ use Product\Domain\Model\ProductShop;
 interface ProductShopRepositoryInterface extends RepositoryInterface
 {
     /**
+     * @param ProductShop $productsShops
+     *
      * @throws DBConnectionException
      */
-    public function save(ProductShop $ProductShop): void;
+    public function save(array $productsShops): void;
 
     /**
+     * @param ProductShop[] $productsShops
+     *
      * @throws DBConnectionException
      */
-    public function remove(ProductShop $ProductShop): void;
+    public function remove(array $productsShops): void;
 
     /**
      * @param Identifier[] $productId

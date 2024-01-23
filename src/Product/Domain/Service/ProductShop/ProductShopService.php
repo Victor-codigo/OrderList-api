@@ -64,7 +64,7 @@ class ProductShopService
             return;
         }
 
-        $this->productShopRepository->remove($productShop);
+        $this->productShopRepository->remove([$productShop]);
     }
 
     /**
@@ -74,7 +74,7 @@ class ProductShopService
     {
         $price->isNull() ?: $productShop->setPrice($price);
 
-        $this->productShopRepository->save($productShop);
+        $this->productShopRepository->save([$productShop]);
 
         return $productShop;
     }
@@ -85,7 +85,7 @@ class ProductShopService
     private function create(Product $product, Shop $shop, Money $price): ProductShop
     {
         $productShopNew = ProductShop::fromPrimitives($product, $shop, $price->getValue());
-        $this->productShopRepository->save($productShopNew);
+        $this->productShopRepository->save([$productShopNew]);
 
         return $productShopNew;
     }

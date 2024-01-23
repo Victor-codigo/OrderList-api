@@ -14,11 +14,21 @@ class ProductSetShopPriceControllerTest extends WebClientTestCase
     use ReloadDatabaseTrait;
 
     private const ENDPOINT = '/api/v1/products/price';
-    private const METHOD = 'PATCH';
+    private const METHOD = 'PUT';
     private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const GROUP_OTHER_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const SHOP_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
-    private const PRODUCT_ID = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
+    private const SHOPS_ID = [
+        'e6c1d350-f010-403c-a2d4-3865c14630ec',
+        'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
+    ];
+    private const PRODUCTS_ID = [
+        '7e3021d4-2d02-4386-8bbe-887cfe8697a8',
+        '8b6d650b-7bb7-4850-bf25-36cda9bce801',
+    ];
+    private const PRICES = [
+        10,
+        20,
+    ];
 
     /** @test */
     public function itShouldSetThePriceOfAProductForAShop(): void
@@ -28,22 +38,119 @@ class ProductSetShopPriceControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
-                'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
-                'price' => 0,
+                'products_id' => self::PRODUCTS_ID,
+                'shops_id' => self::SHOPS_ID,
+                'prices' => self::PRICES,
             ]),
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, ['product_id', 'shop_id', 'price'], [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, [0, 1], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
-        $this->assertSame('Product of a shop set', $responseContent->message);
-        $this->assertEquals(self::PRODUCT_ID, $responseContent->data->product_id);
-        $this->assertEquals(self::SHOP_ID, $responseContent->data->shop_id);
-        $this->assertEquals(0, $responseContent->data->price);
+        $this->assertSame('Product, shop and price set', $responseContent->message);
+
+        foreach (self::PRODUCTS_ID as $index => $productId) {
+            $this->assertContainsEquals(
+                ['group_id' => self::GROUP_ID, 'product_id' => $productId, 'shop_id' => self::SHOPS_ID[$index], 'price' => self::PRICES[$index]],
+                array_map(fn (\stdClass $productShop) => (array) $productShop, $responseContent->data)
+            );
+        }
+    }
+
+    /** @test */
+    public function itShouldSetThePriceOfAProductForAShopProductNotFound(): void
+    {
+        $client = $this->getNewClientAuthenticatedAdmin();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_OTHER_ID,
+                'products_id' => ['140eae6d-5f40-44c4-8a50-d3f8f7825c5c', self::PRODUCTS_ID[0]],
+                'shops_id' => self::SHOPS_ID,
+                'prices' => self::PRICES,
+            ]),
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Product, shop and price set', $responseContent->message);
+    }
+
+    /** @test */
+    public function itShouldSetThePriceOfAProductForAShopShopNotFound(): void
+    {
+        $client = $this->getNewClientAuthenticatedAdmin();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_OTHER_ID,
+                'products_id' => self::PRODUCTS_ID,
+                'shops_id' => ['140eae6d-5f40-44c4-8a50-d3f8f7825c5c', self::SHOPS_ID[1]],
+                'prices' => self::PRICES,
+            ]),
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Product, shop and price set', $responseContent->message);
+    }
+
+    /** @test */
+    public function itShouldSetThePriceOfAProductForAShopProductNotInTheGroup(): void
+    {
+        $client = $this->getNewClientAuthenticatedAdmin();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_OTHER_ID,
+                'products_id' => self::PRODUCTS_ID,
+                'shops_id' => self::SHOPS_ID,
+                'prices' => self::PRICES,
+            ]),
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Product, shop and price set', $responseContent->message);
+    }
+
+    /** @test */
+    public function itShouldFailSettingThePriceOfAProductForAShopProductsShopsPricesNotEquals(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'products_id' => [self::PRODUCTS_ID[0], self::PRODUCTS_ID[1], self::PRODUCTS_ID[0]],
+                'shops_id' => self::SHOPS_ID,
+                'prices' => self::PRICES,
+            ]),
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['shops_prices_not_equal'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertEquals(['not_equal_to'], $responseContent->errors->shops_prices_not_equal);
     }
 
     /** @test */
@@ -54,20 +161,21 @@ class ProductSetShopPriceControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => null,
-                'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
-                'price' => 0,
+                'products_id' => null,
+                'shops_id' => self::SHOPS_ID,
+                'prices' => self::PRICES,
             ]),
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['product_id'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['shops_prices_not_equal', 'products_id'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->product_id);
+        $this->assertEquals(['not_blank'], $responseContent->errors->products_id);
+        $this->assertEquals(['not_equal_to'], $responseContent->errors->shops_prices_not_equal);
     }
 
     /** @test */
@@ -78,20 +186,20 @@ class ProductSetShopPriceControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => 'wrong id',
-                'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
-                'price' => 0,
+                'products_id' => ['wrong id', self::PRODUCTS_ID[1]],
+                'shops_id' => self::SHOPS_ID,
+                'prices' => self::PRICES,
             ]),
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['product_id'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['products_id'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->product_id);
+        $this->assertEquals([['uuid_invalid_characters']], $responseContent->errors->products_id);
     }
 
     /** @test */
@@ -102,20 +210,21 @@ class ProductSetShopPriceControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
-                'shop_id' => null,
                 'group_id' => self::GROUP_ID,
-                'price' => 0,
+                'products_id' => self::PRODUCTS_ID,
+                'shops_id' => null,
+                'prices' => self::PRICES,
             ]),
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['shop_id'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['shops_prices_not_equal', 'shops_id'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->shop_id);
+        $this->assertEquals(['not_equal_to'], $responseContent->errors->shops_prices_not_equal);
+        $this->assertEquals(['not_blank'], $responseContent->errors->shops_id);
     }
 
     /** @test */
@@ -126,20 +235,20 @@ class ProductSetShopPriceControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
-                'shop_id' => 'wrong id',
                 'group_id' => self::GROUP_ID,
-                'price' => 0,
+                'products_id' => self::PRODUCTS_ID,
+                'shops_id' => [self::SHOPS_ID[0], 'wrong id'],
+                'prices' => self::PRICES,
             ]),
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['shop_id'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['shops_id'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->shop_id);
+        $this->assertEquals([['uuid_invalid_characters']], $responseContent->errors->shops_id);
     }
 
     /** @test */
@@ -150,10 +259,10 @@ class ProductSetShopPriceControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
-                'shop_id' => self::SHOP_ID,
                 'group_id' => null,
-                'price' => 0,
+                'products_id' => self::PRODUCTS_ID,
+                'shops_id' => self::SHOPS_ID,
+                'prices' => self::PRICES,
             ]),
         );
 
@@ -174,10 +283,10 @@ class ProductSetShopPriceControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
-                'shop_id' => self::SHOP_ID,
                 'group_id' => 'wrong id',
-                'price' => 0,
+                'products_id' => self::PRODUCTS_ID,
+                'shops_id' => self::SHOPS_ID,
+                'prices' => self::PRICES,
             ]),
         );
 
@@ -198,92 +307,20 @@ class ProductSetShopPriceControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
-                'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
-                'price' => -1,
+                'products_id' => self::PRODUCTS_ID,
+                'shops_id' => self::SHOPS_ID,
+                'prices' => [self::PRICES[0], -1],
             ]),
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['price'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['prices'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertEquals(['positive_or_zero'], $responseContent->errors->price);
-    }
-
-    /** @test */
-    public function itShouldFailSettingThePriceOfAProductForAShopProductNotFound(): void
-    {
-        $client = $this->getNewClientAuthenticatedAdmin();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT,
-            content: json_encode([
-                'product_id' => '140eae6d-5f40-44c4-8a50-d3f8f7825c5c',
-                'shop_id' => self::SHOP_ID,
-                'group_id' => self::GROUP_OTHER_ID,
-                'price' => 0,
-            ]),
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [], ['product_not_found'], Response::HTTP_BAD_REQUEST);
-        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Product not found', $responseContent->message);
-        $this->assertEquals('Product not found', $responseContent->errors->product_not_found);
-    }
-
-    /** @test */
-    public function itShouldFailSettingThePriceOfAProductForAShopShopNotFound(): void
-    {
-        $client = $this->getNewClientAuthenticatedAdmin();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT,
-            content: json_encode([
-                'product_id' => self::PRODUCT_ID,
-                'shop_id' => '140eae6d-5f40-44c4-8a50-d3f8f7825c5c',
-                'group_id' => self::GROUP_OTHER_ID,
-                'price' => 0,
-            ]),
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [], ['product_not_found'], Response::HTTP_BAD_REQUEST);
-        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Product not found', $responseContent->message);
-        $this->assertEquals('Product not found', $responseContent->errors->product_not_found);
-    }
-
-    /** @test */
-    public function itShouldFailSettingThePriceOfAProductForAShopProductNotInTheGroup(): void
-    {
-        $client = $this->getNewClientAuthenticatedAdmin();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT,
-            content: json_encode([
-                'product_id' => self::PRODUCT_ID,
-                'shop_id' => self::SHOP_ID,
-                'group_id' => self::GROUP_OTHER_ID,
-                'price' => 0,
-            ]),
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [], ['product_not_found'], Response::HTTP_BAD_REQUEST);
-        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Product not found', $responseContent->message);
-        $this->assertEquals('Product not found', $responseContent->errors->product_not_found);
+        $this->assertEquals([['positive_or_zero']], $responseContent->errors->prices);
     }
 
     /** @test */
@@ -294,10 +331,10 @@ class ProductSetShopPriceControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'product_id' => self::PRODUCT_ID,
-                'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
-                'price' => 0,
+                'products_id' => self::PRODUCTS_ID,
+                'shops_id' => self::SHOPS_ID,
+                'prices' => self::PRICES,
             ]),
         );
 

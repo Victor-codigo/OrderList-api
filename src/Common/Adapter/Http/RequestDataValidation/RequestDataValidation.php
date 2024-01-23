@@ -30,4 +30,19 @@ trait RequestDataValidation
             $valuesMax
         );
     }
+
+    /**
+     * @param mixed $default value to be set, to those values that are not float
+     */
+    private function arrayFilterFloat(array|null $values, int $valuesMax, mixed $default = null): array
+    {
+        $valuesValid = $this->validateArrayOverflow($values, $valuesMax);
+
+        return array_map(
+            fn ($value) => filter_var($value, FILTER_VALIDATE_FLOAT)
+                ? (float) $value
+                : $default,
+            $valuesValid ?? []
+        );
+    }
 }

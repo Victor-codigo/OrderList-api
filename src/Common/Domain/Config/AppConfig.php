@@ -49,6 +49,11 @@ class AppConfig
     public const ENDPOINT_PRODUCT_GET_SHOPS_MAX = 100;
 
     /**
+     * Maximum number of shops and prices can be set by request.
+     */
+    public const ENDPOINT_PRODUCT_PATCH_PRICES_SHOPS_MAX = 50;
+
+    /**
      * Maximum number of shops can be removed per request.
      */
     public const ENDPOINT_SHOP_GET_SHOPS_MAX = 100;

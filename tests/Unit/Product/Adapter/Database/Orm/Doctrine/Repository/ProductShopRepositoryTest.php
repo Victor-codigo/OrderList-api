@@ -66,7 +66,7 @@ class ProductShopRepositoryTest extends DataBaseTestCase
         $this->mockObjectManager($this->object, $objectManagerMock);
 
         $this->expectException(DBConnectionException::class);
-        $this->object->save($this->getNewProductShop(1.3));
+        $this->object->save([$this->getNewProductShop(1.3)]);
     }
 
     /** @test */

@@ -25,12 +25,17 @@ class ProductShopRepository extends RepositoryBase implements ProductShopReposit
     }
 
     /**
+     * @param ProductShop[] $productsShops
+     *
      * @throws DBConnectionException
      */
-    public function save(ProductShop $productShop): void
+    public function save(array $productsShops): void
     {
         try {
-            $this->objectManager->persist($productShop);
+            foreach ($productsShops as $productShop) {
+                $this->objectManager->persist($productShop);
+            }
+
             $this->objectManager->flush();
         } catch (\Throwable $e) {
             throw DBConnectionException::fromConnection($e->getCode());
@@ -38,12 +43,17 @@ class ProductShopRepository extends RepositoryBase implements ProductShopReposit
     }
 
     /**
+     * @param ProductShop[] $productsShops
+     *
      * @throws DBConnectionException
      */
-    public function remove(ProductShop $productShop): void
+    public function remove(array $productsShops): void
     {
         try {
-            $this->objectManager->remove($productShop);
+            foreach ($productsShops as $productShop) {
+                $this->objectManager->remove($productShop);
+            }
+
             $this->objectManager->flush();
         } catch (\Throwable $e) {
             throw DBConnectionException::fromConnection($e->getCode());

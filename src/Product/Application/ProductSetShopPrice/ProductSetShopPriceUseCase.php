@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Product\Application\ProductSetShopPrice;
 
-use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
 use Common\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
@@ -13,7 +13,6 @@ use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use Product\Application\ProductSetShopPrice\Dto\ProductSetShopPriceInputDto;
 use Product\Application\ProductSetShopPrice\Dto\ProductSetShopPriceOutputDto;
-use Product\Application\ProductSetShopPrice\Exception\ProductSetShopPriceProductNotFoundException;
 use Product\Application\ProductSetShopPrice\Exception\ProductSetShopPriceValidateGroupAndUserException;
 use Product\Domain\Model\ProductShop;
 use Product\Domain\Service\ProductSetShopPrice\Dto\ProductSetShopPriceDto;
@@ -39,11 +38,9 @@ class ProductSetShopPriceUseCase extends ServiceBase
                 $this->createProductSetShopPriceDto($input)
             );
 
-            return $this->createProductSetShopPriceOutputDto($productShopModified);
+            return $this->createProductSetShopPriceOutputDto($input->groupId, $productShopModified);
         } catch (ValidateGroupAndUserException) {
             throw ProductSetShopPriceValidateGroupAndUserException::fromMessage('You have no permissions');
-        } catch (DBNotFoundException) {
-            throw ProductSetShopPriceProductNotFoundException::fromMessage('Product not found');
         } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
@@ -60,11 +57,14 @@ class ProductSetShopPriceUseCase extends ServiceBase
 
     private function createProductSetShopPriceDto(ProductSetShopPriceInputDto $input): ProductSetShopPriceDto
     {
-        return new ProductSetShopPriceDto($input->productId, $input->shopId, $input->groupId, $input->price);
+        return new ProductSetShopPriceDto($input->groupId, $input->productsId, $input->shopsId, $input->prices);
     }
 
-    private function createProductSetShopPriceOutputDto(ProductShop $productShopModified): ProductSetShopPriceOutputDto
+    /**
+     * @param ProductShop[] $productShopModified
+     */
+    private function createProductSetShopPriceOutputDto(Identifier $groupId, array $productShopModified): ProductSetShopPriceOutputDto
     {
-        return new ProductSetShopPriceOutputDto($productShopModified);
+        return new ProductSetShopPriceOutputDto($groupId, $productShopModified);
     }
 }

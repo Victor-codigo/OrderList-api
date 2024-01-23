@@ -9,11 +9,16 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 
 class ProductSetShopPriceDto
 {
+    /**
+     * @param Identifier[] $productsId
+     * @param Identifier[] $shopsId
+     * @param Money[]      $prices
+     */
     public function __construct(
-        public readonly Identifier $productId,
-        public readonly Identifier $shopId,
         public readonly Identifier $groupId,
-        public readonly Money $price
+        public readonly array $productsId,
+        public readonly array $shopsId,
+        public readonly array $prices
     ) {
     }
 }

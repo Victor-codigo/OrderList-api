@@ -108,7 +108,7 @@ class ProductShopServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('remove')
-            ->with($this->productShop);
+            ->with([$this->productShop]);
 
         $this->paginator
             ->expects($this->once())
@@ -144,7 +144,7 @@ class ProductShopServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('remove')
-            ->with($this->productShop)
+            ->with([$this->productShop])
             ->willThrowException(new DBConnectionException());
 
         $this->paginator
@@ -181,7 +181,7 @@ class ProductShopServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('save')
-            ->with($productShopCreatedExpected);
+            ->with([$productShopCreatedExpected]);
 
         $this->paginator
             ->expects($this->never())
@@ -216,7 +216,7 @@ class ProductShopServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('save')
-            ->with($productShopCreatedExpected)
+            ->with([$productShopCreatedExpected])
             ->willThrowException(new DBConnectionException());
 
         $this->paginator
@@ -249,7 +249,7 @@ class ProductShopServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->productShop);
+            ->with([$this->productShop]);
 
         $this->paginator
             ->expects($this->once())
@@ -290,7 +290,7 @@ class ProductShopServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->productShop);
+            ->with([$this->productShop]);
 
         $this->paginator
             ->expects($this->once())
