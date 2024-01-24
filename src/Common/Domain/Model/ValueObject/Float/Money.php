@@ -12,7 +12,6 @@ class Money extends FloatValueObject
     protected function defineConstraints(): void
     {
         $this
-            ->setConstraint(ConstraintFactory::notNull())
             ->setConstraint(ConstraintFactory::type(TYPES::FLOAT))
             ->setConstraint(ConstraintFactory::positiveOrZero());
     }
