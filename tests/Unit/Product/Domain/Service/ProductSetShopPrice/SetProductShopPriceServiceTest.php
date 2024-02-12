@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Product\Domain\Service\ProductSetShopPrice;
+namespace Test\Unit\Product\Domain\Service\SetProductShopPrice;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Float\Money;
@@ -15,21 +15,20 @@ use Product\Domain\Model\Product;
 use Product\Domain\Model\ProductShop;
 use Product\Domain\Port\Repository\ProductRepositoryInterface;
 use Product\Domain\Port\Repository\ProductShopRepositoryInterface;
-use Product\Domain\Service\ProductSetShopPrice\Dto\ProductSetShopPriceDto;
-use Product\Domain\Service\ProductSetShopPrice\ProductSetShopPriceService;
+use Product\Domain\Service\SetProductShopPrice\Dto\SetProductShopPriceDto;
+use Product\Domain\Service\SetProductShopPrice\SetProductShopPriceService;
 use Shop\Domain\Model\Shop;
 use Shop\Domain\Port\Repository\ShopRepositoryInterface;
 
-class ProductSetShopPriceServiceTest extends TestCase
+class SetProductShopPriceServiceTest extends TestCase
 {
-    private ProductSetShopPriceService $object;
+    private SetProductShopPriceService $object;
     private MockObject|ProductShopRepositoryInterface $productShopRepository;
     private MockObject|ProductRepositoryInterface $productRepository;
     private MockObject|ShopRepositoryInterface $shopRepository;
     private MockObject|PaginatorInterface $productsShopsPaginator;
     private MockObject|PaginatorInterface $productsPaginator;
     private MockObject|PaginatorInterface $shopsPaginator;
-    private MockObject|ProductShop $productShop;
 
     protected function setUp(): void
     {
@@ -41,8 +40,7 @@ class ProductSetShopPriceServiceTest extends TestCase
         $this->productsShopsPaginator = $this->createMock(PaginatorInterface::class);
         $this->productsPaginator = $this->createMock(PaginatorInterface::class);
         $this->shopsPaginator = $this->createMock(PaginatorInterface::class);
-        $this->productShop = $this->createMock(ProductShop::class);
-        $this->object = new ProductSetShopPriceService(
+        $this->object = new SetProductShopPriceService(
             $this->productShopRepository,
             $this->productRepository,
             $this->shopRepository
@@ -154,13 +152,34 @@ class ProductSetShopPriceServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @param ProductShop[] $productsShops1
+     * @param ProductShop[] $productsShops2
+     */
+    private function compareProductShop(array $productsShops1, array $productsShops2): void
+    {
+        $this->assertCount(count($productsShops1), $productsShops2);
+
+        foreach ($productsShops1 as $key => $productShop1) {
+            $this->assertEquals($productShop1->getProductId(), $productsShops2[$key]->getProductId());
+            $this->assertEquals($productShop1->getShopId(), $productsShops2[$key]->getShopId());
+            $this->assertEquals($productShop1->getPrice(), $productsShops2[$key]->getPrice());
+        }
+    }
+
     /** @test */
-    public function itShouldSetProductsShopsAndPricesAllNew(): void
+    public function itShouldSetProductsShopsAndPricesAllNewByShopId(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
+        $productNewId = ValueObjectFactory::createIdentifier(null);
+        $shopIdNew = ValueObjectFactory::createIdentifier('shop id 1 new ');
 
         [$productsIdDb, $shopsIdDb, $pricesDb] = $this->createData(null, null, null);
-        [$productsIdNew, $shopsIdNew, $pricesNew] = $this->createData(null, null, [11, 22, 33]);
+        [$productsIdNew, $shopsIdNew, $pricesNew] = $this->createData(
+            ['product id 1', 'product id 2', 'product id 3'],
+            [$shopIdNew, $shopIdNew, $shopIdNew],
+            [11, 22, 33]
+        );
         [$productsDb, $shopsDb] = $this->createProductsAndShops($groupId, $productsIdDb, $shopsIdDb);
         [$productsNew, $shopsNew] = $this->createProductsAndShops($groupId, $productsIdNew, $shopsIdNew);
         $productsShopsNew = $this->createProductsShops($productsNew, $shopsNew, $pricesNew);
@@ -168,7 +187,7 @@ class ProductSetShopPriceServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('findProductsAndShopsOrFail')
-            ->with($productsIdNew, $shopsIdNew, $groupId)
+            ->with(null, [$shopIdNew], $groupId)
             ->willReturn($this->productsShopsPaginator);
 
         $this->productsShopsPaginator
@@ -206,21 +225,97 @@ class ProductSetShopPriceServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('save')
-            ->with($productsShopsNew);
+            ->with($this->callback(fn (array $productShopToSave) => $this->compareProductShop($productShopToSave, $productsShopsNew) || true));
 
-        $input = new ProductSetShopPriceDto($groupId, $productsIdNew, $shopsIdNew, $pricesNew);
+        $input = new SetProductShopPriceDto($groupId, $productNewId, $shopIdNew, $productsIdNew, $pricesNew);
         $return = $this->object->__invoke($input);
 
-        $this->assertEquals($productsShopsNew, $return);
+        $this->compareProductShop($productsShopsNew, $return);
+    }
+
+    /** @test */
+    public function itShouldSetProductsShopsAndPricesAllNew(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier('group id');
+        $productIdNew = ValueObjectFactory::createIdentifier('product id 1 new');
+        $shopIdNew = ValueObjectFactory::createIdentifier(null);
+
+        [$productsIdDb, $shopsIdDb, $pricesDb] = $this->createData(null, null, null);
+        [$productsIdNew, $shopsIdNew, $pricesNew] = $this->createData(
+            [$productIdNew, $productIdNew, $productIdNew],
+            ['shop id 1 new ', 'shop id 2 new', 'shop id 3 new'],
+            [11, 22, 33]
+        );
+        [$productsDb, $shopsDb] = $this->createProductsAndShops($groupId, $productsIdDb, $shopsIdDb);
+        [$productsNew, $shopsNew] = $this->createProductsAndShops($groupId, $productsIdNew, $shopsIdNew);
+        $productsShopsNew = $this->createProductsShops($productsNew, $shopsNew, $pricesNew);
+
+        $this->productShopRepository
+            ->expects($this->once())
+            ->method('findProductsAndShopsOrFail')
+            ->with([$productIdNew], null, $groupId)
+            ->willReturn($this->productsShopsPaginator);
+
+        $this->productsShopsPaginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willThrowException(new DBNotFoundException());
+
+        $this->productRepository
+            ->expects($this->once())
+            ->method('findProductsOrFail')
+            ->with($groupId, $productsIdNew)
+            ->willReturn($this->productsPaginator);
+
+        $this->productsPaginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator(array_merge($productsDb, $productsNew)));
+
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('findShopsOrFail')
+            ->with($groupId, $shopsIdNew)
+            ->willReturn($this->shopsPaginator);
+
+        $this->shopsPaginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator(array_merge($shopsDb, $shopsNew)));
+
+        $this->productShopRepository
+            ->expects($this->once())
+            ->method('remove')
+            ->with([]);
+
+        $this->productShopRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($this->callback(fn (array $productShopToSave) => $this->compareProductShop($productShopToSave, $productsShopsNew) || true));
+
+        $input = new SetProductShopPriceDto($groupId, $productIdNew, $shopIdNew, $shopsIdNew, $pricesNew);
+        $return = $this->object->__invoke($input);
+
+        $this->compareProductShop($productsShopsNew, $return);
     }
 
     /** @test */
     public function itShouldModifyAllProductsShopsAndPrices(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
+        $productIdNew = ValueObjectFactory::createIdentifier('product id 1');
+        $shopIdNew = ValueObjectFactory::createIdentifier(null);
+        [$productsIdDb, $shopsIdDb, $pricesDb] = $this->createData(
+            [$productIdNew, $productIdNew, $productIdNew],
+            null,
+            null
+        );
+        [$productsIdNew, $shopsIdNew, $pricesNew] = $this->createData(
+            $productsIdDb,
+            null,
+            [11, 22, 33]
+        );
 
-        [$productsIdDb, $shopsIdDb, $pricesDb] = $this->createData(null, null, null);
-        [$productsIdNew, $shopsIdNew, $pricesNew] = $this->createData(null, null, [11, 22, 33]);
         [$productsDb, $shopsDb] = $this->createProductsAndShops($groupId, $productsIdDb, $shopsIdDb);
         $productsShopsDb = $this->createProductsShops($productsDb, $shopsDb, $pricesDb);
         $productsShopsNew = $productsShopsDb;
@@ -228,7 +323,7 @@ class ProductSetShopPriceServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('findProductsAndShopsOrFail')
-            ->with($productsIdNew, $shopsIdNew, $groupId)
+            ->with([$productIdNew], null, $groupId)
             ->willReturn($this->productsShopsPaginator);
 
         $this->productsShopsPaginator
@@ -260,18 +355,20 @@ class ProductSetShopPriceServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('save')
-            ->with($productsShopsNew);
+            ->with($this->callback(fn (array $productShopToSave) => $this->compareProductShop($productShopToSave, $productsShopsNew) || true));
 
-        $input = new ProductSetShopPriceDto($groupId, $productsIdNew, $shopsIdNew, $pricesNew);
+        $input = new SetProductShopPriceDto($groupId, $productIdNew, $shopIdNew, $shopsIdNew, $pricesNew);
         $return = $this->object->__invoke($input);
 
-        $this->assertEquals($productsShopsNew, $return);
+        $this->compareProductShop($productsShopsNew, $return);
     }
 
     /** @test */
     public function itShouldRemoveAllProductsShopsAndPrices(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
+        $productIdNew = ValueObjectFactory::createIdentifier('product id 1');
+        $shopIdNew = ValueObjectFactory::createIdentifier(null);
         [$productsIdDb, $shopsIdDb, $pricesDb] = $this->createData(null, null, null);
         [$productsIdNew, $shopsIdNew, $pricesNew] = [[], [], []];
         [$productsDb, $shopsDb] = $this->createProductsAndShops($groupId, $productsIdDb, $shopsIdDb);
@@ -280,7 +377,7 @@ class ProductSetShopPriceServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('findProductsAndShopsOrFail')
-            ->with($productsIdNew, $shopsIdNew, $groupId)
+            ->with([$productIdNew], null, $groupId)
             ->willReturn($this->productsShopsPaginator);
 
         $this->productsShopsPaginator
@@ -307,14 +404,14 @@ class ProductSetShopPriceServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('remove')
-            ->with($productsShopsDb);
+            ->with($this->callback(fn (array $productShopToSave) => $this->compareProductShop($productShopToSave, $productsShopsDb) || true));
 
         $this->productShopRepository
             ->expects($this->once())
             ->method('save')
             ->with([]);
 
-        $input = new ProductSetShopPriceDto($groupId, $productsIdNew, $shopsIdNew, $pricesNew);
+        $input = new SetProductShopPriceDto($groupId, $productIdNew, $shopIdNew, $shopsIdNew, $pricesNew);
         $return = $this->object->__invoke($input);
 
         $this->assertEmpty($return);
@@ -324,22 +421,26 @@ class ProductSetShopPriceServiceTest extends TestCase
     public function itShouldSetModifyAndRemoveProductsShopsAndPrices(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
+        $productIdNew = ValueObjectFactory::createIdentifier('product id 1');
+        $shopIdNew = ValueObjectFactory::createIdentifier(null);
 
-        [$productsIdDb, $shopsIdDb, $pricesDb] = $this->createData(null, null, null);
+        [$productsIdDb, $shopsIdDb, $pricesDb] = $this->createData(
+            [$productIdNew, $productIdNew, $productIdNew],
+            null,
+            null
+        );
         [$productsIdNew, $shopsIdNew, $pricesNew] = $this->createData(
             [
-                'product id 2',
-                'product id new 4',
-                'product id 1',
-                'product id new 5',
-            ],
-            [
+                $productIdNew,
+                $productIdNew,
+                $productIdNew,
+                $productIdNew,
+            ], [
                 'shop id 2',
                 'shop id new 4',
                 'shop id 1',
                 'shop id new 5',
-            ],
-            [
+            ], [
                 22,
                 44,
                 11,
@@ -357,7 +458,7 @@ class ProductSetShopPriceServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('findProductsAndShopsOrFail')
-            ->with($productsIdNew, $shopsIdNew, $groupId)
+            ->with([$productIdNew], null, $groupId)
             ->willReturn($this->productsShopsPaginator);
 
         $this->productsShopsPaginator
@@ -390,29 +491,39 @@ class ProductSetShopPriceServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('remove')
-            ->with([$productsShopsDb[2]]);
+            ->with($this->callback(fn (array $productShopToSave) => $this->compareProductShop($productShopToSave, [$productsShopsDb[2]]) || true));
 
         $this->productShopRepository
             ->expects($this->once())
             ->method('save')
-            ->with([$productsShopsDb[0], $productsShopsDb[1], $productsShopsNew[1], $productsShopsNew[3]]);
+            ->with($this->callback(fn (array $productShopToSave) => $this->compareProductShop($productShopToSave, [$productsShopsDb[0], $productsShopsDb[1], $productsShopsNew[1], $productsShopsNew[3]]) || true));
 
-        $input = new ProductSetShopPriceDto($groupId, $productsIdNew, $shopsIdNew, $pricesNew);
+        $input = new SetProductShopPriceDto($groupId, $productIdNew, $shopIdNew, $shopsIdNew, $pricesNew);
         $return = $this->object->__invoke($input);
 
-        $this->assertEqualsCanonicalizing([$productsShopsDb[0], $productsShopsDb[1], $productsShopsNew[1], $productsShopsNew[3]], $return);
+        $this->compareProductShop([$productsShopsDb[0], $productsShopsDb[1], $productsShopsNew[1], $productsShopsNew[3]], $return);
     }
 
     /** @test */
     public function itShouldFailSettingProductsShopsAndPricesProductsAndShopsNotFound(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
-        [$productsIdNew, $shopsIdNew, $pricesNew] = $this->createData(null, null, [11, 22, 33]);
+        $productIdNew = ValueObjectFactory::createIdentifier('product id 1 new');
+        $shopIdNew = ValueObjectFactory::createIdentifier(null);
+        [$productsIdNew, $shopsIdNew, $pricesNew] = $this->createData(
+            [
+                $productIdNew,
+                $productIdNew,
+                $productIdNew,
+            ],
+            null,
+            [11, 22, 33]
+        );
 
         $this->productShopRepository
             ->expects($this->once())
             ->method('findProductsAndShopsOrFail')
-            ->with($productsIdNew, $shopsIdNew, $groupId)
+            ->with([$productIdNew], null, $groupId)
             ->willReturn($this->productsShopsPaginator);
 
         $this->productsShopsPaginator
@@ -450,7 +561,7 @@ class ProductSetShopPriceServiceTest extends TestCase
             ->method('save')
             ->with([]);
 
-        $input = new ProductSetShopPriceDto($groupId, $productsIdNew, $shopsIdNew, $pricesNew);
+        $input = new SetProductShopPriceDto($groupId, $productIdNew, $shopIdNew, $shopsIdNew, $pricesNew);
         $return = $this->object->__invoke($input);
 
         $this->assertEmpty($return);
@@ -460,10 +571,12 @@ class ProductSetShopPriceServiceTest extends TestCase
     public function itShouldFailSettingProductsShopsAndPricesProductsIdNotFound(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
+        $productIdNew = ValueObjectFactory::createIdentifier('product id not found 1');
+        $shopIdNew = ValueObjectFactory::createIdentifier(null);
 
         [$productsIdDb, $shopsIdDb, $pricesDb] = $this->createData(null, null, null);
         [$productsIdNew, $shopsIdNew, $pricesNew] = $this->createData(
-            ['product id not found 1', 'product not found new 2'],
+            [$productIdNew, $productIdNew],
             ['shop id 1', 'shop id 1'],
             [11, 22]
         );
@@ -473,7 +586,7 @@ class ProductSetShopPriceServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('findProductsAndShopsOrFail')
-            ->with($productsIdNew, $shopsIdNew, $groupId)
+            ->with([$productIdNew], null, $groupId)
             ->willReturn($this->productsShopsPaginator);
 
         $this->productsShopsPaginator
@@ -513,7 +626,7 @@ class ProductSetShopPriceServiceTest extends TestCase
             ->method('save')
             ->with([]);
 
-        $input = new ProductSetShopPriceDto($groupId, $productsIdNew, $shopsIdNew, $pricesNew);
+        $input = new SetProductShopPriceDto($groupId, $productIdNew, $shopIdNew, $shopsIdNew, $pricesNew);
         $return = $this->object->__invoke($input);
 
         $this->assertEmpty($return);
@@ -523,10 +636,12 @@ class ProductSetShopPriceServiceTest extends TestCase
     public function itShouldFailSettingProductsShopsAndPricesShopsIdNotFound(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
+        $productIdNew = ValueObjectFactory::createIdentifier('product id 1');
+        $shopIdNew = ValueObjectFactory::createIdentifier(null);
 
         [$productsIdDb, $shopsIdDb, $pricesDb] = $this->createData(null, null, null);
         [$productsIdNew, $shopsIdNew, $pricesNew] = $this->createData(
-            ['product id new 1', 'product new 2'],
+            [$productIdNew, $productIdNew],
             ['shop id not found 1', 'shop id not found 1'],
             [11, 22]
         );
@@ -536,7 +651,7 @@ class ProductSetShopPriceServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('findProductsAndShopsOrFail')
-            ->with($productsIdNew, $shopsIdNew, $groupId)
+            ->with([$productIdNew], null, $groupId)
             ->willReturn($this->productsShopsPaginator);
 
         $this->productsShopsPaginator
@@ -576,7 +691,7 @@ class ProductSetShopPriceServiceTest extends TestCase
             ->method('save')
             ->with([]);
 
-        $input = new ProductSetShopPriceDto($groupId, $productsIdNew, $shopsIdNew, $pricesNew);
+        $input = new SetProductShopPriceDto($groupId, $productIdNew, $shopIdNew, $shopsIdNew, $pricesNew);
         $return = $this->object->__invoke($input);
 
         $this->assertEmpty($return);
@@ -586,10 +701,12 @@ class ProductSetShopPriceServiceTest extends TestCase
     public function itShouldFailModifyingProductsShopsAndPricesShopsNotFound(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
+        $productIdNew = ValueObjectFactory::createIdentifier('product id 1');
+        $shopIdNew = ValueObjectFactory::createIdentifier(null);
 
         [$productsIdDb, $shopsIdDb, $pricesDb] = $this->createData(null, null, null);
         [$productsIdNew, $shopsIdNew, $pricesNew] = $this->createData(
-            ['product id 1', 'product id 2', 'product id 3'],
+            [$productIdNew, $productIdNew, $productIdNew],
             ['shop id not found 1', 'shop id not found 1', 'shop id not found 3'],
             [11, 22, 33]
         );
@@ -601,7 +718,7 @@ class ProductSetShopPriceServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('findProductsAndShopsOrFail')
-            ->with($productsIdNew, $shopsIdNew, $groupId)
+            ->with([$productIdNew], null, $groupId)
             ->willReturn($this->productsShopsPaginator);
 
         $this->productsShopsPaginator
@@ -641,7 +758,7 @@ class ProductSetShopPriceServiceTest extends TestCase
             ->method('save')
             ->with([]);
 
-        $input = new ProductSetShopPriceDto($groupId, $productsIdNew, $shopsIdNew, $pricesNew);
+        $input = new SetProductShopPriceDto($groupId, $productIdNew, $shopIdNew, $shopsIdNew, $pricesNew);
         $return = $this->object->__invoke($input);
 
         $this->assertEmpty($return);

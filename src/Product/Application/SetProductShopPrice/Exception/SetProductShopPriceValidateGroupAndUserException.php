@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Product\Application\ProductSetShopPrice\Exception;
+namespace Product\Application\SetProductShopPrice\Exception;
 
 use Common\Domain\Exception\DomainExceptionOutput;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\RESPONSE_STATUS_HTTP;
 
-class ProductSetShopPriceValidateGroupAndUserException extends DomainExceptionOutput
+class SetProductShopPriceValidateGroupAndUserException extends DomainExceptionOutput
 {
     public static function fromMessage(string $message): static
     {

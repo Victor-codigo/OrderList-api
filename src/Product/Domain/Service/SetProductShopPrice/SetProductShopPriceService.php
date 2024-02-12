@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Product\Domain\Service\ProductSetShopPrice;
+namespace Product\Domain\Service\SetProductShopPrice;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Float\Money;
@@ -11,11 +11,11 @@ use Product\Domain\Model\Product;
 use Product\Domain\Model\ProductShop;
 use Product\Domain\Port\Repository\ProductRepositoryInterface;
 use Product\Domain\Port\Repository\ProductShopRepositoryInterface;
-use Product\Domain\Service\ProductSetShopPrice\Dto\ProductSetShopPriceDto;
+use Product\Domain\Service\SetProductShopPrice\Dto\SetProductShopPriceDto;
 use Shop\Domain\Model\Shop;
 use Shop\Domain\Port\Repository\ShopRepositoryInterface;
 
-class ProductSetShopPriceService
+class SetProductShopPriceService
 {
     public function __construct(
         private ProductShopRepositoryInterface $productShopRepository,
@@ -27,12 +27,14 @@ class ProductSetShopPriceService
     /**
      * @return ProductShop[]
      */
-    public function __invoke(ProductSetShopPriceDto $input): array
+    public function __invoke(SetProductShopPriceDto $input): array
     {
-        $productsShops = $this->getProductShops($input->productsId, $input->shopsId, $input->groupId);
-        $productsShopsToAdd = $this->createProductShopsToAdd($input->groupId, $productsShops, $input->productsId, $input->shopsId, $input->prices);
-        $productsShopsModified = $this->modifyProductShops($productsShops, $input->productsId, $input->shopsId, $input->prices);
-        $productsShopsToRemove = $this->getProductShopsToRemove($productsShops, $input->productsId, $input->shopsId);
+        ['productsId' => $productsId, 'shopsId' => $shopsId] = $this->getProductsAndShops($input->productId, $input->shopId, $input->productsOrShopsId);
+
+        $productsShops = $this->getProductShops($input->groupId, $input->productId, $input->shopId);
+        $productsShopsToAdd = $this->createProductShopsToAdd($input->groupId, $productsShops, $productsId, $shopsId, $input->prices);
+        $productsShopsModified = $this->modifyProductShops($productsShops, $productsId, $shopsId, $input->prices);
+        $productsShopsToRemove = $this->getProductShopsToRemove($productsShops, $productsId, $shopsId);
         $productsShopsModifiedAndToAdd = array_merge($productsShopsModified, $productsShopsToAdd);
 
         $this->productShopRepository->remove($productsShopsToRemove);
@@ -42,18 +44,43 @@ class ProductSetShopPriceService
     }
 
     /**
-     * @param Identifier[] $productsId
-     * @param Identifier[] $shopsId
+     * @param ProductShop[] $productsOrShopsId
      *
+     * @return array<{productsId: string[], shopsId: string[]}>
+     */
+    private function getProductsAndShops(Identifier $productId, Identifier $shopId, array $productsOrShopsId): array
+    {
+        $productsId = [];
+        $shopsId = [];
+
+        if (!$productId->isNull()) {
+            $shopsId = $productsOrShopsId;
+            $productsId = array_fill(0, count($shopsId), $productId);
+        } elseif (!$shopId->isNull()) {
+            $productsId = $productsOrShopsId;
+            $shopsId = array_fill(0, count($productsId), $shopId);
+        }
+
+        return [
+            'productsId' => $productsId,
+            'shopsId' => $shopsId,
+        ];
+    }
+
+    /**
      * @return ProductShop[]
      */
-    private function getProductShops(array $productsId, array $shopsId, Identifier $groupId): array
+    private function getProductShops(Identifier $groupId, Identifier $productId, Identifier $shopId): array
     {
         try {
-            $productsShopsPaginator = $this->productShopRepository->findProductsAndShopsOrFail($productsId, $shopsId, $groupId);
+            $productsShopsPaginator = $this->productShopRepository->findProductsAndShopsOrFail(
+                $productId->isNull() ? null : [$productId],
+                $shopId->isNull() ? null : [$shopId],
+                $groupId
+            );
 
             return iterator_to_array($productsShopsPaginator);
-        } catch (DBNotFoundException) {
+        } catch (DBNotFoundException $e) {
             return [];
         }
     }
@@ -113,26 +140,28 @@ class ProductSetShopPriceService
     }
 
     /**
-     * @param ProductShop[] $productsShops
+     * @param ProductShop[] $productsShopsDb
      * @param Identifier[]  $productsId
      * @param Identifier[]  $shopsId
      *
      * @return productShop[]
      */
-    private function createProductShopsToAdd(Identifier $groupId, array $productsShops, array $productsId, array $shopsId, array $prices): array
+    private function createProductShopsToAdd(Identifier $groupId, array $productsShopsDb, array $productsId, array $shopsId, array $prices): array
     {
         $productsIdAndShopsIdPrices = array_map(
             fn (Identifier $productId, Identifier $shopId, Money $price) => ['productId' => $productId, 'shopId' => $shopId, 'price' => $price],
             $productsId, $shopsId, $prices
         );
 
-        $productsIdAndShopsIdPricesFilterCallback = function (array $productIdAndShopIdPrice) use ($productsShops) {
-            foreach ($productsShops as $productShop) {
-                if ($productShop->getProductId() != $productIdAndShopIdPrice['productId']) {
+        $productsIdAndShopsIdPricesFilterCallback = function (array $productIdAndShopIdPrice) use ($productsShopsDb) {
+            foreach ($productsShopsDb as $productShopDb) {
+                if (!$productShopDb->getProductId()->equalTo($productIdAndShopIdPrice['productId'])) {
                     continue;
                 }
 
-                return $productShop->getShopId() != $productIdAndShopIdPrice['shopId'];
+                if ($productShopDb->getShopId()->equalTo($productIdAndShopIdPrice['shopId'])) {
+                    return false;
+                }
             }
 
             return true;

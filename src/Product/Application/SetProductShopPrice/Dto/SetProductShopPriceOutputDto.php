@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Product\Application\ProductSetShopPrice\Dto;
+namespace Product\Application\SetProductShopPrice\Dto;
 
 use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Product\Domain\Model\ProductShop;
 
-class ProductSetShopPriceOutputDto implements ApplicationOutputInterface
+class SetProductShopPriceOutputDto implements ApplicationOutputInterface
 {
     /**
      * @param ProductShop[] $productShop

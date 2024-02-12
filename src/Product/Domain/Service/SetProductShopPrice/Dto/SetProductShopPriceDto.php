@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Product\Domain\Service\ProductSetShopPrice\Dto;
+namespace Product\Domain\Service\SetProductShopPrice\Dto;
 
 use Common\Domain\Model\ValueObject\Float\Money;
 use Common\Domain\Model\ValueObject\String\Identifier;
 
-class ProductSetShopPriceDto
+class SetProductShopPriceDto
 {
     /**
-     * @param Identifier[] $productsId
-     * @param Identifier[] $shopsId
+     * @param Identifier[] $productsOrShopsId
      * @param Money[]      $prices
      */
     public function __construct(
         public readonly Identifier $groupId,
-        public readonly array $productsId,
-        public readonly array $shopsId,
+        public readonly Identifier $productId,
+        public readonly Identifier $shopId,
+        public readonly array $productsOrShopsId,
         public readonly array $prices
     ) {
     }

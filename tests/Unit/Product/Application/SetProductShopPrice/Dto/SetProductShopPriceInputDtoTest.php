@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Product\Application\ProductSetShopPrice\Dto;
+namespace Test\Unit\Product\Application\SetProductShopPrice\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
@@ -10,9 +10,9 @@ use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Product\Application\ProductSetShopPrice\Dto\ProductSetShopPriceInputDto;
+use Product\Application\SetProductShopPrice\Dto\SetProductShopPriceInputDto;
 
-class ProductSetShopPriceInputDtoTest extends TestCase
+class SetProductShopPriceInputDtoTest extends TestCase
 {
     private const PRODUCT_ID = 'c4e3c6c4-bcb4-46ec-ae00-71858ba6d46d';
     private const SHOP_ID = '7ba97dfe-ed91-4795-849e-7c07a700cd98';
@@ -30,12 +30,13 @@ class ProductSetShopPriceInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldValidate(): void
+    public function itShouldValidateProductId(): void
     {
-        $object = new ProductSetShopPriceInputDto(
+        $object = new SetProductShopPriceInputDto(
             $this->userSession,
             self::GROUP_ID,
-            [self::PRODUCT_ID, self::PRODUCT_ID],
+            self::PRODUCT_ID,
+            null,
             [self::SHOP_ID, self::SHOP_ID],
             [1, 2]
         );
@@ -46,11 +47,46 @@ class ProductSetShopPriceInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailProductIdIsNull(): void
+    public function itShouldValidateShopId(): void
     {
-        $object = new ProductSetShopPriceInputDto(
+        $object = new SetProductShopPriceInputDto(
             $this->userSession,
             self::GROUP_ID,
+            null,
+            self::SHOP_ID,
+            [self::PRODUCT_ID, self::PRODUCT_ID],
+            [1, 2]
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function itShouldValidateProductsOrShopsIdAndPricesEmpty(): void
+    {
+        $object = new SetProductShopPriceInputDto(
+            $this->userSession,
+            self::GROUP_ID,
+            self::PRODUCT_ID,
+            null,
+            [],
+            []
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function itShouldFailProductIdAndShopIdAreNull(): void
+    {
+        $object = new SetProductShopPriceInputDto(
+            $this->userSession,
+            self::GROUP_ID,
+            null,
             null,
             [self::SHOP_ID, self::SHOP_ID],
             [1, 2]
@@ -58,73 +94,51 @@ class ProductSetShopPriceInputDtoTest extends TestCase
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals([
-                'shops_prices_not_equal' => [VALIDATION_ERRORS::NOT_EQUAL_TO],
-                'products_id' => [VALIDATION_ERRORS::NOT_BLANK],
-            ],
-            $return
-        );
+        $this->assertEquals(['product_id_and_shop_id' => [VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
     /** @test */
     public function itShouldFailProductIdIsWrong(): void
     {
-        $object = new ProductSetShopPriceInputDto(
+        $object = new SetProductShopPriceInputDto(
             $this->userSession,
             self::GROUP_ID,
-            ['id wrong', self::PRODUCT_ID],
+            'id wrong',
+            null,
             [self::SHOP_ID, self::SHOP_ID],
             [1, 2]
         );
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['products_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
-    }
-
-    /** @test */
-    public function itShouldFailShopIdIsNull(): void
-    {
-        $object = new ProductSetShopPriceInputDto(
-            $this->userSession,
-            self::GROUP_ID,
-            [self::PRODUCT_ID, self::PRODUCT_ID],
-            null,
-            [1, 2]
-        );
-        $return = $object->validate($this->validator);
-
-        $this->assertEquals([
-                'shops_prices_not_equal' => [VALIDATION_ERRORS::NOT_EQUAL_TO],
-                'shops_id' => [VALIDATION_ERRORS::NOT_BLANK],
-            ],
-            $return
-        );
+        $this->assertEquals(['product_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
     /** @test */
     public function itShouldFailShopIdIsWrong(): void
     {
-        $object = new ProductSetShopPriceInputDto(
+        $object = new SetProductShopPriceInputDto(
             $this->userSession,
             self::GROUP_ID,
+            self::PRODUCT_ID,
+            'wrong id',
             [self::PRODUCT_ID, self::PRODUCT_ID],
-            [self::SHOP_ID, 'wrong id'],
             [1, 2]
         );
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['shops_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
+        $this->assertEquals(['shop_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
     /** @test */
     public function itShouldFailGroupIdIsNull(): void
     {
-        $object = new ProductSetShopPriceInputDto(
+        $object = new SetProductShopPriceInputDto(
             $this->userSession,
             null,
-            [self::PRODUCT_ID, self::PRODUCT_ID],
+            self::PRODUCT_ID,
+            null,
             [self::SHOP_ID, self::SHOP_ID],
             [1, 2]
         );
@@ -137,10 +151,11 @@ class ProductSetShopPriceInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailGroupIdIsWrong(): void
     {
-        $object = new ProductSetShopPriceInputDto(
+        $object = new SetProductShopPriceInputDto(
             $this->userSession,
             'wrong id',
-            [self::PRODUCT_ID, self::PRODUCT_ID],
+            self::PRODUCT_ID,
+            null,
             [self::SHOP_ID, self::SHOP_ID],
             [1, 2]
         );
@@ -153,10 +168,11 @@ class ProductSetShopPriceInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailPriceIsNull(): void
     {
-        $object = new ProductSetShopPriceInputDto(
+        $object = new SetProductShopPriceInputDto(
             $this->userSession,
             self::GROUP_ID,
-            [self::PRODUCT_ID, self::PRODUCT_ID],
+            self::PRODUCT_ID,
+            null,
             [self::SHOP_ID, self::SHOP_ID],
             null
         );
@@ -164,8 +180,7 @@ class ProductSetShopPriceInputDtoTest extends TestCase
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
-                'shops_prices_not_equal' => [VALIDATION_ERRORS::NOT_EQUAL_TO],
-                'prices' => [VALIDATION_ERRORS::NOT_BLANK],
+                'products_or_shops_prices_not_equals' => [VALIDATION_ERRORS::NOT_EQUAL_TO],
             ],
             $return
         );
@@ -174,43 +189,34 @@ class ProductSetShopPriceInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailPriceIsNegative(): void
     {
-        $object = new ProductSetShopPriceInputDto(
+        $object = new SetProductShopPriceInputDto(
             $this->userSession,
             self::GROUP_ID,
-            [self::PRODUCT_ID, self::PRODUCT_ID],
+            self::PRODUCT_ID,
+            null,
             [self::SHOP_ID, self::SHOP_ID],
             [-1, null]
         );
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['prices' => [
-                [VALIDATION_ERRORS::POSITIVE_OR_ZERO],
-                [VALIDATION_ERRORS::NOT_NULL],
-            ]],
-            $return
-        );
+        $this->assertEquals(['prices' => [[VALIDATION_ERRORS::POSITIVE_OR_ZERO]]], $return);
     }
 
     /** @test */
-    public function itShouldFailProductsIsShopsIsAndPricesAreNull(): void
+    public function itShouldFailProductsOrShopsIdIrWrong(): void
     {
-        $object = new ProductSetShopPriceInputDto(
+        $object = new SetProductShopPriceInputDto(
             $this->userSession,
             self::GROUP_ID,
+            self::PRODUCT_ID,
             null,
-            null,
-            null
+            [self::SHOP_ID, 'wrong id'],
+            [null, null]
         );
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals([
-                'products_id' => [VALIDATION_ERRORS::NOT_BLANK],
-                'shops_id' => [VALIDATION_ERRORS::NOT_BLANK],
-                'prices' => [VALIDATION_ERRORS::NOT_BLANK],
-            ],
-            $return
-        );
+        $this->assertEquals(['products_or_shops_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
     }
 }

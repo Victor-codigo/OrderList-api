@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Product\Application\ProductSetShopPrice;
+namespace Product\Application\SetProductShopPrice;
 
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -11,23 +11,23 @@ use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserExc
 use Common\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
-use Product\Application\ProductSetShopPrice\Dto\ProductSetShopPriceInputDto;
-use Product\Application\ProductSetShopPrice\Dto\ProductSetShopPriceOutputDto;
-use Product\Application\ProductSetShopPrice\Exception\ProductSetShopPriceValidateGroupAndUserException;
+use Product\Application\SetProductShopPrice\Dto\SetProductShopPriceInputDto;
+use Product\Application\SetProductShopPrice\Dto\SetProductShopPriceOutputDto;
+use Product\Application\SetProductShopPrice\Exception\SetProductShopPriceValidateGroupAndUserException;
 use Product\Domain\Model\ProductShop;
-use Product\Domain\Service\ProductSetShopPrice\Dto\ProductSetShopPriceDto;
-use Product\Domain\Service\ProductSetShopPrice\ProductSetShopPriceService;
+use Product\Domain\Service\SetProductShopPrice\Dto\SetProductShopPriceDto;
+use Product\Domain\Service\SetProductShopPrice\SetProductShopPriceService;
 
-class ProductSetShopPriceUseCase extends ServiceBase
+class SetProductShopPriceUseCase extends ServiceBase
 {
     public function __construct(
-        private ProductSetShopPriceService $productSetShopPriceService,
+        private SetProductShopPriceService $productSetShopPriceService,
         private ValidationInterface $validator,
         private ValidateGroupAndUserService $validateGroupAndUserService
     ) {
     }
 
-    public function __invoke(ProductSetShopPriceInputDto $input): ProductSetShopPriceOutputDto
+    public function __invoke(SetProductShopPriceInputDto $input): SetProductShopPriceOutputDto
     {
         $this->validation($input);
 
@@ -40,13 +40,13 @@ class ProductSetShopPriceUseCase extends ServiceBase
 
             return $this->createProductSetShopPriceOutputDto($input->groupId, $productShopModified);
         } catch (ValidateGroupAndUserException) {
-            throw ProductSetShopPriceValidateGroupAndUserException::fromMessage('You have no permissions');
+            throw SetProductShopPriceValidateGroupAndUserException::fromMessage('You have no permissions');
         } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }
 
-    private function validation(ProductSetShopPriceInputDto $input): void
+    private function validation(SetProductShopPriceInputDto $input): void
     {
         $errorList = $input->validate($this->validator);
 
@@ -55,16 +55,16 @@ class ProductSetShopPriceUseCase extends ServiceBase
         }
     }
 
-    private function createProductSetShopPriceDto(ProductSetShopPriceInputDto $input): ProductSetShopPriceDto
+    private function createProductSetShopPriceDto(SetProductShopPriceInputDto $input): SetProductShopPriceDto
     {
-        return new ProductSetShopPriceDto($input->groupId, $input->productsId, $input->shopsId, $input->prices);
+        return new SetProductShopPriceDto($input->groupId, $input->productId, $input->shopId, $input->productsOrShopsId, $input->prices);
     }
 
     /**
      * @param ProductShop[] $productShopModified
      */
-    private function createProductSetShopPriceOutputDto(Identifier $groupId, array $productShopModified): ProductSetShopPriceOutputDto
+    private function createProductSetShopPriceOutputDto(Identifier $groupId, array $productShopModified): SetProductShopPriceOutputDto
     {
-        return new ProductSetShopPriceOutputDto($groupId, $productShopModified);
+        return new SetProductShopPriceOutputDto($groupId, $productShopModified);
     }
 }
