@@ -80,14 +80,14 @@ use Symfony\Component\HttpFoundation\Response;
 class SetProductShopPriceController extends AbstractController
 {
     public function __construct(
-        private SetProductShopPriceUseCase $productSetShopPriceUseCase,
+        private SetProductShopPriceUseCase $setProductShopPriceUseCase,
         private Security $security
     ) {
     }
 
     public function __invoke(SetProductShopPriceRequestDto $request): JsonResponse
     {
-        $productShop = $this->productSetShopPriceUseCase->__invoke(
+        $productShop = $this->setProductShopPriceUseCase->__invoke(
             $this->createShopProductSetPriceInputDto(
                 $request->groupId,
                 $request->productId,

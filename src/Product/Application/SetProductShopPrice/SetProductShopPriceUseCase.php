@@ -21,7 +21,7 @@ use Product\Domain\Service\SetProductShopPrice\SetProductShopPriceService;
 class SetProductShopPriceUseCase extends ServiceBase
 {
     public function __construct(
-        private SetProductShopPriceService $productSetShopPriceService,
+        private SetProductShopPriceService $setProductShopPriceService,
         private ValidationInterface $validator,
         private ValidateGroupAndUserService $validateGroupAndUserService
     ) {
@@ -34,11 +34,11 @@ class SetProductShopPriceUseCase extends ServiceBase
         try {
             $this->validateGroupAndUserService->__invoke($input->groupId);
 
-            $productShopModified = $this->productSetShopPriceService->__invoke(
-                $this->createProductSetShopPriceDto($input)
+            $productShopModified = $this->setProductShopPriceService->__invoke(
+                $this->createSetProductShopPriceDto($input)
             );
 
-            return $this->createProductSetShopPriceOutputDto($input->groupId, $productShopModified);
+            return $this->createSetProductShopPriceOutputDto($input->groupId, $productShopModified);
         } catch (ValidateGroupAndUserException) {
             throw SetProductShopPriceValidateGroupAndUserException::fromMessage('You have no permissions');
         } catch (\Exception) {
@@ -55,7 +55,7 @@ class SetProductShopPriceUseCase extends ServiceBase
         }
     }
 
-    private function createProductSetShopPriceDto(SetProductShopPriceInputDto $input): SetProductShopPriceDto
+    private function createSetProductShopPriceDto(SetProductShopPriceInputDto $input): SetProductShopPriceDto
     {
         return new SetProductShopPriceDto($input->groupId, $input->productId, $input->shopId, $input->productsOrShopsId, $input->prices);
     }
@@ -63,7 +63,7 @@ class SetProductShopPriceUseCase extends ServiceBase
     /**
      * @param ProductShop[] $productShopModified
      */
-    private function createProductSetShopPriceOutputDto(Identifier $groupId, array $productShopModified): SetProductShopPriceOutputDto
+    private function createSetProductShopPriceOutputDto(Identifier $groupId, array $productShopModified): SetProductShopPriceOutputDto
     {
         return new SetProductShopPriceOutputDto($groupId, $productShopModified);
     }
