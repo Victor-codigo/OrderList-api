@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Product\Adapter\Http\Controller\ProductGetShopPrice\Dto;
+namespace Product\Adapter\Http\Controller\GetProductShopPrice\Dto;
 
 use Common\Adapter\Http\Dto\RequestDtoInterface;
 use Common\Domain\Config\AppConfig;
 use Symfony\Component\HttpFoundation\Request;
 
-class ProductGetShopPriceRequestDto implements RequestDtoInterface
+class GetProductShopPriceRequestDto implements RequestDtoInterface
 {
     private const PRODUCTS_MAX = AppConfig::ENDPOINT_PRODUCT_GET_PRODUCTS_MAX;
     private const SHOPS_MAX = AppConfig::ENDPOINT_PRODUCT_GET_SHOPS_MAX;

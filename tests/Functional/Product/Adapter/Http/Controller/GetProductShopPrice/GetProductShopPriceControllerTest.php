@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Test\Functional\Product\Adapter\Http\Controller\ProductGetShopPrice;
+namespace Test\Functional\Product\Adapter\Http\Controller\GetProductShopPrice;
 
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
-class ProductGetShopPriceControllerTest extends WebClientTestCase
+class GetProductShopPriceControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 

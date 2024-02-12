@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Product\Application\ProductGetShopPrice\Dto;
+namespace Product\Application\GetProductShopPrice\Dto;
 
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -10,7 +10,7 @@ use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
 use Common\Domain\Validation\ValidationInterface;
 
-class ProductGetShopPriceInputDto implements ServiceInputDtoInterface
+class GetProductShopPriceInputDto implements ServiceInputDtoInterface
 {
     public readonly UserShared $userSession;
     /**

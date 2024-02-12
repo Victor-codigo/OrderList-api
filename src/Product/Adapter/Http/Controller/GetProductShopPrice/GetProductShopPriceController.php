@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Product\Adapter\Http\Controller\ProductGetShopPrice;
+namespace Product\Adapter\Http\Controller\GetProductShopPrice;
 
 use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use OpenApi\Attributes as OA;
-use Product\Adapter\Http\Controller\ProductGetShopPrice\Dto\ProductGetShopPriceRequestDto;
-use Product\Application\ProductGetShopPrice\Dto\ProductGetShopPriceInputDto;
-use Product\Application\ProductGetShopPrice\ProductGetShopPriceUseCase;
+use Product\Adapter\Http\Controller\GetProductShopPrice\Dto\GetProductShopPriceRequestDto;
+use Product\Application\GetProductShopPrice\Dto\GetProductShopPriceInputDto;
+use Product\Application\GetProductShopPrice\GetProductShopPriceUseCase;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 #[OA\Tag('Product')]
 #[OA\Get(
-    description: 'Get product\'s price',
+    description: 'Get product\'s price ina a shop',
     parameters: [
         new OA\Parameter(
             name: 'group_id',
@@ -84,29 +84,29 @@ use Symfony\Component\HttpFoundation\Response;
         ),
     ]
 )]
-class ProductGetShopPriceController extends AbstractController
+class GetProductShopPriceController extends AbstractController
 {
     public function __construct(
-        private ProductGetShopPriceUseCase $ProductGetShopPriceUseCase,
+        private GetProductShopPriceUseCase $GetProductShopPriceUseCase,
         private Security $security
     ) {
     }
 
-    public function __invoke(ProductGetShopPriceRequestDto $request): JsonResponse
+    public function __invoke(GetProductShopPriceRequestDto $request): JsonResponse
     {
-        $productsPrice = $this->ProductGetShopPriceUseCase->__invoke(
-            $this->createProductGetShopPriceInputDto($request->productsId, $request->shopsId, $request->groupId)
+        $productsPrice = $this->GetProductShopPriceUseCase->__invoke(
+            $this->createGetProductShopPriceInputDto($request->productsId, $request->shopsId, $request->groupId)
         );
 
         return $this->createResponse($productsPrice);
     }
 
-    private function createProductGetShopPriceInputDto(array|null $productsId, array|null $shopsId, string|null $groupId): ProductGetShopPriceInputDto
+    private function createGetProductShopPriceInputDto(array|null $productsId, array|null $shopsId, string|null $groupId): GetProductShopPriceInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();
 
-        return new ProductGetShopPriceInputDto($userSharedAdapter->getUser(), $productsId, $shopsId, $groupId);
+        return new GetProductShopPriceInputDto($userSharedAdapter->getUser(), $productsId, $shopsId, $groupId);
     }
 
     private function createResponse(ApplicationOutputInterface $productsPrice): JsonResponse

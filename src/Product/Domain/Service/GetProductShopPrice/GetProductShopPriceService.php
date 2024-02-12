@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Product\Domain\Service\ProductGetShopPrice;
+namespace Product\Domain\Service\GetProductShopPrice;
 
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Product\Domain\Model\ProductShop;
 use Product\Domain\Port\Repository\ProductShopRepositoryInterface;
-use Product\Domain\Service\ProductGetShopPrice\Dto\ProductGetShopPriceDto;
+use Product\Domain\Service\GetProductShopPrice\Dto\GetProductShopPriceDto;
 
-class ProductGetShopPriceService
+class GetProductShopPriceService
 {
     public function __construct(
         private ProductShopRepositoryInterface $productShopRepository
@@ -19,7 +19,7 @@ class ProductGetShopPriceService
     /**
      * @throws DBNotFoundException
      */
-    public function __invoke(ProductGetShopPriceDto $input): array
+    public function __invoke(GetProductShopPriceDto $input): array
     {
         $productsShopsPaginator = $this->productShopRepository->findProductsAndShopsOrFail($input->productsId, $input->shopsId, $input->groupId);
 

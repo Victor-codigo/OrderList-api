@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Product\Domain\Service\ProductGetShopPrice\Dto;
+namespace Product\Domain\Service\GetProductShopPrice\Dto;
 
 use Common\Domain\Model\ValueObject\String\Identifier;
 
-class ProductGetShopPriceDto
+class GetProductShopPriceDto
 {
     /**
      * @param Identifier[] $productsId

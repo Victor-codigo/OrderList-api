@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Product\Application\ProductGetShopPrice\Dto;
+namespace Product\Application\GetProductShopPrice\Dto;
 
 use Common\Domain\Application\ApplicationOutputInterface;
 
-class ProductGetShopPriceOutputDto implements ApplicationOutputInterface
+class GetProductShopPriceOutputDto implements ApplicationOutputInterface
 {
     public function __construct(
         private array $productsShops

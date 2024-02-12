@@ -53,6 +53,6 @@ product_set_price:
 product_get_price:
   path: /api/v{api_version}/products/price
   methods: GET
-  controller: Product\Adapter\Http\Controller\ProductGetShopPrice\ProductGetShopPriceController
+  controller: Product\Adapter\Http\Controller\GetProductShopPrice\GetProductShopPriceController
   requirements:
     api_version: '\d+[.\d]?'

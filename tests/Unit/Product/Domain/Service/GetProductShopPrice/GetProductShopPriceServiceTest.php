@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Product\Domain\Service\ProductGetShopPrice;
+namespace Test\Unit\Product\Domain\Service\GetProductShopPrice;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -12,13 +12,13 @@ use PHPUnit\Framework\TestCase;
 use Product\Domain\Model\Product;
 use Product\Domain\Model\ProductShop;
 use Product\Domain\Port\Repository\ProductShopRepositoryInterface;
-use Product\Domain\Service\ProductGetShopPrice\Dto\ProductGetShopPriceDto;
-use Product\Domain\Service\ProductGetShopPrice\ProductGetShopPriceService;
+use Product\Domain\Service\GetProductShopPrice\Dto\GetProductShopPriceDto;
+use Product\Domain\Service\GetProductShopPrice\GetProductShopPriceService;
 use Shop\Domain\Model\Shop;
 
-class ProductGetShopPriceServiceTest extends TestCase
+class GetProductShopPriceServiceTest extends TestCase
 {
-    private ProductGetShopPriceService $object;
+    private GetProductShopPriceService $object;
     private MockObject|ProductShopRepositoryInterface $productShopRepository;
     private MockObject|PaginatorInterface $paginator;
 
@@ -28,7 +28,7 @@ class ProductGetShopPriceServiceTest extends TestCase
 
         $this->productShopRepository = $this->createMock(ProductShopRepositoryInterface::class);
         $this->paginator = $this->createMock(PaginatorInterface::class);
-        $this->object = new ProductGetShopPriceService($this->productShopRepository);
+        $this->object = new GetProductShopPriceService($this->productShopRepository);
     }
 
     private function getProductsPrice(): array
@@ -97,7 +97,7 @@ class ProductGetShopPriceServiceTest extends TestCase
     public function itShouldGetProductsPrices(): void
     {
         $productsExpected = $this->getProductsPrice();
-        $input = new ProductGetShopPriceDto(
+        $input = new GetProductShopPriceDto(
             [ValueObjectFactory::createIdentifier('product id')],
             [ValueObjectFactory::createIdentifier('shop id')],
             ValueObjectFactory::createIdentifier('group id')
@@ -123,7 +123,7 @@ class ProductGetShopPriceServiceTest extends TestCase
     /** @test */
     public function itShouldFailGetProductsPricesProductNotFound(): void
     {
-        $input = new ProductGetShopPriceDto(
+        $input = new GetProductShopPriceDto(
             [ValueObjectFactory::createIdentifier('product id')],
             [ValueObjectFactory::createIdentifier('shop id')],
             ValueObjectFactory::createIdentifier('group id')

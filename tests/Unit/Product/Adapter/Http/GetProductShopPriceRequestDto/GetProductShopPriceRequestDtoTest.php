@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Product\Adapter\Http\ProductGetShopPriceRequestDto;
+namespace Test\Unit\Product\Adapter\Http\GetProductShopPriceRequestDto;
 
 use PHPUnit\Framework\TestCase;
-use Product\Adapter\Http\Controller\ProductGetShopPrice\Dto\ProductGetShopPriceRequestDto;
+use Product\Adapter\Http\Controller\GetProductShopPrice\Dto\GetProductShopPriceRequestDto;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 
-class ProductGetShopPriceRequestDtoTest extends TestCase
+class GetProductShopPriceRequestDtoTest extends TestCase
 {
     private const ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
     private const NUM_MAX = 100;
 
-    private function createRequest(array|null $requestData): ProductGetShopPriceRequestDto
+    private function createRequest(array|null $requestData): GetProductShopPriceRequestDto
     {
         $request = new Request();
         $request->query = new InputBag();
@@ -28,7 +28,7 @@ class ProductGetShopPriceRequestDtoTest extends TestCase
             $request->query->set('shops_id', implode(',', $requestData['shops_id']));
         }
 
-        return new ProductGetShopPriceRequestDto($request);
+        return new GetProductShopPriceRequestDto($request);
     }
 
     /** @test */
