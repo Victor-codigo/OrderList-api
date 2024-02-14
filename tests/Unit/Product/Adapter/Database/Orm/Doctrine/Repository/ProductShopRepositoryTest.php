@@ -7,6 +7,7 @@ namespace Test\Unit\Product\Adapter\Database\Orm\Doctrine\Repository;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\Persistence\ObjectManager;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -41,7 +42,7 @@ class ProductShopRepositoryTest extends DataBaseTestCase
         $this->shopRepository = $this->entityManager->getRepository(Shop::class);
     }
 
-    private function getNewProductShop(float $price): ProductShop
+    private function getNewProductShop(float $price, UNIT_MEASURE_TYPE $unit): ProductShop
     {
         $product = $this->productRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::PRODUCT_ID)]);
         $shop = $this->shopRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::SHOP_ID)]);
@@ -49,7 +50,8 @@ class ProductShopRepositoryTest extends DataBaseTestCase
         return new ProductShop(
             $product,
             $shop,
-            ValueObjectFactory::createMoney($price)
+            ValueObjectFactory::createMoney($price),
+            ValueObjectFactory::createUnit($unit)
         );
     }
 
@@ -66,7 +68,7 @@ class ProductShopRepositoryTest extends DataBaseTestCase
         $this->mockObjectManager($this->object, $objectManagerMock);
 
         $this->expectException(DBConnectionException::class);
-        $this->object->save([$this->getNewProductShop(1.3)]);
+        $this->object->save([$this->getNewProductShop(1.3, UNIT_MEASURE_TYPE::UNITS)]);
     }
 
     /** @test */

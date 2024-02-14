@@ -11,39 +11,58 @@ Common\Domain\Model\ValueObject\Float\Money:
     __construct:
       value: null
 
+Common\Domain\Model\ValueObject\Object\UnitMeasure:
+  productsShops_unit_units:
+    __construct:
+      value: <(Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE::UNITS)>
+
+  productsShops_unit_kg:
+    __construct:
+      value: <(Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE::KG)>
+
+  productsShops_unit_cm:
+    __construct:
+      value: <(Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE::CM)>
+
 Product\Domain\Model\ProductShop:
   entity-productsShops:
     __construct:
       product: "@entity-product"
       shop: "@entity-shop"
       price: "@productsShops_price"
+      unit: "@productsShops_unit_units"
 
   entity-productsShops_2:
     __construct:
       product: "@entity-product_2"
       shop: "@entity-shop_2"
       price: "@productsShops_price_2"
+      unit: "@productsShops_unit_units"
 
   entity-productsShops_3:
     __construct:
       product: "@entity-product_3"
       shop: "@entity-shop_3"
       price: "@productsShops_price_null"
+      unit: "@productsShops_unit_kg"
 
   entity-productsShops_4:
     __construct:
       product: "@entity-product_4"
       shop: "@entity-shop"
       price: "@productsShops_price_null"
+      unit: "@productsShops_unit_cm"
 
   entity-productsShops_5:
     __construct:
       product: "@entity-product_4"
       shop: "@entity-shop_2"
       price: "@productsShops_price_null"
+      unit: "@productsShops_unit_units"
 
   entity-productsShops_6:
     __construct:
       product: "@entity-product_4"
       shop: "@entity-shop_3"
       price: "@productsShops_price_null"
+      unit: "@productsShops_unit_kg"

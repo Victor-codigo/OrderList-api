@@ -25,6 +25,11 @@
               type="MoneyType"
               nullable="true"/>
 
+       <field name="unit"
+              columm="unit"
+              type="UnitMeasureType"
+              length="5"/>
+
        <indexes>
               <index name="IDX_id"
                      columns="id"/>
