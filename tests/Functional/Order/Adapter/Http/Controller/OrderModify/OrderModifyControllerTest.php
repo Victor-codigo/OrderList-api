@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Test\Functional\Order\Adapter\Http\Controller\OrderModify;
 
 use Common\Domain\Response\RESPONSE_STATUS;
-use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
@@ -36,7 +35,6 @@ class OrderModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modified',
                 'amount' => 100.36,
-                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ])
         );
 
@@ -63,7 +61,6 @@ class OrderModifyControllerTest extends WebClientTestCase
                 'shop_id' => null,
                 'description' => 'order description modified',
                 'amount' => 100.36,
-                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ])
         );
 
@@ -90,7 +87,6 @@ class OrderModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'description' => null,
                 'amount' => 100.36,
-                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ])
         );
 
@@ -117,61 +113,6 @@ class OrderModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modified',
                 'amount' => null,
-                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
-            ])
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
-        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
-        $this->assertSame('Order modified', $responseContent->message);
-        $this->assertEquals(self::ORDER_ID, $responseContent->data->id);
-    }
-
-    /** @test */
-    public function itShouldModifyOrderUnitIsNull(): void
-    {
-        $client = $this->getNewClientAuthenticatedUser();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT,
-            content: json_encode([
-                'order_id' => self::ORDER_ID,
-                'group_id' => self::GROUP_ID,
-                'product_id' => self::PRODUCT_ID,
-                'shop_id' => self::SHOP_ID,
-                'description' => 'order description modified',
-                'amount' => 10,
-                'unit' => null,
-            ])
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
-        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
-        $this->assertSame('Order modified', $responseContent->message);
-        $this->assertEquals(self::ORDER_ID, $responseContent->data->id);
-    }
-
-    /** @test */
-    public function itShouldModifyOrderUnitIsWrong(): void
-    {
-        $client = $this->getNewClientAuthenticatedUser();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT,
-            content: json_encode([
-                'order_id' => self::ORDER_ID,
-                'group_id' => self::GROUP_ID,
-                'product_id' => self::PRODUCT_ID,
-                'shop_id' => self::SHOP_ID,
-                'description' => 'order description modified',
-                'amount' => 10,
-                'unit' => 'wrong unit',
             ])
         );
 
@@ -198,7 +139,6 @@ class OrderModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modified',
                 'amount' => null,
-                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ])
         );
 
@@ -225,7 +165,6 @@ class OrderModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modified',
                 'amount' => null,
-                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ])
         );
 
@@ -252,7 +191,6 @@ class OrderModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modified',
                 'amount' => null,
-                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ])
         );
 
@@ -279,7 +217,6 @@ class OrderModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modified',
                 'amount' => null,
-                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ])
         );
 
@@ -306,7 +243,6 @@ class OrderModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modified',
                 'amount' => null,
-                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ])
         );
 
@@ -333,7 +269,6 @@ class OrderModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modified',
                 'amount' => null,
-                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ])
         );
 
@@ -360,7 +295,6 @@ class OrderModifyControllerTest extends WebClientTestCase
                 'shop_id' => 'wrong id',
                 'description' => 'order description modified',
                 'amount' => null,
-                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ])
         );
 
@@ -387,7 +321,6 @@ class OrderModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'description' => str_pad('', 501, 'p'),
                 'amount' => 15,
-                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ])
         );
 
@@ -414,7 +347,6 @@ class OrderModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modify',
                 'amount' => -1,
-                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ])
         );
 
@@ -441,7 +373,6 @@ class OrderModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modify',
                 'amount' => 0,
-                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ])
         );
 
@@ -468,7 +399,6 @@ class OrderModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modify',
                 'amount' => 0,
-                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ])
         );
 
@@ -495,7 +425,6 @@ class OrderModifyControllerTest extends WebClientTestCase
                 'shop_id' => 'a53cf32e-815c-4540-b0ac-674b55de96bb',
                 'description' => 'order description modify',
                 'amount' => 0,
-                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ])
         );
 
@@ -522,7 +451,6 @@ class OrderModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modify',
                 'amount' => 0,
-                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ])
         );
 
@@ -549,7 +477,6 @@ class OrderModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modify',
                 'amount' => 0,
-                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ])
         );
 

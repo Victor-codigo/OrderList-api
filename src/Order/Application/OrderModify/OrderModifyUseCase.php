@@ -76,7 +76,6 @@ class OrderModifyUseCase extends ServiceBase
             $input->userSession->getId(),
             $input->description,
             $input->amount,
-            $input->unit,
         );
     }
 

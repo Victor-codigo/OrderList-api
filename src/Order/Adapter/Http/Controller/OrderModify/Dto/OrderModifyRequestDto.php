@@ -25,6 +25,5 @@ class OrderModifyRequestDto implements RequestDtoInterface
         $this->shopId = $request->request->get('shop_id');
         $this->description = $request->request->get('description');
         $this->amount = (float) $request->request->get('amount');
-        $this->unit = $request->request->get('unit');
     }
 }

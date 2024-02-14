@@ -48,7 +48,6 @@ class OrderModifyService
 
         $order
             ->setAmount($input->amount)
-            ->setUnit($input->unit)
             ->setDescription($input->description)
             ->setUserId($input->userId)
             ->setProduct($product)
@@ -63,7 +62,7 @@ class OrderModifyService
     /**
      * @throws OrderModifyProductIdNotFoundException
      */
-    private function validateProduct(identifier $groupId, Identifier $productId): Product
+    private function validateProduct(Identifier $groupId, Identifier $productId): Product
     {
         try {
             $productPagination = $this->productRepository->findProductsOrFail($groupId, [$productId]);

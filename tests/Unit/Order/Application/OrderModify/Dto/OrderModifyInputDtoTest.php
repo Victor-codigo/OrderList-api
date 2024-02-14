@@ -7,7 +7,6 @@ namespace Test\Unit\Order\Application\OrderModify\Dto;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
-use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Common\Domain\Validation\ValidationInterface;
 use Order\Application\OrderModify\Dto\OrderModifyInputDto;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -35,7 +34,6 @@ class OrderModifyInputDtoTest extends TestCase
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = 'order description modified';
         $amount = 13.58;
-        $unit = UNIT_MEASURE_TYPE::UNITS->value;
 
         $object = new OrderModifyInputDto(
             $this->userSession,
@@ -45,7 +43,6 @@ class OrderModifyInputDtoTest extends TestCase
             $shopId,
             $description,
             $amount,
-            $unit
         );
 
         $return = $object->validate($this->validator);
@@ -62,7 +59,6 @@ class OrderModifyInputDtoTest extends TestCase
         $shopId = null;
         $description = 'order description modified';
         $amount = 13.58;
-        $unit = UNIT_MEASURE_TYPE::UNITS->value;
 
         $object = new OrderModifyInputDto(
             $this->userSession,
@@ -72,7 +68,6 @@ class OrderModifyInputDtoTest extends TestCase
             $shopId,
             $description,
             $amount,
-            $unit
         );
 
         $return = $object->validate($this->validator);
@@ -89,7 +84,6 @@ class OrderModifyInputDtoTest extends TestCase
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = null;
         $amount = 13.58;
-        $unit = UNIT_MEASURE_TYPE::UNITS->value;
 
         $object = new OrderModifyInputDto(
             $this->userSession,
@@ -99,7 +93,6 @@ class OrderModifyInputDtoTest extends TestCase
             $shopId,
             $description,
             $amount,
-            $unit
         );
 
         $return = $object->validate($this->validator);
@@ -116,7 +109,6 @@ class OrderModifyInputDtoTest extends TestCase
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = 'order description modified';
         $amount = null;
-        $unit = UNIT_MEASURE_TYPE::UNITS->value;
 
         $object = new OrderModifyInputDto(
             $this->userSession,
@@ -126,34 +118,6 @@ class OrderModifyInputDtoTest extends TestCase
             $shopId,
             $description,
             $amount,
-            $unit
-        );
-
-        $return = $object->validate($this->validator);
-
-        $this->assertEmpty($return);
-    }
-
-    /** @test */
-    public function itShouldValidateUnitIdIsNull(): void
-    {
-        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
-        $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
-        $productId = 'b87e6787-542f-4256-bb37-3e6d09a796e5';
-        $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
-        $description = 'order description modified';
-        $amount = 10;
-        $unit = null;
-
-        $object = new OrderModifyInputDto(
-            $this->userSession,
-            $orderId,
-            $groupId,
-            $productId,
-            $shopId,
-            $description,
-            $amount,
-            $unit
         );
 
         $return = $object->validate($this->validator);
@@ -170,7 +134,6 @@ class OrderModifyInputDtoTest extends TestCase
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = 'order description modified';
         $amount = 10.6;
-        $unit = UNIT_MEASURE_TYPE::UNITS->value;
 
         $object = new OrderModifyInputDto(
             $this->userSession,
@@ -180,7 +143,6 @@ class OrderModifyInputDtoTest extends TestCase
             $shopId,
             $description,
             $amount,
-            $unit
         );
 
         $return = $object->validate($this->validator);
@@ -191,13 +153,12 @@ class OrderModifyInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailValidatingOrderIsWrong(): void
     {
-        $orderId = 'wong id';
+        $orderId = 'wrong id';
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
         $productId = 'b87e6787-542f-4256-bb37-3e6d09a796e5';
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = 'order description modified';
         $amount = 10.6;
-        $unit = UNIT_MEASURE_TYPE::UNITS->value;
 
         $object = new OrderModifyInputDto(
             $this->userSession,
@@ -207,7 +168,6 @@ class OrderModifyInputDtoTest extends TestCase
             $shopId,
             $description,
             $amount,
-            $unit
         );
 
         $return = $object->validate($this->validator);
@@ -224,7 +184,6 @@ class OrderModifyInputDtoTest extends TestCase
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = null;
         $amount = 13.58;
-        $unit = UNIT_MEASURE_TYPE::UNITS->value;
 
         $object = new OrderModifyInputDto(
             $this->userSession,
@@ -234,7 +193,6 @@ class OrderModifyInputDtoTest extends TestCase
             $shopId,
             $description,
             $amount,
-            $unit
         );
 
         $return = $object->validate($this->validator);
@@ -251,7 +209,6 @@ class OrderModifyInputDtoTest extends TestCase
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = null;
         $amount = 13.58;
-        $unit = UNIT_MEASURE_TYPE::UNITS->value;
 
         $object = new OrderModifyInputDto(
             $this->userSession,
@@ -261,7 +218,6 @@ class OrderModifyInputDtoTest extends TestCase
             $shopId,
             $description,
             $amount,
-            $unit
         );
 
         $return = $object->validate($this->validator);
@@ -278,7 +234,6 @@ class OrderModifyInputDtoTest extends TestCase
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = 'order description modified';
         $amount = 13.58;
-        $unit = UNIT_MEASURE_TYPE::UNITS->value;
 
         $object = new OrderModifyInputDto(
             $this->userSession,
@@ -288,7 +243,6 @@ class OrderModifyInputDtoTest extends TestCase
             $shopId,
             $description,
             $amount,
-            $unit
         );
 
         $return = $object->validate($this->validator);
@@ -305,7 +259,6 @@ class OrderModifyInputDtoTest extends TestCase
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = 'order description modified';
         $amount = 13.58;
-        $unit = UNIT_MEASURE_TYPE::UNITS->value;
 
         $object = new OrderModifyInputDto(
             $this->userSession,
@@ -315,7 +268,6 @@ class OrderModifyInputDtoTest extends TestCase
             $shopId,
             $description,
             $amount,
-            $unit
         );
 
         $return = $object->validate($this->validator);
@@ -332,7 +284,6 @@ class OrderModifyInputDtoTest extends TestCase
         $shopId = 'wrong id';
         $description = 'order description modified';
         $amount = 13.58;
-        $unit = UNIT_MEASURE_TYPE::UNITS->value;
 
         $object = new OrderModifyInputDto(
             $this->userSession,
@@ -342,7 +293,6 @@ class OrderModifyInputDtoTest extends TestCase
             $shopId,
             $description,
             $amount,
-            $unit
         );
 
         $return = $object->validate($this->validator);
@@ -359,7 +309,6 @@ class OrderModifyInputDtoTest extends TestCase
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = str_pad('', 501, 'p');
         $amount = 13.58;
-        $unit = UNIT_MEASURE_TYPE::UNITS->value;
 
         $object = new OrderModifyInputDto(
             $this->userSession,
@@ -369,7 +318,6 @@ class OrderModifyInputDtoTest extends TestCase
             $shopId,
             $description,
             $amount,
-            $unit
         );
 
         $return = $object->validate($this->validator);
@@ -386,7 +334,6 @@ class OrderModifyInputDtoTest extends TestCase
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = 'order description';
         $amount = -1;
-        $unit = UNIT_MEASURE_TYPE::UNITS->value;
 
         $object = new OrderModifyInputDto(
             $this->userSession,
@@ -396,39 +343,10 @@ class OrderModifyInputDtoTest extends TestCase
             $shopId,
             $description,
             $amount,
-            $unit
         );
 
         $return = $object->validate($this->validator);
 
         $this->assertEquals(['amount' => [VALIDATION_ERRORS::POSITIVE_OR_ZERO]], $return);
-    }
-
-    /** @test */
-    public function itShouldFailValidatingUnitIsWrong(): void
-    {
-        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
-        $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
-        $productId = 'b87e6787-542f-4256-bb37-3e6d09a796e5';
-        $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
-        $description = 'order description';
-        $amount = 10;
-        $unit = 'wrong unit';
-
-        $object = new OrderModifyInputDto(
-            $this->userSession,
-            $orderId,
-            $groupId,
-            $productId,
-            $shopId,
-            $description,
-            $amount,
-            $unit
-        );
-
-        $return = $object->validate($this->validator);
-
-        $this->assertEmpty($return);
-        $this->assertNull($object->unit->getValue());
     }
 }
