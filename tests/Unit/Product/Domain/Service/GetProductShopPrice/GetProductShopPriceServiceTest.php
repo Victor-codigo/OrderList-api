@@ -7,6 +7,7 @@ namespace Test\Unit\Product\Domain\Service\GetProductShopPrice;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Product\Domain\Model\Product;
@@ -63,22 +64,26 @@ class GetProductShopPriceServiceTest extends TestCase
             ProductShop::fromPrimitives(
                 $product,
                 $shop,
-                14.2
+                14.2,
+                UNIT_MEASURE_TYPE::UNITS
             ),
             ProductShop::fromPrimitives(
                 $product,
                 $shop,
-                16.8
+                16.8,
+                UNIT_MEASURE_TYPE::KG
             ),
             ProductShop::fromPrimitives(
                 $product,
                 $shop,
-                0
+                0,
+                UNIT_MEASURE_TYPE::DM
             ),
             ProductShop::fromPrimitives(
                 $product,
                 $shop,
-                null
+                null,
+                UNIT_MEASURE_TYPE::G
             ),
         ];
     }
@@ -91,6 +96,7 @@ class GetProductShopPriceServiceTest extends TestCase
         $this->assertEquals($productExpected->getProductId()->getValue(), $productActual['product_id']);
         $this->assertEquals($productExpected->getShopId()->getValue(), $productActual['shop_id']);
         $this->assertEquals($productExpected->getPrice()->getValue(), $productActual['price']);
+        $this->assertEquals($productExpected->getUnit()->getValue()->value, $productActual['unit']);
     }
 
     /** @test */

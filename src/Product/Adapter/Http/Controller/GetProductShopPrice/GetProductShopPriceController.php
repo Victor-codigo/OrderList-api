@@ -61,6 +61,7 @@ use Symfony\Component\HttpFoundation\Response;
                                 new OA\Property(property: 'product_id', type: 'string'),
                                 new OA\Property(property: 'shop_id', type: 'string'),
                                 new OA\Property(property: 'price', type: 'float'),
+                                new OA\Property(property: 'unit', type: 'string'),
                             ])),
                         new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),
                     ]

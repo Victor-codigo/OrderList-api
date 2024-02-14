@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Functional\Product\Adapter\Http\Controller\GetProductShopPrice;
 
 use Common\Domain\Response\RESPONSE_STATUS;
+use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
@@ -29,6 +30,7 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertContains($productShopActual->product_id, explode(',', $productShopExpected->productsId));
         $this->assertContains($productShopActual->shop_id, explode(',', $productShopExpected->shopsId));
         $this->assertContains($productShopActual->price, $productShopExpected->prices);
+        $this->assertContains($productShopActual->unit, $productShopExpected->units);
     }
 
     /** @test */
@@ -45,12 +47,18 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
             'prices' => [
                 null,
             ],
+            'units' => [
+                UNIT_MEASURE_TYPE::CM->value,
+            ],
         ];
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?products_id={$requestData['productsId']}&shops_id={$requestData['shopsId']}&group_id={$requestData['groupId']}"
+            uri: self::ENDPOINT
+                ."?products_id={$requestData['productsId']}"
+                ."&shops_id={$requestData['shopsId']}"
+                ."&group_id={$requestData['groupId']}"
         );
 
         $response = $client->getResponse();
@@ -79,12 +87,19 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
                 null,
                 10.50,
             ],
+            'units' => [
+                UNIT_MEASURE_TYPE::CM->value,
+                UNIT_MEASURE_TYPE::UNITS->value,
+            ],
         ];
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?products_id={$requestData['productsId']}&shops_id={$requestData['shopsId']}&group_id={$requestData['groupId']}"
+            uri: self::ENDPOINT
+                ."?products_id={$requestData['productsId']}"
+                ."&shops_id={$requestData['shopsId']}"
+                ."&group_id={$requestData['groupId']}"
         );
 
         $response = $client->getResponse();
@@ -114,12 +129,19 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
             'prices' => [
                 null,
             ],
+            'units' => [
+                UNIT_MEASURE_TYPE::CM->value,
+                UNIT_MEASURE_TYPE::UNITS->value,
+            ],
         ];
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?products_id={$requestData['productsId']}&shops_id={$requestData['shopsId']}&group_id={$requestData['groupId']}"
+            uri: self::ENDPOINT
+                ."?products_id={$requestData['productsId']}"
+                ."&shops_id={$requestData['shopsId']}"
+                ."&group_id={$requestData['groupId']}"
         );
 
         $response = $client->getResponse();
@@ -151,12 +173,19 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
                 null,
                 10.50,
             ],
+            'units' => [
+                UNIT_MEASURE_TYPE::CM->value,
+                UNIT_MEASURE_TYPE::UNITS->value,
+            ],
         ];
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?products_id={$requestData['productsId']}&shops_id={$requestData['shopsId']}&group_id={$requestData['groupId']}"
+            uri: self::ENDPOINT
+                ."?products_id={$requestData['productsId']}"
+                ."&shops_id={$requestData['shopsId']}"
+                ."&group_id={$requestData['groupId']}"
         );
 
         $response = $client->getResponse();
@@ -187,12 +216,19 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
             'prices' => [
                 null,
             ],
+            'units' => [
+                UNIT_MEASURE_TYPE::CM->value,
+                UNIT_MEASURE_TYPE::UNITS->value,
+                UNIT_MEASURE_TYPE::KG->value,
+            ],
         ];
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?products_id={$requestData['productsId']}&group_id={$requestData['groupId']}"
+            uri: self::ENDPOINT
+                ."?products_id={$requestData['productsId']}"
+                ."&group_id={$requestData['groupId']}"
         );
 
         $response = $client->getResponse();
@@ -223,12 +259,18 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
                 null,
                 10.50,
             ],
+            'units' => [
+                UNIT_MEASURE_TYPE::UNITS->value,
+                UNIT_MEASURE_TYPE::CM->value,
+            ],
         ];
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?shops_id={$requestData['shopsId']}&group_id={$requestData['groupId']}"
+            uri: self::ENDPOINT
+                ."?shops_id={$requestData['shopsId']}"
+                ."&group_id={$requestData['groupId']}"
         );
 
         $response = $client->getResponse();
@@ -258,7 +300,9 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?products_id={$requestData['productsId']}&shops_id={$requestData['shopsId']}"
+            uri: self::ENDPOINT
+                ."?products_id={$requestData['productsId']}"
+                ."&shops_id={$requestData['shopsId']}"
         );
 
         $response = $client->getResponse();
@@ -286,7 +330,10 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?products_id={$requestData['productsId']}&shops_id={$requestData['shopsId']}&group_id={$requestData['groupId']}"
+            uri: self::ENDPOINT
+                ."?products_id={$requestData['productsId']}"
+                ."&shops_id={$requestData['shopsId']}"
+                ."&group_id={$requestData['groupId']}"
         );
 
         $response = $client->getResponse();
@@ -309,16 +356,15 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
                 self::SHOP_ID,
             ]),
             'groupId' => self::GROUP_ID,
-            'prices' => [
-                null,
-                10.50,
-            ],
         ];
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?products_id={$requestData['productsId']}shops_id={$requestData['shopsId']}&group_id={$requestData['groupId']}"
+            uri: self::ENDPOINT
+                ."?products_id={$requestData['productsId']}"
+                ."&shops_id={$requestData['shopsId']}"
+                ."&group_id={$requestData['groupId']}"
         );
 
         $response = $client->getResponse();
@@ -341,16 +387,15 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
                 'wrong id',
             ]),
             'groupId' => self::GROUP_ID,
-            'prices' => [
-                null,
-                10.50,
-            ],
         ];
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?products_id={$requestData['productsId']}&shops_id={$requestData['shopsId']}&group_id={$requestData['groupId']}"
+            uri: self::ENDPOINT
+                ."?products_id={$requestData['productsId']}"
+                ."&shops_id={$requestData['shopsId']}"
+                ."&group_id={$requestData['groupId']}"
         );
 
         $response = $client->getResponse();
@@ -367,16 +412,13 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
     {
         $requestData = [
             'groupId' => self::GROUP_ID,
-            'prices' => [
-                null,
-                10.50,
-            ],
         ];
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?group_id={$requestData['groupId']}"
+            uri: self::ENDPOINT
+                ."?group_id={$requestData['groupId']}"
         );
 
         $response = $client->getResponse();
@@ -405,7 +447,10 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedAdmin();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?products_id={$requestData['productsId']}&shops_id={$requestData['shopsId']}&group_id={$requestData['groupId']}"
+            uri: self::ENDPOINT
+                ."?products_id={$requestData['productsId']}"
+                ."&shops_id={$requestData['shopsId']}"
+                ."&group_id={$requestData['groupId']}"
         );
 
         $response = $client->getResponse();
@@ -433,7 +478,10 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?products_id={$requestData['productsId']}&shops_id={$requestData['shopsId']}&group_id={$requestData['groupId']}"
+            uri: self::ENDPOINT
+                ."?products_id={$requestData['productsId']}"
+                ."&shops_id={$requestData['shopsId']}"
+                ."&group_id={$requestData['groupId']}"
         );
 
         $response = $client->getResponse();
