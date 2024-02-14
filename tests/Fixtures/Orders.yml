@@ -106,19 +106,6 @@ Common\Domain\Model\ValueObject\Float\Amount:
     __construct:
       value: 40
 
-Common\Domain\Model\ValueObject\Object\UnitMeasure:
-  order_unit_units:
-    __construct:
-      value: <(Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE::UNITS)>
-
-  order_unit_kg:
-    __construct:
-      value: <(Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE::KG)>
-
-  order_unit_cm:
-    __construct:
-      value: <(Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE::CM)>
-
 Order\Domain\Model\Order:
   entity-order:
     __construct:
@@ -127,7 +114,6 @@ Order\Domain\Model\Order:
       groupId: "@order_group_id_group_exists"
       description: "@order_description"
       amount: "@order_amount_10"
-      unit: "@order_unit_units"
       product: "@entity-product"
       shop: "@entity-shop"
 
@@ -138,7 +124,6 @@ Order\Domain\Model\Order:
       groupId: "@order_group_id_group_exists"
       description: "@order_description_2"
       amount: "@order_amount_20"
-      unit: "@order_unit_kg"
       product: "@entity-product_2"
       shop: "@entity-shop_2"
 
@@ -149,7 +134,6 @@ Order\Domain\Model\Order:
       groupId: "@order_group_id_group_exists"
       description: "@order_description_3"
       amount: "@order_amount_30"
-      unit: "@order_unit_cm"
       product: "@entity-product_3"
       shop: "@entity-shop_3"
 
@@ -160,7 +144,6 @@ Order\Domain\Model\Order:
       groupId: "@order_group_id_group_exists"
       description: "@order_description_4"
       amount: "@order_amount_40"
-      unit: "@order_unit_units"
       product: "@entity-product_4"
       shop: "@entity-shop_2"
 
@@ -171,6 +154,5 @@ Order\Domain\Model\Order:
       groupId: "@order_group_id_group_exists"
       description: "@order_description_null"
       amount: "@order_amount_20"
-      unit: "@order_unit_units"
       product: "@entity-product_2"
       shop: "@entity-shop_2"

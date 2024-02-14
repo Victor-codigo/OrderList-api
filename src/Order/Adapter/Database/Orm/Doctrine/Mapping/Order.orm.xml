@@ -38,11 +38,6 @@
               type="AmountType"
               nullable="true"/>
 
-       <field name="unit"
-              type="UnitMeasureType"
-              length="5"
-              nullable="true"/>
-
        <field name="createdOn"
               column="created_on"
               type="datetime"/>
