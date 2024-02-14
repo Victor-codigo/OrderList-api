@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Order\Domain\Service\OrderGetData;
 
-use Common\Domain\Model\ValueObject\Float\Money;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Order\Domain\Model\Order;
 use Order\Domain\Ports\Repository\OrderRepositoryInterface;
@@ -30,7 +29,7 @@ class OrderGetDataService
         $productsShops = $this->getProductsPricesByProductId($orders, $input->groupId);
 
         return array_map(
-            fn (Order $order) => $this->getOrderData($order, $productsShops[$order->getProductId()->getValue()]->getPrice()),
+            fn (Order $order) => $this->getOrderData($order, $productsShops[$order->getProductId()->getValue()]),
             $orders
         );
     }
@@ -64,7 +63,7 @@ class OrderGetDataService
         );
     }
 
-    private function getOrderData(Order $order, Money $price): array
+    private function getOrderData(Order $order, ProductShop $productShop): array
     {
         return [
             'id' => $order->getId()->getValue(),
@@ -74,9 +73,9 @@ class OrderGetDataService
             'group_id' => $order->getGroupId()->getValue(),
             'description' => $order->getDescription()->getValue(),
             'amount' => $order->getAmount()->getValue(),
-            'unit' => $order->getUnit()->getValue(),
             'created_on' => $order->getCreatedOn()->format('Y-m-d H:i:s'),
-            'price' => $price->getValue(),
+            'price' => $productShop->getPrice()->getValue(),
+            'unit' => $productShop->getUnit()->getValue(),
         ];
     }
 }

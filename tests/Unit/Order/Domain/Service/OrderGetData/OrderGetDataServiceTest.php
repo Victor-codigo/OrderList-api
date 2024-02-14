@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Test\Unit\Order\Domain\Service\OrderGetData;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
-use Common\Domain\Model\ValueObject\Float\Money;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -118,7 +117,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         );
     }
 
-    private function assertOrderDataIsOk(Order $orderExpected, Money $price, array $orderDataActual): void
+    private function assertOrderDataIsOk(Order $orderExpected, ProductShop $productShop, array $orderDataActual): void
     {
         $this->assertArrayHasKey('id', $orderDataActual);
         $this->assertArrayHasKey('product_id', $orderDataActual);
@@ -138,7 +137,8 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $this->assertEquals($orderExpected->getDescription()->getValue(), $orderDataActual['description']);
         $this->assertEquals($orderExpected->getAmount()->getValue(), $orderDataActual['amount']);
         $this->assertIsString($orderDataActual['created_on']);
-        $this->assertEquals($price->getValue(), $orderDataActual['price']);
+        $this->assertEquals($productShop->getPrice()->getValue(), $orderDataActual['price']);
+        $this->assertEquals($productShop->getUnit()->getValue(), $orderDataActual['unit']);
     }
 
     /** @test */
@@ -180,7 +180,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         foreach ($return as $key => $orderData) {
             $this->assertOrderDataIsOk(
                 $ordersExpected[$key],
-                $productsShopsExpected[$ordersExpected[$key]->getProductId()->getValue()]->getPrice(),
+                $productsShopsExpected[$ordersExpected[$key]->getProductId()->getValue()],
                 $orderData
             );
         }
