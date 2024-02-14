@@ -57,7 +57,7 @@ class SetProductShopPriceUseCase extends ServiceBase
 
     private function createSetProductShopPriceDto(SetProductShopPriceInputDto $input): SetProductShopPriceDto
     {
-        return new SetProductShopPriceDto($input->groupId, $input->productId, $input->shopId, $input->productsOrShopsId, $input->prices);
+        return new SetProductShopPriceDto($input->groupId, $input->productId, $input->shopId, $input->productsOrShopsId, $input->prices, $input->units);
     }
 
     /**

@@ -6,6 +6,7 @@ namespace Product\Domain\Service\SetProductShopPrice;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Float\Money;
+use Common\Domain\Model\ValueObject\Object\UnitMeasure;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Product\Domain\Model\Product;
 use Product\Domain\Model\ProductShop;
@@ -32,8 +33,8 @@ class SetProductShopPriceService
         ['productsId' => $productsId, 'shopsId' => $shopsId] = $this->getProductsAndShops($input->productId, $input->shopId, $input->productsOrShopsId);
 
         $productsShops = $this->getProductShops($input->groupId, $input->productId, $input->shopId);
-        $productsShopsToAdd = $this->createProductShopsToAdd($input->groupId, $productsShops, $productsId, $shopsId, $input->prices);
-        $productsShopsModified = $this->modifyProductShops($productsShops, $productsId, $shopsId, $input->prices);
+        $productsShopsToAdd = $this->createProductShopsToAdd($input->groupId, $productsShops, $productsId, $shopsId, $input->prices, $input->units);
+        $productsShopsModified = $this->modifyProductShops($productsShops, $productsId, $shopsId, $input->prices, $input->units);
         $productsShopsToRemove = $this->getProductShopsToRemove($productsShops, $productsId, $shopsId);
         $productsShopsModifiedAndToAdd = array_merge($productsShopsModified, $productsShopsToAdd);
 
@@ -90,12 +91,13 @@ class SetProductShopPriceService
      * @param Identifier[]  $productsId
      * @param Identifier[]  $shopsId
      * @param Money[]       $prices
+     * @param UnitMeasure[] $units
      *
      * @return ProductShop[]
      */
-    private function modifyProductShops(array $productsShops, array $productsId, array $shopsId, array $prices): array
+    private function modifyProductShops(array $productsShops, array $productsId, array $shopsId, array $prices, array $units): array
     {
-        $productsShopsFilter = function (ProductShop $productShop) use ($productsId, $shopsId, $prices) {
+        $productsShopsFilter = function (ProductShop $productShop) use ($productsId, $shopsId, $prices, $units) {
             foreach ($productsId as $index => $productId) {
                 if ($productShop->getProductId() != $productId) {
                     continue;
@@ -106,6 +108,7 @@ class SetProductShopPriceService
                 }
 
                 $productShop->setPrice($prices[$index]);
+                $productShop->setUnit($units[$index]);
 
                 return true;
             }
@@ -143,14 +146,16 @@ class SetProductShopPriceService
      * @param ProductShop[] $productsShopsDb
      * @param Identifier[]  $productsId
      * @param Identifier[]  $shopsId
+     * @param Money[]       $prices
+     * @param UnitMeasure[] $units
      *
      * @return productShop[]
      */
-    private function createProductShopsToAdd(Identifier $groupId, array $productsShopsDb, array $productsId, array $shopsId, array $prices): array
+    private function createProductShopsToAdd(Identifier $groupId, array $productsShopsDb, array $productsId, array $shopsId, array $prices, array $units): array
     {
         $productsIdAndShopsIdPrices = array_map(
-            fn (Identifier $productId, Identifier $shopId, Money $price) => ['productId' => $productId, 'shopId' => $shopId, 'price' => $price],
-            $productsId, $shopsId, $prices
+            fn (Identifier $productId, Identifier $shopId, Money $price, UnitMeasure $unit) => ['productId' => $productId, 'shopId' => $shopId, 'price' => $price, 'unit' => $unit],
+            $productsId, $shopsId, $prices, $units
         );
 
         $productsIdAndShopsIdPricesFilterCallback = function (array $productIdAndShopIdPrice) use ($productsShopsDb) {
@@ -173,22 +178,22 @@ class SetProductShopPriceService
     }
 
     /**
-     * @param array<{productId: Identifier, shopÌd: Identifier, price: Money}> $productsIdAndShopsIdPrice
+     * @param array<{productId: Identifier, shopÌd: Identifier, price: Money, unit: UnitMeasure}> $productsIdAndShopsIdPrice
      *
      * @return ProductShop[]
      */
-    private function createProductsShopsFromArray(Identifier $groupId, array $productsIdAndShopsIdPrice): array
+    private function createProductsShopsFromArray(Identifier $groupId, array $productsIdAndShopsIdPriceUnit): array
     {
-        if (empty($productsIdAndShopsIdPrice)) {
+        if (empty($productsIdAndShopsIdPriceUnit)) {
             return [];
         }
 
-        $productsDb = $this->getProductsFromDb($groupId, array_column($productsIdAndShopsIdPrice, 'productId'));
-        $shopsDb = $this->getShopsFromDb($groupId, array_column($productsIdAndShopsIdPrice, 'shopId'));
+        $productsDb = $this->getProductsFromDb($groupId, array_column($productsIdAndShopsIdPriceUnit, 'productId'));
+        $shopsDb = $this->getShopsFromDb($groupId, array_column($productsIdAndShopsIdPriceUnit, 'shopId'));
 
-        $createProductShopCallback = function (array $productIdAndShopIdPrice) use ($productsDb, $shopsDb) {
-            $productId = $productIdAndShopIdPrice['productId']->getValue();
-            $shopId = $productIdAndShopIdPrice['shopId']->getValue();
+        $createProductShopCallback = function (array $productIdAndShopIdPriceUnit) use ($productsDb, $shopsDb) {
+            $productId = $productIdAndShopIdPriceUnit['productId']->getValue();
+            $shopId = $productIdAndShopIdPriceUnit['shopId']->getValue();
 
             if (!array_key_exists($productId, $productsDb)) {
                 return null;
@@ -198,10 +203,10 @@ class SetProductShopPriceService
                 return null;
             }
 
-            return new ProductShop($productsDb[$productId], $shopsDb[$shopId], $productIdAndShopIdPrice['price']);
+            return new ProductShop($productsDb[$productId], $shopsDb[$shopId], $productIdAndShopIdPriceUnit['price'], $productIdAndShopIdPriceUnit['unit']);
         };
 
-        $productsShopsCreated = array_map($createProductShopCallback, $productsIdAndShopsIdPrice);
+        $productsShopsCreated = array_map($createProductShopCallback, $productsIdAndShopsIdPriceUnit);
 
         return array_values(array_filter($productsShopsCreated));
     }

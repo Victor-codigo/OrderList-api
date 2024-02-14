@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Product\Application\SetProductShopPrice\Dto;
 
 use Common\Domain\Model\ValueObject\Float\Money;
+use Common\Domain\Model\ValueObject\Object\UnitMeasure;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
+use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Common\Domain\Validation\ValidationInterface;
 
 class SetProductShopPriceInputDto implements ServiceInputDtoInterface
@@ -26,23 +28,33 @@ class SetProductShopPriceInputDto implements ServiceInputDtoInterface
      * @var Money[]
      */
     public readonly array $prices;
+    /**
+     * @var UnitMeasure[]
+     */
+    public readonly array $units;
 
     /**
-     * @param float[]|null $prices
+     * @param string[]|null $productsOrShopsId
+     * @param float[]|null  $prices
+     * @param string[]|null $units
      */
-    public function __construct(UserShared $userSession, string|null $groupId, string|null $productId, string|null $shopId, array|null $productsOrShopsId, array|null $prices)
+    public function __construct(UserShared $userSession, string|null $groupId, string|null $productId, string|null $shopId, array|null $productsOrShopsId, array|null $prices, array|null $units)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
         $this->productId = ValueObjectFactory::createIdentifier($productId);
         $this->shopId = ValueObjectFactory::createIdentifier($shopId);
         $this->productsOrShopsId = array_map(
-            fn (string $productOrShopId) => ValueObjectFactory::createIdentifier($productOrShopId),
+            fn (string|null $productOrShopId) => ValueObjectFactory::createIdentifier($productOrShopId),
             $productsOrShopsId ?? []
         );
         $this->prices = array_map(
             fn (float|null $price) => ValueObjectFactory::createMoney($price),
             $prices ?? []
+        );
+        $this->units = array_map(
+            fn (string|null $unit) => ValueObjectFactory::createUnit(UNIT_MEASURE_TYPE::tryFrom($unit ?? '')),
+            $units ?? []
         );
     }
 
@@ -61,12 +73,20 @@ class SetProductShopPriceInputDto implements ServiceInputDtoInterface
 
         $errorListProductsOrShopsId = $this->validateProductsOrShops($validator);
         $errorListPrices = $this->validatePrices($validator);
+        $errorListUnits = $this->validateUnits($validator);
 
-        if (count($this->productsOrShopsId) !== count($this->prices)) {
-            $errorList['products_or_shops_prices_not_equals'] = [VALIDATION_ERRORS::NOT_EQUAL_TO];
+        if (count($this->productsOrShopsId) !== count($this->prices) || count($this->productsOrShopsId) !== count($this->units)) {
+            $errorList['products_or_shops_prices_units_not_equals'] = [VALIDATION_ERRORS::NOT_EQUAL_TO];
         }
 
-        return array_merge($errorList, $errorListProductsOrShopsId, $errorListProductId, $errorListShopId, $errorListPrices);
+        return array_merge(
+            $errorList,
+            $errorListProductsOrShopsId,
+            $errorListProductId,
+            $errorListShopId,
+            $errorListPrices,
+            $errorListUnits
+        );
     }
 
     /**
@@ -112,6 +132,24 @@ class SetProductShopPriceInputDto implements ServiceInputDtoInterface
 
         if (!empty($errorListPrices)) {
             $errorList['prices'] = $errorListPrices;
+        }
+
+        return $errorList;
+    }
+
+    private function validateUnits(ValidationInterface $validator): array
+    {
+        $errorList = [];
+        $errorListUnits = $validator->validateValueObjectArray($this->units);
+        $errorsNullToChoiceNoSuch = function (array $errors) {
+            return array_map(
+                fn (VALIDATION_ERRORS $error) => VALIDATION_ERRORS::NOT_NULL === $error ? VALIDATION_ERRORS::CHOICE_NOT_SUCH : $error,
+                $errors
+            );
+        };
+
+        if (!empty($errorListUnits)) {
+            $errorList['units'] = array_map($errorsNullToChoiceNoSuch, $errorListUnits);
         }
 
         return $errorList;

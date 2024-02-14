@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Functional\Product\Adapter\Http\Controller\SetProductShopPrice;
 
 use Common\Domain\Response\RESPONSE_STATUS;
+use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
@@ -29,6 +30,10 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         10,
         20,
     ];
+    private const UNITS = [
+        UNIT_MEASURE_TYPE::UNITS,
+        UNIT_MEASURE_TYPE::KG,
+    ];
 
     /** @test */
     public function itShouldSetThePriceOfAProductForShops(): void
@@ -43,6 +48,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                 'shop_id' => null,
                 'products_or_shops_id' => self::SHOPS_ID,
                 'prices' => self::PRICES,
+                'units' => array_map(fn (UNIT_MEASURE_TYPE $unit) => $unit->value, self::UNITS),
             ]),
         );
 
@@ -59,6 +65,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                     'product_id' => self::PRODUCTS_ID[0],
                     'shop_id' => self::SHOPS_ID[$index],
                     'price' => self::PRICES[$index],
+                    'unit' => self::UNITS[$index]->value,
                 ],
                 array_map(fn (\stdClass $productShop) => (array) $productShop, $responseContent->data)
             );
@@ -78,6 +85,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOPS_ID[0],
                 'products_or_shops_id' => self::PRODUCTS_ID,
                 'prices' => self::PRICES,
+                'units' => array_map(fn (UNIT_MEASURE_TYPE $unit) => $unit->value, self::UNITS),
             ]),
         );
 
@@ -94,6 +102,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                     'product_id' => self::PRODUCTS_ID[$index],
                     'shop_id' => self::SHOPS_ID[0],
                     'price' => self::PRICES[$index],
+                    'unit' => self::UNITS[$index]->value,
                 ],
                 array_map(fn (\stdClass $productShop) => (array) $productShop, $responseContent->data)
             );
@@ -113,6 +122,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                 'shop_id' => null,
                 'products_or_shops_id' => self::SHOPS_ID,
                 'prices' => self::PRICES,
+                'units' => array_map(fn (UNIT_MEASURE_TYPE $unit) => $unit->value, self::UNITS),
             ]),
         );
 
@@ -137,6 +147,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                 'shop_id' => '140eae6d-5f40-44c4-8a50-d3f8f7825c5c',
                 'products_or_shops_id' => self::SHOPS_ID,
                 'prices' => self::PRICES,
+                'units' => array_map(fn (UNIT_MEASURE_TYPE $unit) => $unit->value, self::UNITS),
             ]),
         );
 
@@ -161,6 +172,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                 'shop_id' => null,
                 'products_or_shops_id' => ['140eae6d-5f40-44c4-8a50-d3f8f7825c5c', self::SHOPS_ID[1]],
                 'prices' => self::PRICES,
+                'units' => array_map(fn (UNIT_MEASURE_TYPE $unit) => $unit->value, self::UNITS),
             ]),
         );
 
@@ -185,6 +197,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                 'shop_id' => null,
                 'products_or_shops_id' => self::SHOPS_ID,
                 'prices' => self::PRICES,
+                'units' => array_map(fn (UNIT_MEASURE_TYPE $unit) => $unit->value, self::UNITS),
             ]),
         );
 
@@ -197,7 +210,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailSettingThePriceOfAProductForAShopShopsAndPricesNotEquals(): void
+    public function itShouldFailSettingThePriceOfAProductForAShopShopsPricesAndUnitsNotEquals(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -209,16 +222,43 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                 'shop_id' => null,
                 'products_or_shops_id' => [self::SHOPS_ID[0]],
                 'prices' => self::PRICES,
+                'units' => array_map(fn (UNIT_MEASURE_TYPE $unit) => $unit->value, self::UNITS),
             ]),
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['products_or_shops_prices_not_equals'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['products_or_shops_prices_units_not_equals'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertEquals(['not_equal_to'], $responseContent->errors->products_or_shops_prices_not_equals);
+        $this->assertEquals(['not_equal_to'], $responseContent->errors->products_or_shops_prices_units_not_equals);
+    }
+
+    /** @test */
+    public function itShouldFailSettingThePriceOfAProductForAShopShopsPricesAndUnitsDifferentNotEquals(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'product_id' => self::PRODUCTS_ID[0],
+                'shop_id' => null,
+                'products_or_shops_id' => self::SHOPS_ID,
+                'prices' => self::PRICES,
+                'units' => [UNIT_MEASURE_TYPE::UNITS],
+            ]),
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['products_or_shops_prices_units_not_equals'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertEquals(['not_equal_to'], $responseContent->errors->products_or_shops_prices_units_not_equals);
     }
 
     /** @test */
@@ -234,16 +274,43 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                 'shop_id' => null,
                 'products_or_shops_id' => null,
                 'prices' => self::PRICES,
+                'units' => array_map(fn (UNIT_MEASURE_TYPE $unit) => $unit->value, self::UNITS),
             ]),
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['products_or_shops_prices_not_equals'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['products_or_shops_prices_units_not_equals'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertEquals(['not_equal_to'], $responseContent->errors->products_or_shops_prices_not_equals);
+        $this->assertEquals(['not_equal_to'], $responseContent->errors->products_or_shops_prices_units_not_equals);
+    }
+
+    /** @test */
+    public function itShouldFailSettingThePriceOfAProductForAShopProductsOrShopsIdValueIsNull(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'product_id' => self::PRODUCTS_ID[0],
+                'shop_id' => null,
+                'products_or_shops_id' => [null, null],
+                'prices' => self::PRICES,
+                'units' => array_map(fn (UNIT_MEASURE_TYPE $unit) => $unit->value, self::UNITS),
+            ]),
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['products_or_shops_id'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertEquals([['not_blank', 'not_null'], ['not_blank', 'not_null']], $responseContent->errors->products_or_shops_id);
     }
 
     /** @test */
@@ -259,6 +326,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                 'shops_id' => null,
                 'products_or_shops_id' => self::SHOPS_ID,
                 'prices' => self::PRICES,
+                'units' => array_map(fn (UNIT_MEASURE_TYPE $unit) => $unit->value, self::UNITS),
             ]),
         );
 
@@ -284,6 +352,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                 'shop_id' => null,
                 'products_or_shops_id' => self::SHOPS_ID,
                 'prices' => self::PRICES,
+                'units' => array_map(fn (UNIT_MEASURE_TYPE $unit) => $unit->value, self::UNITS),
             ]),
         );
 
@@ -309,6 +378,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                 'shop_id' => 'wrong id',
                 'products_or_shops_id' => self::SHOPS_ID,
                 'prices' => self::PRICES,
+                'units' => array_map(fn (UNIT_MEASURE_TYPE $unit) => $unit->value, self::UNITS),
             ]),
         );
 
@@ -334,6 +404,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                 'shop_id' => null,
                 'products_or_shops_id' => [self::SHOPS_ID[0], 'wrong id'],
                 'prices' => self::PRICES,
+                'units' => array_map(fn (UNIT_MEASURE_TYPE $unit) => $unit->value, self::UNITS),
             ]),
         );
 
@@ -359,6 +430,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                 'shop_id' => null,
                 'products_or_shops_id' => self::SHOPS_ID,
                 'prices' => self::PRICES,
+                'units' => array_map(fn (UNIT_MEASURE_TYPE $unit) => $unit->value, self::UNITS),
             ]),
         );
 
@@ -384,6 +456,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                 'shop_id' => null,
                 'products_or_shops_id' => self::SHOPS_ID,
                 'prices' => self::PRICES,
+                'units' => array_map(fn (UNIT_MEASURE_TYPE $unit) => $unit->value, self::UNITS),
             ]),
         );
 
@@ -409,6 +482,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                 'shop_id' => null,
                 'products_or_shops_id' => self::SHOPS_ID,
                 'prices' => [self::PRICES[0], -1],
+                'units' => array_map(fn (UNIT_MEASURE_TYPE $unit) => $unit->value, self::UNITS),
             ]),
         );
 
@@ -419,6 +493,32 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
         $this->assertEquals([['positive_or_zero']], $responseContent->errors->prices);
+    }
+
+    /** @test */
+    public function itShouldFailSettingThePriceOfAProductForAShopUnitIsNull(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'product_id' => self::PRODUCTS_ID[0],
+                'shop_id' => null,
+                'products_or_shops_id' => self::SHOPS_ID,
+                'prices' => self::PRICES,
+                'units' => [null, null],
+            ]),
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['units'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertEquals([['choice_not_such'], ['choice_not_such']], $responseContent->errors->units);
     }
 
     /** @test */
@@ -434,6 +534,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                 'shop_id' => null,
                 'products_or_shops_id' => self::SHOPS_ID,
                 'prices' => self::PRICES,
+                'units' => array_map(fn (UNIT_MEASURE_TYPE $unit) => $unit->value, self::UNITS),
             ]),
         );
 

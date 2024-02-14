@@ -27,6 +27,7 @@ class SetProductShopPriceOutputDto implements ApplicationOutputInterface
                 'product_id' => $productShop->getProductId()->getValue(),
                 'shop_id' => $productShop->getShopId()->getValue(),
                 'price' => $productShop->getPrice()->getValue(),
+                'unit' => $productShop->getUnit()->getValue()->value,
             ],
             $this->productShop
         );

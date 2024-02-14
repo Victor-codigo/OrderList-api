@@ -27,6 +27,11 @@ class SetProductShopPriceRequestDto implements RequestDtoInterface
      */
     public readonly array|null $prices;
 
+    /**
+     * @var string[]|null
+     */
+    public readonly array|null $units;
+
     public function __construct(Request $request)
     {
         $this->groupId = $request->request->get('group_id');
@@ -34,5 +39,6 @@ class SetProductShopPriceRequestDto implements RequestDtoInterface
         $this->shopId = $request->request->get('shop_id');
         $this->productsOrShopsId = $this->validateArrayOverflow($request->request->all('products_or_shops_id'), self::PRODUCTS_SHOPS_NUM_MAX);
         $this->prices = $this->arrayFilterFloat($request->request->all('prices'), self::PRODUCTS_SHOPS_NUM_MAX);
+        $this->units = $this->validateArrayOverflow($request->request->all('units'), self::PRODUCTS_SHOPS_NUM_MAX);
     }
 }
