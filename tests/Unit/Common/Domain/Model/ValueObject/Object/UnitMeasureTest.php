@@ -10,7 +10,7 @@ use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use PHPUnit\Framework\TestCase;
 
-class UnitMeasureTypeTest extends TestCase
+class UnitMeasureTest extends TestCase
 {
     private ValidationChain $validation;
 
@@ -36,7 +36,7 @@ class UnitMeasureTypeTest extends TestCase
         $object = new UnitMeasure(null);
         $return = $this->validation->validateValueObject($object);
 
-        $this->assertEmpty($return);
+        $this->assertEquals([VALIDATION_ERRORS::NOT_NULL], $return);
     }
 
     /** @test */

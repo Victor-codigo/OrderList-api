@@ -16,6 +16,7 @@ class UnitMeasure extends ObjectValueObject
     {
         $this
             ->setConstraint(ConstraintFactory::type(TYPES::OBJECT))
+            ->setConstraint(ConstraintFactory::notNull())
             ->setConstraint(ConstraintFactory::choice(VALUE_OBJECTS_CONSTRAINTS::UNIT_MEASURE_TYPES, false, null, null, null));
     }
 
