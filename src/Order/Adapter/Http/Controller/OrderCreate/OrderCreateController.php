@@ -34,7 +34,6 @@ use Symfony\Component\HttpFoundation\Response;
                                 new OA\Property(property: 'shop_id', type: 'string', description: 'Shop\'s id', example: '0290bf7e-2e68-4698-ba2e-d2394c239572'),
                                 new OA\Property(property: 'description', type: 'string', description: 'Order\'s description'),
                                 new OA\Property(property: 'amount', type: 'float', description: 'Product amount', example: 10.2),
-                                new OA\Property(property: 'unit', type: 'string', description: 'Product unit', example: 'Kg'),
                             ]
                         )),
                     ]

@@ -9,7 +9,6 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintE
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
-use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Doctrine\Common\Collections\ArrayCollection;
 use Order\Domain\Model\Order;
 use Order\Domain\Ports\Repository\OrderRepositoryInterface;
@@ -126,7 +125,6 @@ class OrderCreateServiceTest extends TestCase
                 ValueObjectFactory::createIdentifierNullable(!$shopIsIsNull ? 'shop id 1' : null),
                 ValueObjectFactory::createDescription('order 1 description'),
                 ValueObjectFactory::createAmount(15),
-                ValueObjectFactory::createUnit(UNIT_MEASURE_TYPE::UNITS)
             ),
 
             new OrderDataServiceDto(
@@ -135,7 +133,6 @@ class OrderCreateServiceTest extends TestCase
                 ValueObjectFactory::createIdentifierNullable(!$shopIsIsNull ? 'shop id 2' : null),
                 ValueObjectFactory::createDescription('order 2 description'),
                 ValueObjectFactory::createAmount(34),
-                ValueObjectFactory::createUnit(UNIT_MEASURE_TYPE::KG),
             ),
 
             new OrderDataServiceDto(
@@ -144,7 +141,6 @@ class OrderCreateServiceTest extends TestCase
                 ValueObjectFactory::createIdentifierNullable(!$shopIsIsNull ? 'shop id 3' : null),
                 ValueObjectFactory::createDescription('order 3 description'),
                 ValueObjectFactory::createAmount(26),
-                ValueObjectFactory::createUnit(UNIT_MEASURE_TYPE::CM),
             ),
         ];
     }
@@ -169,7 +165,6 @@ class OrderCreateServiceTest extends TestCase
                 ValueObjectFactory::createIdentifier('group id'),
                 $orders[0]->description,
                 $orders[0]->amount,
-                $orders[0]->unit,
                 $products[0],
                 $shops[0] ?? null
             ),
@@ -179,7 +174,6 @@ class OrderCreateServiceTest extends TestCase
                 ValueObjectFactory::createIdentifier('group id'),
                 $orders[1]->description,
                 $orders[1]->amount,
-                $orders[1]->unit,
                 $products[1],
                 $shops[1] ?? null
             ),
@@ -189,7 +183,6 @@ class OrderCreateServiceTest extends TestCase
                 ValueObjectFactory::createIdentifier('group id'),
                 $orders[2]->description,
                 $orders[2]->amount,
-                $orders[2]->unit,
                 $products[2],
                 $shops[2] ?? null
             ),
@@ -205,7 +198,6 @@ class OrderCreateServiceTest extends TestCase
         $this->assertEquals($expected->getGroupId(), $actual->getGroupId());
         $this->assertEquals($expected->getDescription(), $actual->getDescription());
         $this->assertEquals($expected->getAmount(), $actual->getAmount());
-        $this->assertEquals($expected->getUnit(), $actual->getUnit());
         $this->assertInstanceOf(\DateTime::class, $actual->getCreatedOn());
     }
 

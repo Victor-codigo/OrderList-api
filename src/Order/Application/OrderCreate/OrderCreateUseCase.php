@@ -76,7 +76,6 @@ class OrderCreateUseCase extends ServiceBase
                 $order->shopId,
                 $order->description,
                 $order->amount,
-                $order->unit
             );
         }
 
