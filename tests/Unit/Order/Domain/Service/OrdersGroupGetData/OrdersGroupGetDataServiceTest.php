@@ -238,12 +238,6 @@ class OrdersGroupGetDataServiceTest extends TestCase
     {
         $ordersDataDb = $this->setOrdersNoShop($this->getOrdersDataDb());
         $ordersDataExpected = $this->setOrdersNoShop($this->getOrdersDataExpected());
-        $ordersDataExpected[self::ORDER1_ID]->setShop(null);
-        $ordersDataExpected[self::ORDER1_ID]->setShopId(ValueObjectFactory::createIdentifier(null));
-        $ordersDataExpected[self::ORDER1_ID]->getProduct()->setProductShop([]);
-        $ordersDataExpected[self::ORDER2_ID]->setShop(null);
-        $ordersDataExpected[self::ORDER2_ID]->setShopId(ValueObjectFactory::createIdentifier(null));
-        $ordersDataExpected[self::ORDER2_ID]->getProduct()->setProductShop([]);
 
         $input = new OrdersGroupGetDataDto(
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
