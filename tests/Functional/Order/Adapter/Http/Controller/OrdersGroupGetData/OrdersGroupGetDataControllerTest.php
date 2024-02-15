@@ -9,6 +9,7 @@ use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Order\Domain\Model\Order;
 use Product\Domain\Model\Product;
+use Product\Domain\Model\ProductShop;
 use Shop\Domain\Model\Shop;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
@@ -30,7 +31,6 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
         $this->assertArrayHasKey('group_id', $orderActual);
         $this->assertArrayHasKey('description', $orderActual);
         $this->assertArrayHasKey('amount', $orderActual);
-        $this->assertArrayHasKey('unit', $orderActual);
         $this->assertArrayHasKey('created_on', $orderActual);
         $this->assertArrayHasKey('product', $orderActual);
         $this->assertArrayHasKey('shop', $orderActual);
@@ -41,18 +41,22 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
         $this->assertArrayHasKey('image', $orderActual['product']);
         $this->assertArrayHasKey('created_on', $orderActual['product']);
 
-        $this->assertArrayHasKey('id', $orderActual['shop']);
-        $this->assertArrayHasKey('name', $orderActual['shop']);
-        $this->assertArrayHasKey('description', $orderActual['shop']);
-        $this->assertArrayHasKey('image', $orderActual['shop']);
-        $this->assertArrayHasKey('created_on', $orderActual['shop']);
+        if (!$orderExpected->getShopId()->isNull()) {
+            $this->assertArrayHasKey('id', $orderActual['shop']);
+            $this->assertArrayHasKey('name', $orderActual['shop']);
+            $this->assertArrayHasKey('description', $orderActual['shop']);
+            $this->assertArrayHasKey('image', $orderActual['shop']);
+            $this->assertArrayHasKey('created_on', $orderActual['shop']);
+
+            $this->assertArrayHasKey('price', $orderActual['productShop']);
+            $this->assertArrayHasKey('unit', $orderActual['productShop']);
+        }
 
         $this->assertEquals($orderExpected->getId()->getValue(), $orderActual['id']);
         $this->assertEquals($orderExpected->getUserId()->getValue(), $orderActual['user_id']);
         $this->assertEquals($orderExpected->getGroupId()->getValue(), $orderActual['group_id']);
         $this->assertEquals($orderExpected->getDescription()->getValue(), $orderActual['description']);
         $this->assertEquals($orderExpected->getAmount()->getvalue(), $orderActual['amount']);
-        $this->assertEquals($orderExpected->getUnit()->getvalue()->value, $orderActual['unit']);
 
         $product = $orderExpected->getProduct();
         $this->assertEquals($product->getId()->getvalue(), $orderActual['product']['id']);
@@ -60,11 +64,18 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
         $this->assertEquals($product->getDescription()->getValue(), $orderActual['product']['description']);
         $this->assertEquals($product->getImage()->getValue(), $orderActual['product']['image']);
 
-        $shop = $orderExpected->getShop();
-        $this->assertEquals($shop->getId()->getValue(), $orderActual['shop']['id']);
-        $this->assertEquals($shop->getName(), $orderActual['shop']['name']);
-        $this->assertEquals($shop->getDescription()->getValue(), $orderActual['shop']['description']);
-        $this->assertEquals($shop->getImage()->getValue(), $orderActual['shop']['image']);
+        if (!$orderExpected->getShopId()->isNull()) {
+            $shop = $orderExpected->getShop();
+            $this->assertEquals($shop->getId()->getValue(), $orderActual['shop']['id']);
+            $this->assertEquals($shop->getName(), $orderActual['shop']['name']);
+            $this->assertEquals($shop->getDescription()->getValue(), $orderActual['shop']['description']);
+            $this->assertEquals($shop->getImage()->getValue(), $orderActual['shop']['image']);
+
+            /** @var ProductShop[] $productShop */
+            $productShop = $orderExpected->getProduct()->getProductShop()->getValues();
+            $this->assertEquals($productShop[0]->getPrice()->getValue(), $orderActual['productShop']['price']);
+            $this->assertEquals($productShop[0]->getUnit()->getValue()->value, $orderActual['productShop']['unit']);
+        }
     }
 
     private function getOrdersData(): array
@@ -84,20 +95,13 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
             null
         );
         $product3 = Product::fromPrimitives(
-            '8b6d650b-7bb7-4850-bf25-36cda9bce801',
-            '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
-            'Juan Carlos',
-            null,
-            null
-        );
-        $product4 = Product::fromPrimitives(
             '7e3021d4-2d02-4386-8bbe-887cfe8697a8',
             '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
             'Juanola',
             'Product description 1',
             null
         );
-        $product5 = Product::fromPrimitives(
+        $product4 = Product::fromPrimitives(
             'ca10c90a-c7e6-4594-89e9-71d2f5e74710',
             '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
             'Perico',
@@ -106,27 +110,20 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
         );
 
         $shop1 = Shop::fromPrimitives(
-            'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
-            '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
-            'Shop name 2',
-            'Shop description 2',
-            null
-        );
-        $shop2 = Shop::fromPrimitives(
             'e6c1d350-f010-403c-a2d4-3865c14630ec',
             '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
             'Shop name 1',
             'Shop description 1',
             null
         );
-        $shop3 = Shop::fromPrimitives(
+        $shop2 = Shop::fromPrimitives(
             'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
             '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
             'Shop name 2',
             'Shop description 2',
             null
         );
-        $shop4 = Shop::fromPrimitives(
+        $shop3 = Shop::fromPrimitives(
             'b9b1c541-d41e-4751-9ecb-4a1d823c0405',
             '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
             'Shop name 3',
@@ -134,56 +131,56 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
             null
         );
 
+        $product1->setProductShop([ProductShop::fromPrimitives($product1, $shop2, 20.3, UNIT_MEASURE_TYPE::UNITS)]);
+        $product2->setProductShop([ProductShop::fromPrimitives($product2, $shop1, 10.5, UNIT_MEASURE_TYPE::UNITS)]);
+        $product3->setProductShop([ProductShop::fromPrimitives($product3, $shop2, null, UNIT_MEASURE_TYPE::UNITS)]);
+        $product4->setProductShop([ProductShop::fromPrimitives($product4, $shop3, null, UNIT_MEASURE_TYPE::KG)]);
+
         return [
             'a0b4760a-9037-477a-8b84-d059ae5ee7e9' => Order::fromPrimitives(
                 'a0b4760a-9037-477a-8b84-d059ae5ee7e9',
                 '2606508b-4516-45d6-93a6-c7cb416b7f3f',
                 '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 20.050,
-                UNIT_MEASURE_TYPE::KG,
                 'order description 2',
                 $product1,
-                $shop1
+                $shop2
             ),
             '9a48ac5b-4571-43fd-ac80-28b08124ffb8' => Order::fromPrimitives(
                 '9a48ac5b-4571-43fd-ac80-28b08124ffb8',
                 '2606508b-4516-45d6-93a6-c7cb416b7f3f',
                 '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 10.200,
-                UNIT_MEASURE_TYPE::UNITS,
                 'order description',
                 $product2,
-                $shop2
+                $shop1
             ),
             '5cfe52e5-db78-41b3-9acd-c3c84924cb9b' => Order::fromPrimitives(
                 '5cfe52e5-db78-41b3-9acd-c3c84924cb9b',
                 '2606508b-4516-45d6-93a6-c7cb416b7f3f',
                 '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 20.050,
-                UNIT_MEASURE_TYPE::UNITS,
                 null,
-                $product3,
-                $shop3
+                $product1,
+                $shop2
             ),
             'c3734d1c-8b18-4bfd-95aa-06a261476d9d' => Order::fromPrimitives(
                 'c3734d1c-8b18-4bfd-95aa-06a261476d9d',
                 '6df60afd-f7c3-4c2c-b920-e265f266c560',
                 '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 40.000,
-                UNIT_MEASURE_TYPE::UNITS,
                 'order description 4',
-                $product4,
-                $shop3
+                $product3,
+                $shop2
             ),
             'd351adba-c566-4fa5-bb5b-1a6f73b1d72f' => Order::fromPrimitives(
                 'd351adba-c566-4fa5-bb5b-1a6f73b1d72f',
                 '6df60afd-f7c3-4c2c-b920-e265f266c560',
                 '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 30.150,
-                UNIT_MEASURE_TYPE::CM,
                 'order description 3',
-                $product5,
-                $shop4
+                $product4,
+                $shop3
             ),
         ];
     }
@@ -216,6 +213,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
             $orderActual = (array) $orderActual;
             $orderActual['product'] = (array) $orderActual['product'];
             $orderActual['shop'] = (array) $orderActual['shop'];
+            $orderActual['productShop'] = (array) $orderActual['productShop'];
             $this->assertArrayHasKey($orderActual['id'], $productsExpected);
             $this->assertOrderIsOk($productsExpected[$orderActual['id']], $orderActual);
         }
@@ -248,6 +246,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
         $orderActual = (array) $responseContent->data->orders[0];
         $orderActual['product'] = (array) $orderActual['product'];
         $orderActual['shop'] = (array) $orderActual['shop'];
+        $orderActual['productShop'] = (array) $orderActual['productShop'];
         $this->assertArrayHasKey($orderActual['id'], $productsExpected);
         $this->assertOrderIsOk($productsExpected[$orderActual['id']], $orderActual);
     }

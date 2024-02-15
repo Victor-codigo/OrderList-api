@@ -5,17 +5,21 @@ declare(strict_types=1);
 namespace Order\Domain\Service\OrdersGroupGetData;
 
 use Common\Domain\Exception\LogicException;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Order\Domain\Model\Order;
 use Order\Domain\Ports\Repository\OrderRepositoryInterface;
 use Order\Domain\Service\OrdersGroupGetData\Dto\OrdersGroupGetDataDto;
+use Product\Domain\Model\ProductShop;
 
 class OrdersGroupGetDataService
 {
     private PaginatorInterface $ordersGroupPaginator;
 
     public function __construct(
-        private OrderRepositoryInterface $orderRepository
+        private OrderRepositoryInterface $orderRepository,
     ) {
     }
 
@@ -24,10 +28,9 @@ class OrdersGroupGetDataService
      */
     public function __invoke(OrdersGroupGetDataDto $input): array
     {
-        $this->ordersGroupPaginator = $this->orderRepository->findOrdersGroupOrFail($input->groupId);
-        $this->ordersGroupPaginator->setPagination($input->page->getValue(), $input->pageItems->getValue());
+        $this->ordersGroupPaginator = $this->getOrdersGroup($input->groupId, $input->page, $input->pageItems);
 
-        return $this->getOrderData($this->ordersGroupPaginator);
+        return $this->getOrdersData($this->ordersGroupPaginator);
     }
 
     /**
@@ -42,33 +45,84 @@ class OrdersGroupGetDataService
         return $this->ordersGroupPaginator->getPagesTotal();
     }
 
-    private function getOrderData(PaginatorInterface $listOrderOrdersPaginator): array
+    /**
+     * @throws DBNotFoundException
+     */
+    private function getOrdersGroup(Identifier $groupId, PaginatorPage $page, PaginatorPageItems $pageItems): PaginatorInterface
     {
-        return array_map(
-            fn (Order $order) => [
-                'id' => $order->getId()->getValue(),
-                'user_id' => $order->getUserId()->getValue(),
-                'group_id' => $order->getGroupId()->getValue(),
-                'description' => $order->getDescription()->getValue(),
-                'amount' => $order->getAmount()->getValue(),
-                'unit' => $order->getUnit()->getValue(),
-                'created_on' => $order->getCreatedOn()->format('Y-m-d H:i:s'),
-                'product' => [
-                    'id' => $order->getProduct()->getId()->getValue(),
-                    'name' => $order->getProduct()->getName()->getValue(),
-                    'description' => $order->getProduct()->getDescription()->getValue(),
-                    'image' => $order->getProduct()->getImage()->getValue(),
-                    'created_on' => $order->getProduct()->getCreatedOn()->format('Y-m-d H:i:s'),
-                ],
-                'shop' => [
-                    'id' => $order->getShop()->getId()->getValue(),
-                    'name' => $order->getShop()->getName()->getValue(),
-                    'description' => $order->getShop()->getDescription()->getValue(),
-                    'image' => $order->getShop()->getImage()->getValue(),
-                    'created_on' => $order->getShop()->getCreatedOn()->format('Y-m-d H:i:s'),
-                ],
+        $this->ordersGroupPaginator = $this->orderRepository->findOrdersGroupOrFail($groupId);
+        $this->ordersGroupPaginator->setPagination($page->getValue(), $pageItems->getValue());
+
+        return $this->ordersGroupPaginator;
+    }
+
+    private function getOrdersData(PaginatorInterface $listOrdersPaginator): array
+    {
+        $listOrders = iterator_to_array($listOrdersPaginator);
+
+        return array_map($this->getOrderData(...), $listOrders);
+    }
+
+    private function getOrderData(Order $order): array
+    {
+        return [
+           'id' => $order->getId()->getValue(),
+           'user_id' => $order->getUserId()->getValue(),
+           'group_id' => $order->getGroupId()->getValue(),
+           'description' => $order->getDescription()->getValue(),
+           'amount' => $order->getAmount()->getValue(),
+           'created_on' => $order->getCreatedOn()->format('Y-m-d H:i:s'),
+           'product' => [
+               'id' => $order->getProduct()->getId()->getValue(),
+               'name' => $order->getProduct()->getName()->getValue(),
+               'description' => $order->getProduct()->getDescription()->getValue(),
+               'image' => $order->getProduct()->getImage()->getValue(),
+               'created_on' => $order->getProduct()->getCreatedOn()->format('Y-m-d H:i:s'),
             ],
-            iterator_to_array($listOrderOrdersPaginator)
-        );
+            'shop' => $this->getProductShopData($order),
+            'productShop' => $this->getProductShopPrice($order),
+        ];
+    }
+
+    /**
+     * @return array<{id: string, name: string, description: string, created_on: string}>
+     */
+    private function getProductShopData(Order $order): array
+    {
+        if ($order->getShopId()->isNull()) {
+            return [];
+        }
+
+        return [
+            'id' => $order->getShop()->getId()->getValue(),
+            'name' => $order->getShop()->getName()->getValue(),
+            'description' => $order->getShop()->getDescription()->getValue(),
+            'image' => $order->getShop()->getImage()->getValue(),
+            'created_on' => $order->getShop()->getCreatedOn()->format('Y-m-d H:i:s'),
+        ];
+    }
+
+    /**
+     * @return array<{price: float, unit: string}>
+     */
+    private function getProductShopPrice(Order $order): array
+    {
+        if ($order->getShopId()->isNull()) {
+            return [];
+        }
+
+        /** @var ProductShop[] $productsShops */
+        $productsShops = $order->getProduct()->getProductShop()->getValues();
+
+        foreach ($productsShops as $productShop) {
+            if ($productShop->getShopId()->equalTo($order->getShopId())) {
+                return [
+                    'price' => $productShop->getPrice()->getValue(),
+                    'unit' => $productShop->getUnit()->getValue(),
+                ];
+            }
+        }
+
+        return [];
     }
 }

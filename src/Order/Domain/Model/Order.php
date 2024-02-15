@@ -8,7 +8,6 @@ use Common\Domain\Model\ValueObject\Float\Amount;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Product\Domain\Model\Product;
@@ -54,14 +53,35 @@ class Order
         return $this->groupId;
     }
 
+    public function setGroupId(Identifier $groupId): self
+    {
+        $this->groupId = $groupId;
+
+        return $this;
+    }
+
     public function getProductId(): Identifier
     {
         return $this->productId;
     }
 
+    public function setProductId(Identifier $productId): self
+    {
+        $this->productId = $productId;
+
+        return $this;
+    }
+
     public function getShopId(): Identifier
     {
         return $this->shopId;
+    }
+
+    public function setShopId(Identifier $shopId): self
+    {
+        $this->shopId = $shopId;
+
+        return $this;
     }
 
     public function getDescription(): Description
@@ -117,7 +137,7 @@ class Order
         return $this;
     }
 
-    public function getShop(): Shop
+    public function getShop(): Shop|null
     {
         return $this->shop;
     }
@@ -169,7 +189,7 @@ class Order
         $this->listOrders = new ArrayCollection();
     }
 
-    public static function fromPrimitives(string $id, string $userId, string $groupId, float $amount, UNIT_MEASURE_TYPE $unit, string|null $description, Product $product, ?Shop $shop = null): self
+    public static function fromPrimitives(string $id, string $userId, string $groupId, float $amount, string|null $description, Product $product, ?Shop $shop = null): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),
