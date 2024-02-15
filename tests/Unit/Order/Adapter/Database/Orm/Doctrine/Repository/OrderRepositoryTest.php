@@ -8,7 +8,6 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionExcepti
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\Persistence\ObjectManager;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -69,7 +68,6 @@ class OrderRepositoryTest extends DataBaseTestCase
             '741bdcf7-3c13-4c76-8c0c-98cb33933fb1',
             self::GROUP_ID,
             35.75,
-            UNIT_MEASURE_TYPE::KG,
             'Order description',
             $this->getNewProduct(),
             $this->getNewShop()
@@ -83,7 +81,6 @@ class OrderRepositoryTest extends DataBaseTestCase
             '2606508b-4516-45d6-93a6-c7cb416b7f3f',
             '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
             10.200,
-            UNIT_MEASURE_TYPE::UNITS,
             'Iure ut vero repellat quasi laboriosam earum enim iusto. Aut vitae perspiciatis ipsam et. Aspernatur voluptate voluptatem sequi inventore quas delectus. Quaerat ea repellat qui quia quasi pariatur velit. Tenetur officia iure fuga nihil. Dolorem temporibus voluptatem ut quia qui aut. Non aliquid excepturi architecto aut. Et dolorem quia expedita sint perspiciatis at. Qui quis ducimus error atque provident perspiciatis est. Distinctio suscipit qui aut officia eum sit recusandae.',
             $this->getNewProduct()
         );
