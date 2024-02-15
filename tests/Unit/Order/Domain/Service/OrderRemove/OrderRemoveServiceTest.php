@@ -9,7 +9,6 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
-use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Order\Domain\Model\Order;
 use Order\Domain\Ports\Repository\OrderRepositoryInterface;
 use Order\Domain\Service\OrderRemove\Dto\OrderRemoveDto;
@@ -42,7 +41,7 @@ class OrderRemoveServiceTest extends TestCase
         $product = $this->createMock(Product::class);
 
         return array_map(
-            fn (Identifier $orderId) => Order::fromPrimitives($orderId->getValue(), 'user id', 'group id', 10, UNIT_MEASURE_TYPE::UNITS, 'order description', $product),
+            fn (Identifier $orderId) => Order::fromPrimitives($orderId->getValue(), 'user id', 'group id', 10, 'order description', $product),
             $ordersId
         );
     }
