@@ -23,11 +23,11 @@ class ProductGetDataInputDto implements ServiceInputDtoInterface
     /**
      * @var Identifier[]
      */
-    public readonly array $productId;
+    public readonly array $productsId;
     /**
      * @var Identifier[]
      */
-    public readonly array $shopId;
+    public readonly array $shopsId;
     public readonly NameWithSpaces $productName;
 
     public readonly Filter $productNameFilter;
@@ -56,11 +56,11 @@ class ProductGetDataInputDto implements ServiceInputDtoInterface
     ) {
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
         $this->productName = ValueObjectFactory::createNameWithSpaces($productName);
-        $this->productId = array_map(
+        $this->productsId = array_map(
             fn (string $productId) => ValueObjectFactory::createIdentifier($productId),
             $productsId ?? []
         );
-        $this->shopId = array_map(
+        $this->shopsId = array_map(
             fn (string $shopId) => ValueObjectFactory::createIdentifier($shopId),
             $shopsId ?? []
         );
@@ -83,8 +83,8 @@ class ProductGetDataInputDto implements ServiceInputDtoInterface
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray(['group_id' => $this->groupId]);
-        $errorListProductsId = $validator->validateValueObjectArray($this->productId);
-        $errorListShopsId = $validator->validateValueObjectArray($this->shopId);
+        $errorListProductsId = $validator->validateValueObjectArray($this->productsId);
+        $errorListShopsId = $validator->validateValueObjectArray($this->shopsId);
         $errorListPage = $validator->validateValueObject($this->page);
         $errorListPageItems = $validator->validateValueObject($this->pageItems);
         $errorListProductNameFilter = $this->validateFilter($validator, $this->productNameFilter, 'product_name');

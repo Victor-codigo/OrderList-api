@@ -62,8 +62,8 @@ class ProductGetDataUseCase extends ServiceBase
     {
         return new ProductGetDataDto(
             $input->groupId,
-            $input->productId,
-            $input->shopId,
+            $input->productsId,
+            $input->shopsId,
             $input->productName,
             $input->productNameFilter,
             $input->shopNameFilter,
