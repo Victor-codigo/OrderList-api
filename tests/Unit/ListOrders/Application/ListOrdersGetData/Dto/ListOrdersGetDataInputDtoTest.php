@@ -7,6 +7,8 @@ namespace Test\Unit\ListOrders\Application\ListOrdersGetData\Dto;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
+use Common\Domain\Validation\Filter\FILTER_SECTION;
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\ValidationInterface;
 use ListOrders\Application\ListOrdersGetData\Dto\ListOrdersGetDataInputDto;
 use PHPUnit\Framework\TestCase;
@@ -29,32 +31,18 @@ class ListOrdersGetDataInputDtoTest extends TestCase
     {
         $object = new ListOrdersGetDataInputDto(
             $this->userSession,
+            'd700d726-1939-4f47-894d-a860224dc6f4',
             [
                 '3c6585ed-e5bd-46cd-9458-cea03b4c41a4',
                 '52560574-2751-40c3-bf33-1c65c451066c',
                 '81be2611-c555-44ee-ba24-a3ade9c228a7',
             ],
-            'd700d726-1939-4f47-894d-a860224dc6f4',
-            'list name'
-        );
-
-        $return = $object->validate($this->validator);
-
-        $this->assertEmpty($return);
-    }
-
-    /** @test */
-    public function itShouldValidateListOrdersNameStartsWithIsNull(): void
-    {
-        $object = new ListOrdersGetDataInputDto(
-            $this->userSession,
-            [
-                '3c6585ed-e5bd-46cd-9458-cea03b4c41a4',
-                '52560574-2751-40c3-bf33-1c65c451066c',
-                '81be2611-c555-44ee-ba24-a3ade9c228a7',
-            ],
-            'd700d726-1939-4f47-894d-a860224dc6f4',
-            null
+            'list name',
+            true,
+            FILTER_SECTION::LIST_ORDERS->value,
+            FILTER_STRING_COMPARISON::STARTS_WITH->value,
+            1,
+            10
         );
 
         $return = $object->validate($this->validator);
@@ -67,9 +55,14 @@ class ListOrdersGetDataInputDtoTest extends TestCase
     {
         $object = new ListOrdersGetDataInputDto(
             $this->userSession,
-            null,
             'd700d726-1939-4f47-894d-a860224dc6f4',
-            'list name'
+            null,
+            null,
+            true,
+            null,
+            null,
+            1,
+            10
         );
 
         $return = $object->validate($this->validator);
@@ -82,9 +75,74 @@ class ListOrdersGetDataInputDtoTest extends TestCase
     {
         $object = new ListOrdersGetDataInputDto(
             $this->userSession,
-            [],
             'd700d726-1939-4f47-894d-a860224dc6f4',
-            'list name'
+            [],
+            null,
+            true,
+            null,
+            null,
+            1,
+            10
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function itShouldValidateAllParametersAreNull(): void
+    {
+        $object = new ListOrdersGetDataInputDto(
+            $this->userSession,
+            'd700d726-1939-4f47-894d-a860224dc6f4',
+            null,
+            null,
+            true,
+            null,
+            null,
+            1,
+            10
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function itShouldValidateFilterSection(): void
+    {
+        $object = new ListOrdersGetDataInputDto(
+            $this->userSession,
+            'd700d726-1939-4f47-894d-a860224dc6f4',
+            null,
+            'filter value',
+            true,
+            FILTER_SECTION::LIST_ORDERS->value,
+            FILTER_STRING_COMPARISON::EQUALS->value,
+            1,
+            10
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function itShouldValidateFilterText(): void
+    {
+        $object = new ListOrdersGetDataInputDto(
+            $this->userSession,
+            'd700d726-1939-4f47-894d-a860224dc6f4',
+            null,
+            'filter value',
+            false,
+            FILTER_SECTION::LIST_ORDERS->value,
+            FILTER_STRING_COMPARISON::EQUALS->value,
+            1,
+            10
         );
 
         $return = $object->validate($this->validator);
@@ -97,13 +155,18 @@ class ListOrdersGetDataInputDtoTest extends TestCase
     {
         $object = new ListOrdersGetDataInputDto(
             $this->userSession,
+            null,
             [
                 '3c6585ed-e5bd-46cd-9458-cea03b4c41a4',
                 '52560574-2751-40c3-bf33-1c65c451066c',
                 '81be2611-c555-44ee-ba24-a3ade9c228a7',
             ],
             null,
-            'list name'
+            true,
+            null,
+            null,
+            1,
+            10
         );
 
         $return = $object->validate($this->validator);
@@ -116,13 +179,18 @@ class ListOrdersGetDataInputDtoTest extends TestCase
     {
         $object = new ListOrdersGetDataInputDto(
             $this->userSession,
+            'wring id',
             [
                 '3c6585ed-e5bd-46cd-9458-cea03b4c41a4',
                 '52560574-2751-40c3-bf33-1c65c451066c',
                 '81be2611-c555-44ee-ba24-a3ade9c228a7',
             ],
-            'wring id',
-            'list name'
+            null,
+            true,
+            null,
+            null,
+            1,
+            10
         );
 
         $return = $object->validate($this->validator);
@@ -131,71 +199,149 @@ class ListOrdersGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailValidatingListOrdersIdsAndNameStartsWithAreEmpty(): void
+    public function itShouldFailValidatingListOrdersIdIsWrong(): void
     {
         $object = new ListOrdersGetDataInputDto(
             $this->userSession,
-            [],
             'd700d726-1939-4f47-894d-a860224dc6f4',
-            null
+            [
+                'wrong id',
+            ],
+            null,
+            true,
+            null,
+            null,
+            1,
+            10
         );
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['list_orders_ids_and_name_starts_with_empty' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
+        $this->assertEquals(['list_orders_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
     }
 
     /** @test */
-    public function itShouldFailValidatingListOrdersIdsAndNameStartsWithAreWrong(): void
+    public function itShouldFailValidatingFilterSectionValueIsWrong(): void
     {
         $object = new ListOrdersGetDataInputDto(
             $this->userSession,
-            [
-                'wrong id',
-            ],
             'd700d726-1939-4f47-894d-a860224dc6f4',
-            str_pad('', 51, 'p')
+            [],
+            'wrong value-',
+            true,
+            FILTER_SECTION::LIST_ORDERS->value,
+            FILTER_STRING_COMPARISON::EQUALS->value,
+            1,
+            10
         );
 
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
-                'list_orders_ids' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]],
-                'list_orders_name_starts_with' => [VALIDATION_ERRORS::STRING_TOO_LONG],
+                'section_filter_value' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
+                'text_filter_value' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
             ],
             $return
         );
     }
 
     /** @test */
-    public function itShouldFailValidatingListOrdersIdIsWrong(): void
+    public function itShouldFailValidatingFilterSectionIsWrong(): void
     {
         $object = new ListOrdersGetDataInputDto(
             $this->userSession,
-            [
-                'wrong id',
-            ],
             'd700d726-1939-4f47-894d-a860224dc6f4',
-            'list name'
+            [],
+            'filter value',
+            true,
+            'wrong filter section',
+            FILTER_STRING_COMPARISON::EQUALS->value,
+            1,
+            10
         );
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['list_orders_ids' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
+        $this->assertEquals(['section_filter_type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
     /** @test */
-    public function itShouldFailValidatingListOrdersNameStartsWithIsWrong(): void
+    public function itShouldFailValidatingFilterTextIsWrong(): void
     {
         $object = new ListOrdersGetDataInputDto(
             $this->userSession,
-            [],
             'd700d726-1939-4f47-894d-a860224dc6f4',
-            str_pad('', 51, 'p')
+            [],
+            'filter value',
+            true,
+            FILTER_SECTION::LIST_ORDERS->value,
+            'wrong filter text',
+            1,
+            10
         );
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['list_orders_name_starts_with' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
+        $this->assertEquals(['text_filter_type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailValidatingFilterSectionAndTextAreNotBothPresent(): void
+    {
+        $object = new ListOrdersGetDataInputDto(
+            $this->userSession,
+            'd700d726-1939-4f47-894d-a860224dc6f4',
+            [],
+            'filter value',
+            true,
+            null,
+            'equals',
+            1,
+            10
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['filter_section_and_text_not_empty' => [VALIDATION_ERRORS::NOT_NULL]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailValidatingPageIsWrong(): void
+    {
+        $object = new ListOrdersGetDataInputDto(
+            $this->userSession,
+            'd700d726-1939-4f47-894d-a860224dc6f4',
+            [],
+            'filter value',
+            true,
+            null,
+            null,
+            -1,
+            10
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['page' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailValidatingPageItemsIsWrong(): void
+    {
+        $object = new ListOrdersGetDataInputDto(
+            $this->userSession,
+            'd700d726-1939-4f47-894d-a860224dc6f4',
+            [],
+            'filter value',
+            true,
+            null,
+            null,
+            1,
+            -10
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['page_items' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
     }
 }

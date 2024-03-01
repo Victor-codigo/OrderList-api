@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersGetData;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
-use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use Common\Domain\Validation\Filter\FILTER_SECTION;
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use ListOrders\Domain\Model\ListOrders;
 use ListOrders\Domain\Ports\ListOrdersRepositoryInterface;
 use ListOrders\Domain\Service\ListOrdersGetData\Dto\ListOrdersGetDataDto;
@@ -91,13 +92,77 @@ class ListOrdersGetDataServiceTest extends TestCase
     }
 
     /** @test */
+    public function itShouldGetListOrdersDataOfAGroup(): void
+    {
+        $page = ValueObjectFactory::createPaginatorPage(1);
+        $pageItems = ValueObjectFactory::createPaginatorPageItems(10);
+        $listOrders = $this->getListOrders();
+        $groupId = ValueObjectFactory::createIdentifier('group id');
+        $input = new ListOrdersGetDataDto(
+            $groupId,
+            [],
+            true,
+            null,
+            null,
+            $page,
+            $pageItems
+        );
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByIdOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByListOrdersNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByProductNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByShopNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrdersGroup')
+            ->with($groupId, true)
+            ->willReturn($this->paginator);
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($listOrders));
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with($page->getValue(), $pageItems->getValue());
+
+        $return = $this->object->__invoke($input);
+
+        $this->assertCount(3, $return);
+
+        foreach ($return as $listOrdersData) {
+            $this->assertListOrderDataIsOk($listOrders[$listOrdersData['id']], $listOrdersData);
+        }
+    }
+
+    /** @test */
     public function itShouldGetListOrdersDataListOrdersId(): void
     {
+        $page = ValueObjectFactory::createPaginatorPage(1);
+        $pageItems = ValueObjectFactory::createPaginatorPageItems(10);
         $listOrders = $this->getListOrders();
         $input = new ListOrdersGetDataDto(
-            $this->getListOrdersId(),
             ValueObjectFactory::createIdentifier('group id'),
-            ValueObjectFactory::createNameWithSpaces(null)
+            $this->getListOrdersId(),
+            true,
+            null,
+            null,
+            $page,
+            $pageItems
         );
 
         $this->listOrdersRepository
@@ -108,12 +173,29 @@ class ListOrdersGetDataServiceTest extends TestCase
 
         $this->listOrdersRepository
             ->expects($this->never())
-            ->method('findListOrderByNameStarsWithOrFail');
+            ->method('findListOrderByListOrdersNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByProductNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByShopNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrdersGroup');
 
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator($listOrders));
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with($page->getValue(), $pageItems->getValue());
 
         $return = $this->object->__invoke($input);
 
@@ -127,11 +209,28 @@ class ListOrdersGetDataServiceTest extends TestCase
     /** @test */
     public function itShouldGetListOrdersDataListOrdersNameStartsWith(): void
     {
+        $page = ValueObjectFactory::createPaginatorPage(1);
+        $pageItems = ValueObjectFactory::createPaginatorPageItems(10);
+        $filterValue = ValueObjectFactory::createNameWithSpaces('list');
+        $filterSection = ValueObjectFactory::createFilter(
+            'filter_section',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_SECTION::LIST_ORDERS),
+            $filterValue
+        );
+        $filterText = ValueObjectFactory::createFilter(
+            'filter_text',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            $filterValue
+        );
         $listOrders = $this->getListOrders();
         $input = new ListOrdersGetDataDto(
-            [],
             ValueObjectFactory::createIdentifier('group id'),
-            ValueObjectFactory::createNameWithSpaces('list')
+            [],
+            true,
+            $filterSection,
+            $filterText,
+            $page,
+            $pageItems
         );
 
         $this->listOrdersRepository
@@ -140,14 +239,31 @@ class ListOrdersGetDataServiceTest extends TestCase
 
         $this->listOrdersRepository
             ->expects($this->once())
-            ->method('findListOrderByNameStarsWithOrFail')
-            ->with($input->listOrdersNameStartsWith, $input->groupId)
+            ->method('findListOrderByListOrdersNameFilterOrFail')
+            ->with($input->groupId, $filterText, true)
             ->willReturn($this->paginator);
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByProductNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByShopNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrdersGroup');
 
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator($listOrders));
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with($page->getValue(), $pageItems->getValue());
 
         $return = $this->object->__invoke($input);
 
@@ -159,12 +275,203 @@ class ListOrdersGetDataServiceTest extends TestCase
     }
 
     /** @test */
+    public function itShouldGetListOrdersDataProductNameStartsWith(): void
+    {
+        $page = ValueObjectFactory::createPaginatorPage(1);
+        $pageItems = ValueObjectFactory::createPaginatorPageItems(10);
+        $filterValue = ValueObjectFactory::createNameWithSpaces('product');
+        $filterSection = ValueObjectFactory::createFilter(
+            'filter_section',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_SECTION::PRODUCT),
+            $filterValue
+        );
+        $filterText = ValueObjectFactory::createFilter(
+            'filter_text',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            $filterValue
+        );
+        $listOrders = $this->getListOrders();
+        $input = new ListOrdersGetDataDto(
+            ValueObjectFactory::createIdentifier('group id'),
+            [],
+            true,
+            $filterSection,
+            $filterText,
+            $page,
+            $pageItems
+        );
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByIdOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByListOrdersNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrderByProductNameFilterOrFail')
+            ->with($input->groupId, $filterText, true)
+            ->willReturn($this->paginator);
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByShopNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrdersGroup');
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($listOrders));
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with($page->getValue(), $pageItems->getValue());
+
+        $return = $this->object->__invoke($input);
+
+        $this->assertCount(3, $return);
+
+        foreach ($return as $listOrdersData) {
+            $this->assertListOrderDataIsOk($listOrders[$listOrdersData['id']], $listOrdersData);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetListOrdersDataShopNameStartsWith(): void
+    {
+        $page = ValueObjectFactory::createPaginatorPage(1);
+        $pageItems = ValueObjectFactory::createPaginatorPageItems(10);
+        $filterValue = ValueObjectFactory::createNameWithSpaces('shop');
+        $filterSection = ValueObjectFactory::createFilter(
+            'filter_section',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_SECTION::SHOP),
+            $filterValue
+        );
+        $filterText = ValueObjectFactory::createFilter(
+            'filter_text',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            $filterValue
+        );
+        $listOrders = $this->getListOrders();
+        $input = new ListOrdersGetDataDto(
+            ValueObjectFactory::createIdentifier('group id'),
+            [],
+            true,
+            $filterSection,
+            $filterText,
+            $page,
+            $pageItems
+        );
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByIdOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByListOrdersNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByProductNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrderByShopNameFilterOrFail')
+            ->with($input->groupId, $filterText, true)
+            ->willReturn($this->paginator);
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrdersGroup');
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($listOrders));
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with($page->getValue(), $pageItems->getValue());
+
+        $return = $this->object->__invoke($input);
+
+        $this->assertCount(3, $return);
+
+        foreach ($return as $listOrdersData) {
+            $this->assertListOrderDataIsOk($listOrders[$listOrdersData['id']], $listOrdersData);
+        }
+    }
+
+    /** @test */
+    public function itShouldFailGettingListOrdersDataGroupNotFound(): void
+    {
+        $page = ValueObjectFactory::createPaginatorPage(1);
+        $pageItems = ValueObjectFactory::createPaginatorPageItems(10);
+
+        $input = new ListOrdersGetDataDto(
+            ValueObjectFactory::createIdentifier('group id'),
+            [],
+            true,
+            null,
+            null,
+            $page,
+            $pageItems
+        );
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByIdOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByListOrdersNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByProductNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByShopNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrdersGroup')
+            ->willThrowException(new DBNotFoundException());
+
+        $this->paginator
+            ->expects($this->never())
+            ->method('getIterator');
+
+        $this->paginator
+            ->expects($this->never())
+            ->method('setPagination');
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->__invoke($input);
+    }
+
+    /** @test */
     public function itShouldFailGettingListOrdersDataListOrdersIdNotFound(): void
     {
+        $page = ValueObjectFactory::createPaginatorPage(1);
+        $pageItems = ValueObjectFactory::createPaginatorPageItems(10);
         $input = new ListOrdersGetDataDto(
-            $this->getListOrdersId(),
             ValueObjectFactory::createIdentifier('group id'),
-            ValueObjectFactory::createNameWithSpaces(null)
+            $this->getListOrdersId(),
+            true,
+            null,
+            null,
+            $page,
+            $pageItems
         );
 
         $this->listOrdersRepository
@@ -175,23 +482,56 @@ class ListOrdersGetDataServiceTest extends TestCase
 
         $this->listOrdersRepository
             ->expects($this->never())
-            ->method('findListOrderByNameStarsWithOrFail');
+            ->method('findListOrderByListOrdersNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByProductNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByShopNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrdersGroup');
 
         $this->paginator
             ->expects($this->never())
             ->method('getIterator');
+
+        $this->paginator
+            ->expects($this->never())
+            ->method('setPagination');
 
         $this->expectException(DBNotFoundException::class);
         $this->object->__invoke($input);
     }
 
     /** @test */
-    public function itShouldFailGettingListOrdersDataListOrdersNameStartsWithNotFound(): void
+    public function itShouldFailGettingListOrdersDataListOrdersNameNotFound(): void
     {
+        $page = ValueObjectFactory::createPaginatorPage(1);
+        $pageItems = ValueObjectFactory::createPaginatorPageItems(10);
+        $filterValue = ValueObjectFactory::createNameWithSpaces('list');
+        $filterSection = ValueObjectFactory::createFilter(
+            'filter_section',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_SECTION::LIST_ORDERS),
+            $filterValue
+        );
+        $filterText = ValueObjectFactory::createFilter(
+            'filter_text',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            $filterValue
+        );
         $input = new ListOrdersGetDataDto(
-            [],
             ValueObjectFactory::createIdentifier('group id'),
-            ValueObjectFactory::createNameWithSpaces('list')
+            [],
+            true,
+            $filterSection,
+            $filterText,
+            $page,
+            $pageItems
         );
 
         $this->listOrdersRepository
@@ -200,25 +540,57 @@ class ListOrdersGetDataServiceTest extends TestCase
 
         $this->listOrdersRepository
             ->expects($this->once())
-            ->method('findListOrderByNameStarsWithOrFail')
-            ->with($input->listOrdersNameStartsWith, $input->groupId)
+            ->method('findListOrderByListOrdersNameFilterOrFail')
             ->willThrowException(new DBNotFoundException());
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByProductNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByShopNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrdersGroup');
 
         $this->paginator
             ->expects($this->never())
             ->method('getIterator');
+
+        $this->paginator
+            ->expects($this->never())
+            ->method('setPagination');
 
         $this->expectException(DBNotFoundException::class);
         $this->object->__invoke($input);
     }
 
     /** @test */
-    public function itShouldFailGettingListOrdersDataListOrdersIdAndNameStartsWithAreEmpty(): void
+    public function itShouldFailGettingListOrdersDataProductNameNotFound(): void
     {
+        $page = ValueObjectFactory::createPaginatorPage(1);
+        $pageItems = ValueObjectFactory::createPaginatorPageItems(10);
+        $filterValue = ValueObjectFactory::createNameWithSpaces('list');
+        $filterSection = ValueObjectFactory::createFilter(
+            'filter_section',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_SECTION::PRODUCT),
+            $filterValue
+        );
+        $filterText = ValueObjectFactory::createFilter(
+            'filter_text',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            $filterValue
+        );
         $input = new ListOrdersGetDataDto(
-            [],
             ValueObjectFactory::createIdentifier('group id'),
-            ValueObjectFactory::createNameWithSpaces(null)
+            [],
+            true,
+            $filterSection,
+            $filterText,
+            $page,
+            $pageItems
         );
 
         $this->listOrdersRepository
@@ -227,13 +599,89 @@ class ListOrdersGetDataServiceTest extends TestCase
 
         $this->listOrdersRepository
             ->expects($this->never())
-            ->method('findListOrderByNameStarsWithOrFail');
+            ->method('findListOrderByListOrdersNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrderByProductNameFilterOrFail')
+            ->willThrowException(new DBNotFoundException());
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByShopNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrdersGroup');
 
         $this->paginator
             ->expects($this->never())
             ->method('getIterator');
 
-        $this->expectException(LogicException::class);
+        $this->paginator
+            ->expects($this->never())
+            ->method('setPagination');
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->__invoke($input);
+    }
+
+    /** @test */
+    public function itShouldFailGettingListOrdersShopNameNotFound(): void
+    {
+        $page = ValueObjectFactory::createPaginatorPage(1);
+        $pageItems = ValueObjectFactory::createPaginatorPageItems(10);
+        $filterValue = ValueObjectFactory::createNameWithSpaces('list');
+        $filterSection = ValueObjectFactory::createFilter(
+            'filter_section',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_SECTION::SHOP),
+            $filterValue
+        );
+        $filterText = ValueObjectFactory::createFilter(
+            'filter_text',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            $filterValue
+        );
+        $input = new ListOrdersGetDataDto(
+            ValueObjectFactory::createIdentifier('group id'),
+            [],
+            true,
+            $filterSection,
+            $filterText,
+            $page,
+            $pageItems
+        );
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByIdOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByListOrdersNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByProductNameFilterOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrderByShopNameFilterOrFail')
+            ->willThrowException(new DBNotFoundException());
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrdersGroup');
+
+        $this->paginator
+            ->expects($this->never())
+            ->method('getIterator');
+
+        $this->paginator
+            ->expects($this->never())
+            ->method('setPagination');
+
+        $this->expectException(DBNotFoundException::class);
         $this->object->__invoke($input);
     }
 }

@@ -6,7 +6,7 @@ namespace ListOrders\Application\ListOrdersGetData;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
-use Common\Domain\Exception\LogicException;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
 use Common\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
@@ -47,11 +47,9 @@ class ListOrdersGetDataUseCase extends ServiceBase
                 $this->createListOrdersGetDataDto($input)
             );
 
-            return $this->createListOrdersGetDataOutputDto($listsOrdersData);
+            return $this->createListOrdersGetDataOutputDto($listsOrdersData, $input->page, $this->ListOrdersGetDataService->getPagesTotal());
         } catch (ValidateGroupAndUserException) {
             throw ListOrdersGetDataValidateUserAndGroupException::fromMessage('You not belong to the group');
-        } catch (LogicException) {
-            throw ListOrdersGetDataListOrderIdsAndListOrderNameStartsWithAreNullException::fromMessage('Both list_order_ids and list_orders_starts_with are null');
         } catch (DBNotFoundException) {
             throw ListOrdersGetDataListOrdersNotFoundException::fromMessage('List orders ids not found');
         } catch (\Exception) {
@@ -73,11 +71,19 @@ class ListOrdersGetDataUseCase extends ServiceBase
 
     private function createListOrdersGetDataDto(ListOrdersGetDataInputDto $input): ListOrdersGetDataDto
     {
-        return new ListOrdersGetDataDto($input->listOrdersId, $input->groupId, $input->listOrdersNameStartsWith);
+        return new ListOrdersGetDataDto(
+            $input->groupId,
+            $input->listOrdersId,
+            $input->orderAsc,
+            $input->filterSection,
+            $input->filterText,
+            $input->page,
+            $input->pageItems
+        );
     }
 
-    private function createListOrdersGetDataOutputDto(array $listsOrdersData): ListOrdersGetDataOutputDto
+    private function createListOrdersGetDataOutputDto(array $listsOrdersData, PaginatorPage $page, int $pagesTotal): ListOrdersGetDataOutputDto
     {
-        return new ListOrdersGetDataOutputDto($listsOrdersData);
+        return new ListOrdersGetDataOutputDto($listsOrdersData, $page, $pagesTotal);
     }
 }

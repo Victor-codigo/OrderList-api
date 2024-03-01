@@ -8,6 +8,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionExcepti
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\Persistence\ObjectManager;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -182,10 +183,11 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldFindListOrdersByNameStarsWith(): void
+    public function itShouldFindListOrdersOfAGroup(): void
     {
-        $return = $this->object->findListOrderByNameStarsWithOrFail(
-            ValueObjectFactory::createNameWithSpaces('List')
+        $return = $this->object->findListOrdersGroup(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            true
         );
 
         $listOrdersExpected = $this->object->findBy(['id' => self::LIST_ORDERS_ID]);
@@ -199,39 +201,298 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldFindListOrdersByNameStarsWithGroupId22(): void
+    public function itShouldFailFindingListOrdersOfAGroupNotFound(): void
     {
-        $return = $this->object->findListOrderByNameStarsWithOrFail(
-            ValueObjectFactory::createNameWithSpaces('List'),
-            ValueObjectFactory::createIdentifier(self::GROUP_ID)
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findListOrdersGroup(
+            ValueObjectFactory::createIdentifier('not found id'),
+            true
+        );
+    }
+
+    /** @test */
+    public function itShouldFindListOrdersByListOrdersNameFilterEquals(): void
+    {
+        $listOrdersName = ValueObjectFactory::createNameWithSpaces('List order name 2');
+        $filterText = ValueObjectFactory::createFilter(
+            'filter_text',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::EQUALS),
+            $listOrdersName
+        );
+        $return = $this->object->findListOrderByListOrdersNameFilterOrFail(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            $filterText,
+            true
+        );
+        $listOrdersExpected = $this->object->findBy(['name' => $listOrdersName], ['name' => 'asc']);
+
+        $this->assertEquals($listOrdersExpected, iterator_to_array($return));
+    }
+
+    /** @test */
+    public function itShouldFindListOrdersByListOrdersNameFilterStartsWith(): void
+    {
+        $listOrdersName = ValueObjectFactory::createNameWithSpaces('List order');
+        $filterText = ValueObjectFactory::createFilter(
+            'filter_text',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            $listOrdersName
+        );
+        $return = $this->object->findListOrderByListOrdersNameFilterOrFail(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            $filterText,
+            false
+        );
+        $listOrdersExpected = $this->object->findBy(['name' => [
+             ValueObjectFactory::createNameWithSpaces('List order name 4'),
+             ValueObjectFactory::createNameWithSpaces('List order name 3'),
+             ValueObjectFactory::createNameWithSpaces('List order name 2'),
+             ValueObjectFactory::createNameWithSpaces('List order name 1'),
+        ]],
+            ['name' => 'desc']
         );
 
-        $listOrdersExpected = $this->object->findBy(['id' => self::LIST_ORDERS_ID]);
-        $listOrdersActual = iterator_to_array($return);
-
-        $this->assertCount(count($listOrdersExpected), $listOrdersActual);
-
-        foreach ($listOrdersActual as $listOrder) {
-            $this->assertContainsEquals($listOrder, $listOrdersExpected);
-        }
+        $this->assertEquals($listOrdersExpected, iterator_to_array($return));
     }
 
     /** @test */
-    public function itShouldFailFindListOrdersByNameStarsWithNotFound(): void
+    public function itShouldFindListOrdersByListOrdersNameFilterEndsWith(): void
     {
-        $nameStartsWith = ValueObjectFactory::createNameWithSpaces('not found');
+        $listOrdersName = ValueObjectFactory::createNameWithSpaces('name 3');
+        $filterText = ValueObjectFactory::createFilter(
+            'filter_text',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::ENDS_WITH),
+            $listOrdersName
+        );
+        $return = $this->object->findListOrderByListOrdersNameFilterOrFail(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            $filterText,
+            true
+        );
+        $listOrdersExpected = $this->object->findBy([
+            'name' => ValueObjectFactory::createNameWithSpaces('List order name 3'),
+        ], [
+            'name' => 'asc',
+            ]
+        );
 
-        $this->expectException(DBNotFoundException::class);
-        $this->object->findListOrderByNameStarsWithOrFail($nameStartsWith);
+        $this->assertEquals($listOrdersExpected, iterator_to_array($return));
     }
 
     /** @test */
-    public function itShouldFailFindListOrdersByNameStarsWithGroupIdNotFound(): void
+    public function itShouldFindListOrdersByListOrdersNameFilterContains(): void
     {
-        $nameStartsWith = ValueObjectFactory::createNameWithSpaces('not found');
-        $groupId = ValueObjectFactory::createIdentifier('not found id');
+        $listOrdersName = ValueObjectFactory::createNameWithSpaces('name');
+        $filterText = ValueObjectFactory::createFilter(
+            'filter_text',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::CONTAINS),
+            $listOrdersName
+        );
+        $return = $this->object->findListOrderByListOrdersNameFilterOrFail(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            $filterText,
+            false
+        );
+        $listOrdersExpected = $this->object->findBy(['name' => [
+            ValueObjectFactory::createNameWithSpaces('List order name 4'),
+            ValueObjectFactory::createNameWithSpaces('List order name 3'),
+            ValueObjectFactory::createNameWithSpaces('List order name 2'),
+            ValueObjectFactory::createNameWithSpaces('List order name 1'),
+       ]],
+            ['name' => 'desc']
+        );
 
+        $this->assertEquals($listOrdersExpected, iterator_to_array($return));
+    }
+
+    /** @test */
+    public function itShouldFindListOrdersByProductsNameFilterEquals(): void
+    {
+        $productName = ValueObjectFactory::createNameWithSpaces('Juan Carlos');
+        $filterText = ValueObjectFactory::createFilter(
+            'filter_text',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::EQUALS),
+            $productName
+        );
+        $return = $this->object->findListOrderByProductNameFilterOrFail(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            $filterText,
+            true
+        );
+        $listOrdersExpected = $this->object->findBy(['id' => ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[0])]);
+
+        $this->assertEquals($listOrdersExpected, iterator_to_array($return));
+    }
+
+    /** @test */
+    public function itShouldFindListOrdersByProductsNameFilterStartsWith(): void
+    {
+        $productName = ValueObjectFactory::createNameWithSpaces('Peri');
+        $filterText = ValueObjectFactory::createFilter(
+            'filter_text',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            $productName
+        );
+        $return = $this->object->findListOrderByProductNameFilterOrFail(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            $filterText,
+            true
+        );
+        $listOrdersExpected = $this->object->findBy(['id' => ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[1])]);
+
+        $this->assertEquals($listOrdersExpected, iterator_to_array($return));
+    }
+
+    /** @test */
+    public function itShouldFindListOrdersByProductsNameFilterEndsWith(): void
+    {
+        $productName = ValueObjectFactory::createNameWithSpaces('Carlos');
+        $filterText = ValueObjectFactory::createFilter(
+            'filter_text',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::ENDS_WITH),
+            $productName
+        );
+        $return = $this->object->findListOrderByProductNameFilterOrFail(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            $filterText,
+            true
+        );
+        $listOrdersExpected = $this->object->findBy(['id' => ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[0])]);
+
+        $this->assertEquals($listOrdersExpected, iterator_to_array($return));
+    }
+
+    /** @test */
+    public function itShouldFindListOrdersByProductsNameFilterContains(): void
+    {
+        $productName = ValueObjectFactory::createNameWithSpaces('Carl');
+        $filterText = ValueObjectFactory::createFilter(
+            'filter_text',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::CONTAINS),
+            $productName
+        );
+        $return = $this->object->findListOrderByProductNameFilterOrFail(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            $filterText,
+            true
+        );
+        $listOrdersExpected = $this->object->findBy(['id' => ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[0])]);
+
+        $this->assertEquals($listOrdersExpected, iterator_to_array($return));
+    }
+
+    /** @test */
+    public function itShouldFailFindListOrdersByProductsNameFilterContainsNotFound(): void
+    {
+        $productName = ValueObjectFactory::createNameWithSpaces('not found');
+        $filterText = ValueObjectFactory::createFilter(
+            'filter_text',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::CONTAINS),
+            $productName
+        );
         $this->expectException(DBNotFoundException::class);
-        $this->object->findListOrderByNameStarsWithOrFail($nameStartsWith, $groupId);
+        $this->object->findListOrderByProductNameFilterOrFail(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            $filterText,
+            true
+        );
+    }
+
+    /** @test */
+    public function itShouldFindListOrdersByShopsNameFilterEquals(): void
+    {
+        $productName = ValueObjectFactory::createNameWithSpaces('Shop name 1');
+        $filterText = ValueObjectFactory::createFilter(
+            'filter_text',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::EQUALS),
+            $productName
+        );
+        $return = $this->object->findListOrderByShopNameFilterOrFail(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            $filterText,
+            true
+        );
+        $listOrdersExpected = $this->object->findBy(['id' => ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[0])]);
+
+        $this->assertEquals($listOrdersExpected, iterator_to_array($return));
+    }
+
+    /** @test */
+    public function itShouldFindListOrdersByShopsNameFilterStartsWith(): void
+    {
+        $productName = ValueObjectFactory::createNameWithSpaces('Shop name');
+        $filterText = ValueObjectFactory::createFilter(
+            'filter_text',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            $productName
+        );
+        $return = $this->object->findListOrderByShopNameFilterOrFail(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            $filterText,
+            true
+        );
+        $listOrdersExpected = $this->object->findBy(['id' => [
+            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[0]),
+            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[1]),
+        ]]);
+        $this->assertEquals($listOrdersExpected, iterator_to_array($return));
+    }
+
+    /** @test */
+    public function itShouldFindListOrdersByShopsNameFilterEndsWith(): void
+    {
+        $productName = ValueObjectFactory::createNameWithSpaces('name 1');
+        $filterText = ValueObjectFactory::createFilter(
+            'filter_text',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::ENDS_WITH),
+            $productName
+        );
+        $return = $this->object->findListOrderByShopNameFilterOrFail(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            $filterText,
+            true
+        );
+        $listOrdersExpected = $this->object->findBy(['id' => ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[0])]);
+
+        $this->assertEquals($listOrdersExpected, iterator_to_array($return));
+    }
+
+    /** @test */
+    public function itShouldFindListOrdersByShopsNameFilterContains(): void
+    {
+        $productName = ValueObjectFactory::createNameWithSpaces('name');
+        $filterText = ValueObjectFactory::createFilter(
+            'filter_text',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::CONTAINS),
+            $productName
+        );
+        $return = $this->object->findListOrderByShopNameFilterOrFail(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            $filterText,
+            true
+        );
+        $listOrdersExpected = $this->object->findBy(['id' => [
+            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[0]),
+            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[1]),
+        ]]);
+
+        $this->assertEquals($listOrdersExpected, iterator_to_array($return));
+    }
+
+    /** @test */
+    public function itShouldFailFindListOrdersByShopsNameFilterContainsNotFound(): void
+    {
+        $productName = ValueObjectFactory::createNameWithSpaces('not found');
+        $filterText = ValueObjectFactory::createFilter(
+            'filter_text',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::CONTAINS),
+            $productName
+        );
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findListOrderByShopNameFilterOrFail(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            $filterText,
+            true
+        );
     }
 }

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace ListOrders\Domain\Ports;
 
+use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Ports\Repository\RepositoryInterface;
 use ListOrders\Domain\Model\ListOrders;
@@ -33,5 +33,20 @@ interface ListOrdersRepositoryInterface extends RepositoryInterface
     /**
      * @throws DBNotFoundException
      */
-    public function findListOrderByNameStarsWithOrFail(NameWithSpaces $listsOrdersNameStarsWith, Identifier|null $groupId = null): PaginatorInterface;
+    public function findListOrdersGroup(Identifier $groupId, bool $orderAsc): PaginatorInterface;
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findListOrderByListOrdersNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface;
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findListOrderByProductNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface;
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findListOrderByShopNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface;
 }

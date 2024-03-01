@@ -5,14 +5,20 @@ declare(strict_types=1);
 namespace ListOrders\Domain\Service\ListOrdersGetData;
 
 use Common\Domain\Exception\LogicException;
+use Common\Domain\Model\ValueObject\Group\Filter;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\NameWithSpaces;
+use Common\Domain\Ports\Paginator\PaginatorInterface;
+use Common\Domain\Validation\Filter\FILTER_SECTION;
 use ListOrders\Domain\Model\ListOrders;
 use ListOrders\Domain\Ports\ListOrdersRepositoryInterface;
 use ListOrders\Domain\Service\ListOrdersGetData\Dto\ListOrdersGetDataDto;
 
 class ListOrdersGetDataService
 {
+    private PaginatorInterface $listOrdersPaginator;
+
     public function __construct(
         private ListOrdersRepositoryInterface $listOrdersRepository,
     ) {
@@ -24,9 +30,14 @@ class ListOrdersGetDataService
      */
     public function __invoke(ListOrdersGetDataDto $input): array
     {
-        $listsOrders = $this->findListOrder($input->groupId, $input->listOrdersId, $input->listOrdersNameStartsWith);
+        $this->listOrdersPaginator = $this->findListOrder($input->groupId, $input->listOrdersId, $input->filterSection, $input->filterText, $input->page, $input->pageItems, $input->orderAsc);
 
-        return $this->getListOrderData($listsOrders);
+        return $this->getListOrderData($this->listOrdersPaginator);
+    }
+
+    public function getPagesTotal(): int
+    {
+        return $this->listOrdersPaginator->getPagesTotal();
     }
 
     /**
@@ -35,22 +46,27 @@ class ListOrdersGetDataService
      * @throws DBNotFoundException
      * @throws LogicException
      */
-    private function findListOrder(Identifier $groupId, array $listOrdersId, NameWithSpaces $listOrdersNameStartsWith): array
+    private function findListOrder(Identifier $groupId, array $listOrdersId, Filter|null $filterSection, Filter|null $filterText, PaginatorPage $page, PaginatorPageItems $pageItems, bool $orderAsc): PaginatorInterface
     {
         if (!empty($listOrdersId)) {
             $listOrdersPaginator = $this->listOrdersRepository->findListOrderByIdOrFail($listOrdersId, $groupId);
-        } elseif (!$listOrdersNameStartsWith->isNull()) {
-            $listOrdersPaginator = $this->listOrdersRepository->findListOrderByNameStarsWithOrFail($listOrdersNameStartsWith, $groupId);
+        } elseif (null !== $filterSection && !$filterSection->isNull()
+               || null !== $filterText && !$filterText->isNull()) {
+            $listOrdersPaginator = match ($filterSection->getFilter()->getValue()) {
+                FILTER_SECTION::LIST_ORDERS => $this->listOrdersRepository->findListOrderByListOrdersNameFilterOrFail($groupId, $filterText, $orderAsc),
+                FILTER_SECTION::PRODUCT => $this->listOrdersRepository->findListOrderByProductNameFilterOrFail($groupId, $filterText, $orderAsc),
+                FILTER_SECTION::SHOP => $this->listOrdersRepository->findListOrderByShopNameFilterOrFail($groupId, $filterText, $orderAsc),
+            };
         } else {
-            throw LogicException::fromMessage('listOrdersId and listOrdersNameStarsWith, are both null');
+            $listOrdersPaginator = $this->listOrdersRepository->findListOrdersGroup($groupId, $orderAsc);
         }
 
-        $listOrdersPaginator->setPagination(1, 100);
+        $listOrdersPaginator->setPagination($page->getValue(), $pageItems->getValue());
 
-        return iterator_to_array($listOrdersPaginator);
+        return $listOrdersPaginator;
     }
 
-    private function getListOrderData(array $listsOrders): array
+    private function getListOrderData(PaginatorInterface $listsOrders): array
     {
         return array_map(
             fn (ListOrders $listOrders) => [
@@ -59,10 +75,10 @@ class ListOrdersGetDataService
                 'group_id' => $listOrders->getGroupId()->getValue(),
                 'name' => $listOrders->getName()->getValue(),
                 'description' => $listOrders->getDescription()->getValue(),
-                'date_to_buy' => $listOrders->getDateToBuy()->getValue()->format('Y-m-d H:i:s'),
+                'date_to_buy' => $listOrders->getDateToBuy()->getValue()?->format('Y-m-d H:i:s'),
                 'created_on' => $listOrders->getCreatedOn()->format('Y-m-d H:i:s'),
             ],
-            $listsOrders
+            iterator_to_array($listsOrders)
         );
     }
 }

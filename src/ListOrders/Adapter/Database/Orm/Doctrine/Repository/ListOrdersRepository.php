@@ -8,13 +8,17 @@ use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
+use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use ListOrders\Domain\Model\ListOrders;
+use ListOrders\Domain\Model\ListOrdersOrders;
 use ListOrders\Domain\Ports\ListOrdersRepositoryInterface;
+use Order\Domain\Model\Order;
+use Product\Domain\Model\Product;
+use Shop\Domain\Model\Shop;
 
 class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositoryInterface
 {
@@ -82,21 +86,94 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     /**
      * @throws DBNotFoundException
      */
-    public function findListOrderByNameStarsWithOrFail(NameWithSpaces $listsOrdersNameStarsWith, Identifier|null $groupId = null): PaginatorInterface
+    public function findListOrdersGroup(Identifier $groupId, bool $orderAsc): PaginatorInterface
     {
-        $query = $this->entityManager
-            ->createQueryBuilder()
-            ->select('listOrders')
-            ->from(ListOrders::class, 'listOrders')
-            ->where('listOrders.name LIKE :listOrdersNameStartsWith')
-            ->setParameter('listOrdersNameStartsWith', $listsOrdersNameStarsWith.'%');
+        $listOrdersEntity = ListOrders::class;
+        $orderBy = $orderAsc ? 'ASC' : 'DESC';
+        $dql = <<<DQL
+            SELECT listOrders
+            FROM {$listOrdersEntity} listOrders
+            WHERE listOrders.groupId = :groupId
+            ORDER BY listOrders.name {$orderBy}
+        DQL;
 
-        if (null !== $groupId) {
-            $query
-                ->andWhere('listOrders.groupId = :groupId')
-                ->setParameter('groupId', $groupId);
-        }
+        return $this->dqlPaginationOrFail($dql, [
+            'groupId' => $groupId,
+        ]);
+    }
 
-        return $this->queryPaginationOrFail($query);
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findListOrderByListOrdersNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface
+    {
+        $listOrdersEntity = ListOrders::class;
+        $orderBy = $orderAsc ? 'ASC' : 'DESC';
+        $dql = <<<DQL
+            SELECT listOrders
+            FROM {$listOrdersEntity} listOrders
+            WHERE listOrders.groupId = :groupId
+                AND listOrders.name LIKE :filterTextValue
+            ORDER BY listOrders.name {$orderBy}
+        DQL;
+
+        return $this->dqlPaginationOrFail($dql, [
+            'groupId' => $groupId,
+            'filterTextValue' => $filterText->getValueWithFilter(),
+        ]);
+    }
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findListOrderByProductNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface
+    {
+        $listOrdersEntity = ListOrders::class;
+        $listOrdersOrdersEntity = ListOrdersOrders::class;
+        $orderEntity = Order::class;
+        $productEntity = Product::class;
+        $orderBy = $orderAsc ? 'ASC' : 'DESC';
+        $dql = <<<DQL
+            SELECT listOrders
+            FROM {$listOrdersEntity} listOrders
+                LEFT JOIN {$listOrdersOrdersEntity} listOrdersOrders WITH listOrders.id = listOrdersOrders.listOrdersId
+                LEFT JOIN {$orderEntity} orderEntity WITH listOrdersOrders.orderId = orderEntity.id
+                LEFT JOIN {$productEntity} product WITH orderEntity.productId = product.id
+            WHERE listOrders.groupId = :groupId
+                AND product.name LIKE :filterTextValue
+            ORDER BY listOrders.name {$orderBy}
+        DQL;
+
+        return $this->dqlPaginationOrFail($dql, [
+            'groupId' => $groupId,
+            'filterTextValue' => $filterText->getValueWithFilter(),
+        ]);
+    }
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findListOrderByShopNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface
+    {
+        $listOrdersEntity = ListOrders::class;
+        $listOrdersOrdersEntity = ListOrdersOrders::class;
+        $orderEntity = Order::class;
+        $shopEntity = Shop::class;
+        $orderBy = $orderAsc ? 'ASC' : 'DESC';
+        $dql = <<<DQL
+            SELECT listOrders
+            FROM {$listOrdersEntity} listOrders
+                LEFT JOIN {$listOrdersOrdersEntity} listOrdersOrders WITH listOrders.id = listOrdersOrders.listOrdersId
+                LEFT JOIN {$orderEntity} orderEntity WITH listOrdersOrders.orderId = orderEntity.id
+                LEFT JOIN {$shopEntity} shop WITH orderEntity.shopId = shop.id
+            WHERE listOrders.groupId = :groupId
+                AND shop.name LIKE :filterTextValue
+            ORDER BY listOrders.name {$orderBy}
+        DQL;
+
+        return $this->dqlPaginationOrFail($dql, [
+            'groupId' => $groupId,
+            'filterTextValue' => $filterText->getValueWithFilter(),
+        ]);
     }
 }
