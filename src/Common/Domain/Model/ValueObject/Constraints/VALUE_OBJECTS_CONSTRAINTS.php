@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Constraints;
 
+use Common\Domain\Validation\Filter\FILTER_SECTION;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\Group\GROUP_TYPE;
@@ -184,5 +185,12 @@ final class VALUE_OBJECTS_CONSTRAINTS
         FILTER_STRING_COMPARISON::ENDS_WITH,
         FILTER_STRING_COMPARISON::CONTAINS,
         FILTER_STRING_COMPARISON::EQUALS,
+    ];
+
+    public const FILTER_SECTIONS = [
+        FILTER_SECTION::LIST_ORDERS,
+        FILTER_SECTION::PRODUCT,
+        FILTER_SECTION::SHOP,
+        FILTER_SECTION::ORDER,
     ];
 }

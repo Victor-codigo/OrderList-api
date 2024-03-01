@@ -24,6 +24,7 @@ use Common\Domain\Model\ValueObject\Integer\ValueObjectIntegerFactory;
 use Common\Domain\Model\ValueObject\Integer\ValueObjectIntegerFactoryInterface;
 use Common\Domain\Model\ValueObject\Object\File;
 use Common\Domain\Model\ValueObject\Object\Filter\FilterDbLikeComparison;
+use Common\Domain\Model\ValueObject\Object\Filter\FilterSection;
 use Common\Domain\Model\ValueObject\Object\Filter\ValueObjectFilterInterface;
 use Common\Domain\Model\ValueObject\Object\GroupImage;
 use Common\Domain\Model\ValueObject\Object\GroupType;
@@ -49,6 +50,7 @@ use Common\Domain\Model\ValueObject\String\Url;
 use Common\Domain\Model\ValueObject\String\ValueObjectStringFactory;
 use Common\Domain\Model\ValueObject\String\ValueObjectStringFactoryInterface;
 use Common\Domain\Ports\FileUpload\FileInterface;
+use Common\Domain\Validation\Filter\FILTER_SECTION;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
@@ -196,6 +198,11 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
     public static function createFilterDbLikeComparison(\BackedEnum|null $filter): FilterDbLikeComparison
     {
         return ValueObjectObjectFactory::createFilterDbLikeComparison($filter);
+    }
+
+    public static function createFilterSection(FILTER_SECTION|null $filter): FilterSection
+    {
+        return ValueObjectObjectFactory::createFilterSection($filter);
     }
 
     public static function createFilter(string $id, ValueObjectBase&ValueObjectFilterInterface $type, ValueObjectBase $value): Filter

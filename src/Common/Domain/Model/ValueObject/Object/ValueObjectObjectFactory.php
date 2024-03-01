@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Common\Domain\Model\ValueObject\Object;
 
 use Common\Domain\Model\ValueObject\Object\Filter\FilterDbLikeComparison;
+use Common\Domain\Model\ValueObject\Object\Filter\FilterSection;
 use Common\Domain\Ports\FileUpload\FileInterface;
+use Common\Domain\Validation\Filter\FILTER_SECTION;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
@@ -60,5 +62,10 @@ class ValueObjectObjectFactory
     public static function createFilterDbLikeComparison(\BackedEnum|null $filter): FilterDbLikeComparison
     {
         return new FilterDbLikeComparison($filter);
+    }
+
+    public static function createFilterSection(FILTER_SECTION|null $filter): FilterSection
+    {
+        return new FilterSection($filter);
     }
 }
