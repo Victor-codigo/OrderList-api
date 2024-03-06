@@ -5,19 +5,25 @@ declare(strict_types=1);
 namespace ListOrders\Application\ListOrdersRemove\Dto;
 
 use Common\Domain\Application\ApplicationOutputInterface;
-use Common\Domain\Model\ValueObject\String\Identifier;
+use ListOrders\Domain\Model\ListOrders;
 
 class ListOrdersRemoveOutputDto implements ApplicationOutputInterface
 {
+    /**
+     * @var ListOrders[]
+     */
     public function __construct(
-        public readonly Identifier $listOrdersId
+        public readonly array $listsOrders
     ) {
     }
 
     public function toArray(): array
     {
         return [
-            'id' => $this->listOrdersId->getValue(),
+            'id' => array_map(
+                fn (ListOrders $listOrderId) => $listOrderId->getId()->getValue(),
+                $this->listsOrders
+            ),
         ];
     }
 }

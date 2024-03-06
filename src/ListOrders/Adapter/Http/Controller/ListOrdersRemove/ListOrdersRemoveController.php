@@ -12,6 +12,7 @@ use ListOrders\Adapter\Http\Controller\ListOrdersRemove\Dto\ListOrdersRemoveRequ
 use ListOrders\Application\ListOrdersRemove\Dto\ListOrdersRemoveInputDto;
 use ListOrders\Application\ListOrdersRemove\ListOrdersRemoveUseCase;
 use OpenApi\Attributes as OA;
+use OpenApi\Attributes\Items;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,7 +28,7 @@ use Symfony\Component\HttpFoundation\Response;
                 mediaType: 'application/json',
                 schema: new OA\Schema(
                     properties: [
-                        new OA\Property(property: 'list_orders_id', type: 'string', description: 'list of orders id', example: '9d1a5942-850f-41f9-a32a-38927978ce5c'),
+                        new OA\Property(property: 'lists_orders_id', type: 'array', description: 'lists of orders id', items: new Items(default: '[0290bf7e-2e68-4698-ba2e-d2394c239572]')),
                         new OA\Property(property: 'group_id', type: 'string', description: 'Group id of the order', example: '0290bf7e-2e68-4698-ba2e-d2394c239572'),
                     ]
                 )
@@ -44,8 +45,8 @@ use Symfony\Component\HttpFoundation\Response;
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'ok'),
                         new OA\Property(property: 'message', type: 'string', example: 'List of orders removed'),
-                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(default: '<id, array>')),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),
+                        new OA\Property(property: 'data', type: 'array', items: new Items(default: '<id, array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new Items()),
                     ]
                 )
             )
@@ -59,8 +60,8 @@ use Symfony\Component\HttpFoundation\Response;
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
-                        new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<list_orders_id|group_id|permissions|list_orders_not_found, string|array>')),
+                        new OA\Property(property: 'data', type: 'array', items: new Items()),
+                        new OA\Property(property: 'errors', type: 'array', items: new Items(default: '<list_orders_id|group_id|permissions|lists_orders_not_found, string|array>')),
                     ]
                 )
             )
@@ -78,18 +79,18 @@ class ListOrdersRemoveController extends AbstractController
     public function __invoke(ListOrdersRemoveRequestDto $request): JsonResponse
     {
         $listOrdersRemovedId = $this->listOrdersRemoveUseCase->__invoke(
-            $this->createListOrdersRemoveInputDto($request->listOrdersId, $request->groupId)
+            $this->createListOrdersRemoveInputDto($request->groupId, $request->listsOrdersId)
         );
 
         return $this->createResponse($listOrdersRemovedId);
     }
 
-    private function createListOrdersRemoveInputDto(string|null $listOrdersId, string|null $groupId): ListOrdersRemoveInputDto
+    private function createListOrdersRemoveInputDto(string|null $groupId, array|null $listsOrdersId): ListOrdersRemoveInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();
 
-        return new ListOrdersRemoveInputDto($userSharedAdapter->getUser(), $listOrdersId, $groupId);
+        return new ListOrdersRemoveInputDto($userSharedAdapter->getUser(), $groupId, $listsOrdersId);
     }
 
     private function createResponse(ApplicationOutputInterface $listOrdersRemoved): JsonResponse

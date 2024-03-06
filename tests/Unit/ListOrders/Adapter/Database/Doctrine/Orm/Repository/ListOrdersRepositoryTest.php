@@ -103,11 +103,11 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldRemoveTheListOrders(): void
+    public function itShouldRemoveTheListOrders22(): void
     {
         $listOrdersExists = $this->getListOrdersExists();
         $listOrdersToRemove = $this->object->findBy(['id' => $listOrdersExists->getId()]);
-        $this->object->remove($listOrdersToRemove[0]);
+        $this->object->remove($listOrdersToRemove);
 
         $orderRemoved = $this->object->findBy(['id' => $listOrdersExists->getId()]);
 
@@ -127,7 +127,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->mockObjectManager($this->object, $objectManagerMock);
 
         $this->expectException(DBConnectionException::class);
-        $this->object->remove($this->getListOrders());
+        $this->object->remove([$this->getListOrders()]);
     }
 
     /** @test */

@@ -47,12 +47,16 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     }
 
     /**
+     * @param ListOrders[] $listsOrders
+     *
      * @throws DBConnectionException
      */
-    public function remove(ListOrders $listOrders): void
+    public function remove(array $listsOrders): void
     {
         try {
-            $this->objectManager->remove($listOrders);
+            foreach ($listsOrders as $listsOrders) {
+                $this->objectManager->remove($listsOrders);
+            }
 
             $this->objectManager->flush();
         } catch (\Exception $e) {

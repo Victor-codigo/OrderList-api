@@ -6,7 +6,6 @@ namespace ListOrders\Application\ListOrdersRemove;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
-use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
 use Common\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
@@ -16,6 +15,7 @@ use ListOrders\Application\ListOrdersRemove\Dto\ListOrdersRemoveInputDto;
 use ListOrders\Application\ListOrdersRemove\Dto\ListOrdersRemoveOutputDto;
 use ListOrders\Application\ListOrdersRemove\Exception\ListOrdersListOrdersNotFoundException;
 use ListOrders\Application\ListOrdersRemove\Exception\ListOrdersValidationGroupAndUserException;
+use ListOrders\Domain\Model\ListOrders;
 use ListOrders\Domain\Service\ListOrdersRemove\Dto\ListOrdersRemoveDto;
 use ListOrders\Domain\Service\ListOrdersRemove\ListOrdersRemoveService;
 
@@ -44,7 +44,7 @@ class ListOrdersRemoveUseCase extends ServiceBase
                 $this->createListOrdersRemoveDto($input)
             );
 
-            return $this->createListOrdersRemoveOutputDto($listOrdersRemoved->getId());
+            return $this->createListOrdersRemoveOutputDto($listOrdersRemoved);
         } catch (ValidateGroupAndUserException) {
             throw ListOrdersValidationGroupAndUserException::fromMessage('You not belong to the group');
         } catch (DBNotFoundException) {
@@ -68,11 +68,14 @@ class ListOrdersRemoveUseCase extends ServiceBase
 
     private function createListOrdersRemoveDto(ListOrdersRemoveInputDto $input): ListOrdersRemoveDto
     {
-        return new ListOrdersRemoveDto($input->listOrdersId, $input->groupId);
+        return new ListOrdersRemoveDto($input->groupId, $input->listsOrdersId);
     }
 
-    private function createListOrdersRemoveOutputDto(Identifier $listOrdersId): ListOrdersRemoveOutputDto
+    /**
+     * @param ListOrders[] $listsOrders
+     */
+    private function createListOrdersRemoveOutputDto(array $listsOrders): ListOrdersRemoveOutputDto
     {
-        return new ListOrdersRemoveOutputDto($listOrdersId);
+        return new ListOrdersRemoveOutputDto($listsOrders);
     }
 }

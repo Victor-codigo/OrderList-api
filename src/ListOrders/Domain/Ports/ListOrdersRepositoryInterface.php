@@ -19,9 +19,11 @@ interface ListOrdersRepositoryInterface extends RepositoryInterface
     public function save(ListOrders $orders): void;
 
     /**
+     * @param ListOrders[] $orders
+     *
      * @throws DBConnectionException
      */
-    public function remove(ListOrders $orders): void;
+    public function remove(array $orders): void;
 
     /**
      * @param Identifier[] $ListsOrdersId

@@ -27,9 +27,12 @@ class ListOrdersRemoveInputDtoTest extends TestCase
     /** @test */
     public function itShouldValidate(): void
     {
-        $listOrdersId = '7883e7a9-368f-4ede-988c-afd6203fc191';
+        $listOrdersId = [
+            '7883e7a9-368f-4ede-988c-afd6203fc191',
+            'eb0faeec-bbcd-4bc8-8507-be646d8f4da3',
+        ];
         $groupId = '598ef7d7-5f11-459e-aa74-342922ef96db';
-        $object = new ListOrdersRemoveInputDto($this->userSession, $listOrdersId, $groupId);
+        $object = new ListOrdersRemoveInputDto($this->userSession, $groupId, $listOrdersId);
 
         $return = $object->validate($this->validator);
 
@@ -37,35 +40,41 @@ class ListOrdersRemoveInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailListOrdersIdIsNull(): void
+    public function itShouldFailListsOrdersIdIsNull(): void
     {
         $listOrdersId = null;
         $groupId = '598ef7d7-5f11-459e-aa74-342922ef96db';
-        $object = new ListOrdersRemoveInputDto($this->userSession, $listOrdersId, $groupId);
+        $object = new ListOrdersRemoveInputDto($this->userSession, $groupId, $listOrdersId);
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['list_orders_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
+        $this->assertEquals(['lists_orders_id' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
     /** @test */
-    public function itShouldFailListOrdersIdIsWrong(): void
+    public function itShouldFailListsOrdersIdIsWrong(): void
     {
-        $listOrdersId = 'wrong id';
+        $listOrdersId = [
+            'wrong id',
+            'eb0faeec-bbcd-4bc8-8507-be646d8f4da3',
+        ];
         $groupId = '598ef7d7-5f11-459e-aa74-342922ef96db';
-        $object = new ListOrdersRemoveInputDto($this->userSession, $listOrdersId, $groupId);
+        $object = new ListOrdersRemoveInputDto($this->userSession, $groupId, $listOrdersId);
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['list_orders_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
+        $this->assertEquals(['lists_orders_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
     }
 
     /** @test */
     public function itShouldFailGroupIsNull(): void
     {
-        $listOrdersId = '7883e7a9-368f-4ede-988c-afd6203fc191';
+        $listOrdersId = [
+            'eb0faeec-bbcd-4bc8-8507-be646d8f4da3',
+            '7883e7a9-368f-4ede-988c-afd6203fc191',
+        ];
         $groupId = null;
-        $object = new ListOrdersRemoveInputDto($this->userSession, $listOrdersId, $groupId);
+        $object = new ListOrdersRemoveInputDto($this->userSession, $groupId, $listOrdersId);
 
         $return = $object->validate($this->validator);
 
@@ -75,9 +84,12 @@ class ListOrdersRemoveInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailGroupIdIsWrong(): void
     {
-        $listOrdersId = '7883e7a9-368f-4ede-988c-afd6203fc191';
+        $listOrdersId = [
+            'eb0faeec-bbcd-4bc8-8507-be646d8f4da3',
+            '7883e7a9-368f-4ede-988c-afd6203fc191',
+        ];
         $groupId = 'wrong id';
-        $object = new ListOrdersRemoveInputDto($this->userSession, $listOrdersId, $groupId);
+        $object = new ListOrdersRemoveInputDto($this->userSession, $groupId, $listOrdersId);
 
         $return = $object->validate($this->validator);
 
@@ -87,15 +99,18 @@ class ListOrdersRemoveInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailListOrdersAndGroupIdIsWrong(): void
     {
-        $listOrdersId = 'wrong id';
+        $listOrdersId = [
+            'wrong id',
+            '7883e7a9-368f-4ede-988c-afd6203fc191',
+        ];
         $groupId = 'wrong id';
-        $object = new ListOrdersRemoveInputDto($this->userSession, $listOrdersId, $groupId);
+        $object = new ListOrdersRemoveInputDto($this->userSession, $groupId, $listOrdersId);
 
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
-                'list_orders_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
                 'group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
+                'lists_orders_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]],
             ],
             $return
         );

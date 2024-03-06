@@ -13,21 +13,52 @@ use Common\Domain\Validation\ValidationInterface;
 class ListOrdersRemoveInputDto implements ServiceInputDtoInterface
 {
     public readonly UserShared $userSession;
-    public readonly Identifier $listOrdersId;
     public readonly Identifier $groupId;
+    /**
+     * @var Identifier[]
+     */
+    public readonly array $listsOrdersId;
 
-    public function __construct(UserShared $userSession, string|null $listOrdersId, string|null $groupId)
+    /**
+     * @param string[]|null $listsOrdersId
+     */
+    public function __construct(UserShared $userSession, string|null $groupId, array|null $listsOrdersId)
     {
         $this->userSession = $userSession;
-        $this->listOrdersId = ValueObjectFactory::createIdentifier($listOrdersId);
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
+
+        $this->listsOrdersId = array_map(
+            fn (string $listOrderId) => ValueObjectFactory::createIdentifier($listOrderId),
+            $listsOrdersId ?? []
+        );
     }
 
     public function validate(ValidationInterface $validator): array
     {
-        return $validator->validateValueObjectArray([
-            'list_orders_id' => $this->listOrdersId,
+        $errorList = $validator->validateValueObjectArray([
             'group_id' => $this->groupId,
         ]);
+
+        $errorListListsOrdersId = $this->validateListsOrdersId($validator);
+
+        return array_merge($errorList, $errorListListsOrdersId);
+    }
+
+    private function validateListsOrdersId(ValidationInterface $validator): array
+    {
+        $errorList = [];
+        $errorListListsOrdersIdNotEmpty = $validator
+            ->setValue($this->listsOrdersId)
+            ->notBlank()
+            ->notNull()
+            ->validate();
+
+        $errorListListsOrdersId = $validator->validateValueObjectArray($this->listsOrdersId);
+
+        if (!empty($errorListListsOrdersIdNotEmpty) || !empty($errorListListsOrdersId)) {
+            $errorList['lists_orders_id'] = array_merge($errorListListsOrdersIdNotEmpty, $errorListListsOrdersId);
+        }
+
+        return $errorList;
     }
 }

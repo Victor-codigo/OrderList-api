@@ -30,31 +30,56 @@ class ListOrdersRemoveServiceTest extends TestCase
         $this->object = new ListOrdersRemoveService($this->listOrdersRepository);
     }
 
-    private function getListOrders(): ListOrders
+    /**
+     * @return ListOrders[]
+     */
+    private function getListOrders(): array
     {
-        return ListOrders::fromPrimitives(
-            'list orders id',
-            'group id',
-            'user id',
-            'list orders name',
-            'list orders description',
-            new \DateTime()
-        );
+        return [
+            ListOrders::fromPrimitives(
+                'list orders id 1',
+                'group id 1',
+                'user id',
+                'list orders name 1',
+                'list orders description 1',
+                new \DateTime(),
+            ),
+            ListOrders::fromPrimitives(
+                'list orders id 2',
+                'group id 1',
+                'user id',
+                'list orders name 2',
+                'list orders description 2',
+                new \DateTime(),
+            ),
+            ListOrders::fromPrimitives(
+                'list orders id 3',
+                'group id 1',
+                'user id',
+                'list orders name 3',
+                'list orders description 3',
+                new \DateTime(),
+            ),
+        ];
     }
 
     /** @test */
-    public function itShouldRemoveAListOrder(): void
+    public function itShouldRemoveListsOrders(): void
     {
         $listOrders = $this->getListOrders();
         $input = new ListOrdersRemoveDto(
-            ValueObjectFactory::createIdentifier('list orders id'),
-            ValueObjectFactory::createIdentifier('group id')
+            ValueObjectFactory::createIdentifier('group id'),
+            [
+                ValueObjectFactory::createIdentifier('list orders id 1'),
+                ValueObjectFactory::createIdentifier('list orders id 2'),
+                ValueObjectFactory::createIdentifier('list orders id 3'),
+            ],
         );
 
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('findListOrderByIdOrFail')
-            ->with([$input->listOrdersId], $input->groupId)
+            ->with($input->listsOrdersId, $input->groupId)
             ->willReturn($this->paginator);
 
         $this->listOrdersRepository
@@ -65,12 +90,12 @@ class ListOrdersRemoveServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$listOrders]));
+            ->willReturn(new \ArrayIterator($listOrders));
 
         $this->paginator
             ->expects($this->once())
             ->method('setPagination')
-            ->with(1, 1);
+            ->with(1, 100);
 
         $return = $this->object->__invoke($input);
 
@@ -78,17 +103,60 @@ class ListOrdersRemoveServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailRemovingAListOrderNotFound(): void
+    public function itShouldRemoveListsOrdersThatExists(): void
     {
+        $listOrders = $this->getListOrders();
         $input = new ListOrdersRemoveDto(
-            ValueObjectFactory::createIdentifier('list orders id'),
-            ValueObjectFactory::createIdentifier('group id')
+            ValueObjectFactory::createIdentifier('group id'),
+            [
+                ValueObjectFactory::createIdentifier('list orders id 1'),
+                ValueObjectFactory::createIdentifier('list orders id 2'),
+                ValueObjectFactory::createIdentifier('list orders id 3'),
+            ],
         );
 
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('findListOrderByIdOrFail')
-            ->with([$input->listOrdersId], $input->groupId)
+            ->with($input->listsOrdersId, $input->groupId)
+            ->willReturn($this->paginator);
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('remove')
+            ->with([$listOrders[0], $listOrders[2]]);
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$listOrders[0], $listOrders[2]]));
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with(1, 100);
+
+        $return = $this->object->__invoke($input);
+
+        $this->assertEquals([$listOrders[0], $listOrders[2]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailRemovingListsOrdersNotFound(): void
+    {
+        $input = new ListOrdersRemoveDto(
+            ValueObjectFactory::createIdentifier('group id'),
+            [
+                ValueObjectFactory::createIdentifier('list orders id 1'),
+                ValueObjectFactory::createIdentifier('list orders id 2'),
+                ValueObjectFactory::createIdentifier('list orders id 3'),
+            ],
+        );
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrderByIdOrFail')
+            ->with($input->listsOrdersId, $input->groupId)
             ->willThrowException(new DBNotFoundException());
 
         $this->listOrdersRepository
@@ -108,18 +176,22 @@ class ListOrdersRemoveServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailRemovingAListOrderRemoveError(): void
+    public function itShouldFailRemovingListsOrdersRemoveError(): void
     {
         $listOrders = $this->getListOrders();
         $input = new ListOrdersRemoveDto(
-            ValueObjectFactory::createIdentifier('list orders id'),
-            ValueObjectFactory::createIdentifier('group id')
+            ValueObjectFactory::createIdentifier('group id'),
+            [
+                ValueObjectFactory::createIdentifier('list orders id 1'),
+                ValueObjectFactory::createIdentifier('list orders id 2'),
+                ValueObjectFactory::createIdentifier('list orders id 3'),
+            ],
         );
 
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('findListOrderByIdOrFail')
-            ->with([$input->listOrdersId], $input->groupId)
+            ->with($input->listsOrdersId, $input->groupId)
             ->willReturn($this->paginator);
 
         $this->listOrdersRepository
@@ -135,7 +207,7 @@ class ListOrdersRemoveServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('setPagination')
-            ->with(1, 1);
+            ->with(1, 100);
 
         $this->expectException(DBConnectionException::class);
         $this->object->__invoke($input);

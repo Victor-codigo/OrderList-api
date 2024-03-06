@@ -12,6 +12,6 @@ class ListOrdersListOrdersNotFoundException extends DomainExceptionOutput
 {
     public static function fromMessage(string $message): static
     {
-        return new static($message, ['list_orders_not_found' => $message], RESPONSE_STATUS::ERROR, RESPONSE_STATUS_HTTP::BAD_REQUEST);
+        return new static($message, ['lists_orders_not_found' => $message], RESPONSE_STATUS::ERROR, RESPONSE_STATUS_HTTP::BAD_REQUEST);
     }
 }
