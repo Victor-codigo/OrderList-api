@@ -67,11 +67,9 @@ class ListOrdersOrdersRepository extends RepositoryBase implements ListOrdersOrd
     }
 
     /**
-     * @param Identifier $ordersId
-     *
      * @throws DBNotFoundException
      */
-    public function findListOrderOrdersByIdOrFail(Identifier $listOrdersId, Identifier $groupId, array $ordersId = []): PaginatorInterface
+    public function findListOrderOrdersByIdOrFail(array $listsOrdersId, Identifier $groupId): PaginatorInterface
     {
         $query = $this->entityManager
             ->createQueryBuilder()
@@ -79,15 +77,9 @@ class ListOrdersOrdersRepository extends RepositoryBase implements ListOrdersOrd
             ->from(ListOrdersOrders::class, 'listOrdersOrders')
             ->leftJoin(ListOrders::class, 'listOrders', Join::WITH, 'listOrdersOrders.listOrdersId = listOrders.id')
             ->where('listOrders.groupId = :groupId')
-            ->andWhere('listOrdersOrders.listOrdersId = :listOrdersId')
-            ->setParameter('listOrdersId', $listOrdersId)
+            ->andWhere('listOrdersOrders.listOrdersId IN (:listOrdersId)')
+            ->setParameter('listOrdersId', $listsOrdersId)
             ->setParameter('groupId', $groupId);
-
-        if (!empty($ordersId)) {
-            $query
-                ->andWhere('listOrdersOrders.orderId In (:ordersId)')
-                ->setParameter('ordersId', $ordersId);
-        }
 
         return $this->queryPaginationOrFail($query);
     }

@@ -9,14 +9,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ListOrdersRemoveOrderRequestDto implements RequestDtoInterface
 {
-    public readonly array|null $ordersId;
-    public readonly string|null $listOrdersId;
+    /**
+     * @var string[]|null
+     */
+    public readonly array|null $listsOrdersId;
     public readonly string|null $groupId;
 
     public function __construct(Request $request)
     {
-        $this->ordersId = $request->request->all('orders_id');
-        $this->listOrdersId = $request->request->get('list_orders_id');
         $this->groupId = $request->request->get('group_id');
+        $this->listsOrdersId = $request->request->all('lists_orders_id');
     }
 }

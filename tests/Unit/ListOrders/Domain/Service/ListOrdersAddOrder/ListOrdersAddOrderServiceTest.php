@@ -255,7 +255,7 @@ class ListOrdersAddOrderServiceTest extends TestCase
         $this->listOrdersOrdersRepository
             ->expects($this->once())
             ->method('findListOrderOrdersByIdOrFail')
-            ->with($input->listOrdersId, $input->groupId)
+            ->with([$input->listOrdersId], $input->groupId)
             ->willReturn($this->paginator);
 
         $this->listOrdersOrdersRepository
@@ -310,7 +310,7 @@ class ListOrdersAddOrderServiceTest extends TestCase
         $this->listOrdersOrdersRepository
             ->expects($this->once())
             ->method('findListOrderOrdersByIdOrFail')
-            ->with($input->listOrdersId, $input->groupId)
+            ->with([$input->listOrdersId], $input->groupId)
             ->willReturn($this->paginator);
 
         $this->listOrdersOrdersRepository
@@ -368,7 +368,7 @@ class ListOrdersAddOrderServiceTest extends TestCase
         $this->listOrdersOrdersRepository
             ->expects($this->once())
             ->method('findListOrderOrdersByIdOrFail')
-            ->with($input->listOrdersId, $input->groupId)
+            ->with([$input->listOrdersId], $input->groupId)
             ->willReturn($this->paginator);
 
         $this->listOrdersOrdersRepository
@@ -426,7 +426,7 @@ class ListOrdersAddOrderServiceTest extends TestCase
         $this->listOrdersOrdersRepository
             ->expects($this->once())
             ->method('findListOrderOrdersByIdOrFail')
-            ->with($input->listOrdersId, $input->groupId)
+            ->with([$input->listOrdersId], $input->groupId)
             ->willReturn($this->paginator);
 
         $this->listOrdersOrdersRepository
@@ -482,7 +482,7 @@ class ListOrdersAddOrderServiceTest extends TestCase
         $this->listOrdersOrdersRepository
             ->expects($this->once())
             ->method('findListOrderOrdersByIdOrFail')
-            ->with($input->listOrdersId, $input->groupId)
+            ->with([$input->listOrdersId], $input->groupId)
             ->willReturn($this->paginator);
 
         $this->listOrdersOrdersRepository
@@ -531,7 +531,7 @@ class ListOrdersAddOrderServiceTest extends TestCase
         $this->listOrdersOrdersRepository
             ->expects($this->once())
             ->method('findListOrderOrdersByIdOrFail')
-            ->with($input->listOrdersId, $input->groupId)
+            ->with([$input->listOrdersId], $input->groupId)
             ->willThrowException(new DBNotFoundException());
 
         $this->listOrdersOrdersRepository
@@ -619,7 +619,7 @@ class ListOrdersAddOrderServiceTest extends TestCase
         $this->listOrdersOrdersRepository
             ->expects($this->once())
             ->method('findListOrderOrdersByIdOrFail')
-            ->with($input->listOrdersId, $input->groupId)
+            ->with([$input->listOrdersId], $input->groupId)
             ->willReturn($this->paginator);
 
         $this->listOrdersOrdersRepository

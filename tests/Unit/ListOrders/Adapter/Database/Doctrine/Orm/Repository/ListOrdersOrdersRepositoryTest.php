@@ -176,37 +176,18 @@ class ListOrdersOrdersRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldFindListOrdersOrdersById(): void
+    public function itShouldFindListsOrdersOrdersById(): void
     {
         $listOrdersOrdersExpected = array_filter(
             $this->getListOrdersOrdersExists(),
             fn (ListOrdersOrders $listOrdersOrders) => self::GROUP_ID === $listOrdersOrders->getOrder()->getGroupId()->getValue()
-                                                    && self::LIST_ORDERS_EXISTS_ID === $listOrdersOrders->getListOrders()->getId()->getValue()
+                                                    && (self::LIST_ORDERS_EXISTS_ID === $listOrdersOrders->getListOrders()->getId()->getValue())
         );
 
-        $return = $this->object->findListOrderOrdersByIdOrFail(
+        $return = $this->object->findListOrderOrdersByIdOrFail([
             ValueObjectFactory::createIdentifier(self::LIST_ORDERS_EXISTS_ID),
-            ValueObjectFactory::createIdentifier(self::GROUP_ID)
-        );
-
-        $this->assertEquals($listOrdersOrdersExpected, iterator_to_array($return));
-    }
-
-    /** @test */
-    public function itShouldFindListOrdersOrdersOnlySomeOrdersById(): void
-    {
-        $listOrdersOrdersExpected = array_filter(
-            $this->getListOrdersOrdersExists(),
-            fn (ListOrdersOrders $listOrdersOrders) => self::GROUP_ID === $listOrdersOrders->getListOrders()->getGroupId()->getValue()
-                                                    && self::LIST_ORDERS_EXISTS_ID === $listOrdersOrders->getListOrdersId()->getValue()
-                                                    && (self::ORDER_ID_1 === $listOrdersOrders->getOrderId()->getValue()
-                                                        || self::ORDER_ID_2 === $listOrdersOrders->getOrderId()->getValue())
-        );
-
-        $return = $this->object->findListOrderOrdersByIdOrFail(
-            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_EXISTS_ID),
+        ],
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
-            [self::ORDER_ID_1, self::ORDER_ID_2]
         );
 
         $this->assertEquals($listOrdersOrdersExpected, iterator_to_array($return));
@@ -216,8 +197,9 @@ class ListOrdersOrdersRepositoryTest extends DataBaseTestCase
     public function itShouldFailFindingListOrdersOrdersByIdGroupIdNotFound(): void
     {
         $this->expectException(DBNotFoundException::class);
-        $this->object->findListOrderOrdersByIdOrFail(
-            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_EXISTS_ID),
+        $this->object->findListOrderOrdersByIdOrFail([
+                ValueObjectFactory::createIdentifier(self::LIST_ORDERS_EXISTS_ID),
+            ],
             ValueObjectFactory::createIdentifier('group id')
         );
     }
@@ -226,8 +208,9 @@ class ListOrdersOrdersRepositoryTest extends DataBaseTestCase
     public function itShouldFailFindingListOrdersOrdersByIdListOrdersIdNotFound(): void
     {
         $this->expectException(DBNotFoundException::class);
-        $this->object->findListOrderOrdersByIdOrFail(
-            ValueObjectFactory::createIdentifier('list orders id'),
+        $this->object->findListOrderOrdersByIdOrFail([
+                ValueObjectFactory::createIdentifier('list orders id'),
+            ],
             ValueObjectFactory::createIdentifier(self::GROUP_ID)
         );
     }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ListOrders\Application\ListOrdersRemoveOrder;
 
-use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
@@ -46,8 +45,6 @@ class ListOrdersRemoveOrderUseCase extends ServiceBase
             return $this->createListOrdersRemoveOrderOutputDto($listOrdersOrdersRemoved);
         } catch (ValidateGroupAndUserException) {
             throw ListOrdersRemoveOrderValidateUserAndGroupException::fromMessage('You not belong to the group');
-        } catch (DBNotFoundException) {
-            throw ListOrdersRemoveOrderOrdersNotFoundException::fromMessage('Orders not found');
         } catch (\Exception $e) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
@@ -67,7 +64,7 @@ class ListOrdersRemoveOrderUseCase extends ServiceBase
 
     private function createListOrdersRemoveOrderDto(ListOrdersRemoveOrderInputDto $input): ListOrdersRemoveOrderDto
     {
-        return new ListOrdersRemoveOrderDto($input->listOrdersId, $input->groupId, $input->ordersId);
+        return new ListOrdersRemoveOrderDto($input->groupId, $input->listsOrdersId);
     }
 
     private function createListOrdersRemoveOrderOutputDto(array $listOrdersOrdersRemoved): ListOrdersRemoveOrderOutputDto

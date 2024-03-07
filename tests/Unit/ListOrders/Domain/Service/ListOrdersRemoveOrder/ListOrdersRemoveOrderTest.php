@@ -68,13 +68,11 @@ class ListOrdersRemoveOrderTest extends TestCase
     private function getListOrdersRemoveOrderDto(): ListOrdersRemoveOrderDto
     {
         return new ListOrdersRemoveOrderDto(
-            ValueObjectFactory::createIdentifier('list orders id'),
             ValueObjectFactory::createIdentifier('group id'),
             [
-                ValueObjectFactory::createIdentifier('order id 1'),
-                ValueObjectFactory::createIdentifier('order id 2'),
-                ValueObjectFactory::createIdentifier('order id 3'),
-            ]
+                ValueObjectFactory::createIdentifier('list orders id 1'),
+                ValueObjectFactory::createIdentifier('list orders id 2'),
+            ],
         );
     }
 
@@ -87,7 +85,7 @@ class ListOrdersRemoveOrderTest extends TestCase
         $this->listOrdersOrdersRepository
             ->expects($this->once())
             ->method('findListOrderOrdersByIdOrFail')
-            ->with($input->listOrdersId, $input->groupId, $input->ordersId)
+            ->with($input->listOrdersId, $input->groupId)
             ->willReturn($this->paginator);
 
         $this->listOrdersOrdersRepository
@@ -113,7 +111,7 @@ class ListOrdersRemoveOrderTest extends TestCase
         $this->listOrdersOrdersRepository
             ->expects($this->once())
             ->method('findListOrderOrdersByIdOrFail')
-            ->with($input->listOrdersId, $input->groupId, $input->ordersId)
+            ->with($input->listOrdersId, $input->groupId)
             ->willThrowException(new DBNotFoundException());
 
         $this->listOrdersOrdersRepository
@@ -137,7 +135,7 @@ class ListOrdersRemoveOrderTest extends TestCase
         $this->listOrdersOrdersRepository
             ->expects($this->once())
             ->method('findListOrderOrdersByIdOrFail')
-            ->with($input->listOrdersId, $input->groupId, $input->ordersId)
+            ->with($input->listOrdersId, $input->groupId)
             ->willReturn($this->paginator);
 
         $this->listOrdersOrdersRepository

@@ -9,12 +9,11 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 class ListOrdersRemoveOrderDto
 {
     /**
-     * @param Identifier[] $ordersId
+     * @param Identifier[] $listOrdersId
      */
     public function __construct(
-        public readonly Identifier $listOrdersId,
         public readonly Identifier $groupId,
-        public readonly array $ordersId
+        public readonly array $listOrdersId,
     ) {
     }
 }

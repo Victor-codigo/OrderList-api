@@ -28,9 +28,8 @@ use Symfony\Component\HttpFoundation\Response;
                 mediaType: 'application/json',
                 schema: new OA\Schema(
                     properties: [
-                        new OA\Property(property: 'list_orders_id', type: 'string', description: 'list of orders id', example: '9d1a5942-850f-41f9-a32a-38927978ce5c'),
                         new OA\Property(property: 'group_id', type: 'string', description: 'Group id of the order', example: '0290bf7e-2e68-4698-ba2e-d2394c239572'),
-                        new OA\Property(property: 'orders_id', type: 'array', description: 'Orders id to remove', items: new OA\Items()),
+                        new OA\Property(property: 'lists_orders_id', type: 'array', description: 'list of orders id', items: new Items(default: '9d1a5942-850f-41f9-a32a-38927978ce5c')),
                     ]
                 )
             ),
@@ -46,8 +45,8 @@ use Symfony\Component\HttpFoundation\Response;
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'ok'),
                         new OA\Property(property: 'message', type: 'string', example: 'Orders removed from list of orders'),
-                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(default: '<id, array>')),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),
+                        new OA\Property(property: 'data', type: 'array', items: new Items(default: '<id, array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new Items()),
                     ]
                 )
             )
@@ -61,8 +60,8 @@ use Symfony\Component\HttpFoundation\Response;
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
-                        new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<list_orders_id|group_id|orders_id_empty|orders_id|orders_not_found|permissions, string|array>')),
+                        new OA\Property(property: 'data', type: 'array', items: new Items()),
+                        new OA\Property(property: 'errors', type: 'array', items: new Items(default: '<list_orders_id|group_id|orders_id_empty|orders_id|orders_not_found|permissions, string|array>')),
                     ]
                 )
             )
@@ -80,18 +79,21 @@ class ListOrdersRemoveOrderController extends AbstractController
     public function __invoke(ListOrdersRemoveOrderRequestDto $request): JsonResponse
     {
         $listOrdersRemoved = $this->ListOrdersRemoveOrderUseCase->__invoke(
-            $this->createListOrdersRemoveOrderInputDto($request->listOrdersId, $request->groupId, $request->ordersId)
+            $this->createListOrdersRemoveOrderInputDto($request->groupId, $request->listsOrdersId)
         );
 
         return $this->createResponse($listOrdersRemoved);
     }
 
-    private function createListOrdersRemoveOrderInputDto(string|null $listOrdersId, string|null $groupId, array|null $ordersId): ListOrdersRemoveOrderInputDto
+    /**
+     * @param string[]|null $listOrdersId
+     */
+    private function createListOrdersRemoveOrderInputDto(string|null $groupId, array|null $listOrdersId): ListOrdersRemoveOrderInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();
 
-        return new ListOrdersRemoveOrderInputDto($userSharedAdapter->getUser(), $listOrdersId, $groupId, $ordersId);
+        return new ListOrdersRemoveOrderInputDto($userSharedAdapter->getUser(), $groupId, $listOrdersId);
     }
 
     private function createResponse(ApplicationOutputInterface $listOrdersRemoved): JsonResponse

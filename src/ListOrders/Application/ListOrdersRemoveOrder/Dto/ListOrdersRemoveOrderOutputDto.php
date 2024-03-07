@@ -16,11 +16,11 @@ class ListOrdersRemoveOrderOutputDto implements ApplicationOutputInterface
 
     public function toArray(): array
     {
-        $ordersRemovedId = array_map(
+        $listOrdersOrdersIdRemoved = array_map(
             fn (ListOrdersOrders $listOrdersOrders) => $listOrdersOrders->getOrderId()->getValue(),
             $this->listOrdersOrders
         );
 
-        return ['id' => $ordersRemovedId];
+        return ['id' => $listOrdersOrdersIdRemoved];
     }
 }

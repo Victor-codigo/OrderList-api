@@ -56,7 +56,7 @@ class ListOrdersAddOrderService
     private function getListOrdersOrders(Identifier $listOrdersId, Identifier $groupId): array
     {
         try {
-            $listOrdersOrdersPaginator = $this->listOrdersOrdersRepository->findListOrderOrdersByIdOrFail($listOrdersId, $groupId);
+            $listOrdersOrdersPaginator = $this->listOrdersOrdersRepository->findListOrderOrdersByIdOrFail([$listOrdersId], $groupId);
             $listOrdersOrdersPaginator->setPagination(1, 100);
 
             return iterator_to_array($listOrdersOrdersPaginator);
