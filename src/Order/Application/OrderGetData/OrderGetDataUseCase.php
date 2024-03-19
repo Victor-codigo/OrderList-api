@@ -6,6 +6,7 @@ namespace Order\Application\OrderGetData;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
 use Common\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
@@ -21,7 +22,7 @@ use Order\Domain\Service\OrderGetData\OrderGetDataService;
 class OrderGetDataUseCase extends ServiceBase
 {
     public function __construct(
-        private OrderGetDataService $OrderGetDataService,
+        private OrderGetDataService $orderGetDataService,
         private ValidationInterface $validator,
         private ValidateGroupAndUserService $validateGroupAndUserService
     ) {
@@ -39,11 +40,11 @@ class OrderGetDataUseCase extends ServiceBase
         try {
             $this->validateGroupAndUserService->__invoke($input->groupId);
 
-            $ordersData = $this->OrderGetDataService->__invoke(
+            $ordersData = $this->orderGetDataService->__invoke(
                 $this->createOrderGetDataDto($input)
             );
 
-            return $this->createOrderGetDataOutputDto($ordersData);
+            return $this->createOrderGetDataOutputDto($ordersData, $input->page);
         } catch (ValidateGroupAndUserException) {
             throw OrderGetDataValidateGroupAndUserException::fromMessage('You not belong to the group');
         } catch (DBNotFoundException) {
@@ -67,11 +68,22 @@ class OrderGetDataUseCase extends ServiceBase
 
     private function createOrderGetDataDto(OrderGetDataInputDto $input): OrderGetDataDto
     {
-        return new OrderGetDataDto($input->ordersId, $input->groupId);
+        return new OrderGetDataDto(
+            $input->groupId,
+            $input->listOrdersId,
+            $input->ordersId,
+            $input->page,
+            $input->pageItems,
+            $input->orderAsc,
+            $input->filterSection,
+            $input->filterText,
+        );
     }
 
-    private function createOrderGetDataOutputDto(array $ordersData): OrderGetDataOutputDto
+    private function createOrderGetDataOutputDto(array $ordersData, PaginatorPage $page): OrderGetDataOutputDto
     {
-        return new OrderGetDataOutputDto($ordersData);
+        $pagesTotal = $this->orderGetDataService->getPagesTotal();
+
+        return new OrderGetDataOutputDto($ordersData, $page, $pagesTotal);
     }
 }

@@ -7,6 +7,8 @@ namespace Test\Unit\Order\Application\OrderGetData\Dto;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
+use Common\Domain\Validation\Filter\FILTER_SECTION;
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\ValidationInterface;
 use Order\Application\OrderGetData\Dto\OrderGetDataInputDto;
 use PHPUnit\Framework\TestCase;
@@ -14,6 +16,7 @@ use PHPUnit\Framework\TestCase;
 class OrderGetDataInputDtoTest extends TestCase
 {
     private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const LIST_ORDERS_ID = 'cd82abda-3bd6-44b8-8ff6-4ecd80ea6840';
     private const ORDERS_ID = [
         '9a48ac5b-4571-43fd-ac80-28b08124ffb8',
         'a0b4760a-9037-477a-8b84-d059ae5ee7e9',
@@ -35,7 +38,18 @@ class OrderGetDataInputDtoTest extends TestCase
     /** @test */
     public function itShouldValidate(): void
     {
-        $object = new OrderGetDataInputDto($this->userSession, self::ORDERS_ID, self::GROUP_ID);
+        $object = new OrderGetDataInputDto(
+            $this->userSession,
+            self::GROUP_ID,
+            self::LIST_ORDERS_ID,
+            self::ORDERS_ID,
+            1,
+            10,
+            true,
+            FILTER_SECTION::ORDER->value,
+            FILTER_STRING_COMPARISON::EQUALS->value,
+            'filter value'
+        );
 
         $return = $object->validate($this->validator);
 
@@ -43,39 +57,41 @@ class OrderGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailOrdersIdIsNull(): void
+    public function itShouldValidateListOrdersIdOrdersIdFilterSectionTextAndValueAreNull(): void
     {
-        $object = new OrderGetDataInputDto($this->userSession, null, self::GROUP_ID);
+        $object = new OrderGetDataInputDto(
+            $this->userSession,
+            self::GROUP_ID,
+            null,
+            null,
+            1,
+            10,
+            false,
+            null,
+            null,
+            null
+        );
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['orders_id_empty' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
-    }
-
-    /** @test */
-    public function itShouldFailOrdersIdIsEmpty(): void
-    {
-        $object = new OrderGetDataInputDto($this->userSession, [], self::GROUP_ID);
-
-        $return = $object->validate($this->validator);
-
-        $this->assertEquals(['orders_id_empty' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
-    }
-
-    /** @test */
-    public function itShouldFailOrdersIdIsWrong(): void
-    {
-        $object = new OrderGetDataInputDto($this->userSession, ['wrong id'], self::GROUP_ID);
-
-        $return = $object->validate($this->validator);
-
-        $this->assertEquals(['orders_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
+        $this->assertEmpty($return);
     }
 
     /** @test */
     public function itShouldFailGroupIdIsNull(): void
     {
-        $object = new OrderGetDataInputDto($this->userSession, self::ORDERS_ID, null);
+        $object = new OrderGetDataInputDto(
+            $this->userSession,
+            null,
+            self::LIST_ORDERS_ID,
+            self::ORDERS_ID,
+            1,
+            10,
+            true,
+            FILTER_SECTION::ORDER->value,
+            FILTER_STRING_COMPARISON::EQUALS->value,
+            'filter value'
+        );
 
         $return = $object->validate($this->validator);
 
@@ -85,7 +101,18 @@ class OrderGetDataInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailGroupIdIsWrong(): void
     {
-        $object = new OrderGetDataInputDto($this->userSession, self::ORDERS_ID, 'wrong id');
+        $object = new OrderGetDataInputDto(
+            $this->userSession,
+            'wrong id',
+            self::LIST_ORDERS_ID,
+            self::ORDERS_ID,
+            1,
+            10,
+            true,
+            FILTER_SECTION::ORDER->value,
+            FILTER_STRING_COMPARISON::EQUALS->value,
+            'filter value'
+        );
 
         $return = $object->validate($this->validator);
 
@@ -93,17 +120,217 @@ class OrderGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailOrderIsWrongGroupIdIsWrong(): void
+    public function itShouldFailListOrdersIdIsWrong(): void
     {
-        $object = new OrderGetDataInputDto($this->userSession, ['wrong id'], 'wrong id');
+        $object = new OrderGetDataInputDto(
+            $this->userSession,
+            self::GROUP_ID,
+            'wrong id',
+            self::ORDERS_ID,
+            1,
+            10,
+            true,
+            FILTER_SECTION::ORDER->value,
+            FILTER_STRING_COMPARISON::EQUALS->value,
+            'filter value'
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['list_orders_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailOrdersIdIsWrong(): void
+    {
+        $object = new OrderGetDataInputDto(
+            $this->userSession,
+            self::GROUP_ID,
+            self::LIST_ORDERS_ID,
+            array_merge(self::ORDERS_ID, ['wrong id']),
+            1,
+            10,
+            true,
+            FILTER_SECTION::ORDER->value,
+            FILTER_STRING_COMPARISON::EQUALS->value,
+            'filter value'
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['orders_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailPageIsNull()
+    {
+        $object = new OrderGetDataInputDto(
+            $this->userSession,
+            self::GROUP_ID,
+            self::LIST_ORDERS_ID,
+            self::ORDERS_ID,
+            null,
+            10,
+            true,
+            FILTER_SECTION::ORDER->value,
+            FILTER_STRING_COMPARISON::EQUALS->value,
+            'filter value'
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['page' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailPageIsWrong()
+    {
+        $object = new OrderGetDataInputDto(
+            $this->userSession,
+            self::GROUP_ID,
+            self::LIST_ORDERS_ID,
+            self::ORDERS_ID,
+            -1,
+            10,
+            true,
+            FILTER_SECTION::ORDER->value,
+            FILTER_STRING_COMPARISON::EQUALS->value,
+            'filter value'
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['page' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailPageItemsIsNull()
+    {
+        $object = new OrderGetDataInputDto(
+            $this->userSession,
+            self::GROUP_ID,
+            self::LIST_ORDERS_ID,
+            self::ORDERS_ID,
+            1,
+            null,
+            true,
+            FILTER_SECTION::ORDER->value,
+            FILTER_STRING_COMPARISON::EQUALS->value,
+            'filter value'
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['page_items' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailPageItemsIsWrong()
+    {
+        $object = new OrderGetDataInputDto(
+            $this->userSession,
+            self::GROUP_ID,
+            self::LIST_ORDERS_ID,
+            self::ORDERS_ID,
+            1,
+            -1,
+            true,
+            FILTER_SECTION::ORDER->value,
+            FILTER_STRING_COMPARISON::EQUALS->value,
+            'filter value'
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['page_items' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailFilterSectionIsWrong()
+    {
+        $object = new OrderGetDataInputDto(
+            $this->userSession,
+            self::GROUP_ID,
+            self::LIST_ORDERS_ID,
+            self::ORDERS_ID,
+            1,
+            10,
+            true,
+            'wrong filter',
+            FILTER_STRING_COMPARISON::EQUALS->value,
+            'filter value'
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['section_filter_type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailFilterTextIsWrong()
+    {
+        $object = new OrderGetDataInputDto(
+            $this->userSession,
+            self::GROUP_ID,
+            self::LIST_ORDERS_ID,
+            self::ORDERS_ID,
+            1,
+            10,
+            true,
+            FILTER_SECTION::ORDER->value,
+            'wrong filter',
+            'filter value'
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['text_filter_type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailFilterValueIsNull()
+    {
+        $object = new OrderGetDataInputDto(
+            $this->userSession,
+            self::GROUP_ID,
+            self::LIST_ORDERS_ID,
+            self::ORDERS_ID,
+            1,
+            10,
+            true,
+            FILTER_SECTION::ORDER->value,
+            FILTER_STRING_COMPARISON::EQUALS->value,
+            null
+        );
 
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
-                'group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
-                'orders_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]],
+                'section_filter_value' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
+                'text_filter_value' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
             ],
             $return
         );
+    }
+
+    /** @test */
+    public function itShouldFailFilterSectionOrFilterTextIsNull()
+    {
+        $object = new OrderGetDataInputDto(
+            $this->userSession,
+            self::GROUP_ID,
+            self::LIST_ORDERS_ID,
+            self::ORDERS_ID,
+            1,
+            10,
+            true,
+            null,
+            FILTER_STRING_COMPARISON::EQUALS->value,
+            'filter value'
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['filter_section_and_text_not_empty' => [VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 }

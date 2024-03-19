@@ -37,6 +37,62 @@ use Symfony\Component\HttpFoundation\Response;
             example: '5483539d-52f7-4aa9-a91c-1aae11c3d17f,428e3645-91fb-4239-8b52-b49a056eb2e7',
             schema: new OA\Schema(type: 'string')
         ),
+        new OA\Parameter(
+            name: 'list_orders_id',
+            in: 'query',
+            required: false,
+            description: 'List orders id',
+            example: '5483539d-52f7-4aa9-a91c-1aae11c3d17f',
+            schema: new OA\Schema(type: 'string')
+        ),
+        new OA\Parameter(
+            name: 'page',
+            in: 'query',
+            required: true,
+            description: 'Page number',
+            example: 1,
+            schema: new OA\Schema(type: 'integer')
+        ),
+        new OA\Parameter(
+            name: 'page_items',
+            in: 'query',
+            required: true,
+            description: 'Number of items per page',
+            example: 100,
+            schema: new OA\Schema(type: 'integer')
+        ),
+        new OA\Parameter(
+            name: 'order_asc',
+            in: 'query',
+            required: true,
+            description: 'Order ascendent or descendent',
+            example: true,
+            schema: new OA\Schema(type: 'boolean')
+        ),
+        new OA\Parameter(
+            name: 'filter_section',
+            in: 'query',
+            required: false,
+            description: 'Section filter',
+            example: 'orders',
+            schema: new OA\Schema(type: 'string')
+        ),
+        new OA\Parameter(
+            name: 'filter_text',
+            in: 'query',
+            required: false,
+            description: 'Name filter',
+            example: 'equals',
+            schema: new OA\Schema(type: 'string')
+        ),
+        new OA\Parameter(
+            name: 'filter_value',
+            in: 'query',
+            required: false,
+            description: 'Value of the filter',
+            example: 'some name',
+            schema: new OA\Schema(type: 'string')
+        ),
     ],
     responses: [
         new OA\Response(
@@ -50,16 +106,22 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'message', type: 'string', example: 'Product\'s data'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items(
                             properties: [
-                                new OA\Property(property: 'id', type: 'string'),
-                                new OA\Property(property: 'product_id', type: 'string'),
-                                new OA\Property(property: 'shop_id', type: 'string'),
-                                new OA\Property(property: 'user_id', type: 'string'),
-                                new OA\Property(property: 'group_id', type: 'string'),
-                                new OA\Property(property: 'description', type: 'string'),
-                                new OA\Property(property: 'amount', type: 'float'),
-                                new OA\Property(property: 'created_on', type: 'string'),
-                                new OA\Property(property: 'price', type: 'float'),
-                                new OA\Property(property: 'unit', type: 'string'),
+                                new OA\Property(property: 'page', type: 'integer'),
+                                new OA\Property(property: 'pages_total', type: 'integer'),
+                                new OA\Property(property: 'orders', type: 'array', items: new OA\Items(
+                                    properties: [
+                                        new OA\Property(property: 'id', type: 'string'),
+                                        new OA\Property(property: 'product_id', type: 'string'),
+                                        new OA\Property(property: 'shop_id', type: 'string'),
+                                        new OA\Property(property: 'user_id', type: 'string'),
+                                        new OA\Property(property: 'group_id', type: 'string'),
+                                        new OA\Property(property: 'description', type: 'string'),
+                                        new OA\Property(property: 'amount', type: 'float'),
+                                        new OA\Property(property: 'created_on', type: 'string'),
+                                        new OA\Property(property: 'price', type: 'float'),
+                                        new OA\Property(property: 'unit', type: 'string'),
+                                    ]
+                                )),
                             ])),
                         new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),
                     ]
@@ -76,7 +138,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|orders_id_empty|orders_id|order_not_found|permissions, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|list_orders_id|orders_id|page|page_items|section_filter_type|filter_section_and_text_not_empty|text_filter_type|order_not_found|permissions, string|array>')),
                     ]
                 )
             )
@@ -94,18 +156,39 @@ class OrderGetDataController extends AbstractController
     public function __invoke(OrderGetDataRequestDto $request): JsonResponse
     {
         $ordersData = $this->orderGetDataUseCase->__invoke(
-            $this->createOrderGetDataInputDto($request->ordersId, $request->groupId)
+            $this->createOrderGetDataInputDto(
+                $request->groupId,
+                $request->listOrdersId,
+                $request->ordersId,
+                $request->page,
+                $request->pageItems,
+                $request->orderAsc,
+                $request->filterSection,
+                $request->filterText,
+                $request->filterValue
+            )
         );
 
         return $this->createResponse($ordersData);
     }
 
-    private function createOrderGetDataInputDto(array|null $ordersId, string|null $groupId): OrderGetDataInputDto
+    private function createOrderGetDataInputDto(?string $groupId, ?string $listOrdersId, ?array $ordersId, ?int $page, ?int $pageItems, bool $orderAsc, ?string $filterSection, ?string $filterText, ?string $filterValue): OrderGetDataInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();
 
-        return new OrderGetDataInputDto($userSharedAdapter->getUser(), $ordersId, $groupId);
+        return new OrderGetDataInputDto(
+            $userSharedAdapter->getUser(),
+            $groupId,
+            $listOrdersId,
+            $ordersId,
+            $page,
+            $pageItems,
+            $orderAsc,
+            $filterSection,
+            $filterText,
+            $filterValue
+        );
     }
 
     private function createResponse(ApplicationOutputInterface $ordersData): JsonResponse

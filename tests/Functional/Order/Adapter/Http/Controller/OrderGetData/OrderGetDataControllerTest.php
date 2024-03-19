@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Test\Functional\Order\Adapter\Http\Controller\OrderGetData;
 
 use Common\Domain\Response\RESPONSE_STATUS;
+use Common\Domain\Validation\Filter\FILTER_SECTION;
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,9 +19,13 @@ class OrderGetDataControllerTest extends WebClientTestCase
     private const ENDPOINT = '/api/v1/orders';
     private const METHOD = 'GET';
     private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const LIST_ORDERS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
     private const ORDERS_ID = [
         '9a48ac5b-4571-43fd-ac80-28b08124ffb8',
         'a0b4760a-9037-477a-8b84-d059ae5ee7e9',
+        '5cfe52e5-db78-41b3-9acd-c3c84924cb9b',
+        'c3734d1c-8b18-4bfd-95aa-06a261476d9d',
+        'd351adba-c566-4fa5-bb5b-1a6f73b1d72f',
     ];
 
     private const USER_HAS_NO_GROUP_EMAIL = 'email.other_2.active@host.com';
@@ -54,6 +60,42 @@ class OrderGetDataControllerTest extends WebClientTestCase
                 'price' => 20.30,
                 'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ],
+            self::ORDERS_ID[2] => [
+                'id' => self::ORDERS_ID[2],
+                'product_id' => '8b6d650b-7bb7-4850-bf25-36cda9bce801',
+                'shop_id' => 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
+                'user_id' => '2606508b-4516-45d6-93a6-c7cb416b7f3f',
+                'group_id' => '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
+                'description' => null,
+                'amount' => 20.050,
+                'created_on' => '2024-03-19 10:12:56',
+                'price' => 20.30,
+                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
+            ],
+            self::ORDERS_ID[3] => [
+                'id' => self::ORDERS_ID[3],
+                'product_id' => '7e3021d4-2d02-4386-8bbe-887cfe8697a8',
+                'shop_id' => 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
+                'user_id' => '6df60afd-f7c3-4c2c-b920-e265f266c560',
+                'group_id' => '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
+                'description' => 'order description 4',
+                'amount' => 40,
+                'created_on' => '2024-03-19 10:12:56',
+                'price' => null,
+                'unit' => UNIT_MEASURE_TYPE::UNITS->value,
+            ],
+            self::ORDERS_ID[4] => [
+                'id' => self::ORDERS_ID[4],
+                'product_id' => 'ca10c90a-c7e6-4594-89e9-71d2f5e74710',
+                'shop_id' => 'b9b1c541-d41e-4751-9ecb-4a1d823c0405',
+                'user_id' => '6df60afd-f7c3-4c2c-b920-e265f266c560',
+                'group_id' => '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
+                'description' => 'order description 3',
+                'amount' => 30.150,
+                'created_on' => '2024-03-19 10:12:56',
+                'price' => null,
+                'unit' => UNIT_MEASURE_TYPE::KG->value,
+            ],
         ];
     }
 
@@ -83,97 +125,251 @@ class OrderGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldGetOrdersData(): void
+    public function itShouldGetOrdersDataByGroupId(): void
     {
-        $ordersId = implode(',', self::ORDERS_ID);
         $groupId = self::GROUP_ID;
+        $page = 1;
+        $pageItems = 10;
+        $orderAsc = true;
         $ordersDataExpected = $this->getOrdersDataExpected();
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?orders_id={$ordersId}&group_id={$groupId}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&order_asc={$orderAsc}"
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [0, 1], [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'orders'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Orders\' data', $responseContent->message);
-        $this->assertIsArray($responseContent->data);
-        $this->assertCount(count(self::ORDERS_ID), $responseContent->data);
+        $this->assertCount(count(self::ORDERS_ID), $responseContent->data->orders);
 
-        foreach ($responseContent->data as $orderData) {
+        foreach ($responseContent->data->orders as $orderData) {
             $this->assertTrue(property_exists($orderData, 'id'));
             $this->assertOrderDataIsOk($ordersDataExpected[$orderData->id], $orderData);
         }
     }
 
     /** @test */
-    public function itShouldGetOrdersDataTwoOrdersOfThree(): void
+    public function itShouldGetOrdersDataByGroupIdAndOrdersId(): void
     {
         $ordersId = implode(',', self::ORDERS_ID);
-        $ordersId .= ',5170ab8a-a359-4ef8-b07a-866500b731e5';
         $groupId = self::GROUP_ID;
+        $page = 1;
+        $pageItems = 10;
+        $orderAsc = false;
         $ordersDataExpected = $this->getOrdersDataExpected();
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?orders_id={$ordersId}&group_id={$groupId}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&orders_id={$ordersId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&order_asc={$orderAsc}"
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [0, 1], [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'orders'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Orders\' data', $responseContent->message);
-        $this->assertIsArray($responseContent->data);
-        $this->assertCount(count(self::ORDERS_ID), $responseContent->data);
+        $this->assertCount(count(self::ORDERS_ID), $responseContent->data->orders);
 
-        foreach ($responseContent->data as $orderData) {
+        foreach ($responseContent->data->orders as $orderData) {
             $this->assertTrue(property_exists($orderData, 'id'));
             $this->assertOrderDataIsOk($ordersDataExpected[$orderData->id], $orderData);
         }
     }
 
     /** @test */
-    public function itShouldGetOrdersDataOnlyOneOf101(): void
+    public function itShouldGetOrdersDataByGroupIdAndListOrderName(): void
     {
-        $ordersId = array_fill(0, 100, self::ORDERS_ID[0]);
-        $ordersId[] = self::ORDERS_ID[1];
-        $ordersId = implode(',', $ordersId);
         $groupId = self::GROUP_ID;
+        $page = 1;
+        $pageItems = 10;
+        $orderAsc = true;
+        $filterSection = FILTER_SECTION::LIST_ORDERS->value;
+        $filterText = FILTER_STRING_COMPARISON::EQUALS->value;
+        $filterValue = 'List order name 1';
         $ordersDataExpected = $this->getOrdersDataExpected();
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?orders_id={$ordersId}&group_id={$groupId}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&order_asc={$orderAsc}"
+                ."&filter_section={$filterSection}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}"
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [0], [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'orders'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Orders\' data', $responseContent->message);
-        $this->assertIsArray($responseContent->data);
-        $this->assertCount(1, $responseContent->data);
+        $this->assertCount(3, $responseContent->data->orders);
 
-        foreach ($responseContent->data as $orderData) {
+        $ordersIdExpected = [
+            self::ORDERS_ID[0],
+            self::ORDERS_ID[2],
+            self::ORDERS_ID[3],
+        ];
+
+        foreach ($responseContent->data->orders as $orderData) {
             $this->assertTrue(property_exists($orderData, 'id'));
+            $this->assertContains($orderData->id, $ordersIdExpected);
             $this->assertOrderDataIsOk($ordersDataExpected[$orderData->id], $orderData);
         }
     }
 
     /** @test */
-    public function itShouldFailGettingOrdersGroupIdIsNull(): void
+    public function itShouldGetOrdersDataByGroupIdAndProductName(): void
     {
-        $ordersId = implode(',', self::ORDERS_ID);
+        $groupId = self::GROUP_ID;
+        $listOrdersId = self::LIST_ORDERS_ID;
+        $page = 1;
+        $pageItems = 10;
+        $orderAsc = true;
+        $filterSection = FILTER_SECTION::PRODUCT->value;
+        $filterText = FILTER_STRING_COMPARISON::EQUALS->value;
+        $filterValue = 'Juan Carlos';
+        $ordersDataExpected = $this->getOrdersDataExpected();
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?orders_id={$ordersId}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&list_orders_id={$listOrdersId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&order_asc={$orderAsc}"
+                ."&filter_section={$filterSection}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}"
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'orders'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Orders\' data', $responseContent->message);
+        $this->assertCount(1, $responseContent->data->orders);
+
+        $ordersIdExpected = [
+            self::ORDERS_ID[2],
+        ];
+
+        foreach ($responseContent->data->orders as $orderData) {
+            $this->assertTrue(property_exists($orderData, 'id'));
+            $this->assertContains($orderData->id, $ordersIdExpected);
+            $this->assertOrderDataIsOk($ordersDataExpected[$orderData->id], $orderData);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetOrdersDataByGroupIdAndShopName(): void
+    {
+        $groupId = self::GROUP_ID;
+        $listOrdersId = self::LIST_ORDERS_ID;
+        $page = 1;
+        $pageItems = 10;
+        $orderAsc = true;
+        $filterSection = FILTER_SECTION::SHOP->value;
+        $filterText = FILTER_STRING_COMPARISON::EQUALS->value;
+        $filterValue = 'Shop name 2';
+        $ordersDataExpected = $this->getOrdersDataExpected();
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&list_orders_id={$listOrdersId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&order_asc={$orderAsc}"
+                ."&filter_section={$filterSection}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}"
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'orders'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Orders\' data', $responseContent->message);
+        $this->assertCount(2, $responseContent->data->orders);
+
+        $ordersIdExpected = [
+            self::ORDERS_ID[2],
+            self::ORDERS_ID[3],
+        ];
+
+        foreach ($responseContent->data->orders as $orderData) {
+            $this->assertTrue(property_exists($orderData, 'id'));
+            $this->assertContains($orderData->id, $ordersIdExpected);
+            $this->assertOrderDataIsOk($ordersDataExpected[$orderData->id], $orderData);
+        }
+    }
+
+    /** @test */
+    public function itShouldFailGettingOrdersDataOrdersNotFound(): void
+    {
+        $groupId = self::GROUP_ID;
+        $orders_id = self::LIST_ORDERS_ID;
+        $page = 1;
+        $pageItems = 10;
+        $orderAsc = true;
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&orders_id={$orders_id}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&order_asc={$orderAsc}"
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['order_not_found'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Orders not found', $responseContent->message);
+
+        $this->assertEquals('Orders not found', $responseContent->errors->order_not_found);
+    }
+
+    /** @test */
+    public function itShouldFailGettingOrdersDataGroupIdIsNull(): void
+    {
+        $groupId = null;
+        $page = 1;
+        $pageItems = 10;
+        $orderAsc = true;
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&order_asc={$orderAsc}"
         );
 
         $response = $client->getResponse();
@@ -182,18 +378,25 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $this->assertResponseStructureIsOk($response, [], ['group_id'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
+
+        $this->assertEquals(['not_blank'], $responseContent->errors->group_id);
     }
 
     /** @test */
-    public function itShouldFailGettingOrdersGroupIdIsWrong(): void
+    public function itShouldFailGettingOrdersDataGroupIdIsWrong(): void
     {
-        $ordersId = implode(',', self::ORDERS_ID);
         $groupId = 'wrong id';
+        $page = 1;
+        $pageItems = 10;
+        $orderAsc = true;
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?orders_id={$ordersId}&group_id={$groupId}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&order_asc={$orderAsc}"
         );
 
         $response = $client->getResponse();
@@ -202,37 +405,61 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $this->assertResponseStructureIsOk($response, [], ['group_id'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
+
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
     /** @test */
-    public function itShouldFailGettingOrdersOrdersIdIsNull(): void
+    public function itShouldFailGettingOrdersDataListOrdersIdIsWrong(): void
     {
         $groupId = self::GROUP_ID;
+        $listOrdersId = 'wrong id';
+        $page = 1;
+        $pageItems = 10;
+        $orderAsc = true;
+        $filterSection = FILTER_SECTION::ORDER->value;
+        $filterText = FILTER_STRING_COMPARISON::EQUALS->value;
+        $filterValue = 'Juan Carlos';
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?group_id={$groupId}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&list_orders_id={$listOrdersId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&order_asc={$orderAsc}"
+                ."&filter_section={$filterSection}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}"
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['orders_id_empty'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['list_orders_id'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertEquals(['not_blank'], $responseContent->errors->orders_id_empty);
+        $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->list_orders_id);
     }
 
     /** @test */
-    public function itShouldFailGettingOrdersOrdersIdIsWrong(): void
+    public function itShouldFailGettingOrdersDataOrdersIdIsWrong(): void
     {
-        $ordersId = 'wrong id';
         $groupId = self::GROUP_ID;
+        $ordersId = implode(',', array_merge(self::ORDERS_ID, ['wrong id']));
+        $page = 1;
+        $pageItems = 10;
+        $orderAsc = true;
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?orders_id={$ordersId}&group_id={$groupId}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&orders_id={$ordersId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&order_asc={$orderAsc}"
         );
 
         $response = $client->getResponse();
@@ -245,23 +472,242 @@ class OrderGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailGetOrdersDataOrdersNotFound(): void
+    public function itShouldFailGettingOrdersDataPageIsNull(): void
     {
-        $ordersId = '5170ab8a-a359-4ef8-b07a-866500b731e5';
         $groupId = self::GROUP_ID;
+        $listOrdersId = 'wrong id';
+        $pageItems = 10;
+        $orderAsc = true;
+        $filterSection = FILTER_SECTION::ORDER->value;
+        $filterText = FILTER_STRING_COMPARISON::EQUALS->value;
+        $filterValue = 'Juan Carlos';
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?orders_id={$ordersId}&group_id={$groupId}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&list_orders_id={$listOrdersId}"
+                ."&page_items={$pageItems}"
+                ."&order_asc={$orderAsc}"
+                ."&filter_section={$filterSection}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}"
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['order_not_found'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['page'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Orders not found', $responseContent->message);
-        $this->assertEquals('Orders not found', $responseContent->errors->order_not_found);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['greater_than'], $responseContent->errors->page);
+    }
+
+    /** @test */
+    public function itShouldFailGettingOrdersDataPageIsWrong(): void
+    {
+        $groupId = self::GROUP_ID;
+        $listOrdersId = 'wrong id';
+        $page = -1;
+        $pageItems = 10;
+        $orderAsc = true;
+        $filterSection = FILTER_SECTION::ORDER->value;
+        $filterText = FILTER_STRING_COMPARISON::EQUALS->value;
+        $filterValue = 'Juan Carlos';
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&list_orders_id={$listOrdersId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&order_asc={$orderAsc}"
+                ."&filter_section={$filterSection}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}"
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['page'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['greater_than'], $responseContent->errors->page);
+    }
+
+    /** @test */
+    public function itShouldFailGettingOrdersDataPageItemsIsNull(): void
+    {
+        $groupId = self::GROUP_ID;
+        $listOrdersId = self::LIST_ORDERS_ID;
+        $page = 1;
+        $orderAsc = true;
+        $filterSection = FILTER_SECTION::ORDER->value;
+        $filterText = FILTER_STRING_COMPARISON::EQUALS->value;
+        $filterValue = 'Juan Carlos';
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&list_orders_id={$listOrdersId}"
+                ."&page={$page}"
+                ."&order_asc={$orderAsc}"
+                ."&filter_section={$filterSection}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}"
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['page_items'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['greater_than'], $responseContent->errors->page_items);
+    }
+
+    /** @test */
+    public function itShouldFailGettingOrdersDataPageItemsIsWrong(): void
+    {
+        $groupId = self::GROUP_ID;
+        $listOrdersId = self::LIST_ORDERS_ID;
+        $page = 1;
+        $pageItems = -1;
+        $orderAsc = true;
+        $filterSection = FILTER_SECTION::ORDER->value;
+        $filterText = FILTER_STRING_COMPARISON::EQUALS->value;
+        $filterValue = 'Juan Carlos';
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&list_orders_id={$listOrdersId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&order_asc={$orderAsc}"
+                ."&filter_section={$filterSection}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}"
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['page_items'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['greater_than'], $responseContent->errors->page_items);
+    }
+
+    /** @test */
+    public function itShouldFailGettingOrdersDataFiltersSectionIsWrong(): void
+    {
+        $groupId = self::GROUP_ID;
+        $listOrdersId = self::LIST_ORDERS_ID;
+        $page = 1;
+        $pageItems = 10;
+        $orderAsc = true;
+        $filterSection = 'wrong filter';
+        $filterText = FILTER_STRING_COMPARISON::EQUALS->value;
+        $filterValue = 'Juan Carlos';
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&list_orders_id={$listOrdersId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&order_asc={$orderAsc}"
+                ."&filter_section={$filterSection}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}"
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['section_filter_type'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->section_filter_type);
+    }
+
+    /** @test */
+    public function itShouldFailGettingOrdersDataFiltersTextIsWrong(): void
+    {
+        $groupId = self::GROUP_ID;
+        $listOrdersId = self::LIST_ORDERS_ID;
+        $page = 1;
+        $pageItems = 10;
+        $orderAsc = true;
+        $filterSection = FILTER_SECTION::ORDER->value;
+        $filterText = 'wrong filter';
+        $filterValue = 'Juan Carlos';
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&list_orders_id={$listOrdersId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&order_asc={$orderAsc}"
+                ."&filter_section={$filterSection}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}"
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['text_filter_type'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->text_filter_type);
+    }
+
+    /** @test */
+    public function itShouldFailGettingOrdersDataFilterTextMissing(): void
+    {
+        $groupId = self::GROUP_ID;
+        $listOrdersId = self::LIST_ORDERS_ID;
+        $page = 1;
+        $pageItems = 10;
+        $orderAsc = true;
+        $filterSection = FILTER_SECTION::ORDER->value;
+        $filterValue = 'Juan Carlos';
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&list_orders_id={$listOrdersId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&order_asc={$orderAsc}"
+                ."&filter_section={$filterSection}"
+                ."&filter_value={$filterValue}"
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['filter_section_and_text_not_empty'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['not_null'], $responseContent->errors->filter_section_and_text_not_empty);
     }
 
     /** @test */
@@ -269,10 +715,18 @@ class OrderGetDataControllerTest extends WebClientTestCase
     {
         $ordersId = implode(',', self::ORDERS_ID);
         $groupId = self::GROUP_ID;
+        $page = 1;
+        $pageItems = 10;
+        $orderAsc = true;
         $client = $this->getNewClientAuthenticatedAdmin();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?orders_id={$ordersId}&group_id={$groupId}",
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&orders_id={$ordersId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&order_asc={$orderAsc}"
         );
 
         $response = $client->getResponse();

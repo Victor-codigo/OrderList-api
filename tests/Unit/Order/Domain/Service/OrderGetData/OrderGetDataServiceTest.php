@@ -8,7 +8,11 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use Common\Domain\Validation\Filter\FILTER_SECTION;
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
+use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
+use ListOrders\Domain\Model\ListOrders;
 use Order\Domain\Model\Order;
 use Order\Domain\Ports\Repository\OrderRepositoryInterface;
 use Order\Domain\Service\OrderGetData\Dto\OrderGetDataDto;
@@ -16,8 +20,8 @@ use Order\Domain\Service\OrderGetData\OrderGetDataService;
 use PHPUnit\Framework\MockObject\MockObject;
 use Product\Domain\Model\Product;
 use Product\Domain\Model\ProductShop;
-use Product\Domain\Port\Repository\ProductRepositoryInterface;
 use Product\Domain\Port\Repository\ProductShopRepositoryInterface;
+use Shop\Domain\Model\Shop;
 use Test\Unit\DataBaseTestCase;
 
 class OrderGetDataServiceTest extends DataBaseTestCase
@@ -32,25 +36,20 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         'd351adba-c566-4fa5-bb5b-1a6f73b1d72f',
     ];
     private OrderGetDataService $object;
-    private MockObject|OrderRepositoryInterface $orderRepositoryMock;
-    private OrderRepositoryInterface $orderRepository;
-    private ProductShopRepositoryInterface $productShopRepository;
-    private MockObject|ProductShopRepositoryInterface $productShopRepositoryMock;
-    private ProductRepositoryInterface $productRepository;
-    private MockObject|PaginatorInterface $paginator;
+    private MockObject|OrderRepositoryInterface $orderRepository;
+    private MockObject|ProductShopRepositoryInterface $productShopRepository;
+    private MockObject|PaginatorInterface $ordersPaginator;
+    private MockObject|PaginatorInterface $productsShopsPaginator;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->orderRepositoryMock = $this->createMock(OrderRepositoryInterface::class);
-        $this->productShopRepositoryMock = $this->createMock(ProductShopRepositoryInterface::class);
-        $this->paginator = $this->createMock(PaginatorInterface::class);
-        $this->object = new OrderGetDataService($this->orderRepositoryMock, $this->productShopRepositoryMock);
-
-        $this->productShopRepository = $this->entityManager->getRepository(ProductShop::class);
-        $this->productRepository = $this->entityManager->getRepository(Product::class);
-        $this->orderRepository = $this->entityManager->getRepository(Order::class);
+        $this->orderRepository = $this->createMock(OrderRepositoryInterface::class);
+        $this->productShopRepository = $this->createMock(ProductShopRepositoryInterface::class);
+        $this->ordersPaginator = $this->createMock(PaginatorInterface::class);
+        $this->productsShopsPaginator = $this->createMock(PaginatorInterface::class);
+        $this->object = new OrderGetDataService($this->orderRepository, $this->productShopRepository);
     }
 
     /**
@@ -64,44 +63,118 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         );
     }
 
+    private function getListOrders(): ListOrders
+    {
+        return ListOrders::fromPrimitives(
+            '0f782e29-91ef-496c-b088-cd3cf4467c81',
+            '7992d525-38f3-4864-9518-22ecf4190cea',
+            'c76402a0-e650-418e-b369-e846d155a5d8',
+            'List orders 1',
+            'List orders 1 description',
+            null
+        );
+    }
+
+    /**
+     * @return Product[]
+     */
+    private function getProducts(): array
+    {
+        return [
+            Product::fromPrimitives(
+                'cfc7f721-da43-45e1-b98c-25454fe8196e',
+                '7992d525-38f3-4864-9518-22ecf4190cea',
+                'Product 1',
+                'Product 1 description',
+                null
+            ),
+            Product::fromPrimitives(
+                'c00ad57c-5c6b-4abd-9b14-9dfa7a196058',
+                '7992d525-38f3-4864-9518-22ecf4190cea',
+                'Product 2',
+                'Product 2 description',
+                null
+            ),
+        ];
+    }
+
+    /**
+     * @return Shop[]
+     */
+    private function getShops(): array
+    {
+        return [
+            Shop::fromPrimitives(
+                '3d984e2d-74a3-4977-a927-65d3add38c0f',
+                '7992d525-38f3-4864-9518-22ecf4190cea',
+                'Shop 1',
+                'Shop 1 description',
+                null
+            ),
+            Shop::fromPrimitives(
+                '94a8f497-5c8b-44b7-9e26-8efe36044f8c',
+                '7992d525-38f3-4864-9518-22ecf4190cea',
+                'Shop 2',
+                'Shop 2 description',
+                null
+            ),
+        ];
+    }
+
     /**
      * @return Order[]
      */
     private function getOrders(): array
     {
-        $orders = $this->orderRepository->findBy(['id' => self::ORDERS_ID]);
+        $listOrders = $this->getListOrders();
+        $product = $this->getProducts();
+        $shops = $this->getShops();
 
-        return array_combine(
-            array_map(
-                fn (Order $order) => $order->getProductId()->getValue(),
-                $orders
+        return [
+            Order::fromPrimitives(
+                '41d14a8a-9bdc-4a77-898e-9972355c6b2f',
+                '7992d525-38f3-4864-9518-22ecf4190cea',
+                'c76402a0-e650-418e-b369-e846d155a5d8',
+                'Order 1 description',
+                10,
+                false,
+                $listOrders,
+                $product[0],
+                null
             ),
-            $orders
-        );
+            Order::fromPrimitives(
+                'f76f65dc-92b7-450a-bbf9-224764eb22f6',
+                '7992d525-38f3-4864-9518-22ecf4190cea',
+                'c76402a0-e650-418e-b369-e846d155a5d8',
+                'Order 2 description',
+                20,
+                true,
+                $listOrders,
+                $product[1],
+                $shops[1]
+            ),
+        ];
     }
 
-    /**
-     * @param Order[] $orders
-     */
-    private function getProductsShops(array $orders): array
+    private function getProductsShops(): array
     {
-        $shopsId = array_map(
-            fn (Order $order) => $order->getShopId(),
-            $orders
-        );
+        $products = $this->getProducts();
+        $shops = $this->getShops();
 
-        $productsShopsExpected = $this->productShopRepository->findBy([
-            'productId' => array_keys($orders),
-            'shopId' => $shopsId,
-        ]);
-
-        return array_combine(
-            array_map(
-                fn (ProductShop $productShop) => $productShop->getProductId()->getValue(),
-                $productsShopsExpected
+        return [
+            ProductShop::fromPrimitives(
+                $products[0],
+                $shops[0],
+                null,
+                null
             ),
-            $productsShopsExpected
-        );
+            ProductShop::fromPrimitives(
+                $products[1],
+                $shops[1],
+                40,
+                UNIT_MEASURE_TYPE::KG
+            ),
+        ];
     }
 
     /**
@@ -142,103 +215,526 @@ class OrderGetDataServiceTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldGetOrdersData(): void
+    public function itShouldGetOrdersDataByGroupIdAndOrdersId22(): void
     {
         $input = new OrderGetDataDto(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifierNullable(null),
             $this->getOrdersIdentifiers(),
-            ValueObjectFactory::createIdentifier(self::GROUP_ID)
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(10),
+            true,
+            null,
+            null
         );
         $ordersExpectedIndexProduct = $this->getOrders();
-        $ordersExpected = array_values($ordersExpectedIndexProduct);
-        $shopsId = $this->getShopsId($ordersExpected);
+        $productsId = array_map(
+            fn (Order $order) => $order->getProductId(),
+            $ordersExpectedIndexProduct
+        );
+        $shopsId = $this->getShopsId($ordersExpectedIndexProduct);
         $productsShopsExpected = $this->getProductsShops($ordersExpectedIndexProduct);
 
-        $this->orderRepositoryMock
+        $this->orderRepository
             ->expects($this->once())
             ->method('findOrdersByIdOrFail')
-            ->with($input->ordersId, $input->groupId)
-            ->willReturn($this->paginator);
+            ->with($input->groupId, $input->ordersId, $input->orderAsc)
+            ->willReturn($this->ordersPaginator);
 
-        $this->productShopRepositoryMock
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByProductNameFilterOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByShopNameFilterOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByListOrdersNameOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByGroupIdOrFail');
+
+        $this->ordersPaginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with($input->page->getValue(), $input->pageItems->getValue());
+
+        $this->ordersPaginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($ordersExpectedIndexProduct));
+
+        $this->productShopRepository
             ->expects($this->once())
             ->method('findProductsAndShopsOrFail')
-            ->with(array_keys($ordersExpectedIndexProduct), $shopsId, $input->groupId)
-            ->willReturn($this->paginator);
+            ->with($productsId, $shopsId, $input->groupId)
+            ->willReturn($this->productsShopsPaginator);
 
-        $this->paginator
-            ->expects($this->exactly(2))
+        $this->productsShopsPaginator
+            ->expects($this->once())
             ->method('getIterator')
-            ->willReturnOnConsecutiveCalls(
-                new \ArrayIterator($ordersExpected),
-                new \ArrayIterator($productsShopsExpected)
-            );
+            ->willReturn(new \ArrayIterator($productsShopsExpected));
 
         $return = $this->object->__invoke($input);
 
-        $this->assertCount(4, $return);
-
-        foreach ($return as $key => $orderData) {
-            $this->assertOrderDataIsOk(
-                $ordersExpected[$key],
-                $productsShopsExpected[$ordersExpected[$key]->getProductId()->getValue()],
-                $orderData
-            );
+        foreach ($ordersExpectedIndexProduct as $key => $orderExpected) {
+            $this->assertOrderDataIsOk($orderExpected, $productsShopsExpected[$key], $return[$key]);
         }
     }
 
     /** @test */
-    public function itShouldFailGettingOrdersDataProductsNotFound(): void
+    public function itShouldGetOrdersDataByGroupIdListOrdersIdAndProductName(): void
     {
+        $filterValue = ValueObjectFactory::createNameWithSpaces('Product name');
         $input = new OrderGetDataDto(
-            $this->getOrdersIdentifiers(),
-            ValueObjectFactory::createIdentifier(self::GROUP_ID)
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifierNullable('8da455f5-89e6-43b2-bdef-58e75949c5d2'),
+            [],
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(10),
+            false,
+            ValueObjectFactory::createFilter(
+                'section_filter',
+                ValueObjectFactory::createFilterSection(FILTER_SECTION::PRODUCT),
+                $filterValue
+            ),
+            ValueObjectFactory::createFilter(
+                'text_filter',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::EQUALS),
+                $filterValue
+            )
         );
+        $ordersExpectedIndexProduct = $this->getOrders();
+        $productsId = array_map(
+            fn (Order $order) => $order->getProductId(),
+            $ordersExpectedIndexProduct
+        );
+        $shopsId = $this->getShopsId($ordersExpectedIndexProduct);
+        $productsShopsExpected = $this->getProductsShops($ordersExpectedIndexProduct);
 
-        $this->orderRepositoryMock
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByIdOrFail');
+
+        $this->orderRepository
             ->expects($this->once())
-            ->method('findOrdersByIdOrFail')
-            ->with($input->ordersId, $input->groupId)
-            ->willThrowException(new DBNotFoundException());
+            ->method('findOrdersByProductNameFilterOrFail')
+            ->with($input->groupId, $input->listOrdersId->toIdentifier(), $input->filterText, $input->orderAsc)
+            ->willReturn($this->ordersPaginator);
 
-        $this->productShopRepositoryMock
+        $this->orderRepository
             ->expects($this->never())
-            ->method('findProductsAndShopsOrFail');
+            ->method('findOrdersByShopNameFilterOrFail');
 
-        $this->paginator
+        $this->orderRepository
             ->expects($this->never())
-            ->method('getIterator');
+            ->method('findOrdersByListOrdersNameOrFail');
 
-        $this->expectException(DBNotFoundException::class);
-        $this->object->__invoke($input);
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByGroupIdOrFail');
+
+        $this->ordersPaginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with($input->page->getValue(), $input->pageItems->getValue());
+
+        $this->ordersPaginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($ordersExpectedIndexProduct));
+
+        $this->productShopRepository
+            ->expects($this->once())
+            ->method('findProductsAndShopsOrFail')
+            ->with($productsId, $shopsId, $input->groupId)
+            ->willReturn($this->productsShopsPaginator);
+
+        $this->productsShopsPaginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($productsShopsExpected));
+
+        $return = $this->object->__invoke($input);
+
+        foreach ($ordersExpectedIndexProduct as $key => $orderExpected) {
+            $this->assertOrderDataIsOk($orderExpected, $productsShopsExpected[$key], $return[$key]);
+        }
     }
 
     /** @test */
-    public function itShouldFailGettingOrdersDataProductShopNotFound(): void
+    public function itShouldGetOrdersDataByGroupIdListOrdersIdAndOrderName(): void
     {
+        $filterValue = ValueObjectFactory::createNameWithSpaces('Product name');
         $input = new OrderGetDataDto(
-            $this->getOrdersIdentifiers(),
-            ValueObjectFactory::createIdentifier(self::GROUP_ID)
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifierNullable('8da455f5-89e6-43b2-bdef-58e75949c5d2'),
+            [],
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(10),
+            false,
+            ValueObjectFactory::createFilter(
+                'section_filter',
+                ValueObjectFactory::createFilterSection(FILTER_SECTION::ORDER),
+                $filterValue
+            ),
+            ValueObjectFactory::createFilter(
+                'text_filter',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::EQUALS),
+                $filterValue
+            )
         );
         $ordersExpectedIndexProduct = $this->getOrders();
-        $ordersExpected = array_values($ordersExpectedIndexProduct);
-        $shopsId = $this->getShopsId($ordersExpected);
+        $productsId = array_map(
+            fn (Order $order) => $order->getProductId(),
+            $ordersExpectedIndexProduct
+        );
+        $shopsId = $this->getShopsId($ordersExpectedIndexProduct);
+        $productsShopsExpected = $this->getProductsShops($ordersExpectedIndexProduct);
 
-        $this->orderRepositoryMock
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByIdOrFail');
+
+        $this->orderRepository
             ->expects($this->once())
-            ->method('findOrdersByIdOrFail')
-            ->with($input->ordersId, $input->groupId)
-            ->willReturn($this->paginator);
+            ->method('findOrdersByProductNameFilterOrFail')
+            ->with($input->groupId, $input->listOrdersId->toIdentifier(), $input->filterText, $input->orderAsc)
+            ->willReturn($this->ordersPaginator);
 
-        $this->productShopRepositoryMock
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByShopNameFilterOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByListOrdersNameOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByGroupIdOrFail');
+
+        $this->ordersPaginator
             ->expects($this->once())
-            ->method('findProductsAndShopsOrFail')
-            ->with(array_keys($ordersExpectedIndexProduct), $shopsId, $input->groupId)
-            ->willThrowException(new DBNotFoundException());
+            ->method('setPagination')
+            ->with($input->page->getValue(), $input->pageItems->getValue());
 
-        $this->paginator
+        $this->ordersPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($ordersExpected));
+            ->willReturn(new \ArrayIterator($ordersExpectedIndexProduct));
+
+        $this->productShopRepository
+            ->expects($this->once())
+            ->method('findProductsAndShopsOrFail')
+            ->with($productsId, $shopsId, $input->groupId)
+            ->willReturn($this->productsShopsPaginator);
+
+        $this->productsShopsPaginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($productsShopsExpected));
+
+        $return = $this->object->__invoke($input);
+
+        foreach ($ordersExpectedIndexProduct as $key => $orderExpected) {
+            $this->assertOrderDataIsOk($orderExpected, $productsShopsExpected[$key], $return[$key]);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetOrdersDataByGroupIdListOrdersIdAndShopName(): void
+    {
+        $filterValue = ValueObjectFactory::createNameWithSpaces('Shop name');
+        $input = new OrderGetDataDto(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifierNullable('8da455f5-89e6-43b2-bdef-58e75949c5d2'),
+            [],
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(10),
+            false,
+            ValueObjectFactory::createFilter(
+                'section_filter',
+                ValueObjectFactory::createFilterSection(FILTER_SECTION::SHOP),
+                $filterValue
+            ),
+            ValueObjectFactory::createFilter(
+                'text_filter',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::EQUALS),
+                $filterValue
+            )
+        );
+        $ordersExpectedIndexProduct = $this->getOrders();
+        $productsId = array_map(
+            fn (Order $order) => $order->getProductId(),
+            $ordersExpectedIndexProduct
+        );
+        $shopsId = $this->getShopsId($ordersExpectedIndexProduct);
+        $productsShopsExpected = $this->getProductsShops($ordersExpectedIndexProduct);
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByIdOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByProductNameFilterOrFail');
+
+        $this->orderRepository
+            ->expects($this->once())
+            ->method('findOrdersByShopNameFilterOrFail')
+            ->with($input->groupId, $input->listOrdersId->toIdentifier(), $input->filterText, $input->orderAsc)
+            ->willReturn($this->ordersPaginator);
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByListOrdersNameOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByGroupIdOrFail');
+
+        $this->ordersPaginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with($input->page->getValue(), $input->pageItems->getValue());
+
+        $this->ordersPaginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($ordersExpectedIndexProduct));
+
+        $this->productShopRepository
+            ->expects($this->once())
+            ->method('findProductsAndShopsOrFail')
+            ->with($productsId, $shopsId, $input->groupId)
+            ->willReturn($this->productsShopsPaginator);
+
+        $this->productsShopsPaginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($productsShopsExpected));
+
+        $return = $this->object->__invoke($input);
+
+        foreach ($ordersExpectedIndexProduct as $key => $orderExpected) {
+            $this->assertOrderDataIsOk($orderExpected, $productsShopsExpected[$key], $return[$key]);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetOrdersDataByGroupIdListOrdersName(): void
+    {
+        $filterValue = ValueObjectFactory::createNameWithSpaces('Shop name');
+        $input = new OrderGetDataDto(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifierNullable('8da455f5-89e6-43b2-bdef-58e75949c5d2'),
+            [],
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(10),
+            false,
+            ValueObjectFactory::createFilter(
+                'section_filter',
+                ValueObjectFactory::createFilterSection(FILTER_SECTION::LIST_ORDERS),
+                $filterValue
+            ),
+            ValueObjectFactory::createFilter(
+                'text_filter',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::EQUALS),
+                $filterValue
+            )
+        );
+        $ordersExpectedIndexProduct = $this->getOrders();
+        $productsId = array_map(
+            fn (Order $order) => $order->getProductId(),
+            $ordersExpectedIndexProduct
+        );
+        $shopsId = $this->getShopsId($ordersExpectedIndexProduct);
+        $productsShopsExpected = $this->getProductsShops($ordersExpectedIndexProduct);
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByIdOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByProductNameFilterOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByShopNameFilterOrFail');
+
+        $this->orderRepository
+            ->expects($this->once())
+            ->method('findOrdersByListOrdersNameOrFail')
+            ->with($input->groupId, ValueObjectFactory::createNameWithSpaces($input->filterText->getValue()), $input->orderAsc)
+            ->willReturn($this->ordersPaginator);
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByGroupIdOrFail');
+
+        $this->ordersPaginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with($input->page->getValue(), $input->pageItems->getValue());
+
+        $this->ordersPaginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($ordersExpectedIndexProduct));
+
+        $this->productShopRepository
+            ->expects($this->once())
+            ->method('findProductsAndShopsOrFail')
+            ->with($productsId, $shopsId, $input->groupId)
+            ->willReturn($this->productsShopsPaginator);
+
+        $this->productsShopsPaginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($productsShopsExpected));
+
+        $return = $this->object->__invoke($input);
+
+        foreach ($ordersExpectedIndexProduct as $key => $orderExpected) {
+            $this->assertOrderDataIsOk($orderExpected, $productsShopsExpected[$key], $return[$key]);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetOrdersDataByGroupId(): void
+    {
+        $input = new OrderGetDataDto(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifierNullable('8da455f5-89e6-43b2-bdef-58e75949c5d2'),
+            [],
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(10),
+            false,
+            ValueObjectFactory::createFilter(
+                'section_filter',
+                ValueObjectFactory::createFilterSection(FILTER_SECTION::LIST_ORDERS),
+                ValueObjectFactory::createNameWithSpaces(null)
+            ),
+            ValueObjectFactory::createFilter(
+                'text_filter',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::EQUALS),
+                ValueObjectFactory::createNameWithSpaces(null)
+            )
+        );
+        $ordersExpectedIndexProduct = $this->getOrders();
+        $productsId = array_map(
+            fn (Order $order) => $order->getProductId(),
+            $ordersExpectedIndexProduct
+        );
+        $shopsId = $this->getShopsId($ordersExpectedIndexProduct);
+        $productsShopsExpected = $this->getProductsShops($ordersExpectedIndexProduct);
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByIdOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByProductNameFilterOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByShopNameFilterOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByListOrdersNameOrFail');
+
+        $this->orderRepository
+            ->expects($this->once())
+            ->method('findOrdersByGroupIdOrFail')
+            ->with($input->groupId, $input->orderAsc)
+            ->willReturn($this->ordersPaginator);
+
+        $this->ordersPaginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with($input->page->getValue(), $input->pageItems->getValue());
+
+        $this->ordersPaginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($ordersExpectedIndexProduct));
+
+        $this->productShopRepository
+            ->expects($this->once())
+            ->method('findProductsAndShopsOrFail')
+            ->with($productsId, $shopsId, $input->groupId)
+            ->willReturn($this->productsShopsPaginator);
+
+        $this->productsShopsPaginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($productsShopsExpected));
+
+        $return = $this->object->__invoke($input);
+
+        foreach ($ordersExpectedIndexProduct as $key => $orderExpected) {
+            $this->assertOrderDataIsOk($orderExpected, $productsShopsExpected[$key], $return[$key]);
+        }
+    }
+
+    /** @test */
+    public function itShouldFailGettingOrdersDataByGroupIdNotFound(): void
+    {
+        $input = new OrderGetDataDto(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifierNullable('8da455f5-89e6-43b2-bdef-58e75949c5d2'),
+            [],
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(10),
+            false,
+            null,
+            null
+        );
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByIdOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByProductNameFilterOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByShopNameFilterOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByListOrdersNameOrFail');
+
+        $this->orderRepository
+            ->expects($this->once())
+            ->method('findOrdersByGroupIdOrFail')
+            ->with($input->groupId, $input->orderAsc)
+            ->willThrowException(new DBNotFoundException());
+
+        $this->ordersPaginator
+            ->expects($this->never())
+            ->method('setPagination');
+
+        $this->ordersPaginator
+            ->expects($this->never())
+            ->method('getIterator');
+
+        $this->productShopRepository
+            ->expects($this->never())
+            ->method('findProductsAndShopsOrFail');
+
+        $this->productsShopsPaginator
+            ->expects($this->never())
+            ->method('getIterator');
 
         $this->expectException(DBNotFoundException::class);
         $this->object->__invoke($input);

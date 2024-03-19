@@ -5,16 +5,23 @@ declare(strict_types=1);
 namespace Order\Application\OrderGetData\Dto;
 
 use Common\Domain\Application\ApplicationOutputInterface;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 
 class OrderGetDataOutputDto implements ApplicationOutputInterface
 {
     public function __construct(
-        public readonly array $ordersData
+        public readonly array $ordersData,
+        public readonly PaginatorPage $page,
+        public readonly int $pagesTotal
     ) {
     }
 
     public function toArray(): array
     {
-        return $this->ordersData;
+        return [
+            'page' => $this->page->getValue(),
+            'pages_total' => $this->pagesTotal,
+            'orders' => $this->ordersData,
+        ];
     }
 }
