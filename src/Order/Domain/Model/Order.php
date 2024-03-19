@@ -8,32 +8,40 @@ use Common\Domain\Model\ValueObject\Float\Amount;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use ListOrders\Domain\Model\ListOrders;
 use Product\Domain\Model\Product;
 use Shop\Domain\Model\Shop;
 
 class Order
 {
     private Identifier $id;
-    private Identifier $userId;
+    private Identifier $listOrdersId;
     private Identifier $groupId;
+    private Identifier $userId;
     private Identifier $productId;
     private Identifier $shopId;
     private Description $description;
     private Amount $amount;
+    private bool $bought;
     private \DateTime $createdOn;
 
+    private ListOrders $listOrders;
     private Product $product;
-    private Shop|null $shop;
-    /**
-     * @var Collection<ListOrders>
-     */
-    private Collection $listOrders;
+    private ?Shop $shop;
 
     public function getId(): Identifier
     {
         return $this->id;
+    }
+
+    public function getGroupId(): Identifier
+    {
+        return $this->groupId;
+    }
+
+    public function getListOrdersId(): Identifier
+    {
+        return $this->listOrdersId;
     }
 
     public function getUserId(): Identifier
@@ -46,11 +54,6 @@ class Order
         $this->userId = $userId;
 
         return $this;
-    }
-
-    public function getGroupId(): Identifier
-    {
-        return $this->groupId;
     }
 
     public function setGroupId(Identifier $groupId): self
@@ -108,6 +111,18 @@ class Order
         return $this;
     }
 
+    public function getBought(): bool
+    {
+        return $this->bought;
+    }
+
+    public function setBought(bool $bought): self
+    {
+        $this->bought = $bought;
+
+        return $this;
+    }
+
     public function getCreatedOn(): \DateTime
     {
         return $this->createdOn;
@@ -137,66 +152,60 @@ class Order
         return $this;
     }
 
-    public function getShop(): Shop|null
+    public function getShop(): ?Shop
     {
         return $this->shop;
     }
 
-    public function setShop(Shop|null $shop): self
+    public function setShop(?Shop $shop): self
     {
         $this->shop = $shop;
 
         return $this;
     }
 
-    public function getListOrders(): Collection
+    public function getListOrders(): ListOrders
     {
         return $this->listOrders;
     }
 
-    /**
-     * @param Order[] $orders
-     */
-    public function setListOrders(array $orders): self
+    public function setListOrders(ListOrders $listOrders): self
     {
-        $this->listOrders = new ArrayCollection($orders);
+        $this->listOrders = $listOrders;
 
         return $this;
     }
 
-    public function addListOrders(Order $order): self
-    {
-        $this->listOrders->add($order);
-
-        return $this;
-    }
-
-    public function __construct(Identifier $id, Identifier $userId, Identifier $groupId, Description $description, Amount $amount, Product $product, ?Shop $shop = null)
+    public function __construct(Identifier $id, Identifier $groupId, Identifier $userId, Description $description, Amount $amount, bool $bought, ListOrders $listOrders, Product $product, ?Shop $shop = null)
     {
         $this->id = $id;
-        $this->userId = $userId;
         $this->groupId = $groupId;
+        $this->listOrdersId = $listOrders->getId();
+        $this->userId = $userId;
         $this->productId = $product->getId();
         $this->shopId = null !== $shop
             ? $shop->getId()
             : ValueObjectFactory::createIdentifier(null);
         $this->description = $description;
         $this->amount = $amount;
+        $this->bought = $bought;
         $this->createdOn = new \DateTime();
 
+        $this->listOrders = $listOrders;
         $this->product = $product;
         $this->shop = $shop;
-        $this->listOrders = new ArrayCollection();
     }
 
-    public static function fromPrimitives(string $id, string $userId, string $groupId, float $amount, string|null $description, Product $product, ?Shop $shop = null): self
+    public static function fromPrimitives(string $id, string $groupId, string $userId, ?string $description, float $amount, bool $bought, ListOrders $listOrders, Product $product, ?Shop $shop = null): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),
-            ValueObjectFactory::createIdentifier($userId),
             ValueObjectFactory::createIdentifier($groupId),
+            ValueObjectFactory::createIdentifier($userId),
             ValueObjectFactory::createDescription($description),
             ValueObjectFactory::createAmount($amount),
+            $bought,
+            $listOrders,
             $product,
             $shop
         );

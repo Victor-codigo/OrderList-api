@@ -5,16 +5,21 @@
             repository-class="Order\Adapter\Database\Orm\Doctrine\Repository\OrderRepository">
 
        <id name="id"
-            type="IdentifierType"
-            column-definition="CHAR(36) NOT NULL"/>
-
-       <field name="userId"
-              column="user_id"
-              type="IdentifierType"
-              column-definition="CHAR(36) NOT NULL"/>
+           type="IdentifierType"
+           column-definition="CHAR(36) NOT NULL"/>
 
        <field name="groupId"
               column="group_id"
+              type="IdentifierType"
+              column-definition="CHAR(36) NOT NULL"/>
+
+       <field name="listOrdersId"
+              column="list_orders_id"
+              type="IdentifierType"
+              column-definition="CHAR(36) NOT NULL"/>
+
+       <field name="userId"
+              column="user_id"
               type="IdentifierType"
               column-definition="CHAR(36) NOT NULL"/>
 
@@ -38,6 +43,10 @@
               type="AmountType"
               nullable="true"/>
 
+       <field name="bought"
+              column="bought"
+              type="boolean"/>
+
        <field name="createdOn"
               column="created_on"
               type="datetime"/>
@@ -48,6 +57,9 @@
 
               <index name="IDX_group_id"
                      columns="group_id"/>
+
+              <index name="IDX_list_order_id"
+                     columns="list_orders_id"/>
 
               <index name="IDX_product_id"
                      columns="product_id"/>
@@ -75,10 +87,14 @@
 
        </many-to-one>
 
-       <!-- Orders - ListOrders_Orders -->
-       <one-to-many field="listOrders"
-                    target-entity="ListOrders\Domain\Model\ListOrdersOrders"
-                    mapped-by="order" />
+       <!-- Orders - ListOrders -->
+       <many-to-one field="listOrders"
+                    target-entity="ListOrders\Domain\Model\ListOrders"
+                    inversed-by="orders">
+
+              <join-column name="list_orders_id"
+                           referenced-column-name="id" />
+       </many-to-one>
 
        <!-- Orders - Shops -->
        <many-to-one field="shop"

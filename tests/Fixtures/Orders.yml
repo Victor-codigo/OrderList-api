@@ -110,49 +110,59 @@ Order\Domain\Model\Order:
   entity-order:
     __construct:
       id: "@order_id"
-      userId: "@entity-user_active->getId"
       groupId: "@order_group_id_group_exists"
+      userId: "@entity-user_active->getId"
       description: "@order_description"
       amount: "@order_amount_10"
+      bought: false
+      listOrders: "@entity-listOrder"
       product: "@entity-product"
       shop: "@entity-shop"
 
   entity-order_2:
     __construct:
       id: "@order_id_2"
-      userId: "@entity-user_active->getId"
       groupId: "@order_group_id_group_exists"
+      userId: "@entity-user_active->getId"
       description: "@order_description_2"
       amount: "@order_amount_20"
+      bought: true
+      listOrders: "@entity-listOrder_2"
       product: "@entity-product_2"
       shop: "@entity-shop_2"
 
   entity-order_3:
     __construct:
       id: "@order_id_3"
-      userId: "@entity-user_admin->getId"
       groupId: "@order_group_id_group_exists"
+      userId: "@entity-user_admin->getId"
       description: "@order_description_3"
       amount: "@order_amount_30"
+      bought: false
+      listOrders: "@entity-listOrder_3"
       product: "@entity-product_3"
       shop: "@entity-shop_3"
 
   entity-order_4:
     __construct:
       id: "@order_id_4"
-      userId: "@entity-user_admin->getId"
       groupId: "@order_group_id_group_exists"
+      userId: "@entity-user_admin->getId"
       description: "@order_description_4"
       amount: "@order_amount_40"
+      bought: false
+      listOrders: "@entity-listOrder"
       product: "@entity-product_4"
       shop: "@entity-shop_2"
 
   entity-order_5:
     __construct:
       id: "@order_id_5"
-      userId: "@entity-user_active->getId"
       groupId: "@order_group_id_group_exists"
+      userId: "@entity-user_active->getId"
       description: "@order_description_null"
       amount: "@order_amount_20"
+      bought: true
+      listOrders: "@entity-listOrder"
       product: "@entity-product_2"
       shop: "@entity-shop_2"

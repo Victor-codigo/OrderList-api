@@ -59,9 +59,9 @@
         </unique-constraints>
 
 
-       <!-- List_Orders - LostOrders_Orders -->
+       <!-- List_Orders - Orders -->
        <one-to-many field="orders"
-                    target-entity="ListOrders\Domain\Model\ListOrdersOrders"
+                    target-entity="Order\Domain\Model\Order"
                     mapped-by="listOrders" />
 
     </entity>
