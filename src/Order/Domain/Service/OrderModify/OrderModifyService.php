@@ -6,9 +6,12 @@ namespace Order\Domain\Service\OrderModify;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use ListOrders\Domain\Model\ListOrders;
+use ListOrders\Domain\Ports\ListOrdersRepositoryInterface;
 use Order\Domain\Model\Order;
 use Order\Domain\Ports\Repository\OrderRepositoryInterface;
 use Order\Domain\Service\OrderModify\Dto\OrderModifyDto;
+use Order\Domain\Service\OrderModify\Exception\OrderModifyListOrdersIdNotFoundException;
 use Order\Domain\Service\OrderModify\Exception\OrderModifyProductIdNotFoundException;
 use Order\Domain\Service\OrderModify\Exception\OrderModifyShopIdNotFoundException;
 use Product\Domain\Model\Product;
@@ -20,12 +23,14 @@ class OrderModifyService
 {
     public function __construct(
         private OrderRepositoryInterface $orderRepository,
+        private ListOrdersRepositoryInterface $listOrdersRepository,
         private ProductRepositoryInterface $productRepository,
         private ShopRepositoryInterface $shopRepository
     ) {
     }
 
     /**
+     * @throws OrderModifyListOrdersIdNotFoundException
      * @throws OrderModifyProductIdNotFoundException
      * @throws OrderModifyShopIdNotFoundException
      * @throws DBNotFoundException
@@ -34,22 +39,20 @@ class OrderModifyService
      */
     public function __invoke(OrderModifyDto $input): Order
     {
+        $listOrders = $this->validateListOrders($input->groupId, $input->listOrdersId);
         $product = $this->validateProduct($input->groupId, $input->productId);
-
-        $shop = null;
-        if (!$input->shopId->isNull()) {
-            $shop = $this->validateShopAndProductIsinAShop($input->groupId, $input->shopId->toIdentifier(), $input->productId);
-        }
+        $shop = $this->validateShop($input->groupId, $input->shopId->toIdentifier(), $input->productId);
 
         /** @var Order $order */
         $order = iterator_to_array(
-            $this->orderRepository->findOrdersByIdOrFail([$input->orderId], $input->groupId)
+            $this->orderRepository->findOrdersByIdOrFail($input->groupId, [$input->orderId], true)
         )[0];
 
         $order
             ->setAmount($input->amount)
             ->setDescription($input->description)
             ->setUserId($input->userId)
+            ->setListOrders($listOrders)
             ->setProduct($product)
             ->setShop($shop)
             ->setCreatedOn(new \DateTime());
@@ -57,6 +60,20 @@ class OrderModifyService
         $this->orderRepository->save([$order]);
 
         return $order;
+    }
+
+    /**
+     * @throws OrderModifyListOrdersIdNotFoundException
+     */
+    private function validateListOrders(Identifier $groupId, Identifier $listOrdersId): ListOrders
+    {
+        try {
+            $listOrdersPagination = $this->listOrdersRepository->findListOrderByIdOrFail([$listOrdersId], $groupId);
+
+            return iterator_to_array($listOrdersPagination)[0];
+        } catch (DBNotFoundException) {
+            throw OrderModifyListOrdersIdNotFoundException::fromMessage('Product id not found');
+        }
     }
 
     /**
@@ -76,9 +93,13 @@ class OrderModifyService
     /**
      * @throws OrderModifyShopIdNotFoundException
      */
-    private function validateShopAndProductIsinAShop(Identifier $groupId, Identifier $shopId, Identifier $productId): Shop
+    private function validateShop(Identifier $groupId, Identifier $shopId, Identifier $productId): ?Shop
     {
         try {
+            if ($shopId->isNull()) {
+                return null;
+            }
+
             $shopPagination = $this->shopRepository->findShopsOrFail($groupId, [$shopId], [$productId]);
 
             return iterator_to_array($shopPagination)[0];

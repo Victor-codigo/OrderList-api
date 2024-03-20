@@ -27,8 +27,9 @@ use Symfony\Component\HttpFoundation\Response;
                 mediaType: 'application/json',
                 schema: new OA\Schema(
                     properties: [
-                        new OA\Property(property: 'order_id', type: 'string', description: 'Order id', example: '0290bf7e-2e68-4698-ba2e-d2394c239572'),
                         new OA\Property(property: 'group_id', type: 'string', description: 'Group id', example: '0290bf7e-2e68-4698-ba2e-d2394c239572'),
+                        new OA\Property(property: 'list_orders_ud', type: 'string', description: 'List orders id', example: '0630d868-e1d5-4c17-84c8-002eb28f5bdb'),
+                        new OA\Property(property: 'order_id', type: 'string', description: 'Order id', example: '0290bf7e-2e68-4698-ba2e-d2394c239572'),
                         new OA\Property(property: 'product_id', type: 'string', description: 'Product id', example: '0290bf7e-2e68-4698-ba2e-d2394c239572'),
                         new OA\Property(property: 'shop_id', type: 'string', description: 'Shop id', example: '0290bf7e-2e68-4698-ba2e-d2394c239572'),
                         new OA\Property(property: 'description', type: 'string', description: 'Order description'),
@@ -64,7 +65,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<order_id|group_id|product_id|shop_id|description|amount|order_not_found|product_not_found|shop_not_found|group_error, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<order_id|group_id|list_orders_id|product_id|shop_id|description|amount|list_orders_not_found|order_not_found|product_not_found|shop_not_found|group_error, string|array>')),
                     ]
                 )
             )
@@ -83,8 +84,9 @@ class OrderModifyController extends AbstractController
     {
         $orderModify = $this->OrderModifyUseCase->__invoke(
             $this->createOrderModifyInputDto(
-                $request->orderId,
                 $request->groupId,
+                $request->listOrdersId,
+                $request->orderId,
                 $request->productId,
                 $request->shopId,
                 $request->description,
@@ -95,15 +97,16 @@ class OrderModifyController extends AbstractController
         return $this->createResponse($orderModify);
     }
 
-    private function createOrderModifyInputDto(string|null $orderId, string|null $groupId, string|null $productId, string|null $shopId, string|null $description, float|null $amount): OrderModifyInputDto
+    private function createOrderModifyInputDto(?string $groupId, ?string $listOrdersId, ?string $orderId, ?string $productId, ?string $shopId, ?string $description, ?float $amount): OrderModifyInputDto
     {
         /** @var UserSharedSymfonyAdapter $userAdapter */
         $userAdapter = $this->security->getUser();
 
         return new OrderModifyInputDto(
             $userAdapter->getUser(),
-            $orderId,
             $groupId,
+            $listOrdersId,
+            $orderId,
             $productId,
             $shopId,
             $description,

@@ -28,8 +28,9 @@ class OrderModifyInputDtoTest extends TestCase
     /** @test */
     public function itShouldValidate(): void
     {
-        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
+        $listOrdersId = '0e8a10dc-1a77-46b4-8340-bd6218cbec68';
+        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $productId = 'b87e6787-542f-4256-bb37-3e6d09a796e5';
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = 'order description modified';
@@ -37,8 +38,9 @@ class OrderModifyInputDtoTest extends TestCase
 
         $object = new OrderModifyInputDto(
             $this->userSession,
-            $orderId,
             $groupId,
+            $listOrdersId,
+            $orderId,
             $productId,
             $shopId,
             $description,
@@ -53,8 +55,9 @@ class OrderModifyInputDtoTest extends TestCase
     /** @test */
     public function itShouldValidateShopIdIsNull(): void
     {
-        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
+        $listOrdersId = '0e8a10dc-1a77-46b4-8340-bd6218cbec68';
+        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $productId = 'b87e6787-542f-4256-bb37-3e6d09a796e5';
         $shopId = null;
         $description = 'order description modified';
@@ -62,8 +65,9 @@ class OrderModifyInputDtoTest extends TestCase
 
         $object = new OrderModifyInputDto(
             $this->userSession,
-            $orderId,
             $groupId,
+            $listOrdersId,
+            $orderId,
             $productId,
             $shopId,
             $description,
@@ -78,8 +82,9 @@ class OrderModifyInputDtoTest extends TestCase
     /** @test */
     public function itShouldValidateDescriptionIdIsNull(): void
     {
-        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
+        $listOrdersId = '0e8a10dc-1a77-46b4-8340-bd6218cbec68';
+        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $productId = 'b87e6787-542f-4256-bb37-3e6d09a796e5';
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = null;
@@ -87,8 +92,9 @@ class OrderModifyInputDtoTest extends TestCase
 
         $object = new OrderModifyInputDto(
             $this->userSession,
-            $orderId,
             $groupId,
+            $listOrdersId,
+            $orderId,
             $productId,
             $shopId,
             $description,
@@ -103,8 +109,9 @@ class OrderModifyInputDtoTest extends TestCase
     /** @test */
     public function itShouldValidateAmountIdIsNull(): void
     {
-        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
+        $listOrdersId = '0e8a10dc-1a77-46b4-8340-bd6218cbec68';
+        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $productId = 'b87e6787-542f-4256-bb37-3e6d09a796e5';
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = 'order description modified';
@@ -112,8 +119,9 @@ class OrderModifyInputDtoTest extends TestCase
 
         $object = new OrderModifyInputDto(
             $this->userSession,
-            $orderId,
             $groupId,
+            $listOrdersId,
+            $orderId,
             $productId,
             $shopId,
             $description,
@@ -128,8 +136,9 @@ class OrderModifyInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailValidatingOrderIsNull(): void
     {
-        $orderId = null;
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
+        $listOrdersId = '0e8a10dc-1a77-46b4-8340-bd6218cbec68';
+        $orderId = null;
         $productId = 'b87e6787-542f-4256-bb37-3e6d09a796e5';
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = 'order description modified';
@@ -137,8 +146,9 @@ class OrderModifyInputDtoTest extends TestCase
 
         $object = new OrderModifyInputDto(
             $this->userSession,
-            $orderId,
             $groupId,
+            $listOrdersId,
+            $orderId,
             $productId,
             $shopId,
             $description,
@@ -153,8 +163,9 @@ class OrderModifyInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailValidatingOrderIsWrong(): void
     {
-        $orderId = 'wrong id';
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
+        $listOrdersId = '0e8a10dc-1a77-46b4-8340-bd6218cbec68';
+        $orderId = 'wrong id';
         $productId = 'b87e6787-542f-4256-bb37-3e6d09a796e5';
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = 'order description modified';
@@ -162,8 +173,9 @@ class OrderModifyInputDtoTest extends TestCase
 
         $object = new OrderModifyInputDto(
             $this->userSession,
-            $orderId,
             $groupId,
+            $listOrdersId,
+            $orderId,
             $productId,
             $shopId,
             $description,
@@ -178,8 +190,9 @@ class OrderModifyInputDtoTest extends TestCase
     /** @test */
     public function itShouldValidateGroupIdIsNull(): void
     {
-        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $groupId = null;
+        $listOrdersId = '0e8a10dc-1a77-46b4-8340-bd6218cbec68';
+        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $productId = 'b87e6787-542f-4256-bb37-3e6d09a796e5';
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = null;
@@ -187,8 +200,9 @@ class OrderModifyInputDtoTest extends TestCase
 
         $object = new OrderModifyInputDto(
             $this->userSession,
-            $orderId,
             $groupId,
+            $listOrdersId,
+            $orderId,
             $productId,
             $shopId,
             $description,
@@ -203,8 +217,9 @@ class OrderModifyInputDtoTest extends TestCase
     /** @test */
     public function itShouldValidateGroupIdIsWrong(): void
     {
-        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $groupId = 'wrong id';
+        $listOrdersId = '0e8a10dc-1a77-46b4-8340-bd6218cbec68';
+        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $productId = 'b87e6787-542f-4256-bb37-3e6d09a796e5';
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = null;
@@ -212,8 +227,9 @@ class OrderModifyInputDtoTest extends TestCase
 
         $object = new OrderModifyInputDto(
             $this->userSession,
-            $orderId,
             $groupId,
+            $listOrdersId,
+            $orderId,
             $productId,
             $shopId,
             $description,
@@ -226,10 +242,65 @@ class OrderModifyInputDtoTest extends TestCase
     }
 
     /** @test */
+    public function itShouldValidateListOrdersIdIsNull(): void
+    {
+        $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
+        $listOrdersId = null;
+        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
+        $productId = 'b87e6787-542f-4256-bb37-3e6d09a796e5';
+        $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
+        $description = null;
+        $amount = 13.58;
+
+        $object = new OrderModifyInputDto(
+            $this->userSession,
+            $groupId,
+            $listOrdersId,
+            $orderId,
+            $productId,
+            $shopId,
+            $description,
+            $amount,
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['list_orders_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
+    }
+
+    /** @test */
+    public function itShouldValidateListOrdersIdIsWrong(): void
+    {
+        $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
+        $listOrdersId = 'wrong id';
+        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
+        $productId = 'b87e6787-542f-4256-bb37-3e6d09a796e5';
+        $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
+        $description = null;
+        $amount = 13.58;
+
+        $object = new OrderModifyInputDto(
+            $this->userSession,
+            $groupId,
+            $listOrdersId,
+            $orderId,
+            $productId,
+            $shopId,
+            $description,
+            $amount,
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['list_orders_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
+    }
+
+    /** @test */
     public function itShouldValidateProductIdIsNull(): void
     {
-        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
+        $listOrdersId = '0e8a10dc-1a77-46b4-8340-bd6218cbec68';
+        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $productId = null;
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = 'order description modified';
@@ -237,8 +308,9 @@ class OrderModifyInputDtoTest extends TestCase
 
         $object = new OrderModifyInputDto(
             $this->userSession,
-            $orderId,
             $groupId,
+            $listOrdersId,
+            $orderId,
             $productId,
             $shopId,
             $description,
@@ -253,8 +325,9 @@ class OrderModifyInputDtoTest extends TestCase
     /** @test */
     public function itShouldValidateProductIdIsWrong(): void
     {
-        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
+        $listOrdersId = '0e8a10dc-1a77-46b4-8340-bd6218cbec68';
+        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $productId = 'wrong id';
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = 'order description modified';
@@ -262,8 +335,9 @@ class OrderModifyInputDtoTest extends TestCase
 
         $object = new OrderModifyInputDto(
             $this->userSession,
-            $orderId,
             $groupId,
+            $listOrdersId,
+            $orderId,
             $productId,
             $shopId,
             $description,
@@ -278,8 +352,9 @@ class OrderModifyInputDtoTest extends TestCase
     /** @test */
     public function itShouldValidateShopIdIsWrong(): void
     {
-        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
+        $listOrdersId = '0e8a10dc-1a77-46b4-8340-bd6218cbec68';
+        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $productId = 'b87e6787-542f-4256-bb37-3e6d09a796e5';
         $shopId = 'wrong id';
         $description = 'order description modified';
@@ -287,8 +362,9 @@ class OrderModifyInputDtoTest extends TestCase
 
         $object = new OrderModifyInputDto(
             $this->userSession,
-            $orderId,
             $groupId,
+            $listOrdersId,
+            $orderId,
             $productId,
             $shopId,
             $description,
@@ -303,8 +379,9 @@ class OrderModifyInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailValidatingDescriptionIsTooLong(): void
     {
-        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
+        $listOrdersId = '0e8a10dc-1a77-46b4-8340-bd6218cbec68';
+        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $productId = 'b87e6787-542f-4256-bb37-3e6d09a796e5';
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = str_pad('', 501, 'p');
@@ -312,8 +389,9 @@ class OrderModifyInputDtoTest extends TestCase
 
         $object = new OrderModifyInputDto(
             $this->userSession,
-            $orderId,
             $groupId,
+            $listOrdersId,
+            $orderId,
             $productId,
             $shopId,
             $description,
@@ -328,8 +406,9 @@ class OrderModifyInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailValidatingAmountIsNegative(): void
     {
-        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
+        $listOrdersId = '0e8a10dc-1a77-46b4-8340-bd6218cbec68';
+        $orderId = 'cbf92e4f-8e96-4a43-90c3-2769a293facb';
         $productId = 'b87e6787-542f-4256-bb37-3e6d09a796e5';
         $shopId = '45abea59-3e11-4fbd-b0dc-cc0fc8608430';
         $description = 'order description';
@@ -337,8 +416,9 @@ class OrderModifyInputDtoTest extends TestCase
 
         $object = new OrderModifyInputDto(
             $this->userSession,
-            $orderId,
             $groupId,
+            $listOrdersId,
+            $orderId,
             $productId,
             $shopId,
             $description,

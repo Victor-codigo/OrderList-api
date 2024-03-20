@@ -14,6 +14,7 @@ class OrderModifyDto
     public function __construct(
         public readonly Identifier $orderId,
         public readonly Identifier $groupId,
+        public readonly Identifier $listOrdersId,
         public readonly Identifier $productId,
         public readonly IdentifierNullable $shopId,
         public readonly Identifier $userId,

@@ -16,6 +16,7 @@ class OrderModifyControllerTest extends WebClientTestCase
     private const ENDPOINT = '/api/v1/orders';
     private const METHOD = 'PUT';
     private const ORDER_ID = 'a0b4760a-9037-477a-8b84-d059ae5ee7e9';
+    private const LIST_ORDERS_ID = 'd446eab9-5199-48d0-91f5-0407a86bcb4f';
     private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const PRODUCT_ID = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
     private const PRODUCT_NOT_IN_A_SHOP_ID = 'ca10c90a-c7e6-4594-89e9-71d2f5e74710';
@@ -29,8 +30,9 @@ class OrderModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'order_id' => self::ORDER_ID,
                 'group_id' => self::GROUP_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
+                'order_id' => self::ORDER_ID,
                 'product_id' => self::PRODUCT_ID,
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modified',
@@ -55,8 +57,9 @@ class OrderModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'order_id' => self::ORDER_ID,
                 'group_id' => self::GROUP_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
+                'order_id' => self::ORDER_ID,
                 'product_id' => self::PRODUCT_ID,
                 'shop_id' => null,
                 'description' => 'order description modified',
@@ -81,8 +84,9 @@ class OrderModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'order_id' => self::ORDER_ID,
                 'group_id' => self::GROUP_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
+                'order_id' => self::ORDER_ID,
                 'product_id' => self::PRODUCT_ID,
                 'shop_id' => self::SHOP_ID,
                 'description' => null,
@@ -107,8 +111,9 @@ class OrderModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'order_id' => self::ORDER_ID,
                 'group_id' => self::GROUP_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
+                'order_id' => self::ORDER_ID,
                 'product_id' => self::PRODUCT_ID,
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modified',
@@ -133,8 +138,9 @@ class OrderModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'order_id' => null,
                 'group_id' => self::GROUP_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
+                'order_id' => null,
                 'product_id' => self::PRODUCT_ID,
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modified',
@@ -159,8 +165,9 @@ class OrderModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'order_id' => 'wrong id',
                 'group_id' => self::GROUP_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
+                'order_id' => 'wrong id',
                 'product_id' => self::PRODUCT_ID,
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modified',
@@ -185,8 +192,9 @@ class OrderModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'order_id' => self::ORDER_ID,
                 'group_id' => null,
+                'list_orders_id' => self::LIST_ORDERS_ID,
+                'order_id' => self::ORDER_ID,
                 'product_id' => self::PRODUCT_ID,
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modified',
@@ -211,8 +219,9 @@ class OrderModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'order_id' => self::ORDER_ID,
                 'group_id' => 'wrong id',
+                'list_orders_id' => self::LIST_ORDERS_ID,
+                'order_id' => self::ORDER_ID,
                 'product_id' => self::PRODUCT_ID,
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modified',
@@ -230,6 +239,87 @@ class OrderModifyControllerTest extends WebClientTestCase
     }
 
     /** @test */
+    public function itShouldFailModifyingOrderListOrdersIdIsNull(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'list_orders_id' => null,
+                'order_id' => self::ORDER_ID,
+                'product_id' => self::PRODUCT_ID,
+                'shop_id' => self::SHOP_ID,
+                'description' => 'order description modified',
+                'amount' => null,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['list_orders_id'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->list_orders_id);
+    }
+
+    /** @test */
+    public function itShouldFailModifyingOrderListOrdersIdIsWrong(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'list_orders_id' => 'wrong id',
+                'order_id' => self::ORDER_ID,
+                'product_id' => self::PRODUCT_ID,
+                'shop_id' => self::SHOP_ID,
+                'description' => 'order description modified',
+                'amount' => null,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['list_orders_id'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->list_orders_id);
+    }
+
+    /** @test */
+    public function itShouldFailModifyingOrderListOrdersIdNotFound(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'list_orders_id' => 'ceaaac38-19ed-4aee-9d80-7a19e3da5dba',
+                'order_id' => self::ORDER_ID,
+                'product_id' => self::PRODUCT_ID,
+                'shop_id' => self::SHOP_ID,
+                'description' => 'order description modified',
+                'amount' => null,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['list_orders_not_found'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('List orders not found', $responseContent->message);
+        $this->assertEquals('List orders not found', $responseContent->errors->list_orders_not_found);
+    }
+
+    /** @test */
     public function itShouldFailModifyingOrderProductIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -237,8 +327,9 @@ class OrderModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'order_id' => self::ORDER_ID,
                 'group_id' => self::GROUP_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
+                'order_id' => self::ORDER_ID,
                 'product_id' => null,
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modified',
@@ -263,8 +354,9 @@ class OrderModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'order_id' => self::ORDER_ID,
                 'group_id' => self::GROUP_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
+                'order_id' => self::ORDER_ID,
                 'product_id' => 'wrong id',
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modified',
@@ -289,8 +381,9 @@ class OrderModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'order_id' => self::ORDER_ID,
                 'group_id' => self::GROUP_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
+                'order_id' => self::ORDER_ID,
                 'product_id' => self::PRODUCT_ID,
                 'shop_id' => 'wrong id',
                 'description' => 'order description modified',
@@ -315,8 +408,9 @@ class OrderModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'order_id' => self::ORDER_ID,
                 'group_id' => self::GROUP_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
+                'order_id' => self::ORDER_ID,
                 'product_id' => self::PRODUCT_ID,
                 'shop_id' => self::SHOP_ID,
                 'description' => str_pad('', 501, 'p'),
@@ -341,8 +435,9 @@ class OrderModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'order_id' => self::ORDER_ID,
                 'group_id' => self::GROUP_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
+                'order_id' => self::ORDER_ID,
                 'product_id' => self::PRODUCT_ID,
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modify',
@@ -367,8 +462,9 @@ class OrderModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'order_id' => 'a53cf32e-815c-4540-b0ac-674b55de96bb',
                 'group_id' => self::GROUP_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
+                'order_id' => 'a53cf32e-815c-4540-b0ac-674b55de96bb',
                 'product_id' => self::PRODUCT_ID,
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modify',
@@ -393,8 +489,9 @@ class OrderModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'order_id' => self::ORDER_ID,
                 'group_id' => self::GROUP_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
+                'order_id' => self::ORDER_ID,
                 'product_id' => 'a53cf32e-815c-4540-b0ac-674b55de96bb',
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modify',
@@ -419,8 +516,9 @@ class OrderModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'order_id' => self::ORDER_ID,
                 'group_id' => self::GROUP_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
+                'order_id' => self::ORDER_ID,
                 'product_id' => self::PRODUCT_ID,
                 'shop_id' => 'a53cf32e-815c-4540-b0ac-674b55de96bb',
                 'description' => 'order description modify',
@@ -445,8 +543,9 @@ class OrderModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'order_id' => self::ORDER_ID,
                 'group_id' => self::GROUP_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
+                'order_id' => self::ORDER_ID,
                 'product_id' => self::PRODUCT_NOT_IN_A_SHOP_ID,
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modify',
@@ -471,8 +570,9 @@ class OrderModifyControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'order_id' => self::ORDER_ID,
                 'group_id' => self::GROUP_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
+                'order_id' => self::ORDER_ID,
                 'product_id' => self::PRODUCT_NOT_IN_A_SHOP_ID,
                 'shop_id' => self::SHOP_ID,
                 'description' => 'order description modify',

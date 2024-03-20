@@ -16,8 +16,9 @@ use Common\Domain\Validation\ValidationInterface;
 class OrderModifyInputDto implements ServiceInputDtoInterface
 {
     public readonly UserShared $userSession;
-    public readonly Identifier $orderId;
     public readonly Identifier $groupId;
+    public readonly Identifier $listOrdersId;
+    public readonly Identifier $orderId;
     public readonly Identifier $productId;
     public readonly IdentifierNullable $shopId;
     public readonly Description $description;
@@ -25,16 +26,18 @@ class OrderModifyInputDto implements ServiceInputDtoInterface
 
     public function __construct(
         UserShared $userSession,
-        string|null $orderId,
-        string|null $groupId,
-        string|null $productId,
-        string|null $shopId,
-        string|null $description,
-        float|null $amount,
+        ?string $groupId,
+        ?string $listOrdersId,
+        ?string $orderId,
+        ?string $productId,
+        ?string $shopId,
+        ?string $description,
+        ?float $amount,
     ) {
         $this->userSession = $userSession;
-        $this->orderId = ValueObjectFactory::createIdentifier($orderId);
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
+        $this->listOrdersId = ValueObjectFactory::createIdentifier($listOrdersId);
+        $this->orderId = ValueObjectFactory::createIdentifier($orderId);
         $this->productId = ValueObjectFactory::createIdentifier($productId);
         $this->shopId = ValueObjectFactory::createIdentifierNullable($shopId);
         $this->description = ValueObjectFactory::createDescription($description);
@@ -44,8 +47,9 @@ class OrderModifyInputDto implements ServiceInputDtoInterface
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([
-            'order_id' => $this->orderId,
             'group_id' => $this->groupId,
+            'list_orders_id' => $this->listOrdersId,
+            'order_id' => $this->orderId,
             'product_id' => $this->productId,
             'shop_id' => $this->shopId,
             'description' => $this->description,

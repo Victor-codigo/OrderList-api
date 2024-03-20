@@ -14,11 +14,13 @@ use Common\Domain\Validation\ValidationInterface;
 use Order\Application\OrderModify\Dto\OrderModifyInputDto;
 use Order\Application\OrderModify\Dto\OrderModifyOutputDto;
 use Order\Application\OrderModify\Exception\OrderModifyGroupAndUserValidationException;
+use Order\Application\OrderModify\Exception\OrderModifyListOrdersIdNotFoundException;
 use Order\Application\OrderModify\Exception\OrderModifyOrderIdNotFoundException;
 use Order\Application\OrderModify\Exception\OrderModifyProductIdNotFoundException;
 use Order\Application\OrderModify\Exception\OrderModifyShopIdNotFoundException;
 use Order\Domain\Model\Order;
 use Order\Domain\Service\OrderModify\Dto\OrderModifyDto;
+use Order\Domain\Service\OrderModify\Exception\OrderModifyListOrdersIdNotFoundException as OrderModifyServiceListOrdersIdNotFoundException;
 use Order\Domain\Service\OrderModify\Exception\OrderModifyProductIdNotFoundException as OrderModifyServiceProductIdNotFoundException;
 use Order\Domain\Service\OrderModify\Exception\OrderModifyShopIdNotFoundException as OrderModifyServiceShopIdNotFoundException;
 use Order\Domain\Service\OrderModify\OrderModifyService;
@@ -48,6 +50,8 @@ class OrderModifyUseCase extends ServiceBase
             throw OrderModifyProductIdNotFoundException::fromMessage('Product not found');
         } catch (OrderModifyServiceShopIdNotFoundException) {
             throw OrderModifyShopIdNotFoundException::fromMessage('Shop not found, or product is not in the shop');
+        } catch (OrderModifyServiceListOrdersIdNotFoundException) {
+            throw OrderModifyListOrdersIdNotFoundException::fromMessage('List orders not found');
         } catch (DBNotFoundException) {
             throw OrderModifyOrderIdNotFoundException::fromMessage('Order not found');
         } catch (ValidateGroupAndUserException) {
@@ -71,6 +75,7 @@ class OrderModifyUseCase extends ServiceBase
         return new OrderModifyDto(
             $input->orderId,
             $input->groupId,
+            $input->listOrdersId,
             $input->productId,
             $input->shopId,
             $input->userSession->getId(),

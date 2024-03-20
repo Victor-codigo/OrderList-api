@@ -8,9 +8,12 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use ListOrders\Domain\Model\ListOrders;
+use ListOrders\Domain\Ports\ListOrdersRepositoryInterface;
 use Order\Domain\Model\Order;
 use Order\Domain\Ports\Repository\OrderRepositoryInterface;
 use Order\Domain\Service\OrderModify\Dto\OrderModifyDto;
+use Order\Domain\Service\OrderModify\Exception\OrderModifyListOrdersIdNotFoundException;
 use Order\Domain\Service\OrderModify\Exception\OrderModifyProductIdNotFoundException;
 use Order\Domain\Service\OrderModify\Exception\OrderModifyShopIdNotFoundException;
 use Order\Domain\Service\OrderModify\OrderModifyService;
@@ -25,12 +28,14 @@ class OrderModifyServiceTest extends TestCase
 {
     private const ORDER_ID = 'a0b4760a-9037-477a-8b84-d059ae5ee7e9';
     private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const LIST_ORDERS_ID = '218ee820-fd4b-4a4c-abc3-0e26ac437dd9';
     private const PRODUCT_ID = '8b6d650b-7bb7-4850-bf25-36cda9bce801';
     private const SHOP_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
     private const USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
     private OrderModifyService $object;
     private MockObject|OrderRepositoryInterface $orderRepository;
+    private MockObject|ListOrdersRepositoryInterface $listOrdersRepository;
     private MockObject|ProductRepositoryInterface $productRepository;
     private MockObject|ShopRepositoryInterface $shopRepository;
     private MockObject|PaginatorInterface $paginator;
@@ -40,10 +45,28 @@ class OrderModifyServiceTest extends TestCase
         parent::setUp();
 
         $this->orderRepository = $this->createMock(OrderRepositoryInterface::class);
+        $this->listOrdersRepository = $this->createMock(ListOrdersRepositoryInterface::class);
         $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
         $this->shopRepository = $this->createMock(ShopRepositoryInterface::class);
         $this->paginator = $this->createMock(PaginatorInterface::class);
-        $this->object = new OrderModifyService($this->orderRepository, $this->productRepository, $this->shopRepository);
+        $this->object = new OrderModifyService(
+            $this->orderRepository,
+            $this->listOrdersRepository,
+            $this->productRepository,
+            $this->shopRepository
+        );
+    }
+
+    private function getListsOrders(): ListOrders
+    {
+        return ListOrders::fromPrimitives(
+            'list orders 1 id',
+            'group id',
+            'list orders 1 user id',
+            'list orders 1 name',
+            'list orders 1 description',
+            null
+        );
     }
 
     private function getProduct(): Product
@@ -68,27 +91,31 @@ class OrderModifyServiceTest extends TestCase
         );
     }
 
-    private function getOrderFromInput(OrderModifyDto $input, Product $product, Shop $shop): Order
+    private function getOrderFromInput(OrderModifyDto $input, ListOrders $listOrders, Product $product, Shop $shop): Order
     {
         return new Order(
             $input->orderId,
-            $input->userId,
             $input->groupId,
+            $input->userId,
             $input->description,
             $input->amount,
+            false,
+            $listOrders,
             $product,
             $shop,
         );
     }
 
-    private function getOrder(Product $product, Shop $shop): Order
+    private function getOrder(ListOrders $listOrders, Product $product, Shop $shop): Order
     {
         return new Order(
             ValueObjectFactory::createIdentifier(self::ORDER_ID),
-            ValueObjectFactory::createIdentifier(self::USER_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifier(self::USER_ID),
             ValueObjectFactory::createDescription('order description'),
             ValueObjectFactory::createAmount(null),
+            true,
+            $listOrders,
             $product,
             $shop
         );
@@ -108,19 +135,27 @@ class OrderModifyServiceTest extends TestCase
     /** @test */
     public function itShouldModifyTheOrder(): void
     {
+        $listOrders = $this->getListsOrders();
         $product = $this->getProduct();
         $shop = $this->getShop();
-        $order = $this->getOrder($product, $shop);
+        $order = $this->getOrder($listOrders, $product, $shop);
         $input = new OrderModifyDto(
             ValueObjectFactory::createIdentifier(self::ORDER_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID),
             ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
             ValueObjectFactory::createIdentifierNullable(self::SHOP_ID),
             ValueObjectFactory::createIdentifier(self::USER_ID),
             ValueObjectFactory::createDescription('order description modified'),
             ValueObjectFactory::createAmount(10.3),
         );
-        $orderExpected = $this->getOrderFromInput($input, $product, $shop);
+        $orderExpected = $this->getOrderFromInput($input, $listOrders, $product, $shop);
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrderByIdOrFail')
+            ->with([$input->listOrdersId], $input->groupId)
+            ->willReturn($this->paginator);
 
         $this->productRepository
             ->expects($this->once())
@@ -137,7 +172,73 @@ class OrderModifyServiceTest extends TestCase
         $this->orderRepository
             ->expects($this->once())
             ->method('findOrdersByIdOrFail')
-            ->with([$input->orderId], $input->groupId)
+            ->with($input->groupId, [$input->orderId])
+            ->willReturn($this->paginator);
+
+        $this->orderRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($this->callback(function (array $orderToSave) use ($orderExpected) {
+                $this->assertCount(1, $orderToSave);
+                $this->assertOrderIsOk($orderExpected, $orderToSave[0]);
+
+                return true;
+            }));
+
+        $this->paginator
+            ->expects($this->exactly(4))
+            ->method('getIterator')
+            ->willReturnOnConsecutiveCalls(
+                new \ArrayIterator([$listOrders]),
+                new \ArrayIterator([$product]),
+                new \ArrayIterator([$shop]),
+                new \ArrayIterator([$order])
+            );
+
+        $return = $this->object->__invoke($input);
+
+        $this->assertOrderIsOk($orderExpected, $return);
+    }
+
+    /** @test */
+    public function itShouldModifyTheOrderShopIsNull(): void
+    {
+        $listOrders = $this->getListsOrders();
+        $product = $this->getProduct();
+        $shop = $this->getShop();
+        $order = $this->getOrder($listOrders, $product, $shop);
+        $input = new OrderModifyDto(
+            ValueObjectFactory::createIdentifier(self::ORDER_ID),
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID),
+            ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
+            ValueObjectFactory::createIdentifierNullable(null),
+            ValueObjectFactory::createIdentifier(self::USER_ID),
+            ValueObjectFactory::createDescription('order description modified'),
+            ValueObjectFactory::createAmount(10.3),
+        );
+        $orderExpected = $this->getOrderFromInput($input, $listOrders, $product, $shop);
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrderByIdOrFail')
+            ->with([$input->listOrdersId], $input->groupId)
+            ->willReturn($this->paginator);
+
+        $this->productRepository
+            ->expects($this->once())
+            ->method('findProductsOrFail')
+            ->with($input->groupId, [$input->productId])
+            ->willReturn($this->paginator);
+
+        $this->shopRepository
+            ->expects($this->never())
+            ->method('findShopsOrFail');
+
+        $this->orderRepository
+            ->expects($this->once())
+            ->method('findOrdersByIdOrFail')
+            ->with($input->groupId, [$input->orderId])
             ->willReturn($this->paginator);
 
         $this->orderRepository
@@ -154,8 +255,8 @@ class OrderModifyServiceTest extends TestCase
             ->expects($this->exactly(3))
             ->method('getIterator')
             ->willReturnOnConsecutiveCalls(
+                new \ArrayIterator([$listOrders]),
                 new \ArrayIterator([$product]),
-                new \ArrayIterator([$shop]),
                 new \ArrayIterator([$order])
             );
 
@@ -165,17 +266,69 @@ class OrderModifyServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailModifyingTheOrderValidateProductNotFound(): void
+    public function itShouldFailModifyingTheOrderListOrderNotFound(): void
     {
         $input = new OrderModifyDto(
             ValueObjectFactory::createIdentifier(self::ORDER_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID),
             ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
             ValueObjectFactory::createIdentifierNullable(self::SHOP_ID),
             ValueObjectFactory::createIdentifier(self::USER_ID),
             ValueObjectFactory::createDescription('order description modified'),
             ValueObjectFactory::createAmount(10.3),
         );
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrderByIdOrFail')
+            ->with([$input->listOrdersId], $input->groupId)
+            ->willThrowException(new DBNotFoundException());
+
+        $this->productRepository
+            ->expects($this->never())
+            ->method('findProductsOrFail');
+
+        $this->shopRepository
+            ->expects($this->never())
+            ->method('findShopsOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByIdOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('save');
+
+        $this->paginator
+            ->expects($this->never())
+            ->method('getIterator');
+
+        $this->expectException(OrderModifyListOrdersIdNotFoundException::class);
+        $this->object->__invoke($input);
+    }
+
+    /** @test */
+    public function itShouldFailModifyingTheOrderProductNotFound(): void
+    {
+        $listOrders = $this->getListsOrders();
+        $input = new OrderModifyDto(
+            ValueObjectFactory::createIdentifier(self::ORDER_ID),
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID),
+            ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
+            ValueObjectFactory::createIdentifierNullable(self::SHOP_ID),
+            ValueObjectFactory::createIdentifier(self::USER_ID),
+            ValueObjectFactory::createDescription('order description modified'),
+            ValueObjectFactory::createAmount(10.3),
+        );
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrderByIdOrFail')
+            ->with([$input->listOrdersId], $input->groupId)
+            ->willReturn($this->paginator);
 
         $this->productRepository
             ->expects($this->once())
@@ -196,8 +349,11 @@ class OrderModifyServiceTest extends TestCase
             ->method('save');
 
         $this->paginator
-            ->expects($this->never())
-            ->method('getIterator');
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturnOnConsecutiveCalls(
+                new \ArrayIterator([$listOrders])
+            );
 
         $this->expectException(OrderModifyProductIdNotFoundException::class);
         $this->object->__invoke($input);
@@ -206,16 +362,24 @@ class OrderModifyServiceTest extends TestCase
     /** @test */
     public function itShouldFailModifyingTheOrderShopNotFound(): void
     {
+        $listOrders = $this->getListsOrders();
         $product = $this->getProduct();
         $input = new OrderModifyDto(
             ValueObjectFactory::createIdentifier(self::ORDER_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID),
             ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
             ValueObjectFactory::createIdentifierNullable(self::SHOP_ID),
             ValueObjectFactory::createIdentifier(self::USER_ID),
             ValueObjectFactory::createDescription('order description modified'),
             ValueObjectFactory::createAmount(10.3),
         );
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrderByIdOrFail')
+            ->with([$input->listOrdersId], $input->groupId)
+            ->willReturn($this->paginator);
 
         $this->productRepository
             ->expects($this->once())
@@ -238,9 +402,12 @@ class OrderModifyServiceTest extends TestCase
             ->method('save');
 
         $this->paginator
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$product]));
+            ->willReturnOnConsecutiveCalls(
+                new \ArrayIterator([$listOrders]),
+                new \ArrayIterator([$product])
+            );
 
         $this->expectException(OrderModifyShopIdNotFoundException::class);
         $this->object->__invoke($input);
@@ -249,17 +416,25 @@ class OrderModifyServiceTest extends TestCase
     /** @test */
     public function itShouldFailModifyingTheOrderOrderNotFound(): void
     {
+        $listOrders = $this->getListsOrders();
         $product = $this->getProduct();
         $shop = $this->getShop();
         $input = new OrderModifyDto(
             ValueObjectFactory::createIdentifier(self::ORDER_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID),
             ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
             ValueObjectFactory::createIdentifierNullable(self::SHOP_ID),
             ValueObjectFactory::createIdentifier(self::USER_ID),
             ValueObjectFactory::createDescription('order description modified'),
             ValueObjectFactory::createAmount(10.3),
         );
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrderByIdOrFail')
+            ->with([$input->listOrdersId], $input->groupId)
+            ->willReturn($this->paginator);
 
         $this->productRepository
             ->expects($this->once())
@@ -276,7 +451,7 @@ class OrderModifyServiceTest extends TestCase
         $this->orderRepository
             ->expects($this->once())
             ->method('findOrdersByIdOrFail')
-            ->with([$input->orderId], $input->groupId)
+            ->with($input->groupId, [$input->orderId], true)
             ->willThrowException(new DBNotFoundException());
 
         $this->orderRepository
@@ -284,9 +459,10 @@ class OrderModifyServiceTest extends TestCase
             ->method('save');
 
         $this->paginator
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(3))
             ->method('getIterator')
             ->willReturnOnConsecutiveCalls(
+                new \ArrayIterator([$listOrders]),
                 new \ArrayIterator([$product]),
                 new \ArrayIterator([$shop]),
             );
@@ -298,18 +474,26 @@ class OrderModifyServiceTest extends TestCase
     /** @test */
     public function itShouldFailModifyingTheOrderSavingError(): void
     {
+        $listOrders = $this->getListsOrders();
         $product = $this->getProduct();
         $shop = $this->getShop();
-        $order = $this->getOrder($product, $shop);
+        $order = $this->getOrder($listOrders, $product, $shop);
         $input = new OrderModifyDto(
             ValueObjectFactory::createIdentifier(self::ORDER_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID),
             ValueObjectFactory::createIdentifier(self::PRODUCT_ID),
             ValueObjectFactory::createIdentifierNullable(self::SHOP_ID),
             ValueObjectFactory::createIdentifier(self::USER_ID),
             ValueObjectFactory::createDescription('order description modified'),
             ValueObjectFactory::createAmount(10.3),
         );
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrderByIdOrFail')
+            ->with([$input->listOrdersId], $input->groupId)
+            ->willReturn($this->paginator);
 
         $this->productRepository
             ->expects($this->once())
@@ -326,7 +510,7 @@ class OrderModifyServiceTest extends TestCase
         $this->orderRepository
             ->expects($this->once())
             ->method('findOrdersByIdOrFail')
-            ->with([$input->orderId], $input->groupId)
+            ->with($input->groupId, [$input->orderId], true)
             ->willReturn($this->paginator);
 
         $this->orderRepository
@@ -335,9 +519,10 @@ class OrderModifyServiceTest extends TestCase
             ->willThrowException(new DBUniqueConstraintException());
 
         $this->paginator
-            ->expects($this->exactly(3))
+            ->expects($this->exactly(4))
             ->method('getIterator')
             ->willReturnOnConsecutiveCalls(
+                new \ArrayIterator([$listOrders]),
                 new \ArrayIterator([$product]),
                 new \ArrayIterator([$shop]),
                 new \ArrayIterator([$order])

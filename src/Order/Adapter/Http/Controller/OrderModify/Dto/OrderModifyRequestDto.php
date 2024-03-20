@@ -9,18 +9,20 @@ use Symfony\Component\HttpFoundation\Request;
 
 class OrderModifyRequestDto implements RequestDtoInterface
 {
-    public readonly string|null $orderId;
-    public readonly string|null $groupId;
-    public readonly string|null $productId;
-    public readonly string|null $shopId;
-    public readonly string|null $description;
-    public readonly float|null $amount;
-    public readonly string|null $unit;
+    public readonly ?string $groupId;
+    public readonly ?string $orderId;
+    public readonly ?string $listOrdersId;
+    public readonly ?string $productId;
+    public readonly ?string $shopId;
+    public readonly ?string $description;
+    public readonly ?float $amount;
+    public readonly ?string $unit;
 
     public function __construct(Request $request)
     {
-        $this->orderId = $request->request->get('order_id');
         $this->groupId = $request->request->get('group_id');
+        $this->listOrdersId = $request->request->get('list_orders_id');
+        $this->orderId = $request->request->get('order_id');
         $this->productId = $request->request->get('product_id');
         $this->shopId = $request->request->get('shop_id');
         $this->description = $request->request->get('description');
