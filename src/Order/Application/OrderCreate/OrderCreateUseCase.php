@@ -16,11 +16,15 @@ use Order\Application\OrderCreate\Dto\OrderCreateInputDto;
 use Order\Application\OrderCreate\Dto\OrderCreateOutputDto;
 use Order\Application\OrderCreate\Dto\OrderDataDto;
 use Order\Application\OrderCreate\Exception\OrderCreateGroupAndUserValidationException;
+use Order\Application\OrderCreate\Exception\OrderCreateListOrdersNotFoundException;
 use Order\Application\OrderCreate\Exception\OrderCreateProductNotFoundException;
+use Order\Application\OrderCreate\Exception\OrderCreateShopNotFoundException;
 use Order\Domain\Model\Order;
 use Order\Domain\Service\OrderCreate\Dto\OrderCreateDto;
 use Order\Domain\Service\OrderCreate\Dto\OrderDataServiceDto;
+use Order\Domain\Service\OrderCreate\Exception\OrderCreateListOrdersNotFoundException as OrderCreateServiceListOrdersNotFoundException;
 use Order\Domain\Service\OrderCreate\Exception\OrderCreateProductNotFoundException as OrderCreateServiceProductNotFoundException;
+use Order\Domain\Service\OrderCreate\Exception\OrderCreateShopNotFoundException as OrderCreateServiceShopNotFoundException;
 use Order\Domain\Service\OrderCreate\OrderCreateService;
 
 class OrderCreateUseCase extends ServiceBase
@@ -47,8 +51,12 @@ class OrderCreateUseCase extends ServiceBase
             return $this->createOrderCreateOutputDto($orders);
         } catch (ValidateGroupAndUserException) {
             throw OrderCreateGroupAndUserValidationException::fromMessage('You not belong to the group');
+        } catch (OrderCreateServiceListOrdersNotFoundException) {
+            throw OrderCreateListOrdersNotFoundException::fromMessage('List of orders or lists of orders not found');
         } catch (OrderCreateServiceProductNotFoundException) {
             throw OrderCreateProductNotFoundException::fromMessage('Product or products not found');
+        } catch (OrderCreateServiceShopNotFoundException) {
+            throw OrderCreateShopNotFoundException::fromMessage('Shop or shops not found');
         } catch (\Exception $e) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
@@ -71,6 +79,7 @@ class OrderCreateUseCase extends ServiceBase
         $ordersServiceData = [];
         foreach ($ordersData as $order) {
             $ordersServiceData[] = new OrderDataServiceDto(
+                $order->listOrdersId,
                 $order->productId,
                 $order->userId,
                 $order->shopId,

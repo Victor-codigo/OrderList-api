@@ -42,18 +42,21 @@ class OrderCreateControllerTest extends WebClientTestCase
     {
         return [
             [
+                'list_orders_id' => 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d',
                 'product_id' => 'afc62bc9-c42c-4c4d-8098-09ce51414a92',
                 'shop_id' => 'e6c1d350-f010-403c-a2d4-3865c14630ec',
                 'description' => 'order 1 description',
                 'amount' => 10.56,
             ],
             [
+                'list_orders_id' => 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d',
                 'product_id' => '7e3021d4-2d02-4386-8bbe-887cfe8697a8',
                 'shop_id' => 'e6c1d350-f010-403c-a2d4-3865c14630ec',
                 'description' => 'order 2 description',
                 'amount' => 20.56,
             ],
             [
+                'list_orders_id' => 'd446eab9-5199-48d0-91f5-0407a86bcb4f',
                 'product_id' => '8b6d650b-7bb7-4850-bf25-36cda9bce801',
                 'shop_id' => 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
                 'description' => 'order 3 description',
@@ -63,7 +66,7 @@ class OrderCreateControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldCreateOrders22(): void
+    public function itShouldCreateOrders(): void
     {
         $ordersData = $this->getOrdersData();
         $client = $this->getNewClientAuthenticatedUser();
@@ -212,6 +215,80 @@ class OrderCreateControllerTest extends WebClientTestCase
     }
 
     /** @test */
+    public function itShouldFailCreatingOrdersListsOrdersIdIsNull(): void
+    {
+        $ordersData = $this->getOrdersData();
+        $ordersData[0]['list_orders_id'] = null;
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_EXISTS_ID,
+                'orders_data' => $ordersData,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], [0], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors[0]->list_orders_id);
+    }
+
+    /** @test */
+    public function itShouldFailCreatingOrdersListsOrdersIdINotFound(): void
+    {
+        $ordersData = $this->getOrdersData();
+        $ordersData[0]['list_orders_id'] = '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387';
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_EXISTS_ID,
+                'orders_data' => $ordersData,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['list_orders_not_found'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('List of orders or lists of orders not found', $responseContent->message);
+        $this->assertEquals('List of orders or lists of orders not found', $responseContent->errors->list_orders_not_found);
+    }
+
+    /** @test */
+    public function itShouldFailCreatingOrdersNoneListOrdersIdIFound(): void
+    {
+        $ordersData = $this->getOrdersData();
+        $ordersData[0]['list_orders_id'] = '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387';
+        $ordersData[1]['list_orders_id'] = '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387';
+        $ordersData[2]['list_orders_id'] = '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387';
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_EXISTS_ID,
+                'orders_data' => $ordersData,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['list_orders_not_found'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('List of orders or lists of orders not found', $responseContent->message);
+        $this->assertEquals('List of orders or lists of orders not found', $responseContent->errors->list_orders_not_found);
+    }
+
+    /** @test */
     public function itShouldFailCreatingOrdersProductIdIsNull(): void
     {
         $ordersData = $this->getOrdersData();
@@ -283,6 +360,56 @@ class OrderCreateControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Product or products not found', $responseContent->message);
         $this->assertEquals('Product or products not found', $responseContent->errors->product_not_found);
+    }
+
+    /** @test */
+    public function itShouldFailCreatingOrdersShopIdINotFound(): void
+    {
+        $ordersData = $this->getOrdersData();
+        $ordersData[0]['shop_id'] = '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387';
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_EXISTS_ID,
+                'orders_data' => $ordersData,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['shop_not_found'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Shop or shops not found', $responseContent->message);
+        $this->assertEquals('Shop or shops not found', $responseContent->errors->shop_not_found);
+    }
+
+    /** @test */
+    public function itShouldFailCreatingOrdersNoneShopIdIFound(): void
+    {
+        $ordersData = $this->getOrdersData();
+        $ordersData[0]['shop_id'] = '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387';
+        $ordersData[1]['shop_id'] = '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387';
+        $ordersData[2]['shop_id'] = '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387';
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_EXISTS_ID,
+                'orders_data' => $ordersData,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['shop_not_found'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Shop or shops not found', $responseContent->message);
+        $this->assertEquals('Shop or shops not found', $responseContent->errors->shop_not_found);
     }
 
     /** @test */

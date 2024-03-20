@@ -30,6 +30,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'group_id', type: 'string', description: 'Group id to add the order', example: '0290bf7e-2e68-4698-ba2e-d2394c239572'),
                         new OA\Property(property: 'orders_data', type: 'array', description: 'Order\'s data', items: new OA\Items(
                             properties: [
+                                new OA\Property(property: 'list_orders_id', type: 'string', description: 'list of orders\' id', example: 'bf1aab1f-8042-41ff-b43d-ada633fb0671'),
                                 new OA\Property(property: 'product_id', type: 'string', description: 'Product\' id', example: '0290bf7e-2e68-4698-ba2e-d2394c239572'),
                                 new OA\Property(property: 'shop_id', type: 'string', description: 'Shop\'s id', example: '0290bf7e-2e68-4698-ba2e-d2394c239572'),
                                 new OA\Property(property: 'description', type: 'string', description: 'Order\'s description'),
@@ -67,7 +68,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|orders_empty|product_not_found|group_error|[], string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|list_orders_id|product_id|orders_empty|list_orders_not_found|product_not_found|shop_not_found|group_error|[], string|array>')),
                     ]
                 )
             )
@@ -91,7 +92,7 @@ class OrderCreateController extends AbstractController
         return $this->createResponse($ordersId);
     }
 
-    private function createOrderCreateInputDto(string|null $groupId, array $ordersData): OrderCreateInputDto
+    private function createOrderCreateInputDto(?string $groupId, array $ordersData): OrderCreateInputDto
     {
         /** @var UserSharedSymfonyAdapter $userAdapter */
         $userAdapter = $this->security->getUser();

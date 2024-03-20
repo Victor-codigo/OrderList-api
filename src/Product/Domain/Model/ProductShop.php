@@ -95,7 +95,7 @@ class ProductShop
         $this->unit = $unit;
     }
 
-    public static function fromPrimitives(Product $product, Shop $shop, float|null $price = null, UNIT_MEASURE_TYPE $unit): self
+    public static function fromPrimitives(Product $product, Shop $shop, ?float $price, ?UNIT_MEASURE_TYPE $unit): self
     {
         return new self(
             $product,

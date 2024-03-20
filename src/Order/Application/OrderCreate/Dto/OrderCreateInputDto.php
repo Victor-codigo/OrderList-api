@@ -20,7 +20,7 @@ class OrderCreateInputDto implements ServiceInputDtoInterface
      */
     public readonly array $ordersData;
 
-    public function __construct(UserShared $userSession, string|null $groupId, array|null $ordersData)
+    public function __construct(UserShared $userSession, ?string $groupId, ?array $ordersData)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
@@ -34,6 +34,7 @@ class OrderCreateInputDto implements ServiceInputDtoInterface
     private function createOrderDto(array $orderData, Identifier $userSessionId): OrderDataDto
     {
         return new OrderDataDto(
+            ValueObjectFactory::createIdentifier($orderData['list_orders_id'] ?? null),
             ValueObjectFactory::createIdentifier($orderData['product_id'] ?? null),
             ValueObjectFactory::createIdentifierNullable($orderData['shop_id'] ?? null),
             $userSessionId,
@@ -55,6 +56,7 @@ class OrderCreateInputDto implements ServiceInputDtoInterface
 
         $errorListOrders = array_filter(array_map(
             fn (OrderDataDto $order) => $validator->validateValueObjectArray([
+                'list_orders_id' => $order->listOrdersId,
                 'product_id' => $order->productId,
                 'shop_id' => $order->shopId,
                 'description' => $order->description,
