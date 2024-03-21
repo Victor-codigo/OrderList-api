@@ -7,6 +7,7 @@ namespace Test\Functional\Order\Adapter\Http\Controller\OrdersGroupGetData;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use ListOrders\Domain\Model\ListOrders;
 use Order\Domain\Model\Order;
 use Product\Domain\Model\Product;
 use Product\Domain\Model\ProductShop;
@@ -80,6 +81,33 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
 
     private function getOrdersData(): array
     {
+        $listOrders1 = ListOrders::fromPrimitives(
+            'd446eab9-5199-48d0-91f5-0407a86bcb4f',
+            '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
+            '2606508b-4516-45d6-93a6-c7cb416b7f3f',
+            'List order name 2',
+            'List order description 2',
+            new \DateTime('2023-05-28 10:20:15')
+        );
+
+        $listOrders2 = ListOrders::fromPrimitives(
+            'ba6bed75-4c6e-4ac3-8787-5bded95dac8d',
+            '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
+            '2606508b-4516-45d6-93a6-c7cb416b7f3f',
+            'List order name 1',
+            'List order description 1',
+            new \DateTime('2023-05-29 10:20:15')
+        );
+
+        $listOrders3 = ListOrders::fromPrimitives(
+            'f2980f67-4eb9-41ca-b452-ffa2c7da6a37',
+            '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
+            '2606508b-4516-45d6-93a6-c7cb416b7f3f',
+            'List order name 3',
+            'List order description 3',
+            new \DateTime('2023-05-27 10:20:15')
+        );
+
         $product1 = Product::fromPrimitives(
             '8b6d650b-7bb7-4850-bf25-36cda9bce801',
             '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
@@ -139,46 +167,56 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
         return [
             'a0b4760a-9037-477a-8b84-d059ae5ee7e9' => Order::fromPrimitives(
                 'a0b4760a-9037-477a-8b84-d059ae5ee7e9',
-                '2606508b-4516-45d6-93a6-c7cb416b7f3f',
                 '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
-                20.050,
+                '2606508b-4516-45d6-93a6-c7cb416b7f3f',
                 'order description 2',
+                20.050,
+                true,
+                $listOrders1,
                 $product1,
                 $shop2
             ),
             '9a48ac5b-4571-43fd-ac80-28b08124ffb8' => Order::fromPrimitives(
                 '9a48ac5b-4571-43fd-ac80-28b08124ffb8',
-                '2606508b-4516-45d6-93a6-c7cb416b7f3f',
                 '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
-                10.200,
+                '2606508b-4516-45d6-93a6-c7cb416b7f3f',
                 'order description',
+                10.200,
+                false,
+                $listOrders2,
                 $product2,
                 $shop1
             ),
             '5cfe52e5-db78-41b3-9acd-c3c84924cb9b' => Order::fromPrimitives(
                 '5cfe52e5-db78-41b3-9acd-c3c84924cb9b',
-                '2606508b-4516-45d6-93a6-c7cb416b7f3f',
                 '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
-                20.050,
+                '2606508b-4516-45d6-93a6-c7cb416b7f3f',
                 null,
+                20.050,
+                true,
+                $listOrders2,
                 $product1,
                 $shop2
             ),
             'c3734d1c-8b18-4bfd-95aa-06a261476d9d' => Order::fromPrimitives(
                 'c3734d1c-8b18-4bfd-95aa-06a261476d9d',
-                '6df60afd-f7c3-4c2c-b920-e265f266c560',
                 '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
-                40.000,
+                '6df60afd-f7c3-4c2c-b920-e265f266c560',
                 'order description 4',
+                40.000,
+                false,
+                $listOrders2,
                 $product3,
                 $shop2
             ),
             'd351adba-c566-4fa5-bb5b-1a6f73b1d72f' => Order::fromPrimitives(
                 'd351adba-c566-4fa5-bb5b-1a6f73b1d72f',
-                '6df60afd-f7c3-4c2c-b920-e265f266c560',
                 '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
-                30.150,
+                '6df60afd-f7c3-4c2c-b920-e265f266c560',
                 'order description 3',
+                30.150,
+                false,
+                $listOrders3,
                 $product4,
                 $shop3
             ),
@@ -195,6 +233,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
                 .'/'.self::GROUP_ID
                 .'?page=1'
                 .'&page_items=100'
+                .'&order_asc=true'
         );
 
         $response = $client->getResponse();
@@ -229,6 +268,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
                 .'/'.self::GROUP_ID
                 .'?page=1'
                 .'&page_items=1'
+                .'&order_asc=false'
         );
 
         $response = $client->getResponse();
@@ -261,6 +301,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
                 .'/wrong id'
                 .'?page=1'
                 .'&page_items=100'
+                .'order_asc=true'
         );
 
         $response = $client->getResponse();
@@ -282,6 +323,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
             uri: self::ENDPOINT
                 .'/'.self::GROUP_ID
                 .'&page_items=100'
+                .'order_asc=true'
         );
 
         $response = $client->getResponse();
@@ -304,6 +346,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
                 .'/'.self::GROUP_ID
                 .'?page=-1'
                 .'&page_items=100'
+                .'order_asc=true'
         );
 
         $response = $client->getResponse();
@@ -325,6 +368,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
             uri: self::ENDPOINT
                 .'/'.self::GROUP_ID
                 .'&page=1'
+                .'order_asc=true'
         );
 
         $response = $client->getResponse();
@@ -347,6 +391,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
                 .'/'.self::GROUP_ID
                 .'?page=1'
                 .'&page_items=0'
+                .'order_asc=true'
         );
 
         $response = $client->getResponse();
@@ -369,6 +414,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
                 .'/'.self::GROUP_ID_ORDERS_NOT_BELONGS
                 .'?page=1'
                 .'&page_items=100'
+                .'order_asc=true'
         );
 
         $response = $client->getResponse();
@@ -389,6 +435,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
                 .'/'.self::GROUP_ID
                 .'?page=1'
                 .'&page_items=100'
+                .'order_asc=true'
         );
 
         $response = $client->getResponse();

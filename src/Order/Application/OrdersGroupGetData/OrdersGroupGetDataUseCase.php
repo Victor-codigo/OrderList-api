@@ -63,7 +63,7 @@ class OrdersGroupGetDataUseCase extends ServiceBase
 
     private function createOrdersGroupGetDataDto(OrdersGroupGetDataInputDto $input): OrdersGroupGetDataDto
     {
-        return new OrdersGroupGetDataDto($input->groupId, $input->page, $input->pageItems);
+        return new OrdersGroupGetDataDto($input->groupId, $input->page, $input->pageItems, $input->orderAsc);
     }
 
     private function createOrdersGroupGetDataOutputDto(array $ordersGroupData, int $page, int $pagesTotal): OrdersGroupGetDataOutputDto

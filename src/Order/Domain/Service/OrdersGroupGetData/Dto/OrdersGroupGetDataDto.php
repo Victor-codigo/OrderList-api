@@ -14,6 +14,7 @@ class OrdersGroupGetDataDto
         public readonly Identifier $groupId,
         public readonly PaginatorPage $page,
         public readonly PaginatorPageItems $pageItems,
+        public readonly bool $orderAsc
     ) {
     }
 }

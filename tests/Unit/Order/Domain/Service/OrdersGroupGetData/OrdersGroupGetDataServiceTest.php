@@ -9,6 +9,7 @@ use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
+use ListOrders\Domain\Model\ListOrders;
 use Order\Domain\Model\Order;
 use Order\Domain\Ports\Repository\OrderRepositoryInterface;
 use Order\Domain\Service\OrdersGroupGetData\Dto\OrdersGroupGetDataDto;
@@ -22,6 +23,7 @@ use Shop\Domain\Model\Shop;
 class OrdersGroupGetDataServiceTest extends TestCase
 {
     private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const LIST_ORDER_ID = '36810398-3503-4ec4-9018-1f2607face0b';
     private const PRODUCT1_ID = '8b6d650b-7bb7-4850-bf25-36cda9bce801';
     private const PRODUCT2_ID = 'afc62bc9-c42c-4c4d-8098-09ce51414a92';
     private const SHOP1_ID = 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e';
@@ -103,6 +105,15 @@ class OrdersGroupGetDataServiceTest extends TestCase
      */
     private function getOrdersDataDb(): array
     {
+        $listOrders = ListOrders::fromPrimitives(
+            self::LIST_ORDER_ID,
+            self::GROUP_ID,
+            self::USER_ID,
+            'list orders 1 name',
+            'list orders 1 description',
+            null
+        );
+
         $product1 = Product::fromPrimitives(
             self::PRODUCT1_ID,
             self::GROUP_ID,
@@ -145,19 +156,23 @@ class OrdersGroupGetDataServiceTest extends TestCase
         return [
             self::ORDER1_ID => Order::fromPrimitives(
                 self::ORDER1_ID,
-                self::USER_ID,
                 self::GROUP_ID,
-                20.050,
+                self::USER_ID,
                 'order description 2',
+                20.050,
+                true,
+                $listOrders,
                 $product1,
                 $shop1
             ),
             self::ORDER2_ID => Order::fromPrimitives(
                 self::ORDER2_ID,
-                self::USER_ID,
                 self::GROUP_ID,
-                10.200,
+                self::USER_ID,
                 'order description',
+                10.200,
+                false,
+                $listOrders,
                 $product2,
                 $shop2
             ),
@@ -207,13 +222,14 @@ class OrdersGroupGetDataServiceTest extends TestCase
         $input = new OrdersGroupGetDataDto(
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             ValueObjectFactory::createPaginatorPage(1),
-            ValueObjectFactory::createPaginatorPageItems(100)
+            ValueObjectFactory::createPaginatorPageItems(100),
+            true
         );
 
         $this->orderRepository
             ->expects($this->once())
-            ->method('findOrdersGroupOrFail')
-            ->with($input->groupId)
+            ->method('findOrdersByGroupIdOrFail')
+            ->with($input->groupId, true)
             ->willReturn($this->paginator);
 
         $this->paginator
@@ -242,13 +258,14 @@ class OrdersGroupGetDataServiceTest extends TestCase
         $input = new OrdersGroupGetDataDto(
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             ValueObjectFactory::createPaginatorPage(1),
-            ValueObjectFactory::createPaginatorPageItems(100)
+            ValueObjectFactory::createPaginatorPageItems(100),
+            false
         );
 
         $this->orderRepository
             ->expects($this->once())
-            ->method('findOrdersGroupOrFail')
-            ->with($input->groupId)
+            ->method('findOrdersByGroupIdOrFail')
+            ->with($input->groupId, false)
             ->willReturn($this->paginator);
 
         $this->paginator
@@ -274,13 +291,14 @@ class OrdersGroupGetDataServiceTest extends TestCase
         $input = new OrdersGroupGetDataDto(
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             ValueObjectFactory::createPaginatorPage(1),
-            ValueObjectFactory::createPaginatorPageItems(100)
+            ValueObjectFactory::createPaginatorPageItems(100),
+            true
         );
 
         $this->orderRepository
             ->expects($this->once())
-            ->method('findOrdersGroupOrFail')
-            ->with($input->groupId)
+            ->method('findOrdersByGroupIdOrFail')
+            ->with($input->groupId, true)
             ->willThrowException(new DBNotFoundException());
 
         $this->paginator
@@ -303,13 +321,14 @@ class OrdersGroupGetDataServiceTest extends TestCase
         $input = new OrdersGroupGetDataDto(
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             ValueObjectFactory::createPaginatorPage(1),
-            ValueObjectFactory::createPaginatorPageItems(100)
+            ValueObjectFactory::createPaginatorPageItems(100),
+            true
         );
 
         $this->orderRepository
             ->expects($this->once())
-            ->method('findOrdersGroupOrFail')
-            ->with($input->groupId)
+            ->method('findOrdersByGroupIdOrFail')
+            ->with($input->groupId, true)
             ->willReturn($this->paginator);
 
         $this->paginator

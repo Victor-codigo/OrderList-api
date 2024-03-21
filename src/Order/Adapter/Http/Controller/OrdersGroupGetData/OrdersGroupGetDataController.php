@@ -44,6 +44,14 @@ use Symfony\Component\HttpFoundation\Response;
             example: 100,
             schema: new OA\Schema(type: 'int')
         ),
+        new OA\Parameter(
+            name: 'order_asc',
+            in: 'query',
+            required: true,
+            description: 'Order of the response data',
+            example: true,
+            schema: new OA\Schema(type: 'int')
+        ),
     ],
     responses: [
         new OA\Response(
@@ -121,18 +129,18 @@ class OrdersGroupGetDataController extends AbstractController
     public function __invoke(OrdersGroupGetDataRequestDto $request): JsonResponse
     {
         $ordersGroupData = $this->OrdersGroupGetDataUseCase->__invoke(
-            $this->createOrdersGroupGetDataInputDto($request->groupId, $request->page, $request->pageItems)
+            $this->createOrdersGroupGetDataInputDto($request->groupId, $request->page, $request->pageItems, $request->orderAsc)
         );
 
         return $this->createResponse($ordersGroupData);
     }
 
-    private function createOrdersGroupGetDataInputDto(string|null $groupId, int|null $page, int|null $pageItems): OrdersGroupGetDataInputDto
+    private function createOrdersGroupGetDataInputDto(?string $groupId, ?int $page, ?int $pageItems, bool $orderAsc): OrdersGroupGetDataInputDto
     {
         /** @var UserSharedSymfonyAdapter $userAdapter */
         $userAdapter = $this->security->getUser();
 
-        return new OrdersGroupGetDataInputDto($userAdapter->getUser(), $groupId, $page, $pageItems);
+        return new OrdersGroupGetDataInputDto($userAdapter->getUser(), $groupId, $page, $pageItems, $orderAsc);
     }
 
     private function createResponse(ApplicationOutputInterface $ordersGroupData): JsonResponse

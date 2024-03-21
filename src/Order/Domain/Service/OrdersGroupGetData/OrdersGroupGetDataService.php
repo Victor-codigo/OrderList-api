@@ -28,7 +28,7 @@ class OrdersGroupGetDataService
      */
     public function __invoke(OrdersGroupGetDataDto $input): array
     {
-        $this->ordersGroupPaginator = $this->getOrdersGroup($input->groupId, $input->page, $input->pageItems);
+        $this->ordersGroupPaginator = $this->getOrdersGroup($input->groupId, $input->page, $input->pageItems, $input->orderAsc);
 
         return $this->getOrdersData($this->ordersGroupPaginator);
     }
@@ -48,9 +48,9 @@ class OrdersGroupGetDataService
     /**
      * @throws DBNotFoundException
      */
-    private function getOrdersGroup(Identifier $groupId, PaginatorPage $page, PaginatorPageItems $pageItems): PaginatorInterface
+    private function getOrdersGroup(Identifier $groupId, PaginatorPage $page, PaginatorPageItems $pageItems, bool $orderAsc): PaginatorInterface
     {
-        $this->ordersGroupPaginator = $this->orderRepository->findOrdersGroupOrFail($groupId);
+        $this->ordersGroupPaginator = $this->orderRepository->findOrdersByGroupIdOrFail($groupId, $orderAsc);
         $this->ordersGroupPaginator->setPagination($page->getValue(), $pageItems->getValue());
 
         return $this->ordersGroupPaginator;
@@ -66,18 +66,18 @@ class OrdersGroupGetDataService
     private function getOrderData(Order $order): array
     {
         return [
-           'id' => $order->getId()->getValue(),
-           'user_id' => $order->getUserId()->getValue(),
-           'group_id' => $order->getGroupId()->getValue(),
-           'description' => $order->getDescription()->getValue(),
-           'amount' => $order->getAmount()->getValue(),
-           'created_on' => $order->getCreatedOn()->format('Y-m-d H:i:s'),
-           'product' => [
-               'id' => $order->getProduct()->getId()->getValue(),
-               'name' => $order->getProduct()->getName()->getValue(),
-               'description' => $order->getProduct()->getDescription()->getValue(),
-               'image' => $order->getProduct()->getImage()->getValue(),
-               'created_on' => $order->getProduct()->getCreatedOn()->format('Y-m-d H:i:s'),
+            'id' => $order->getId()->getValue(),
+            'user_id' => $order->getUserId()->getValue(),
+            'group_id' => $order->getGroupId()->getValue(),
+            'description' => $order->getDescription()->getValue(),
+            'amount' => $order->getAmount()->getValue(),
+            'created_on' => $order->getCreatedOn()->format('Y-m-d H:i:s'),
+            'product' => [
+                'id' => $order->getProduct()->getId()->getValue(),
+                'name' => $order->getProduct()->getName()->getValue(),
+                'description' => $order->getProduct()->getDescription()->getValue(),
+                'image' => $order->getProduct()->getImage()->getValue(),
+                'created_on' => $order->getProduct()->getCreatedOn()->format('Y-m-d H:i:s'),
             ],
             'shop' => $this->getProductShopData($order),
             'productShop' => $this->getProductShopPrice($order),

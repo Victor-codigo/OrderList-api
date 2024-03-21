@@ -18,13 +18,15 @@ class OrdersGroupGetDataInputDto implements ServiceInputDtoInterface
     public readonly Identifier $groupId;
     public readonly PaginatorPage $page;
     public readonly PaginatorPageItems $pageItems;
+    public readonly bool $orderAsc;
 
-    public function __construct(UserShared $userSession, string|null $groupId, int|null $page, int|null $pageItems)
+    public function __construct(UserShared $userSession, ?string $groupId, ?int $page, ?int $pageItems, bool $orderAsc)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
         $this->page = ValueObjectFactory::createPaginatorPage($page);
         $this->pageItems = ValueObjectFactory::createPaginatorPageItems($pageItems);
+        $this->orderAsc = $orderAsc;
     }
 
     public function validate(ValidationInterface $validator): array

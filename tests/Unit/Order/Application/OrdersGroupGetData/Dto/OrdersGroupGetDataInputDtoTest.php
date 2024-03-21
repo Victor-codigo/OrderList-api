@@ -34,7 +34,8 @@ class OrdersGroupGetDataInputDtoTest extends TestCase
             $this->userSession,
             '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
             1,
-            100
+            100,
+            true
         );
 
         $return = $object->validate($this->validator);
@@ -49,7 +50,8 @@ class OrdersGroupGetDataInputDtoTest extends TestCase
             $this->userSession,
             null,
             1,
-            100
+            100,
+            false
         );
 
         $return = $object->validate($this->validator);
@@ -64,7 +66,8 @@ class OrdersGroupGetDataInputDtoTest extends TestCase
             $this->userSession,
             'group id wrong',
             1,
-            100
+            100,
+            true
         );
 
         $return = $object->validate($this->validator);
@@ -79,7 +82,8 @@ class OrdersGroupGetDataInputDtoTest extends TestCase
             $this->userSession,
             self::GROUP_ID,
             null,
-            100
+            100,
+            true
         );
 
         $return = $object->validate($this->validator);
@@ -94,7 +98,8 @@ class OrdersGroupGetDataInputDtoTest extends TestCase
             $this->userSession,
             self::GROUP_ID,
             -1,
-            100
+            100,
+            true
         );
 
         $return = $object->validate($this->validator);
@@ -109,7 +114,8 @@ class OrdersGroupGetDataInputDtoTest extends TestCase
             $this->userSession,
             self::GROUP_ID,
             1,
-            null
+            null,
+            true
         );
 
         $return = $object->validate($this->validator);
@@ -124,7 +130,8 @@ class OrdersGroupGetDataInputDtoTest extends TestCase
             $this->userSession,
             self::GROUP_ID,
             1,
-            -1
+            -1,
+            true
         );
 
         $return = $object->validate($this->validator);
