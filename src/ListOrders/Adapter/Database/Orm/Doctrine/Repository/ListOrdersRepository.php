@@ -14,7 +14,6 @@ use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use ListOrders\Domain\Model\ListOrders;
-use ListOrders\Domain\Model\ListOrdersOrders;
 use ListOrders\Domain\Ports\ListOrdersRepositoryInterface;
 use Order\Domain\Model\Order;
 use Product\Domain\Model\Product;
@@ -69,7 +68,7 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
      *
      * @throws DBNotFoundException
      */
-    public function findListOrderByIdOrFail(array $ListsOrdersId, Identifier|null $groupId = null): PaginatorInterface
+    public function findListOrderByIdOrFail(array $ListsOrdersId, ?Identifier $groupId = null): PaginatorInterface
     {
         $query = $this->entityManager
             ->createQueryBuilder()
@@ -133,15 +132,13 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     public function findListOrderByProductNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface
     {
         $listOrdersEntity = ListOrders::class;
-        $listOrdersOrdersEntity = ListOrdersOrders::class;
         $orderEntity = Order::class;
         $productEntity = Product::class;
         $orderBy = $orderAsc ? 'ASC' : 'DESC';
         $dql = <<<DQL
             SELECT listOrders
             FROM {$listOrdersEntity} listOrders
-                LEFT JOIN {$listOrdersOrdersEntity} listOrdersOrders WITH listOrders.id = listOrdersOrders.listOrdersId
-                LEFT JOIN {$orderEntity} orderEntity WITH listOrdersOrders.orderId = orderEntity.id
+                LEFT JOIN {$orderEntity} orderEntity WITH listOrders.id = orderEntity.listOrdersId
                 LEFT JOIN {$productEntity} product WITH orderEntity.productId = product.id
             WHERE listOrders.groupId = :groupId
                 AND product.name LIKE :filterTextValue
@@ -160,15 +157,13 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     public function findListOrderByShopNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface
     {
         $listOrdersEntity = ListOrders::class;
-        $listOrdersOrdersEntity = ListOrdersOrders::class;
         $orderEntity = Order::class;
         $shopEntity = Shop::class;
         $orderBy = $orderAsc ? 'ASC' : 'DESC';
         $dql = <<<DQL
             SELECT listOrders
             FROM {$listOrdersEntity} listOrders
-                LEFT JOIN {$listOrdersOrdersEntity} listOrdersOrders WITH listOrders.id = listOrdersOrders.listOrdersId
-                LEFT JOIN {$orderEntity} orderEntity WITH listOrdersOrders.orderId = orderEntity.id
+                LEFT JOIN {$orderEntity} orderEntity WITH listOrders.id = orderEntity.listOrdersId
                 LEFT JOIN {$shopEntity} shop WITH orderEntity.shopId = shop.id
             WHERE listOrders.groupId = :groupId
                 AND shop.name LIKE :filterTextValue

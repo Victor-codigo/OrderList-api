@@ -244,10 +244,10 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
             false
         );
         $listOrdersExpected = $this->object->findBy(['name' => [
-             ValueObjectFactory::createNameWithSpaces('List order name 4'),
-             ValueObjectFactory::createNameWithSpaces('List order name 3'),
-             ValueObjectFactory::createNameWithSpaces('List order name 2'),
-             ValueObjectFactory::createNameWithSpaces('List order name 1'),
+            ValueObjectFactory::createNameWithSpaces('List order name 4'),
+            ValueObjectFactory::createNameWithSpaces('List order name 3'),
+            ValueObjectFactory::createNameWithSpaces('List order name 2'),
+            ValueObjectFactory::createNameWithSpaces('List order name 1'),
         ]],
             ['name' => 'desc']
         );
@@ -273,7 +273,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
             'name' => ValueObjectFactory::createNameWithSpaces('List order name 3'),
         ], [
             'name' => 'asc',
-            ]
+        ]
         );
 
         $this->assertEquals($listOrdersExpected, iterator_to_array($return));
@@ -298,7 +298,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
             ValueObjectFactory::createNameWithSpaces('List order name 3'),
             ValueObjectFactory::createNameWithSpaces('List order name 2'),
             ValueObjectFactory::createNameWithSpaces('List order name 1'),
-       ]],
+        ]],
             ['name' => 'desc']
         );
 
@@ -319,7 +319,10 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
             $filterText,
             true
         );
-        $listOrdersExpected = $this->object->findBy(['id' => ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[0])]);
+        $listOrdersExpected = $this->object->findBy(['id' => [
+            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[0]),
+            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[1]),
+        ]]);
 
         $this->assertEquals($listOrdersExpected, iterator_to_array($return));
     }
@@ -338,7 +341,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
             $filterText,
             true
         );
-        $listOrdersExpected = $this->object->findBy(['id' => ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[1])]);
+        $listOrdersExpected = $this->object->findBy(['id' => ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[3])]);
 
         $this->assertEquals($listOrdersExpected, iterator_to_array($return));
     }
@@ -357,7 +360,11 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
             $filterText,
             true
         );
-        $listOrdersExpected = $this->object->findBy(['id' => ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[0])]);
+
+        $listOrdersExpected = $this->object->findBy(['id' => [
+            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[0]),
+            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[1]),
+        ]]);
 
         $this->assertEquals($listOrdersExpected, iterator_to_array($return));
     }
@@ -376,7 +383,11 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
             $filterText,
             true
         );
-        $listOrdersExpected = $this->object->findBy(['id' => ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[0])]);
+
+        $listOrdersExpected = $this->object->findBy(['id' => [
+            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[0]),
+            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[1]),
+        ]]);
 
         $this->assertEquals($listOrdersExpected, iterator_to_array($return));
     }
@@ -434,6 +445,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $listOrdersExpected = $this->object->findBy(['id' => [
             ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[0]),
             ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[1]),
+            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[3]),
         ]]);
         $this->assertEquals($listOrdersExpected, iterator_to_array($return));
     }
@@ -474,6 +486,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $listOrdersExpected = $this->object->findBy(['id' => [
             ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[0]),
             ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[1]),
+            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID[3]),
         ]]);
 
         $this->assertEquals($listOrdersExpected, iterator_to_array($return));
