@@ -38,16 +38,6 @@ list_orders_remove:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
-# LIST ORDERS GET ORDERS
-# -------------------------------------------------------------
-list_orders_get_orders:
-  path: /api/v{api_version}/list-orders/order
-  methods: GET
-  controller: ListOrders\Adapter\Http\Controller\ListOrdersGetOrders\ListOrdersGetOrdersController
-  requirements:
-    api_version: '\d+[.\d]?'
-
-# -------------------------------------------------------------
 # LIST ORDERS REMOVE ORDERS
 # -------------------------------------------------------------
 list_orders_remove_orders:
