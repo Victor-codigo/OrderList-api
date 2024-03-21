@@ -9,6 +9,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use ListOrders\Domain\Model\ListOrders;
 use Order\Domain\Model\Order;
 use Order\Domain\Ports\Repository\OrderRepositoryInterface;
 use Order\Domain\Service\OrderRemove\Dto\OrderRemoveDto;
@@ -38,10 +39,21 @@ class OrderRemoveServiceTest extends TestCase
 
     private function createOrder(array $ordersId): array
     {
+        $listOrders = $this->createMock(ListOrders::class);
         $product = $this->createMock(Product::class);
 
         return array_map(
-            fn (Identifier $orderId) => Order::fromPrimitives($orderId->getValue(), 'user id', 'group id', 10, 'order description', $product),
+            fn (Identifier $orderId) => Order::fromPrimitives(
+                $orderId->getValue(),
+                'group id',
+                'user id',
+                'order description',
+                10,
+                false,
+                $listOrders,
+                $product
+            ),
+
             $ordersId
         );
     }
@@ -61,7 +73,7 @@ class OrderRemoveServiceTest extends TestCase
         $this->orderRepository
             ->expects($this->once())
             ->method('findOrdersByIdOrFail')
-            ->with($ordersId, $groupId)
+            ->with($groupId, $ordersId, true)
             ->willReturn($this->paginator);
 
         $this->orderRepository
@@ -95,7 +107,7 @@ class OrderRemoveServiceTest extends TestCase
         $this->orderRepository
             ->expects($this->once())
             ->method('findOrdersByIdOrFail')
-            ->with($ordersId, $groupId)
+            ->with($groupId, $ordersId, true)
             ->willThrowException(new DBNotFoundException());
 
         $this->orderRepository
@@ -124,7 +136,7 @@ class OrderRemoveServiceTest extends TestCase
         $this->orderRepository
             ->expects($this->once())
             ->method('findOrdersByIdOrFail')
-            ->with($ordersId, $groupId)
+            ->with($groupId, $ordersId, true)
             ->willThrowException(new DBConnectionException());
 
         $this->orderRepository

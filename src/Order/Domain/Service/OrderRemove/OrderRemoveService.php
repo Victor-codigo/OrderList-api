@@ -22,7 +22,7 @@ class OrderRemoveService
      */
     public function __invoke(OrderRemoveDto $input): array
     {
-        $ordersPaginator = $this->orderRepository->findOrdersByIdOrFail($input->ordersId, $input->groupId);
+        $ordersPaginator = $this->orderRepository->findOrdersByIdOrFail($input->groupId, $input->ordersId, true);
         $orders = iterator_to_array($ordersPaginator);
 
         $this->orderRepository->remove($orders);
