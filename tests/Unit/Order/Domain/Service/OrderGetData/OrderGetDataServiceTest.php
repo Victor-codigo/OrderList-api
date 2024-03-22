@@ -193,29 +193,33 @@ class OrderGetDataServiceTest extends DataBaseTestCase
     private function assertOrderDataIsOk(Order $orderExpected, ProductShop $productShop, array $orderDataActual): void
     {
         $this->assertArrayHasKey('id', $orderDataActual);
+        $this->assertArrayHasKey('group_id', $orderDataActual);
+        $this->assertArrayHasKey('list_orders_id', $orderDataActual);
         $this->assertArrayHasKey('product_id', $orderDataActual);
         $this->assertArrayHasKey('shop_id', $orderDataActual);
         $this->assertArrayHasKey('user_id', $orderDataActual);
-        $this->assertArrayHasKey('group_id', $orderDataActual);
         $this->assertArrayHasKey('description', $orderDataActual);
         $this->assertArrayHasKey('amount', $orderDataActual);
+        $this->assertArrayHasKey('bought', $orderDataActual);
         $this->assertArrayHasKey('created_on', $orderDataActual);
         $this->assertArrayHasKey('price', $orderDataActual);
 
         $this->assertEquals($orderExpected->getId()->getValue(), $orderDataActual['id']);
+        $this->assertEquals($orderExpected->getGroupId()->getValue(), $orderDataActual['group_id']);
+        $this->assertEquals($orderExpected->getListOrdersId()->getValue(), $orderDataActual['list_orders_id']);
         $this->assertEquals($orderExpected->getProductId()->getValue(), $orderDataActual['product_id']);
         $this->assertEquals($orderExpected->getShopId()->getValue(), $orderDataActual['shop_id']);
         $this->assertEquals($orderExpected->getUserId()->getValue(), $orderDataActual['user_id']);
-        $this->assertEquals($orderExpected->getGroupId()->getValue(), $orderDataActual['group_id']);
         $this->assertEquals($orderExpected->getDescription()->getValue(), $orderDataActual['description']);
         $this->assertEquals($orderExpected->getAmount()->getValue(), $orderDataActual['amount']);
+        $this->assertEquals($orderExpected->getBought(), $orderDataActual['bought']);
         $this->assertIsString($orderDataActual['created_on']);
         $this->assertEquals($productShop->getPrice()->getValue(), $orderDataActual['price']);
         $this->assertEquals($productShop->getUnit()->getValue(), $orderDataActual['unit']);
     }
 
     /** @test */
-    public function itShouldGetOrdersDataByGroupIdAndOrdersId22(): void
+    public function itShouldGetOrdersDataByGroupIdAndOrdersId(): void
     {
         $input = new OrderGetDataDto(
             ValueObjectFactory::createIdentifier(self::GROUP_ID),

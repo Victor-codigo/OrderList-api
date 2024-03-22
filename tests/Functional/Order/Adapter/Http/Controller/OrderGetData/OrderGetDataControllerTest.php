@@ -36,62 +36,72 @@ class OrderGetDataControllerTest extends WebClientTestCase
     private function getOrdersDataExpected(): array
     {
         return [
-             self::ORDERS_ID[0] => [
+            self::ORDERS_ID[0] => [
                 'id' => self::ORDERS_ID[0],
+                'group_id' => '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
+                'list_orders_id' => 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d',
                 'product_id' => 'afc62bc9-c42c-4c4d-8098-09ce51414a92',
                 'shop_id' => 'e6c1d350-f010-403c-a2d4-3865c14630ec',
                 'user_id' => '2606508b-4516-45d6-93a6-c7cb416b7f3f',
-                'group_id' => '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 'description' => 'order description',
                 'amount' => 10.200,
+                'bought' => false,
                 'created_on' => '2023-05-29 13:35:10',
                 'price' => 10.50,
                 'unit' => UNIT_MEASURE_TYPE::UNITS->value,
-             ],
-             self::ORDERS_ID[1] => [
+            ],
+            self::ORDERS_ID[1] => [
                 'id' => self::ORDERS_ID[1],
+                'group_id' => '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
+                'list_orders_id' => 'd446eab9-5199-48d0-91f5-0407a86bcb4f',
                 'product_id' => '8b6d650b-7bb7-4850-bf25-36cda9bce801',
                 'shop_id' => 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
                 'user_id' => '2606508b-4516-45d6-93a6-c7cb416b7f3f',
-                'group_id' => '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 'description' => 'order description 2',
                 'amount' => 20.050,
+                'bought' => true,
                 'created_on' => '2023-05-29 13:35:10',
                 'price' => 20.30,
                 'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ],
             self::ORDERS_ID[2] => [
                 'id' => self::ORDERS_ID[2],
+                'group_id' => '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
+                'list_orders_id' => 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d',
                 'product_id' => '8b6d650b-7bb7-4850-bf25-36cda9bce801',
                 'shop_id' => 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
                 'user_id' => '2606508b-4516-45d6-93a6-c7cb416b7f3f',
-                'group_id' => '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 'description' => null,
                 'amount' => 20.050,
+                'bought' => true,
                 'created_on' => '2024-03-19 10:12:56',
                 'price' => 20.30,
                 'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ],
             self::ORDERS_ID[3] => [
                 'id' => self::ORDERS_ID[3],
+                'group_id' => '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
+                'list_orders_id' => 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d',
                 'product_id' => '7e3021d4-2d02-4386-8bbe-887cfe8697a8',
                 'shop_id' => 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
                 'user_id' => '6df60afd-f7c3-4c2c-b920-e265f266c560',
-                'group_id' => '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 'description' => 'order description 4',
                 'amount' => 40,
+                'bought' => false,
                 'created_on' => '2024-03-19 10:12:56',
                 'price' => null,
                 'unit' => UNIT_MEASURE_TYPE::UNITS->value,
             ],
             self::ORDERS_ID[4] => [
                 'id' => self::ORDERS_ID[4],
+                'group_id' => '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
+                'list_orders_id' => 'f2980f67-4eb9-41ca-b452-ffa2c7da6a37',
                 'product_id' => 'ca10c90a-c7e6-4594-89e9-71d2f5e74710',
                 'shop_id' => 'b9b1c541-d41e-4751-9ecb-4a1d823c0405',
                 'user_id' => '6df60afd-f7c3-4c2c-b920-e265f266c560',
-                'group_id' => '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
                 'description' => 'order description 3',
                 'amount' => 30.150,
+                'bought' => false,
                 'created_on' => '2024-03-19 10:12:56',
                 'price' => null,
                 'unit' => UNIT_MEASURE_TYPE::KG->value,
@@ -102,23 +112,27 @@ class OrderGetDataControllerTest extends WebClientTestCase
     private function assertOrderDataIsOk(array $orderExpected, object $orderDataActual): void
     {
         $this->assertTrue(property_exists($orderDataActual, 'id'));
+        $this->assertTrue(property_exists($orderDataActual, 'group_id'));
+        $this->assertTrue(property_exists($orderDataActual, 'list_orders_id'));
         $this->assertTrue(property_exists($orderDataActual, 'product_id'));
         $this->assertTrue(property_exists($orderDataActual, 'shop_id'));
         $this->assertTrue(property_exists($orderDataActual, 'user_id'));
-        $this->assertTrue(property_exists($orderDataActual, 'group_id'));
         $this->assertTrue(property_exists($orderDataActual, 'description'));
         $this->assertTrue(property_exists($orderDataActual, 'amount'));
+        $this->assertTrue(property_exists($orderDataActual, 'bought'));
         $this->assertTrue(property_exists($orderDataActual, 'created_on'));
         $this->assertTrue(property_exists($orderDataActual, 'price'));
         $this->assertTrue(property_exists($orderDataActual, 'unit'));
 
         $this->assertEquals($orderExpected['id'], $orderDataActual->id);
+        $this->assertEquals($orderExpected['group_id'], $orderDataActual->group_id);
+        $this->assertEquals($orderExpected['list_orders_id'], $orderDataActual->list_orders_id);
         $this->assertEquals($orderExpected['product_id'], $orderDataActual->product_id);
         $this->assertEquals($orderExpected['shop_id'], $orderDataActual->shop_id);
         $this->assertEquals($orderExpected['user_id'], $orderDataActual->user_id);
-        $this->assertEquals($orderExpected['group_id'], $orderDataActual->group_id);
         $this->assertEquals($orderExpected['description'], $orderDataActual->description);
         $this->assertEquals($orderExpected['amount'], $orderDataActual->amount);
+        $this->assertEquals($orderExpected['bought'], $orderDataActual->bought);
         $this->assertIsString($orderDataActual->created_on);
         $this->assertEquals($orderExpected['price'], $orderDataActual->price);
         $this->assertEquals($orderExpected['unit'], $orderDataActual->unit);
@@ -346,13 +360,8 @@ class OrderGetDataControllerTest extends WebClientTestCase
         );
 
         $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['order_not_found'], Response::HTTP_BAD_REQUEST);
-        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Orders not found', $responseContent->message);
-
-        $this->assertEquals('Orders not found', $responseContent->errors->order_not_found);
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
     /** @test */

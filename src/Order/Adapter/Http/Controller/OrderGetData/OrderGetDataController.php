@@ -111,12 +111,14 @@ use Symfony\Component\HttpFoundation\Response;
                                 new OA\Property(property: 'orders', type: 'array', items: new OA\Items(
                                     properties: [
                                         new OA\Property(property: 'id', type: 'string'),
+                                        new OA\Property(property: 'group_id', type: 'string'),
+                                        new OA\Property(property: 'list_orders_id', type: 'string'),
                                         new OA\Property(property: 'product_id', type: 'string'),
                                         new OA\Property(property: 'shop_id', type: 'string'),
                                         new OA\Property(property: 'user_id', type: 'string'),
-                                        new OA\Property(property: 'group_id', type: 'string'),
                                         new OA\Property(property: 'description', type: 'string'),
                                         new OA\Property(property: 'amount', type: 'float'),
+                                        new OA\Property(property: 'bought', type: 'boolean'),
                                         new OA\Property(property: 'created_on', type: 'string'),
                                         new OA\Property(property: 'price', type: 'float'),
                                         new OA\Property(property: 'unit', type: 'string'),

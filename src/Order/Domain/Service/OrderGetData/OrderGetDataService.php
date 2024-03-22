@@ -183,12 +183,14 @@ class OrderGetDataService
 
         return [
             'id' => $order->getId()->getValue(),
+            'group_id' => $order->getGroupId()->getValue(),
+            'list_orders_id' => $order->getListOrdersId()->getValue(),
             'product_id' => $order->getProductId()->getValue(),
             'shop_id' => $order->getShopId()->getValue(),
             'user_id' => $order->getUserId()->getValue(),
-            'group_id' => $order->getGroupId()->getValue(),
             'description' => $order->getDescription()->getValue(),
             'amount' => $order->getAmount()->getValue(),
+            'bought' => $order->getBought(),
             'created_on' => $order->getCreatedOn()->format('Y-m-d H:i:s'),
             'price' => $price,
             'unit' => $unit,
