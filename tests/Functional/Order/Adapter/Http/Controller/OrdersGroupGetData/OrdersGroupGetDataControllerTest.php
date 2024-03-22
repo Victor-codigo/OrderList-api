@@ -246,15 +246,15 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(1, $responseContent->data->page);
         $this->assertEquals(1, $responseContent->data->pages_total);
         $this->assertCount(5, $responseContent->data->orders);
-        $productsExpected = $this->getOrdersData();
+        $ordersExpected = $this->getOrdersData();
 
         foreach ($responseContent->data->orders as $orderActual) {
             $orderActual = (array) $orderActual;
             $orderActual['product'] = (array) $orderActual['product'];
             $orderActual['shop'] = (array) $orderActual['shop'];
             $orderActual['productShop'] = (array) $orderActual['productShop'];
-            $this->assertArrayHasKey($orderActual['id'], $productsExpected);
-            $this->assertOrderIsOk($productsExpected[$orderActual['id']], $orderActual);
+            $this->assertArrayHasKey($orderActual['id'], $ordersExpected);
+            $this->assertOrderIsOk($ordersExpected[$orderActual['id']], $orderActual);
         }
     }
 
@@ -281,14 +281,14 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(1, $responseContent->data->page);
         $this->assertEquals(5, $responseContent->data->pages_total);
         $this->assertCount(1, $responseContent->data->orders);
-        $productsExpected = $this->getOrdersData();
+        $ordersExpected = $this->getOrdersData();
 
         $orderActual = (array) $responseContent->data->orders[0];
         $orderActual['product'] = (array) $orderActual['product'];
         $orderActual['shop'] = (array) $orderActual['shop'];
         $orderActual['productShop'] = (array) $orderActual['productShop'];
-        $this->assertArrayHasKey($orderActual['id'], $productsExpected);
-        $this->assertOrderIsOk($productsExpected[$orderActual['id']], $orderActual);
+        $this->assertArrayHasKey($orderActual['id'], $ordersExpected);
+        $this->assertOrderIsOk($ordersExpected[$orderActual['id']], $orderActual);
     }
 
     /** @test */
