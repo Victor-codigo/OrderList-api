@@ -49,7 +49,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $this->productShopRepository = $this->createMock(ProductShopRepositoryInterface::class);
         $this->ordersPaginator = $this->createMock(PaginatorInterface::class);
         $this->productsShopsPaginator = $this->createMock(PaginatorInterface::class);
-        $this->object = new OrderGetDataService($this->orderRepository, $this->productShopRepository);
+        $this->object = new OrderGetDataService($this->orderRepository);
     }
 
     /**
@@ -130,6 +130,16 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $product = $this->getProducts();
         $shops = $this->getShops();
 
+        $product[0]->setProductShop([
+            ProductShop::fromPrimitives($product[0], $shops[1], 20.30, UNIT_MEASURE_TYPE::UNITS),
+            ProductShop::fromPrimitives($product[0], $shops[0], 20.30, UNIT_MEASURE_TYPE::UNITS),
+        ]);
+
+        $product[1]->setProductShop([
+            ProductShop::fromPrimitives($product[1], $shops[0], 10.5, UNIT_MEASURE_TYPE::UNITS),
+            ProductShop::fromPrimitives($product[1], $shops[1], 10.5, UNIT_MEASURE_TYPE::UNITS),
+        ]);
+
         return [
             Order::fromPrimitives(
                 '41d14a8a-9bdc-4a77-898e-9972355c6b2f',
@@ -190,32 +200,59 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         );
     }
 
-    private function assertOrderDataIsOk(Order $orderExpected, ProductShop $productShop, array $orderDataActual): void
+    private function assertOrderDataIsOk(Order $orderExpected, array $orderActual): void
     {
-        $this->assertArrayHasKey('id', $orderDataActual);
-        $this->assertArrayHasKey('group_id', $orderDataActual);
-        $this->assertArrayHasKey('list_orders_id', $orderDataActual);
-        $this->assertArrayHasKey('product_id', $orderDataActual);
-        $this->assertArrayHasKey('shop_id', $orderDataActual);
-        $this->assertArrayHasKey('user_id', $orderDataActual);
-        $this->assertArrayHasKey('description', $orderDataActual);
-        $this->assertArrayHasKey('amount', $orderDataActual);
-        $this->assertArrayHasKey('bought', $orderDataActual);
-        $this->assertArrayHasKey('created_on', $orderDataActual);
-        $this->assertArrayHasKey('price', $orderDataActual);
+        $this->assertArrayHasKey('id', $orderActual);
+        $this->assertArrayHasKey('user_id', $orderActual);
+        $this->assertArrayHasKey('group_id', $orderActual);
+        $this->assertArrayHasKey('description', $orderActual);
+        $this->assertArrayHasKey('amount', $orderActual);
+        $this->assertArrayHasKey('created_on', $orderActual);
+        $this->assertArrayHasKey('product', $orderActual);
+        $this->assertArrayHasKey('shop', $orderActual);
+        $this->assertArrayHasKey('productShop', $orderActual);
 
-        $this->assertEquals($orderExpected->getId()->getValue(), $orderDataActual['id']);
-        $this->assertEquals($orderExpected->getGroupId()->getValue(), $orderDataActual['group_id']);
-        $this->assertEquals($orderExpected->getListOrdersId()->getValue(), $orderDataActual['list_orders_id']);
-        $this->assertEquals($orderExpected->getProductId()->getValue(), $orderDataActual['product_id']);
-        $this->assertEquals($orderExpected->getShopId()->getValue(), $orderDataActual['shop_id']);
-        $this->assertEquals($orderExpected->getUserId()->getValue(), $orderDataActual['user_id']);
-        $this->assertEquals($orderExpected->getDescription()->getValue(), $orderDataActual['description']);
-        $this->assertEquals($orderExpected->getAmount()->getValue(), $orderDataActual['amount']);
-        $this->assertEquals($orderExpected->getBought(), $orderDataActual['bought']);
-        $this->assertIsString($orderDataActual['created_on']);
-        $this->assertEquals($productShop->getPrice()->getValue(), $orderDataActual['price']);
-        $this->assertEquals($productShop->getUnit()->getValue(), $orderDataActual['unit']);
+        $this->assertArrayHasKey('id', $orderActual['product']);
+        $this->assertArrayHasKey('name', $orderActual['product']);
+        $this->assertArrayHasKey('description', $orderActual['product']);
+        $this->assertArrayHasKey('image', $orderActual['product']);
+        $this->assertArrayHasKey('created_on', $orderActual['product']);
+
+        if (!$orderExpected->getShopId()->isNull()) {
+            $this->assertArrayHasKey('id', $orderActual['shop']);
+            $this->assertArrayHasKey('name', $orderActual['shop']);
+            $this->assertArrayHasKey('description', $orderActual['shop']);
+            $this->assertArrayHasKey('image', $orderActual['shop']);
+            $this->assertArrayHasKey('created_on', $orderActual['shop']);
+
+            $this->assertArrayHasKey('price', $orderActual['productShop']);
+            $this->assertArrayHasKey('unit', $orderActual['productShop']);
+        }
+
+        $this->assertEquals($orderExpected->getId()->getValue(), $orderActual['id']);
+        $this->assertEquals($orderExpected->getUserId()->getValue(), $orderActual['user_id']);
+        $this->assertEquals($orderExpected->getGroupId()->getValue(), $orderActual['group_id']);
+        $this->assertEquals($orderExpected->getDescription()->getValue(), $orderActual['description']);
+        $this->assertEquals($orderExpected->getAmount()->getvalue(), $orderActual['amount']);
+
+        $product = $orderExpected->getProduct();
+        $this->assertEquals($product->getId()->getvalue(), $orderActual['product']['id']);
+        $this->assertEquals($product->getName()->getValue(), $orderActual['product']['name']);
+        $this->assertEquals($product->getDescription()->getValue(), $orderActual['product']['description']);
+        $this->assertEquals($product->getImage()->getValue(), $orderActual['product']['image']);
+
+        if (!$orderExpected->getShopId()->isNull()) {
+            $shop = $orderExpected->getShop();
+            $this->assertEquals($shop->getId()->getValue(), $orderActual['shop']['id']);
+            $this->assertEquals($shop->getName(), $orderActual['shop']['name']);
+            $this->assertEquals($shop->getDescription()->getValue(), $orderActual['shop']['description']);
+            $this->assertEquals($shop->getImage()->getValue(), $orderActual['shop']['image']);
+
+            /** @var ProductShop[] $productShop */
+            $productShop = $orderExpected->getProduct()->getProductShop()->getValues();
+            $this->assertEquals($productShop[0]->getPrice()->getValue(), $orderActual['productShop']['price']);
+            $this->assertEquals($productShop[0]->getUnit()->getValue(), $orderActual['productShop']['unit']);
+        }
     }
 
     /** @test */
@@ -232,12 +269,6 @@ class OrderGetDataServiceTest extends DataBaseTestCase
             null
         );
         $ordersExpectedIndexProduct = $this->getOrders();
-        $productsId = array_map(
-            fn (Order $order) => $order->getProductId(),
-            $ordersExpectedIndexProduct
-        );
-        $shopsId = $this->getShopsId($ordersExpectedIndexProduct);
-        $productsShopsExpected = $this->getProductsShops($ordersExpectedIndexProduct);
 
         $this->orderRepository
             ->expects($this->once())
@@ -271,21 +302,10 @@ class OrderGetDataServiceTest extends DataBaseTestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator($ordersExpectedIndexProduct));
 
-        $this->productShopRepository
-            ->expects($this->once())
-            ->method('findProductsAndShopsOrFail')
-            ->with($productsId, $shopsId, $input->groupId)
-            ->willReturn($this->productsShopsPaginator);
-
-        $this->productsShopsPaginator
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator($productsShopsExpected));
-
         $return = $this->object->__invoke($input);
 
         foreach ($ordersExpectedIndexProduct as $key => $orderExpected) {
-            $this->assertOrderDataIsOk($orderExpected, $productsShopsExpected[$key], $return[$key]);
+            $this->assertOrderDataIsOk($orderExpected, $return[$key]);
         }
     }
 
@@ -312,12 +332,6 @@ class OrderGetDataServiceTest extends DataBaseTestCase
             )
         );
         $ordersExpectedIndexProduct = $this->getOrders();
-        $productsId = array_map(
-            fn (Order $order) => $order->getProductId(),
-            $ordersExpectedIndexProduct
-        );
-        $shopsId = $this->getShopsId($ordersExpectedIndexProduct);
-        $productsShopsExpected = $this->getProductsShops($ordersExpectedIndexProduct);
 
         $this->orderRepository
             ->expects($this->never())
@@ -351,21 +365,10 @@ class OrderGetDataServiceTest extends DataBaseTestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator($ordersExpectedIndexProduct));
 
-        $this->productShopRepository
-            ->expects($this->once())
-            ->method('findProductsAndShopsOrFail')
-            ->with($productsId, $shopsId, $input->groupId)
-            ->willReturn($this->productsShopsPaginator);
-
-        $this->productsShopsPaginator
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator($productsShopsExpected));
-
         $return = $this->object->__invoke($input);
 
         foreach ($ordersExpectedIndexProduct as $key => $orderExpected) {
-            $this->assertOrderDataIsOk($orderExpected, $productsShopsExpected[$key], $return[$key]);
+            $this->assertOrderDataIsOk($orderExpected, $return[$key]);
         }
     }
 
@@ -392,12 +395,6 @@ class OrderGetDataServiceTest extends DataBaseTestCase
             )
         );
         $ordersExpectedIndexProduct = $this->getOrders();
-        $productsId = array_map(
-            fn (Order $order) => $order->getProductId(),
-            $ordersExpectedIndexProduct
-        );
-        $shopsId = $this->getShopsId($ordersExpectedIndexProduct);
-        $productsShopsExpected = $this->getProductsShops($ordersExpectedIndexProduct);
 
         $this->orderRepository
             ->expects($this->never())
@@ -431,21 +428,10 @@ class OrderGetDataServiceTest extends DataBaseTestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator($ordersExpectedIndexProduct));
 
-        $this->productShopRepository
-            ->expects($this->once())
-            ->method('findProductsAndShopsOrFail')
-            ->with($productsId, $shopsId, $input->groupId)
-            ->willReturn($this->productsShopsPaginator);
-
-        $this->productsShopsPaginator
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator($productsShopsExpected));
-
         $return = $this->object->__invoke($input);
 
         foreach ($ordersExpectedIndexProduct as $key => $orderExpected) {
-            $this->assertOrderDataIsOk($orderExpected, $productsShopsExpected[$key], $return[$key]);
+            $this->assertOrderDataIsOk($orderExpected, $return[$key]);
         }
     }
 
@@ -472,12 +458,6 @@ class OrderGetDataServiceTest extends DataBaseTestCase
             )
         );
         $ordersExpectedIndexProduct = $this->getOrders();
-        $productsId = array_map(
-            fn (Order $order) => $order->getProductId(),
-            $ordersExpectedIndexProduct
-        );
-        $shopsId = $this->getShopsId($ordersExpectedIndexProduct);
-        $productsShopsExpected = $this->getProductsShops($ordersExpectedIndexProduct);
 
         $this->orderRepository
             ->expects($this->never())
@@ -511,21 +491,10 @@ class OrderGetDataServiceTest extends DataBaseTestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator($ordersExpectedIndexProduct));
 
-        $this->productShopRepository
-            ->expects($this->once())
-            ->method('findProductsAndShopsOrFail')
-            ->with($productsId, $shopsId, $input->groupId)
-            ->willReturn($this->productsShopsPaginator);
-
-        $this->productsShopsPaginator
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator($productsShopsExpected));
-
         $return = $this->object->__invoke($input);
 
         foreach ($ordersExpectedIndexProduct as $key => $orderExpected) {
-            $this->assertOrderDataIsOk($orderExpected, $productsShopsExpected[$key], $return[$key]);
+            $this->assertOrderDataIsOk($orderExpected, $return[$key]);
         }
     }
 
@@ -552,12 +521,6 @@ class OrderGetDataServiceTest extends DataBaseTestCase
             )
         );
         $ordersExpectedIndexProduct = $this->getOrders();
-        $productsId = array_map(
-            fn (Order $order) => $order->getProductId(),
-            $ordersExpectedIndexProduct
-        );
-        $shopsId = $this->getShopsId($ordersExpectedIndexProduct);
-        $productsShopsExpected = $this->getProductsShops($ordersExpectedIndexProduct);
 
         $this->orderRepository
             ->expects($this->never())
@@ -591,21 +554,10 @@ class OrderGetDataServiceTest extends DataBaseTestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator($ordersExpectedIndexProduct));
 
-        $this->productShopRepository
-            ->expects($this->once())
-            ->method('findProductsAndShopsOrFail')
-            ->with($productsId, $shopsId, $input->groupId)
-            ->willReturn($this->productsShopsPaginator);
-
-        $this->productsShopsPaginator
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator($productsShopsExpected));
-
         $return = $this->object->__invoke($input);
 
         foreach ($ordersExpectedIndexProduct as $key => $orderExpected) {
-            $this->assertOrderDataIsOk($orderExpected, $productsShopsExpected[$key], $return[$key]);
+            $this->assertOrderDataIsOk($orderExpected, $return[$key]);
         }
     }
 
@@ -631,12 +583,6 @@ class OrderGetDataServiceTest extends DataBaseTestCase
             )
         );
         $ordersExpectedIndexProduct = $this->getOrders();
-        $productsId = array_map(
-            fn (Order $order) => $order->getProductId(),
-            $ordersExpectedIndexProduct
-        );
-        $shopsId = $this->getShopsId($ordersExpectedIndexProduct);
-        $productsShopsExpected = $this->getProductsShops($ordersExpectedIndexProduct);
 
         $this->orderRepository
             ->expects($this->never())
@@ -670,21 +616,10 @@ class OrderGetDataServiceTest extends DataBaseTestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator($ordersExpectedIndexProduct));
 
-        $this->productShopRepository
-            ->expects($this->once())
-            ->method('findProductsAndShopsOrFail')
-            ->with($productsId, $shopsId, $input->groupId)
-            ->willReturn($this->productsShopsPaginator);
-
-        $this->productsShopsPaginator
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator($productsShopsExpected));
-
         $return = $this->object->__invoke($input);
 
         foreach ($ordersExpectedIndexProduct as $key => $orderExpected) {
-            $this->assertOrderDataIsOk($orderExpected, $productsShopsExpected[$key], $return[$key]);
+            $this->assertOrderDataIsOk($orderExpected, $return[$key]);
         }
     }
 
@@ -729,14 +664,6 @@ class OrderGetDataServiceTest extends DataBaseTestCase
             ->method('setPagination');
 
         $this->ordersPaginator
-            ->expects($this->never())
-            ->method('getIterator');
-
-        $this->productShopRepository
-            ->expects($this->never())
-            ->method('findProductsAndShopsOrFail');
-
-        $this->productsShopsPaginator
             ->expects($this->never())
             ->method('getIterator');
 

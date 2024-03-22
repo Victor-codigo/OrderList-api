@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Order\Domain\Service\OrderGetData;
 
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
@@ -16,7 +17,6 @@ use Order\Domain\Model\Order;
 use Order\Domain\Ports\Repository\OrderRepositoryInterface;
 use Order\Domain\Service\OrderGetData\Dto\OrderGetDataDto;
 use Product\Domain\Model\ProductShop;
-use Product\Domain\Port\Repository\ProductShopRepositoryInterface;
 
 class OrderGetDataService
 {
@@ -24,19 +24,21 @@ class OrderGetDataService
 
     public function __construct(
         private OrderRepositoryInterface $orderRepository,
-        private ProductShopRepositoryInterface $productShopRepository,
     ) {
     }
 
+    /**
+     * @throws DBNotFoundException
+     */
     public function __invoke(OrderGetDataDto $input): array
     {
         $this->ordersPaginator = $this->getOrdersByOrdersId($input->groupId, $input->ordersId, $input->orderAsc);
         $this->ordersPaginator ??= $this->getOrdersByProductName($input->groupId, $input->listOrdersId, $input->filterSection, $input->filterText, $input->orderAsc);
         $this->ordersPaginator ??= $this->getOrdersByShopName($input->groupId, $input->listOrdersId, $input->filterSection, $input->filterText, $input->orderAsc);
         $this->ordersPaginator ??= $this->getOrdersByListOrdersName($input->groupId, $input->filterSection, $input->filterText, $input->orderAsc);
-        $this->ordersPaginator ??= $this->getOrdersByGroupId($input->groupId, $input->orderAsc);
+        $this->ordersPaginator ??= $this->getOrdersByGroupId($input->groupId, $input->filterSection, $input->orderAsc);
 
-        return $this->getOrdersData($input->groupId, $input->page, $input->pageItems);
+        return $this->getOrdersData($input->page, $input->pageItems);
     }
 
     public function getPagesTotal(): int
@@ -44,15 +46,13 @@ class OrderGetDataService
         return $this->ordersPaginator->getPagesTotal();
     }
 
-    private function getOrdersData(Identifier $groupId, PaginatorPage $page, PaginatorPageItems $pageItems): array
+    private function getOrdersData(PaginatorPage $page, PaginatorPageItems $pageItems): array
     {
         $this->ordersPaginator->setPagination($page->getValue(), $pageItems->getValue());
         $orders = iterator_to_array($this->ordersPaginator);
 
-        $productsShops = $this->getProductsPricesByProductId($groupId, $orders);
-
         return array_map(
-            fn (Order $order) => $this->createOrderData($order, $productsShops),
+            fn (Order $order) => $this->getOrderData($order),
             $orders
         );
     }
@@ -74,7 +74,7 @@ class OrderGetDataService
     /**
      * @throws DBNotFoundException
      */
-    private function getOrdersByGroupId(Identifier $groupId, bool $orderAsc): PaginatorInterface
+    private function getOrdersByGroupId(Identifier $groupId, ?Filter $filterSection, bool $orderAsc): ?PaginatorInterface
     {
         return $this->orderRepository->findOrdersByGroupIdOrFail($groupId, $orderAsc);
     }
@@ -140,60 +140,66 @@ class OrderGetDataService
         return $this->orderRepository->findOrdersByListOrdersNameOrFail($groupId, ValueObjectFactory::createNameWithSpaces($filterText->getValue()), $orderAsc);
     }
 
-    /**
-     * @param Order[] $orders
-     *
-     * @return ProductShop[]
-     *
-     * @throws DBNotFoundException
-     */
-    private function getProductsPricesByProductId(Identifier $groupId, array $orders): array
+    private function getOrderData(Order $order): array
     {
-        $productsId = array_map(
-            fn (Order $order) => $order->getProductId(),
-            $orders
-        );
-        $shopsId = array_map(
-            fn (Order $order) => $order->getShopId(),
-            $orders
-        );
-        $productsShopsPagination = $this->productShopRepository->findProductsAndShopsOrFail($productsId, $shopsId, $groupId);
-
-        return iterator_to_array($productsShopsPagination);
+        return [
+            'id' => $order->getId()->getValue(),
+            'user_id' => $order->getUserId()->getValue(),
+            'group_id' => $order->getGroupId()->getValue(),
+            'description' => $order->getDescription()->getValue(),
+            'amount' => $order->getAmount()->getValue(),
+            'created_on' => $order->getCreatedOn()->format('Y-m-d H:i:s'),
+            'product' => [
+                'id' => $order->getProduct()->getId()->getValue(),
+                'name' => $order->getProduct()->getName()->getValue(),
+                'description' => $order->getProduct()->getDescription()->getValue(),
+                'image' => $order->getProduct()->getImage()->getValue(),
+                'created_on' => $order->getProduct()->getCreatedOn()->format('Y-m-d H:i:s'),
+            ],
+            'shop' => $this->getProductShopData($order),
+            'productShop' => $this->getProductShopPrice($order),
+        ];
     }
 
     /**
-     * @param ProductShop[] $productsShops
+     * @return array<{id: string, name: string, description: string, created_on: string}>
      */
-    private function createOrderData(Order $order, array $productsShops): array
+    private function getProductShopData(Order $order): array
     {
-        $productShopFind = array_filter(
-            $productsShops,
-            fn (ProductShop $productShop) => $productShop->getProductId()->equalTo($order->getProductId())
-                                          && $productShop->getShopId()->equalTo($order->getShopId())
-        );
-
-        $price = null;
-        $unit = null;
-        if (count($productShopFind) > 0) {
-            $productShop = reset($productShopFind);
-            $price = $productShop->getPrice()->getValue();
-            $unit = $productShop->getUnit()->getValue();
+        if ($order->getShopId()->isNull()) {
+            return [];
         }
 
         return [
-            'id' => $order->getId()->getValue(),
-            'group_id' => $order->getGroupId()->getValue(),
-            'list_orders_id' => $order->getListOrdersId()->getValue(),
-            'product_id' => $order->getProductId()->getValue(),
-            'shop_id' => $order->getShopId()->getValue(),
-            'user_id' => $order->getUserId()->getValue(),
-            'description' => $order->getDescription()->getValue(),
-            'amount' => $order->getAmount()->getValue(),
-            'bought' => $order->getBought(),
-            'created_on' => $order->getCreatedOn()->format('Y-m-d H:i:s'),
-            'price' => $price,
-            'unit' => $unit,
+            'id' => $order->getShop()->getId()->getValue(),
+            'name' => $order->getShop()->getName()->getValue(),
+            'description' => $order->getShop()->getDescription()->getValue(),
+            'image' => $order->getShop()->getImage()->getValue(),
+            'created_on' => $order->getShop()->getCreatedOn()->format('Y-m-d H:i:s'),
         ];
+    }
+
+    /**
+     * @return array<{price: float, unit: string}>
+     */
+    private function getProductShopPrice(Order $order): array
+    {
+        if ($order->getShopId()->isNull()) {
+            return [];
+        }
+
+        /** @var ProductShop[] $productsShops */
+        $productsShops = $order->getProduct()->getProductShop()->getValues();
+
+        foreach ($productsShops as $productShop) {
+            if ($productShop->getShopId()->equalTo($order->getShopId())) {
+                return [
+                    'price' => $productShop->getPrice()->getValue(),
+                    'unit' => $productShop->getUnit()->getValue(),
+                ];
+            }
+        }
+
+        return [];
     }
 }
