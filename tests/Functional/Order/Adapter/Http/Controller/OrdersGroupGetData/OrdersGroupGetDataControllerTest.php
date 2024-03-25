@@ -28,10 +28,12 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
     private function assertOrderIsOk(Order $orderExpected, array $orderActual): void
     {
         $this->assertArrayHasKey('id', $orderActual);
-        $this->assertArrayHasKey('user_id', $orderActual);
         $this->assertArrayHasKey('group_id', $orderActual);
+        $this->assertArrayHasKey('list_orders_id', $orderActual);
+        $this->assertArrayHasKey('user_id', $orderActual);
         $this->assertArrayHasKey('description', $orderActual);
         $this->assertArrayHasKey('amount', $orderActual);
+        $this->assertArrayHasKey('bought', $orderActual);
         $this->assertArrayHasKey('created_on', $orderActual);
         $this->assertArrayHasKey('product', $orderActual);
         $this->assertArrayHasKey('shop', $orderActual);
@@ -54,10 +56,12 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
         }
 
         $this->assertEquals($orderExpected->getId()->getValue(), $orderActual['id']);
-        $this->assertEquals($orderExpected->getUserId()->getValue(), $orderActual['user_id']);
         $this->assertEquals($orderExpected->getGroupId()->getValue(), $orderActual['group_id']);
+        $this->assertEquals($orderExpected->getListOrdersId()->getValue(), $orderActual['list_orders_id']);
+        $this->assertEquals($orderExpected->getUserId()->getValue(), $orderActual['user_id']);
         $this->assertEquals($orderExpected->getDescription()->getValue(), $orderActual['description']);
         $this->assertEquals($orderExpected->getAmount()->getvalue(), $orderActual['amount']);
+        $this->assertEquals($orderExpected->getBought(), $orderActual['bought']);
 
         $product = $orderExpected->getProduct();
         $this->assertEquals($product->getId()->getvalue(), $orderActual['product']['id']);

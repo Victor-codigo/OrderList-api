@@ -67,10 +67,12 @@ class OrdersGroupGetDataService
     {
         return [
             'id' => $order->getId()->getValue(),
-            'user_id' => $order->getUserId()->getValue(),
             'group_id' => $order->getGroupId()->getValue(),
+            'list_orders_id' => $order->getListOrdersId()->getValue(),
+            'user_id' => $order->getUserId()->getValue(),
             'description' => $order->getDescription()->getValue(),
             'amount' => $order->getAmount()->getValue(),
+            'bought' => $order->getBought(),
             'created_on' => $order->getCreatedOn()->format('Y-m-d H:i:s'),
             'product' => [
                 'id' => $order->getProduct()->getId()->getValue(),
