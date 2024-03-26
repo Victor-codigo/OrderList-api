@@ -18,6 +18,7 @@ use Order\Application\OrderCreate\Dto\OrderDataDto;
 use Order\Application\OrderCreate\Exception\OrderCreateGroupAndUserValidationException;
 use Order\Application\OrderCreate\Exception\OrderCreateListOrdersNotFoundException;
 use Order\Application\OrderCreate\Exception\OrderCreateProductNotFoundException;
+use Order\Application\OrderCreate\Exception\OrderCreateProductShopRepeatedException;
 use Order\Application\OrderCreate\Exception\OrderCreateShopNotFoundException;
 use Order\Domain\Model\Order;
 use Order\Domain\Service\OrderCreate\Dto\OrderCreateDto;
@@ -25,7 +26,6 @@ use Order\Domain\Service\OrderCreate\Dto\OrderDataServiceDto;
 use Order\Domain\Service\OrderCreate\Exception\OrderCreateListOrdersNotFoundException as OrderCreateServiceListOrdersNotFoundException;
 use Order\Domain\Service\OrderCreate\Exception\OrderCreateProductNotFoundException as OrderCreateServiceProductNotFoundException;
 use Order\Domain\Service\OrderCreate\Exception\OrderCreateProductShopRepeatedException as OrderCreateServiceProductShopRepeatedException;
-use Order\Domain\Service\OrderCreate\Exception\OrderCreateProductShopRepeatedException;
 use Order\Domain\Service\OrderCreate\Exception\OrderCreateShopNotFoundException as OrderCreateServiceShopNotFoundException;
 use Order\Domain\Service\OrderCreate\OrderCreateService;
 
