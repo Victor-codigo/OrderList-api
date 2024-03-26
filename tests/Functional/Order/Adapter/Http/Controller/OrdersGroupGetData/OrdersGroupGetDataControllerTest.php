@@ -224,6 +224,17 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
                 $product4,
                 $shop3
             ),
+            '72f2f46d-3f3f-48d0-b4eb-5cbed7896cab' => Order::fromPrimitives(
+                '72f2f46d-3f3f-48d0-b4eb-5cbed7896cab',
+                '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
+                '2606508b-4516-45d6-93a6-c7cb416b7f3f',
+                null,
+                20.050,
+                true,
+                $listOrders2,
+                $product3,
+                null
+            ),
         ];
     }
 
@@ -249,7 +260,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
 
         $this->assertEquals(1, $responseContent->data->page);
         $this->assertEquals(1, $responseContent->data->pages_total);
-        $this->assertCount(5, $responseContent->data->orders);
+        $this->assertCount(6, $responseContent->data->orders);
         $ordersExpected = $this->getOrdersData();
 
         foreach ($responseContent->data->orders as $orderActual) {
@@ -283,7 +294,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
         $this->assertSame('Orders of the group data', $responseContent->message);
 
         $this->assertEquals(1, $responseContent->data->page);
-        $this->assertEquals(5, $responseContent->data->pages_total);
+        $this->assertEquals(6, $responseContent->data->pages_total);
         $this->assertCount(1, $responseContent->data->orders);
         $ordersExpected = $this->getOrdersData();
 

@@ -31,6 +31,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         '5cfe52e5-db78-41b3-9acd-c3c84924cb9b',
         'c3734d1c-8b18-4bfd-95aa-06a261476d9d',
         'd351adba-c566-4fa5-bb5b-1a6f73b1d72f',
+        '72f2f46d-3f3f-48d0-b4eb-5cbed7896cab',
     ];
 
     private const USER_HAS_NO_GROUP_EMAIL = 'email.other_2.active@host.com';
@@ -178,6 +179,17 @@ class OrderGetDataControllerTest extends WebClientTestCase
                 $listOrders3,
                 $product4,
                 $shop3
+            ),
+            '72f2f46d-3f3f-48d0-b4eb-5cbed7896cab' => Order::fromPrimitives(
+                '72f2f46d-3f3f-48d0-b4eb-5cbed7896cab',
+                '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
+                '2606508b-4516-45d6-93a6-c7cb416b7f3f',
+                null,
+                20.050,
+                true,
+                $listOrders2,
+                $product3,
+                null
             ),
         ];
     }
@@ -344,7 +356,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'orders'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Orders\' data', $responseContent->message);
-        $this->assertCount(3, $responseContent->data->orders);
+        $this->assertCount(4, $responseContent->data->orders);
 
         foreach ($responseContent->data->orders as $orderActual) {
             $orderActual = (array) $orderActual;
