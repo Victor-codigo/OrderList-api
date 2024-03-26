@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Common\Domain\Model\ValueObject\Object;
+namespace Test\Unit\Common\Domain\Model\ValueObject\Object\Filter;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\Filter\FilterDbLikeComparison;

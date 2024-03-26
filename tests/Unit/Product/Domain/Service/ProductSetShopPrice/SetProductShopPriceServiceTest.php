@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Product\Domain\Service\SetProductShopPrice;
+namespace Test\Unit\Product\Domain\Service\ProductSetShopPrice;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Float\Money;
@@ -140,7 +140,7 @@ class SetProductShopPriceServiceTest extends TestCase
      *
      * @return array<{0: Identifier[], 1: Identifier[], 2: Money[], 3: UnitMeasure[]}>
      */
-    private function createData(array|null $productsId, array|null $shopsIds, array|null $prices, array|null $units): array
+    private function createData(?array $productsId, ?array $shopsIds, ?array $prices, ?array $units): array
     {
         $productsId ??= ['product id 1', 'product id 2', 'product id 3'];
         $shopsIds ??= ['shop id 1', 'shop id 2', 'shop id 3'];
@@ -148,10 +148,10 @@ class SetProductShopPriceServiceTest extends TestCase
         $units ??= [UNIT_MEASURE_TYPE::UNITS, UNIT_MEASURE_TYPE::KG, UNIT_MEASURE_TYPE::M];
 
         return [
-             $this->getIdentifier($productsId),
-             $this->getIdentifier($shopsIds),
-             $this->getPrices($prices),
-             $this->getUnits($units),
+            $this->getIdentifier($productsId),
+            $this->getIdentifier($shopsIds),
+            $this->getPrices($prices),
+            $this->getUnits($units),
         ];
     }
 

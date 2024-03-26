@@ -190,8 +190,8 @@ class SetProductShopPriceInputDtoTest extends TestCase
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
-                'products_or_shops_prices_units_not_equals' => [VALIDATION_ERRORS::NOT_EQUAL_TO],
-            ],
+            'products_or_shops_prices_units_not_equals' => [VALIDATION_ERRORS::NOT_EQUAL_TO],
+        ],
             $return
         );
     }
@@ -212,8 +212,8 @@ class SetProductShopPriceInputDtoTest extends TestCase
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
-                'products_or_shops_prices_units_not_equals' => [VALIDATION_ERRORS::NOT_EQUAL_TO],
-            ],
+            'products_or_shops_prices_units_not_equals' => [VALIDATION_ERRORS::NOT_EQUAL_TO],
+        ],
             $return
         );
     }
