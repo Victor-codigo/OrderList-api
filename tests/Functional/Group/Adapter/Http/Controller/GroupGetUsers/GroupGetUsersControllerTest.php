@@ -358,7 +358,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailUserSessionIsNotInTheGroup22(): void
+    public function itShouldFailUserSessionIsNotInTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();
         $client->request(

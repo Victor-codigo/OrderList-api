@@ -620,7 +620,7 @@ class ShopModifyControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailImageErrorTmpDir22(): void
+    public function itShouldFailImageErrorTmpDir(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $this->createImageTestPath();

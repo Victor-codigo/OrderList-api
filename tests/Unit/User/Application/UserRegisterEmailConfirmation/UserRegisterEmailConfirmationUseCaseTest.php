@@ -211,7 +211,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailUserIsAlreadyActive22()
+    public function itShouldFailUserIsAlreadyActive()
     {
         $token = 'token expired';
         /** @var MockObject|UserEmailConfirmationInputDto $input */

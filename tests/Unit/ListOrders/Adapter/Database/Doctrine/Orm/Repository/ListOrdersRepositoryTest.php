@@ -103,7 +103,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldRemoveTheListOrders22(): void
+    public function itShouldRemoveTheListOrders(): void
     {
         $listOrdersExists = $this->getListOrdersExists();
         $listOrdersToRemove = $this->object->findBy(['id' => $listOrdersExists->getId()]);

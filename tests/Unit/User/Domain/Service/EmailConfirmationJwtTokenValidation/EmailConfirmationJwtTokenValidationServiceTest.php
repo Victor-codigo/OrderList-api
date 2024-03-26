@@ -181,7 +181,7 @@ class EmailConfirmationJwtTokenValidationServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldActivateTheUser22(): void
+    public function itShouldActivateTheUser(): void
     {
         $token = ValueObjectFactory::createJwtToken('token');
         $tokenDecoded = $this->createTokenClass();

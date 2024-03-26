@@ -232,7 +232,7 @@ class GroupModifyInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailImageMimeTypeNotAllowed22(): void
+    public function itShouldFailImageMimeTypeNotAllowed(): void
     {
         $user = $this->getUser();
         $userNameModify = 'UserNameModified';

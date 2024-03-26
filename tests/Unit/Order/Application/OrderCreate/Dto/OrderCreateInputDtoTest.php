@@ -145,7 +145,7 @@ class OrderCreateInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailListsOrdersIdIsNull22(): void
+    public function itShouldFailListsOrdersIdIsNull(): void
     {
         $ordersData = $this->getOrdersData();
 
