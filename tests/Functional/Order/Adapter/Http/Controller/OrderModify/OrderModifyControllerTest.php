@@ -17,6 +17,7 @@ class OrderModifyControllerTest extends WebClientTestCase
     private const METHOD = 'PUT';
     private const ORDER_ID = 'a0b4760a-9037-477a-8b84-d059ae5ee7e9';
     private const LIST_ORDERS_ID = 'd446eab9-5199-48d0-91f5-0407a86bcb4f';
+    private const LIST_ORDERS_ID_2 = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
     private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const PRODUCT_ID = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
     private const PRODUCT_NOT_IN_A_SHOP_ID = 'ca10c90a-c7e6-4594-89e9-71d2f5e74710';
@@ -560,6 +561,33 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Shop not found, or product is not in the shop', $responseContent->message);
         $this->assertEquals('Shop not found, or product is not in the shop', $responseContent->errors->shop_not_found);
+    }
+
+    /** @test */
+    public function itShouldFailModifyingOrderProductAndShopRepeatedInListOrders(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID_2,
+                'order_id' => self::ORDER_ID,
+                'product_id' => self::PRODUCT_ID,
+                'shop_id' => self::SHOP_ID,
+                'description' => 'order description modify',
+                'amount' => 0,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['order_product_and_shop_repeated'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Product and shop are already in the order list', $responseContent->message);
+        $this->assertEquals('Product and shop are already in the order list', $responseContent->errors->order_product_and_shop_repeated);
     }
 
     /** @test */

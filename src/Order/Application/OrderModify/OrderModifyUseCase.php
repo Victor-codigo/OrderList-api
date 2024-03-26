@@ -17,11 +17,13 @@ use Order\Application\OrderModify\Exception\OrderModifyGroupAndUserValidationExc
 use Order\Application\OrderModify\Exception\OrderModifyListOrdersIdNotFoundException;
 use Order\Application\OrderModify\Exception\OrderModifyOrderIdNotFoundException;
 use Order\Application\OrderModify\Exception\OrderModifyProductIdNotFoundException;
+use Order\Application\OrderModify\Exception\OrderModifyProductShopRepeatedException;
 use Order\Application\OrderModify\Exception\OrderModifyShopIdNotFoundException;
 use Order\Domain\Model\Order;
 use Order\Domain\Service\OrderModify\Dto\OrderModifyDto;
 use Order\Domain\Service\OrderModify\Exception\OrderModifyListOrdersIdNotFoundException as OrderModifyServiceListOrdersIdNotFoundException;
 use Order\Domain\Service\OrderModify\Exception\OrderModifyProductIdNotFoundException as OrderModifyServiceProductIdNotFoundException;
+use Order\Domain\Service\OrderModify\Exception\OrderModifyProductShopRepeatedException as OrderModifyServiceProductShopRepeatedException;
 use Order\Domain\Service\OrderModify\Exception\OrderModifyShopIdNotFoundException as OrderModifyServiceShopIdNotFoundException;
 use Order\Domain\Service\OrderModify\OrderModifyService;
 
@@ -52,6 +54,8 @@ class OrderModifyUseCase extends ServiceBase
             throw OrderModifyShopIdNotFoundException::fromMessage('Shop not found, or product is not in the shop');
         } catch (OrderModifyServiceListOrdersIdNotFoundException) {
             throw OrderModifyListOrdersIdNotFoundException::fromMessage('List orders not found');
+        } catch (OrderModifyServiceProductShopRepeatedException) {
+            throw OrderModifyProductShopRepeatedException::fromMessage('Product and shop are already in the order list');
         } catch (DBNotFoundException) {
             throw OrderModifyOrderIdNotFoundException::fromMessage('Order not found');
         } catch (ValidateGroupAndUserException) {

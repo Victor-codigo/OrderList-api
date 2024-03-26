@@ -13,6 +13,7 @@ use Order\Domain\Ports\Repository\OrderRepositoryInterface;
 use Order\Domain\Service\OrderModify\Dto\OrderModifyDto;
 use Order\Domain\Service\OrderModify\Exception\OrderModifyListOrdersIdNotFoundException;
 use Order\Domain\Service\OrderModify\Exception\OrderModifyProductIdNotFoundException;
+use Order\Domain\Service\OrderModify\Exception\OrderModifyProductShopRepeatedException;
 use Order\Domain\Service\OrderModify\Exception\OrderModifyShopIdNotFoundException;
 use Product\Domain\Model\Product;
 use Product\Domain\Port\Repository\ProductRepositoryInterface;
@@ -33,6 +34,7 @@ class OrderModifyService
      * @throws OrderModifyListOrdersIdNotFoundException
      * @throws OrderModifyProductIdNotFoundException
      * @throws OrderModifyShopIdNotFoundException
+     * @throws OrderCreateProductShopRepeatedException
      * @throws DBNotFoundException
      * @throws DBUniqueConstraintException
      * @throws DBConnectionException
@@ -42,6 +44,7 @@ class OrderModifyService
         $listOrders = $this->validateListOrders($input->groupId, $input->listOrdersId);
         $product = $this->validateProduct($input->groupId, $input->productId);
         $shop = $this->validateShop($input->groupId, $input->shopId->toIdentifier(), $input->productId);
+        $this->productAndShopAreNotRepeatedOrFail($input->groupId, $input->listOrdersId, $product, $shop);
 
         /** @var Order $order */
         $order = iterator_to_array(
@@ -60,6 +63,21 @@ class OrderModifyService
         $this->orderRepository->save([$order]);
 
         return $order;
+    }
+
+    /**
+     * @throws OrderCreateProductShopRepeatedException
+     */
+    private function productAndShopAreNotRepeatedOrFail(Identifier $groupId, Identifier $listOrdersId, Product $product, ?Shop $shop): void
+    {
+        try {
+            $shopId = null === $shop ? [] : [$shop->getId()];
+
+            $this->orderRepository->findOrdersByListOrdersIdProductIdAndShopIdOrFail($groupId, $listOrdersId, [$product->getId()], $shopId);
+
+            throw OrderModifyProductShopRepeatedException::fromMessage('Product and shop are already in the list of orders');
+        } catch (DBNotFoundException) {
+        }
     }
 
     /**
