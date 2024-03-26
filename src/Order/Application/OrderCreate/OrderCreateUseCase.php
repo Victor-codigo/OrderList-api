@@ -18,12 +18,14 @@ use Order\Application\OrderCreate\Dto\OrderDataDto;
 use Order\Application\OrderCreate\Exception\OrderCreateGroupAndUserValidationException;
 use Order\Application\OrderCreate\Exception\OrderCreateListOrdersNotFoundException;
 use Order\Application\OrderCreate\Exception\OrderCreateProductNotFoundException;
+use Order\Application\OrderCreate\Exception\OrderCreateProductShopRepeatedException;
 use Order\Application\OrderCreate\Exception\OrderCreateShopNotFoundException;
 use Order\Domain\Model\Order;
 use Order\Domain\Service\OrderCreate\Dto\OrderCreateDto;
 use Order\Domain\Service\OrderCreate\Dto\OrderDataServiceDto;
 use Order\Domain\Service\OrderCreate\Exception\OrderCreateListOrdersNotFoundException as OrderCreateServiceListOrdersNotFoundException;
 use Order\Domain\Service\OrderCreate\Exception\OrderCreateProductNotFoundException as OrderCreateServiceProductNotFoundException;
+use Order\Domain\Service\OrderCreate\Exception\OrderCreateProductShopRepeatedException as OrderCreateServiceProductShopRepeatedException;
 use Order\Domain\Service\OrderCreate\Exception\OrderCreateShopNotFoundException as OrderCreateServiceShopNotFoundException;
 use Order\Domain\Service\OrderCreate\OrderCreateService;
 
@@ -45,7 +47,7 @@ class OrderCreateUseCase extends ServiceBase
             $this->validateGroupAndUserService->__invoke($input->groupId);
 
             $orders = $this->OrderCreateService->__invoke(
-                $this->createOrderCreateDto($input->groupId, $input->ordersData)
+                $this->createOrderCreateDto($input->groupId, $input->listOrdersId, $input->ordersData)
             );
 
             return $this->createOrderCreateOutputDto($orders);
@@ -55,6 +57,8 @@ class OrderCreateUseCase extends ServiceBase
             throw OrderCreateListOrdersNotFoundException::fromMessage('List of orders or lists of orders not found');
         } catch (OrderCreateServiceProductNotFoundException) {
             throw OrderCreateProductNotFoundException::fromMessage('Product or products not found');
+        } catch (OrderCreateServiceProductShopRepeatedException) {
+            throw OrderCreateProductShopRepeatedException::fromMessage('Product and shop are already in the order list');
         } catch (OrderCreateServiceShopNotFoundException) {
             throw OrderCreateShopNotFoundException::fromMessage('Shop or shops not found');
         } catch (\Exception $e) {
@@ -74,12 +78,11 @@ class OrderCreateUseCase extends ServiceBase
     /**
      * @param OrderDataDto[] $ordersData
      */
-    private function createOrderCreateDto(Identifier $groupId, array $ordersData): OrderCreateDto
+    private function createOrderCreateDto(Identifier $groupId, Identifier $listOrdersId, array $ordersData): OrderCreateDto
     {
         $ordersServiceData = [];
         foreach ($ordersData as $order) {
             $ordersServiceData[] = new OrderDataServiceDto(
-                $order->listOrdersId,
                 $order->productId,
                 $order->userId,
                 $order->shopId,
@@ -88,7 +91,7 @@ class OrderCreateUseCase extends ServiceBase
             );
         }
 
-        return new OrderCreateDto($groupId, $ordersServiceData);
+        return new OrderCreateDto($groupId, $listOrdersId, $ordersServiceData);
     }
 
     private function createOrderCreateOutputDto(array $orders): OrderCreateOutputDto

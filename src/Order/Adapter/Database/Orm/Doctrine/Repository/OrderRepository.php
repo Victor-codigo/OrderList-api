@@ -195,4 +195,33 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
             ]
         );
     }
+
+    /**
+     * @param Identifier[] $productsId
+     * @param Identifier[] $shopsId
+     *
+     * @throws DBNotFoundException
+     */
+    public function findOrdersByListOrdersIdProductIdAndShopIdOrFail(Identifier $groupId, Identifier $listOrdersId, array $productsId, array $shopsId): PaginatorInterface
+    {
+        $query = $this->entityManager->createQueryBuilder()
+            ->select('orders')
+            ->from(Order::class, 'orders')
+            ->where('orders.groupId = :groupId')
+            ->andWhere('orders.listOrdersId = :listOrdersId')
+            ->andWhere('orders.productId IN (:productsId)')
+            ->setParameter('groupId', $groupId)
+            ->setParameter('listOrdersId', $listOrdersId)
+            ->setParameter('productsId', $productsId);
+
+        if (!empty($shopsId)) {
+            $query
+                ->andWhere('orders.shopId IN (:shopsId)')
+                ->setParameter('shopsId', $shopsId);
+        } else {
+            $query->andWhere('orders.shopId IS NULL');
+        }
+
+        return $this->queryPaginationOrFail($query);
+    }
 }

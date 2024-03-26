@@ -13,6 +13,7 @@ class OrderCreateDto
      */
     public function __construct(
         public readonly Identifier $groupId,
+        public readonly Identifier $listOrdersId,
         public readonly array $orders
     ) {
     }

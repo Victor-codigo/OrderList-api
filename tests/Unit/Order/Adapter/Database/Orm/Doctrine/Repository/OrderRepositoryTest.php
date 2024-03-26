@@ -29,6 +29,36 @@ class OrderRepositoryTest extends DataBaseTestCase
 
     private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const LIST_ORDERS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
+    private const ORDERS_ID = [
+        '5cfe52e5-db78-41b3-9acd-c3c84924cb9b',
+        '9a48ac5b-4571-43fd-ac80-28b08124ffb8',
+        'a0b4760a-9037-477a-8b84-d059ae5ee7e9',
+        'c3734d1c-8b18-4bfd-95aa-06a261476d9d',
+        'd351adba-c566-4fa5-bb5b-1a6f73b1d72f',
+        '72f2f46d-3f3f-48d0-b4eb-5cbed7896cab',
+    ];
+    private const PRODUCTS_AND_SHOPS_ID = [
+        self::ORDERS_ID[0] => [
+            'productId' => '8b6d650b-7bb7-4850-bf25-36cda9bce801',
+            'shopId' => 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
+        ],
+        self::ORDERS_ID[1] => [
+            'productId' => 'afc62bc9-c42c-4c4d-8098-09ce51414a92',
+            'shopId' => 'e6c1d350-f010-403c-a2d4-3865c14630ec',
+        ],
+        self::ORDERS_ID[2] => [
+            'productId' => '8b6d650b-7bb7-4850-bf25-36cda9bce801',
+            'shopId' => 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
+        ],
+        self::ORDERS_ID[3] => [
+            'productId' => '7e3021d4-2d02-4386-8bbe-887cfe8697a8',
+            'shopId' => 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
+        ],
+        self::ORDERS_ID[4] => [
+            'productId' => 'ca10c90a-c7e6-4594-89e9-71d2f5e74710',
+            'shopId' => 'b9b1c541-d41e-4751-9ecb-4a1d823c0405',
+        ],
+    ];
 
     private OrderRepository $object;
     private ProductRepositoryInterface $productRepository;
@@ -420,5 +450,58 @@ class OrderRepositoryTest extends DataBaseTestCase
 
         $this->expectException(DBNotFoundException::class);
         $this->object->findOrdersByGroupIdOrFail($groupId, $orderAsc);
+    }
+
+    /** @test */
+    public function itShouldGetOrdersByListOrdersIdProductsIdAndShopsId(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $listOrdersId = ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID);
+        $productsId = array_map(
+            fn (array $productAndShopId) => ValueObjectFactory::createIdentifier($productAndShopId['productId']),
+            array_slice(self::PRODUCTS_AND_SHOPS_ID, 0, 3, false)
+        );
+        $shopId = array_map(
+            fn (array $productAndShopId) => ValueObjectFactory::createIdentifier($productAndShopId['shopId']),
+            array_slice(self::PRODUCTS_AND_SHOPS_ID, 0, 3, false)
+        );
+
+        $return = $this->object->findOrdersByListOrdersIdProductIdAndShopIdOrFail($groupId, $listOrdersId, $productsId, $shopId);
+        $ordersExpected = $this->object->findBy(['id' => [self::ORDERS_ID[0], self::ORDERS_ID[1]]]);
+
+        $this->assertEquals($ordersExpected, iterator_to_array($return));
+    }
+
+    /** @test */
+    public function itShouldGetOrdersByListOrdersIdProductsIdAndShopsIdIsEqualsToNull(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $listOrdersId = ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID);
+        $productsId = array_map(
+            fn (array $productAndShopId) => ValueObjectFactory::createIdentifier($productAndShopId['productId']),
+            self::PRODUCTS_AND_SHOPS_ID
+        );
+        $shopId = [];
+
+        $return = $this->object->findOrdersByListOrdersIdProductIdAndShopIdOrFail($groupId, $listOrdersId, $productsId, $shopId);
+        $ordersExpected = $this->object->findBy(['id' => [self::ORDERS_ID[5]]]);
+
+        $this->assertEquals($ordersExpected, iterator_to_array($return));
+    }
+
+    /** @test */
+    public function itShouldFailGettingOrdersByListOrdersIdProductsIdAndShopsIdNotFound(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $listOrdersId = ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID);
+        $productsId = [
+            ValueObjectFactory::createIdentifier('not found product id'),
+        ];
+        $shopId = [
+            ValueObjectFactory::createIdentifier('not found shop id'),
+        ];
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findOrdersByListOrdersIdProductIdAndShopIdOrFail($groupId, $listOrdersId, $productsId, $shopId);
     }
 }

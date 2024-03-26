@@ -28,9 +28,9 @@ use Symfony\Component\HttpFoundation\Response;
                 schema: new OA\Schema(
                     properties: [
                         new OA\Property(property: 'group_id', type: 'string', description: 'Group id to add the order', example: '0290bf7e-2e68-4698-ba2e-d2394c239572'),
+                        new OA\Property(property: 'list_orders_id', type: 'string', description: 'list of orders id, in witch the orders are added', example: 'bf1aab1f-8042-41ff-b43d-ada633fb0671'),
                         new OA\Property(property: 'orders_data', type: 'array', description: 'Order\'s data', items: new OA\Items(
                             properties: [
-                                new OA\Property(property: 'list_orders_id', type: 'string', description: 'list of orders\' id', example: 'bf1aab1f-8042-41ff-b43d-ada633fb0671'),
                                 new OA\Property(property: 'product_id', type: 'string', description: 'Product\' id', example: '0290bf7e-2e68-4698-ba2e-d2394c239572'),
                                 new OA\Property(property: 'shop_id', type: 'string', description: 'Shop\'s id', example: '0290bf7e-2e68-4698-ba2e-d2394c239572'),
                                 new OA\Property(property: 'description', type: 'string', description: 'Order\'s description'),
@@ -68,7 +68,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|list_orders_id|product_id|orders_empty|list_orders_not_found|product_not_found|shop_not_found|group_error|[], string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|list_orders_id|product_id|orders_empty|list_orders_not_found|product_not_found|shop_not_found|group_error|order_product_and_shop_repeated|[], string|array>')),
                     ]
                 )
             )
@@ -86,18 +86,18 @@ class OrderCreateController extends AbstractController
     public function __invoke(OrderCreateRequestDto $request): JsonResponse
     {
         $ordersId = $this->OrderCreateUseCase->__invoke(
-            $this->createOrderCreateInputDto($request->groupId, $request->ordersData)
+            $this->createOrderCreateInputDto($request->groupId, $request->listOrdersId, $request->ordersData)
         );
 
         return $this->createResponse($ordersId);
     }
 
-    private function createOrderCreateInputDto(?string $groupId, array $ordersData): OrderCreateInputDto
+    private function createOrderCreateInputDto(?string $groupId, ?string $listOrdersId, array $ordersData): OrderCreateInputDto
     {
         /** @var UserSharedSymfonyAdapter $userAdapter */
         $userAdapter = $this->security->getUser();
 
-        return new OrderCreateInputDto($userAdapter->getUser(), $groupId, $ordersData);
+        return new OrderCreateInputDto($userAdapter->getUser(), $groupId, $listOrdersId, $ordersData);
     }
 
     private function createResponse(OrderCreateOutputDto $OrdersId): JsonResponse

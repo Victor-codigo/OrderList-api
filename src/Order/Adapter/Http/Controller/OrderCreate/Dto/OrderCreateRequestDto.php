@@ -9,12 +9,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class OrderCreateRequestDto implements RequestDtoInterface
 {
-    public readonly string|null $groupId;
-    public readonly array|null $ordersData;
+    public readonly ?string $groupId;
+    public readonly ?string $listOrdersId;
+    public readonly ?array $ordersData;
 
     public function __construct(Request $request)
     {
         $this->groupId = $request->request->get('group_id');
+        $this->listOrdersId = $request->request->get('list_orders_id');
         $this->ordersData = $request->request->all('orders_data');
     }
 }

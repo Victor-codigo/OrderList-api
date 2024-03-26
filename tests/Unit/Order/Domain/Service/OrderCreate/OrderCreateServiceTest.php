@@ -18,6 +18,7 @@ use Order\Domain\Service\OrderCreate\Dto\OrderCreateDto;
 use Order\Domain\Service\OrderCreate\Dto\OrderDataServiceDto;
 use Order\Domain\Service\OrderCreate\Exception\OrderCreateListOrdersNotFoundException;
 use Order\Domain\Service\OrderCreate\Exception\OrderCreateProductNotFoundException;
+use Order\Domain\Service\OrderCreate\Exception\OrderCreateProductShopRepeatedException;
 use Order\Domain\Service\OrderCreate\Exception\OrderCreateShopNotFoundException;
 use Order\Domain\Service\OrderCreate\OrderCreateService;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -29,6 +30,8 @@ use Shop\Domain\Port\Repository\ShopRepositoryInterface;
 
 class OrderCreateServiceTest extends TestCase
 {
+    public const LIST_ORDERS_ID = 'e39d9a07-0f40-42a7-84da-c90cdbd77bec';
+
     private OrderCreateService $object;
     private MockObject|OrderRepositoryInterface $orderRepository;
     private MockObject|ListOrdersRepositoryInterface $listOrdersRepository;
@@ -65,7 +68,7 @@ class OrderCreateServiceTest extends TestCase
 
         return [
             ListOrders::fromPrimitives(
-                $ordersData[0]->listOrdersId->getValue(),
+                self::LIST_ORDERS_ID,
                 'group id',
                 $ordersData[0]->userId->getValue(),
                 'list order 1 name',
@@ -73,7 +76,7 @@ class OrderCreateServiceTest extends TestCase
                 null
             ),
             ListOrders::fromPrimitives(
-                $ordersData[1]->listOrdersId->getValue(),
+                self::LIST_ORDERS_ID,
                 'group id',
                 $ordersData[1]->userId->getValue(),
                 'list order 2 name',
@@ -154,7 +157,6 @@ class OrderCreateServiceTest extends TestCase
     {
         return [
             new OrderDataServiceDto(
-                ValueObjectFactory::createIdentifier('list orders id 1'),
                 ValueObjectFactory::createIdentifier('product id 1'),
                 ValueObjectFactory::createIdentifier('user id 1'),
                 ValueObjectFactory::createIdentifierNullable(!$shopIsIsNull ? 'shop id 1' : null),
@@ -163,7 +165,6 @@ class OrderCreateServiceTest extends TestCase
             ),
 
             new OrderDataServiceDto(
-                ValueObjectFactory::createIdentifier('list orders id 2'),
                 ValueObjectFactory::createIdentifier('product id 2'),
                 ValueObjectFactory::createIdentifier('user id 2'),
                 ValueObjectFactory::createIdentifierNullable(!$shopIsIsNull ? 'shop id 2' : null),
@@ -172,7 +173,6 @@ class OrderCreateServiceTest extends TestCase
             ),
 
             new OrderDataServiceDto(
-                ValueObjectFactory::createIdentifier('list orders id 2'),
                 ValueObjectFactory::createIdentifier('product id 3'),
                 ValueObjectFactory::createIdentifier('user id 3'),
                 ValueObjectFactory::createIdentifierNullable(!$shopIsIsNull ? 'shop id 3' : null),
@@ -249,12 +249,9 @@ class OrderCreateServiceTest extends TestCase
     public function itShouldCreateOrders(): void
     {
         $listsOrders = $this->getListsOrders();
+        $listOrdersId = ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID);
         $orders = $this->getOrders();
         $ordersData = $this->getOrdersData();
-        $listsOrdersId = array_map(
-            fn (Order $order) => $order->getListOrdersId(),
-            $orders
-        );
         $productsId = array_map(
             fn (Order $order) => $order->getProductId(),
             $orders
@@ -265,12 +262,12 @@ class OrderCreateServiceTest extends TestCase
             $orders
         );
         $shops = $this->getShops();
-        $input = new OrderCreateDto($this->groupId, $ordersData);
+        $input = new OrderCreateDto($this->groupId, $listOrdersId, $ordersData);
 
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('findListOrderByIdOrFail')
-            ->with($listsOrdersId, $this->groupId)
+            ->with([$listOrdersId], $this->groupId)
             ->willReturn($this->paginator);
 
         $this->productRepository
@@ -285,13 +282,19 @@ class OrderCreateServiceTest extends TestCase
             ->with($this->groupId, $shopsId)
             ->willReturn($this->paginator);
 
+        $this->orderRepository
+            ->expects($this->once())
+            ->method('findOrdersByListOrdersIdProductIdAndShopIdOrFail')
+            ->with($this->groupId, $listOrdersId, $productsId, $shopsId)
+            ->willThrowException(new DBNotFoundException());
+
         $this->paginator
             ->expects($this->exactly(3))
             ->method('getIterator')
             ->willReturnOnConsecutiveCalls(
                 new ArrayCollection($listsOrders),
                 new ArrayCollection($products),
-                new ArrayCollection($shops)
+                new ArrayCollection($shops),
             );
 
         $this->paginator
@@ -331,12 +334,9 @@ class OrderCreateServiceTest extends TestCase
     public function itShouldCreateOrdersShopsIdAreNull(): void
     {
         $listsOrders = $this->getListsOrders();
+        $listOrdersId = ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID);
         $orders = $this->getOrders(true);
         $ordersData = $this->getOrdersData(true);
-        $listsOrdersId = array_map(
-            fn (Order $order) => $order->getListOrdersId(),
-            $orders
-        );
         $productsId = array_map(
             fn (Order $order) => $order->getProductId(),
             $orders
@@ -346,12 +346,12 @@ class OrderCreateServiceTest extends TestCase
             fn (Order $order) => $order->getShopId(),
             $orders
         );
-        $input = new OrderCreateDto($this->groupId, $ordersData);
+        $input = new OrderCreateDto($this->groupId, $listOrdersId, $ordersData);
 
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('findListOrderByIdOrFail')
-            ->with($listsOrdersId, $this->groupId)
+            ->with([$listOrdersId], $this->groupId)
             ->willReturn($this->paginator);
 
         $this->productRepository
@@ -364,6 +364,12 @@ class OrderCreateServiceTest extends TestCase
             ->expects($this->once())
             ->method('findShopsOrFail')
             ->with($this->groupId, $shopsId)
+            ->willThrowException(new DBNotFoundException());
+
+        $this->orderRepository
+            ->expects($this->once())
+            ->method('findOrdersByListOrdersIdProductIdAndShopIdOrFail')
+            ->with($this->groupId, $listOrdersId, $productsId, [])
             ->willThrowException(new DBNotFoundException());
 
         $this->paginator
@@ -410,18 +416,14 @@ class OrderCreateServiceTest extends TestCase
     /** @test */
     public function itShouldFailCreatingOrdersListsOrdersNotFound(): void
     {
-        $orders = $this->getOrders();
+        $listOrdersId = ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID);
         $ordersData = $this->getOrdersData();
-        $listsOrdersId = array_map(
-            fn (Order $order) => $order->getListOrdersId(),
-            $orders
-        );
-        $input = new OrderCreateDto($this->groupId, $ordersData);
+        $input = new OrderCreateDto($this->groupId, $listOrdersId, $ordersData);
 
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('findListOrderByIdOrFail')
-            ->with($listsOrdersId, $this->groupId)
+            ->with([$listOrdersId], $this->groupId)
             ->willThrowException(new DBNotFoundException());
 
         $this->productRepository
@@ -440,9 +442,13 @@ class OrderCreateServiceTest extends TestCase
             ->expects($this->never())
             ->method('save');
 
-        $this->paginator
+        $this->orderRepository
             ->expects($this->never())
-            ->method('getIterator');
+            ->method('findOrdersByListOrdersIdProductIdAndShopIdOrFail');
+
+        $this->paginator
+                ->expects($this->never())
+                ->method('getIterator');
 
         $this->paginator
             ->expects($this->never())
@@ -453,75 +459,22 @@ class OrderCreateServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailCreatingOrdersNotFoundAllListsOrders(): void
-    {
-        $listsOrders = $this->getListsOrders();
-        $orders = $this->getOrders();
-        $ordersData = $this->getOrdersData();
-        $listsOrdersId = array_map(
-            fn (Order $order) => $order->getListOrdersId(),
-            $orders
-        );
-        $input = new OrderCreateDto($this->groupId, $ordersData);
-
-        $this->listOrdersRepository
-            ->expects($this->once())
-            ->method('findListOrderByIdOrFail')
-            ->with($listsOrdersId, $this->groupId)
-            ->willReturn($this->paginator);
-
-        $this->productRepository
-            ->expects($this->never())
-            ->method('findProductsOrFail');
-
-        $this->shopRepository
-            ->expects($this->never())
-            ->method('findShopsOrFail');
-
-        $this->paginator
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturnOnConsecutiveCalls(
-                new \ArrayIterator([$listsOrders[0]]),
-            );
-
-        $this->paginator
-            ->expects($this->once())
-            ->method('setPagination')
-            ->with(1);
-
-        $this->orderRepository
-            ->expects($this->never())
-            ->method('generateId');
-
-        $this->orderRepository
-            ->expects($this->never())
-            ->method('save');
-
-        $this->expectException(OrderCreateListOrdersNotFoundException::class);
-        $this->object->__invoke($input);
-    }
-
-    /** @test */
     public function itShouldFailCreatingOrdersProductsNotFound(): void
     {
         $listsOrders = $this->getListsOrders();
+        $listOrdersId = ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID);
         $orders = $this->getOrders();
         $ordersData = $this->getOrdersData();
-        $listsOrdersId = array_map(
-            fn (Order $order) => $order->getListOrdersId(),
-            $orders
-        );
         $productsId = array_map(
             fn (Order $order) => $order->getProductId(),
             $orders
         );
-        $input = new OrderCreateDto($this->groupId, $ordersData);
+        $input = new OrderCreateDto($this->groupId, $listOrdersId, $ordersData);
 
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('findListOrderByIdOrFail')
-            ->with($listsOrdersId, $this->groupId)
+            ->with([$listOrdersId], $this->groupId)
             ->willReturn($this->paginator);
 
         $this->productRepository
@@ -541,6 +494,10 @@ class OrderCreateServiceTest extends TestCase
         $this->orderRepository
             ->expects($this->never())
             ->method('save');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByListOrdersIdProductIdAndShopIdOrFail');
 
         $this->paginator
             ->expects($this->once())
@@ -562,23 +519,20 @@ class OrderCreateServiceTest extends TestCase
     public function itShouldFailCreatingOrdersNotFoundAllProducts(): void
     {
         $listsOrders = $this->getListsOrders();
+        $listOrdersId = ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID);
         $orders = $this->getOrders();
         $ordersData = $this->getOrdersData();
-        $listsOrdersId = array_map(
-            fn (Order $order) => $order->getListOrdersId(),
-            $orders
-        );
         $productsId = array_map(
             fn (Order $order) => $order->getProductId(),
             $orders
         );
         $products = $this->getProducts();
-        $input = new OrderCreateDto($this->groupId, $ordersData);
+        $input = new OrderCreateDto($this->groupId, $listOrdersId, $ordersData);
 
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('findListOrderByIdOrFail')
-            ->with($listsOrdersId, $this->groupId)
+            ->with([$listOrdersId], $this->groupId)
             ->willReturn($this->paginator);
 
         $this->productRepository
@@ -590,6 +544,10 @@ class OrderCreateServiceTest extends TestCase
         $this->shopRepository
             ->expects($this->never())
             ->method('findShopsOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByListOrdersIdProductIdAndShopIdOrFail');
 
         $this->paginator
             ->expects($this->exactly(2))
@@ -620,12 +578,9 @@ class OrderCreateServiceTest extends TestCase
     public function itShouldFailCreatingOrdersNotFoundAllShops(): void
     {
         $listsOrders = $this->getListsOrders();
+        $listOrdersId = ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID);
         $orders = $this->getOrders();
         $ordersData = $this->getOrdersData();
-        $listsOrdersId = array_map(
-            fn (Order $order) => $order->getListOrdersId(),
-            $orders
-        );
         $productsId = array_map(
             fn (Order $order) => $order->getProductId(),
             $orders
@@ -636,12 +591,12 @@ class OrderCreateServiceTest extends TestCase
             $orders
         );
         $shops = $this->getShops();
-        $input = new OrderCreateDto($this->groupId, $ordersData);
+        $input = new OrderCreateDto($this->groupId, $listOrdersId, $ordersData);
 
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('findListOrderByIdOrFail')
-            ->with($listsOrdersId, $this->groupId)
+            ->with([$listOrdersId], $this->groupId)
             ->willReturn($this->paginator);
 
         $this->productRepository
@@ -655,6 +610,10 @@ class OrderCreateServiceTest extends TestCase
             ->method('findShopsOrFail')
             ->with($this->groupId, $shopsId)
             ->willReturn($this->paginator);
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByListOrdersIdProductIdAndShopIdOrFail');
 
         $this->paginator
             ->expects($this->exactly(3))
@@ -683,15 +642,12 @@ class OrderCreateServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailCreatingOrdersDatabaseException(): void
+    public function itShouldFailCreatingOrdersProductOrShopAlreadyInListOrders(): void
     {
         $listsOrders = $this->getListsOrders();
+        $listOrdersId = ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID);
         $orders = $this->getOrders();
         $ordersData = $this->getOrdersData();
-        $listsOrdersId = array_map(
-            fn (Order $order) => $order->getListOrdersId(),
-            $orders
-        );
         $productsId = array_map(
             fn (Order $order) => $order->getProductId(),
             $orders
@@ -702,18 +658,18 @@ class OrderCreateServiceTest extends TestCase
             $orders
         );
         $shops = $this->getShops();
-        $input = new OrderCreateDto($this->groupId, $ordersData);
+        $input = new OrderCreateDto($this->groupId, $listOrdersId, $ordersData);
 
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('findListOrderByIdOrFail')
-            ->with($listsOrdersId, $this->groupId)
+            ->with([$listOrdersId], $this->groupId)
             ->willReturn($this->paginator);
 
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('findListOrderByIdOrFail')
-            ->with($listsOrdersId, $this->groupId)
+            ->with([$listOrdersId], $this->groupId)
             ->willReturn($this->paginator);
 
         $this->productRepository
@@ -727,6 +683,87 @@ class OrderCreateServiceTest extends TestCase
             ->method('findShopsOrFail')
             ->with($this->groupId, $shopsId)
             ->willReturn($this->paginator);
+
+        $this->orderRepository
+            ->expects($this->once())
+            ->method('findOrdersByListOrdersIdProductIdAndShopIdOrFail')
+            ->with($this->groupId, $listOrdersId, $productsId, $shopsId)
+            ->willReturn($this->paginator);
+
+        $this->paginator
+            ->expects($this->exactly(3))
+            ->method('getIterator')
+            ->willReturnOnConsecutiveCalls(
+                new ArrayCollection($listsOrders),
+                new ArrayCollection($products),
+                new ArrayCollection($shops),
+            );
+
+        $this->paginator
+            ->expects($this->exactly(3))
+            ->method('setPagination')
+            ->with(1);
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('generateId');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('save');
+
+        $this->expectException(OrderCreateProductShopRepeatedException::class);
+        $this->object->__invoke($input);
+    }
+
+    /** @test */
+    public function itShouldFailCreatingOrdersDatabaseException(): void
+    {
+        $listsOrders = $this->getListsOrders();
+        $listOrdersId = ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID);
+        $orders = $this->getOrders();
+        $ordersData = $this->getOrdersData();
+        $productsId = array_map(
+            fn (Order $order) => $order->getProductId(),
+            $orders
+        );
+        $products = $this->getProducts();
+        $shopsId = array_map(
+            fn (Order $order) => $order->getShopId(),
+            $orders
+        );
+        $shops = $this->getShops();
+        $input = new OrderCreateDto($this->groupId, $listOrdersId, $ordersData);
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrderByIdOrFail')
+            ->with([$listOrdersId], $this->groupId)
+            ->willReturn($this->paginator);
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrderByIdOrFail')
+            ->with([$listOrdersId], $this->groupId)
+            ->willReturn($this->paginator);
+
+        $this->productRepository
+            ->expects($this->once())
+            ->method('findProductsOrFail')
+            ->with($this->groupId, $productsId)
+            ->willReturn($this->paginator);
+
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('findShopsOrFail')
+            ->with($this->groupId, $shopsId)
+            ->willReturn($this->paginator);
+
+        $this->orderRepository
+            ->expects($this->once())
+            ->method('findOrdersByListOrdersIdProductIdAndShopIdOrFail')
+            ->with($this->groupId, $listOrdersId, $productsId, $shopsId)
+            ->willThrowException(new DBNotFoundException());
 
         $this->paginator
             ->expects($this->exactly(3))

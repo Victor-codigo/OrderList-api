@@ -15,6 +15,8 @@ use PHPUnit\Framework\TestCase;
 class OrderCreateInputDtoTest extends TestCase
 {
     private const GROUP_ID_NEW = '971c0fc0-50b4-42ad-b5b4-a4ad1f11c380';
+    private const LIST_ORDERS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
+
     private MockObject|UserShared $userSession;
     private ValidationInterface $validator;
 
@@ -58,7 +60,7 @@ class OrderCreateInputDtoTest extends TestCase
     {
         $ordersData = $this->getOrdersData();
 
-        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, $ordersData);
+        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, self::LIST_ORDERS_ID, $ordersData);
 
         $return = $object->validate($this->validator);
 
@@ -71,7 +73,7 @@ class OrderCreateInputDtoTest extends TestCase
         $ordersData = $this->getOrdersData();
         $ordersData[0]['shop_id'] = null;
 
-        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, $ordersData);
+        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, self::LIST_ORDERS_ID, $ordersData);
 
         $return = $object->validate($this->validator);
 
@@ -86,7 +88,7 @@ class OrderCreateInputDtoTest extends TestCase
         $ordersData[1]['description'] = null;
         $ordersData[2]['description'] = null;
 
-        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, $ordersData);
+        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, self::LIST_ORDERS_ID, $ordersData);
 
         $return = $object->validate($this->validator);
 
@@ -101,7 +103,7 @@ class OrderCreateInputDtoTest extends TestCase
         $ordersData[1]['amount'] = null;
         $ordersData[2]['amount'] = null;
 
-        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, $ordersData);
+        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, self::LIST_ORDERS_ID, $ordersData);
 
         $return = $object->validate($this->validator);
 
@@ -111,7 +113,7 @@ class OrderCreateInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailOrdersDataIdsNull(): void
     {
-        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, null);
+        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, self::LIST_ORDERS_ID, null);
 
         $return = $object->validate($this->validator);
 
@@ -123,7 +125,7 @@ class OrderCreateInputDtoTest extends TestCase
     {
         $ordersData = $this->getOrdersData();
 
-        $object = new OrderCreateInputDto($this->userSession, null, $ordersData);
+        $object = new OrderCreateInputDto($this->userSession, null, self::LIST_ORDERS_ID, $ordersData);
 
         $return = $object->validate($this->validator);
 
@@ -135,7 +137,7 @@ class OrderCreateInputDtoTest extends TestCase
     {
         $ordersData = $this->getOrdersData();
 
-        $object = new OrderCreateInputDto($this->userSession, 'wrong id', $ordersData);
+        $object = new OrderCreateInputDto($this->userSession, 'wrong id', self::LIST_ORDERS_ID, $ordersData);
 
         $return = $object->validate($this->validator);
 
@@ -143,16 +145,15 @@ class OrderCreateInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailListsOrdersIdIsNull(): void
+    public function itShouldFailListsOrdersIdIsNull22(): void
     {
         $ordersData = $this->getOrdersData();
-        $ordersData[0]['list_orders_id'] = null;
 
-        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, $ordersData);
+        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, null, $ordersData);
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals([['list_orders_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]]], $return);
+        $this->assertEquals(['list_orders_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
     /** @test */
@@ -162,7 +163,7 @@ class OrderCreateInputDtoTest extends TestCase
         $ordersData[0]['product_id'] = null;
         $ordersData[2]['product_id'] = null;
 
-        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, $ordersData);
+        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, self::LIST_ORDERS_ID, $ordersData);
 
         $return = $object->validate($this->validator);
 
@@ -178,13 +179,12 @@ class OrderCreateInputDtoTest extends TestCase
     public function itShouldFailListOrdersIsWrong(): void
     {
         $ordersData = $this->getOrdersData();
-        $ordersData[0]['list_orders_id'] = 'wrong id';
 
-        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, $ordersData);
+        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, 'wrong id', $ordersData);
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals([['list_orders_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
+        $this->assertEquals(['list_orders_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
     /** @test */
@@ -193,7 +193,7 @@ class OrderCreateInputDtoTest extends TestCase
         $ordersData = $this->getOrdersData();
         $ordersData[0]['product_id'] = null;
 
-        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, $ordersData);
+        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, self::LIST_ORDERS_ID, $ordersData);
 
         $return = $object->validate($this->validator);
 
@@ -207,7 +207,7 @@ class OrderCreateInputDtoTest extends TestCase
         $ordersData[0]['product_id'] = null;
         $ordersData[2]['product_id'] = null;
 
-        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, $ordersData);
+        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, self::LIST_ORDERS_ID, $ordersData);
 
         $return = $object->validate($this->validator);
 
@@ -225,7 +225,7 @@ class OrderCreateInputDtoTest extends TestCase
         $ordersData = $this->getOrdersData();
         $ordersData[0]['product_id'] = 'wrong id';
 
-        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, $ordersData);
+        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, self::LIST_ORDERS_ID, $ordersData);
 
         $return = $object->validate($this->validator);
 
@@ -238,7 +238,7 @@ class OrderCreateInputDtoTest extends TestCase
         $ordersData = $this->getOrdersData();
         $ordersData[0]['shop_id'] = 'wrong id';
 
-        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, $ordersData);
+        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, self::LIST_ORDERS_ID, $ordersData);
 
         $return = $object->validate($this->validator);
 
@@ -251,7 +251,7 @@ class OrderCreateInputDtoTest extends TestCase
         $ordersData = $this->getOrdersData();
         $ordersData[0]['description'] = str_pad('', 501, 'p');
 
-        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, $ordersData);
+        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, self::LIST_ORDERS_ID, $ordersData);
 
         $return = $object->validate($this->validator);
 
@@ -264,7 +264,7 @@ class OrderCreateInputDtoTest extends TestCase
         $ordersData = $this->getOrdersData();
         $ordersData[0]['amount'] = -3;
 
-        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, $ordersData);
+        $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, self::LIST_ORDERS_ID, $ordersData);
 
         $return = $object->validate($this->validator);
 

@@ -25,6 +25,7 @@ class OrderCreateControllerTest extends WebClientTestCase
     private const USER_HAS_NO_GROUP_PASSWORD = '123456';
     private const GROUP_EXISTS_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const GROUP_ID_EXISTS_USER_NOT_BELONGS = '4d52266f-aa7e-324e-b92d-6152635dd09e';
+    private const LIST_ORDERS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
 
     private string $pathImageProduct;
 
@@ -65,16 +66,35 @@ class OrderCreateControllerTest extends WebClientTestCase
         ];
     }
 
+    private function getOrdersDataNew(): array
+    {
+        return [
+            [
+                'product_id' => '8b6d650b-7bb7-4850-bf25-36cda9bce801',
+                'shop_id' => 'e6c1d350-f010-403c-a2d4-3865c14630ec',
+                'description' => 'order 1 description',
+                'amount' => 10.56,
+            ],
+            [
+                'product_id' => 'ca10c90a-c7e6-4594-89e9-71d2f5e74710',
+                'shop_id' => 'e6c1d350-f010-403c-a2d4-3865c14630ec',
+                'description' => 'order 2 description',
+                'amount' => 20.56,
+            ],
+        ];
+    }
+
     /** @test */
     public function itShouldCreateOrders(): void
     {
-        $ordersData = $this->getOrdersData();
+        $ordersData = $this->getOrdersDataNew();
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
                 'orders_data' => $ordersData,
             ])
         );
@@ -92,19 +112,18 @@ class OrderCreateControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldCreateOrdersDescriptionAndAmountAreNull(): void
     {
-        $ordersData = $this->getOrdersData();
+        $ordersData = $this->getOrdersDataNew();
         $ordersData[0]['description'] = null;
         $ordersData[0]['amount'] = null;
         $ordersData[1]['description'] = null;
         $ordersData[1]['amount'] = null;
-        $ordersData[2]['description'] = null;
-        $ordersData[2]['amount'] = null;
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
                 'orders_data' => $ordersData,
             ])
         );
@@ -122,16 +141,16 @@ class OrderCreateControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldCreateOrdersShopIdIsNull(): void
     {
-        $ordersData = $this->getOrdersData();
+        $ordersData = $this->getOrdersDataNew();
         $ordersData[0]['shop_id'] = null;
         $ordersData[1]['shop_id'] = null;
-        $ordersData[2]['shop_id'] = null;
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
                 'orders_data' => $ordersData,
             ])
         );
@@ -149,13 +168,14 @@ class OrderCreateControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailCreatingOrdersGroupIdIsNull(): void
     {
-        $ordersData = $this->getOrdersData();
+        $ordersData = $this->getOrdersDataNew();
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => null,
+                'list_orders_id' => self::LIST_ORDERS_ID,
                 'orders_data' => $ordersData,
             ])
         );
@@ -172,13 +192,14 @@ class OrderCreateControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailCreatingOrdersGroupIdIsWrong(): void
     {
-        $ordersData = $this->getOrdersData();
+        $ordersData = $this->getOrdersDataNew();
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => 'wrong id',
+                'list_orders_id' => self::LIST_ORDERS_ID,
                 'orders_data' => $ordersData,
             ])
         );
@@ -201,6 +222,7 @@ class OrderCreateControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
                 'orders_data' => null,
             ])
         );
@@ -217,8 +239,7 @@ class OrderCreateControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailCreatingOrdersListsOrdersIdIsNull(): void
     {
-        $ordersData = $this->getOrdersData();
-        $ordersData[0]['list_orders_id'] = null;
+        $ordersData = $this->getOrdersDataNew();
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
@@ -232,49 +253,23 @@ class OrderCreateControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], [0], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['list_orders_id'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors[0]->list_orders_id);
+        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->list_orders_id);
     }
 
     /** @test */
     public function itShouldFailCreatingOrdersListsOrdersIdINotFound(): void
     {
-        $ordersData = $this->getOrdersData();
-        $ordersData[0]['list_orders_id'] = '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387';
+        $ordersData = $this->getOrdersDataNew();
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
-                'orders_data' => $ordersData,
-            ])
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [], ['list_orders_not_found'], Response::HTTP_BAD_REQUEST);
-        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('List of orders or lists of orders not found', $responseContent->message);
-        $this->assertEquals('List of orders or lists of orders not found', $responseContent->errors->list_orders_not_found);
-    }
-
-    /** @test */
-    public function itShouldFailCreatingOrdersNoneListOrdersIdIFound(): void
-    {
-        $ordersData = $this->getOrdersData();
-        $ordersData[0]['list_orders_id'] = '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387';
-        $ordersData[1]['list_orders_id'] = '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387';
-        $ordersData[2]['list_orders_id'] = '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387';
-        $client = $this->getNewClientAuthenticatedUser();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT,
-            content: json_encode([
-                'group_id' => self::GROUP_EXISTS_ID,
+                'list_orders_id' => '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387',
                 'orders_data' => $ordersData,
             ])
         );
@@ -291,7 +286,7 @@ class OrderCreateControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailCreatingOrdersProductIdIsNull(): void
     {
-        $ordersData = $this->getOrdersData();
+        $ordersData = $this->getOrdersDataNew();
         $ordersData[0]['product_id'] = null;
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -299,6 +294,7 @@ class OrderCreateControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
                 'orders_data' => $ordersData,
             ])
         );
@@ -315,7 +311,7 @@ class OrderCreateControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailCreatingOrdersProductIdINotFound(): void
     {
-        $ordersData = $this->getOrdersData();
+        $ordersData = $this->getOrdersDataNew();
         $ordersData[0]['product_id'] = '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387';
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -323,6 +319,7 @@ class OrderCreateControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
                 'orders_data' => $ordersData,
             ])
         );
@@ -339,16 +336,16 @@ class OrderCreateControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailCreatingOrdersNoneProductIdIFound(): void
     {
-        $ordersData = $this->getOrdersData();
+        $ordersData = $this->getOrdersDataNew();
         $ordersData[0]['product_id'] = '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387';
         $ordersData[1]['product_id'] = '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387';
-        $ordersData[2]['product_id'] = '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387';
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
                 'orders_data' => $ordersData,
             ])
         );
@@ -365,7 +362,7 @@ class OrderCreateControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailCreatingOrdersShopIdINotFound(): void
     {
-        $ordersData = $this->getOrdersData();
+        $ordersData = $this->getOrdersDataNew();
         $ordersData[0]['shop_id'] = '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387';
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -373,6 +370,7 @@ class OrderCreateControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
                 'orders_data' => $ordersData,
             ])
         );
@@ -389,16 +387,16 @@ class OrderCreateControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailCreatingOrdersNoneShopIdIFound(): void
     {
-        $ordersData = $this->getOrdersData();
+        $ordersData = $this->getOrdersDataNew();
         $ordersData[0]['shop_id'] = '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387';
         $ordersData[1]['shop_id'] = '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387';
-        $ordersData[2]['shop_id'] = '96ca5611-1b9d-4c21-ba2f-0fe4c8a95387';
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
                 'orders_data' => $ordersData,
             ])
         );
@@ -413,15 +411,40 @@ class OrderCreateControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailCreatingOrdersUserNotBelongsToTheGroup(): void
+    public function itShouldFailCreatingOrdersProductAndShopRepeated(): void
     {
         $ordersData = $this->getOrdersData();
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_EXISTS_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
+                'orders_data' => $ordersData,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['order_product_and_shop_repeated'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Product and shop are already in the order list', $responseContent->message);
+        $this->assertEquals('Product and shop are already in the order list', $responseContent->errors->order_product_and_shop_repeated);
+    }
+
+    /** @test */
+    public function itShouldFailCreatingOrdersUserNotBelongsToTheGroup(): void
+    {
+        $ordersData = $this->getOrdersDataNew();
         $client = $this->getNewClientAuthenticatedAdmin();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
+                'list_orders_id' => self::LIST_ORDERS_ID,
                 'orders_data' => $ordersData,
             ])
         );

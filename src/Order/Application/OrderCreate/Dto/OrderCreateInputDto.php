@@ -14,16 +14,18 @@ class OrderCreateInputDto implements ServiceInputDtoInterface
 {
     public readonly UserShared $userSession;
     public readonly Identifier $groupId;
+    public readonly Identifier $listOrdersId;
 
     /**
      * @var OrderDataDto[]
      */
     public readonly array $ordersData;
 
-    public function __construct(UserShared $userSession, ?string $groupId, ?array $ordersData)
+    public function __construct(UserShared $userSession, ?string $groupId, ?string $listOrdersId, ?array $ordersData)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
+        $this->listOrdersId = ValueObjectFactory::createIdentifier($listOrdersId);
 
         $this->ordersData = array_map(
             fn (array $orderData) => $this->createOrderDto($orderData, $userSession->getId()),
@@ -56,7 +58,6 @@ class OrderCreateInputDto implements ServiceInputDtoInterface
 
         $errorListOrders = array_filter(array_map(
             fn (OrderDataDto $order) => $validator->validateValueObjectArray([
-                'list_orders_id' => $order->listOrdersId,
                 'product_id' => $order->productId,
                 'shop_id' => $order->shopId,
                 'description' => $order->description,
@@ -65,11 +66,11 @@ class OrderCreateInputDto implements ServiceInputDtoInterface
             $this->ordersData
         ));
 
-        $errorListGroupId = $validator->validateValueObject($this->groupId);
-        if (!empty($errorListGroupId)) {
-            $errorListGroupId = ['group_id' => $errorListGroupId];
-        }
+        $errorList = $validator->validateValueObjectArray([
+            'group_id' => $this->groupId,
+            'list_orders_id' => $this->listOrdersId,
+        ]);
 
-        return array_merge($ordersDataArrayError, $errorListOrders, $errorListGroupId);
+        return array_merge($ordersDataArrayError, $errorListOrders, $errorList);
     }
 }

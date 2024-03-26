@@ -15,6 +15,7 @@ use Order\Domain\Service\OrderCreate\Dto\OrderCreateDto;
 use Order\Domain\Service\OrderCreate\Dto\OrderDataServiceDto;
 use Order\Domain\Service\OrderCreate\Exception\OrderCreateListOrdersNotFoundException;
 use Order\Domain\Service\OrderCreate\Exception\OrderCreateProductNotFoundException;
+use Order\Domain\Service\OrderCreate\Exception\OrderCreateProductShopRepeatedException;
 use Order\Domain\Service\OrderCreate\Exception\OrderCreateProductsNotFoundException;
 use Order\Domain\Service\OrderCreate\Exception\OrderCreateShopNotFoundException;
 use Product\Domain\Model\Product;
@@ -38,15 +39,17 @@ class OrderCreateService
      * @throws OrderCreateProductsNotFoundException
      * @throws DBUniqueConstraintException
      * @throws DBConnectionException
+     * @throws OrderCreateProductShopRepeatedException
      */
     public function __invoke(OrderCreateDto $input): array
     {
-        $listsOrders = $this->getListOrders($input->groupId, $input->orders);
+        $listOrders = $this->getListOrders($input->groupId, $input->listOrdersId);
         $products = $this->getProducts($input->groupId, $input->orders);
         $shops = $this->getShops($input->groupId, $input->orders);
+        $this->productAndShopAreNotRepeatedOrFail($input->groupId, $input->listOrdersId, $products, $shops);
 
         $orders = array_map(
-            fn (OrderDataServiceDto $order) => $this->createOrder($input->groupId, $order, $listsOrders, $products, $shops),
+            fn (OrderDataServiceDto $order) => $this->createOrder($input->groupId, $order, $listOrders, $products, $shops),
             $input->orders
         );
 
@@ -56,31 +59,40 @@ class OrderCreateService
     }
 
     /**
-     * @return ListOrders[]
+     * @param Product[] $products
+     * @param Shop[]    $shops
      *
-     * @throws OrderCreateListOrdersNotFoundException
+     * @throws OrderCreateProductShopRepeatedException
      */
-    private function getListOrders(Identifier $groupId, array $orders): array
+    private function productAndShopAreNotRepeatedOrFail(Identifier $groupId, Identifier $listOrdersId, array $products, array $shops): void
     {
-        $listOrdersId = array_map(
-            fn (OrderDataServiceDto $order) => $order->listOrdersId,
-            $orders
-        );
+        $productsId = array_values(array_map(
+            fn (Product $product) => $product->getId(),
+            $products
+        ));
+        $shopsId = array_values(array_map(
+            fn (Shop $shop) => $shop->getId(),
+            $shops
+        ));
 
         try {
-            $listOrdersPagination = $this->listOrdersRepository->findListOrderByIdOrFail($listOrdersId, $groupId);
-            $listOrdersPagination->setPagination(1);
-            $listsOrders = iterator_to_array($listOrdersPagination);
-            $listOrdersIdUnique = array_unique($listOrdersId);
+            $this->orderRepository->findOrdersByListOrdersIdProductIdAndShopIdOrFail($groupId, $listOrdersId, $productsId, $shopsId);
 
-            if (count($listsOrders) !== count($listOrdersIdUnique)) {
-                throw DBNotFoundException::fromMessage('Not all list orders have been found');
-            }
+            throw OrderCreateProductShopRepeatedException::fromMessage('Product and shop are already in the list of orders');
+        } catch (DBNotFoundException) {
+        }
+    }
 
-            return array_combine(
-                array_map(fn (ListOrders $listOrders) => $listOrders->getId()->getValue(), $listsOrders),
-                $listsOrders
-            );
+    /**
+     * @throws OrderCreateListOrdersNotFoundException
+     */
+    private function getListOrders(Identifier $groupId, Identifier $listOrdersId): ListOrders
+    {
+        try {
+            $listOrdersPagination = $this->listOrdersRepository->findListOrderByIdOrFail([$listOrdersId], $groupId);
+            $listOrdersPagination->setPagination(1, 1);
+
+            return iterator_to_array($listOrdersPagination)[0];
         } catch (DBNotFoundException) {
             throw OrderCreateListOrdersNotFoundException::fromMessage('List orders not found');
         }
@@ -101,17 +113,17 @@ class OrderCreateService
         );
 
         try {
-            $products = $this->productRepository->findProductsOrFail($groupId, $productsId);
-            $products->setPagination(1);
-            $productsArray = iterator_to_array($products);
+            $productsPagination = $this->productRepository->findProductsOrFail($groupId, $productsId);
+            $productsPagination->setPagination(1);
+            $products = iterator_to_array($productsPagination);
 
-            if (count($orders) !== count($productsArray)) {
+            if (count($orders) !== count($products)) {
                 throw DBNotFoundException::fromMessage('Not all products have been found');
             }
 
             return array_combine(
-                array_map(fn (Product $product) => $product->getId()->getValue(), $productsArray),
-                $productsArray
+                array_map(fn (Product $product) => $product->getId()->getValue(), $products),
+                $products
             );
         } catch (DBNotFoundException) {
             throw OrderCreateProductNotFoundException::fromMessage('Products not found');
@@ -159,11 +171,10 @@ class OrderCreateService
     }
 
     /**
-     * @param ListOrders[] $listsOrders
-     * @param Product[]    $products
-     * @param Shop[]       $shops
+     * @param Product[] $products
+     * @param Shop[]    $shops
      */
-    private function createOrder(Identifier $groupId, OrderDataServiceDto $order, array $listsOrders, array $products, array $shops): Order
+    private function createOrder(Identifier $groupId, OrderDataServiceDto $order, ListOrders $listOrders, array $products, array $shops): Order
     {
         $orderId = $this->orderRepository->generateId();
 
@@ -179,7 +190,7 @@ class OrderCreateService
             $order->description,
             $order->amount,
             false,
-            $listsOrders[$order->listOrdersId->getValue()],
+            $listOrders,
             $products[$order->productId->getValue()],
             $shopId
         );
