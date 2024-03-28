@@ -332,6 +332,26 @@ class OrderRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
+    public function itShouldFindOrdersByProductNameListOrdersIdIsNull(): void
+    {
+        $orderAsc = true;
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $listOrdersId = ValueObjectFactory::createIdentifier(null);
+        $filterText = ValueObjectFactory::createFilter(
+            'text_filter',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::EQUALS),
+            ValueObjectFactory::createNameWithSpaces('Juan Carlos')
+        );
+
+        $return = $this->object->findOrdersByProductNameFilterOrFail($groupId, $listOrdersId, $filterText, $orderAsc);
+        $ordersDb = iterator_to_array($return);
+
+        $expectedOrders = $this->object->findBy(['productId' => ValueObjectFactory::createIdentifier('8b6d650b-7bb7-4850-bf25-36cda9bce801')]);
+
+        $this->assertEqualsCanonicalizing($ordersDb, $expectedOrders);
+    }
+
+    /** @test */
     public function itShouldFindOrdersByProductName(): void
     {
         $orderAsc = true;
@@ -352,7 +372,7 @@ class OrderRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldFindOrdersByProductNameGroupNotFound(): void
+    public function itShouldFailFindingOrdersByProductNameGroupNotFound(): void
     {
         $orderAsc = true;
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);

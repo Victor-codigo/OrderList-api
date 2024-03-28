@@ -131,7 +131,7 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
             ->leftJoin(Product::class, 'products', Join::WITH, 'orders.productId = products.id')
             ->where('orders.groupId = :groupId');
 
-        if (null !== $listOrdersId) {
+        if (null !== $listOrdersId && !$listOrdersId->isNull()) {
             $query
                 ->andWhere('orders.listOrdersId = :listOrdersId')
                 ->setParameter('listOrdersId', $listOrdersId);
