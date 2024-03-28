@@ -44,7 +44,7 @@ class OrderModifyService
         $listOrders = $this->validateListOrders($input->groupId, $input->listOrdersId);
         $product = $this->validateProduct($input->groupId, $input->productId);
         $shop = $this->validateShop($input->groupId, $input->shopId->toIdentifier(), $input->productId);
-        $this->productAndShopAreNotRepeatedOrFail($input->groupId, $input->listOrdersId, $product, $shop);
+        $this->productAndShopAreNotRepeatedOrFail($input->orderId, $input->groupId, $input->listOrdersId, $product, $shop);
 
         /** @var Order $order */
         $order = iterator_to_array(
@@ -68,12 +68,18 @@ class OrderModifyService
     /**
      * @throws OrderCreateProductShopRepeatedException
      */
-    private function productAndShopAreNotRepeatedOrFail(Identifier $groupId, Identifier $listOrdersId, Product $product, ?Shop $shop): void
+    private function productAndShopAreNotRepeatedOrFail(Identifier $orderId, Identifier $groupId, Identifier $listOrdersId, Product $product, ?Shop $shop): void
     {
         try {
             $shopId = null === $shop ? [] : [$shop->getId()];
+            $ordersPagination = $this->orderRepository->findOrdersByListOrdersIdProductIdAndShopIdOrFail($groupId, $listOrdersId, [$product->getId()], $shopId);
+            $ordersPagination->setPagination(1, 1);
+            /** @var Order $order */
+            $order = iterator_to_array($ordersPagination)[0];
 
-            $this->orderRepository->findOrdersByListOrdersIdProductIdAndShopIdOrFail($groupId, $listOrdersId, [$product->getId()], $shopId);
+            if ($order->getId()->equalTo($orderId)) {
+                throw DBNotFoundException::fromMessage('Order is the same order as modified');
+            }
 
             throw OrderModifyProductShopRepeatedException::fromMessage('Product and shop are already in the list of orders');
         } catch (DBNotFoundException) {
