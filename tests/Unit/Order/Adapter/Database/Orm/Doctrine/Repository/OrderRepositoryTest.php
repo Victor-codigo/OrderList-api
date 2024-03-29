@@ -433,6 +433,28 @@ class OrderRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
+    public function itShouldFindOrdersByShopNameListOrdersIdIsNull(): void
+    {
+        $orderAsc = true;
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $listOrdersId = ValueObjectFactory::createIdentifier(null);
+        $filterText = ValueObjectFactory::createFilter(
+            'text_filter',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::EQUALS),
+            ValueObjectFactory::createNameWithSpaces('Shop name 2')
+        );
+
+        $return = $this->object->findOrdersByShopNameFilterOrFail($groupId, $listOrdersId, $filterText, $orderAsc);
+        $ordersDb = iterator_to_array($return);
+
+        $expectedOrders = $this->object->findBy([
+            'shopId' => ValueObjectFactory::createIdentifier('f6ae3da3-c8f2-4ccb-9143-0f361eec850e'),
+        ]);
+
+        $this->assertEqualsCanonicalizing($ordersDb, $expectedOrders);
+    }
+
+    /** @test */
     public function itShouldFindOrdersByShopNameGroupNotFound(): void
     {
         $orderAsc = true;

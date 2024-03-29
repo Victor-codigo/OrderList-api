@@ -159,7 +159,7 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
             ->where('orders.groupId = :groupId')
             ->andWhere('shops.name LIKE :filterTextValue');
 
-        if (null !== $listOrdersId) {
+        if (null !== $listOrdersId && !$listOrdersId->isNull()) {
             $query
                 ->andWhere('orders.listOrdersId = :listOrdersId')
                 ->setParameter('listOrdersId', $listOrdersId);
