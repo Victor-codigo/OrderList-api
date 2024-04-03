@@ -46,3 +46,13 @@ orders_group_get_data:
   controller: Order\Adapter\Http\Controller\OrdersGroupGetData\OrdersGroupGetDataController
   requirements:
     api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# ORDER SET BOUGHT
+# -------------------------------------------------------------
+orders_bought:
+  path: /api/v{api_version}/orders/bought
+  methods: PATCH
+  controller: Order\Adapter\Http\Controller\OrderBought\OrderBoughtController
+  requirements:
+    api_version: '\d+[.\d]?'
