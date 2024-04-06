@@ -14,6 +14,11 @@ class AppConfig
     public const GROUP_USERS_MAX = 100;
 
     /**
+     * Maximum number of orders per list of orders.
+     */
+    public const LIST_ORDERS_MAX_ORDERS = 500;
+
+    /**
      * Maximum number of users can be added to a group per request.
      */
     public const ENDPOINT_GROUP_USER_ADD_MAX_USERS = 50;
@@ -156,7 +161,7 @@ class AppConfig
      */
     public const PAGINATION_PAGE_ITEMS_MAX = 100;
 
-    protected static AppConfig|null $instance = null;
+    protected static ?AppConfig $instance = null;
     protected static VALUE_OBJECTS_CONSTRAINTS $valueObject;
 
     public static function valueObject(): VALUE_OBJECTS_CONSTRAINTS

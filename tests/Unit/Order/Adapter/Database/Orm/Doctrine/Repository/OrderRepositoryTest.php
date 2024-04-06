@@ -546,4 +546,32 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->expectException(DBNotFoundException::class);
         $this->object->findOrdersByListOrdersIdProductIdAndShopIdOrFail($groupId, $listOrdersId, $productsId, $shopId);
     }
+
+    /** @test */
+    public function idShouldFindAllOrdersOfAListOfOrders(): void
+    {
+        $listOrdersId = ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID);
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $orderAsc = true;
+
+        $return = $this->object->findOrdersByListOrdersIdOrFail($listOrdersId, $groupId, $orderAsc);
+
+        $ordersExpected = $this->object->findBy([
+            'listOrdersId' => $listOrdersId,
+            'groupId' => $groupId,
+        ]);
+
+        $this->assertEqualsCanonicalizing($ordersExpected, iterator_to_array($return));
+    }
+
+    /** @test */
+    public function idShouldFailFindingAllOrdersOfAListOfOrdersNotFound(): void
+    {
+        $listOrdersId = ValueObjectFactory::createIdentifier('id not found');
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $orderAsc = true;
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findOrdersByListOrdersIdOrFail($listOrdersId, $groupId, $orderAsc);
+    }
 }

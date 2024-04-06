@@ -36,3 +36,13 @@ list_orders_remove:
   controller: ListOrders\Adapter\Http\Controller\ListOrdersRemove\ListOrdersRemoveController
   requirements:
     api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# LIST ORDERS GET PRICE
+# -------------------------------------------------------------
+list_orders_get_price:
+  path: /api/v{api_version}/list-orders/price
+  methods: GET
+  controller: ListOrders\Adapter\Http\Controller\ListOrdersGetPrice\ListOrdersGetPriceController
+  requirements:
+    api_version: '\d+[.\d]?'

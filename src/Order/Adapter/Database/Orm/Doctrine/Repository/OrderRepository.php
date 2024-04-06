@@ -224,4 +224,29 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
 
         return $this->queryPaginationOrFail($query);
     }
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findOrdersByListOrdersIdOrFail(Identifier $listOrderId, Identifier $groupId, bool $orderAsc): PaginatorInterface
+    {
+        $ordersEntity = Order::class;
+        $listOrdersEntity = ListOrders::class;
+        $productEntity = Product::class;
+        $orderBy = $orderAsc ? 'ASC' : 'DESC';
+        $dql = <<<DQL
+            SELECT orders
+            FROM {$ordersEntity} orders
+                LEFT JOIN {$listOrdersEntity} listOrders WITH orders.listOrdersId = listOrders.id
+                LEFT JOIN {$productEntity} products WITH products.id = orders.productId
+            WHERE orders.groupId = :groupId
+                AND listOrders.id = :listOrderId
+            ORDER BY products.name {$orderBy}
+        DQL;
+
+        return $this->dqlPaginationOrFail($dql, [
+            'groupId' => $groupId,
+            'listOrderId' => $listOrderId,
+        ]);
+    }
 }
