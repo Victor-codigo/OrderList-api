@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class AlphanumericValidatorTest extends TestCase
 {
-    private const PATTERN = '/^[a-zA-Z0-9_]+$/i';
+    private const PATTERN = '/^[A-Za-zÀ-ÿ0-9_]+$/i';
 
     private AlphanumericValidator $object;
     private MockObject|Alphanumeric $alphanumeric;
@@ -67,6 +67,15 @@ class AlphanumericValidatorTest extends TestCase
 
         $this->expectNotToPerformAssertions();
         $this->object->validate('lola_hello22', $this->alphanumeric);
+    }
+
+    /** @test */
+    public function itShouldValidateStringAlphanumericWithAccents(): void
+    {
+        $this->alphanumeric->pattern = self::PATTERN;
+
+        $this->expectNotToPerformAssertions();
+        $this->object->validate('lolá_hëllò22', $this->alphanumeric);
     }
 
     /** @test */

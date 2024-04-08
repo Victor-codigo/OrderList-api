@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class AlphanumericWithWhiteSpaceValidatorTest extends TestCase
 {
-    private const PATTERN = '/^[a-zA-Z0-9_\s]+$/i';
+    private const PATTERN = '/^[A-Za-zÀ-ÿ0-9_\s]+$/i';
 
     private AlphanumericWithWhiteSpaceValidator $object;
     private MockObject|AlphanumericWithWhiteSpace $alphanumericWithWhiteSpace;
@@ -65,6 +65,15 @@ class AlphanumericWithWhiteSpaceValidatorTest extends TestCase
 
         $this->expectNotToPerformAssertions();
         $this->object->validate('lola_hello 22', $this->alphanumericWithWhiteSpace);
+    }
+
+    /** @test */
+    public function itShouldValueIsStringAlphanumericWithWhiteSpaceAndAccents(): void
+    {
+        $this->alphanumericWithWhiteSpace->pattern = self::PATTERN;
+
+        $this->expectNotToPerformAssertions();
+        $this->object->validate('lolá_hëllò 22', $this->alphanumericWithWhiteSpace);
     }
 
     /** @test */

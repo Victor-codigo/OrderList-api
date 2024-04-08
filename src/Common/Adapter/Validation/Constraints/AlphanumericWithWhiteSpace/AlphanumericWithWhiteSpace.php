@@ -21,15 +21,15 @@ class AlphanumericWithWhiteSpace extends Regex
     protected static $errorNames = self::ERROR_NAMES;
 
     public function __construct(
-        string $message = null,
-        string $htmlPattern = null,
-        callable $normalizer = null,
-        array $groups = null,
+        ?string $message = null,
+        ?string $htmlPattern = null,
+        ?callable $normalizer = null,
+        ?array $groups = null,
         mixed $payload = null,
         array $options = []
     ) {
         parent::__construct(
-            '/^[a-zA-Z0-9_\s]+$/i',
+            '/^[A-Za-zÀ-ÿ0-9_\s]+$/i',
             $message,
             $htmlPattern,
             true,
