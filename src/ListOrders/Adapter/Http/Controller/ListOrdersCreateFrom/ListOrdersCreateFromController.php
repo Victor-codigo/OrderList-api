@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 #[OA\Tag('ListOrders')]
 #[OA\Post(
-    description: 'Creates a list of orders',
+    description: 'Creates a list of orders from another',
     requestBody: new OA\RequestBody(
         required: true,
         content: [
@@ -27,10 +27,9 @@ use Symfony\Component\HttpFoundation\Response;
                 mediaType: 'application/json',
                 schema: new OA\Schema(
                     properties: [
+                        new OA\Property(property: 'list_orders_id_create_from', type: 'string', description: 'List orders id from witch create a copy', example: 'c11b0638-c33d-41bc-8720-bebc3eed46db'),
                         new OA\Property(property: 'group_id', type: 'string', description: 'Group id to add the list of orders', example: '0290bf7e-2e68-4698-ba2e-d2394c239572'),
                         new OA\Property(property: 'name', type: 'string', description: 'Name of the list of orders', example: 'List name'),
-                        new OA\Property(property: 'description', type: 'string', description: 'Description of the list of orders', example: 'List of orders description'),
-                        new OA\Property(property: 'date_to_buy', type: 'string', description: 'Date to buy the list', example: '2023-6-3 12:30:00'),
                     ]
                 )
             ),
@@ -45,7 +44,7 @@ use Symfony\Component\HttpFoundation\Response;
                 schema: new OA\Schema(
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'ok'),
-                        new OA\Property(property: 'message', type: 'string', example: 'List of orders created'),
+                        new OA\Property(property: 'message', type: 'string', example: 'List order created from other list of orders'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items(default: '<id, array>')),
                         new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),
                     ]
@@ -62,7 +61,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|name|name_exists|permissions, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<list_orders_id_create_from|group_id|name|list_orders_create_from_not_found|name_exists|permissions, string|array>')),
                     ]
                 )
             )
