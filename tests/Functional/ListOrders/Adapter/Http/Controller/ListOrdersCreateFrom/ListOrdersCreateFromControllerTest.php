@@ -228,4 +228,28 @@ class ListOrdersCreateFromControllerTest extends WebClientTestCase
         $this->assertSame('The name already exists', $responseContent->message);
         $this->assertEquals('The name already exists', $responseContent->errors->name_exists);
     }
+
+    /** @test */
+    public function itShouldCreateListOrdersFromOtherUserNotBelongsToTheGroup(): void
+    {
+        $listOrderNewName = 'list orders new name';
+        $client = $this->getNewClientAuthenticatedAdmin();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'list_orders_id_create_from' => self::LIST_ORDERS_CREATE_FROM_ID,
+                'group_id' => self::GROUP_ID,
+                'name' => $listOrderNewName,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['permissions'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('You not belong to the group', $responseContent->message);
+        $this->assertEquals('You not belong to the group', $responseContent->errors->permissions);
+    }
 }
