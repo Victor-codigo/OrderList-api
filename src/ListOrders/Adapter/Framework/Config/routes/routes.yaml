@@ -8,6 +8,16 @@ list_orders_create:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
+# LIST ORDERS CREATE FROM
+# -------------------------------------------------------------
+list_orders_create_from:
+  path: /api/v{api_version}/list-orders/create-from
+  methods: POST
+  controller: ListOrders\Adapter\Http\Controller\ListOrdersCreateFrom\ListOrdersCreateFromController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
 # LIST ORDERS MODIFY
 # -------------------------------------------------------------
 list_orders_modify:

@@ -14,7 +14,12 @@ use Doctrine\Persistence\ObjectManager;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use ListOrders\Adapter\Database\Orm\Doctrine\Repository\ListOrdersRepository;
 use ListOrders\Domain\Model\ListOrders;
+use Order\Domain\Model\Order;
 use PHPUnit\Framework\MockObject\MockObject;
+use Product\Adapter\Database\Orm\Doctrine\Repository\ProductRepository;
+use Product\Domain\Model\Product;
+use Shop\Adapter\Database\Orm\Doctrine\Repository\ShopRepository;
+use Shop\Domain\Model\Shop;
 use Test\Unit\DataBaseTestCase;
 
 class ListOrdersRepositoryTest extends DataBaseTestCase
@@ -32,12 +37,16 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     private const USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
     private ListOrdersRepository $object;
+    private ProductRepository $productRepository;
+    private ShopRepository $shopRepository;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->object = $this->entityManager->getRepository(ListOrders::class);
+        $this->productRepository = $this->entityManager->getRepository(Product::class);
+        $this->shopRepository = $this->entityManager->getRepository(Shop::class);
     }
 
     private function getListOrders(): ListOrders
@@ -62,6 +71,43 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
             'listOrders description',
             new \DateTime()
         );
+    }
+
+    private function getOrders(ListOrders $listOrders): array
+    {
+        $product = $this->productRepository->findBy(['id' => [
+            '7e3021d4-2d02-4386-8bbe-887cfe8697a8',
+            '8b6d650b-7bb7-4850-bf25-36cda9bce801',
+        ]]);
+        $shop = $this->shopRepository->findBy(['id' => [
+            'b9b1c541-d41e-4751-9ecb-4a1d823c0405',
+            'cc7f5dd6-02ba-4bd9-b5c1-5b65d81e59a0',
+        ]]);
+
+        return [
+            Order::fromPrimitives(
+                '0fb81352-e16c-4769-892f-4a5cf33eeea1',
+                self::GROUP_ID,
+                self::USER_ID,
+                'order 1 description',
+                1,
+                true,
+                $listOrders,
+                $product[0],
+                $shop[0]
+            ),
+            Order::fromPrimitives(
+                '8ce3b62c-b111-471a-bab1-71dafea79d51',
+                self::GROUP_ID,
+                self::USER_ID,
+                'order 2 description',
+                2,
+                false,
+                $listOrders,
+                $product[1],
+                $shop[1]
+            ),
+        ];
     }
 
     /** @test */
@@ -100,6 +146,48 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
 
         $this->expectException(DBConnectionException::class);
         $this->object->save($this->getListOrders());
+    }
+
+    /** @test */
+    public function itShouldSaveTheListOrdersAndItsOrders(): void
+    {
+        $listOrders = $this->getListOrders();
+        $orders = $this->getOrders($listOrders);
+        $listOrders->setOrders($orders);
+
+        $this->object->saveListOrdersAndOrders($listOrders);
+
+        /** @var Group $groupSaved */
+        $listOrdersSaved = $this->object->findOneBy(['id' => $listOrders->getId()]);
+
+        $this->assertSame($listOrders, $listOrdersSaved);
+    }
+
+    /** @test */
+    public function itShouldFailSavingTheListOrdersAndItsOrdersListAlreadyExists(): void
+    {
+        $listOrders = $this->getListOrdersExists();
+        $orders = $this->getOrders($listOrders);
+        $listOrders->setOrders($orders);
+
+        $this->expectException(DBUniqueConstraintException::class);
+        $this->object->saveListOrdersAndOrders($listOrders);
+    }
+
+    /** @test */
+    public function itShouldFailSavingTheListOrdersAndItsOrdersListDataBaseError(): void
+    {
+        /** @var MockObject|ObjectManager $objectManagerMock */
+        $objectManagerMock = $this->createMock(ObjectManager::class);
+        $objectManagerMock
+            ->expects($this->once())
+            ->method('flush')
+            ->willThrowException(ConnectionException::driverRequired(''));
+
+        $this->mockObjectManager($this->object, $objectManagerMock);
+
+        $this->expectException(DBConnectionException::class);
+        $this->object->saveListOrdersAndOrders($this->getListOrders());
     }
 
     /** @test */

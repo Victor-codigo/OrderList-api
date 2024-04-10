@@ -172,6 +172,7 @@ class Order
     public function setListOrders(ListOrders $listOrders): self
     {
         $this->listOrders = $listOrders;
+        $this->listOrdersId = $this->listOrders->getId();
 
         return $this;
     }
@@ -209,5 +210,15 @@ class Order
             $product,
             $shop
         );
+    }
+
+    public function cloneWithNewId(Identifier $id): Order
+    {
+        $orderNew = clone $this;
+        $orderNewReflection = new \ReflectionClass($orderNew);
+        $idProperty = $orderNewReflection->getProperty('id');
+        $idProperty->setValue($orderNew, $id);
+
+        return $orderNew;
     }
 }

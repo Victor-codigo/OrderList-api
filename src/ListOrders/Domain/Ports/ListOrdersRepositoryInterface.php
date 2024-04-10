@@ -19,6 +19,12 @@ interface ListOrdersRepositoryInterface extends RepositoryInterface
     public function save(ListOrders $orders): void;
 
     /**
+     * @throws DBUniqueConstraintException
+     * @throws DBConnectionException
+     */
+    public function saveListOrdersAndOrders(ListOrders $listOrders): void;
+
+    /**
      * @param ListOrders[] $orders
      *
      * @throws DBConnectionException
@@ -30,7 +36,7 @@ interface ListOrdersRepositoryInterface extends RepositoryInterface
      *
      * @throws DBNotFoundException
      */
-    public function findListOrderByIdOrFail(array $ListsOrdersId, Identifier|null $groupId = null): PaginatorInterface;
+    public function findListOrderByIdOrFail(array $ListsOrdersId, ?Identifier $groupId = null): PaginatorInterface;
 
     /**
      * @throws DBNotFoundException

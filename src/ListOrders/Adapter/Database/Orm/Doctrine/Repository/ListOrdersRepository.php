@@ -46,6 +46,27 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     }
 
     /**
+     * @throws DBUniqueConstraintException
+     * @throws DBConnectionException
+     */
+    public function saveListOrdersAndOrders(ListOrders $listOrders): void
+    {
+        try {
+            $this->objectManager->persist($listOrders);
+
+            foreach ($listOrders->getOrders() as $order) {
+                $this->objectManager->persist($order);
+            }
+
+            $this->objectManager->flush();
+        } catch (UniqueConstraintViolationException $e) {
+            throw DBUniqueConstraintException::fromId($listOrders->getId()->getValue(), $e->getCode());
+        } catch (\Exception $e) {
+            throw DBConnectionException::fromConnection($e->getCode());
+        }
+    }
+
+    /**
      * @param ListOrders[] $listsOrders
      *
      * @throws DBConnectionException
