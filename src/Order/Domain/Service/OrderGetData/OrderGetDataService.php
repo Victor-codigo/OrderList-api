@@ -36,6 +36,7 @@ class OrderGetDataService
         $this->ordersPaginator ??= $this->getOrdersByProductName($input->groupId, $input->listOrdersId, $input->filterSection, $input->filterText, $input->orderAsc);
         $this->ordersPaginator ??= $this->getOrdersByShopName($input->groupId, $input->listOrdersId, $input->filterSection, $input->filterText, $input->orderAsc);
         $this->ordersPaginator ??= $this->getOrdersByListOrdersName($input->groupId, $input->filterSection, $input->filterText, $input->orderAsc);
+        $this->ordersPaginator ??= $this->getOrdersByListOrdersId($input->groupId, $input->listOrdersId, $input->orderAsc);
         $this->ordersPaginator ??= $this->getOrdersByGroupId($input->groupId, $input->filterSection, $input->orderAsc);
 
         return $this->getOrdersData($input->page, $input->pageItems);
@@ -138,6 +139,18 @@ class OrderGetDataService
         }
 
         return $this->orderRepository->findOrdersByListOrdersNameOrFail($groupId, ValueObjectFactory::createNameWithSpaces($filterText->getValue()), $orderAsc);
+    }
+
+    /**
+     * @throws DBNotFoundException
+     */
+    private function getOrdersByListOrdersId(Identifier $groupId, IdentifierNullable $listOrdersId, bool $orderAsc): ?PaginatorInterface
+    {
+        if ($listOrdersId->isNull()) {
+            return null;
+        }
+
+        return $this->orderRepository->findOrdersByListOrdersIdOrFail($listOrdersId->toIdentifier(), $groupId, $orderAsc);
     }
 
     private function getOrderData(Order $order): array

@@ -294,6 +294,10 @@ class OrderGetDataServiceTest extends DataBaseTestCase
 
         $this->orderRepository
             ->expects($this->never())
+            ->method('findOrdersByListOrdersIdOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
             ->method('findOrdersByGroupIdOrFail');
 
         $this->ordersPaginator
@@ -354,6 +358,10 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $this->orderRepository
             ->expects($this->never())
             ->method('findOrdersByListOrdersNameOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByListOrdersIdOrFail');
 
         $this->orderRepository
             ->expects($this->never())
@@ -420,6 +428,10 @@ class OrderGetDataServiceTest extends DataBaseTestCase
 
         $this->orderRepository
             ->expects($this->never())
+            ->method('findOrdersByListOrdersIdOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
             ->method('findOrdersByGroupIdOrFail');
 
         $this->ordersPaginator
@@ -480,6 +492,10 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $this->orderRepository
             ->expects($this->never())
             ->method('findOrdersByListOrdersNameOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByListOrdersIdOrFail');
 
         $this->orderRepository
             ->expects($this->never())
@@ -546,6 +562,77 @@ class OrderGetDataServiceTest extends DataBaseTestCase
 
         $this->orderRepository
             ->expects($this->never())
+            ->method('findOrdersByListOrdersIdOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByGroupIdOrFail');
+
+        $this->ordersPaginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with($input->page->getValue(), $input->pageItems->getValue());
+
+        $this->ordersPaginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($ordersExpectedIndexProduct));
+
+        $return = $this->object->__invoke($input);
+
+        foreach ($ordersExpectedIndexProduct as $key => $orderExpected) {
+            $this->assertOrderDataIsOk($orderExpected, $return[$key]);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetOrdersDataByGroupIdListOrdersId(): void
+    {
+        $filterValue = ValueObjectFactory::createNameWithSpaces(null);
+        $input = new OrderGetDataDto(
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifierNullable('8da455f5-89e6-43b2-bdef-58e75949c5d2'),
+            [],
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(10),
+            false,
+            ValueObjectFactory::createFilter(
+                'section_filter',
+                ValueObjectFactory::createFilterSection(FILTER_SECTION::LIST_ORDERS),
+                $filterValue
+            ),
+            ValueObjectFactory::createFilter(
+                'text_filter',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::EQUALS),
+                $filterValue
+            )
+        );
+        $ordersExpectedIndexProduct = $this->getOrders();
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByIdOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByProductNameFilterOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByShopNameFilterOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByListOrdersNameOrFail');
+
+        $this->orderRepository
+            ->expects($this->once())
+            ->method('findOrdersByListOrdersIdOrFail')
+            ->with($input->listOrdersId->toIdentifier(), $input->groupId, $input->orderAsc)
+            ->willReturn($this->ordersPaginator);
+
+        $this->orderRepository
+            ->expects($this->never())
             ->method('findOrdersByGroupIdOrFail');
 
         $this->ordersPaginator
@@ -570,7 +657,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
     {
         $input = new OrderGetDataDto(
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
-            ValueObjectFactory::createIdentifierNullable('8da455f5-89e6-43b2-bdef-58e75949c5d2'),
+            ValueObjectFactory::createIdentifierNullable(null),
             [],
             ValueObjectFactory::createPaginatorPage(1),
             ValueObjectFactory::createPaginatorPageItems(10),
@@ -605,6 +692,10 @@ class OrderGetDataServiceTest extends DataBaseTestCase
             ->method('findOrdersByListOrdersNameOrFail');
 
         $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByListOrdersIdOrFail');
+
+        $this->orderRepository
             ->expects($this->once())
             ->method('findOrdersByGroupIdOrFail')
             ->with($input->groupId, $input->orderAsc)
@@ -632,7 +723,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
     {
         $input = new OrderGetDataDto(
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
-            ValueObjectFactory::createIdentifierNullable('8da455f5-89e6-43b2-bdef-58e75949c5d2'),
+            ValueObjectFactory::createIdentifierNullable(null),
             [],
             ValueObjectFactory::createPaginatorPage(1),
             ValueObjectFactory::createPaginatorPageItems(10),
@@ -656,6 +747,10 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $this->orderRepository
             ->expects($this->never())
             ->method('findOrdersByListOrdersNameOrFail');
+
+        $this->orderRepository
+            ->expects($this->never())
+            ->method('findOrdersByListOrdersIdOrFail');
 
         $this->orderRepository
             ->expects($this->once())

@@ -369,6 +369,47 @@ class OrderGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
+    public function itShouldGetOrdersDataByGroupIdAndListOrderId(): void
+    {
+        $groupId = self::GROUP_ID;
+        $listOrdersId = self::LIST_ORDERS_ID;
+        $page = 1;
+        $pageItems = 10;
+        $orderAsc = true;
+        $filterSection = null;
+        $filterText = null;
+        $filterValue = null;
+        $ordersDataExpected = $this->getOrdersDataExpected();
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?group_id={$groupId}"
+                ."&list_orders_id={$listOrdersId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&order_asc={$orderAsc}"
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'orders'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Orders\' data', $responseContent->message);
+        $this->assertCount(4, $responseContent->data->orders);
+
+        foreach ($responseContent->data->orders as $orderActual) {
+            $orderActual = (array) $orderActual;
+            $orderActual['product'] = (array) $orderActual['product'];
+            $orderActual['shop'] = (array) $orderActual['shop'];
+            $orderActual['productShop'] = (array) $orderActual['productShop'];
+            $this->assertArrayHasKey($orderActual['id'], $ordersDataExpected);
+            $this->assertOrderIsOk($ordersDataExpected[$orderActual['id']], $orderActual);
+        }
+    }
+
+    /** @test */
     public function itShouldGetOrdersDataByGroupIdAndProductName(): void
     {
         $groupId = self::GROUP_ID;
