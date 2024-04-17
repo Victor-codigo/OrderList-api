@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Common\Adapter\ModuleCommunication;
 
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
+use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationTokenNotFoundInRequestException;
 use Common\Domain\Config\AppConfig;
 use Common\Domain\HttpClient\Exception\Error400Exception;
 use Common\Domain\HttpClient\Exception\Error500Exception;
@@ -44,6 +45,7 @@ class ModuleCommunication implements ModuleCommunicationInterface
     /**
      * @throws ModuleCommunicationException
      * @throws ValueError
+     * @throws ModuleCommunicationTokenNotFoundInRequestException
      */
     public function __invoke(ModuleCommunicationConfigDto $routeConfig): ResponseDto
     {
@@ -117,7 +119,7 @@ class ModuleCommunication implements ModuleCommunicationInterface
      * @param Cookie[] $cookies
      * @param string[] $headers
      */
-    private function json(string $tokenSession = null, array $data = [], array $cookies = [], array $headers = []): array
+    private function json(?string $tokenSession = null, array $data = [], array $cookies = [], array $headers = []): array
     {
         $json = self::COMMUNICATION_CONFIG;
 
@@ -133,7 +135,7 @@ class ModuleCommunication implements ModuleCommunicationInterface
      * @param Cookie[]                $cookies
      * @param string[]                $headers
      */
-    private function form(string $tokenSession = null, array $data = [], array $files = [], array $cookies = [], array $headers = []): array
+    private function form(?string $tokenSession = null, array $data = [], array $files = [], array $cookies = [], array $headers = []): array
     {
         $form = self::COMMUNICATION_CONFIG;
         $formFields = [];
@@ -152,12 +154,18 @@ class ModuleCommunication implements ModuleCommunicationInterface
     /**
      * @param UploadedFileInterface[] $files
      * @param Cookie                  $cookies
+     *
+     * @throws ModuleCommunicationTokenNotFoundInRequestException
      */
     private function getOptions(bool $authentication, string $contentType, array $content = [], array $files = [], array $cookies = [], array $headers = []): array
     {
         $tokenSession = null;
         if ($authentication) {
             $tokenSession = $this->jwtTokenExtractor->extract($this->request->getCurrentRequest());
+
+            if (false === $tokenSession) {
+                throw ModuleCommunicationTokenNotFoundInRequestException::fromMessage('Token not found in request');
+            }
         }
 
         return match ($contentType) {

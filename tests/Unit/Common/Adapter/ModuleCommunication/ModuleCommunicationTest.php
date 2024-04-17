@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\Common\Adapter\ModuleCommunication;
 
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
+use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationTokenNotFoundInRequestException;
 use Common\Adapter\ModuleCommunication\ModuleCommunication;
 use Common\Domain\HttpClient\Exception\Error400Exception;
 use Common\Domain\HttpClient\Exception\Error500Exception;
@@ -28,11 +29,10 @@ class ModuleCommunicationTest extends TestCase
 {
     private const URL = 'http://domain.com/url/to/resource';
     private const JWT_TOKEN = 'asdgasdfbadsfhaetrhadfhbadfhbaerth';
-    private const IMAGE_PATH = 'tests/Fixtures/Files/Image.png';
 
     private ModuleCommunication $object;
     private MockObject|HttpClientInterface $httpClient;
-    private MockObject|HttpClientResponseInterface  $httpClientResponse;
+    private MockObject|HttpClientResponseInterface $httpClientResponse;
     private MockObject|DIInterface $DI;
     private MockObject|TokenExtractorInterface $jwtTokenExtractor;
     private MockObject|RequestStack $requestStack;
@@ -131,7 +131,7 @@ class ModuleCommunicationTest extends TestCase
         $this->assertEquals(self::JWT_TOKEN, $options['auth_bearer']);
     }
 
-    private function mockRequestMethod(ModuleCommunicationConfigDto $routeConfig, string $url, string $expectedUrl, \DomainException $requestException = null): void
+    private function mockRequestMethod(ModuleCommunicationConfigDto $routeConfig, string $url, string $expectedUrl, bool $tokenFound, ?\DomainException $requestException = null): void
     {
         $this->DI
             ->expects($this->once())
@@ -148,10 +148,10 @@ class ModuleCommunicationTest extends TestCase
             ->expects($this->once())
             ->method('extract')
             ->with($this->request)
-            ->willReturn(self::JWT_TOKEN);
+            ->willReturn($tokenFound ? self::JWT_TOKEN : false);
 
         $this->httpClient
-            ->expects($this->once())
+            ->expects($tokenFound ? $this->once() : $this->never())
             ->method('request')
             ->with(
                 $routeConfig->method,
@@ -161,7 +161,7 @@ class ModuleCommunicationTest extends TestCase
             ->willReturn($this->httpClientResponse);
 
         $this->httpClientResponse
-           ->expects($this->atLeastOnce())
+           ->expects($tokenFound ? $this->atLeastOnce() : $this->never())
            ->method('getContent')
            ->with($this->callback(function (bool $throwException = true) {
                ++$this->getContentNumCalls;
@@ -206,7 +206,7 @@ class ModuleCommunicationTest extends TestCase
         ];
 
         $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig, self::URL, self::URL);
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL, true);
 
         $return = $this->object->__invoke($routeConfig);
 
@@ -232,7 +232,7 @@ class ModuleCommunicationTest extends TestCase
             'header2',
         ];
         $routeConfig = ModuleCommunicationFactoryTest::form(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig, self::URL, self::URL);
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL, true);
 
         $return = $this->object->__invoke($routeConfig);
 
@@ -259,7 +259,7 @@ class ModuleCommunicationTest extends TestCase
             'header2',
         ];
         $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig, self::URL, self::URL);
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL, true);
 
         $return = $this->object->__invoke($routeConfig);
 
@@ -270,7 +270,7 @@ class ModuleCommunicationTest extends TestCase
     public function itShouldCreateAValidRequestNoDevOrTestUrlWithoutQueryString(): void
     {
         $routeConfig = ModuleCommunicationFactoryTest::json(true);
-        $this->mockRequestMethod($routeConfig, self::URL, self::URL);
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL, true);
 
         $this->object->__invoke($routeConfig);
     }
@@ -290,7 +290,7 @@ class ModuleCommunicationTest extends TestCase
             'dev'
         );
 
-        $this->mockRequestMethod($routeConfig, $url, $urlExpected);
+        $this->mockRequestMethod($routeConfig, $url, $urlExpected, true);
 
         $this->object->__invoke($routeConfig);
     }
@@ -310,7 +310,7 @@ class ModuleCommunicationTest extends TestCase
             'test'
         );
 
-        $this->mockRequestMethod($routeConfig, $url, $urlExpected);
+        $this->mockRequestMethod($routeConfig, $url, $urlExpected, true);
 
         $this->object->__invoke($routeConfig);
     }
@@ -330,8 +330,29 @@ class ModuleCommunicationTest extends TestCase
             'test'
         );
 
-        $this->mockRequestMethod($routeConfig, $url, $urlExpected);
+        $this->mockRequestMethod($routeConfig, $url, $urlExpected, true);
 
+        $this->object->__invoke($routeConfig);
+    }
+
+    /** @test */
+    public function itShouldFailCreatingAValidRequestTokenNotFoundInRequest(): void
+    {
+        $url = self::URL.'?param1=value1&param2=value2';
+        $urlExpected = self::URL.'?XDEBUG_SESSION=VSCODE&env=test&param1=value1&param2=value2';
+        $routeConfig = ModuleCommunicationFactoryTest::json(true);
+
+        $this->object = new ModuleCommunication(
+            $this->httpClient,
+            $this->DI,
+            $this->jwtTokenExtractor,
+            $this->requestStack,
+            'test'
+        );
+
+        $this->mockRequestMethod($routeConfig, $url, $urlExpected, false);
+
+        $this->expectException(ModuleCommunicationTokenNotFoundInRequestException::class);
         $this->object->__invoke($routeConfig);
     }
 
@@ -355,7 +376,7 @@ class ModuleCommunicationTest extends TestCase
             'header2',
         ];
         $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig, self::URL, self::URL);
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL, true);
         $this->expectException(ModuleCommunicationException::class);
 
         $return = $this->object->__invoke($routeConfig);
@@ -385,7 +406,7 @@ class ModuleCommunicationTest extends TestCase
             'header2',
         ];
         $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig, self::URL, self::URL, Error400Exception::fromMessage('', $httpExceptionInterface));
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL, true, Error400Exception::fromMessage('', $httpExceptionInterface));
 
         $return = $this->object->__invoke($routeConfig);
 
@@ -414,7 +435,7 @@ class ModuleCommunicationTest extends TestCase
             'header2',
         ];
         $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig, self::URL, self::URL, Error500Exception::fromMessage('', $httpExceptionInterface));
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL, true, Error500Exception::fromMessage('', $httpExceptionInterface));
 
         $return = $this->object->__invoke($routeConfig);
 
@@ -444,7 +465,7 @@ class ModuleCommunicationTest extends TestCase
             'header2',
         ];
         $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig, self::URL, self::URL, NetworkException::fromMessage('', $httpExceptionInterface));
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL, true, NetworkException::fromMessage('', $httpExceptionInterface));
 
         $this->object->__invoke($routeConfig);
     }
