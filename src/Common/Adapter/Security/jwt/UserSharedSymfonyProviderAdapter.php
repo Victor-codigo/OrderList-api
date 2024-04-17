@@ -13,7 +13,6 @@ use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\User\USER_ROLES;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\UserNotFoundException;
-use Lexik\Bundle\JWTAuthenticationBundle\TokenExtractor\TokenExtractorInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -23,7 +22,6 @@ class UserSharedSymfonyProviderAdapter implements UserProviderInterface
 {
     public function __construct(
         private ModuleCommunicationInterface $moduleCommunication,
-        private TokenExtractorInterface $tokenExtractor,
         private RequestStack $request
     ) {
     }
