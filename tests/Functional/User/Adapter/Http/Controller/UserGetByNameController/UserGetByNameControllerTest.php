@@ -108,35 +108,35 @@ class UserGetByNameControllerTest extends WebClientTestCase
         $this->assertIsString($responseContent->data[0]->created_on);
     }
 
-     /** @test */
-     public function itShouldGetUserInfoByNameUserSessionIsHimself(): void
-     {
-         $client = $this->getNewClientAuthenticatedUser();
-         $userData = $this->getUsersData();
-         $userRoles = $this->getRolesString([$userData[1]]);
-         $client->request(
-             method: self::METHOD,
-             uri: self::ENDPOINT."/{$userData[1]->getName()->getValue()}",
-         );
-         $response = $client->getResponse();
-         $responseContent = json_decode($response->getContent());
+    /** @test */
+    public function itShouldGetUserInfoByNameUserSessionIsHimself(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $userData = $this->getUsersData();
+        $userRoles = $this->getRolesString([$userData[1]]);
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT."/{$userData[1]->getName()->getValue()}",
+        );
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
 
-         $this->assertResponseStructureIsOk($response, [0], [], Response::HTTP_OK);
-         $this->assertSame(RESPONSE_STATUS::OK->value, $responseContent->status);
-         $this->assertSame('User found', $responseContent->message);
+        $this->assertResponseStructureIsOk($response, [0], [], Response::HTTP_OK);
+        $this->assertSame(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('User found', $responseContent->message);
 
-         $this->assertCount(1, $responseContent->data);
-         $this->assertTrue(property_exists($responseContent->data[0], 'id'));
-         $this->assertTrue(property_exists($responseContent->data[0], 'name'));
-         $this->assertTrue(property_exists($responseContent->data[0], 'email'));
-         $this->assertTrue(property_exists($responseContent->data[0], 'roles'));
-         $this->assertTrue(property_exists($responseContent->data[0], 'created_on'));
-         $this->assertEquals($userData[1]->getId()->getValue(), $responseContent->data[0]->id);
-         $this->assertEquals($userData[1]->getName()->getValue(), $responseContent->data[0]->name);
-         $this->assertEquals($userData[1]->getEmail()->getValue(), $responseContent->data[0]->email);
-         $this->assertEquals($responseContent->data[0]->roles, $userRoles[0]);
-         $this->assertIsString($responseContent->data[0]->created_on);
-     }
+        $this->assertCount(1, $responseContent->data);
+        $this->assertTrue(property_exists($responseContent->data[0], 'id'));
+        $this->assertTrue(property_exists($responseContent->data[0], 'name'));
+        $this->assertTrue(property_exists($responseContent->data[0], 'email'));
+        $this->assertTrue(property_exists($responseContent->data[0], 'roles'));
+        $this->assertTrue(property_exists($responseContent->data[0], 'created_on'));
+        $this->assertEquals($userData[1]->getId()->getValue(), $responseContent->data[0]->id);
+        $this->assertEquals($userData[1]->getName()->getValue(), $responseContent->data[0]->name);
+        $this->assertEquals($userData[1]->getEmail()->getValue(), $responseContent->data[0]->email);
+        $this->assertEquals($responseContent->data[0]->roles, $userRoles[0]);
+        $this->assertIsString($responseContent->data[0]->created_on);
+    }
 
     /** @test */
     public function itShouldGetUserInfoByNameManyUsers(): void
@@ -191,7 +191,7 @@ class UserGetByNameControllerTest extends WebClientTestCase
     public function itShouldFailGettingUserInfoByNameUserNotValid(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
-        $userName = 'User not valid';
+        $userName = 'User not valid-';
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT."/{$userName}",
@@ -203,7 +203,7 @@ class UserGetByNameControllerTest extends WebClientTestCase
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
 
-        $this->assertEquals(['alphanumeric'], $responseContent->errors->users_name);
+        $this->assertEquals(['alphanumeric_with_whitespace'], $responseContent->errors->users_name);
     }
 
     /** @test */

@@ -51,7 +51,7 @@ class UserGetByNameInputDtoTest extends TestCase
         $object = new UserGetByNameInputDto($this->userSession, [$userName]);
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['users_name' => [VALIDATION_ERRORS::ALPHANUMERIC]], $return);
+        $this->assertEquals(['users_name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE]], $return);
     }
 
     /** @test */

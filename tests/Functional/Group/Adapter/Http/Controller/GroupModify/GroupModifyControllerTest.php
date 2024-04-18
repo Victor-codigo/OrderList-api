@@ -272,7 +272,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertResponseStructureIsOk($response, [], ['name'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertSame(['alphanumeric'], $responseContent->errors->name);
+        $this->assertSame(['alphanumeric_with_whitespace'], $responseContent->errors->name);
     }
 
     /** @test */

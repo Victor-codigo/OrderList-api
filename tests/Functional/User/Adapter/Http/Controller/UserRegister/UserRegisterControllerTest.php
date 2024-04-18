@@ -7,7 +7,7 @@ namespace Test\Functional\User\Adapter\Http\Controller\UserRegister;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\User\USER_ROLES;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
@@ -87,7 +87,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertIsString($content->data->id);
         $this->assertEquals(36, strlen($content->data->id));
 
-        $this->assertUserRegisterdIsOk(
+        $this->assertUserRegisteredIsOk(
             $content->data->id,
             $clientData['password'],
             $clientData['email'],
@@ -131,7 +131,7 @@ class UserRegisterControllerTest extends WebClientTestCase
 
         $this->assertEmpty($content->errors);
 
-        $this->assertUserRegisterdIsOk(
+        $this->assertUserRegisteredIsOk(
             $content->data->id,
             $clientData['password'],
             $clientData['email'],
@@ -171,7 +171,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertSame('Error', $content->message);
         $this->assertSame(['not_blank', 'string_too_short'], $content->errors->name);
 
-        $this->assertRowDoesntExistInDataBase('email', new Email($clientData['email']), User::class);
+        $this->assertRowDoesNotExistInDataBase('email', new Email($clientData['email']), User::class);
     }
 
     /** @test */
@@ -203,7 +203,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertSame('Error', $content->message);
         $this->assertSame(['string_too_long'], $content->errors->name);
 
-        $this->assertRowDoesntExistInDataBase('email', new Email($clientData['email']), User::class);
+        $this->assertRowDoesNotExistInDataBase('email', new Email($clientData['email']), User::class);
     }
 
     /** @test */
@@ -233,9 +233,9 @@ class UserRegisterControllerTest extends WebClientTestCase
 
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $content->status);
         $this->assertSame('Error', $content->message);
-        $this->assertSame(['alphanumeric'], $content->errors->name);
+        $this->assertSame(['alphanumeric_with_whitespace'], $content->errors->name);
 
-        $this->assertRowDoesntExistInDataBase('email', new Email($clientData['email']), User::class);
+        $this->assertRowDoesNotExistInDataBase('email', new Email($clientData['email']), User::class);
     }
 
     /** @test */
@@ -266,7 +266,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertSame('Error', $content->message);
         $this->assertSame(['not_blank', 'not_null'], $content->errors->name);
 
-        $this->assertRowDoesntExistInDataBase('email', new Email($clientData['email']), User::class);
+        $this->assertRowDoesNotExistInDataBase('email', new Email($clientData['email']), User::class);
     }
 
     /** @test */
@@ -298,7 +298,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertSame('Error', $content->message);
         $this->assertSame(['email'], $content->errors->email);
 
-        $this->assertRowDoesntExistInDataBase('email', new Email($clientData['email']), User::class);
+        $this->assertRowDoesNotExistInDataBase('email', new Email($clientData['email']), User::class);
     }
 
     /** @test */
@@ -329,11 +329,11 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertSame('Error', $content->message);
         $this->assertSame(['not_blank', 'not_null'], $content->errors->email);
 
-        $this->assertRowDoesntExistInDataBase('name', new Name($clientData['name']), User::class);
+        $this->assertRowDoesNotExistInDataBase('name', new NameWithSpaces($clientData['name']), User::class);
     }
 
     /** @test */
-    public function itShoulCreateTheUserPasswordBoundLower(): void
+    public function itShouldCreateTheUserPasswordBoundLower(): void
     {
         static::$clientNoAuthenticated = $this->getNewClient();
         $clientData = [
@@ -362,7 +362,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertIsString($content->data->id);
         $this->assertEquals(36, strlen($content->data->id));
 
-        $this->assertUserRegisterdIsOk(
+        $this->assertUserRegisteredIsOk(
             $content->data->id,
             $clientData['password'],
             $clientData['email'],
@@ -374,7 +374,7 @@ class UserRegisterControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShoulCreateTheUserPasswordBoundUpper(): void
+    public function itShouldCreateTheUserPasswordBoundUpper(): void
     {
         static::$clientNoAuthenticated = $this->getNewClient();
         $clientData = [
@@ -403,7 +403,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertIsString($content->data->id);
         $this->assertEquals(36, strlen($content->data->id));
 
-        $this->assertUserRegisterdIsOk(
+        $this->assertUserRegisteredIsOk(
             $content->data->id,
             $clientData['password'],
             $clientData['email'],
@@ -415,7 +415,7 @@ class UserRegisterControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShoulFailPasswordTooshort(): void
+    public function itShouldFailPasswordToShort(): void
     {
         static::$clientNoAuthenticated = $this->getNewClient();
         $clientData = [
@@ -443,11 +443,11 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertSame('Error', $content->message);
         $this->assertSame(['string_too_short'], $content->errors->password);
 
-        $this->assertRowDoesntExistInDataBase('email', new Email($clientData['email']), User::class);
+        $this->assertRowDoesNotExistInDataBase('email', new Email($clientData['email']), User::class);
     }
 
     /** @test */
-    public function itShoulFailPasswordTooLong(): void
+    public function itShouldFailPasswordTooLong(): void
     {
         static::$clientNoAuthenticated = $this->getNewClient();
         $clientData = [
@@ -475,11 +475,11 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertSame('Error', $content->message);
         $this->assertSame(['string_too_long'], $content->errors->password);
 
-        $this->assertRowDoesntExistInDataBase('email', new Email($clientData['email']), User::class);
+        $this->assertRowDoesNotExistInDataBase('email', new Email($clientData['email']), User::class);
     }
 
     /** @test */
-    public function itShoulFailPasswordNotSet(): void
+    public function itShouldFailPasswordNotSet(): void
     {
         static::$clientNoAuthenticated = $this->getNewClient();
         $clientData = [
@@ -507,11 +507,11 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertSame('Error', $content->message);
         $this->assertSame(['not_blank', 'not_null'], $content->errors->password);
 
-        $this->assertRowDoesntExistInDataBase('email', new Email($clientData['email']), User::class);
+        $this->assertRowDoesNotExistInDataBase('email', new Email($clientData['email']), User::class);
     }
 
     /** @test */
-    public function itShoulFailUrlConfirmEmailNotSet(): void
+    public function itShouldFailUrlConfirmEmailNotSet(): void
     {
         static::$clientNoAuthenticated = $this->getNewClient();
         $clientData = [
@@ -538,7 +538,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertSame('Error', $content->message);
         $this->assertSame(['not_blank', 'not_null'], $content->errors->email_confirmation_url);
 
-        $this->assertRowDoesntExistInDataBase('email', new Email($clientData['email']), User::class);
+        $this->assertRowDoesNotExistInDataBase('email', new Email($clientData['email']), User::class);
     }
 
     /** @test */
@@ -569,10 +569,10 @@ class UserRegisterControllerTest extends WebClientTestCase
 
         $this->assertSame('Error', $content->message);
 
-        $this->assertRowDoesntExistInDataBase('email', new Email($clientData['email']), User::class);
+        $this->assertRowDoesNotExistInDataBase('email', new Email($clientData['email']), User::class);
     }
 
-    private function assertUserRegisterdIsOk(string $userId, string $password, string $email, string $name, array $roles): void
+    private function assertUserRegisteredIsOk(string $userId, string $password, string $email, string $name, array $roles): void
     {
         $entityManager = $this->getEntityManager();
         $userRepository = $entityManager->getRepository(User::class);

@@ -21,9 +21,9 @@ class WebClientTestCase extends WebTestCase
     private const USER_USER_EMAIL = 'email.already.active@host.com';
     private const USER_USER_PASSWORD = '123456';
 
-    private static KernelBrowser|null $clientAuthenticatedUser = null;
-    private static KernelBrowser|null $clientAuthenticatedAdmin = null;
-    protected static KernelBrowser|null $clientNoAuthenticated = null;
+    private static ?KernelBrowser $clientAuthenticatedUser = null;
+    private static ?KernelBrowser $clientAuthenticatedAdmin = null;
+    protected static ?KernelBrowser $clientNoAuthenticated = null;
     /**
      * @var EntityManager[]
      */
@@ -69,7 +69,7 @@ class WebClientTestCase extends WebTestCase
         return $client;
     }
 
-    protected function getCurrentClient(): KernelBrowser|null
+    protected function getCurrentClient(): ?KernelBrowser
     {
         if (null !== static::$clientAuthenticatedUser) {
             return static::$clientAuthenticatedUser;
@@ -199,7 +199,7 @@ class WebClientTestCase extends WebTestCase
         }
     }
 
-    protected function assertRowDoesntExistInDataBase(string $columnName, mixed $value, string $entityClassName): void
+    protected function assertRowDoesNotExistInDataBase(string $columnName, mixed $value, string $entityClassName): void
     {
         $entityManager = $this->getEntityManager();
         $repository = $entityManager->getRepository($entityClassName);

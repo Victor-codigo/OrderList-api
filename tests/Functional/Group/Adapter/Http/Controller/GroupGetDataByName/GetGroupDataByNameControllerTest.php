@@ -89,7 +89,7 @@ class GetGroupDataByNameControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
 
-        $this->assertEquals(['alphanumeric'], $responseContent->errors->group_name);
+        $this->assertEquals(['alphanumeric_with_whitespace'], $responseContent->errors->group_name);
     }
 
     /** @test */
