@@ -19,7 +19,7 @@ Common\Domain\Model\ValueObject\String\Identifier:
     __construct:
       value: "4b513296-14ac-4fb1-a574-05bc9b1dbe3f"
 
-Common\Domain\Model\ValueObject\String\Name:
+Common\Domain\Model\ValueObject\String\NameWithSpaces:
   group_name_random-{1..100}:
     __construct:
       value (unique): <name()>

@@ -7,7 +7,7 @@ namespace Group\Domain\Model;
 use Common\Domain\Model\ValueObject\Object\GroupType;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Group\GROUP_TYPE;
@@ -18,7 +18,7 @@ use User\Domain\Model\User;
 class Group
 {
     private Identifier $id;
-    private Name $name;
+    private NameWithSpaces $name;
     private Description $description;
     private Path $image;
     private \DateTime $createdOn;
@@ -34,12 +34,12 @@ class Group
         return $this->id;
     }
 
-    public function getName(): Name
+    public function getName(): NameWithSpaces
     {
         return $this->name;
     }
 
-    public function setName(Name $name): self
+    public function setName(NameWithSpaces $name): self
     {
         $this->name = $name;
 
@@ -112,7 +112,7 @@ class Group
         return $this;
     }
 
-    public function __construct(Identifier $id, Name $name, GroupType $type, Description $description, Path $image)
+    public function __construct(Identifier $id, NameWithSpaces $name, GroupType $type, Description $description, Path $image)
     {
         $this->id = $id;
         $this->name = $name;
@@ -123,11 +123,11 @@ class Group
         $this->createdOn = new \DateTime();
     }
 
-    public static function fromPrimitives(string $id, string $name, GROUP_TYPE $type, string|null $description, string|null $image): self
+    public static function fromPrimitives(string $id, string $name, GROUP_TYPE $type, ?string $description, ?string $image): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),
-            ValueObjectFactory::createName($name),
+            ValueObjectFactory::createNameWithSpaces($name),
             ValueObjectFactory::createGroupType($type),
             ValueObjectFactory::createDescription($description),
             ValueObjectFactory::createPath($image)

@@ -6,7 +6,7 @@ namespace Group\Application\GroupRemove;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
@@ -65,7 +65,7 @@ class GroupRemoveUseCase extends ServiceBase
         }
     }
 
-    private function createNotificationGroupRemoved(Identifier $userId, Name $groupName, string $systemKey): void
+    private function createNotificationGroupRemoved(Identifier $userId, NameWithSpaces $groupName, string $systemKey): void
     {
         $response = $this->moduleCommunication->__invoke(
             ModuleCommunicationFactory::notificationCreateGroupRemoved($userId, $groupName, $systemKey)

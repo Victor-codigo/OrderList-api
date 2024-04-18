@@ -32,6 +32,9 @@
         <testsuite name="unitUser">
             <directory suffix="Test.php">tests/Unit/User</directory>
         </testsuite>
+        <testsuite name="unitGroup">
+            <directory suffix="Test.php">tests/Unit/Group</directory>
+        </testsuite>
         <testsuite name="functionalUser">
             <directory suffix="Test.php">tests/Functional/User</directory>
         </testsuite>

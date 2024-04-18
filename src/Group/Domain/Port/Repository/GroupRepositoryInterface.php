@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Domain\Port\Repository;
 
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Ports\Repository\RepositoryInterface;
 use Group\Domain\Model\Group;
 
@@ -31,5 +31,5 @@ interface GroupRepositoryInterface extends RepositoryInterface
     /**
      * @throws DBNotFoundException
      */
-    public function findGroupByNameOrFail(Name $groupName): Group;
+    public function findGroupByNameOrFail(NameWithSpaces $groupName): Group;
 }

@@ -10,7 +10,7 @@
             column-definition="CHAR(36) NOT NULL"/>
 
         <field name="name"
-               type="NameType"
+               type="NameWithSpacesType"
                length="50"
                unique="true"/>
 

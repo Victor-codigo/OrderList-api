@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupGetDataByName\Dto;
 
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
@@ -13,12 +13,12 @@ use Common\Domain\Validation\ValidationInterface;
 class GroupGetDataByNameInputDto implements ServiceInputDtoInterface
 {
     public readonly UserShared $userSession;
-    public readonly Name $groupName;
+    public readonly NameWithSpaces $groupName;
 
-    public function __construct(UserShared $userSession, string|null $groupName)
+    public function __construct(UserShared $userSession, ?string $groupName)
     {
         $this->userSession = $userSession;
-        $this->groupName = ValueObjectFactory::createName($groupName);
+        $this->groupName = ValueObjectFactory::createNameWithSpaces($groupName);
     }
 
     public function validate(ValidationInterface $validator): array

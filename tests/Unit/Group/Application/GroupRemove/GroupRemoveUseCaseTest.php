@@ -62,7 +62,7 @@ class GroupRemoveUseCaseTest extends TestCase
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
         $groupId = ValueObjectFactory::createIdentifier('group id');
-        $groupName = ValueObjectFactory::createName('group name');
+        $groupName = ValueObjectFactory::createNameWithSpaces('group name');
         $input = new GroupRemoveInputDto($this->userSession, $groupId->getValue());
 
         $this->validator
@@ -124,7 +124,7 @@ class GroupRemoveUseCaseTest extends TestCase
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
         $groupId = ValueObjectFactory::createIdentifier('group id');
-        $groupName = ValueObjectFactory::createName('group name');
+        $groupName = ValueObjectFactory::createNameWithSpaces('group name');
         $input = new GroupRemoveInputDto($this->userSession, $groupId->getValue());
 
         $this->validator

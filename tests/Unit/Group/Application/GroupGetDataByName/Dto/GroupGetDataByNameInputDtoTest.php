@@ -47,10 +47,10 @@ class GroupGetDataByNameInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailGroupNameIsWrong(): void
     {
-        $groupName = 'not valid name';
+        $groupName = 'not valid name-';
         $object = new GroupGetDataByNameInputDto($this->userSession, $groupName);
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['group_name' => [VALIDATION_ERRORS::ALPHANUMERIC]], $return);
+        $this->assertEquals(['group_name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE]], $return);
     }
 }

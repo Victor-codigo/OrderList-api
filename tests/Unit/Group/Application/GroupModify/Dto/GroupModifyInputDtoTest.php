@@ -200,7 +200,7 @@ class GroupModifyInputDtoTest extends TestCase
         $object = new GroupModifyInputDto(
             $user,
             self::GROUP_ID,
-            'not valid name',
+            'not valid name-',
             $userDescriptionModify,
             false,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK)
@@ -208,7 +208,7 @@ class GroupModifyInputDtoTest extends TestCase
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['name' => [VALIDATION_ERRORS::ALPHANUMERIC]], $return);
+        $this->assertEquals(['name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE]], $return);
     }
 
     /** @test */

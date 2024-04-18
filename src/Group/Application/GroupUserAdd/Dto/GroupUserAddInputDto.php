@@ -6,7 +6,7 @@ namespace Group\Application\GroupUserAdd\Dto;
 
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
@@ -19,7 +19,7 @@ class GroupUserAddInputDto implements ServiceInputDtoInterface
     public readonly UserShared $userSession;
     public readonly Identifier $groupId;
     /**
-     * @var Identifier[]|Name[]
+     * @var Identifier[]|NameWithSpaces[]
      */
     public readonly array $users;
     public readonly Rol $rol;
@@ -27,7 +27,7 @@ class GroupUserAddInputDto implements ServiceInputDtoInterface
     /**
      * @param string[] $users
      */
-    public function __construct(UserShared $userSession, string|null $groupId, array|null $users, string|null $identifierType, bool|null $admin)
+    public function __construct(UserShared $userSession, ?string $groupId, ?array $users, ?string $identifierType, ?bool $admin)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
@@ -35,7 +35,7 @@ class GroupUserAddInputDto implements ServiceInputDtoInterface
 
         $this->users = null === $users ? [] : array_map(
             fn (string $user) => 'name' === $identifierType
-                ? ValueObjectFactory::createName($user)
+                ? ValueObjectFactory::createNameWithSpaces($user)
                 : ValueObjectFactory::createIdentifier($user),
             $users
         );

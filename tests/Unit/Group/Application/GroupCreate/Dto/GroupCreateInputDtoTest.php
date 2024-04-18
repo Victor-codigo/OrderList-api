@@ -114,14 +114,14 @@ class GroupCreateInputDtoTest extends TestCase
     {
         $object = new GroupCreateInputDto(
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
-            'Group Name',
+            'Group Name-',
             'This is a description of the group',
             'TYPE_GROUP',
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK)
         );
         $return = $object->validate($this->validator);
 
-        $this->assertSame(['name' => [VALIDATION_ERRORS::ALPHANUMERIC]], $return);
+        $this->assertSame(['name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE]], $return);
     }
 
     /** @test */

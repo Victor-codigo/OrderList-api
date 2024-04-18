@@ -57,7 +57,7 @@ class GroupModifyServiceTest extends TestCase
     private function getGroupModified(Group $group): Group
     {
         return (clone $group)
-            ->setName(ValueObjectFactory::createName('groupNameModified'))
+            ->setName(ValueObjectFactory::createNameWithSpaces('groupNameModified'))
             ->setDescription(ValueObjectFactory::createDescription('group description modified'))
             ->setImage(ValueObjectFactory::createPath(self::FILE_NAME_FILE_UPLOADED_MODIFIED));
     }

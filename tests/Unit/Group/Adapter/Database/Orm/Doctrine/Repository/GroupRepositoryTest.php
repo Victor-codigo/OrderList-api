@@ -171,7 +171,7 @@ class GroupRepositoryTest extends DataBaseTestCase
     /** @test */
     public function itShouldFindAGroupByName(): void
     {
-        $groupName = ValueObjectFactory::createName('GroupOne');
+        $groupName = ValueObjectFactory::createNameWithSpaces('GroupOne');
         $return = $this->object->findGroupByNameOrFail($groupName);
         $returnExpected = $this->object->findBy(['name' => $groupName]);
 
@@ -183,6 +183,6 @@ class GroupRepositoryTest extends DataBaseTestCase
     {
         $this->expectException(DBNotFoundException::class);
 
-        $this->object->findGroupsByIdOrFail([ValueObjectFactory::createName('namNotFound')]);
+        $this->object->findGroupsByIdOrFail([ValueObjectFactory::createNameWithSpaces('namNotFound')]);
     }
 }

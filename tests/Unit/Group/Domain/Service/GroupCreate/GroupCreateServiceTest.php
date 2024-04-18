@@ -51,14 +51,14 @@ class GroupCreateServiceTest extends DataBaseTestCase
     {
         return new GroupCreateDto(
             ValueObjectFactory::createIdentifier('87c635dd-1861-430e-bbf8-9f21ac4b1b86'),
-            ValueObjectFactory::createName('GroupName'),
+            ValueObjectFactory::createNameWithSpaces('GroupName'),
             ValueObjectFactory::createDescription('This is a description of the group'),
             ValueObjectFactory::createGroupType($groupType),
             ValueObjectFactory::createGroupImage($imageUploaded)
         );
     }
 
-    private function assertGroupIsCreated(Group $group, GroupCreateDto $groupCreateDto, GROUP_TYPE $expectedGroupType, string|null $expectedImageUploadedFileName): void
+    private function assertGroupIsCreated(Group $group, GroupCreateDto $groupCreateDto, GROUP_TYPE $expectedGroupType, ?string $expectedImageUploadedFileName): void
     {
         $this->assertInstanceOf(Identifier::class, $group->getId());
         $this->assertSame($groupCreateDto->name, $group->getName());

@@ -64,7 +64,7 @@ class GroupGetDataByNameTest extends TestCase
     {
         $groupDataExpected = $this->getGroupData();
         $input = new GroupGetDataByNameDto(
-            ValueObjectFactory::createName('groupOne')
+            ValueObjectFactory::createNameWithSpaces('groupOne')
         );
 
         $this->groupRepository
@@ -84,7 +84,7 @@ class GroupGetDataByNameTest extends TestCase
         $groupDataExpected = $this->getGroupData();
         $groupDataExpected->setImage(ValueObjectFactory::createPath(null));
         $input = new GroupGetDataByNameDto(
-            ValueObjectFactory::createName('groupOne')
+            ValueObjectFactory::createNameWithSpaces('groupOne')
         );
 
         $this->groupRepository
@@ -102,7 +102,7 @@ class GroupGetDataByNameTest extends TestCase
     public function itShouldFailGettingTheGroupDataByTheName(): void
     {
         $input = new GroupGetDataByNameDto(
-            ValueObjectFactory::createName('groupOne')
+            ValueObjectFactory::createNameWithSpaces('groupOne')
         );
 
         $this->groupRepository

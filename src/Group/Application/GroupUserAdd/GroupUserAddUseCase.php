@@ -9,7 +9,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionExcepti
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -117,7 +117,7 @@ class GroupUserAddUseCase extends ServiceBase
     }
 
     /**
-     * @param Identifier[]|Name[] $users
+     * @param Identifier[]|NameWithSpaces[] $users
      *
      * @return Identifier[]
      *
@@ -138,8 +138,6 @@ class GroupUserAddUseCase extends ServiceBase
     }
 
     /**
-     * @param Name[] $userName
-     *
      * @throws GroupUserAddUsersValidationException
      */
     private function getUserByNameOrFail(array $usersNames): array

@@ -8,7 +8,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionExcepti
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\FileUpload\Exception\FileUploadException;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
@@ -74,7 +74,7 @@ class GroupCreateUseCase extends ServiceBase
         }
     }
 
-    private function createNotificationGroupCreated(Identifier $userId, Name $groupName, string $systemKey): void
+    private function createNotificationGroupCreated(Identifier $userId, NameWithSpaces $groupName, string $systemKey): void
     {
         $response = $this->moduleCommunication->__invoke(
             ModuleCommunicationFactory::notificationCreateGroupCreated($userId, $groupName, $systemKey)

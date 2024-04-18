@@ -53,7 +53,7 @@ class GroupCreateUseCaseTest extends TestCase
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
         $groupId = ValueObjectFactory::createIdentifier('group id');
-        $groupName = ValueObjectFactory::createName('group name');
+        $groupName = ValueObjectFactory::createNameWithSpaces('group name');
         $description = ValueObjectFactory::createDescription('description');
         $groupType = ValueObjectFactory::createGroupType(GROUP_TYPE::GROUP);
         $image = ValueObjectFactory::createGroupImage($this->createMock(UploadedFileInterface::class));
@@ -110,7 +110,7 @@ class GroupCreateUseCaseTest extends TestCase
     public function itShouldFailCreateTheGroupNotificationError(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
-        $groupName = ValueObjectFactory::createName('group name');
+        $groupName = ValueObjectFactory::createNameWithSpaces('group name');
         $description = ValueObjectFactory::createDescription('description');
         $groupType = ValueObjectFactory::createGroupType(GROUP_TYPE::GROUP);
         $image = ValueObjectFactory::createGroupImage($this->createMock(UploadedFileInterface::class));

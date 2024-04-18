@@ -8,7 +8,7 @@ use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\Persistence\ManagerRegistry;
 use Group\Domain\Model\Group;
@@ -70,7 +70,7 @@ class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
     /**
      * @throws DBNotFoundException
      */
-    public function findGroupByNameOrFail(Name $groupName): Group
+    public function findGroupByNameOrFail(NameWithSpaces $groupName): Group
     {
         $groupData = $this->findBy(['name' => $groupName], null, 1);
 

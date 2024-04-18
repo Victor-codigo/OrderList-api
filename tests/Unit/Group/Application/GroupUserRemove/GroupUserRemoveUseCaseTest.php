@@ -61,7 +61,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
     public function itShouldRemoveTheUsersFromTheGroup(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
-        $groupName = ValueObjectFactory::createName('group name');
+        $groupName = ValueObjectFactory::createNameWithSpaces('group name');
         $usersId = [
             ValueObjectFactory::createIdentifier('user id 1'),
             ValueObjectFactory::createIdentifier('user id 2'),
@@ -123,7 +123,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
     public function itShouldFailRemoveTheUsersFromTheGroupNotificationError(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
-        $groupName = ValueObjectFactory::createName('group name');
+        $groupName = ValueObjectFactory::createNameWithSpaces('group name');
         $usersId = [
             ValueObjectFactory::createIdentifier('user id 1'),
             ValueObjectFactory::createIdentifier('user id 2'),
