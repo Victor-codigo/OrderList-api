@@ -7,7 +7,7 @@ namespace Common\Domain\Security;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\User\USER_ROLES;
@@ -19,7 +19,7 @@ class UserShared
     public function __construct(
         private Identifier $id,
         private Email $email,
-        private Name $name,
+        private NameWithSpaces $name,
         private Roles $roles,
         private Path $image,
         private \DateTime $createdOn,
@@ -36,7 +36,7 @@ class UserShared
         return $this->email;
     }
 
-    public function getName(): Name
+    public function getName(): NameWithSpaces
     {
         return $this->name;
     }
@@ -51,7 +51,7 @@ class UserShared
         return $this->createdOn;
     }
 
-    public static function fromPrimitives(string $id, string $email, string $name, array $roles, string|null $image, \DateTime $createdOn): self
+    public static function fromPrimitives(string $id, string $email, string $name, array $roles, ?string $image, \DateTime $createdOn): self
     {
         $roles = array_map(
             fn (USER_ROLES $rol) => ValueObjectFactory::createRol($rol),
@@ -61,7 +61,7 @@ class UserShared
         return new self(
             ValueObjectFactory::createIdentifier($id),
             ValueObjectFactory::createEmail($email),
-            ValueObjectFactory::createName($name),
+            ValueObjectFactory::createNameWithSpaces($name),
             ValueObjectFactory::createRoles($roles),
             ValueObjectFactory::createPath($image),
             $createdOn

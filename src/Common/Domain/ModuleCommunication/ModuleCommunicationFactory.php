@@ -11,7 +11,7 @@ use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\JwtToken;
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
 use Common\Domain\Validation\Group\GROUP_TYPE;
@@ -114,7 +114,7 @@ class ModuleCommunicationFactory
     public static function userGetByName(array $usersNames): ModuleCommunicationConfigDto
     {
         $usersNamePlain = array_map(
-            fn (Name $userName) => $userName->getValue(),
+            fn (NameWithSpaces $userName) => $userName->getValue(),
             $usersNames
         );
 
@@ -140,7 +140,7 @@ class ModuleCommunicationFactory
     /**
      * @param UploadedFileInterface[] $files
      */
-    public static function groupCreate(Name $name, Description $description, GROUP_TYPE $type, array $files = []): ModuleCommunicationConfigDto
+    public static function groupCreate(NameWithSpaces $name, Description $description, GROUP_TYPE $type, array $files = []): ModuleCommunicationConfigDto
     {
         $attributes = [
             'api_version' => static::API_VERSION,
@@ -287,7 +287,7 @@ class ModuleCommunicationFactory
         );
     }
 
-    public static function notificationCreateUserRegistered(Identifier $recipientUserId, Name $userName, string $domainName, string $systemKey): ModuleCommunicationConfigDto
+    public static function notificationCreateUserRegistered(Identifier $recipientUserId, NameWithSpaces $userName, string $domainName, string $systemKey): ModuleCommunicationConfigDto
     {
         $content = [
             'users_id' => $recipientUserId->getValue(),
@@ -305,7 +305,7 @@ class ModuleCommunicationFactory
     /**
      * @param Identifier[] $recipientUsersId
      */
-    public static function notificationCreateGroupUserAdded(array $recipientUsersId, Name $groupName, Name $userWhoAddsYouName, string $systemKey): ModuleCommunicationConfigDto
+    public static function notificationCreateGroupUserAdded(array $recipientUsersId, NameWithSpaces $groupName, NameWithSpaces $userWhoAddsYouName, string $systemKey): ModuleCommunicationConfigDto
     {
         $recipientUsersIdPlain = array_map(
             fn (Identifier $recipientUserId) => $recipientUserId->getValue(),
@@ -325,7 +325,7 @@ class ModuleCommunicationFactory
         return self::notificationCreate($content, null);
     }
 
-    public static function notificationCreateGroupCreated(Identifier $userId, Name $groupName, string $systemKey): ModuleCommunicationConfigDto
+    public static function notificationCreateGroupCreated(Identifier $userId, NameWithSpaces $groupName, string $systemKey): ModuleCommunicationConfigDto
     {
         $content = [
             'users_id' => [$userId->getValue()],
@@ -339,7 +339,7 @@ class ModuleCommunicationFactory
         return self::notificationCreate($content, null);
     }
 
-    public static function notificationCreateGroupRemoved(Identifier $userId, Name $groupName, string $systemKey): ModuleCommunicationConfigDto
+    public static function notificationCreateGroupRemoved(Identifier $userId, NameWithSpaces $groupName, string $systemKey): ModuleCommunicationConfigDto
     {
         $content = [
             'users_id' => [$userId->getValue()],
@@ -356,7 +356,7 @@ class ModuleCommunicationFactory
     /**
      * @param Identifier[] $usersId
      */
-    public static function notificationCreateGroupUsersRemoved(array $usersId, Name $groupName, string $systemKey): ModuleCommunicationConfigDto
+    public static function notificationCreateGroupUsersRemoved(array $usersId, NameWithSpaces $groupName, string $systemKey): ModuleCommunicationConfigDto
     {
         $usersIdPlain = array_map(
             fn (Identifier $userId) => $userId->getValue(),
