@@ -76,7 +76,7 @@ class UserFirstLoginServiceTest extends TestCase
     /** @test */
     public function itShouldFailCouldNotCreateUserGroup(): void
     {
-        $groupName = ValueObjectFactory::createName('groupName');
+        $groupName = ValueObjectFactory::createNameWithSpaces('groupName');
         $userCreateGroupDto = new UserCreateGroupDto($groupName);
         $input = new UserFirstLoginDto($this->user);
 
@@ -107,7 +107,7 @@ class UserFirstLoginServiceTest extends TestCase
     /** @test */
     public function itShouldCreateTheUserGroupAndChangeRoleAndCreateNotification(): void
     {
-        $userName = ValueObjectFactory::createName('userName');
+        $userName = ValueObjectFactory::createNameWithSpaces('userName');
         $userId = ValueObjectFactory::createIdentifier('user id');
         $userCreateGroupDto = new UserCreateGroupDto($userName);
         $input = new UserFirstLoginDto($this->user);
@@ -164,7 +164,7 @@ class UserFirstLoginServiceTest extends TestCase
     /** @test */
     public function itShouldFailNotificationUserRegistered(): void
     {
-        $userName = ValueObjectFactory::createName('userName');
+        $userName = ValueObjectFactory::createNameWithSpaces('userName');
         $userId = ValueObjectFactory::createIdentifier('user id');
         $userCreateGroupDto = new UserCreateGroupDto($userName);
         $input = new UserFirstLoginDto($this->user);

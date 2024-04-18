@@ -145,7 +145,7 @@ Common\Domain\Model\ValueObject\String\Password:
     __construct:
       value: "\\$2y\\$13\\$/Bu6Y2ggoPUQNi1gCIqZyeapz0wWXTQEFsTRHggTR72u31Af6X2Du" #123456
 
-Common\Domain\Model\ValueObject\String\Name:
+Common\Domain\Model\ValueObject\String\NameWithSpaces:
   user_name_random-{1..100}:
     __construct:
       value (unique): <name()>

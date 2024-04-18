@@ -166,7 +166,7 @@ class UserModifyInputDtoTest extends TestCase
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['name' => [VALIDATION_ERRORS::ALPHANUMERIC]], $return);
+        $this->assertEquals(['name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE]], $return);
     }
 
     /** @test */

@@ -10,7 +10,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Validation\User\USER_ROLES;
 use Doctrine\DBAL\Exception;
@@ -135,7 +135,7 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
     }
 
     /**
-     * @param Name[] $usersName
+     * @param NameWithSpaces[] $usersName
      *
      * @return Users[]
      *

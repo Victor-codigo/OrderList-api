@@ -38,7 +38,7 @@ class UserRemoveService
             ->setRoles(ValueObjectFactory::createRoles([ValueObjectFactory::createRol(USER_ROLES::DELETED)]))
             ->setEmail(ValueObjectFactory::createEmail(''))
             ->setPassword(ValueObjectFactory::createPassword(''))
-            ->setName(ValueObjectFactory::createName(''));
+            ->setName(ValueObjectFactory::createNameWithSpaces(''));
 
         $profile = $user->getProfile();
         $profile

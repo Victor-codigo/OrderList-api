@@ -47,7 +47,7 @@ class UserRemoveServiceTest extends TestCase
     private function setUserAsDeleted(User $user): void
     {
         $user->setEmail(ValueObjectFactory::createEmail(''));
-        $user->setName(ValueObjectFactory::createName(''));
+        $user->setName(ValueObjectFactory::createNameWithSpaces(''));
         $user->setPassword(ValueObjectFactory::createPassword(''));
         $user->setRoles(ValueObjectFactory::createRoles([new Rol(USER_ROLES::DELETED)]));
         $user->getProfile()->setImage(ValueObjectFactory::createPath(null));

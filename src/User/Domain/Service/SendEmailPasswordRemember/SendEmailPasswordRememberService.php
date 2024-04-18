@@ -7,7 +7,7 @@ namespace User\Domain\Service\SendEmailPasswordRemember;
 use Common\Domain\Mailer\EmailDto;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\String\Url;
 use Common\Domain\Ports\JwtToken\JwtHS256Interface;
 use Common\Domain\Ports\Mailer\MailerInterface;
@@ -33,7 +33,7 @@ class SendEmailPasswordRememberService
         string $adminEmail,
         string $appName,
         int $emailUserPasswordRememberExpire
-        ) {
+    ) {
         $this->mailer = $mailer;
         $this->translator = $translator;
         $this->jwt = $jwt;
@@ -63,7 +63,7 @@ class SendEmailPasswordRememberService
         $this->mailer->send();
     }
 
-    private function createEmailDto(Identifier $id, Email $emailTo, Name $userName, string $appName, int $emailUserPasswordRememberExpire, Url $passwordRememberUrl): EmailDto
+    private function createEmailDto(Identifier $id, Email $emailTo, NameWithSpaces $userName, string $appName, int $emailUserPasswordRememberExpire, Url $passwordRememberUrl): EmailDto
     {
         return new EmailDto(
             $this->translator->translate('subject', ['appName' => $appName], EmailPasswordRememberDto::TRANSLATOR_DOMAIN),
@@ -73,7 +73,7 @@ class SendEmailPasswordRememberService
         );
     }
 
-    private function createEmailTemplateData(Identifier $id, Name $userName, string $appName, int $emailUserPasswordRememberExpire, Url $passwordRememberUrl): EmailPasswordRememberDto
+    private function createEmailTemplateData(Identifier $id, NameWithSpaces $userName, string $appName, int $emailUserPasswordRememberExpire, Url $passwordRememberUrl): EmailPasswordRememberDto
     {
         return $this->emailPasswordRememberDto->setData(
             $appName,

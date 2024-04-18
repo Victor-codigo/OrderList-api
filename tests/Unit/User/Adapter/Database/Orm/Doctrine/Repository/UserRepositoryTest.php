@@ -190,9 +190,9 @@ class UserRepositoryTest extends DataBaseTestCase
     public function itShouldReturnManyUsersByName(): void
     {
         $usersName = [
-            ValueObjectFactory::createName('Maria'),
-            ValueObjectFactory::createName('Admin'),
-            ValueObjectFactory::createName('Juanito'),
+            ValueObjectFactory::createNameWithSpaces('Maria'),
+            ValueObjectFactory::createNameWithSpaces('Admin'),
+            ValueObjectFactory::createNameWithSpaces('Juanito'),
         ];
         $return = $this->userRepository->findUsersByNameOrFail($usersName);
         $dbUsersName = array_map(

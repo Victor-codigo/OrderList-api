@@ -6,7 +6,7 @@ namespace User\Application\UserModify\Dto;
 
 use Common\Domain\Model\ValueObject\Object\UserImage;
 use Common\Domain\Model\ValueObject\String\Email;
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
 use Common\Domain\Service\ServiceInputDtoInterface;
@@ -16,30 +16,30 @@ use User\Domain\Model\User;
 class UserModifyInputDto implements ServiceInputDtoInterface
 {
     public readonly Email $email;
-    public readonly Name $name;
+    public readonly NameWithSpaces $name;
     public readonly bool $imageRemove;
-    public readonly UserImage|null $image;
+    public readonly ?UserImage $image;
     public readonly User $user;
 
     private function __construct(
-        string|null $email,
-        string|null $name,
-        bool|null $imageRemove,
-        UploadedFileInterface|null $image,
+        ?string $email,
+        ?string $name,
+        ?bool $imageRemove,
+        ?UploadedFileInterface $image,
         User $user
     ) {
         $this->email = ValueObjectFactory::createEmail($email);
-        $this->name = ValueObjectFactory::createName($name);
+        $this->name = ValueObjectFactory::createNameWithSpaces($name);
         $this->imageRemove = $imageRemove ?? false;
         $this->image = ValueObjectFactory::createUserImage($image);
         $this->user = $user;
     }
 
     public static function create(
-        string|null $email,
-        string|null $name,
-        bool|null $imageRemove,
-        UploadedFileInterface|null $image,
+        ?string $email,
+        ?string $name,
+        ?bool $imageRemove,
+        ?UploadedFileInterface $image,
         User $user
     ): self {
         return new self(

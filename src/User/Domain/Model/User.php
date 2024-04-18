@@ -6,7 +6,7 @@ use Common\Domain\Event\EventRegisterTrait;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -21,20 +21,20 @@ class User
 
     private Identifier $id;
     private Email $email;
-    private Name $name;
+    private NameWithSpaces $name;
     private Password $password;
     private Roles $roles;
     private \DateTime $createdOn;
     private Profile $profile;
 
-    private UserPreRegisteredEvent|null $userPreRegisteredEventData = null;
+    private ?UserPreRegisteredEvent $userPreRegisteredEventData = null;
 
     public function setUserPreRegisteredEventData(UserPreRegisteredEvent $data)
     {
         $this->userPreRegisteredEventData = $data;
     }
 
-    public function getUserPreRegisteredEventData(): UserPreRegisteredEvent|null
+    public function getUserPreRegisteredEventData(): ?UserPreRegisteredEvent
     {
         return $this->userPreRegisteredEventData;
     }
@@ -56,12 +56,12 @@ class User
         return $this;
     }
 
-    public function getName(): Name
+    public function getName(): NameWithSpaces
     {
         return $this->name;
     }
 
-    public function setName(Name $name): self
+    public function setName(NameWithSpaces $name): self
     {
         $this->name = $name;
 
@@ -102,7 +102,7 @@ class User
         return $this;
     }
 
-    public function __construct(Identifier $id, Email $email, Password $password, Name $name, Roles $roles)
+    public function __construct(Identifier $id, Email $email, Password $password, NameWithSpaces $name, Roles $roles)
     {
         $this->id = $id;
         $this->email = $email;
@@ -127,7 +127,7 @@ class User
             ValueObjectFactory::createIdentifier($id),
             ValueObjectFactory::createEmail($email),
             ValueObjectFactory::createPassword($password),
-            ValueObjectFactory::createName($name),
+            ValueObjectFactory::createNameWithSpaces($name),
             ValueObjectFactory::createRoles($roles)
         );
     }

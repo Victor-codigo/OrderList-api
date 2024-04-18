@@ -35,7 +35,7 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
         UserPasswordHasherInterface $passwordHasher,
 
         #[Autowire(expression: 'null')]
-        User|null $user = null
+        ?User $user = null
     ) {
         $this->passwordHasher = $passwordHasher;
         $this->user = $user ?? $this->createUserNull();
@@ -110,7 +110,7 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
             ValueObjectFactory::createIdentifier(null),
             ValueObjectFactory::createEmail(null),
             ValueObjectFactory::createPassword(null),
-            ValueObjectFactory::createName(null),
+            ValueObjectFactory::createNameWithSpaces(null),
             ValueObjectFactory::createRoles(null)
         );
     }

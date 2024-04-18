@@ -52,7 +52,7 @@ class UserCreateGroupServiceTest extends TestCase
     /** @test */
     public function itShouldFailCouldNotCreateTheGroupStatusError(): void
     {
-        $name = ValueObjectFactory::createName('userName');
+        $name = ValueObjectFactory::createNameWithSpaces('userName');
         $input = new UserCreateGroupDto($name);
         $requestConfiguration = $this->createModuleCommunicationConfigDto();
 
@@ -83,7 +83,7 @@ class UserCreateGroupServiceTest extends TestCase
     /** @test */
     public function itShouldFailCouldNotCreateTheGroupErrors(): void
     {
-        $name = ValueObjectFactory::createName('userName');
+        $name = ValueObjectFactory::createNameWithSpaces('userName');
         $input = new UserCreateGroupDto($name);
         $requestConfiguration = $this->createModuleCommunicationConfigDto();
 
@@ -114,7 +114,7 @@ class UserCreateGroupServiceTest extends TestCase
     /** @test */
     public function itShouldCreateTheUserGroup(): void
     {
-        $name = ValueObjectFactory::createName('userName');
+        $name = ValueObjectFactory::createNameWithSpaces('userName');
         $input = new UserCreateGroupDto($name);
         $requestConfiguration = $this->createModuleCommunicationConfigDto();
 

@@ -8,7 +8,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Object\Rol;
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectBase;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Struct\SCOPE;
@@ -72,7 +72,7 @@ class UserGetByNameUseCase extends ServiceBase
     }
 
     /**
-     * @param Name[] $usersName
+     * @param NameWithSpaces[] $usersName
      */
     private function createGetUsersPublicDataDto(array $usersName): GetUsersPublicDataDto
     {
@@ -85,7 +85,7 @@ class UserGetByNameUseCase extends ServiceBase
         foreach ($userData->usersData as $userNumber => $userData) {
             foreach ($userData as $property => $data) {
                 if ($data instanceof Roles) {
-                    $userDataPlain[$userNumber][$property] = array_map(fn (rol $rol) => $rol->getValue()->value, $data->getValue());
+                    $userDataPlain[$userNumber][$property] = array_map(fn (Rol $rol) => $rol->getValue()->value, $data->getValue());
                     continue;
                 } elseif ($data instanceof \DateTime) {
                     $userDataPlain[$userNumber][$property] = $data->format('Y-m-d H:i:s');

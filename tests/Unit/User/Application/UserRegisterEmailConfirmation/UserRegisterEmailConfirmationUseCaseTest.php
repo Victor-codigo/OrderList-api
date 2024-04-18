@@ -114,7 +114,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
             ->expects($this->once())
             ->method('validate')
             ->with($this->validator)
-            ->willReturn(['field' => [VALIDATION_ERRORS::ALPHANUMERIC]]);
+            ->willReturn(['field' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE]]);
 
         $this->expectException(ValueObjectValidationException::class);
         $this->object->__invoke($input);

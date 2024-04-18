@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace User\Domain\Service\UserFirstLogin;
 
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -76,7 +76,7 @@ class UserFirstLoginService
         $this->userRepository->save($user);
     }
 
-    private function createUserCreateGroupDto(Name $userName): UserCreateGroupDto
+    private function createUserCreateGroupDto(NameWithSpaces $userName): UserCreateGroupDto
     {
         return new UserCreateGroupDto($userName);
     }

@@ -19,7 +19,7 @@
                length="256"/>
 
         <field name="name"
-               type="NameType"
+               type="NameWithSpacesType"
                length="50"/>
 
         <field name="roles"

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace User\Application\UserGetByName\Dto;
 
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\ServiceInputDtoInterface;
 use Common\Domain\Validation\ValidationInterface;
@@ -14,15 +14,15 @@ class UserGetByNameInputDto implements ServiceInputDtoInterface
 {
     public readonly User $userSession;
     /**
-     * @var Name[]|null
+     * @var NameWithSpaces[]|null
      */
-    public readonly array|null $usersName;
+    public readonly ?array $usersName;
 
-    public function __construct(User $userSession, array|null $usersName)
+    public function __construct(User $userSession, ?array $usersName)
     {
         $this->userSession = $userSession;
         $this->usersName = null === $usersName ? null : array_map(
-            fn (string $userName) => ValueObjectFactory::createName($userName),
+            fn (string $userName) => ValueObjectFactory::createNameWithSpaces($userName),
             $usersName
         );
     }

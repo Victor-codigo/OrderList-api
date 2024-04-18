@@ -8,7 +8,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Struct\SCOPE;
 use Common\Domain\Validation\User\USER_ROLES;
 use User\Domain\Model\User;
@@ -43,7 +43,7 @@ class GeUsersPublicDataService
     }
 
     /**
-     * @param Identifier[]|Name[] $users
+     * @param Identifier[]|NameWithSpaces[] $users
      *
      * @return User[]
      *
@@ -61,7 +61,7 @@ class GeUsersPublicDataService
             return $this->userRepository->findUsersByIdOrFail($users);
         }
 
-        if (reset($users) instanceof Name) {
+        if (reset($users) instanceof NameWithSpaces) {
             return $this->userRepository->findUsersByNameOrFail($users);
         }
     }
@@ -73,11 +73,11 @@ class GeUsersPublicDataService
     {
         $usersValid = array_filter(
             $users,
-            fn ($user) => $user instanceof Identifier || $user instanceof Name
+            fn ($user) => $user instanceof Identifier || $user instanceof NameWithSpaces
         );
 
         if (count($usersValid) !== count($users)) {
-            throw LogicException::fromMessage('Users must be type of '.Identifier::class.' or '.Name::class);
+            throw LogicException::fromMessage('Users must be type of '.Identifier::class.' or '.NameWithSpaces::class);
         }
     }
 

@@ -7,7 +7,7 @@ namespace User\Application\UserRegister\Dto;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Email;
-use Common\Domain\Model\ValueObject\String\Name;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\String\Url;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -16,27 +16,27 @@ use Common\Domain\Validation\ValidationInterface;
 
 final class UserRegisterInputDto implements ServiceInputDtoInterface
 {
-    public readonly Email|null $email;
-    public readonly Password|null $password;
-    public readonly Name|null $name;
-    public readonly Roles|null $roles;
-    public readonly ProfileCreateInputDto|null $profile;
-    public readonly Url|null $userRegisterEmailConfirmationUrl;
+    public readonly ?Email $email;
+    public readonly ?Password $password;
+    public readonly ?NameWithSpaces $name;
+    public readonly ?Roles $roles;
+    public readonly ?ProfileCreateInputDto $profile;
+    public readonly ?Url $userRegisterEmailConfirmationUrl;
 
     /**
      * @param Rol[]|null $roles
      */
     private function __construct(
-        string|null $email,
-        string|null $password,
-        string|null $name,
-        array|null $roles,
-        ProfileCreateInputDto|null $profile,
-        string|null $userRegisterEmailConfirmationUrl
+        ?string $email,
+        ?string $password,
+        ?string $name,
+        ?array $roles,
+        ?ProfileCreateInputDto $profile,
+        ?string $userRegisterEmailConfirmationUrl
     ) {
         $this->email = ValueObjectFactory::createEmail($email);
         $this->password = ValueObjectFactory::createPassword($password);
-        $this->name = ValueObjectFactory::createName($name);
+        $this->name = ValueObjectFactory::createNameWithSpaces($name);
         $this->roles = ValueObjectFactory::createRoles($roles);
         $this->profile = $profile;
 
@@ -44,11 +44,11 @@ final class UserRegisterInputDto implements ServiceInputDtoInterface
     }
 
     public static function create(
-        string|null $email,
-        string|null $password,
-        string|null $name,
-        array|null $roles,
-        string|null $userRegisterEmailConfirmationUrl
+        ?string $email,
+        ?string $password,
+        ?string $name,
+        ?array $roles,
+        ?string $userRegisterEmailConfirmationUrl
     ): self {
         $profile = ProfileCreateInputDto::create(null);
 

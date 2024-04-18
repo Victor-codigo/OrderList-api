@@ -47,7 +47,7 @@ class UserGetByNameInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailNotValidUserName(): void
     {
-        $userName = 'Juan y Medio';
+        $userName = 'Juan y Medio-';
         $object = new UserGetByNameInputDto($this->userSession, [$userName]);
         $return = $object->validate($this->validator);
 

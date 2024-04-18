@@ -52,7 +52,7 @@ interface UserRepositoryInterface extends RepositoryInterface
     public function findUsersByIdOrFail(array $id): array;
 
     /**
-     * @param Name[] $usersName
+     * @param NameWithSpaces[] $usersName
      *
      * @return Users[]
      *
