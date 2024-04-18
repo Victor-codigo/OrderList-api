@@ -23,6 +23,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
+use Test\Unit\Common\Adapter\ModuleCommunication\Fixtures\AUTHENTICATION_SOURCE;
 use Test\Unit\Common\Adapter\ModuleCommunication\Fixtures\ModuleCommunicationFactoryTest;
 
 class ModuleCommunicationTest extends TestCase
@@ -131,7 +132,7 @@ class ModuleCommunicationTest extends TestCase
         $this->assertEquals(self::JWT_TOKEN, $options['auth_bearer']);
     }
 
-    private function mockRequestMethod(ModuleCommunicationConfigDto $routeConfig, string $url, string $expectedUrl, bool $tokenFound, ?\DomainException $requestException = null): void
+    private function mockRequestMethod(ModuleCommunicationConfigDto $routeConfig, string $url, string $expectedUrl, AUTHENTICATION_SOURCE $authenticationSource, ?\DomainException $requestException = null): void
     {
         $this->DI
             ->expects($this->once())
@@ -148,10 +149,13 @@ class ModuleCommunicationTest extends TestCase
             ->expects($this->once())
             ->method('extract')
             ->with($this->request)
-            ->willReturn($tokenFound ? self::JWT_TOKEN : false);
+            ->willReturn(AUTHENTICATION_SOURCE::REQUEST === $authenticationSource ? self::JWT_TOKEN : false);
 
         $this->httpClient
-            ->expects($tokenFound ? $this->once() : $this->never())
+            ->expects(
+                AUTHENTICATION_SOURCE::NOT_AUTHENTICATED === $authenticationSource && $routeConfig->authentication
+                    ? $this->never() : $this->once()
+            )
             ->method('request')
             ->with(
                 $routeConfig->method,
@@ -161,7 +165,10 @@ class ModuleCommunicationTest extends TestCase
             ->willReturn($this->httpClientResponse);
 
         $this->httpClientResponse
-           ->expects($tokenFound ? $this->atLeastOnce() : $this->never())
+           ->expects(
+               AUTHENTICATION_SOURCE::NOT_AUTHENTICATED === $authenticationSource && $routeConfig->authentication
+                   ? $this->never() : $this->atLeastOnce()
+           )
            ->method('getContent')
            ->with($this->callback(function (bool $throwException = true) {
                ++$this->getContentNumCalls;
@@ -206,7 +213,7 @@ class ModuleCommunicationTest extends TestCase
         ];
 
         $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig, self::URL, self::URL, true);
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL, AUTHENTICATION_SOURCE::REQUEST);
 
         $return = $this->object->__invoke($routeConfig);
 
@@ -232,7 +239,7 @@ class ModuleCommunicationTest extends TestCase
             'header2',
         ];
         $routeConfig = ModuleCommunicationFactoryTest::form(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig, self::URL, self::URL, true);
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL, AUTHENTICATION_SOURCE::REQUEST);
 
         $return = $this->object->__invoke($routeConfig);
 
@@ -259,7 +266,7 @@ class ModuleCommunicationTest extends TestCase
             'header2',
         ];
         $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig, self::URL, self::URL, true);
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL, AUTHENTICATION_SOURCE::REQUEST);
 
         $return = $this->object->__invoke($routeConfig);
 
@@ -270,7 +277,7 @@ class ModuleCommunicationTest extends TestCase
     public function itShouldCreateAValidRequestNoDevOrTestUrlWithoutQueryString(): void
     {
         $routeConfig = ModuleCommunicationFactoryTest::json(true);
-        $this->mockRequestMethod($routeConfig, self::URL, self::URL, true);
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL, AUTHENTICATION_SOURCE::REQUEST);
 
         $this->object->__invoke($routeConfig);
     }
@@ -290,7 +297,7 @@ class ModuleCommunicationTest extends TestCase
             'dev'
         );
 
-        $this->mockRequestMethod($routeConfig, $url, $urlExpected, true);
+        $this->mockRequestMethod($routeConfig, $url, $urlExpected, AUTHENTICATION_SOURCE::REQUEST);
 
         $this->object->__invoke($routeConfig);
     }
@@ -310,7 +317,7 @@ class ModuleCommunicationTest extends TestCase
             'test'
         );
 
-        $this->mockRequestMethod($routeConfig, $url, $urlExpected, true);
+        $this->mockRequestMethod($routeConfig, $url, $urlExpected, AUTHENTICATION_SOURCE::REQUEST);
 
         $this->object->__invoke($routeConfig);
     }
@@ -330,8 +337,53 @@ class ModuleCommunicationTest extends TestCase
             'test'
         );
 
-        $this->mockRequestMethod($routeConfig, $url, $urlExpected, true);
+        $this->mockRequestMethod($routeConfig, $url, $urlExpected, AUTHENTICATION_SOURCE::REQUEST);
 
+        $this->object->__invoke($routeConfig);
+    }
+
+    /** @test */
+    public function itShouldCreateAValidRequestAuthenticationPassedOnHeaders(): void
+    {
+        $url = self::URL.'?param1=value1&param2=value2';
+        $urlExpected = self::URL.'?XDEBUG_SESSION=VSCODE&env=test&param1=value1&param2=value2';
+        $routeConfig = ModuleCommunicationFactoryTest::json(true, [], [], [], [], [
+            'Authorization' => 'Bearer '.self::JWT_TOKEN,
+        ]);
+
+        $this->object = new ModuleCommunication(
+            $this->httpClient,
+            $this->DI,
+            $this->jwtTokenExtractor,
+            $this->requestStack,
+            'test'
+        );
+
+        $this->mockRequestMethod($routeConfig, $url, $urlExpected, AUTHENTICATION_SOURCE::PASS_ON_HEADERS);
+
+        $this->object->__invoke($routeConfig);
+    }
+
+    /** @test */
+    public function itShouldFailCreatingAValidRequestAuthenticationPassedOnHeadersHeaderBadFormed(): void
+    {
+        $url = self::URL.'?param1=value1&param2=value2';
+        $urlExpected = self::URL.'?XDEBUG_SESSION=VSCODE&env=test&param1=value1&param2=value2';
+        $routeConfig = ModuleCommunicationFactoryTest::json(true, [], [], [], [], [
+            'Authorization' => self::JWT_TOKEN,
+        ]);
+
+        $this->object = new ModuleCommunication(
+            $this->httpClient,
+            $this->DI,
+            $this->jwtTokenExtractor,
+            $this->requestStack,
+            'test'
+        );
+
+        $this->mockRequestMethod($routeConfig, $url, $urlExpected, AUTHENTICATION_SOURCE::NOT_AUTHENTICATED);
+
+        $this->expectException(ModuleCommunicationTokenNotFoundInRequestException::class);
         $this->object->__invoke($routeConfig);
     }
 
@@ -350,7 +402,7 @@ class ModuleCommunicationTest extends TestCase
             'test'
         );
 
-        $this->mockRequestMethod($routeConfig, $url, $urlExpected, false);
+        $this->mockRequestMethod($routeConfig, $url, $urlExpected, AUTHENTICATION_SOURCE::NOT_AUTHENTICATED);
 
         $this->expectException(ModuleCommunicationTokenNotFoundInRequestException::class);
         $this->object->__invoke($routeConfig);
@@ -376,7 +428,7 @@ class ModuleCommunicationTest extends TestCase
             'header2',
         ];
         $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig, self::URL, self::URL, true);
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL, AUTHENTICATION_SOURCE::REQUEST);
         $this->expectException(ModuleCommunicationException::class);
 
         $return = $this->object->__invoke($routeConfig);
@@ -406,7 +458,7 @@ class ModuleCommunicationTest extends TestCase
             'header2',
         ];
         $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig, self::URL, self::URL, true, Error400Exception::fromMessage('', $httpExceptionInterface));
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL, AUTHENTICATION_SOURCE::REQUEST, Error400Exception::fromMessage('', $httpExceptionInterface));
 
         $return = $this->object->__invoke($routeConfig);
 
@@ -435,7 +487,7 @@ class ModuleCommunicationTest extends TestCase
             'header2',
         ];
         $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig, self::URL, self::URL, true, Error500Exception::fromMessage('', $httpExceptionInterface));
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL, AUTHENTICATION_SOURCE::REQUEST, Error500Exception::fromMessage('', $httpExceptionInterface));
 
         $return = $this->object->__invoke($routeConfig);
 
@@ -465,7 +517,7 @@ class ModuleCommunicationTest extends TestCase
             'header2',
         ];
         $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig, self::URL, self::URL, true, NetworkException::fromMessage('', $httpExceptionInterface));
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL, AUTHENTICATION_SOURCE::REQUEST, NetworkException::fromMessage('', $httpExceptionInterface));
 
         $this->object->__invoke($routeConfig);
     }

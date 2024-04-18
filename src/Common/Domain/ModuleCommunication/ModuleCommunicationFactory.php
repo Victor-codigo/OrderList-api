@@ -111,9 +111,6 @@ class ModuleCommunicationFactory
         );
     }
 
-    /**
-     * @param Name[] $usersId
-     */
     public static function userGetByName(array $usersNames): ModuleCommunicationConfigDto
     {
         $usersNamePlain = array_map(
@@ -302,7 +299,7 @@ class ModuleCommunicationFactory
             'system_key' => $systemKey,
         ];
 
-        return self::notificationCreate($content);
+        return self::notificationCreate($content, null);
     }
 
     /**
@@ -325,7 +322,7 @@ class ModuleCommunicationFactory
             'system_key' => $systemKey,
         ];
 
-        return self::notificationCreate($content);
+        return self::notificationCreate($content, null);
     }
 
     public static function notificationCreateGroupCreated(Identifier $userId, Name $groupName, string $systemKey): ModuleCommunicationConfigDto
@@ -339,7 +336,7 @@ class ModuleCommunicationFactory
             'system_key' => $systemKey,
         ];
 
-        return self::notificationCreate($content);
+        return self::notificationCreate($content, null);
     }
 
     public static function notificationCreateGroupRemoved(Identifier $userId, Name $groupName, string $systemKey): ModuleCommunicationConfigDto
@@ -353,7 +350,7 @@ class ModuleCommunicationFactory
             'system_key' => $systemKey,
         ];
 
-        return self::notificationCreate($content);
+        return self::notificationCreate($content, null);
     }
 
     /**
@@ -375,12 +372,9 @@ class ModuleCommunicationFactory
             'system_key' => $systemKey,
         ];
 
-        return self::notificationCreate($content);
+        return self::notificationCreate($content, null);
     }
 
-    /**
-     * @param Identifier[] $recipientUsersId
-     */
     public static function notificationUserEmailChanged(Identifier $userId, string $systemKey): ModuleCommunicationConfigDto
     {
         $content = [
@@ -390,12 +384,9 @@ class ModuleCommunicationFactory
             'system_key' => $systemKey,
         ];
 
-        return self::notificationCreate($content);
+        return self::notificationCreate($content, null);
     }
 
-    /**
-     * @param Identifier[] $recipientUsersId
-     */
     public static function notificationUserPasswordChanged(Identifier $userId, string $systemKey): ModuleCommunicationConfigDto
     {
         $content = [
@@ -405,13 +396,10 @@ class ModuleCommunicationFactory
             'system_key' => $systemKey,
         ];
 
-        return self::notificationCreate($content);
+        return self::notificationCreate($content, null);
     }
 
-    /**
-     * @param Identifier[] $recipientUsersId
-     */
-    public static function notificationUserPasswordRemember(Identifier $userId, string $systemKey): ModuleCommunicationConfigDto
+    public static function notificationUserPasswordRemember(Identifier $userId, JwtToken $tokenSession, string $systemKey): ModuleCommunicationConfigDto
     {
         $content = [
             'users_id' => [$userId->getValue()],
@@ -420,14 +408,20 @@ class ModuleCommunicationFactory
             'system_key' => $systemKey,
         ];
 
-        return self::notificationCreate($content);
+        return self::notificationCreate($content, $tokenSession);
     }
 
-    private static function notificationCreate(array $content): ModuleCommunicationConfigDto
+    private static function notificationCreate(array $content, ?JwtToken $tokenSession): ModuleCommunicationConfigDto
     {
         $attributes = [
             'api_version' => static::API_VERSION,
         ];
+
+        if (null !== $tokenSession && !$tokenSession->isNull()) {
+            $headers = [
+                'Authorization' => "Bearer {$tokenSession->getValue()}",
+            ];
+        }
 
         return new ModuleCommunicationConfigDto(
             'notification_create',
@@ -439,7 +433,7 @@ class ModuleCommunicationFactory
             self::CONTENT_TYPE_APPLICATION_JSON,
             $content,
             [],
-            []
+            $headers ?? []
         );
     }
 }

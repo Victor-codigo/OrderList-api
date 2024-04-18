@@ -161,16 +161,47 @@ class ModuleCommunication implements ModuleCommunicationInterface
     {
         $tokenSession = null;
         if ($authentication) {
-            $tokenSession = $this->jwtTokenExtractor->extract($this->request->getCurrentRequest());
-
-            if (false === $tokenSession) {
-                throw ModuleCommunicationTokenNotFoundInRequestException::fromMessage('Token not found in request');
-            }
+            $tokenSession = $this->getAuthentication($headers);
         }
 
         return match ($contentType) {
             'application/json' => $this->json($tokenSession, $content, $cookies, $headers),
             'multipart/form-data' => $this->form($tokenSession, $content, $files, $cookies, $headers)
         };
+    }
+
+    /**
+     * @param string[] $headers
+     *
+     * @throws ModuleCommunicationTokenNotFoundInRequestException
+     */
+    private function getAuthentication(array $headers): string
+    {
+        $tokenSession = $this->jwtTokenExtractor->extract($this->request->getCurrentRequest());
+
+        if (false !== $tokenSession) {
+            return $tokenSession;
+        }
+
+        if (array_key_exists('Authorization', $headers)) {
+            $tokenSession = $this->getBearerToken($headers['Authorization']);
+        }
+
+        if (null === $tokenSession || false === $tokenSession) {
+            throw ModuleCommunicationTokenNotFoundInRequestException::fromMessage('Token not found in request');
+        }
+
+        return $tokenSession;
+    }
+
+    private function getBearerToken(string $token): ?string
+    {
+        $tokenSession = explode(' ', $token);
+
+        if ('Bearer' !== $tokenSession[0]) {
+            return null;
+        }
+
+        return $tokenSession[1];
     }
 }
