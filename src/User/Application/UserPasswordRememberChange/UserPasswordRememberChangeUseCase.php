@@ -17,7 +17,6 @@ use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
-use InvalidArgumentException;
 use User\Application\UserPasswordRememberChange\Dto\UserPasswordRememberChangeInputDto;
 use User\Application\UserPasswordRememberChange\Exception\UserPasswordRememberChangeNotificationException;
 use User\Application\UserPasswordRememberChange\Exception\UserPasswordRememberChangePasswordNewAndPasswordNewRepeatAreNotEqualsException;
@@ -56,8 +55,8 @@ class UserPasswordRememberChangeUseCase extends ServiceBase
                 $this->createUserPasswordChangeDto($tokenDecoded->username, $passwordChangeDto->passwordNew, $passwordChangeDto->passwordNewRepeat)
             );
 
-            $this->createNotificationPasswordRemember($tokenDecoded->username, $this->systemKey);
-        } catch (InvalidArgumentException) {
+            $this->createNotificationPasswordRemember($tokenDecoded->username, $passwordChangeDto->token, $this->systemKey);
+        } catch (\InvalidArgumentException) {
             throw UserPasswordRememberChangeTokenWrongException::fromMessage('Wrong token');
         } catch (JwtTokenExpiredException) {
             throw UserPasswordRememberChangeTokenExpiredException::fromMessage('Token has expired');
@@ -110,11 +109,11 @@ class UserPasswordRememberChangeUseCase extends ServiceBase
     /**
      * @throws UserPasswordRememberChangeNotificationException
      */
-    private function createNotificationPasswordRemember(string $userIdPlain, string $systemKey): void
+    private function createNotificationPasswordRemember(string $userIdPlain, JwtToken $tokenSession, string $systemKey): void
     {
         $userId = ValueObjectFactory::createIdentifier($userIdPlain);
         $response = $this->moduleCommunication->__invoke(
-            ModuleCommunicationFactory::notificationUserPasswordRemember($userId, $systemKey)
+            ModuleCommunicationFactory::notificationUserPasswordRemember($userId, $tokenSession, $systemKey)
         );
 
         if (RESPONSE_STATUS::OK !== $response->getStatus()) {
