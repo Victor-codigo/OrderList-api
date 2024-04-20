@@ -124,7 +124,7 @@ class GetUsersUseCase extends ServiceBase
             $itemPlain[$key] = match (true) {
                 $value instanceof Roles => $value->getRolesEnums(),
                 $value instanceof ValueObjectBase => $value->getValue(),
-                $value instanceof \DateTime => $value->format('Y-m-d H:i'),
+                $value instanceof \DateTime => $value->format('Y-m-d H:i:s'),
                 default => $value
             };
         }

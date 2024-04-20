@@ -100,7 +100,7 @@ class GetUsersControllerTest extends WebClientTestCase
                     $user->getRoles()->getRolesEnums()),
                 $users
             ),
-            'usersCreatedOn' => array_map(fn (User $user) => $user->getCreatedOn()->format('Y-m-d H:i'), $users),
+            'usersCreatedOn' => array_map(fn (User $user) => $user->getCreatedOn()->format('Y-m-d H:i:s'), $users),
             'usersImages' => array_map(fn (User $user) => $user->getProfile()->getImage()->getValue(), $users),
         ];
     }
