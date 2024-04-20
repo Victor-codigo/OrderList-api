@@ -593,6 +593,6 @@ class UserRegisterControllerTest extends WebClientTestCase
         $profileRepository = $entityManager->getRepository(Profile::class);
         $profileSaved = $profileRepository->findOneBy(['id' => $userIdentifier]);
 
-        $this->assertNull($profileSaved->getImage());
+        $this->assertNull($profileSaved->getImage()->getValue());
     }
 }

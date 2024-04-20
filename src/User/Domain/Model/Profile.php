@@ -10,14 +10,14 @@ use Common\Domain\Model\ValueObject\String\Path;
 class Profile
 {
     protected Identifier $id;
-    protected Path|null $image = null;
+    protected Path $image;
 
     public function getId(): Identifier
     {
         return $this->id;
     }
 
-    public function getImage(): Path|null
+    public function getImage(): Path
     {
         return $this->image;
     }
@@ -29,7 +29,7 @@ class Profile
         return $this;
     }
 
-    public function __construct(Identifier $id, Path|null $image = null)
+    public function __construct(Identifier $id, Path $image)
     {
         $this->id = $id;
         $this->image = $image;

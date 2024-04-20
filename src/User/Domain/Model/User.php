@@ -110,7 +110,10 @@ class User
         $this->roles = $roles;
         $this->password = $password;
         $this->createdOn = new \DateTime();
-        $this->profile = new Profile($this->getId());
+        $this->profile = new Profile(
+            $this->getId(),
+            ValueObjectFactory::createPath(null)
+        );
     }
 
     /**
