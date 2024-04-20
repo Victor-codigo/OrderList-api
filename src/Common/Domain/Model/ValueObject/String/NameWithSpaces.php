@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Common\Domain\Model\ValueObject\String;
 
 use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
+use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\ConstraintFactory;
 
@@ -23,5 +24,19 @@ class NameWithSpaces extends StringValueObject
     public function __toString()
     {
         return $this->getValue();
+    }
+
+    public function witheSpacesToSlashes()
+    {
+        $nameWithSlashes = mb_ereg_replace(' ', '-', $this->getValue());
+
+        return ValueObjectFactory::createNameWithSpaces($nameWithSlashes);
+    }
+
+    public function slashesToWiteSpaces()
+    {
+        $nameWithWhiteSpaces = mb_ereg_replace('-', ' ', $this->getValue());
+
+        return ValueObjectFactory::createNameWithSpaces($nameWithWhiteSpaces);
     }
 }
