@@ -191,7 +191,7 @@ class UserGetByNameControllerTest extends WebClientTestCase
     public function itShouldFailGettingUserInfoByNameUserNotValid(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
-        $userName = 'User not valid-';
+        $userName = 'User not valid+';
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT."/{$userName}",

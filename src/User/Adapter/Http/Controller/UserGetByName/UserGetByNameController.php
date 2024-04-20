@@ -63,7 +63,7 @@ use User\Application\UserGetByName\UserGetByNameUseCase;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<alphanumeric, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<alphanumeric_with_whitespace, string|array>')),
                     ]
                 )
             )
@@ -95,7 +95,7 @@ class UserGetByNameController extends AbstractController
         return $this->createResponse($userFound->userData);
     }
 
-    private function createUserGetByNameInputDto(array|null $userName): UserGetByNameInputDto
+    private function createUserGetByNameInputDto(?array $userName): UserGetByNameInputDto
     {
         /** @var UserSymfonyAdapter $userAdapter */
         $userAdapter = $this->security->getUser();

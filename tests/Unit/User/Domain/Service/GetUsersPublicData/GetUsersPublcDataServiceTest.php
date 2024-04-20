@@ -101,6 +101,7 @@ class GetUsersPublcDataServiceTest extends TestCase
         $expectedUsersEmail = array_map(fn (User $user) => $user->getEmail(), $expectedUsers);
         $expectedUsersNames = array_map(fn (User $user) => $user->getName(), $expectedUsers);
         $expectedUsersRoles = array_map(fn (User $user) => $user->getRoles(), $expectedUsers);
+        $expectedUsersImages = array_map(fn (User $user) => $user->getImage(), $expectedUsers);
         $expectedUsersCreatedOn = array_map(fn (User $user) => $user->getCreatedOn(), $expectedUsers);
 
         $this->userRepository
@@ -115,17 +116,19 @@ class GetUsersPublcDataServiceTest extends TestCase
         $this->assertInstanceOf(GetUsersPublicDataOutputDto::class, $return);
 
         foreach ($return->usersData as $user) {
-            $this->assertCount(5, $user);
+            $this->assertCount(6, $user);
             $this->assertArrayHasKey('id', $user);
             $this->assertArrayHasKey('email', $user);
             $this->assertArrayHasKey('name', $user);
             $this->assertArrayHasKey('roles', $user);
+            $this->assertArrayHasKey('image', $user);
             $this->assertArrayHasKey('created_on', $user);
 
             $this->assertContains($user['id'], $expectedUsersIdentifiers);
             $this->assertContains($user['email'], $expectedUsersEmail);
             $this->assertContains($user['name'], $expectedUsersNames);
             $this->assertContainsEquals($user['roles'], $expectedUsersRoles);
+            $this->assertContainsEquals($user['image'], $expectedUsersImages);
             $this->assertContains($user['created_on'], $expectedUsersCreatedOn);
         }
     }

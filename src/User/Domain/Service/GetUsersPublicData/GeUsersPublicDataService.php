@@ -116,7 +116,7 @@ class GeUsersPublicDataService
     }
 
     /**
-     * @param Users[] $users
+     * @param User[] $users
      */
     private function getUserPrivateData(array $users): array
     {
@@ -127,6 +127,7 @@ class GeUsersPublicDataService
                 'email' => $user->getEmail(),
                 'name' => $user->getName(),
                 'roles' => $user->getRoles(),
+                'image' => $user->getImage(),
                 'created_on' => $user->getCreatedOn(),
             ];
         }
