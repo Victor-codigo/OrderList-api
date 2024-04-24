@@ -31,7 +31,7 @@ class GroupUserGetGroupsService
      */
     public function __invoke(GroupUserGetGroupsDto $input): GroupUserGetGroupsOutputDto
     {
-        $userGroups = $this->userGroupRepository->findUserGroupsById($input->userId, null, GROUP_TYPE::GROUP);
+        $userGroups = $this->userGroupRepository->findUserGroupsByName($input->userId, $input->filterText, GROUP_TYPE::GROUP, $input->orderAsc);
 
         return $this->getUserGroups($userGroups, $input->page, $input->pageItems);
     }

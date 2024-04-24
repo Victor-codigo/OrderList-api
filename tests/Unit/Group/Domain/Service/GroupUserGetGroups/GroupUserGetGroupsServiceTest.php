@@ -8,6 +8,8 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use Common\Domain\Validation\Filter\FILTER_SECTION;
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Group\Domain\Model\Group;
@@ -108,15 +110,32 @@ class GroupUserGetGroupsServiceTest extends TestCase
             iterator_to_array($expectedUserGroups)
         ));
 
+        $input = new GroupUserGetGroupsDto(
+            $userId,
+            $paginatorPage,
+            $paginatorPageItems,
+            ValueObjectFactory::createFilter(
+                'text_filter',
+                ValueObjectFactory::createFilterSection(FILTER_SECTION::GROUP),
+                ValueObjectFactory::createNameWithSpaces('groupName')
+            ),
+            ValueObjectFactory::createFilter(
+                'text_filter',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::CONTAINS),
+                ValueObjectFactory::createNameWithSpaces('groupName')
+            ),
+            true
+        );
+
         $this->userGroupRepository
             ->expects($this->once())
-            ->method('findUserGroupsById')
+            ->method('findUserGroupsByName')
             ->with($userId)
             ->willReturn($expectedUserGroups);
 
         $this->mockGroupGetDataService($groupGetDataDto->groupsId, $expectedGroupsData, $this->once());
 
-        $return = $this->object->__invoke(new GroupUserGetGroupsDto($userId, $paginatorPage, $paginatorPageItems));
+        $return = $this->object->__invoke($input);
 
         $this->assertTrue(property_exists($return, 'page'));
         $this->assertTrue(property_exists($return, 'pagesTotal'));
@@ -150,16 +169,32 @@ class GroupUserGetGroupsServiceTest extends TestCase
             fn (UserGroup $userGroup) => $userGroup->getGroupId(),
             iterator_to_array($expectedUserGroups)
         ));
+        $input = new GroupUserGetGroupsDto(
+            $userId,
+            $paginatorPage,
+            $paginatorPageItems,
+            ValueObjectFactory::createFilter(
+                'text_filter',
+                ValueObjectFactory::createFilterSection(FILTER_SECTION::GROUP),
+                ValueObjectFactory::createNameWithSpaces('groupName')
+            ),
+            ValueObjectFactory::createFilter(
+                'text_filter',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::CONTAINS),
+                ValueObjectFactory::createNameWithSpaces('groupName')
+            ),
+            true
+        );
 
         $this->userGroupRepository
             ->expects($this->once())
-            ->method('findUserGroupsById')
+            ->method('findUserGroupsByName')
             ->with($userId)
             ->willThrowException(new DBNotFoundException());
 
         $this->mockGroupGetDataService($groupGetDataDto->groupsId, $expectedGroupsData, $this->never());
 
         $this->expectException(DBNotFoundException::class);
-        $this->object->__invoke(new GroupUserGetGroupsDto($userId, $paginatorPage, $paginatorPageItems));
+        $this->object->__invoke($input);
     }
 }

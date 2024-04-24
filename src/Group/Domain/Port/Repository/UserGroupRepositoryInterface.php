@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Domain\Port\Repository;
 
+use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Ports\Repository\RepositoryInterface;
@@ -36,7 +37,12 @@ interface UserGroupRepositoryInterface extends RepositoryInterface
     /**
      * @throws DBNotFoundException
      */
-    public function findUserGroupsById(Identifier $userId, GROUP_ROLES|null $groupRol = null, GROUP_TYPE|null $groupType = null): PaginatorInterface;
+    public function findUserGroupsById(Identifier $userId, ?GROUP_ROLES $groupRol = null, ?GROUP_TYPE $groupType = null): PaginatorInterface;
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findUserGroupsByName(Identifier $userId, ?Filter $filterText, GROUP_TYPE $groupType, bool $orderAsc): PaginatorInterface;
 
     /**
      * @throws DBNotFoundException

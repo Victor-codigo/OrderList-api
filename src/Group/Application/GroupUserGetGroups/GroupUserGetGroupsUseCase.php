@@ -38,7 +38,7 @@ class GroupUserGetGroupsUseCase extends ServiceBase
             );
 
             return $this->createGroupUserGetGroupsOutputDto($input->page, $userGroups);
-        } catch (DBNotFoundException) {
+        } catch (DBNotFoundException $e) {
             throw GroupUserGetGroupsNoGroupsFoundException::fromMessage('No groups found');
         } catch (\Exception $e) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
@@ -59,7 +59,7 @@ class GroupUserGetGroupsUseCase extends ServiceBase
 
     private function createGroupUserGetGroupsDto(GroupUserGetGroupsInputDto $input): GroupUserGetGroupsDto
     {
-        return new GroupUserGetGroupsDto($input->userSession->getId(), $input->page, $input->pageItems);
+        return new GroupUserGetGroupsDto($input->userSession->getId(), $input->page, $input->pageItems, $input->filterSection, $input->filterText, $input->orderAsc);
     }
 
     private function createGroupUserGetGroupsOutputDto(PaginatorPage $page, GroupUserGetGroupsOutputServiceDto $userGroups): GroupUserGetGroupsOutputDto

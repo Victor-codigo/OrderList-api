@@ -7,6 +7,7 @@ namespace Group\Adapter\Database\Orm\Doctrine\Repository;
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Validation\Group\GROUP_ROLES;
@@ -107,7 +108,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
     /**
      * @throws DBNotFoundException
      */
-    public function findUserGroupsById(Identifier $userId, GROUP_ROLES $groupRol = null, GROUP_TYPE $groupType = null): PaginatorInterface
+    public function findUserGroupsById(Identifier $userId, ?GROUP_ROLES $groupRol = null, ?GROUP_TYPE $groupType = null): PaginatorInterface
     {
         $queryBuilder = $this->entityManager
             ->createQueryBuilder()
@@ -136,6 +137,31 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
         }
 
         return $paginator;
+    }
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findUserGroupsByName(Identifier $userId, ?Filter $filterText, GROUP_TYPE $groupType, bool $orderAsc): PaginatorInterface
+    {
+        $query = $this->entityManager
+            ->createQueryBuilder()
+            ->select('usersGroups')
+            ->from(UserGroup::class, 'usersGroups')
+            ->leftJoin(Group::class, 'groups', Join::WITH, 'groups.id = usersGroups.groupId')
+            ->where('usersGroups.userId = :userId')
+            ->setParameter('userId', $userId)
+            ->andWhere('groups.type = :groupType')
+            ->setParameter('groupType', $groupType)
+            ->orderBy('groups.name', $orderAsc ? 'ASC' : 'DESC');
+
+        if (null !== $filterText && !$filterText->isNull()) {
+            $query
+                ->andWhere('groups.name LIKE :groupName')
+                ->setParameter('groupName', $filterText->getValueWithFilter());
+        }
+
+        return $this->queryPaginationOrFail($query);
     }
 
     /**

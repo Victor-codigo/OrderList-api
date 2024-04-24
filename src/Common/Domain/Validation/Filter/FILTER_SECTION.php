@@ -10,4 +10,5 @@ enum FILTER_SECTION: string
     case SHOP = 'shop';
     case LIST_ORDERS = 'list_orders';
     case ORDER = 'order';
+    case GROUP = 'group';
 }
