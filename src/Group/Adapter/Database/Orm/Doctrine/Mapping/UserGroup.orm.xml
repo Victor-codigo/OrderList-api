@@ -30,7 +30,9 @@
                      inversed-by="users">
 
             <join-column name="group_id"
-                         referenced-column-name="id" />
+                         referenced-column-name="id"
+                         on-delete="CASCADE" />
+
         </many-to-one>
     </entity>
 </doctrine-mapping>
