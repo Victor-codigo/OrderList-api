@@ -10,12 +10,13 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Service\Image\EntityImageModifyInterface;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use User\Domain\Model\User;
 
-class Group
+class Group implements EntityImageModifyInterface
 {
     private Identifier $id;
     private NameWithSpaces $name;

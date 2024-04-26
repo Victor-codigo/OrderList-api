@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Group\Domain\Service\GroupRemove;
 
 use Common\Domain\Exception\DomainInternalErrorException;
+use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Service\Image\EntityImageRemove\EntityImageRemoveService;
 use Group\Domain\Model\Group;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Service\GroupRemove\Dto\GroupRemoveDto;
@@ -13,7 +15,8 @@ class GroupRemoveService
 {
     public function __construct(
         private GroupRepositoryInterface $groupRepository,
-        private string $groupImagePath
+        private EntityImageRemoveService $entityImageRemoveService,
+        private string $groupImagePath,
     ) {
     }
 
@@ -23,31 +26,24 @@ class GroupRemoveService
      */
     public function __invoke(GroupRemoveDto $input): void
     {
-        $group = $this->groupRepository->findGroupsByIdOrFail([$input->groupId]);
+        $groups = $this->groupRepository->findGroupsByIdOrFail($input->groupsId);
 
-        $this->removeGroupImage($group[0]);
-        $this->groupRepository->remove($group[0]);
+        $this->removeGroupsImages($groups);
+        $this->groupRepository->remove($groups);
     }
 
     /**
-     * @throws DomainInternalErrorException
+     * @param Group[] $groups
      */
-    private function removeGroupImage(Group $group): void
+    private function removeGroupsImages(array $groups): void
     {
-        $image = $group->getImage()?->getValue();
+        $imagesGroupPath = ValueObjectFactory::createPath($this->groupImagePath);
 
-        if (null === $image) {
-            return;
-        }
-
-        $image = $this->groupImagePath.'/'.$image;
-
-        if (!file_exists($image)) {
-            return;
-        }
-
-        if (!unlink($image)) {
-            throw DomainInternalErrorException::fromMessage('The image cannot be deleted');
+        foreach ($groups as $group) {
+            try {
+                $this->entityImageRemoveService->__invoke($group, $imagesGroupPath);
+            } catch (DomainInternalErrorException $e) {
+            }
         }
     }
 }

@@ -6,7 +6,6 @@ namespace Group\Application\GroupRemove;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
@@ -18,6 +17,7 @@ use Group\Application\GroupRemove\Dto\GroupRemoveOutputDto;
 use Group\Application\GroupRemove\Exception\GroupRemoveGroupNotFoundException;
 use Group\Application\GroupRemove\Exception\GroupRemoveGroupNotificationException;
 use Group\Application\GroupRemove\Exception\GroupRemovePermissionsException;
+use Group\Domain\Model\Group;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Service\GroupRemove\Dto\GroupRemoveDto;
 use Group\Domain\Service\GroupRemove\GroupRemoveService;
@@ -35,18 +35,22 @@ class GroupRemoveUseCase extends ServiceBase
     ) {
     }
 
+    /**
+     * @throws GroupRemoveGroupNotificationException
+     * @throws GroupRemoveGroupNotFoundException
+     */
     public function __invoke(GroupRemoveInputDto $input): GroupRemoveOutputDto
     {
         try {
             $this->validation($input);
-            $group = $this->groupRepository->findGroupsByIdOrFail([$input->groupId])[0];
+            $groups = $this->groupRepository->findGroupsByIdOrFail($input->groupsId);
             $this->groupRemoveService->__invoke(
                 $this->createGroupRemoveDto($input)
             );
 
-            $this->createNotificationGroupRemoved($input->userSession->getId(), $group->getName(), $this->systemKey);
+            $this->createNotificationGroupsRemoved($input->userSession->getId(), $groups, $this->systemKey);
 
-            return $this->createGroupRemoveOutputDto($input->groupId);
+            return $this->createGroupRemoveOutputDto($input->groupsId);
         } catch (DBNotFoundException) {
             throw GroupRemoveGroupNotFoundException::fromMessage('Group not found');
         }
@@ -60,29 +64,44 @@ class GroupRemoveUseCase extends ServiceBase
             throw ValueObjectValidationException::fromArray('Error', $errorList);
         }
 
-        if (!$this->userHasGroupAdminGrantsService->__invoke($input->userSession, $input->groupId)) {
-            throw GroupRemovePermissionsException::fromMessage('Not permissions in this group');
+        foreach ($input->groupsId as $groupId) {
+            if (!$this->userHasGroupAdminGrantsService->__invoke($input->userSession, $groupId)) {
+                throw GroupRemovePermissionsException::fromMessage('Not permissions in this group');
+            }
         }
     }
 
-    private function createNotificationGroupRemoved(Identifier $userId, NameWithSpaces $groupName, string $systemKey): void
+    /**
+     * @param Group[] $groups
+     *
+     * @throws GroupRemoveGroupNotificationException
+     */
+    private function createNotificationGroupsRemoved(Identifier $userId, array $groups, string $systemKey): void
     {
-        $response = $this->moduleCommunication->__invoke(
-            ModuleCommunicationFactory::notificationCreateGroupRemoved($userId, $groupName, $systemKey)
-        );
+        $responses = [];
+        foreach ($groups as $group) {
+            $responses[] = $this->moduleCommunication->__invoke(
+                ModuleCommunicationFactory::notificationCreateGroupRemoved($userId, $group->getName(), $systemKey)
+            );
+        }
 
-        if (RESPONSE_STATUS::OK !== $response->getStatus()) {
-            throw GroupRemoveGroupNotificationException::fromMessage('An error was ocurred when trying to send the notification: user group removed');
+        foreach ($responses as $response) {
+            if (RESPONSE_STATUS::OK !== $response->getStatus()) {
+                throw GroupRemoveGroupNotificationException::fromMessage('An error was ocurred when trying to send the notification: user group removed');
+            }
         }
     }
 
     private function createGroupRemoveDto(GroupRemoveInputDto $input): GroupRemoveDto
     {
-        return new GroupRemoveDto($input->groupId);
+        return new GroupRemoveDto($input->groupsId);
     }
 
-    private function createGroupRemoveOutputDto(Identifier $groupId): GroupRemoveOutputDto
+    /**
+     * @param string[] $groupsId
+     */
+    private function createGroupRemoveOutputDto(array $groupsId): GroupRemoveOutputDto
     {
-        return new GroupRemoveOutputDto($groupId);
+        return new GroupRemoveOutputDto($groupsId);
     }
 }

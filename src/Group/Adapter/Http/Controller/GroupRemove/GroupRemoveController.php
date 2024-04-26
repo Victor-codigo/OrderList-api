@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Adapter\Http\Controller\GroupRemove;
 
-use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use Group\Adapter\Http\Controller\GroupRemove\Dto\GroupRemoveRequestDto;
@@ -26,7 +26,7 @@ use Symfony\Component\HttpFoundation\Response;
                 mediaType: 'application/json',
                 schema: new OA\Schema(
                     properties: [
-                        new OA\Property(property: 'group_id', type: 'string', description: 'Group\'s id', example: 'fdb242b4-bac8-4463-88d0-0941bb0beee0'),
+                        new OA\Property(property: 'groups_id', type: 'array', description: 'Group\'s ids', items: new OA\Items()),
                     ]
                 )
             ),
@@ -35,7 +35,7 @@ use Symfony\Component\HttpFoundation\Response;
     responses: [
         new OA\Response(
             response: Response::HTTP_CREATED,
-            description: 'The group has been removed',
+            description: 'The group or groups has been removed',
             content: new OA\MediaType(
                 mediaType: 'application/json',
                 schema: new OA\Schema(
@@ -58,7 +58,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|group_not_found, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<groups_id_empty|group_id|group_not_found|permissions, string|array>')),
                     ]
                 )
             )
@@ -91,24 +91,27 @@ class GroupRemoveController extends AbstractController
     public function __invoke(GroupRemoveRequestDto $request): JsonResponse
     {
         $groupRemoved = $this->groupRemoveUseCase->__invoke(
-            $this->createGroupRemoveInputDto($request->groupId)
+            $this->createGroupRemoveInputDto($request->groupsId)
         );
 
-        return $this->createResponse($groupRemoved->groupRemovedId);
+        return $this->createResponse($groupRemoved);
     }
 
-    private function createGroupRemoveInputDto(string|null $groupId): GroupRemoveInputDto
+    /**
+     * @param string[]|null $groupsId
+     */
+    private function createGroupRemoveInputDto(?array $groupsId): GroupRemoveInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();
 
-        return new GroupRemoveInputDto($userSharedAdapter->getUser(), $groupId);
+        return new GroupRemoveInputDto($userSharedAdapter->getUser(), $groupsId);
     }
 
-    private function createResponse(Identifier $groupRemovedId): JsonResponse
+    private function createResponse(ApplicationOutputInterface $groupsRemovedId): JsonResponse
     {
         $responseDto = (new ResponseDto())
-            ->setData(['id' => $groupRemovedId->getValue()])
+            ->setData(['id' => $groupsRemovedId->toArray()])
             ->setMessage('Group removed')
             ->setStatus(RESPONSE_STATUS::OK);
 

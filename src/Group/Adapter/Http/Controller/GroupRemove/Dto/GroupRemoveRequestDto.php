@@ -5,14 +5,23 @@ declare(strict_types=1);
 namespace Group\Adapter\Http\Controller\GroupRemove\Dto;
 
 use Common\Adapter\Http\Dto\RequestDtoInterface;
+use Common\Adapter\Http\RequestDataValidation\RequestDataValidation;
+use Common\Domain\Config\AppConfig;
 use Symfony\Component\HttpFoundation\Request;
 
 class GroupRemoveRequestDto implements RequestDtoInterface
 {
-    public readonly string|null $groupId;
+    use RequestDataValidation;
+
+    private const GROUPS_REMOVE_MAX = AppConfig::ENDPOINT_GROUP_DELETE_MAX;
+
+    /**
+     * @var string[]|null
+     */
+    public readonly ?array $groupsId;
 
     public function __construct(Request $request)
     {
-        $this->groupId = $request->request->get('group_id');
+        $this->groupsId = $this->validateArrayOverflow($request->request->all('groups_id'), self::GROUPS_REMOVE_MAX);
     }
 }

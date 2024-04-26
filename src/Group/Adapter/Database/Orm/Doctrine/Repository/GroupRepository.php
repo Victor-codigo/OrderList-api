@@ -38,12 +38,17 @@ class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
     }
 
     /**
+     * @param Group[] $groups
+     *
      * @throws DBConnectionException
      */
-    public function remove(Group $group): void
+    public function remove(array $groups): void
     {
         try {
-            $this->objectManager->remove($group);
+            foreach ($groups as $group) {
+                $this->objectManager->remove($group);
+            }
+
             $this->objectManager->flush();
         } catch (\Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());

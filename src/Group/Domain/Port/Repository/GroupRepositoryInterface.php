@@ -17,9 +17,11 @@ interface GroupRepositoryInterface extends RepositoryInterface
     public function save(Group $group): void;
 
     /**
+     * @param Group[] $groups
+     *
      * @throws DBConnectionException
      */
-    public function remove(Group $group): void;
+    public function remove(array $groups): void;
 
     /**
      * @return Group[]

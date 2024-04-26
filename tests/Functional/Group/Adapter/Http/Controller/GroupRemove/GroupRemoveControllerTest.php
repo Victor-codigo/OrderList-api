@@ -16,6 +16,8 @@ class GroupRemoveControllerTest extends WebClientTestCase
     private const ENDPOINT = '/api/v1/groups';
     private const METHOD = 'DELETE';
     private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const GROUP_2_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const GROUP_ID_USER_NOT_ADMIN = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
 
     protected function setUp(): void
     {
@@ -30,7 +32,7 @@ class GroupRemoveControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'group_id' => self::GROUP_ID,
+                'groups_id' => [self::GROUP_ID, self::GROUP_2_ID],
             ])
         );
 
@@ -40,28 +42,28 @@ class GroupRemoveControllerTest extends WebClientTestCase
         $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Group removed', $responseContent->message);
-        $this->assertSame(self::GROUP_ID, $responseContent->data->id);
+        $this->assertSame([self::GROUP_ID, self::GROUP_2_ID], $responseContent->data->id);
     }
 
     /** @test */
-    public function itShouldFailGroupIdIsNull(): void
+    public function itShouldFailGroupIdIsNull22(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'group_id' => null,
+                'groups_id' => null,
             ])
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['group_id'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['groups_id_empty'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertSame(['not_blank', 'not_null'], $responseContent->errors->group_id);
+        $this->assertSame(['not_blank'], $responseContent->errors->groups_id_empty);
     }
 
     /** @test */
@@ -72,17 +74,17 @@ class GroupRemoveControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'group_id' => 'not valid id',
+                'groups_id' => ['not valid id'],
             ])
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['group_id'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['groups_id'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertSame(['uuid_invalid_characters'], $responseContent->errors->group_id);
+        $this->assertSame([['uuid_invalid_characters']], $responseContent->errors->groups_id);
     }
 
     /** @test */
@@ -93,7 +95,7 @@ class GroupRemoveControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'group_id' => '467fef4a-d3a9-4d08-9430-c06da70fd231',
+                'groups_id' => ['467fef4a-d3a9-4d08-9430-c06da70fd231'],
             ])
         );
 
@@ -114,7 +116,7 @@ class GroupRemoveControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT,
             content: json_encode([
-                'group_id' => self::GROUP_ID,
+                'groups_id' => [self::GROUP_ID, self::GROUP_ID_USER_NOT_ADMIN],
             ])
         );
 

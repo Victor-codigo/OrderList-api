@@ -376,9 +376,6 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $page = 1;
         $pageItems = 10;
         $orderAsc = true;
-        $filterSection = null;
-        $filterText = null;
-        $filterValue = null;
         $ordersDataExpected = $this->getOrdersDataExpected();
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
