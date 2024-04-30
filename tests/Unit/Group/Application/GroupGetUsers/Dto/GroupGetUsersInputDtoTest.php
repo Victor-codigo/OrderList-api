@@ -7,6 +7,8 @@ namespace Test\Unit\Group\Application\GroupGetUsers\Dto;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
+use Common\Domain\Validation\Filter\FILTER_SECTION;
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupGetUsers\Dto\GroupGetUsersInputDto;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -16,87 +18,234 @@ class GroupGetUsersInputDtoTest extends TestCase
 {
     private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
 
-    private MockObject|UserShared $userSession;
     private MockObject|ValidationInterface $validator;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->userSession = $this->createMock(UserShared::class);
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
-    public function itShouldValidateTheInput(): void
+    private function inputDataProvider(): iterable
     {
-        $object = new GroupGetUsersInputDto($this->userSession, self::GROUP_ID, 1, 5);
-        $return = $object->validate($this->validator);
+        $userSession = $this->createMock(UserShared::class);
 
-        $this->assertEmpty($return);
+        yield [
+            new GroupGetUsersInputDto(
+                $userSession,
+                self::GROUP_ID,
+                1,
+                5,
+                FILTER_SECTION::GROUP_USERS->value,
+                FILTER_STRING_COMPARISON::EQUALS->value,
+                'user name',
+                true
+            ),
+            [],
+        ];
+
+        yield [
+            new GroupGetUsersInputDto(
+                $userSession,
+                self::GROUP_ID,
+                1,
+                5,
+                FILTER_SECTION::GROUP_USERS->value,
+                FILTER_STRING_COMPARISON::STARTS_WITH->value,
+                'user name',
+                false
+            ),
+            [],
+        ];
+
+        yield [
+            new GroupGetUsersInputDto(
+                $userSession,
+                self::GROUP_ID,
+                1,
+                5,
+                FILTER_SECTION::GROUP_USERS->value,
+                FILTER_STRING_COMPARISON::ENDS_WITH->value,
+                'user name',
+                false
+            ),
+            [],
+        ];
+
+        yield [
+            new GroupGetUsersInputDto(
+                $userSession,
+                self::GROUP_ID,
+                1,
+                5,
+                FILTER_SECTION::GROUP_USERS->value,
+                FILTER_STRING_COMPARISON::CONTAINS->value,
+                'user name',
+                false
+            ),
+            [],
+        ];
+
+        yield [
+            new GroupGetUsersInputDto(
+                $userSession,
+                self::GROUP_ID,
+                1,
+                5,
+                null,
+                null,
+                null,
+                true
+            ),
+            [],
+        ];
+
+        yield [
+            new GroupGetUsersInputDto(
+                $userSession,
+                null,
+                1,
+                5,
+                null,
+                null,
+                null,
+                true
+            ),
+            ['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]],
+        ];
+
+        yield [
+            new GroupGetUsersInputDto(
+                $userSession,
+                'wrong id',
+                1,
+                5,
+                null,
+                null,
+                null,
+                true
+            ),
+            ['group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]],
+        ];
+
+        yield [
+            new GroupGetUsersInputDto(
+                $userSession,
+                self::GROUP_ID,
+                null,
+                5,
+                null,
+                null,
+                null,
+                true
+            ),
+            ['page' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]],
+        ];
+
+        yield [
+            new GroupGetUsersInputDto(
+                $userSession,
+                self::GROUP_ID,
+                -1,
+                5,
+                null,
+                null,
+                null,
+                true
+            ),
+            ['page' => [VALIDATION_ERRORS::GREATER_THAN]],
+        ];
+
+        yield [
+            new GroupGetUsersInputDto(
+                $userSession,
+                self::GROUP_ID,
+                1,
+                null,
+                null,
+                null,
+                null,
+                true
+            ),
+            ['page_items' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]],
+        ];
+
+        yield [
+            new GroupGetUsersInputDto(
+                $userSession,
+                self::GROUP_ID,
+                1,
+                -1,
+                null,
+                null,
+                null,
+                true
+            ),
+            ['page_items' => [VALIDATION_ERRORS::GREATER_THAN]],
+        ];
+
+        yield [
+            new GroupGetUsersInputDto(
+                $userSession,
+                self::GROUP_ID,
+                1,
+                5,
+                FILTER_SECTION::GROUP_USERS->value,
+                null,
+                null,
+                true
+            ),
+            [
+                'filter_section_and_text_not_empty' => [VALIDATION_ERRORS::NOT_NULL],
+                'section_filter_value' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
+            ],
+        ];
+
+        yield [
+            new GroupGetUsersInputDto(
+                $userSession,
+                self::GROUP_ID,
+                1,
+                5,
+                FILTER_SECTION::GROUP_USERS->value,
+                FILTER_STRING_COMPARISON::CONTAINS->value,
+                null,
+                true
+            ),
+            [
+                'section_filter_value' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
+                'text_filter_value' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
+            ],
+        ];
+
+        yield [
+            new GroupGetUsersInputDto(
+                $userSession,
+                self::GROUP_ID,
+                1,
+                5,
+                null,
+                FILTER_STRING_COMPARISON::CONTAINS->value,
+                null,
+                true
+            ),
+            [
+                'filter_section_and_text_not_empty' => [VALIDATION_ERRORS::NOT_NULL],
+                'text_filter_value' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
+            ],
+        ];
     }
 
-    /** @test */
-    public function itShouldValidatePageItemsIs1(): void
+    /**
+     * @test
+     *
+     * @dataProvider inputDataProvider
+     */
+    public function itShouldValidateInput22(GroupGetUsersInputDto $object, array $errors): void
     {
-        $object = new GroupGetUsersInputDto($this->userSession, self::GROUP_ID, 5, 1);
         $return = $object->validate($this->validator);
 
-        $this->assertEmpty($return);
-    }
-
-    /** @test */
-    public function itShouldFailGroupIdIsNull(): void
-    {
-        $object = new GroupGetUsersInputDto($this->userSession, null, 1, 5);
-        $return = $object->validate($this->validator);
-
-        $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
-    }
-
-    /** @test */
-    public function itShouldValidatePageIs1(): void
-    {
-        $object = new GroupGetUsersInputDto($this->userSession, self::GROUP_ID, 1, 1);
-        $return = $object->validate($this->validator);
-
-        $this->assertEmpty($return);
-    }
-
-    /** @test */
-    public function itShouldFailGroupIdIsNotValid(): void
-    {
-        $groupId = 'not valid id';
-        $object = new GroupGetUsersInputDto($this->userSession, $groupId, 1, 5);
-        $return = $object->validate($this->validator);
-
-        $this->assertEquals(['group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
-    }
-
-    /** @test */
-    public function itShouldFailPageItemsIsLessThanOne(): void
-    {
-        $object = new GroupGetUsersInputDto($this->userSession, self::GROUP_ID, 5, 0);
-        $return = $object->validate($this->validator);
-
-        $this->assertEquals(['page_items' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
-    }
-
-    /** @test */
-    public function itShouldFailPageItemsIsGreaterThan100(): void
-    {
-        $object = new GroupGetUsersInputDto($this->userSession, self::GROUP_ID, 5, 101);
-        $return = $object->validate($this->validator);
-
-        $this->assertEquals(['page_items' => [VALIDATION_ERRORS::LESS_THAN_OR_EQUAL]], $return);
-    }
-
-    /** @test */
-    public function itShouldFailPageIsLessThanOne(): void
-    {
-        $object = new GroupGetUsersInputDto($this->userSession, self::GROUP_ID, 0, 1);
-        $return = $object->validate($this->validator);
-
-        $this->assertEquals(['page' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
+        $this->assertEquals($errors, $return);
     }
 }

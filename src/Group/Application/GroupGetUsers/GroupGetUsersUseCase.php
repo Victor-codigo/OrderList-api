@@ -4,31 +4,26 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupGetUsers;
 
-use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
-use Common\Domain\HttpClient\Exception\Error400Exception;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
-use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
-use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
-use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Service\Exception\DomainErrorException;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
-use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupGetUsers\Dto\GroupGetUsersInputDto;
 use Group\Application\GroupGetUsers\Dto\GroupGetUsersOutputDto;
 use Group\Application\GroupGetUsers\Exception\GroupGetUsersGroupNotFoundException;
 use Group\Application\GroupGetUsers\Exception\GroupGetUsersUserNotInTheGroupException;
-use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
+use Group\Domain\Service\GroupGetUsers\Dto\GroupGetUsersDto;
+use Group\Domain\Service\GroupGetUsers\GroupGetUsersService;
 
 class GroupGetUsersUseCase extends ServiceBase
 {
     public function __construct(
+        private GroupGetUsersService $groupGetUsersService,
         private UserGroupRepositoryInterface $userGroupRepository,
         private ModuleCommunicationInterface $moduleCommunication,
         private ValidationInterface $validator
@@ -46,11 +41,16 @@ class GroupGetUsersUseCase extends ServiceBase
         $this->validation($input);
 
         try {
-            $groupUsers = $this->userGroupRepository->findGroupUsersOrFail($input->groupId);
             $this->validateIsUserSessionInGroup($input->groupId, $input->userSession->getId());
-            $usersData = $this->getUsersData($groupUsers, $input->page, $input->pageItems);
+            $usersData = $this->groupGetUsersService->__invoke(
+                $this->createGroupGetUsersDto($input)
+            );
 
-            return $this->createGroupGetUsersOutputDto($usersData, $input->page, $groupUsers->getPagesTotal());
+            return $this->createGroupGetUsersOutputDto(
+                $usersData,
+                $input->page,
+                $this->groupGetUsersService->getPagesTotal()
+            );
         } catch (GroupGetUsersUserNotInTheGroupException $e) {
             throw $e;
         } catch (DBNotFoundException) {
@@ -74,8 +74,6 @@ class GroupGetUsersUseCase extends ServiceBase
     }
 
     /**
-     * @param UserGroup[] $groupUsers
-     *
      * @throws GroupGetUsersUserNotInTheGroupException
      */
     private function validateIsUserSessionInGroup(Identifier $groupId, Identifier $userSessionId): void
@@ -87,39 +85,9 @@ class GroupGetUsersUseCase extends ServiceBase
         }
     }
 
-    /**
-     * @throws Error400Exception
-     * @throws ModuleCommunicationException
-     * @throws \ValueError
-     */
-    private function getUsersData(PaginatorInterface $usersGroup, PaginatorPage $page, PaginatorPageItems $pageItems): array
+    private function createGroupGetUsersDto(GroupGetUsersInputDto $input): GroupGetUsersDto
     {
-        $usersGroup->setPagination($page->getValue(), $pageItems->getValue());
-        $usersId = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId(),
-            iterator_to_array($usersGroup)
-        );
-
-        $usersAdmin = array_filter(
-            iterator_to_array($usersGroup),
-            fn (UserGroup $userGroup) => $userGroup->getRoles()->has(new Rol(GROUP_ROLES::ADMIN)),
-        );
-
-        $usersAdminId = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId()->getValue(),
-            $usersAdmin
-        );
-
-        $usersData = $this->moduleCommunication->__invoke(
-            ModuleCommunicationFactory::userGet($usersId)
-        );
-
-        array_walk(
-            $usersData->data,
-            fn (array &$userData) => $userData['admin'] = in_array($userData['id'], $usersAdminId)
-        );
-
-        return $usersData->getData();
+        return new GroupGetUsersDto($input->groupId, $input->page, $input->pageItems, $input->filterSection, $input->filterText, $input->orderAsc);
     }
 
     private function createGroupGetUsersOutputDto(array $users, PaginatorPage $page, int $pagesTotal): GroupGetUsersOutputDto

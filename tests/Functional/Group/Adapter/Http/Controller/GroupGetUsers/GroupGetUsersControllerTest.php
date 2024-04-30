@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupGetUsers;
 
 use Common\Domain\Response\RESPONSE_STATUS;
+use Common\Domain\Validation\Filter\FILTER_SECTION;
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
@@ -13,23 +15,38 @@ class GroupGetUsersControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/groups/user/{group_id}?page={page}&page_items={page_items}';
+    private const ENDPOINT = '/api/v1/groups/user/';
     private const METHOD = 'GET';
     private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const USER_EMAIL = 'email.already.active@host.com';
     private const USER_PASSWORD = '123456';
 
+    private function assertUsersAreOk(object $responseContent, int $expectedUsersCount, int $expectedPage, int $expectedPagesTotal): void
+    {
+        $this->assertCount($expectedUsersCount, $responseContent->data->users);
+        $this->assertEquals($expectedPage, $responseContent->data->page);
+        $this->assertEquals($expectedPagesTotal, $responseContent->data->pages_total);
+
+        foreach ($responseContent->data->users as $userData) {
+            $this->assertTrue(property_exists($userData, 'id'));
+            $this->assertTrue(property_exists($userData, 'name'));
+            $this->assertTrue(property_exists($userData, 'image'));
+            $this->assertTrue(property_exists($userData, 'admin'));
+        }
+    }
+
     /** @test */
     public function itShouldGetTheGroupUsersData(): void
     {
+        $page = 1;
+        $pageItems = 50;
         $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $client->request(
             method: self::METHOD,
-            uri: str_replace(
-                ['{group_id}',  '{page}', '{page_items}'],
-                [self::GROUP_ID, 1, 50],
-                self::ENDPOINT
-            )
+            uri: self::ENDPOINT
+                .self::GROUP_ID
+                ."?page={$page}"
+                ."&page_items={$pageItems}"
         );
 
         $response = $client->getResponse();
@@ -39,29 +56,20 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Users of the group', $responseContent->message);
 
-        $this->assertCount(50, $responseContent->data->users);
-        $this->assertEquals(1, $responseContent->data->page);
-        $this->assertEquals(2, $responseContent->data->pages_total);
-
-        foreach ($responseContent->data->users as $userData) {
-            $this->assertTrue(property_exists($userData, 'id'));
-            $this->assertTrue(property_exists($userData, 'name'));
-            $this->assertTrue(property_exists($userData, 'image'));
-            $this->assertTrue(property_exists($userData, 'admin'));
-        }
+        $this->assertUsersAreOk($responseContent, $pageItems, $page, 2);
     }
 
     /** @test */
     public function itShouldGet50UsersNoLimitSet(): void
     {
+        $page = 1;
+        $pageItems = 50;
         $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $client->request(
             method: self::METHOD,
-            uri: str_replace(
-                ['{group_id}',  '{page}', '&page_items={page_items}'],
-                [self::GROUP_ID, 1, ''],
-                self::ENDPOINT
-            )
+            uri: self::ENDPOINT
+                .self::GROUP_ID
+                ."?page={$page}"
         );
 
         $response = $client->getResponse();
@@ -71,29 +79,20 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Users of the group', $responseContent->message);
 
-        $this->assertCount(50, $responseContent->data->users);
-        $this->assertEquals(1, $responseContent->data->page);
-        $this->assertEquals(2, $responseContent->data->pages_total);
-
-        foreach ($responseContent->data->users as $userData) {
-            $this->assertTrue(property_exists($userData, 'id'));
-            $this->assertTrue(property_exists($userData, 'name'));
-            $this->assertTrue(property_exists($userData, 'image'));
-            $this->assertTrue(property_exists($userData, 'admin'));
-        }
+        $this->assertUsersAreOk($responseContent, $pageItems, $page, 2);
     }
 
     /** @test */
-    public function itShouldGet50UsersNoOffsetSet(): void
+    public function itShouldGet50UsersNoPageSet(): void
     {
+        $page = 1;
+        $pageItems = 50;
         $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $client->request(
             method: self::METHOD,
-            uri: str_replace(
-                ['{group_id}',  'page={page}', '{page_items}'],
-                [self::GROUP_ID, '', 50],
-                self::ENDPOINT
-            )
+            uri: self::ENDPOINT
+                .self::GROUP_ID
+                ."?page_items={$pageItems}"
         );
 
         $response = $client->getResponse();
@@ -103,29 +102,19 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Users of the group', $responseContent->message);
 
-        $this->assertCount(50, $responseContent->data->users);
-        $this->assertEquals(1, $responseContent->data->page);
-        $this->assertEquals(2, $responseContent->data->pages_total);
-
-        foreach ($responseContent->data->users as $userData) {
-            $this->assertTrue(property_exists($userData, 'id'));
-            $this->assertTrue(property_exists($userData, 'name'));
-            $this->assertTrue(property_exists($userData, 'image'));
-            $this->assertTrue(property_exists($userData, 'admin'));
-        }
+        $this->assertUsersAreOk($responseContent, $pageItems, $page, 2);
     }
 
     /** @test */
     public function itShouldGet50UsersNoLimitAndNoOffsetSet(): void
     {
+        $page = 1;
+        $pageItems = 50;
         $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $client->request(
             method: self::METHOD,
-            uri: str_replace(
-                ['{group_id}', '?page={page}', '&page_items={page_items}'],
-                [self::GROUP_ID, '', ''],
-                self::ENDPOINT
-            )
+            uri: self::ENDPOINT
+                .self::GROUP_ID
         );
 
         $response = $client->getResponse();
@@ -135,29 +124,21 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Users of the group', $responseContent->message);
 
-        $this->assertCount(50, $responseContent->data->users);
-        $this->assertEquals(1, $responseContent->data->page);
-        $this->assertEquals(2, $responseContent->data->pages_total);
-
-        foreach ($responseContent->data->users as $userData) {
-            $this->assertTrue(property_exists($userData, 'id'));
-            $this->assertTrue(property_exists($userData, 'name'));
-            $this->assertTrue(property_exists($userData, 'image'));
-            $this->assertTrue(property_exists($userData, 'admin'));
-        }
+        $this->assertUsersAreOk($responseContent, $pageItems, $page, 2);
     }
 
     /** @test */
     public function itShouldGet5Users(): void
     {
+        $page = 1;
+        $pageItems = 5;
         $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $client->request(
             method: self::METHOD,
-            uri: str_replace(
-                ['{group_id}',  '{page}', '{page_items}'],
-                [self::GROUP_ID, 1, 5],
-                self::ENDPOINT
-            )
+            uri: self::ENDPOINT
+                .self::GROUP_ID
+                ."?page={$page}"
+                ."&page_items={$pageItems}"
         );
 
         $response = $client->getResponse();
@@ -167,41 +148,29 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Users of the group', $responseContent->message);
 
-        $this->assertCount(5, $responseContent->data->users);
-        $this->assertEquals(1, $responseContent->data->page);
-        $this->assertEquals(20, $responseContent->data->pages_total);
-
-        foreach ($responseContent->data->users as $userData) {
-            $this->assertTrue(property_exists($userData, 'id'));
-            $this->assertTrue(property_exists($userData, 'name'));
-            $this->assertTrue(property_exists($userData, 'image'));
-            $this->assertTrue(property_exists($userData, 'admin'));
-        }
+        $this->assertUsersAreOk($responseContent, $pageItems, $page, 20);
     }
 
     /** @test */
-    public function itShouldGet3UsersWithOffset3(): void
+    public function itShouldGetUserFilteredByName(): void
     {
+        $page = 1;
+        $pageItems = 5;
+        $filterSection = FILTER_SECTION::GROUP_USERS->value;
+        $filterText = FILTER_STRING_COMPARISON::EQUALS->value;
+        $filterValue = 'Ona Kilback';
+        $orderAsc = true;
         $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $client->request(
             method: self::METHOD,
-            uri: str_replace(
-                ['{group_id}',  '{page}', '{page_items}'],
-                [self::GROUP_ID, 1, 4],
-                self::ENDPOINT
-            )
-        );
-
-        $response10Users = $client->getResponse();
-        $responseContent10Users = json_decode($response10Users->getContent());
-
-        $client->request(
-            method: self::METHOD,
-            uri: str_replace(
-                ['{group_id}',  '{page}', '{page_items}'],
-                [self::GROUP_ID, 1, 3],
-                self::ENDPOINT
-            )
+            uri: self::ENDPOINT
+                .self::GROUP_ID
+                ."?page={$page}"
+                ."&page_items={$pageItems}"
+                ."&filter_section={$filterSection}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}"
+                ."&order_asc={$orderAsc}"
         );
 
         $response = $client->getResponse();
@@ -211,71 +180,29 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Users of the group', $responseContent->message);
 
-        $this->assertCount(3, $responseContent->data->users);
-        $this->assertEquals(1, $responseContent->data->page);
-        $this->assertEquals(34, $responseContent->data->pages_total);
-
-        foreach ($responseContent->data->users as $userData) {
-            $this->assertTrue(property_exists($userData, 'id'));
-            $this->assertTrue(property_exists($userData, 'name'));
-            $this->assertTrue(property_exists($userData, 'image'));
-            $this->assertTrue(property_exists($userData, 'admin'));
-            $this->assertContainsEquals($userData, $responseContent10Users->data->users);
-        }
+        $this->assertUsersAreOk($responseContent, 1, $page, 20);
     }
 
     /** @test */
-    public function itShouldFailGroupIdIsEmpty(): void
+    public function itShouldNotGetUserFilteredByNameUserNotExists(): void
     {
+        $page = 1;
+        $pageItems = 5;
+        $filterSection = FILTER_SECTION::GROUP_USERS->value;
+        $filterText = FILTER_STRING_COMPARISON::EQUALS->value;
+        $filterValue = 'not exists user';
+        $orderAsc = true;
         $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $client->request(
             method: self::METHOD,
-            uri: str_replace(
-                ['{group_id}',  '{page}', '{page_items}'],
-                ['', 1, 50],
-                self::ENDPOINT
-            )
-        );
-
-        $response = $client->getResponse();
-
-        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_NOT_FOUND);
-    }
-
-    /** @test */
-    public function itShouldFailGroupIdIsNotValid(): void
-    {
-        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
-        $client->request(
-            method: self::METHOD,
-            uri: str_replace(
-                ['{group_id}',  '{page}', '{page_items}'],
-                ['not_valid_id', 1, 50],
-                self::ENDPOINT
-            )
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [], ['group_id'], Response::HTTP_BAD_REQUEST);
-        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Error', $responseContent->message);
-
-        $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
-    }
-
-    /** @test */
-    public function itShouldFailGroupIdIsNotRegistered(): void
-    {
-        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
-        $client->request(
-            method: self::METHOD,
-            uri: str_replace(
-                ['{group_id}',  '{page}', '{page_items}'],
-                ['20354d7a-e4fe-47af-8ff6-187bca92f3f9', 1, 50],
-                self::ENDPOINT
-            )
+            uri: self::ENDPOINT
+                .self::GROUP_ID
+                ."?page={$page}"
+                ."&page_items={$pageItems}"
+                ."&filter_section={$filterSection}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}"
+                ."&order_asc={$orderAsc}"
         );
 
         $response = $client->getResponse();
@@ -289,16 +216,60 @@ class GroupGetUsersControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailLimitTooHigh(): void
+    public function itShouldFailGroupIdIsEmpty(): void
     {
+        $page = 1;
+        $pageItems = 50;
         $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $client->request(
             method: self::METHOD,
-            uri: str_replace(
-                ['{group_id}',  '{page}', '{page_items}'],
-                [self::GROUP_ID, 1, 101],
-                self::ENDPOINT
-            )
+            uri: self::ENDPOINT
+                ."?page={$page}"
+                ."&page_items={$pageItems}"
+        );
+
+        $response = $client->getResponse();
+
+        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_NOT_FOUND);
+    }
+
+    /** @test */
+    public function itShouldFailGroupIdIsNotValid(): void
+    {
+        $page = 1;
+        $pageItems = 50;
+        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                .'not_valid_id'
+                ."?page={$page}"
+                ."&page_items={$pageItems}"
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['group_id'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
+    }
+
+    /** @test */
+    public function itShouldFailLimitTooHigh(): void
+    {
+        $page = 1;
+        $pageItems = 101;
+        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                .self::GROUP_ID
+                ."?page={$page}"
+                ."&page_items={$pageItems}"
         );
 
         $response = $client->getResponse();
@@ -314,14 +285,15 @@ class GroupGetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailLimitTooLow(): void
     {
+        $page = 1;
+        $pageItems = -1;
         $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $client->request(
             method: self::METHOD,
-            uri: str_replace(
-                ['{group_id}',  '{page}', '{page_items}'],
-                [self::GROUP_ID, 1, -1],
-                self::ENDPOINT
-            )
+            uri: self::ENDPOINT
+                .self::GROUP_ID
+                ."?page={$page}"
+                ."&page_items={$pageItems}"
         );
 
         $response = $client->getResponse();
@@ -337,14 +309,15 @@ class GroupGetUsersControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailOffsetTooLow(): void
     {
+        $page = -1;
+        $pageItems = 1;
         $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $client->request(
             method: self::METHOD,
-            uri: str_replace(
-                ['{group_id}',  '{page}', '{page_items}'],
-                [self::GROUP_ID, -1, 1],
-                self::ENDPOINT
-            )
+            uri: self::ENDPOINT
+                .self::GROUP_ID
+                ."?page={$page}"
+                ."&page_items={$pageItems}"
         );
 
         $response = $client->getResponse();
@@ -358,16 +331,103 @@ class GroupGetUsersControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailUserSessionIsNotInTheGroup(): void
+    public function itShouldFailFilterSectionNotSet(): void
     {
-        $client = $this->getNewClientAuthenticatedAdmin();
+        $page = 1;
+        $pageItems = 50;
+        $filterText = FILTER_STRING_COMPARISON::EQUALS->value;
+        $filterValue = 'user name';
+        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $client->request(
             method: self::METHOD,
-            uri: str_replace(
-                ['{group_id}',  '{page}', '{page_items}'],
-                [self::GROUP_ID, 1, 1],
-                self::ENDPOINT
-            )
+            uri: self::ENDPOINT
+                .self::GROUP_ID
+                ."?page={$page}"
+                ."&page_items={$pageItems}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}"
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['filter_section_and_text_not_empty'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['not_null'], $responseContent->errors->filter_section_and_text_not_empty);
+    }
+
+    /** @test */
+    public function itShouldFailFilterTextNotSet(): void
+    {
+        $page = 1;
+        $pageItems = 50;
+        $filterSection = FILTER_SECTION::GROUP_USERS->value;
+        $filterValue = 'user name';
+        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                .self::GROUP_ID
+                ."?page={$page}"
+                ."&page_items={$pageItems}"
+                ."&filter_section={$filterSection}"
+                ."&filter_value={$filterValue}"
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['filter_section_and_text_not_empty'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['not_null'], $responseContent->errors->filter_section_and_text_not_empty);
+    }
+
+    /** @test */
+    public function itShouldFailFilterValueNotSet(): void
+    {
+        $page = 1;
+        $pageItems = 50;
+        $filterSection = FILTER_SECTION::GROUP_USERS->value;
+        $filterText = FILTER_STRING_COMPARISON::EQUALS->value;
+        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                .self::GROUP_ID
+                ."?page={$page}"
+                ."&page_items={$pageItems}"
+                ."&filter_section={$filterSection}"
+                ."&filter_text={$filterText}"
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['section_filter_value', 'text_filter_value'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->section_filter_value);
+        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->text_filter_value);
+    }
+
+    /** @test */
+    public function itShouldFailUserSessionIsNotInTheGroup(): void
+    {
+        $page = 1;
+        $pageItems = 1;
+        $client = $this->getNewClientAuthenticatedAdmin();
+
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                .self::GROUP_ID
+                ."?page={$page}"
+                ."&page_items={$pageItems}"
         );
 
         $response = $client->getResponse();

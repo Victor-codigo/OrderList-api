@@ -47,6 +47,42 @@ use Symfony\Component\HttpFoundation\Response;
             example: 50,
             schema: new OA\Schema(type: 'int')
         ),
+
+        new OA\Parameter(
+            name: 'filter_section',
+            in: 'query',
+            required: false,
+            description: 'filter of the section',
+            example: 'group_section',
+            schema: new OA\Schema(type: 'string')
+        ),
+
+        new OA\Parameter(
+            name: 'filter_text',
+            in: 'query',
+            required: false,
+            description: 'filter of the user name',
+            example: 'equals',
+            schema: new OA\Schema(type: 'string')
+        ),
+
+        new OA\Parameter(
+            name: 'filter_value',
+            in: 'query',
+            required: false,
+            description: 'Value of the filter',
+            example: 'María',
+            schema: new OA\Schema(type: 'string')
+        ),
+
+        new OA\Parameter(
+            name: 'order_asc',
+            in: 'query',
+            required: false,
+            description: 'data returned order; true ascendent, false descendent',
+            example: true,
+            schema: new OA\Schema(type: 'boolean')
+        ),
     ],
     responses: [
         new OA\Response(
@@ -89,7 +125,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'status', type: 'string', example: 'ok'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<groups_id|group_not_found|page|offset, string>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|group_not_found|page|page_items|filter_section_and_text_not_empty|section_filter_value|text_filter_value|permissions, string>')),
                     ]
                 )
             )
@@ -122,18 +158,26 @@ class GroupGetUsersController extends AbstractController
     public function __invoke(GroupGetUsersRequestDto $request): JsonResponse
     {
         $groupUsers = $this->groupGetUsersUseCase->__invoke(
-            $this->createGroupGetUsersInputDto($request->groupId, $request->page, $request->pageItems)
+            $this->createGroupGetUsersInputDto(
+                $request->groupId,
+                $request->page,
+                $request->pageItems,
+                $request->filterSection,
+                $request->filterText,
+                $request->filterValue,
+                $request->orderAsc
+            )
         );
 
         return $this->createResponse($groupUsers);
     }
 
-    private function createGroupGetUsersInputDto(string|null $groupId, int $page, int $pageItems): GroupGetUsersInputDto
+    private function createGroupGetUsersInputDto(?string $groupId, int $page, int $pageItems, ?string $filterSection, ?string $filterText, ?string $filterValue, bool $orderAsc): GroupGetUsersInputDto
     {
         /** @var UserSharedSymfonyAdapter $userAdapter */
         $userAdapter = $this->security->getUser();
 
-        return new GroupGetUsersInputDto($userAdapter->getUser(), $groupId, $page, $pageItems);
+        return new GroupGetUsersInputDto($userAdapter->getUser(), $groupId, $page, $pageItems, $filterSection, $filterText, $filterValue, $orderAsc);
     }
 
     private function createResponse(GroupGetUsersOutputDto $groupUsers): JsonResponse
