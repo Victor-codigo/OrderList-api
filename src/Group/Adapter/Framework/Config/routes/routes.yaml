@@ -38,10 +38,10 @@ group_user_get_groups:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
-# GROUP USER GET GROUPS
+# GROUP GET USERS
 # -------------------------------------------------------------
 group_group_get_users:
-  path: /api/v{api_version}/groups/user/{group_id}
+  path: /api/v{api_version}/groups/user
   methods: GET
   controller: Group\Adapter\Http\Controller\GroupGetUsers\GroupGetUsersController
   requirements:

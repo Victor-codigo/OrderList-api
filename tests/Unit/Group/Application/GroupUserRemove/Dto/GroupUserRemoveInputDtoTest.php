@@ -76,7 +76,7 @@ class GroupUserRemoveInputDtoTest extends TestCase
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['users' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
+        $this->assertEquals(['users_id' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
     /** @test */
@@ -88,6 +88,6 @@ class GroupUserRemoveInputDtoTest extends TestCase
 
         $return = $object->validate($this->validator);
 
-        $this->assertEquals(['users' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
+        $this->assertEquals(['users_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 }

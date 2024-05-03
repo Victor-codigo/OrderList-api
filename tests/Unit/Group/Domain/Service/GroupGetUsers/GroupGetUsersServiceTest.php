@@ -6,7 +6,6 @@ namespace Test\Unit\Group\Domain\Service\GroupGetUsers;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
-use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -49,7 +48,7 @@ class GroupGetUsersServiceTest extends TestCase
     /**
      * @return User[]
      */
-    private function getUsers(): array
+    private function getUsers_old(): array
     {
         return [
             User::fromPrimitives(
@@ -73,6 +72,33 @@ class GroupGetUsersServiceTest extends TestCase
                 'user 3 name',
                 [USER_ROLES::USER]
             ),
+        ];
+    }
+
+    private function getUsers(): array
+    {
+        return [
+            [
+                'id' => 'user 1 id',
+                'name' => 'user 1 name',
+                'image' => 'user 1 image',
+                'created_on' => 'user 1 created on',
+                'admin' => false,
+            ],
+            [
+                'id' => 'user 2 id',
+                'name' => 'user 2 name',
+                'image' => 'user 2 image',
+                'created_on' => 'user 2 created on',
+                'admin' => true,
+            ],
+            [
+                'id' => 'user 3 id',
+                'name' => 'user 3 name',
+                'image' => 'user 3 image',
+                'created_on' => 'user 3 created on',
+                'admin' => false,
+            ],
         ];
     }
 
@@ -114,16 +140,16 @@ class GroupGetUsersServiceTest extends TestCase
 
         foreach ($users as $key => $user) {
             $this->assertArrayHasKey('id', $user);
-            $this->assertArrayHasKey('email', $user);
-            $this->assertArrayHasKey('password', $user);
             $this->assertArrayHasKey('name', $user);
-            $this->assertArrayHasKey('roles', $user);
+            $this->assertArrayHasKey('image', $user);
+            $this->assertArrayHasKey('created_on', $user);
+            $this->assertArrayHasKey('admin', $user);
 
-            $this->assertEquals($usersExpected[$key]->getId()->getvalue(), $user['id']);
-            $this->assertEquals($usersExpected[$key]->getEmail()->getValue(), $user['email']);
-            $this->assertEquals($usersExpected[$key]->getPassword()->getValue(), $user['password']);
-            $this->assertEquals($usersExpected[$key]->getName()->getValue(), $user['name']);
-            $this->assertEquals(array_map(fn (Rol $rol) => $rol->getValue()->value, $usersExpected[$key]->getRoles()->getValue()), $user['roles']);
+            $this->assertEquals($usersExpected[$key]['id'], $user['id']);
+            $this->assertEquals($usersExpected[$key]['name'], $user['name']);
+            $this->assertEquals($usersExpected[$key]['image'], $user['image']);
+            $this->assertEquals($usersExpected[$key]['created_on'], $user['created_on']);
+            $this->assertIsBool($user['admin']);
         }
     }
 
@@ -134,12 +160,12 @@ class GroupGetUsersServiceTest extends TestCase
     {
         return new ResponseDto(
             array_map(
-                fn (User $user) => [
-                    'id' => $user->getId()->getValue(),
-                    'email' => $user->getEmail()->getValue(),
-                    'password' => $user->getPassword()->getValue(),
-                    'name' => $user->getName()->getValue(),
-                    'roles' => array_map(fn (Rol $rol) => $rol->getvalue()->value, $user->getRoles()->getValue()),
+                fn (array $user) => [
+                    'id' => $user['id'],
+                    'name' => $user['name'],
+                    'image' => $user['image'],
+                    'created_on' => $user['created_on'],
+                    'admin' => $user['admin'],
                 ],
                 $data
             ),

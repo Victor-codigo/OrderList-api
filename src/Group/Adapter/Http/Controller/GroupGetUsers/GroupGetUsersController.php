@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Group\Adapter\Http\Controller\GroupGetUsers;
 
 use Common\Adapter\Security\UserSharedSymfonyAdapter;
+use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Config\AppConfig;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use Group\Adapter\Http\Controller\GroupGetUsers\Dto\GroupGetUsersRequestDto;
 use Group\Application\GroupGetUsers\Dto\GroupGetUsersInputDto;
-use Group\Application\GroupGetUsers\Dto\GroupGetUsersOutputDto;
 use Group\Application\GroupGetUsers\GroupGetUsersUseCase;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -180,7 +180,7 @@ class GroupGetUsersController extends AbstractController
         return new GroupGetUsersInputDto($userAdapter->getUser(), $groupId, $page, $pageItems, $filterSection, $filterText, $filterValue, $orderAsc);
     }
 
-    private function createResponse(GroupGetUsersOutputDto $groupUsers): JsonResponse
+    private function createResponse(ApplicationOutputInterface $groupUsers): JsonResponse
     {
         $responseDto = (new ResponseDto())
             ->setMessage('Users of the group')

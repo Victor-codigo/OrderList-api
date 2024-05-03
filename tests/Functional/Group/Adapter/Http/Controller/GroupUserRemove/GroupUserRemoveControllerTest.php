@@ -32,7 +32,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_ID,
-                'users' => self::GROUP_USERS_TO_REMOVE_ID,
+                'users_id' => self::GROUP_USERS_TO_REMOVE_ID,
             ])
         );
 
@@ -54,7 +54,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_ID,
-                'users' => array_merge(
+                'users_id' => array_merge(
                     array_fill(0, 50, self::GROUP_USERS_TO_REMOVE_ID[0]),
                     [self::GROUP_USERS_TO_REMOVE_ID[1]]
                 ),
@@ -79,7 +79,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => null,
-                'users' => self::GROUP_USERS_TO_REMOVE_ID,
+                'users_id' => self::GROUP_USERS_TO_REMOVE_ID,
             ])
         );
 
@@ -101,7 +101,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => 'not valid id',
-                'users' => self::GROUP_USERS_TO_REMOVE_ID,
+                'users_id' => self::GROUP_USERS_TO_REMOVE_ID,
             ])
         );
 
@@ -123,17 +123,17 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_ID,
-                'users' => null,
+                'users_id' => null,
             ])
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['users'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['users_id'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertEquals(['not_blank'], $responseContent->errors->users);
+        $this->assertEquals(['not_blank'], $responseContent->errors->users_id);
     }
 
     /** @test */
@@ -145,17 +145,17 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_ID,
-                'users' => array_merge(self::GROUP_USERS_TO_REMOVE_ID, ['id not valid']),
+                'users_id' => array_merge(self::GROUP_USERS_TO_REMOVE_ID, ['id not valid']),
             ])
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['users'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['users_id'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
-        $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->users);
+        $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->users_id);
     }
 
     /** @test */
@@ -167,7 +167,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_ID,
-                'users' => self::GROUP_USER_ADMIN_ID,
+                'users_id' => self::GROUP_USER_ADMIN_ID,
             ])
         );
 
@@ -187,7 +187,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_ID,
-                'users' => [self::GROUP_USER_ADMIN_ID],
+                'users_id' => [self::GROUP_USER_ADMIN_ID],
             ])
         );
 
@@ -209,7 +209,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_ID,
-                'users' => array_merge(self::GROUP_USERS_TO_REMOVE_ID, [self::GROUP_USER_ADMIN_ID]),
+                'users_id' => array_merge(self::GROUP_USERS_TO_REMOVE_ID, [self::GROUP_USER_ADMIN_ID]),
             ])
         );
 
@@ -231,7 +231,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => '5f911e7c-f839-4ae0-8f5e-109ad169d2b2',
-                'users' => array_merge(self::GROUP_USERS_TO_REMOVE_ID, [self::GROUP_USER_ADMIN_ID]),
+                'users_id' => array_merge(self::GROUP_USERS_TO_REMOVE_ID, [self::GROUP_USER_ADMIN_ID]),
             ])
         );
 
@@ -253,7 +253,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
             uri: self::ENDPOINT,
             content: json_encode([
                 'group_id' => self::GROUP_ID,
-                'users' => array_merge(self::GROUP_USERS_TO_REMOVE_ID, [self::GROUP_USER_ADMIN_ID]),
+                'users_id' => array_merge(self::GROUP_USERS_TO_REMOVE_ID, [self::GROUP_USER_ADMIN_ID]),
             ])
         );
 

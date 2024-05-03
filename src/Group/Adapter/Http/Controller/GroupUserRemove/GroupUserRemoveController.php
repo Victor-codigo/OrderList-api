@@ -16,7 +16,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Test\Unit\User\Adapter\Security\Jwt\Fixtures\UserAdapter;
 
 #[OA\Tag('Group')]
 #[OA\Delete(
@@ -29,7 +28,7 @@ use Test\Unit\User\Adapter\Security\Jwt\Fixtures\UserAdapter;
                 schema: new OA\Schema(
                     properties: [
                         new OA\Property(property: 'group_id', type: 'string', description: 'Group id', example: 'fdb242b4-bac8-4463-88d0-0941bb0beee0'),
-                        new OA\Property(property: 'users', type: 'array', items: new OA\Items(), description: 'Ids of users to remove from the group', example: ['fdb242b4-bac8-4463-88d0-0941bb0beee0', '2606508b-4516-45d6-93a6-c7cb416b7f3f']),
+                        new OA\Property(property: 'users_id', type: 'array', items: new OA\Items(), description: 'Ids of users to remove from the group', example: ['fdb242b4-bac8-4463-88d0-0941bb0beee0', '2606508b-4516-45d6-93a6-c7cb416b7f3f']),
                     ]
                 )
             ),
@@ -61,7 +60,7 @@ use Test\Unit\User\Adapter\Security\Jwt\Fixtures\UserAdapter;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|users|group_without_admin|group_empty|group_users_not_found, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|users_id|group_without_admin|group_empty|group_users_not_found, string|array>')),
                     ]
                 )
             )
@@ -100,9 +99,9 @@ class GroupUserRemoveController extends AbstractController
         return $this->createResponse($groupUsersRemoveOutput);
     }
 
-    private function createGroupUserRemoveInputDto(string|null $groupId, array|null $usersId): GroupUserRemoveInputDto
+    private function createGroupUserRemoveInputDto(?string $groupId, ?array $usersId): GroupUserRemoveInputDto
     {
-        /** @var UserAdapter $userAdapter */
+        /** @var UserShared $userAdapter */
         $userAdapter = $this->security->getUser();
 
         return new GroupUserRemoveInputDto($userAdapter->getUser(), $groupId, $usersId);

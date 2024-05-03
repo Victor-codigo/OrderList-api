@@ -15,7 +15,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/groups/user/';
+    private const ENDPOINT = '/api/v1/groups/user';
     private const METHOD = 'GET';
     private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const USER_EMAIL = 'email.already.active@host.com';
@@ -32,6 +32,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
             $this->assertTrue(property_exists($userData, 'name'));
             $this->assertTrue(property_exists($userData, 'image'));
             $this->assertTrue(property_exists($userData, 'admin'));
+            $this->assertTrue(property_exists($userData, 'created_on'));
         }
     }
 
@@ -44,8 +45,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
-                .self::GROUP_ID
-                ."?page={$page}"
+                .'?group_id='.self::GROUP_ID
+                ."&page={$page}"
                 ."&page_items={$pageItems}"
         );
 
@@ -68,8 +69,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
-                .self::GROUP_ID
-                ."?page={$page}"
+                .'?group_id='.self::GROUP_ID
+                ."&page={$page}"
         );
 
         $response = $client->getResponse();
@@ -91,8 +92,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
-                .self::GROUP_ID
-                ."?page_items={$pageItems}"
+                .'?group_id='.self::GROUP_ID
+                ."&page_items={$pageItems}"
         );
 
         $response = $client->getResponse();
@@ -114,7 +115,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
-                .self::GROUP_ID
+                .'?group_id='.self::GROUP_ID
         );
 
         $response = $client->getResponse();
@@ -136,8 +137,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
-                .self::GROUP_ID
-                ."?page={$page}"
+                .'?group_id='.self::GROUP_ID
+                ."&page={$page}"
                 ."&page_items={$pageItems}"
         );
 
@@ -164,8 +165,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
-                .self::GROUP_ID
-                ."?page={$page}"
+                .'?group_id='.self::GROUP_ID
+                ."&page={$page}"
                 ."&page_items={$pageItems}"
                 ."&filter_section={$filterSection}"
                 ."&filter_text={$filterText}"
@@ -196,8 +197,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
-                .self::GROUP_ID
-                ."?page={$page}"
+                .'?group_id='.self::GROUP_ID
+                ."&page={$page}"
                 ."&page_items={$pageItems}"
                 ."&filter_section={$filterSection}"
                 ."&filter_text={$filterText}"
@@ -229,8 +230,13 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         );
 
         $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_NOT_FOUND);
+        $this->assertResponseStructureIsOk($response, [], ['group_id'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
     /** @test */
@@ -242,8 +248,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
-                .'not_valid_id'
-                ."?page={$page}"
+                .'?group_id=not_valid_id'
+                ."&page={$page}"
                 ."&page_items={$pageItems}"
         );
 
@@ -267,7 +273,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
-                .self::GROUP_ID
+                .'?group_id='.self::GROUP_ID
                 ."?page={$page}"
                 ."&page_items={$pageItems}"
         );
@@ -291,7 +297,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
-                .self::GROUP_ID
+                .'?group_id='.self::GROUP_ID
                 ."?page={$page}"
                 ."&page_items={$pageItems}"
         );
@@ -315,8 +321,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
-                .self::GROUP_ID
-                ."?page={$page}"
+                .'?group_id='.self::GROUP_ID
+                ."&page={$page}"
                 ."&page_items={$pageItems}"
         );
 
@@ -341,8 +347,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
-                .self::GROUP_ID
-                ."?page={$page}"
+                .'?group_id='.self::GROUP_ID
+                ."&page={$page}"
                 ."&page_items={$pageItems}"
                 ."&filter_text={$filterText}"
                 ."&filter_value={$filterValue}"
@@ -369,7 +375,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
-                .self::GROUP_ID
+                .'?group_id='.self::GROUP_ID
                 ."?page={$page}"
                 ."&page_items={$pageItems}"
                 ."&filter_section={$filterSection}"
@@ -397,8 +403,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
-                .self::GROUP_ID
-                ."?page={$page}"
+                .'?group_id='.self::GROUP_ID
+                ."&page={$page}"
                 ."&page_items={$pageItems}"
                 ."&filter_section={$filterSection}"
                 ."&filter_text={$filterText}"
@@ -425,8 +431,8 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
-                .self::GROUP_ID
-                ."?page={$page}"
+                .'?group_id='.self::GROUP_ID
+                ."&page={$page}"
                 ."&page_items={$pageItems}"
         );
 

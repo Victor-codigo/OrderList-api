@@ -102,12 +102,28 @@ class GroupGetUsersService
                 fn (array &$userData) => $userData['admin'] = in_array($userData['id'], $usersAdminId)
             );
 
-            return $this->sortUsersByName($usersFilteredByNameData, $orderAsc);
+            $usersSortedByName = $this->sortUsersByName($usersFilteredByNameData, $orderAsc);
+
+            return $this->getUserData($usersSortedByName);
         } catch (DBNotFoundException $th) {
             throw $th;
         } catch (\Throwable $th) {
             throw new DomainInternalErrorException();
         }
+    }
+
+    private function getUserData(array $usersData): array
+    {
+        return array_map(
+            fn (array $userData) => [
+                'id' => $userData['id'],
+                'name' => $userData['name'],
+                'image' => $userData['image'],
+                'created_on' => $userData['created_on'] ?? null,
+                'admin' => $userData['admin'],
+            ],
+            $usersData
+        );
     }
 
     private function filterUsersByName(array $usersData, ?Filter $filterText): array
@@ -121,21 +137,29 @@ class GroupGetUsersService
         return match ($filterText->getFilter()->getValue()) {
             FILTER_STRING_COMPARISON::EQUALS => array_filter(
                 $usersData,
-                fn (array $userData) => mb_ereg("^{$pattern}$", $userData['name'])
+                fn (array $userData) => $this->matchStringCiAi("^{$pattern}$", $userData['name'])
             ),
             FILTER_STRING_COMPARISON::STARTS_WITH => array_filter(
                 $usersData,
-                fn (array $userData) => mb_ereg("^{$pattern}.*", $userData['name'])
+                fn (array $userData) => $this->matchStringCiAi("^{$pattern}.*", $userData['name'])
             ),
             FILTER_STRING_COMPARISON::ENDS_WITH => array_filter(
                 $usersData,
-                fn (array $userData) => mb_ereg(".*{$pattern}$", $userData['name'])
+                fn (array $userData) => $this->matchStringCiAi(".*{$pattern}$", $userData['name'])
             ),
             FILTER_STRING_COMPARISON::CONTAINS => array_filter(
                 $usersData,
-                fn (array $userData) => mb_ereg(".*{$pattern}.*", $userData['name'])
+                fn (array $userData) => $this->matchStringCiAi(".*{$pattern}.*", $userData['name'])
             ),
         };
+    }
+
+    private function matchStringCiAi(string $pattern, string $value): bool
+    {
+        $patternWithoutAccents = iconv('utf-8', 'ASCII//TRANSLIT', $pattern);
+        $valueWithoutAccents = iconv('utf-8', 'ASCII//TRANSLIT', $value);
+
+        return mb_eregi($patternWithoutAccents, $valueWithoutAccents);
     }
 
     private function sortUsersByName(array $usersData, bool $orderAsc): array

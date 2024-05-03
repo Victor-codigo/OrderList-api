@@ -23,7 +23,7 @@ class GroupGetUsersRequestDto implements RequestDtoInterface
 
     public function __construct(Request $request)
     {
-        $this->groupId = $request->attributes->get('group_id');
+        $this->groupId = $request->query->get('group_id');
         $this->page = $request->query->getInt('page', 1);
         $this->pageItems = $request->query->getInt('page_items', self::LIMIT_USERS_MAX);
         $this->filterSection = $request->query->get('filter_section');

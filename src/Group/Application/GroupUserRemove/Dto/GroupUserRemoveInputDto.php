@@ -20,7 +20,7 @@ class GroupUserRemoveInputDto implements ServiceInputDtoInterface
      */
     public readonly array $usersId;
 
-    public function __construct(UserShared $userSession, string|null $groupId, array|null $usersId)
+    public function __construct(UserShared $userSession, ?string $groupId, ?array $usersId)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
@@ -50,7 +50,7 @@ class GroupUserRemoveInputDto implements ServiceInputDtoInterface
         $usersIdErrorList = array_unique($usersIdErrorList, SORT_REGULAR);
 
         if (!empty($usersIdErrorList)) {
-            $errorList['users'] = $usersIdErrorList;
+            $errorList['users_id'] = $usersIdErrorList;
         }
 
         return $errorList;
