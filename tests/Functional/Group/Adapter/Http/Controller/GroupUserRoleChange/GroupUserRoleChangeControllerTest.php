@@ -31,7 +31,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldChangeGroupUsersRol(): void
+    public function itShouldChangeGroupUsersRolToAdmin(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -52,6 +52,33 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
         $this->assertSame('Users roles has been changed', $responseContent->message);
 
         foreach (self::USERS_ID as $userId) {
+            $this->assertContains($userId, (array) $responseContent->data->id);
+        }
+    }
+
+    /** @test */
+    public function itShouldChangeGroupUsersRolToUser(): void
+    {
+        $usersIdToChangeRol = [self::USERS_ID[1], self::USERS_ID[2]];
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'users' => $usersIdToChangeRol,
+                'admin' => false,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Users roles has been changed', $responseContent->message);
+
+        foreach ($usersIdToChangeRol as $userId) {
             $this->assertContains($userId, (array) $responseContent->data->id);
         }
     }

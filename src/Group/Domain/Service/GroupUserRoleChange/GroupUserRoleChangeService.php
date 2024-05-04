@@ -7,7 +7,6 @@ namespace Group\Domain\Service\GroupUserRoleChange;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
@@ -31,14 +30,15 @@ class GroupUserRoleChangeService
      */
     public function __invoke(GroupUserRoleChangeDto $input): array
     {
-        $groupUsers = $this->userGroupRepository->findGroupUsersOrFail($input->groupId);
+        $groupUsersPaginator = $this->userGroupRepository->findGroupUsersOrFail($input->groupId);
+        $groupUsers = iterator_to_array($groupUsersPaginator);
         $groupUsersValid = $this->getUsersValid($groupUsers, $input->usersId);
 
         if (empty($groupUsersValid)) {
             return [];
         }
 
-        $this->setUsersGroupRol($groupUsersValid, $input->rol);
+        $this->setUsersGroupRol($groupUsers, $groupUsersValid, $input->rol);
         $this->userGroupRepository->save($groupUsersValid);
 
         return array_map(
@@ -49,13 +49,14 @@ class GroupUserRoleChangeService
 
     /**
      * @param Identifier[] $usersId
+     * @param UserGroup[]  $groupUsers
      *
      * @return UserGroup[]
      */
-    private function getUsersValid(PaginatorInterface $groupUsers, array $usersId): array
+    private function getUsersValid(array $groupUsers, array $usersId): array
     {
         return array_values(array_filter(
-            iterator_to_array($groupUsers),
+            $groupUsers,
             fn (UserGroup $userGroup) => in_array($userGroup->getUserId(), $usersId)
         ));
     }
@@ -65,10 +66,10 @@ class GroupUserRoleChangeService
      *
      * @throws GroupWithoutAdminsException
      */
-    private function setUsersGroupRol(array $usersGroup, Rol $rol): void
+    private function setUsersGroupRol(array $usersGroup, array $usersToChangeRol, Rol $rol): void
     {
-        foreach ($usersGroup as $userGroup) {
-            $userGroup->setRoles(ValueObjectFactory::createRoles([$rol]));
+        foreach ($usersToChangeRol as $userGroupToChangeRol) {
+            $userGroupToChangeRol->setRoles(ValueObjectFactory::createRoles([$rol]));
         }
 
         $groupAdmins = array_filter(
