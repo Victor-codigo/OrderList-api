@@ -153,13 +153,109 @@ class GroupGetUsersControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldGetUserFilteredByName(): void
+    public function itShouldGetUserByNameFilterEquals(): void
     {
         $page = 1;
         $pageItems = 5;
         $filterSection = FILTER_SECTION::GROUP_USERS->value;
         $filterText = FILTER_STRING_COMPARISON::EQUALS->value;
         $filterValue = 'Ona Kilback';
+        $orderAsc = true;
+        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                .'?group_id='.self::GROUP_ID
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&filter_section={$filterSection}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}"
+                ."&order_asc={$orderAsc}"
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'users'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Users of the group', $responseContent->message);
+
+        $this->assertUsersAreOk($responseContent, 1, $page, 20);
+    }
+
+    /** @test */
+    public function itShouldGetUserByNameFilterStartsWith(): void
+    {
+        $page = 1;
+        $pageItems = 5;
+        $filterSection = FILTER_SECTION::GROUP_USERS->value;
+        $filterText = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $filterValue = 'Ona';
+        $orderAsc = true;
+        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                .'?group_id='.self::GROUP_ID
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&filter_section={$filterSection}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}"
+                ."&order_asc={$orderAsc}"
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'users'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Users of the group', $responseContent->message);
+
+        $this->assertUsersAreOk($responseContent, 1, $page, 20);
+    }
+
+    /** @test */
+    public function itShouldGetUserByNameFilterEndsWith(): void
+    {
+        $page = 1;
+        $pageItems = 5;
+        $filterSection = FILTER_SECTION::GROUP_USERS->value;
+        $filterText = FILTER_STRING_COMPARISON::ENDS_WITH->value;
+        $filterValue = 'Kilback';
+        $orderAsc = true;
+        $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                .'?group_id='.self::GROUP_ID
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&filter_section={$filterSection}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}"
+                ."&order_asc={$orderAsc}"
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'users'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Users of the group', $responseContent->message);
+
+        $this->assertUsersAreOk($responseContent, 1, $page, 20);
+    }
+
+    /** @test */
+    public function itShouldGetUserByNameFilterContains(): void
+    {
+        $page = 1;
+        $pageItems = 5;
+        $filterSection = FILTER_SECTION::GROUP_USERS->value;
+        $filterText = FILTER_STRING_COMPARISON::CONTAINS->value;
+        $filterValue = 'Kil';
         $orderAsc = true;
         $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $client->request(

@@ -311,6 +311,55 @@ class GroupGetUsersServiceTest extends TestCase
     }
 
     /** @test */
+    public function itShouldFailGettingGroupUsersUserNameNotFound(): void
+    {
+        $input = new GroupGetUsersDto(
+            ValueObjectFactory::createIdentifier('group id'),
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(10),
+            ValueObjectFactory::createFilter(
+                'filter_section',
+                ValueObjectFactory::createFilterSection(FILTER_SECTION::GROUP_USERS),
+                ValueObjectFactory::createNameWithSpaces('user not exists')
+            ),
+            ValueObjectFactory::createFilter(
+                'text_filter',
+                ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::EQUALS),
+                ValueObjectFactory::createNameWithSpaces('user not exists')
+            ),
+            true
+        );
+        $groupUsersData = $this->getGroupUsersData();
+        $usersData = $this->getUsers();
+        $usersResponseDto = $this->getUsersResponseDto($usersData, [], RESPONSE_STATUS::OK);
+
+        $this->userGroupRepository
+            ->expects($this->once())
+            ->method('findGroupUsersOrFail')
+            ->with($input->groupId)
+            ->willReturn($this->pagination);
+
+        $this->pagination
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with($input->page->getValue(), $input->pageItems->getValue());
+
+        $this->pagination
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($groupUsersData));
+
+        $this->moduleCommunication
+            ->expects($this->once())
+            ->method('__invoke')
+            ->with($this->isInstanceOf(ModuleCommunicationConfigDto::class))
+            ->willReturn($usersResponseDto);
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->__invoke($input);
+    }
+
+    /** @test */
     public function itShouldFailGetGroupUsersGroupHasNoUsers(): void
     {
         $input = new GroupGetUsersDto(
