@@ -14,6 +14,7 @@ use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserRemove\Dto\GroupUserRemoveInputDto;
 use Group\Application\GroupUserRemove\Exception\GroupUserRemoveGroupNotificationException;
+use Group\Application\GroupUserRemove\Exception\GroupUserRemovePermissionsException;
 use Group\Application\GroupUserRemove\GroupUserRemoveUseCase;
 use Group\Domain\Model\Group;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
@@ -79,6 +80,10 @@ class GroupUserRemoveUseCaseTest extends TestCase
             ->with($this->userSession, $groupId)
             ->willReturn(true);
 
+        $this->userSession
+            ->expects($this->never())
+            ->method('getId');
+
         $this->groupRepository
             ->expects($this->once())
             ->method('findGroupsByIdOrFail')
@@ -117,6 +122,163 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $return = $this->object->__invoke($input);
 
         $this->assertEquals($usersId, $return->usersId);
+    }
+
+    /** @test */
+    public function itShouldRemoveHimselfFromTheGroup(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier('group id');
+        $groupName = ValueObjectFactory::createNameWithSpaces('group name');
+        $usersId = [
+            ValueObjectFactory::createIdentifier('user id 1'),
+        ];
+        $input = new GroupUserRemoveInputDto($this->userSession, $groupId->getValue(), $usersId);
+
+        $this->validator
+            ->expects($this->any())
+            ->method('validateValueObjectArray')
+            ->willReturn([]);
+
+        $this->userHasGroupAdminGrantsService
+            ->expects($this->once())
+            ->method('__invoke')
+            ->with($this->userSession, $groupId)
+            ->willReturn(false);
+
+        $this->userSession
+            ->expects($this->once())
+            ->method('getId')
+            ->willReturn($usersId[0]);
+
+        $this->groupRepository
+            ->expects($this->once())
+            ->method('findGroupsByIdOrFail')
+            ->with([$groupId])
+            ->willReturn([$this->group]);
+
+        $this->groupUserRemoveService
+            ->expects($this->once())
+            ->method('__invoke')
+            ->with($this->callback(function (GroupUserRemoveDto $serviceInput) use ($groupId, $usersId) {
+                $this->assertEquals($groupId, $serviceInput->groupId);
+                $this->assertEquals($usersId, $serviceInput->usersId);
+
+                return true;
+            }))
+            ->willReturn($usersId);
+
+        $this->group
+            ->expects($this->once())
+            ->method('getName')
+            ->willReturn($groupName);
+
+        $this->moduleCommunication
+            ->expects($this->once())
+            ->method('__invoke')
+            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($usersId, $groupName) {
+                $this->assertEquals($usersId, $notificationDto->content['users_id']);
+                $this->assertEquals($groupName, $notificationDto->content['notification_data']['group_name']);
+                $this->assertEquals(self::SYSTEM_KEY, $notificationDto->content['system_key']);
+                $this->assertEquals(NOTIFICATION_TYPE::GROUP_USER_REMOVED->value, $notificationDto->content['type']);
+
+                return true;
+            }))
+            ->willReturn(new ResponseDto(status: RESPONSE_STATUS::OK));
+
+        $return = $this->object->__invoke($input);
+
+        $this->assertEquals($usersId, $return->usersId);
+    }
+
+    /** @test */
+    public function itShouldFailRemoveHimselfFromTheGroupManyUsersProvided(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier('group id');
+        $usersId = [
+            ValueObjectFactory::createIdentifier('user id 1'),
+            ValueObjectFactory::createIdentifier('user id 2'),
+        ];
+        $input = new GroupUserRemoveInputDto($this->userSession, $groupId->getValue(), $usersId);
+
+        $this->validator
+            ->expects($this->any())
+            ->method('validateValueObjectArray')
+            ->willReturn([]);
+
+        $this->userHasGroupAdminGrantsService
+            ->expects($this->once())
+            ->method('__invoke')
+            ->with($this->userSession, $groupId)
+            ->willReturn(false);
+
+        $this->userSession
+            ->expects($this->never())
+            ->method('getId');
+
+        $this->groupRepository
+            ->expects($this->never())
+            ->method('findGroupsByIdOrFail');
+
+        $this->groupUserRemoveService
+            ->expects($this->never())
+            ->method('__invoke');
+
+        $this->group
+            ->expects($this->never())
+            ->method('getName');
+
+        $this->moduleCommunication
+            ->expects($this->never())
+            ->method('__invoke');
+
+        $this->expectException(GroupUserRemovePermissionsException::class);
+        $this->object->__invoke($input);
+    }
+
+    /** @test */
+    public function itShouldFailRemoveHimselfFromTheGroupUserProvidedIsNotUserSession(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier('group id');
+        $usersId = [
+            ValueObjectFactory::createIdentifier('user id 1'),
+        ];
+        $userIdOther = ValueObjectFactory::createIdentifier('user id other 1');
+        $input = new GroupUserRemoveInputDto($this->userSession, $groupId->getValue(), $usersId);
+
+        $this->validator
+            ->expects($this->any())
+            ->method('validateValueObjectArray')
+            ->willReturn([]);
+
+        $this->userHasGroupAdminGrantsService
+            ->expects($this->once())
+            ->method('__invoke')
+            ->with($this->userSession, $groupId)
+            ->willReturn(false);
+
+        $this->userSession
+            ->expects($this->once())
+            ->method('getId')
+            ->willReturn($userIdOther);
+
+        $this->groupRepository
+            ->expects($this->never())
+            ->method('findGroupsByIdOrFail');
+
+        $this->groupUserRemoveService
+            ->expects($this->never())
+            ->method('__invoke');
+
+        $this->group
+            ->expects($this->never())
+            ->method('getName');
+
+        $this->moduleCommunication
+            ->expects($this->never())
+            ->method('__invoke');
+
+        $this->expectException(GroupUserRemovePermissionsException::class);
+        $this->object->__invoke($input);
     }
 
     /** @test */

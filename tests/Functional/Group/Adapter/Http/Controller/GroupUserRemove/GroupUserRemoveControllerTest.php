@@ -71,6 +71,28 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
     }
 
     /** @test */
+    public function itShouldAllowRemoveHimselfFromTheGroup(): void
+    {
+        $client = $this->getNewClientAuthenticatedAdmin();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'users_id' => [self::GROUP_USERS_TO_REMOVE_ID[2]],
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Users removed', $responseContent->message);
+        $this->assertEquals([self::GROUP_USERS_TO_REMOVE_ID[2]], $responseContent->data->id);
+    }
+
+    /** @test */
     public function itShouldFailGroupIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -242,6 +264,55 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Group or users not found', $responseContent->message);
         $this->assertEquals('Group or users not found', $responseContent->errors->group_users_not_found);
+    }
+
+    /** @test */
+    public function itShouldFailRemovingHimselfFromTheGroupManyUsersPassed(): void
+    {
+        $client = $this->getNewClientAuthenticatedAdmin();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'users_id' => [
+                    self::GROUP_USERS_TO_REMOVE_ID[1],
+                    self::GROUP_USERS_TO_REMOVE_ID[2],
+                ],
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['permissions'], Response::HTTP_UNAUTHORIZED);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Not permissions in this group', $responseContent->message);
+        $this->assertEquals('Not permissions in this group', $responseContent->errors->permissions);
+    }
+
+    /** @test */
+    public function itShouldFailRemovingHimselfFromTheGroupUserPassedIsNotUserSession(): void
+    {
+        $client = $this->getNewClientAuthenticatedAdmin();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'users_id' => [
+                    self::GROUP_USERS_TO_REMOVE_ID[1],
+                ],
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['permissions'], Response::HTTP_UNAUTHORIZED);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Not permissions in this group', $responseContent->message);
+        $this->assertEquals('Not permissions in this group', $responseContent->errors->permissions);
     }
 
     /** @test */

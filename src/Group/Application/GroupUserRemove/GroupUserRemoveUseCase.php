@@ -10,6 +10,7 @@ use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
+use Common\Domain\Security\UserShared;
 use Common\Domain\Service\Exception\DomainErrorException;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
@@ -81,7 +82,23 @@ class GroupUserRemoveUseCase extends ServiceBase
             throw ValueObjectValidationException::fromArray('Error', $errorList);
         }
 
-        if (!$this->userHasGroupAdminGrantsService->__invoke($input->userSession, $input->groupId)) {
+        $this->validateUserPrivileges($input->userSession, $input->groupId, $input->usersId);
+    }
+
+    /**
+     * @param Identifier[] $usersId
+     */
+    private function validateUserPrivileges(UserShared $userSession, Identifier $groupId, array $usersId): void
+    {
+        if ($this->userHasGroupAdminGrantsService->__invoke($userSession, $groupId)) {
+            return;
+        }
+
+        if (count($usersId) > 1) {
+            throw GroupUserRemovePermissionsException::fromMessage('Not permissions in this group');
+        }
+
+        if (!$userSession->getId()->equalTo(reset($usersId))) {
             throw GroupUserRemovePermissionsException::fromMessage('Not permissions in this group');
         }
     }
