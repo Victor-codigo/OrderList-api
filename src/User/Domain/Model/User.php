@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace User\Domain\Model;
 
 use Common\Domain\Event\EventRegisterTrait;

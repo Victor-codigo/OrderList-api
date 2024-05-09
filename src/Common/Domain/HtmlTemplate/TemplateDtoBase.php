@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Common\Domain\HtmlTemplate;
 
 use Common\Domain\Exception\InvalidArgumentException as InvalidArgumentDomainException;

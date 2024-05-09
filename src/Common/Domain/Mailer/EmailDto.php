@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Common\Domain\Mailer;
 
 use Common\Domain\Ports\HtmlTemplate\TemplateDtoInterface;

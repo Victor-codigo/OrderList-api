@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Common\Domain\Ports\HtmlTemplate;
 
 interface HtmlTemplateInterface
@@ -12,5 +14,5 @@ interface HtmlTemplateInterface
      * @throws TemplateCantBeFoundException
      * @throws TemplateRenderingException
      */
-    public function render(string $templatePath, TemplateDtoInterface $params = null): string;
+    public function render(string $templatePath, ?TemplateDtoInterface $params = null): string;
 }

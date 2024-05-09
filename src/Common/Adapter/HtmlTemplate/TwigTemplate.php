@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Common\Adapter\HtmlTemplate;
 
 use Common\Domain\HtmlTemplate\Exception\TemplateCantBeFoundException;
@@ -22,14 +24,11 @@ class TwigTemplate implements HtmlTemplateInterface
     }
 
     /**
-     * @param array $params key - name
-     *                      value - value
-     *
      * @throws TemplateSyntaxErrorException
      * @throws TemplateCantBeFoundException
      * @throws TemplateRenderingException
      */
-    public function render(string $templatePath, TemplateDtoInterface $data = null): string
+    public function render(string $templatePath, ?TemplateDtoInterface $data = null): string
     {
         try {
             $templateData = [];

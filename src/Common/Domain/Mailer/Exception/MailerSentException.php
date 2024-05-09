@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Common\Domain\Mailer\Exception;
 
 use Common\Domain\Exception\DomainException;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace User\Adapter\Templates\Email\EmailRegistrationConfirmation;
 
 use Common\Domain\HtmlTemplate\TemplateDtoBase;

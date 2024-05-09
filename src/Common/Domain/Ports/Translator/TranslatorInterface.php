@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Common\Domain\Ports\Translator;
 
 interface TranslatorInterface
@@ -7,7 +9,7 @@ interface TranslatorInterface
     /**
      * @throws InvalidArgumentException
      */
-    public function translate(string $id, array $params = [], string|null $domain = null, string|null $locale = null): string;
+    public function translate(string $id, array $params = [], ?string $domain = null, ?string $locale = null): string;
 
     public function setLocale(string $locale): void;
 

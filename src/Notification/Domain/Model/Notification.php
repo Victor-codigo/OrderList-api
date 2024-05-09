@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Notification\Domain\Model;
 
 use Common\Domain\Model\ValueObject\Array\NotificationData;
