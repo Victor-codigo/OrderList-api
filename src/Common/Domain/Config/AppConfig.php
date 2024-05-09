@@ -49,6 +49,11 @@ class AppConfig
     public const ENDPOINT_NOTIFICATION_REMOVE_MAX = 100;
 
     /**
+     * Maximum number of notifications can be removed per request.
+     */
+    public const ENDPOINT_NOTIFICATION_MARK_AS_VIEWED_MAX = 100;
+
+    /**
      * Maximum number of products can be removed per request.
      */
     public const ENDPOINT_PRODUCT_GET_PRODUCTS_MAX = 100;

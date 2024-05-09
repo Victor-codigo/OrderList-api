@@ -26,3 +26,13 @@ notification_get_data:
   controller: Notification\Adapter\Http\Controller\NotificationGetData\NotificationGetDataController
   requirements:
     api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# NOTIFICATION MARK AS VIEWED
+# -------------------------------------------------------------
+notification_mark_as_viewed:
+  path: /api/v{api_version}/notification/mark-as-viewed
+  methods: PATCH
+  controller: Notification\Adapter\Http\Controller\NotificationMarkAsViewed\NotificationMarkAsViewedController
+  requirements:
+    api_version: '\d+[.\d]?'
