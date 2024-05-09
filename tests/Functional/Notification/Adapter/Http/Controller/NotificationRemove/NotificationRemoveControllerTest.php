@@ -13,7 +13,7 @@ class NotificationRemoveControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/notification/';
+    private const ENDPOINT = '/api/v1/notification';
     private const METHOD = 'DELETE';
     private const NOTIFICATION_ID_1 = '84a08f7c-30a6-4bd5-8e5b-b2d49948e72c';
     private const NOTIFICATION_ID_2 = 'd75a3fb1-42aa-46c0-be4c-1147f0808d60';
@@ -40,7 +40,8 @@ class NotificationRemoveControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT.implode(',', $notificationsId),
+            uri: self::ENDPOINT
+                .'?notifications_id='.implode(',', $notificationsId),
             content: json_encode([])
         );
 
@@ -65,7 +66,8 @@ class NotificationRemoveControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT.implode(',', $notificationsId),
+            uri: self::ENDPOINT
+                .'?notifications_id='.implode(',', $notificationsId),
             content: json_encode([])
         );
 
@@ -90,7 +92,8 @@ class NotificationRemoveControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT.implode(',', $notificationsId),
+            uri: self::ENDPOINT
+                .'?notifications_id='.implode(',', $notificationsId),
             content: json_encode([])
         );
 
@@ -115,7 +118,8 @@ class NotificationRemoveControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT.implode(',', $notificationsId),
+            uri: self::ENDPOINT
+                .'?notifications_id='.implode(',', $notificationsId),
             content: json_encode([])
         );
 
@@ -135,7 +139,8 @@ class NotificationRemoveControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT.implode(',', $notificationsId),
+            uri: self::ENDPOINT
+                .'?notifications_id='.implode(',', $notificationsId),
             content: json_encode([])
         );
 
@@ -155,7 +160,8 @@ class NotificationRemoveControllerTest extends WebClientTestCase
         $client = $this->getNewClientNoAuthenticated();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT.implode(',', $notificationsId),
+            uri: self::ENDPOINT
+                .'?notifications_id='.implode(',', $notificationsId),
             content: json_encode([])
         );
 

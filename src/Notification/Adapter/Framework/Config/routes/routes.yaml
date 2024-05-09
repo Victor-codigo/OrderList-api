@@ -11,7 +11,7 @@ notification_create:
 # NOTIFICATION REMOVE
 # -------------------------------------------------------------
 notification_remove:
-  path: /api/v{api_version}/notification/{notifications_id}
+  path: /api/v{api_version}/notification
   methods: DELETE
   controller: Notification\Adapter\Http\Controller\NotificationRemove\NotificationRemoveController
   requirements:
