@@ -281,12 +281,8 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
         );
 
         $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['list_orders_not_found'], Response::HTTP_BAD_REQUEST);
-        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('List orders ids not found', $responseContent->message);
-        $this->assertEquals('List orders ids not found', $responseContent->errors->list_orders_not_found);
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
     /** @test */
