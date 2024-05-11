@@ -9,8 +9,6 @@ use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\Array\NotificationData;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use JsonException;
-use Throwable;
 
 class NotificationDataType extends TypeBase
 {
@@ -50,16 +48,16 @@ class NotificationDataType extends TypeBase
     public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
         if (null === $value) {
-            return new NotificationData(null);
+            return new NotificationData([]);
         }
 
         try {
             $notificationData = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
 
             return parent::convertToPHPValue($notificationData, $platform);
-        } catch (JsonException) {
+        } catch (\JsonException) {
             throw InvalidArgumentException::fromMessage('convertToPHPValue: data base notification data, is not a valid json string');
-        } catch (Throwable) {
+        } catch (\Throwable) {
             throw LogicException::fromMessage('convertToPHPValue: data base notification data, can\'t be converted to a '.NotificationData::class);
         }
     }

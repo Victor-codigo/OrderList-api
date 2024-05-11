@@ -71,21 +71,23 @@ class NotificationDataTypeTest extends TestCase
     }
 
     /** @test */
-    public function convertToPHPValueValueIsNullAndReturnNull(): void
+    public function convertToPHPValueValueIsNullAndReturnsArrayEmpty(): void
     {
         $return = $this->object->convertToPHPValue(null, $this->abstractPlatform);
 
         $this->assertInstanceOf(NotificationData::class, $return);
-        $this->assertNull($return->getValue());
+        $this->assertIsArray($return->getValue());
+        $this->assertEmpty($return->getValue());
     }
 
     /** @test */
-    public function convertToPHPValueIsArrayEmptyReturnsNull(): void
+    public function convertToPHPValueIsArrayEmptyReturnsArrayEmpty(): void
     {
         $return = $this->object->convertToPHPValue(null, $this->abstractPlatform);
 
         $this->assertInstanceOf(NotificationData::class, $return);
-        $this->assertNull($return->getValue());
+        $this->assertIsArray($return->getValue());
+        $this->assertEmpty($return->getValue());
     }
 
     /** @test */
