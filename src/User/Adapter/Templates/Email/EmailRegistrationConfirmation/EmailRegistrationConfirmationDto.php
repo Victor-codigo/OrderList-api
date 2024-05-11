@@ -14,7 +14,7 @@ final class EmailRegistrationConfirmationDto extends TemplateDtoBase
 
     private string $appName;
     private string $urlRegistrationConfirmation;
-    private string $emailUserRegistrationConfirmationExpire;
+    private int $emailUserRegistrationConfirmationExpire;
 
     private TemplateId $title;
     private TemplateId $welcome;
