@@ -8,7 +8,9 @@ services:
     autoconfigure: true
 
     bind:
+      $appProtocolAndDomain: "%common.app.protocolAndDomain%"
       $shopImagePath: "%shop.image.path%"
+      $shopPublicImagePath: "%shop.public.image.path%"
 
   # Adapter
   Shop\Adapter\:

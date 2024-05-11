@@ -28,6 +28,8 @@ class GroupGetUsersService
     public function __construct(
         private UserGroupRepositoryInterface $userGroupRepository,
         private ModuleCommunicationInterface $moduleCommunication,
+        private string $userPublicImagePath,
+        private string $appProtocolAndDomain
     ) {
     }
 
@@ -118,7 +120,9 @@ class GroupGetUsersService
             fn (array $userData) => [
                 'id' => $userData['id'],
                 'name' => $userData['name'],
-                'image' => $userData['image'],
+                'image' => null === $userData['image']
+                    ? null
+                    : $userData['image'],
                 'created_on' => $userData['created_on'] ?? null,
                 'admin' => $userData['admin'],
             ],

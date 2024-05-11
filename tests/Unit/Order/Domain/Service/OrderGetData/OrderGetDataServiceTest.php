@@ -35,6 +35,10 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         'c3734d1c-8b18-4bfd-95aa-06a261476d9d',
         'd351adba-c566-4fa5-bb5b-1a6f73b1d72f',
     ];
+    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const PRODUCT_PUBLIC_PATH = '/productPublicPath';
+    private const SHOP_PUBLIC_PATH = '/shopPublicPath';
+
     private OrderGetDataService $object;
     private MockObject|OrderRepositoryInterface $orderRepository;
     private MockObject|ProductShopRepositoryInterface $productShopRepository;
@@ -49,7 +53,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $this->productShopRepository = $this->createMock(ProductShopRepositoryInterface::class);
         $this->ordersPaginator = $this->createMock(PaginatorInterface::class);
         $this->productsShopsPaginator = $this->createMock(PaginatorInterface::class);
-        $this->object = new OrderGetDataService($this->orderRepository);
+        $this->object = new OrderGetDataService($this->orderRepository, self::PRODUCT_PUBLIC_PATH, self::SHOP_PUBLIC_PATH, self::APP_PROTOCOL_AND_DOMAIN);
     }
 
     /**
@@ -86,7 +90,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
                 '7992d525-38f3-4864-9518-22ecf4190cea',
                 'Product 1',
                 'Product 1 description',
-                null
+                'fileName.file'
             ),
             Product::fromPrimitives(
                 'c00ad57c-5c6b-4abd-9b14-9dfa7a196058',
@@ -96,6 +100,27 @@ class OrderGetDataServiceTest extends DataBaseTestCase
                 null
             ),
         ];
+    }
+
+    /**
+     * @return Product[]
+     */
+    private function getProductsExpected(): array
+    {
+        $products = $this->getProducts();
+
+        return array_map(
+            function (Product $product) {
+                if (!$product->getImage()->isNull()) {
+                    $product->setImage(
+                        ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::PRODUCT_PUBLIC_PATH.'/'.$product->getImage()->getValue())
+                    );
+                }
+
+                return $product;
+            },
+            $products
+        );
     }
 
     /**
@@ -109,7 +134,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
                 '7992d525-38f3-4864-9518-22ecf4190cea',
                 'Shop 1',
                 'Shop 1 description',
-                null
+                'fileName.file'
             ),
             Shop::fromPrimitives(
                 '94a8f497-5c8b-44b7-9e26-8efe36044f8c',
@@ -119,6 +144,27 @@ class OrderGetDataServiceTest extends DataBaseTestCase
                 null
             ),
         ];
+    }
+
+    /**
+     * @return Shop[]
+     */
+    private function getShopsExpected(): array
+    {
+        $shops = $this->getShops();
+
+        return array_map(
+            function (Shop $shop) {
+                if (!$shop->getImage()->isNull()) {
+                    $shop->setImage(
+                        ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::PRODUCT_PUBLIC_PATH.'/'.$shop->getImage()->getValue())
+                    );
+                }
+
+                return $shop;
+            },
+            $shops
+        );
     }
 
     /**
@@ -164,6 +210,33 @@ class OrderGetDataServiceTest extends DataBaseTestCase
                 $shops[1]
             ),
         ];
+    }
+
+    /**
+     * @return Order[]
+     */
+    private function getOrdersExpected(): array
+    {
+        $orders = $this->getOrders();
+
+        return array_map(
+            function (Order $order) {
+                if (!$order->getProduct()->getImage()->isNull()) {
+                    $order->getProduct()->setImage(
+                        ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::PRODUCT_PUBLIC_PATH.'/'.$order->getProduct()->getImage()->getValue())
+                    );
+                }
+
+                if (null !== $order->getShop() && !$order->getShop()->getImage()->isNull()) {
+                    $order->getShop()->setImage(
+                        ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::SHOP_PUBLIC_PATH.'/'.$order->getShop()->getImage()->getValue())
+                    );
+                }
+
+                return $order;
+            },
+            $orders
+        );
     }
 
     private function getProductsShops(): array
@@ -260,7 +333,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldGetOrdersDataByGroupIdAndOrdersId(): void
+    public function itShouldGetOrdersDataByGroupIdAndOrdersId22(): void
     {
         $input = new OrderGetDataDto(
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
@@ -272,7 +345,8 @@ class OrderGetDataServiceTest extends DataBaseTestCase
             null,
             null
         );
-        $ordersExpectedIndexProduct = $this->getOrders();
+        $ordersIndexProduct = $this->getOrders();
+        $ordersExpectedIndexProduct = $this->getOrdersExpected();
 
         $this->orderRepository
             ->expects($this->once())
@@ -308,7 +382,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $this->ordersPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($ordersExpectedIndexProduct));
+            ->willReturn(new \ArrayIterator($ordersIndexProduct));
 
         $return = $this->object->__invoke($input);
 
@@ -339,7 +413,8 @@ class OrderGetDataServiceTest extends DataBaseTestCase
                 $filterValue
             )
         );
-        $ordersExpectedIndexProduct = $this->getOrders();
+        $ordersIndexProduct = $this->getOrders();
+        $ordersExpectedIndexProduct = $this->getOrdersExpected();
 
         $this->orderRepository
             ->expects($this->never())
@@ -375,7 +450,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $this->ordersPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($ordersExpectedIndexProduct));
+            ->willReturn(new \ArrayIterator($ordersIndexProduct));
 
         $return = $this->object->__invoke($input);
 
@@ -406,7 +481,8 @@ class OrderGetDataServiceTest extends DataBaseTestCase
                 $filterValue
             )
         );
-        $ordersExpectedIndexProduct = $this->getOrders();
+        $ordersIndexProduct = $this->getOrders();
+        $ordersExpectedIndexProduct = $this->getOrdersExpected();
 
         $this->orderRepository
             ->expects($this->never())
@@ -442,7 +518,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $this->ordersPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($ordersExpectedIndexProduct));
+            ->willReturn(new \ArrayIterator($ordersIndexProduct));
 
         $return = $this->object->__invoke($input);
 
@@ -473,7 +549,8 @@ class OrderGetDataServiceTest extends DataBaseTestCase
                 $filterValue
             )
         );
-        $ordersExpectedIndexProduct = $this->getOrders();
+        $ordersIndexProduct = $this->getOrders();
+        $ordersExpectedIndexProduct = $this->getOrdersExpected();
 
         $this->orderRepository
             ->expects($this->never())
@@ -509,7 +586,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $this->ordersPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($ordersExpectedIndexProduct));
+            ->willReturn(new \ArrayIterator($ordersIndexProduct));
 
         $return = $this->object->__invoke($input);
 
@@ -540,7 +617,8 @@ class OrderGetDataServiceTest extends DataBaseTestCase
                 $filterValue
             )
         );
-        $ordersExpectedIndexProduct = $this->getOrders();
+        $ordersIndexProduct = $this->getOrders();
+        $ordersExpectedIndexProduct = $this->getOrdersExpected();
 
         $this->orderRepository
             ->expects($this->never())
@@ -576,7 +654,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $this->ordersPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($ordersExpectedIndexProduct));
+            ->willReturn(new \ArrayIterator($ordersIndexProduct));
 
         $return = $this->object->__invoke($input);
 
@@ -607,7 +685,8 @@ class OrderGetDataServiceTest extends DataBaseTestCase
                 $filterValue
             )
         );
-        $ordersExpectedIndexProduct = $this->getOrders();
+        $ordersIndexProduct = $this->getOrders();
+        $ordersExpectedIndexProduct = $this->getOrdersExpected();
 
         $this->orderRepository
             ->expects($this->never())
@@ -643,7 +722,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $this->ordersPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($ordersExpectedIndexProduct));
+            ->willReturn(new \ArrayIterator($ordersIndexProduct));
 
         $return = $this->object->__invoke($input);
 
@@ -673,7 +752,8 @@ class OrderGetDataServiceTest extends DataBaseTestCase
                 ValueObjectFactory::createNameWithSpaces(null)
             )
         );
-        $ordersExpectedIndexProduct = $this->getOrders();
+        $ordersIndexProduct = $this->getOrders();
+        $ordersExpectedIndexProduct = $this->getOrdersExpected();
 
         $this->orderRepository
             ->expects($this->never())
@@ -709,7 +789,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $this->ordersPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($ordersExpectedIndexProduct));
+            ->willReturn(new \ArrayIterator($ordersIndexProduct));
 
         $return = $this->object->__invoke($input);
 

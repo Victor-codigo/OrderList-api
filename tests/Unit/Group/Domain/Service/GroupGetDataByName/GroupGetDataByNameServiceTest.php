@@ -14,8 +14,9 @@ use Group\Domain\Service\GroupGetDataByName\GroupGetDataByNameService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class GroupGetDataByNameTest extends TestCase
+class GroupGetDataByNameServiceTest extends TestCase
 {
+    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
     private const GROUP_PUBLIC_PATH = 'group/public/path';
 
     private GroupGetDataByNameService $object;
@@ -26,7 +27,7 @@ class GroupGetDataByNameTest extends TestCase
         parent::setUp();
 
         $this->groupRepository = $this->createMock(GroupRepositoryInterface::class);
-        $this->object = new GroupGetDataByNameService($this->groupRepository, self::GROUP_PUBLIC_PATH);
+        $this->object = new GroupGetDataByNameService($this->groupRepository, self::GROUP_PUBLIC_PATH, self::APP_PROTOCOL_AND_DOMAIN);
     }
 
     private function getGroupData(): Group
@@ -55,7 +56,7 @@ class GroupGetDataByNameTest extends TestCase
         if (null === $groupDataExpected->getImage()->getValue()) {
             $this->assertEquals(null, $groupDataActual['image']);
         } else {
-            $this->assertEquals(self::GROUP_PUBLIC_PATH.'/'.$groupDataExpected->getImage()->getValue(), $groupDataActual['image']);
+            $this->assertEquals(self::APP_PROTOCOL_AND_DOMAIN.self::GROUP_PUBLIC_PATH.'/'.$groupDataExpected->getImage()->getValue(), $groupDataActual['image']);
         }
     }
 

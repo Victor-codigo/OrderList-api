@@ -13,7 +13,8 @@ class GroupGetDataByNameService
 {
     public function __construct(
         private GroupRepositoryInterface $groupRepository,
-        private string $groupPublicImagePath
+        private string $groupPublicImagePath,
+        private string $appProtocolAndDomain,
     ) {
     }
 
@@ -35,7 +36,7 @@ class GroupGetDataByNameService
             'description' => $group->getDescription()->getValue(),
             'image' => $group->getImage()->isNull()
                 ? null
-                : "{$this->groupPublicImagePath}/{$group->getImage()->getValue()}",
+                : "{$this->appProtocolAndDomain}{$this->groupPublicImagePath}/{$group->getImage()->getValue()}",
             'created_on' => $group->getCreatedOn()->format('Y-m-d H:i:s'),
         ];
     }

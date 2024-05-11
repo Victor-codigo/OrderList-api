@@ -27,7 +27,8 @@ use PHPUnit\Framework\TestCase;
 class GroupUserGetGroupsServiceTest extends TestCase
 {
     private const USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
-    private const PATH_TO_GROUP_IMAGE_PUBLIC_PATH = 'path/to/group/public/image/path';
+    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const PATH_TO_GROUP_IMAGE_PUBLIC_PATH = '/groupPublicImagePath';
 
     private GroupUserGetGroupsService $object;
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;
@@ -41,7 +42,7 @@ class GroupUserGetGroupsServiceTest extends TestCase
         $this->groupRepository = $this->createMock(GroupRepositoryInterface::class);
         $this->userGroupRepository = $this->createMock(UserGroupRepositoryInterface::class);
 
-        $this->groupGetDataService = new GroupGetDataService($this->groupRepository, self::PATH_TO_GROUP_IMAGE_PUBLIC_PATH);
+        $this->groupGetDataService = new GroupGetDataService($this->groupRepository, self::PATH_TO_GROUP_IMAGE_PUBLIC_PATH, self::APP_PROTOCOL_AND_DOMAIN);
         $this->object = new GroupUserGetGroupsService($this->userGroupRepository, $this->groupGetDataService);
     }
 

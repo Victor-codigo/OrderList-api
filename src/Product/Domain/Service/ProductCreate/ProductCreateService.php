@@ -97,6 +97,6 @@ class ProductCreateService
 
         $this->fileUpload->__invoke($image->getValue(), $this->productImagePath);
 
-        return new path($this->fileUpload->getFileName());
+        return new Path($this->fileUpload->getFileName());
     }
 }

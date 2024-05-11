@@ -32,6 +32,10 @@ class OrdersGroupGetDataServiceTest extends TestCase
     private const ORDER2_ID = '9a48ac5b-4571-43fd-ac80-28b08124ffb8';
     private const USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
+    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const PRODUCT_PUBLIC_PATH = '/productPublicPath';
+    private const SHOP_PUBLIC_PATH = '/shopPublicPath';
+
     private OrdersGroupGetDataService $object;
     private MockObject|OrderRepositoryInterface $orderRepository;
     private MockObject|PaginatorInterface $paginator;
@@ -42,7 +46,7 @@ class OrdersGroupGetDataServiceTest extends TestCase
 
         $this->orderRepository = $this->createMock(OrderRepositoryInterface::class);
         $this->paginator = $this->createMock(PaginatorInterface::class);
-        $this->object = new OrdersGroupGetDataService($this->orderRepository);
+        $this->object = new OrdersGroupGetDataService($this->orderRepository, self::PRODUCT_PUBLIC_PATH, self::SHOP_PUBLIC_PATH, self::APP_PROTOCOL_AND_DOMAIN);
     }
 
     private function assertOrderIsOk(Order $orderExpected, array $orderActual): void
@@ -128,7 +132,7 @@ class OrdersGroupGetDataServiceTest extends TestCase
             self::GROUP_ID,
             'Maluela',
             'Dolorem omnis accusamus iusto qui rerum eligendi. Ipsa omnis autem totam est vero qui. Voluptas quisquam cumque dolorem ut debitis recusandae veniam. Quam repellendus est sed enim doloremque eum eius. Ut est odio est. Voluptates dolorem et nisi voluptatum. Voluptas vitae deserunt mollitia consequuntur eos. Suscipit recusandae hic cumque voluptatem officia. Exercitationem quibusdam ea qui laudantium est non quis. Vero dicta et voluptas explicabo.',
-            null
+            'fileName.file'
         );
 
         $shop1 = Shop::fromPrimitives(
@@ -143,7 +147,7 @@ class OrdersGroupGetDataServiceTest extends TestCase
             self::GROUP_ID,
             'Shop name 1',
             'Quae suscipit ea sit est exercitationem aliquid nobis. Qui quidem aut non quia cupiditate. Neque sunt aperiam cum quis quia aspernatur quia. Ratione enim eos rerum et. Ducimus voluptatem nam porro et est molestiae. Rerum perspiciatis et distinctio totam culpa et quaerat temporibus. Suscipit occaecati rerum molestiae voluptas odio eos. Sunt labore quia asperiores laborum. Unde explicabo et aspernatur vel odio modi qui. Ipsa recusandae eveniet doloribus quisquam. Nam aut ut omnis qui possimus.',
-            null
+            'fileName.file'
         );
 
         $product1->setProductShop([
@@ -213,7 +217,24 @@ class OrdersGroupGetDataServiceTest extends TestCase
             ProductShop::fromPrimitives($order2->getProduct(), $order2->getShop(), 10.5, UNIT_MEASURE_TYPE::UNITS),
         ]);
 
-        return $ordersDataDb;
+        return array_map(
+            function (Order $order) {
+                if (!$order->getProduct()->getImage()->isNull()) {
+                    $order->getProduct()->setImage(
+                        ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::PRODUCT_PUBLIC_PATH.'/'.$order->getProduct()->getImage()->getValue())
+                    );
+                }
+
+                if (null !== $order->getShop() && !$order->getShop()->getImage()->isNull()) {
+                    $order->getShop()->setImage(
+                        ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::SHOP_PUBLIC_PATH.'/'.$order->getShop()->getImage()->getValue())
+                    );
+                }
+
+                return $order;
+            },
+            $ordersDataDb
+        );
     }
 
     /** @test */

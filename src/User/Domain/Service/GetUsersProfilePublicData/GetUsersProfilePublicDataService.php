@@ -12,13 +12,11 @@ use User\Domain\Service\GetUsersProfilePublicData\Dto\GetUsersProfilePublicDataO
 
 class GetUsersProfilePublicDataService
 {
-    private ProfileRepositoryInterface $profileRepository;
-    private string $userPublicImagePath;
-
-    public function __construct(ProfileRepositoryInterface $profileRepository, string $userPublicImagePath)
-    {
-        $this->profileRepository = $profileRepository;
-        $this->userPublicImagePath = $userPublicImagePath;
+    public function __construct(
+        private ProfileRepositoryInterface $profileRepository,
+        private string $userPublicImagePath,
+        private string $appProtocolAndDomain
+    ) {
     }
 
     public function __invoke(GetUsersProfilePublicDataDto $usersDto, SCOPE $scope): GetUsersProfilePublicDataOutputDto
@@ -39,16 +37,15 @@ class GetUsersProfilePublicDataService
             $image = $profile->getImage()->getValue();
             $profilesData[] = [
                 'id' => $profile->getId(),
-                'image' => null === $image ? null : ValueObjectFactory::createPath($this->userPublicImagePath.'/'.$image),
+                'image' => null === $image
+                    ? null
+                    : ValueObjectFactory::createPath("{$this->appProtocolAndDomain}{$this->userPublicImagePath}/{$image}"),
             ];
         }
 
         return $profilesData;
     }
 
-    /**
-     * @param Profiles[] $users
-     */
     private function getProfilesPrivateData(array $profiles): array
     {
         $profileData = [];
@@ -56,7 +53,9 @@ class GetUsersProfilePublicDataService
             $image = $profile->getImage()->getValue();
             $profileData[] = [
                 'id' => $profile->getId(),
-                'image' => null === $image ? null : ValueObjectFactory::createPath($this->userPublicImagePath.'/'.$image),
+                'image' => null === $image
+                    ? null
+                    : ValueObjectFactory::createPath("{$this->appProtocolAndDomain}{$this->userPublicImagePath}/{$image}"),
             ];
         }
 

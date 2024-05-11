@@ -15,7 +15,6 @@ use Common\Domain\Response\ResponseDto;
 use Common\Domain\Validation\Filter\FILTER_SECTION;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\Group\GROUP_ROLES;
-use Common\Domain\Validation\User\USER_ROLES;
 use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
@@ -27,6 +26,9 @@ use User\Domain\Model\User;
 
 class GroupGetUsersServiceTest extends TestCase
 {
+    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const USER_PUBLIC_IMAGE_PATH = '/userPublicImagePath';
+
     private GroupGetUsersService $object;
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
@@ -41,38 +43,10 @@ class GroupGetUsersServiceTest extends TestCase
         $this->pagination = $this->createMock(PaginatorInterface::class);
         $this->object = new GroupGetUsersService(
             $this->userGroupRepository,
-            $this->moduleCommunication
+            $this->moduleCommunication,
+            self::USER_PUBLIC_IMAGE_PATH,
+            self::APP_PROTOCOL_AND_DOMAIN,
         );
-    }
-
-    /**
-     * @return User[]
-     */
-    private function getUsers_old(): array
-    {
-        return [
-            User::fromPrimitives(
-                'user 1 id',
-                'user 1 email',
-                'user 1 password',
-                'user 1 name',
-                [USER_ROLES::USER]
-            ),
-            User::fromPrimitives(
-                'user 2 id',
-                'user 2 email',
-                'user 2 password',
-                'user 2 name',
-                [USER_ROLES::USER]
-            ),
-            User::fromPrimitives(
-                'user 3 id',
-                'user 3 email',
-                'user 3 password',
-                'user 3 name',
-                [USER_ROLES::USER]
-            ),
-        ];
     }
 
     private function getUsers(): array
@@ -95,11 +69,27 @@ class GroupGetUsersServiceTest extends TestCase
             [
                 'id' => 'user 3 id',
                 'name' => 'user 3 name',
-                'image' => 'user 3 image',
+                'image' => null,
                 'created_on' => 'user 3 created on',
                 'admin' => false,
             ],
         ];
+    }
+
+    private function getUsersExpected(): array
+    {
+        $users = $this->getUsers();
+
+        return array_map(
+            function (array $user) {
+                if (null !== $user['image']) {
+                    $user['image'] = self::APP_PROTOCOL_AND_DOMAIN.self::USER_PUBLIC_IMAGE_PATH.'/'.$user['image'];
+                }
+
+                return $user;
+            },
+            $users
+        );
     }
 
     /**
@@ -163,7 +153,9 @@ class GroupGetUsersServiceTest extends TestCase
                 fn (array $user) => [
                     'id' => $user['id'],
                     'name' => $user['name'],
-                    'image' => $user['image'],
+                    'image' => null === $user['image']
+                        ? null
+                        : self::APP_PROTOCOL_AND_DOMAIN.self::USER_PUBLIC_IMAGE_PATH.'/'.$user['image'],
                     'created_on' => $user['created_on'],
                     'admin' => $user['admin'],
                 ],
@@ -177,7 +169,7 @@ class GroupGetUsersServiceTest extends TestCase
 
     private function getGroupUsersDataProvider(): iterable
     {
-        $usersData = $this->getUsers();
+        $usersExpectedData = $this->getUsersExpected();
 
         yield [
             new GroupGetUsersDto(
@@ -196,7 +188,7 @@ class GroupGetUsersServiceTest extends TestCase
                 ),
                 true
             ),
-            [$usersData[0]],
+            [$usersExpectedData[0]],
         ];
 
         yield [
@@ -216,7 +208,7 @@ class GroupGetUsersServiceTest extends TestCase
                 ),
                 false
             ),
-            array_reverse($usersData),
+            array_reverse($usersExpectedData),
         ];
 
         yield [
@@ -236,7 +228,7 @@ class GroupGetUsersServiceTest extends TestCase
                 ),
                 true
             ),
-            $usersData,
+            $usersExpectedData,
         ];
 
         yield [
@@ -256,7 +248,7 @@ class GroupGetUsersServiceTest extends TestCase
                 ),
                 true
             ),
-            [$usersData[0]],
+            [$usersExpectedData[0]],
         ];
 
         yield [
@@ -268,7 +260,7 @@ class GroupGetUsersServiceTest extends TestCase
                 null,
                 true
             ),
-            $usersData,
+            $usersExpectedData,
         ];
     }
 

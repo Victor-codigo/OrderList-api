@@ -24,6 +24,9 @@ class OrderGetDataService
 
     public function __construct(
         private OrderRepositoryInterface $orderRepository,
+        private string $productPublicImagePath,
+        private string $shopPublicImagePath,
+        private string $appProtocolAndDomain
     ) {
     }
 
@@ -168,7 +171,9 @@ class OrderGetDataService
                 'id' => $order->getProduct()->getId()->getValue(),
                 'name' => $order->getProduct()->getName()->getValue(),
                 'description' => $order->getProduct()->getDescription()->getValue(),
-                'image' => $order->getProduct()->getImage()->getValue(),
+                'image' => $order->getProduct()->getImage()->isNull()
+                    ? null
+                    : "{$this->appProtocolAndDomain}{$this->productPublicImagePath}/{$order->getProduct()->getImage()->getValue()}",
                 'created_on' => $order->getProduct()->getCreatedOn()->format('Y-m-d H:i:s'),
             ],
             'shop' => $this->getProductShopData($order),
@@ -189,7 +194,9 @@ class OrderGetDataService
             'id' => $order->getShop()->getId()->getValue(),
             'name' => $order->getShop()->getName()->getValue(),
             'description' => $order->getShop()->getDescription()->getValue(),
-            'image' => $order->getShop()->getImage()->getValue(),
+            'image' => $order->getShop()->getImage()->isNull()
+                ? null
+                : "{$this->appProtocolAndDomain}{$this->shopPublicImagePath}/{$order->getShop()->getImage()->getValue()}",
             'created_on' => $order->getShop()->getCreatedOn()->format('Y-m-d H:i:s'),
         ];
     }

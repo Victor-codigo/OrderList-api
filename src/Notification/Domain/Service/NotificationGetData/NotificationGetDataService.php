@@ -55,7 +55,7 @@ class NotificationGetDataService
     /**
      * @throws LogicException
      */
-    private function translateNotification(language $lang, NotificationType $notificationType, NotificationData $notificationData): string
+    private function translateNotification(Language $lang, NotificationType $notificationType, NotificationData $notificationData): string
     {
         $translateKey = match ($notificationType->getValue()) {
             NOTIFICATION_TYPE::GROUP_CREATED => 'notification.group.created',

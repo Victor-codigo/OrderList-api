@@ -23,6 +23,9 @@ imports:
 parameters:
     common.environment.app_env: "%env(string:APP_ENV)%"
     common.app_name: "%env(string:APP_NAME)%"
+    common.app.protocol: "%env(string:PROTOCOL)%"
+    common.app.domain: "%env(string:DOMAIN_NAME)%"
+    common.app.protocolAndDomain: "%env(string:PROTOCOL)%://%env(string:DOMAIN_NAME)%"
     common.system.key: "%env(string:SYSTEM_KEY)%"
     user.jwt_key: "%env(file:resolve:JWT_SECRET_KEY)%"
 
@@ -33,6 +36,9 @@ services:
 
         bind:
             $appEnv: "%common.environment.app_env%"
+            $appProtocol: "%common.app.protocol%"
+            $appDomain: "%common.app.domain%"
+            $appProtocolAndDomain: "%common.app.protocolAndDomain%"
 
     # Adapter
     Common\Adapter\:

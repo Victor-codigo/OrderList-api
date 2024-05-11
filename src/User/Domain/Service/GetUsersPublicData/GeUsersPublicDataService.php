@@ -9,6 +9,7 @@ use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
+use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Struct\SCOPE;
 use Common\Domain\Validation\User\USER_ROLES;
 use User\Domain\Model\User;
@@ -18,11 +19,11 @@ use User\Domain\Service\GetUsersPublicData\Dto\GetUsersPublicDataOutputDto;
 
 class GeUsersPublicDataService
 {
-    private UserRepositoryInterface $userRepository;
-
-    public function __construct(UserRepositoryInterface $userRepository)
-    {
-        $this->userRepository = $userRepository;
+    public function __construct(
+        private UserRepositoryInterface $userRepository,
+        private string $userPublicImagePath,
+        private string $appProtocolAndDomain
+    ) {
     }
 
     /**
@@ -127,7 +128,9 @@ class GeUsersPublicDataService
                 'email' => $user->getEmail(),
                 'name' => $user->getName(),
                 'roles' => $user->getRoles(),
-                'image' => $user->getImage(),
+                'image' => $user->getImage()->isNull()
+                    ? ValueObjectFactory::createPath(null)
+                    : ValueObjectFactory::createPath("{$this->appProtocolAndDomain}{$this->userPublicImagePath}/{$user->getImage()->getValue()}"),
                 'created_on' => $user->getCreatedOn(),
             ];
         }

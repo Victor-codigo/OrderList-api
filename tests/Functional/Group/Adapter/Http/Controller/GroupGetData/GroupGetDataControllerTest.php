@@ -42,13 +42,14 @@ class GroupGetDataControllerTest extends WebClientTestCase
     {
         $client = $this->getNewClientAuthenticatedUser();
         $patImageGroup = static::getContainer()->getParameter('group.public.image.path');
+        $appProtocolAndDomain = static::getContainer()->getParameter('common.app.protocolAndDomain');
 
         $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
-        $groupsImage = array_map(fn (Group $group) => "{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
+        $groupsImage = array_map(fn (Group $group) => "{$appProtocolAndDomain}{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
 
         $client->request(
             method: self::METHOD,
@@ -84,13 +85,14 @@ class GroupGetDataControllerTest extends WebClientTestCase
     {
         $client = $this->getNewClientAuthenticatedUser();
         $patImageGroup = static::getContainer()->getParameter('group.public.image.path');
+        $appProtocolAndDomain = static::getContainer()->getParameter('common.app.protocolAndDomain');
 
         $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
-        $groupsImage = array_map(fn (Group $group) => "{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
+        $groupsImage = array_map(fn (Group $group) => "{$appProtocolAndDomain}{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
         $groups50Id = array_merge(array_fill(0, 47, $groupsId[0]), $groupsId);
 
         $client->request(
@@ -127,13 +129,14 @@ class GroupGetDataControllerTest extends WebClientTestCase
     {
         $client = $this->getNewClientAuthenticatedUser();
         $patImageGroup = static::getContainer()->getParameter('group.public.image.path');
+        $appProtocolAndDomain = static::getContainer()->getParameter('common.app.protocolAndDomain');
 
         $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
-        $groupsImage = array_map(fn (Group $group) => "{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
+        $groupsImage = array_map(fn (Group $group) => "{$appProtocolAndDomain}{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
         $groups50Id = array_merge(array_fill(0, 48, $groupsId[0]), $groupsId);
 
         $client->request(
@@ -170,13 +173,14 @@ class GroupGetDataControllerTest extends WebClientTestCase
     {
         $client = $this->getNewClientAuthenticatedAdmin();
         $patImageGroup = static::getContainer()->getParameter('group.public.image.path');
+        $appProtocolAndDomain = static::getContainer()->getParameter('common.app.protocolAndDomain');
 
         $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
-        $groupsImage = array_map(fn (Group $group) => "{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
+        $groupsImage = array_map(fn (Group $group) => "{$appProtocolAndDomain}{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
 
         $client->request(
             method: self::METHOD,

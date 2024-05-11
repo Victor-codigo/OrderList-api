@@ -46,6 +46,10 @@ Common\Domain\Model\ValueObject\String\Description:
       value: null
 
 Common\Domain\Model\ValueObject\String\Path:
+  shop_image_with_image:
+    __construct:
+      value: "fileName.file"
+
   shop_image_null:
     __construct:
       value: null
@@ -57,7 +61,7 @@ Shop\Domain\Model\Shop:
       groupId: "@product_group_id_group_exists"
       name: "@shop_name"
       description: "@shop_description"
-      image: "@shop_image_null"
+      image: "@shop_image_with_image"
 
   entity-shop_2:
     __construct:

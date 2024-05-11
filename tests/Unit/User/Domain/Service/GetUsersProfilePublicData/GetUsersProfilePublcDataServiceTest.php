@@ -17,7 +17,8 @@ use User\Domain\Service\GetUsersProfilePublicData\GetUsersProfilePublicDataServi
 
 class GetUsersProfilePublcDataServiceTest extends TestCase
 {
-    private const URL_IMAGE_PUBLIC_PATH = 'URL_PUBLIC_IMAGE';
+    private const USER_PUBLIC_IMAGE_PATH = '/userPublicImagePath';
+    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
 
     private GetUsersProfilePublicDataService $object;
     private MockObject|ProfileRepositoryInterface $profileRepository;
@@ -27,7 +28,7 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
         parent::setUp();
 
         $this->profileRepository = $this->createMock(ProfileRepositoryInterface::class);
-        $this->object = new GetUsersProfilePublicDataService($this->profileRepository, self::URL_IMAGE_PUBLIC_PATH);
+        $this->object = new GetUsersProfilePublicDataService($this->profileRepository, self::USER_PUBLIC_IMAGE_PATH, self::APP_PROTOCOL_AND_DOMAIN, self::APP_PROTOCOL_AND_DOMAIN);
     }
 
     private function getProfilesId(): array
@@ -42,28 +43,44 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
     private function getProfiles(): array
     {
         return [
-            new Profile(ValueObjectFactory::createIdentifier('0b13e52d-b058-32fb-8507-10dec634a07c'), ValueObjectFactory::createPath('path\\to\\file')),
-            new Profile(ValueObjectFactory::createIdentifier('0b17ca3e-490b-3ddb-aa78-35b4ce668dc0'), ValueObjectFactory::createPath('path\\to\\file')),
-            new Profile(ValueObjectFactory::createIdentifier('1befdbe2-9c14-42f0-850f-63e061e33b8f'), ValueObjectFactory::createPath('path\\to\\file')),
+            new Profile(ValueObjectFactory::createIdentifier('0b13e52d-b058-32fb-8507-10dec634a07c'), ValueObjectFactory::createPath('fileName.file')),
+            new Profile(ValueObjectFactory::createIdentifier('0b17ca3e-490b-3ddb-aa78-35b4ce668dc0'), ValueObjectFactory::createPath(null)),
+            new Profile(ValueObjectFactory::createIdentifier('1befdbe2-9c14-42f0-850f-63e061e33b8f'), ValueObjectFactory::createPath(null)),
         ];
+    }
+
+    private function getProfilesExpected(): array
+    {
+        $usersProfile = $this->getProfiles();
+
+        return array_map(
+            function (Profile $userProfile) {
+                if (!$userProfile->getImage()->isNull()) {
+                    $userProfile->setImage(
+                        ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::USER_PUBLIC_IMAGE_PATH.'/'.$userProfile->getImage()->getValue())
+                    );
+                }
+
+                return $userProfile;
+            },
+            $usersProfile
+        );
     }
 
     /** @test */
     public function itShouldGetTheUsersProfilePublicData(): void
     {
         $profilesId = $this->getProfilesId();
-        $expectedProfiles = $this->getProfiles();
+        $profiles = $this->getProfiles();
+        $expectedProfiles = $this->getProfilesExpected();
         $expectedProfileIdentifiers = array_map(fn (Profile $profile) => $profile->getId(), $expectedProfiles);
-        $expectedProfileImages = array_map(
-            fn (Profile $profile) => ValueObjectFactory::createPath(self::URL_IMAGE_PUBLIC_PATH.'/'.$profile->getImage()->getValue()),
-            $expectedProfiles
-        );
+        $expectedProfileImages = array_map(fn (Profile $profile) => $profile->getImage()->getValue(), $expectedProfiles);
 
         $this->profileRepository
             ->expects($this->once())
             ->method('findProfilesOrFail')
             ->with($profilesId)
-            ->willReturn($expectedProfiles);
+            ->willReturn($profiles);
 
         $profilesDto = new GetUsersProfilePublicDataDto($profilesId);
         $return = $this->object->__invoke($profilesDto, SCOPE::PUBLIC);
@@ -73,8 +90,8 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
         foreach ($return->profileData as $profile) {
             $this->assertArrayHasKey('id', $profile);
             $this->assertArrayHasKey('image', $profile);
-            $this->assertContains($profile['id'], $expectedProfileIdentifiers);
-            $this->assertContainsEquals($profile['image'], $expectedProfileImages);
+            $this->assertContainsEquals($profile['id'], $expectedProfileIdentifiers);
+            $this->assertContainsEquals($profile['image']?->getValue(), $expectedProfileImages);
         }
     }
 
@@ -82,18 +99,16 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
     public function itShouldGetTheUsersProfilePrivateData(): void
     {
         $profilesId = $this->getProfilesId();
-        $expectedProfiles = $this->getProfiles();
+        $profiles = $this->getProfiles();
+        $expectedProfiles = $this->getProfilesExpected();
         $expectedProfileIdentifiers = array_map(fn (Profile $profile) => $profile->getId(), $expectedProfiles);
-        $expectedProfileImages = array_map(
-            fn (Profile $profile) => ValueObjectFactory::createPath(self::URL_IMAGE_PUBLIC_PATH.'/'.$profile->getImage()->getValue()),
-            $expectedProfiles
-        );
+        $expectedProfileImages = array_map(fn (Profile $profile) => $profile->getImage()->getValue(), $expectedProfiles);
 
         $this->profileRepository
             ->expects($this->once())
             ->method('findProfilesOrFail')
             ->with($profilesId)
-            ->willReturn($expectedProfiles);
+            ->willReturn($profiles);
 
         $profilesDto = new GetUsersProfilePublicDataDto($profilesId);
         $return = $this->object->__invoke($profilesDto, SCOPE::PRIVATE);
@@ -103,12 +118,12 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
         foreach ($return->profileData as $profile) {
             $this->assertArrayHasKey('id', $profile);
             $this->assertArrayHasKey('image', $profile);
-            $this->assertContains($profile['id'], $expectedProfileIdentifiers);
-            $this->assertContainsEquals($profile['image'], $expectedProfileImages);
+            $this->assertContainsEquals($profile['id'], $expectedProfileIdentifiers);
+            $this->assertContainsEquals($profile['image']?->getValue(), $expectedProfileImages);
         }
     }
 
-    /* @test */
+    /** @test */
     public function itShouldFailNoUsersProfileFound(): void
     {
         $this->expectException(DBNotFoundException::class);

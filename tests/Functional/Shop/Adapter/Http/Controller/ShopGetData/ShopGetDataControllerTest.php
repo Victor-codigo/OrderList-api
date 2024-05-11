@@ -56,13 +56,16 @@ class ShopGetDataControllerTest extends WebClientTestCase
 
     private function getShops(): array
     {
+        $appProtocolAndDomain = static::getContainer()->getParameter('common.app.protocolAndDomain');
+        $shopPublicImagePath = static::getContainer()->getParameter('shop.public.image.path');
+
         return [
             [
                 'id' => 'e6c1d350-f010-403c-a2d4-3865c14630ec',
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Shop name 1',
                 'description' => 'Dolorem omnis accusamus iusto qui rerum eligendi. Ipsa omnis autem totam est vero qui. Voluptas quisquam cumque dolorem ut debitis recusandae veniam. Quam repellendus est sed enim doloremque eum eius. Ut est odio est. Voluptates dolorem et nisi voluptatum. Voluptas vitae deserunt mollitia consequuntur eos. Suscipit recusandae hic cumque voluptatem officia. Exercitationem quibusdam ea qui laudantium est non quis. Vero dicta et voluptas explicabo.',
-                'image' => null,
+                'image' => "{$appProtocolAndDomain}{$shopPublicImagePath}/fileName.file",
                 'created_on' => '',
             ],
             [
@@ -99,9 +102,9 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $orderAsc = true;
         $page = 1;
         $pageItems = 100;
-        $shopDataExpected = $this->getShops();
 
         $client = $this->getNewClientAuthenticatedUser();
+        $shopDataExpected = $this->getShops();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -129,9 +132,9 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $orderAsc = false;
         $page = 1;
         $pageItems = 100;
-        $shopDataExpected = $this->getShops();
 
         $client = $this->getNewClientAuthenticatedUser();
+        $shopDataExpected = $this->getShops();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -160,9 +163,9 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $orderAsc = true;
         $page = 1;
         $pageItems = 100;
-        $shopDataExpected = $this->getShops();
 
         $client = $this->getNewClientAuthenticatedUser();
+        $shopDataExpected = $this->getShops();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -192,9 +195,9 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $orderArc = true;
         $page = 1;
         $pageItems = 100;
-        $shopDataExpected = $this->getShops();
 
         $client = $this->getNewClientAuthenticatedUser();
+        $shopDataExpected = $this->getShops();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -230,9 +233,9 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $orderArc = false;
         $page = 1;
         $pageItems = 100;
-        $shopDataExpected = $this->getShops();
 
         $client = $this->getNewClientAuthenticatedUser();
+        $shopDataExpected = $this->getShops();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -268,9 +271,8 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $page = 1;
         $pageItems = 100;
 
-        $shopDataExpected = $this->getShops();
-
         $client = $this->getNewClientAuthenticatedUser();
+        $shopDataExpected = $this->getShops();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -301,9 +303,8 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $page = 1;
         $pageItems = 100;
 
-        $shopDataExpected = $this->getShops();
-
         $client = $this->getNewClientAuthenticatedUser();
+        $shopDataExpected = $this->getShops();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -336,9 +337,8 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $page = 1;
         $pageItems = 100;
 
-        $shopDataExpected = array_reverse($this->getShops());
-
         $client = $this->getNewClientAuthenticatedUser();
+        $shopDataExpected = array_reverse($this->getShops());
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT

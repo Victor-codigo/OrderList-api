@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 class GroupGetDataServiceTest extends TestCase
 {
+    private const PATH_APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
     private const PATH_GROUP_IMAGES_PUBLIC = '/assets/img/groups';
 
     private GroupGetDataService $object;
@@ -25,7 +26,7 @@ class GroupGetDataServiceTest extends TestCase
         parent::setUp();
 
         $this->groupRepository = $this->createMock(GroupRepositoryInterface::class);
-        $this->object = new GroupGetDataService($this->groupRepository, self::PATH_GROUP_IMAGES_PUBLIC);
+        $this->object = new GroupGetDataService($this->groupRepository, self::PATH_GROUP_IMAGES_PUBLIC, self::PATH_APP_PROTOCOL_AND_DOMAIN);
     }
 
     /**
@@ -95,7 +96,7 @@ class GroupGetDataServiceTest extends TestCase
                 $this->assertNull($groupData['image']);
             } else {
                 $this->assertEquals(
-                    self::PATH_GROUP_IMAGES_PUBLIC."/{$expectedGroupsData[$key]->getImage()->getValue()}",
+                    self::PATH_APP_PROTOCOL_AND_DOMAIN.self::PATH_GROUP_IMAGES_PUBLIC."/{$expectedGroupsData[$key]->getImage()->getValue()}",
                     $groupData['image']
                 );
             }
@@ -177,7 +178,7 @@ class GroupGetDataServiceTest extends TestCase
                 $this->assertNull($groupData['image']);
             } else {
                 $this->assertEquals(
-                    self::PATH_GROUP_IMAGES_PUBLIC."/{$expectedGroupsData[$key]->getImage()->getValue()}",
+                    self::PATH_APP_PROTOCOL_AND_DOMAIN.self::PATH_GROUP_IMAGES_PUBLIC."/{$expectedGroupsData[$key]->getImage()->getValue()}",
                     $groupData['image']
                 );
             }

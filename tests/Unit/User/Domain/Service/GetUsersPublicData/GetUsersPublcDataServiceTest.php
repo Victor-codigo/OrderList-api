@@ -19,6 +19,9 @@ use User\Domain\Service\GetUsersPublicData\GeUsersPublicDataService;
 
 class GetUsersPublcDataServiceTest extends TestCase
 {
+    private const USER_PUBLIC_IMAGE_PATH = 'userPublicImagePath';
+    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+
     private GeUsersPublicDataService $object;
     private MockObject|UserRepositoryInterface $userRepository;
 
@@ -27,7 +30,7 @@ class GetUsersPublcDataServiceTest extends TestCase
         parent::setUp();
 
         $this->userRepository = $this->createMock(UserRepositoryInterface::class);
-        $this->object = new GeUsersPublicDataService($this->userRepository);
+        $this->object = new GeUsersPublicDataService($this->userRepository, self::USER_PUBLIC_IMAGE_PATH, self::APP_PROTOCOL_AND_DOMAIN);
     }
 
     private function getUsersId(): array

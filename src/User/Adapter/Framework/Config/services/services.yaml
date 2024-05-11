@@ -12,6 +12,7 @@ services:
         bind:
             $appName: "%common.app_name%"
             $adminEmail: "%user.admin_email%"
+            $appProtocolAndDomain: "%common.app.protocolAndDomain%"
             $emailUserRegistrationConfirmationExpire: "%user.email_user_registration_confirmation_expire%"
             $emailUserPasswordRememberExpire: "%user.email_user_password_remember_expire%"
             $userImagePath: "%user.image.path%"

@@ -1,9 +1,16 @@
+parameters:
+  order.product.public.image.path: "%env(string:PRODUCT_IMAGE_PUBLIC_PATH)%"
+  order.shop.public.image.path: "%env(string:SHOP_IMAGE_PUBLIC_PATH)%"
+
 services:
   _defaults:
     autowire: true
     autoconfigure: true
 
     bind:
+      $appProtocolAndDomain: "%common.app.protocolAndDomain%"
+      $productPublicImagePath: "%product.public.image.path%"
+      $shopPublicImagePath: "%order.shop.public.image.path%"
 
   # Adapter
   Order\Adapter\:

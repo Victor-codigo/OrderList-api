@@ -52,9 +52,9 @@ class UserRegisterUseCase extends ServiceBase
             $this->repository->save($user);
 
             $this->eventsRegisteredDispatch($this->eventDispatcher, $user->getEventsRegistered());
-        } catch (DBUniqueConstraintException) {
+        } catch (DBUniqueConstraintException$e) {
             throw EmailAlreadyExistsException::fromMessage('The email already exists');
-        } catch (DBConnectionException) {
+        } catch (DBConnectionException$e) {
             throw DomainErrorException::fromMessage('An error has been occurred');
         }
 

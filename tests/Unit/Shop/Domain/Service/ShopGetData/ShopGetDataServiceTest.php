@@ -19,6 +19,9 @@ use Shop\Domain\Service\ShopGetData\ShopGetDataService;
 
 class ShopGetDataServiceTest extends TestCase
 {
+    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const SHOP_PUBLIC_IMAGE_PATH = '/shopPublicImagePath';
+
     private ShopGetDataService $object;
     private MockObject|ShopRepositoryInterface $shopRepository;
     private MockObject|PaginatorInterface $paginator;
@@ -29,16 +32,34 @@ class ShopGetDataServiceTest extends TestCase
 
         $this->shopRepository = $this->createMock(ShopRepositoryInterface::class);
         $this->paginator = $this->createMock(PaginatorInterface::class);
-        $this->object = new ShopGetDataService($this->shopRepository);
+        $this->object = new ShopGetDataService($this->shopRepository, self::APP_PROTOCOL_AND_DOMAIN, self::SHOP_PUBLIC_IMAGE_PATH);
     }
 
     private function getShops(): array
     {
         return [
-            Shop::fromPrimitives('shop 1 id', 'group id', 'shop 1 name', 'shop 1 description', null),
+            Shop::fromPrimitives('shop 1 id', 'group id', 'shop 1 name', 'shop 1 description', 'fileName.file'),
             Shop::fromPrimitives('shop 2 id', 'group id', 'shop 2 name', 'shop 2 description', null),
             Shop::fromPrimitives('shop 3 id', 'group id', 'shop 3 name', 'shop 3 description', null),
         ];
+    }
+
+    private function getShopsExpected(): array
+    {
+        $shops = $this->getShops();
+
+        return array_map(
+            function (Shop $shop) {
+                if (!$shop->getImage()->isNull()) {
+                    $shop->setImage(
+                        ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::SHOP_PUBLIC_IMAGE_PATH.'/'.$shop->getImage()->getValue())
+                    );
+                }
+
+                return $shop;
+            },
+            $shops
+        );
     }
 
     private function assertShopDataIsOk(Shop $shopsDataExpected, array $shopDataActual): void
@@ -62,6 +83,7 @@ class ShopGetDataServiceTest extends TestCase
     public function itShouldGetShopsDataOrderByShopIdAndProductIdAsc(): void
     {
         $shops = $this->getShops();
+        $shopsExpected = $this->getShopsExpected();
         $input = new ShopGetDataDto(
             ValueObjectFactory::createIdentifier('group id'),
             [ValueObjectFactory::createIdentifier('shop 1 id')],
@@ -108,9 +130,9 @@ class ShopGetDataServiceTest extends TestCase
 
         $return = $this->object->__invoke($input);
 
-        $this->assertCount(count($shops), $return);
+        $this->assertCount(count($shopsExpected), $return);
 
-        foreach ($shops as $key => $shopExpected) {
+        foreach ($shopsExpected as $key => $shopExpected) {
             $this->assertShopDataIsOk($shopExpected, $return[$key]);
         }
     }
@@ -119,6 +141,7 @@ class ShopGetDataServiceTest extends TestCase
     public function itShouldGetShopsDataOfAGroupOrderByNameAsc(): void
     {
         $shops = $this->getShops();
+        $shopsExpected = $this->getShopsExpected();
         $input = new ShopGetDataDto(
             ValueObjectFactory::createIdentifier('group id'),
             [],
@@ -160,9 +183,9 @@ class ShopGetDataServiceTest extends TestCase
 
         $return = $this->object->__invoke($input);
 
-        $this->assertCount(count($shops), $return);
+        $this->assertCount(count($shopsExpected), $return);
 
-        foreach (array_reverse($shops) as $key => $shopExpected) {
+        foreach (array_reverse($shopsExpected) as $key => $shopExpected) {
             $this->assertShopDataIsOk($shopExpected, $return[$key]);
         }
     }
@@ -171,6 +194,7 @@ class ShopGetDataServiceTest extends TestCase
     public function itShouldGetShopsDataByShopNameOrderByNameAsc(): void
     {
         $shops = $this->getShops();
+        $shopsExpected = $this->getShopsExpected();
         $input = new ShopGetDataDto(
             ValueObjectFactory::createIdentifier('group id'),
             [],
@@ -216,9 +240,9 @@ class ShopGetDataServiceTest extends TestCase
 
         $return = $this->object->__invoke($input);
 
-        $this->assertCount(count($shops), $return);
+        $this->assertCount(count($shopsExpected), $return);
 
-        foreach ($shops as $key => $shopExpected) {
+        foreach ($shopsExpected as $key => $shopExpected) {
             $this->assertShopDataIsOk($shopExpected, $return[$key]);
         }
     }
@@ -227,6 +251,7 @@ class ShopGetDataServiceTest extends TestCase
     public function itShouldGetShopsDataWithFilterOrderByNameAsc(): void
     {
         $shops = $this->getShops();
+        $shopsExpected = $this->getShopsExpected();
         $input = new ShopGetDataDto(
             ValueObjectFactory::createIdentifier('group id'),
             [],
@@ -272,9 +297,9 @@ class ShopGetDataServiceTest extends TestCase
 
         $return = $this->object->__invoke($input);
 
-        $this->assertCount(count($shops), $return);
+        $this->assertCount(count($shopsExpected), $return);
 
-        foreach ($shops as $key => $shopExpected) {
+        foreach ($shopsExpected as $key => $shopExpected) {
             $this->assertShopDataIsOk($shopExpected, $return[$key]);
         }
     }

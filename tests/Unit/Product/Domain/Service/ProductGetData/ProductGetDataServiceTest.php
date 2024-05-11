@@ -18,6 +18,9 @@ use Product\Domain\Service\ProductGetData\ProductGetDataService;
 
 class ProductGetDataServiceTest extends TestCase
 {
+    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const PRODUCT_PUBLIC_PATH = '/group/public/path';
+
     private ProductGetDataService $object;
     private MockObject|ProductRepositoryInterface $productRepository;
     private MockObject|PaginatorInterface $paginator;
@@ -28,16 +31,34 @@ class ProductGetDataServiceTest extends TestCase
 
         $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
         $this->paginator = $this->createMock(PaginatorInterface::class);
-        $this->object = new ProductGetDataService($this->productRepository);
+        $this->object = new ProductGetDataService($this->productRepository, self::PRODUCT_PUBLIC_PATH, self::APP_PROTOCOL_AND_DOMAIN);
     }
 
     private function getProducts(): array
     {
         return [
-            Product::fromPrimitives('product 1 id', 'group id', 'product 1 name', 'product 1 description', null),
+            Product::fromPrimitives('product 1 id', 'group id', 'product 1 name', 'product 1 description', 'imageName.jpg'),
             Product::fromPrimitives('product 2 id', 'group id', 'product 2 name', 'product 2 description', null),
             Product::fromPrimitives('product 3 id', 'group id', 'product 3 name', 'product 3 description', null),
         ];
+    }
+
+    private function getProductsExpected(): array
+    {
+        $products = $this->getProducts();
+
+        return array_map(
+            function (Product $product) {
+                if (!$product->getImage()->isNull()) {
+                    $product->setImage(
+                        ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::PRODUCT_PUBLIC_PATH.'/'.$product->getImage()->getValue())
+                    );
+                }
+
+                return $product;
+            },
+            $products
+        );
     }
 
     private function assertProductDataIsOk(array $productsDataExpected, array $productDataActual): void
@@ -90,6 +111,7 @@ class ProductGetDataServiceTest extends TestCase
     public function itShouldGetProductOfAGroupOrderAsc(): void
     {
         $products = $this->getProducts();
+        $productsExpected = $this->getProductsExpected();
         $input = new ProductGetDataDto(
             ValueObjectFactory::createIdentifier('group id'),
             [],
@@ -143,7 +165,7 @@ class ProductGetDataServiceTest extends TestCase
         $this->assertCount(count($products), $return);
 
         foreach ($return as $product) {
-            $this->assertProductDataIsOk($products, $product);
+            $this->assertProductDataIsOk($productsExpected, $product);
         }
     }
 
@@ -151,6 +173,7 @@ class ProductGetDataServiceTest extends TestCase
     public function itShouldGetProductOfAGroupWithProductsIdAndShopsId(): void
     {
         $products = $this->getProducts();
+        $productsExpected = $this->getProductsExpected();
         $input = new ProductGetDataDto(
             ValueObjectFactory::createIdentifier('group id'),
             [ValueObjectFactory::createIdentifier('product 1 id')],
@@ -204,7 +227,7 @@ class ProductGetDataServiceTest extends TestCase
         $this->assertCount(count($products), $return);
 
         foreach ($return as $product) {
-            $this->assertProductDataIsOk($products, $product);
+            $this->assertProductDataIsOk($productsExpected, $product);
         }
     }
 
@@ -212,6 +235,7 @@ class ProductGetDataServiceTest extends TestCase
     public function itShouldGetProductOfAGroupWithProductName(): void
     {
         $products = $this->getProducts();
+        $productsExpected = $this->getProductsExpected();
         $input = new ProductGetDataDto(
             ValueObjectFactory::createIdentifier('group id'),
             [],
@@ -265,7 +289,7 @@ class ProductGetDataServiceTest extends TestCase
         $this->assertCount(count($products), $return);
 
         foreach ($return as $product) {
-            $this->assertProductDataIsOk($products, $product);
+            $this->assertProductDataIsOk($productsExpected, $product);
         }
     }
 
@@ -273,6 +297,7 @@ class ProductGetDataServiceTest extends TestCase
     public function itShouldGetProductOfAGroupWithProductNameFilter(): void
     {
         $products = $this->getProducts();
+        $productsExpected = $this->getProductsExpected();
         $input = new ProductGetDataDto(
             ValueObjectFactory::createIdentifier('group id'),
             [],
@@ -326,7 +351,7 @@ class ProductGetDataServiceTest extends TestCase
         $this->assertCount(count($products), $return);
 
         foreach ($return as $product) {
-            $this->assertProductDataIsOk($products, $product);
+            $this->assertProductDataIsOk($productsExpected, $product);
         }
     }
 
@@ -334,6 +359,7 @@ class ProductGetDataServiceTest extends TestCase
     public function itShouldGetProductOfAGroupWithShopNameFilter(): void
     {
         $products = $this->getProducts();
+        $productsExpected = $this->getProductsExpected();
         $input = new ProductGetDataDto(
             ValueObjectFactory::createIdentifier('group id'),
             [],
@@ -387,7 +413,7 @@ class ProductGetDataServiceTest extends TestCase
         $this->assertCount(count($products), $return);
 
         foreach ($return as $product) {
-            $this->assertProductDataIsOk($products, $product);
+            $this->assertProductDataIsOk($productsExpected, $product);
         }
     }
 

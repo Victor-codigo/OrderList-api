@@ -15,7 +15,8 @@ class GroupGetDataService
 {
     public function __construct(
         private GroupRepositoryInterface $groupRepository,
-        private string $groupPublicImagePath
+        private string $groupPublicImagePath,
+        private string $appProtocolAndDomain
     ) {
     }
 
@@ -39,7 +40,7 @@ class GroupGetDataService
      *
      * @return Group[]
      */
-    private function getGroupsByType(array $groups, GROUP_TYPE|null $groupType = null): array
+    private function getGroupsByType(array $groups, ?GROUP_TYPE $groupType = null): array
     {
         if (null === $groupType) {
             return $groups;
@@ -63,7 +64,7 @@ class GroupGetDataService
                 'description' => $group->getDescription()->getValue(),
                 'image' => $group->getImage()->isNull()
                     ? null
-                    : "{$this->groupPublicImagePath}/{$group->getImage()->getValue()}",
+                    : "{$this->appProtocolAndDomain}{$this->groupPublicImagePath}/{$group->getImage()->getValue()}",
                 'created_on' => $group->getCreatedOn()->format('Y-m-d H:i:s'),
             ];
         }

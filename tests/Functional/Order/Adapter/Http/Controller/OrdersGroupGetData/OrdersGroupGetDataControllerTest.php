@@ -85,6 +85,10 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
 
     private function getOrdersData(): array
     {
+        $appProtocolAndDomain = static::getContainer()->getParameter('common.app.protocolAndDomain');
+        $productPublicImagePath = static::getContainer()->getParameter('order.product.public.image.path');
+        $shopPublicImagePath = static::getContainer()->getParameter('order.shop.public.image.path');
+
         $listOrders1 = ListOrders::fromPrimitives(
             'd446eab9-5199-48d0-91f5-0407a86bcb4f',
             '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
@@ -124,7 +128,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
             '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
             'Maluela',
             'Product description 1',
-            null
+            "{$appProtocolAndDomain}{$productPublicImagePath}/fileName.file"
         );
         $product3 = Product::fromPrimitives(
             '7e3021d4-2d02-4386-8bbe-887cfe8697a8',
@@ -146,7 +150,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
             '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
             'Shop name 1',
             'Shop description 1',
-            null
+            "{$appProtocolAndDomain}{$shopPublicImagePath}/fileName.file"
         );
         $shop2 = Shop::fromPrimitives(
             'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',

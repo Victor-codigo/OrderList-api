@@ -30,6 +30,11 @@ class ProductGetDataControllerTest extends WebClientTestCase
         'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
     ];
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+    }
+
     private function assertResponseDataIsOk(int $pageExpected, int $pagesTotalExpected, array $productDataExpected, object $responseActual): void
     {
         $this->assertTrue(property_exists($responseActual, 'page'));
@@ -63,6 +68,9 @@ class ProductGetDataControllerTest extends WebClientTestCase
 
     private function getProductsData(): array
     {
+        $appProtocolAndDomain = static::getContainer()->getParameter('common.app.protocolAndDomain');
+        $productPublicImagePath = static::getContainer()->getParameter('product.public.image.path');
+
         return [
             [
                 'id' => '8b6d650b-7bb7-4850-bf25-36cda9bce801',
@@ -85,7 +93,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Maluela',
                 'description' => 'Product description 1',
-                'image' => null,
+                'image' => "{$appProtocolAndDomain}{$productPublicImagePath}/fileName.file",
                 'created_on' => '',
             ],
             [
@@ -103,11 +111,11 @@ class ProductGetDataControllerTest extends WebClientTestCase
     public function itShouldGetProductsOfAGroupOrderAsc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
-        $productDataExpected = $this->getProductsData();
         $page = 1;
         $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
+        $productDataExpected = $this->getProductsData();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -132,11 +140,11 @@ class ProductGetDataControllerTest extends WebClientTestCase
     public function itShouldGetProductsOfAGroupOrderDesc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
-        $productDataExpected = $this->getProductsData();
         $page = 1;
         $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
+        $productDataExpected = $this->getProductsData();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -162,11 +170,11 @@ class ProductGetDataControllerTest extends WebClientTestCase
     {
         $groupId = self::GROUP_EXISTS_ID;
         $productsId = implode(',', self::PRODUCTS_ID);
-        $productDataExpected = $this->getProductsData();
         $page = 1;
         $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
+        $productDataExpected = $this->getProductsData();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -202,15 +210,15 @@ class ProductGetDataControllerTest extends WebClientTestCase
     {
         $groupId = self::GROUP_EXISTS_ID;
         $productsId = implode(',', self::PRODUCTS_ID);
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
         $productDataExpected = $this->getProductsData();
         usort(
             $productDataExpected,
             fn (array $productA, array $productB) => strcmp($productA['name'], $productB['name'])
         );
-        $page = 1;
-        $pageItems = 100;
-
-        $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -232,9 +240,9 @@ class ProductGetDataControllerTest extends WebClientTestCase
             $page,
             1,
             [
-              $productDataExpected[0],
-              $productDataExpected[1],
-              $productDataExpected[2],
+                $productDataExpected[0],
+                $productDataExpected[1],
+                $productDataExpected[2],
             ],
             $responseContent->data
         );
@@ -245,11 +253,11 @@ class ProductGetDataControllerTest extends WebClientTestCase
     {
         $groupId = self::GROUP_EXISTS_ID;
         $shopsId = implode(',', self::SHOPS_ID);
-        $productDataExpected = $this->getProductsData();
         $page = 1;
         $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
+        $productDataExpected = $this->getProductsData();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -283,15 +291,15 @@ class ProductGetDataControllerTest extends WebClientTestCase
     {
         $groupId = self::GROUP_EXISTS_ID;
         $shopsId = implode(',', self::SHOPS_ID);
+        $page = 1;
+        $pageItems = 100;
+
+        $client = $this->getNewClientAuthenticatedUser();
         $productDataExpected = $this->getProductsData();
         usort(
             $productDataExpected,
             fn (array $productA, array $productB) => strcmp($productA['name'], $productB['name'])
         );
-        $page = 1;
-        $pageItems = 100;
-
-        $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -313,9 +321,9 @@ class ProductGetDataControllerTest extends WebClientTestCase
             $page,
             1,
             [
-              $productDataExpected[0],
-              $productDataExpected[1],
-              $productDataExpected[2],
+                $productDataExpected[0],
+                $productDataExpected[1],
+                $productDataExpected[2],
             ],
             $responseContent->data
         );
@@ -326,11 +334,11 @@ class ProductGetDataControllerTest extends WebClientTestCase
     {
         $groupId = self::GROUP_EXISTS_ID;
         $productName = 'Juanola';
-        $productDataExpected = $this->getProductsData();
         $page = 1;
         $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
+        $productDataExpected = $this->getProductsData();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -357,11 +365,11 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $groupId = self::GROUP_EXISTS_ID;
         $productNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
         $productNameFilterValue = 'Ju';
-        $productDataExpected = $this->getProductsData();
         $page = 1;
         $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
+        $productDataExpected = $this->getProductsData();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -397,11 +405,11 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $groupId = self::GROUP_EXISTS_ID;
         $productNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
         $productNameFilterValue = 'Ju';
-        $productDataExpected = $this->getProductsData();
         $page = 1;
         $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
+        $productDataExpected = $this->getProductsData();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -438,11 +446,11 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $groupId = self::GROUP_EXISTS_ID;
         $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
         $shopNameFilterValue = 'Shop name 1';
-        $productDataExpected = $this->getProductsData();
         $page = 1;
         $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
+        $productDataExpected = $this->getProductsData();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -478,11 +486,11 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $groupId = self::GROUP_EXISTS_ID;
         $shopNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
         $shopNameFilterValue = 'Shop name 1';
-        $productDataExpected = $this->getProductsData();
         $page = 1;
         $pageItems = 100;
 
         $client = $this->getNewClientAuthenticatedUser();
+        $productDataExpected = $this->getProductsData();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -519,11 +527,11 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $groupId = self::GROUP_EXISTS_ID;
         $productNameFilterType = FILTER_STRING_COMPARISON::STARTS_WITH->value;
         $productNameFilterValue = 'Ju';
-        $productDataExpected = $this->getProductsData();
         $page = 1;
         $pageItems = 1;
 
         $client = $this->getNewClientAuthenticatedUser();
+        $productDataExpected = $this->getProductsData();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT

@@ -48,6 +48,10 @@ Common\Domain\Model\ValueObject\String\Description:
       value: null
 
 Common\Domain\Model\ValueObject\String\Path:
+  product_image_with_path:
+    __construct:
+      value: "fileName.file"
+
   product_image_null:
     __construct:
       value: null
@@ -59,7 +63,7 @@ Product\Domain\Model\Product:
       groupId: "@product_group_id_group_exists"
       name: "@product_name"
       description: "@product_description"
-      image: "@product_image_null"
+      image: "@product_image_with_path"
 
   entity-product_2:
     __construct:

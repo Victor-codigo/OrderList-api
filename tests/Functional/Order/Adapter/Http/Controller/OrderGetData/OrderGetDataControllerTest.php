@@ -41,6 +41,10 @@ class OrderGetDataControllerTest extends WebClientTestCase
 
     private function getOrdersDataExpected(): array
     {
+        $appProtocolAndDomain = static::getContainer()->getParameter('common.app.protocolAndDomain');
+        $productPublicImagePath = static::getContainer()->getParameter('order.product.public.image.path');
+        $shopPublicImagePath = static::getContainer()->getParameter('order.shop.public.image.path');
+
         $listOrders1 = ListOrders::fromPrimitives(
             'd446eab9-5199-48d0-91f5-0407a86bcb4f',
             '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
@@ -80,7 +84,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
             '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
             'Maluela',
             'Product description 1',
-            null
+            "{$appProtocolAndDomain}{$productPublicImagePath}/fileName.file"
         );
         $product3 = Product::fromPrimitives(
             '7e3021d4-2d02-4386-8bbe-887cfe8697a8',
@@ -102,7 +106,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
             '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
             'Shop name 1',
             'Shop description 1',
-            null
+            "{$appProtocolAndDomain}{$shopPublicImagePath}/fileName.file"
         );
         $shop2 = Shop::fromPrimitives(
             'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
@@ -259,8 +263,8 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $page = 1;
         $pageItems = 10;
         $orderAsc = true;
-        $ordersDataExpected = $this->getOrdersDataExpected();
         $client = $this->getNewClientAuthenticatedUser();
+        $ordersDataExpected = $this->getOrdersDataExpected();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -296,8 +300,8 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $page = 1;
         $pageItems = 10;
         $orderAsc = false;
-        $ordersDataExpected = $this->getOrdersDataExpected();
         $client = $this->getNewClientAuthenticatedUser();
+        $ordersDataExpected = $this->getOrdersDataExpected();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -336,8 +340,8 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $filterSection = FILTER_SECTION::LIST_ORDERS->value;
         $filterText = FILTER_STRING_COMPARISON::EQUALS->value;
         $filterValue = 'List order name 1';
-        $ordersDataExpected = $this->getOrdersDataExpected();
         $client = $this->getNewClientAuthenticatedUser();
+        $ordersDataExpected = $this->getOrdersDataExpected();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -376,8 +380,8 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $page = 1;
         $pageItems = 10;
         $orderAsc = true;
-        $ordersDataExpected = $this->getOrdersDataExpected();
         $client = $this->getNewClientAuthenticatedUser();
+        $ordersDataExpected = $this->getOrdersDataExpected();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -417,8 +421,8 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $filterSection = FILTER_SECTION::PRODUCT->value;
         $filterText = FILTER_STRING_COMPARISON::EQUALS->value;
         $filterValue = 'Juan Carlos';
-        $ordersDataExpected = $this->getOrdersDataExpected();
         $client = $this->getNewClientAuthenticatedUser();
+        $ordersDataExpected = $this->getOrdersDataExpected();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -461,8 +465,8 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $filterSection = FILTER_SECTION::SHOP->value;
         $filterText = FILTER_STRING_COMPARISON::EQUALS->value;
         $filterValue = 'Shop name 2';
-        $ordersDataExpected = $this->getOrdersDataExpected();
         $client = $this->getNewClientAuthenticatedUser();
+        $ordersDataExpected = $this->getOrdersDataExpected();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT

@@ -32,6 +32,7 @@ class GetGroupDataByNameControllerTest extends WebClientTestCase
     private function assertGroupDataIsOk(Group $groupDataExpected, \stdClass $groupDataActual): void
     {
         $pathImageGroup = static::getContainer()->getParameter('group.public.image.path');
+        $appProtocolAndDomain = static::getContainer()->getParameter('common.app.protocolAndDomain');
 
         $this->assertTrue(property_exists($groupDataActual, 'group_id'));
         $this->assertTrue(property_exists($groupDataActual, 'name'));
@@ -42,7 +43,7 @@ class GetGroupDataByNameControllerTest extends WebClientTestCase
         $this->assertEquals($groupDataExpected->getId()->getValue(), $groupDataActual->group_id);
         $this->assertEquals($groupDataExpected->getName()->getValue(), $groupDataActual->name);
         $this->assertEquals($groupDataExpected->getDescription()->getValue(), $groupDataActual->description);
-        $this->assertEquals($pathImageGroup.'/'.$groupDataExpected->getImage()->getValue(), $groupDataActual->image);
+        $this->assertEquals($appProtocolAndDomain.$pathImageGroup.'/'.$groupDataExpected->getImage()->getValue(), $groupDataActual->image);
     }
 
     /** @test */

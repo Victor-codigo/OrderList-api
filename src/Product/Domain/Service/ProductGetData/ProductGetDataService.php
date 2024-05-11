@@ -18,10 +18,12 @@ use Product\Domain\Service\ProductGetData\Dto\ProductGetDataDto;
 
 class ProductGetDataService
 {
-    private PaginatorInterface|null $productsPaginator;
+    private ?PaginatorInterface $productsPaginator;
 
     public function __construct(
-        private ProductRepositoryInterface $productRepository
+        private ProductRepositoryInterface $productRepository,
+        private string $productPublicImagePath,
+        private string $appProtocolAndDomain,
     ) {
     }
 
@@ -55,7 +57,7 @@ class ProductGetDataService
      *
      * @throws DBNotFoundException
      */
-    private function getProductsByProductIdOrShopsId(Identifier $groupId, array $productsId, array $shopsId, bool $orderAsc): PaginatorInterface|null
+    private function getProductsByProductIdOrShopsId(Identifier $groupId, array $productsId, array $shopsId, bool $orderAsc): ?PaginatorInterface
     {
         if (empty($productsId) && empty($shopsId)) {
             return null;
@@ -85,7 +87,7 @@ class ProductGetDataService
     /**
      * @throws DBNotFoundException
      */
-    private function getProductsByProductName(Identifier $groupId, NameWithSpaces $productName, bool $orderAsc): PaginatorInterface|null
+    private function getProductsByProductName(Identifier $groupId, NameWithSpaces $productName, bool $orderAsc): ?PaginatorInterface
     {
         if ($productName->isNull()) {
             return null;
@@ -97,7 +99,7 @@ class ProductGetDataService
     /**
      * @throws DBNotFoundException
      */
-    private function getProductByProductNameFilter(Identifier $groupId, Filter $productNameFilter, bool $orderAsc): PaginatorInterface|null
+    private function getProductByProductNameFilter(Identifier $groupId, Filter $productNameFilter, bool $orderAsc): ?PaginatorInterface
     {
         if ($productNameFilter->isNull()) {
             return null;
@@ -109,7 +111,7 @@ class ProductGetDataService
     /**
      * @throws DBNotFoundException
      */
-    private function getProductByShopNameFilter(Identifier $groupId, Filter $shopNameFilter, bool $orderAsc): PaginatorInterface|null
+    private function getProductByShopNameFilter(Identifier $groupId, Filter $shopNameFilter, bool $orderAsc): ?PaginatorInterface
     {
         if ($shopNameFilter->isNull()) {
             return null;
@@ -131,7 +133,9 @@ class ProductGetDataService
                 'group_id' => $product->getGroupId()->getValue(),
                 'name' => $product->getName()->getValue(),
                 'description' => $product->getDescription()->getValue(),
-                'image' => $product->getImage()->getValue(),
+                'image' => $product->getImage()->isNull()
+                    ? null
+                    : "{$this->appProtocolAndDomain}{$this->productPublicImagePath}/{$product->getImage()->getValue()}",
                 'created_on' => $product->getCreatedOn()->format('Y-m-d H:i:s'),
             ],
             iterator_to_array($productsPaginator)
