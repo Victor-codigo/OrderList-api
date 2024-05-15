@@ -112,6 +112,7 @@ class NotificationRepository extends RepositoryBase implements NotificationRepos
             SELECT notification
             FROM {$notificationEntity} notification
             WHERE notification.userId = :userId
+            ORDER BY notification.createdOn DESC
         DQL;
 
         $query = $this->entityManager
