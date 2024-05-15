@@ -177,17 +177,17 @@ class NotificationRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldGetNotificationsByUserId(): void
+    public function itShouldGetNotificationsByUserIdOrderedAsc(): void
     {
         $userId = ValueObjectFactory::createIdentifier(self::NOTIFICATION_USER_ID_ACTIVE);
         $return = $this->object->getNotificationByUserIdOrFail($userId);
 
-        $notificationsExpected = $this->object->findBy(['userId' => $userId]);
+        $notificationsExpected = $this->object->findBy(['userId' => $userId], ['createdOn' => 'DESC']);
 
         $this->assertCount(count($notificationsExpected), $return);
 
-        foreach ($return as $notification) {
-            $this->assertContainsEquals($notification, $notificationsExpected);
+        foreach ($return as $key => $notification) {
+            $this->assertEquals($notification, $notificationsExpected[$key]);
         }
     }
 
