@@ -38,7 +38,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldGetGroupsData(): void
+    public function itShouldGetGroupsData22(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $patImageGroup = static::getContainer()->getParameter('group.public.image.path');
@@ -47,6 +47,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
+        $groupsType = array_map(fn (Group $group) => $group->getType()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
         $groupsImage = array_map(fn (Group $group) => "{$appProtocolAndDomain}{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
@@ -67,11 +68,18 @@ class GroupGetDataControllerTest extends WebClientTestCase
 
         foreach ($responseContent->data as $groupData) {
             $this->assertTrue(property_exists($groupData, 'group_id'));
+            $this->assertTrue(property_exists($groupData, 'type'));
             $this->assertTrue(property_exists($groupData, 'name'));
             $this->assertTrue(property_exists($groupData, 'description'));
             $this->assertTrue(property_exists($groupData, 'image'));
             $this->assertTrue(property_exists($groupData, 'created_on'));
             $this->assertContains($groupData->group_id, $groupsId);
+            $this->assertContains(
+                'group' === $groupData->type
+                    ? GROUP_TYPE::GROUP
+                    : GROUP_TYPE::USER,
+                $groupsType
+            );
             $this->assertContains($groupData->name, $groupsName);
             $this->assertContains($groupData->description, $groupsDescription);
             $this->assertIsString($groupData->created_on);

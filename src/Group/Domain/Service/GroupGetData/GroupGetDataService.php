@@ -60,6 +60,7 @@ class GroupGetDataService
         foreach ($groups as $group) {
             yield [
                 'group_id' => $group->getId()->getValue(),
+                'type' => $this->getGroupType($group->getType()),
                 'name' => $group->getName()->getValue(),
                 'description' => $group->getDescription()->getValue(),
                 'image' => $group->getImage()->isNull()
@@ -68,5 +69,14 @@ class GroupGetDataService
                 'created_on' => $group->getCreatedOn()->format('Y-m-d H:i:s'),
             ];
         }
+    }
+
+    private function getGroupType(GroupType $groupType): string
+    {
+        if (GROUP_TYPE::GROUP === $groupType->getValue()) {
+            return 'group';
+        }
+
+        return 'user';
     }
 }

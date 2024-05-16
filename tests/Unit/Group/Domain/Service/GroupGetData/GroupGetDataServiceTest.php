@@ -83,11 +83,13 @@ class GroupGetDataServiceTest extends TestCase
         $this->assertCount(2, $return);
         foreach ($return as $key => $groupData) {
             $this->assertArrayHasKey('group_id', $groupData);
+            $this->assertArrayHasKey('type', $groupData);
             $this->assertArrayHasKey('name', $groupData);
             $this->assertArrayHasKey('description', $groupData);
             $this->assertArrayHasKey('image', $groupData);
             $this->assertArrayHasKey('created_on', $groupData);
             $this->assertEquals($expectedGroupsData[$key]->getId()->getValue(), $groupData['group_id']);
+            $this->assertEquals(GROUP_TYPE::GROUP === $expectedGroupsData[$key]->getType()->getValue() ? 'group' : 'user', $groupData['type']);
             $this->assertEquals($expectedGroupsData[$key]->getName()->getValue(), $groupData['name']);
             $this->assertEquals($expectedGroupsData[$key]->getDescription()->getValue(), $groupData['description']);
             $this->assertEquals($expectedGroupsData[$key]->getCreatedOn()->format('Y-m-d H:i:s'), $groupData['created_on']);
