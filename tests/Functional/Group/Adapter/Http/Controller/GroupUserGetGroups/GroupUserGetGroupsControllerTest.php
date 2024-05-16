@@ -30,22 +30,43 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         return [
             Group::fromPrimitives('fdb242b4-bac8-4463-88d0-0941bb0beee0', 'GroupOne', GROUP_TYPE::GROUP, 'This is a group of users', null),
             Group::fromPrimitives('4b513296-14ac-4fb1-a574-05bc9b1dbe3f', 'Group100Users', GROUP_TYPE::GROUP, 'This group contains 100 users', null),
+            Group::fromPrimitives('a5002966-dbf7-4f76-a862-23a04b5ca465', 'GroupTwo', GROUP_TYPE::USER, 'This is a group of one user', 'image_of_group_type_user'),
+            Group::fromPrimitives('e05b2466-9528-4815-ac7f-663c1d89ab55', 'GroupThree', GROUP_TYPE::GROUP, 'This is a group of users', 'image_of_group_type_group'),
         ];
     }
 
-    private function assertGroupDataIsOk(object $groupData, array $groupsId, array $groupsName, array $groupsDescription): void
+    private function assertResponseDataIsOk(object $responseContent, array $groupsId, array $groupsType, array $groupsName, array $groupsDescription): void
+    {
+        $this->assertTrue(property_exists($responseContent->data, 'page'));
+        $this->assertTrue(property_exists($responseContent->data, 'pages_total'));
+        $this->assertTrue(property_exists($responseContent->data, 'groups'));
+        $this->assertCount(count($groupsId), $responseContent->data->groups);
+
+        foreach ($responseContent->data->groups as $groupData) {
+            $this->assertGroupDataIsOk($groupData, $groupsId, $groupsType, $groupsName, $groupsDescription);
+        }
+    }
+
+    private function assertGroupDataIsOk(object $groupData, array $groupsId, array $groupsType, array $groupsName, array $groupsDescription): void
     {
         $this->assertTrue(property_exists($groupData, 'group_id'));
+        $this->assertTrue(property_exists($groupData, 'type'));
         $this->assertTrue(property_exists($groupData, 'name'));
         $this->assertTrue(property_exists($groupData, 'description'));
         $this->assertTrue(property_exists($groupData, 'created_on'));
         $this->assertTrue(property_exists($groupData, 'admin'));
         $this->assertContains($groupData->group_id, $groupsId);
+        $this->assertContains(
+            'group' === $groupData->type
+                ? GROUP_TYPE::GROUP
+                : GROUP_TYPE::USER,
+            $groupsType
+        );
         $this->assertContains($groupData->name, $groupsName);
         $this->assertContains($groupData->description, $groupsDescription);
         $this->assertIsString($groupData->created_on);
         $this->assertStringMatchesFormat('%d-%d-%d %d:%d:%d', $groupData->created_on);
-        $this->assertTrue($groupData->admin);
+        $this->assertIsBool($groupData->admin);
     }
 
     /** @test */
@@ -54,6 +75,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
+        $groupsType = array_map(fn (Group $group) => $group->getType()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
 
@@ -62,7 +84,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT
                 .'?page=1'
-                .'&page_items=2'
+                .'&page_items=4'
                 .'&order_asc=true'
         );
 
@@ -73,14 +95,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Groups of the user', $responseContent->message);
 
-        $this->assertTrue(property_exists($responseContent->data, 'page'));
-        $this->assertTrue(property_exists($responseContent->data, 'pages_total'));
-        $this->assertTrue(property_exists($responseContent->data, 'groups'));
-        $this->assertCount(count($groupsId), $responseContent->data->groups);
-
-        foreach ($responseContent->data->groups as $groupData) {
-            $this->assertGroupDataIsOk($groupData, $groupsId, $groupsName, $groupsDescription);
-        }
+        $this->assertResponseDataIsOk($responseContent, $groupsId, $groupsType, $groupsName, $groupsDescription);
     }
 
     /** @test */
@@ -92,6 +107,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = [$groups[0]->getId()->getValue()];
+        $groupsType = array_map(fn (Group $group) => $group->getType()->getValue(), $groups);
         $groupsName = [$groups[0]->getName()->getValue()];
         $groupsDescription = [$groups[0]->getDescription()->getValue()];
 
@@ -114,14 +130,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Groups of the user', $responseContent->message);
 
-        $this->assertTrue(property_exists($responseContent->data, 'page'));
-        $this->assertTrue(property_exists($responseContent->data, 'pages_total'));
-        $this->assertTrue(property_exists($responseContent->data, 'groups'));
-        $this->assertCount(count($groupsId), $responseContent->data->groups);
-
-        foreach ($responseContent->data->groups as $groupData) {
-            $this->assertGroupDataIsOk($groupData, $groupsId, $groupsName, $groupsDescription);
-        }
+        $this->assertResponseDataIsOk($responseContent, $groupsId, $groupsType, $groupsName, $groupsDescription);
     }
 
     /** @test */
@@ -133,6 +142,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
+        $groupsType = array_map(fn (Group $group) => $group->getType()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
 
@@ -141,7 +151,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT
                 .'?page=1'
-                .'&page_items=2'
+                .'&page_items=4'
                 ."&filter_section={$filterSection->value}"
                 ."&filter_text={$filterText->value}"
                 ."&filter_value={$filterValue}"
@@ -155,14 +165,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Groups of the user', $responseContent->message);
 
-        $this->assertTrue(property_exists($responseContent->data, 'page'));
-        $this->assertTrue(property_exists($responseContent->data, 'pages_total'));
-        $this->assertTrue(property_exists($responseContent->data, 'groups'));
-        $this->assertCount(count($groupsId), $responseContent->data->groups);
-
-        foreach ($responseContent->data->groups as $groupData) {
-            $this->assertGroupDataIsOk($groupData, $groupsId, $groupsName, $groupsDescription);
-        }
+        $this->assertResponseDataIsOk($responseContent, $groupsId, $groupsType, $groupsName, $groupsDescription);
     }
 
     /** @test */
@@ -174,6 +177,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = [$groups[0]->getId()->getValue()];
+        $groupsType = [$groups[0]->getType()->getValue()];
         $groupsName = [$groups[0]->getName()->getValue()];
         $groupsDescription = [$groups[0]->getDescription()->getValue()];
 
@@ -196,14 +200,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Groups of the user', $responseContent->message);
 
-        $this->assertTrue(property_exists($responseContent->data, 'page'));
-        $this->assertTrue(property_exists($responseContent->data, 'pages_total'));
-        $this->assertTrue(property_exists($responseContent->data, 'groups'));
-        $this->assertCount(count($groupsId), $responseContent->data->groups);
-
-        foreach ($responseContent->data->groups as $groupData) {
-            $this->assertGroupDataIsOk($groupData, $groupsId, $groupsName, $groupsDescription);
-        }
+        $this->assertResponseDataIsOk($responseContent, $groupsId, $groupsType, $groupsName, $groupsDescription);
     }
 
     /** @test */
@@ -215,6 +212,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
+        $groupsType = array_map(fn (Group $group) => $group->getType()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
 
@@ -223,7 +221,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT
                 .'?page=1'
-                .'&page_items=2'
+                .'&page_items=4'
                 ."&filter_section={$filterSection->value}"
                 ."&filter_text={$filterText->value}"
                 ."&filter_value={$filterValue}"
@@ -237,14 +235,37 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Groups of the user', $responseContent->message);
 
-        $this->assertTrue(property_exists($responseContent->data, 'page'));
-        $this->assertTrue(property_exists($responseContent->data, 'pages_total'));
-        $this->assertTrue(property_exists($responseContent->data, 'groups'));
-        $this->assertCount(count($groupsId), $responseContent->data->groups);
+        $this->assertResponseDataIsOk($responseContent, $groupsId, $groupsType, $groupsName, $groupsDescription);
+    }
 
-        foreach ($responseContent->data->groups as $groupData) {
-            $this->assertGroupDataIsOk($groupData, $groupsId, $groupsName, $groupsDescription);
-        }
+    /** @test */
+    public function itShouldGroupsDataForTheUserGroupTypeUser(): void
+    {
+        $groupCreatedOn = new \DateTime();
+        $groups = $this->getGroupsData($groupCreatedOn);
+        $groupsId = [$groups[2]->getId()->getValue()];
+        $groupsType = [$groups[2]->getType()->getValue()];
+        $groupsName = [$groups[2]->getName()->getValue()];
+        $groupsDescription = [$groups[2]->getDescription()->getValue()];
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                .'?page=1'
+                .'&page_items=2'
+                .'&group_type=user'
+                .'&order_asc=true'
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['page', 'pages_total', 'groups'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Groups of the user', $responseContent->message);
+
+        $this->assertResponseDataIsOk($responseContent, $groupsId, $groupsType, $groupsName, $groupsDescription);
     }
 
     /** @test */
@@ -256,6 +277,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
+        $groupsType = array_map(fn (Group $group) => $group->getType()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
         $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
 
@@ -264,7 +286,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT
                 .'?page=1'
-                .'&page_items=2'
+                .'&page_items=4'
                 ."&filter_section={$filterSection->value}"
                 ."&filter_text={$filterText->value}"
                 ."&filter_value={$filterValue}"
@@ -278,14 +300,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Groups of the user', $responseContent->message);
 
-        $this->assertTrue(property_exists($responseContent->data, 'page'));
-        $this->assertTrue(property_exists($responseContent->data, 'pages_total'));
-        $this->assertTrue(property_exists($responseContent->data, 'groups'));
-        $this->assertCount(count($groupsId), $responseContent->data->groups);
-
-        foreach ($responseContent->data->groups as $groupData) {
-            $this->assertGroupDataIsOk($groupData, $groupsId, $groupsName, $groupsDescription);
-        }
+        $this->assertResponseDataIsOk($responseContent, $groupsId, $groupsType, $groupsName, $groupsDescription);
     }
 
     /** @test */
@@ -297,6 +312,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
             uri: self::ENDPOINT
                 .'?page=1'
                 .'&page_items=2'
+                .'&group_type=group'
         );
 
         $response = $client->getResponse();

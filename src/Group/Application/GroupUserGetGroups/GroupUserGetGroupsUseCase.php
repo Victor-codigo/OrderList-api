@@ -59,7 +59,7 @@ class GroupUserGetGroupsUseCase extends ServiceBase
 
     private function createGroupUserGetGroupsDto(GroupUserGetGroupsInputDto $input): GroupUserGetGroupsDto
     {
-        return new GroupUserGetGroupsDto($input->userSession->getId(), $input->page, $input->pageItems, $input->filterSection, $input->filterText, $input->orderAsc);
+        return new GroupUserGetGroupsDto($input->userSession->getId(), $input->page, $input->pageItems, $input->groupType, $input->filterSection, $input->filterText, $input->orderAsc);
     }
 
     private function createGroupUserGetGroupsOutputDto(PaginatorPage $page, GroupUserGetGroupsOutputServiceDto $userGroups): GroupUserGetGroupsOutputDto

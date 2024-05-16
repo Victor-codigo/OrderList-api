@@ -31,15 +31,15 @@ class GroupUserGetGroupsService
      */
     public function __invoke(GroupUserGetGroupsDto $input): GroupUserGetGroupsOutputDto
     {
-        $userGroups = $this->userGroupRepository->findUserGroupsByName($input->userId, $input->filterText, GROUP_TYPE::GROUP, $input->orderAsc);
+        $userGroups = $this->userGroupRepository->findUserGroupsByName($input->userId, $input->filterText, $input->groupType, $input->orderAsc);
 
-        return $this->getUserGroups($userGroups, $input->page, $input->pageItems);
+        return $this->getUserGroups($userGroups, $input->groupType, $input->page, $input->pageItems);
     }
 
     /**
      * @throws DBNotFoundException
      */
-    private function getUserGroups(PaginatorInterface $userGroups, PaginatorPage $page, PaginatorPageItems $pageItems): GroupUserGetGroupsOutputDto
+    private function getUserGroups(PaginatorInterface $userGroups, ?GROUP_TYPE $groupType, PaginatorPage $page, PaginatorPageItems $pageItems): GroupUserGetGroupsOutputDto
     {
         $userGroups->setPagination($page->getValue(), $pageItems->getValue());
 
@@ -59,7 +59,7 @@ class GroupUserGetGroupsService
         );
 
         $groupsData = iterator_to_array($this->groupGetDataService->__invoke(
-            $this->createGroupGetDataDto($groupsId)
+            $this->createGroupGetDataDto($groupsId, $groupType)
         ));
 
         array_walk(
@@ -73,8 +73,8 @@ class GroupUserGetGroupsService
     /**
      * @param Identifier[] $groupsId
      */
-    private function createGroupGetDataDto(array $groupsId): GroupGetDataDto
+    private function createGroupGetDataDto(array $groupsId, ?GROUP_TYPE $groupType): GroupGetDataDto
     {
-        return new GroupGetDataDto($groupsId, GROUP_TYPE::GROUP);
+        return new GroupGetDataDto($groupsId, $groupType);
     }
 }

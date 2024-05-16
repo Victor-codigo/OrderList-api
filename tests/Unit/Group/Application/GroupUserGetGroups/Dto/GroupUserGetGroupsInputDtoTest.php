@@ -9,6 +9,7 @@ use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\Filter\FILTER_SECTION;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
+use Common\Domain\Validation\Group\GROUP_TYPE;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserGetGroups\Dto\GroupUserGetGroupsInputDto;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -34,6 +35,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
             $this->userSession,
             1,
             100,
+            GROUP_TYPE::GROUP->value,
             FILTER_SECTION::GROUP->value,
             FILTER_STRING_COMPARISON::EQUALS->value,
             'group name',
@@ -54,6 +56,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
             null,
             null,
             null,
+            null,
             true
         );
         $return = $object->validate($this->validator);
@@ -68,6 +71,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
             $this->userSession,
             null,
             100,
+            GROUP_TYPE::USER->value,
             FILTER_SECTION::GROUP->value,
             FILTER_STRING_COMPARISON::EQUALS->value,
             'group name',
@@ -85,6 +89,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
             $this->userSession,
             -1,
             100,
+            null,
             FILTER_SECTION::GROUP->value,
             FILTER_STRING_COMPARISON::EQUALS->value,
             'group name',
@@ -102,6 +107,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
             $this->userSession,
             1,
             null,
+            GROUP_TYPE::GROUP->value,
             FILTER_SECTION::GROUP->value,
             FILTER_STRING_COMPARISON::EQUALS->value,
             'group name',
@@ -119,6 +125,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
             $this->userSession,
             1,
             -1,
+            GROUP_TYPE::USER->value,
             FILTER_SECTION::GROUP->value,
             FILTER_STRING_COMPARISON::EQUALS->value,
             'group name',
@@ -137,6 +144,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
             1,
             100,
             null,
+            null,
             FILTER_STRING_COMPARISON::EQUALS->value,
             'group name',
             true
@@ -153,6 +161,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
             $this->userSession,
             1,
             100,
+            GROUP_TYPE::GROUP->value,
             'wrong section',
             FILTER_STRING_COMPARISON::EQUALS->value,
             'group name',
@@ -170,6 +179,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
             $this->userSession,
             1,
             100,
+            GROUP_TYPE::USER->value,
             FILTER_SECTION::GROUP->value,
             null,
             'group name',
@@ -187,6 +197,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
             $this->userSession,
             1,
             100,
+            null,
             FILTER_SECTION::GROUP->value,
             'wrong section',
             'group name',
@@ -204,6 +215,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
             $this->userSession,
             1,
             100,
+            GROUP_TYPE::GROUP->value,
             FILTER_SECTION::GROUP->value,
             FILTER_STRING_COMPARISON::EQUALS->value,
             null,

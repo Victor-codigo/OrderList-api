@@ -13,6 +13,7 @@ use Common\Domain\Service\ServiceInputDtoInterface;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\Filter\FILTER_SECTION;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
+use Common\Domain\Validation\Group\GROUP_TYPE;
 use Common\Domain\Validation\ValidationInterface;
 
 class GroupUserGetGroupsInputDto implements ServiceInputDtoInterface
@@ -20,15 +21,17 @@ class GroupUserGetGroupsInputDto implements ServiceInputDtoInterface
     public readonly UserShared $userSession;
     public readonly PaginatorPage $page;
     public readonly PaginatorPageItems $pageItems;
+    public readonly ?GROUP_TYPE $groupType;
     public readonly ?Filter $filterSection;
     public readonly ?Filter $filterText;
     public readonly bool $orderAsc;
 
-    public function __construct(UserShared $userSession, ?int $page, ?int $pageItems, ?string $filterSection, ?string $filterText, ?string $filterValue, bool $orderAsc)
+    public function __construct(UserShared $userSession, ?int $page, ?int $pageItems, ?string $groupType, ?string $filterSection, ?string $filterText, ?string $filterValue, bool $orderAsc)
     {
         $this->userSession = $userSession;
         $this->page = ValueObjectFactory::createPaginatorPage($page);
         $this->pageItems = ValueObjectFactory::createPaginatorPageItems($pageItems);
+        $this->groupType = $this->getGroupType($groupType);
 
         $this->filterSection = null === $filterSection ? null : ValueObjectFactory::createFilter(
             'filter_section',
@@ -94,5 +97,22 @@ class GroupUserGetGroupsInputDto implements ServiceInputDtoInterface
         }
 
         return $errorList;
+    }
+
+    private function getGroupType(?string $groupType): ?GROUP_TYPE
+    {
+        if (null === $groupType) {
+            return null;
+        }
+
+        if ('USER' === mb_strtoupper($groupType)) {
+            return GROUP_TYPE::USER;
+        }
+
+        if ('GROUP' === mb_strtoupper($groupType)) {
+            return GROUP_TYPE::GROUP;
+        }
+
+        return null;
     }
 }

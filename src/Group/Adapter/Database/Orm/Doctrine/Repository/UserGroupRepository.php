@@ -142,7 +142,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
     /**
      * @throws DBNotFoundException
      */
-    public function findUserGroupsByName(Identifier $userId, ?Filter $filterText, GROUP_TYPE $groupType, bool $orderAsc): PaginatorInterface
+    public function findUserGroupsByName(Identifier $userId, ?Filter $filterText, ?GROUP_TYPE $groupType, bool $orderAsc): PaginatorInterface
     {
         $query = $this->entityManager
             ->createQueryBuilder()
@@ -151,9 +151,13 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
             ->leftJoin(Group::class, 'groups', Join::WITH, 'groups.id = usersGroups.groupId')
             ->where('usersGroups.userId = :userId')
             ->setParameter('userId', $userId)
-            ->andWhere('groups.type = :groupType')
-            ->setParameter('groupType', $groupType)
             ->orderBy('groups.name', $orderAsc ? 'ASC' : 'DESC');
+
+        if (null !== $groupType) {
+            $query
+                ->andWhere('groups.type = :groupType')
+                ->setParameter('groupType', $groupType);
+        }
 
         if (null !== $filterText && !$filterText->isNull()) {
             $query

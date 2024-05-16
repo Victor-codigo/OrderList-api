@@ -42,7 +42,7 @@ interface UserGroupRepositoryInterface extends RepositoryInterface
     /**
      * @throws DBNotFoundException
      */
-    public function findUserGroupsByName(Identifier $userId, ?Filter $filterText, GROUP_TYPE $groupType, bool $orderAsc): PaginatorInterface;
+    public function findUserGroupsByName(Identifier $userId, ?Filter $filterText, ?GROUP_TYPE $groupType, bool $orderAsc): PaginatorInterface;
 
     /**
      * @throws DBNotFoundException

@@ -26,6 +26,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
     private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
     private const GROUP_2_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const GROUP_3_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
+    private const GROUP_4_ID = 'e05b2466-9528-4815-ac7f-663c1d89ab55';
     private const GROUP_USER_ADMIN_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
     private UserGroupRepository $object;
@@ -324,10 +325,12 @@ class UserGroupRepositoryTest extends DataBaseTestCase
             'groupId' => [
                 ValueObjectFactory::createIdentifier(self::GROUP_ID),
                 ValueObjectFactory::createIdentifier(self::GROUP_2_ID),
+                ValueObjectFactory::createIdentifier(self::GROUP_4_ID),
             ],
             'userId' => ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID),
         ]);
 
+        $r = iterator_to_array($return);
         $this->assertEqualsCanonicalizing($expectedGroups, iterator_to_array($return));
     }
 
@@ -367,6 +370,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
             'groupId' => [
                 ValueObjectFactory::createIdentifier(self::GROUP_ID),
                 ValueObjectFactory::createIdentifier(self::GROUP_2_ID),
+                ValueObjectFactory::createIdentifier(self::GROUP_4_ID),
             ],
             'userId' => ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID),
         ]);
@@ -392,6 +396,31 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         ]);
 
         $this->assertEquals($expectedGroups, iterator_to_array($return));
+    }
+
+    /** @test */
+    public function itShouldGetUserGroupsByFilterStartsWithAndGroupTypeNotSet(): void
+    {
+        $groupName = 'Group';
+        $userId = ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID);
+        $filterText = ValueObjectFactory::createFilter(
+            'text_filter',
+            ValueObjectFactory::createFilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH),
+            ValueObjectFactory::createNameWithSpaces($groupName)
+        );
+
+        $return = $this->object->findUserGroupsByName($userId, $filterText, null, true);
+        $expectedGroups = $this->object->findBy([
+            'groupId' => [
+                ValueObjectFactory::createIdentifier(self::GROUP_2_ID),
+                ValueObjectFactory::createIdentifier(self::GROUP_ID),
+                ValueObjectFactory::createIdentifier(self::GROUP_3_ID),
+                ValueObjectFactory::createIdentifier(self::GROUP_4_ID),
+            ],
+            'userId' => ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID),
+        ]);
+
+        $this->assertEqualsCanonicalizing($expectedGroups, iterator_to_array($return));
     }
 
     /** @test */

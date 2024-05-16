@@ -7,6 +7,10 @@ Common\Domain\Model\ValueObject\String\Identifier:
     __construct:
       value: "fdb242b4-bac8-4463-88d0-0941bb0beee0"
 
+  group_id_type_group_2:
+    __construct:
+      value: "e05b2466-9528-4815-ac7f-663c1d89ab55"
+
   group_id_type_user:
     __construct:
       value: "a5002966-dbf7-4f76-a862-23a04b5ca465"
@@ -27,6 +31,10 @@ Common\Domain\Model\ValueObject\String\NameWithSpaces:
   group_name_type_group:
     __construct:
       value: "GroupOne"
+
+  group_name_type_group_2:
+    __construct:
+      value: "GroupThree"
 
   group_name_type_user:
     __construct:
@@ -104,6 +112,14 @@ Group\Domain\Model\Group:
     __construct:
       id: "@group_id_type_group"
       name: "@group_name_type_group"
+      type: "@group_type_group"
+      description: "@group_description_type_group"
+      image: "@group_image_type_group"
+
+  entity-group_type_group_2:
+    __construct:
+      id: "@group_id_type_group_2"
+      name: "@group_name_type_group_2"
       type: "@group_type_group"
       description: "@group_description_type_group"
       image: "@group_image_type_group"

@@ -101,9 +101,6 @@ class GroupUserGetGroupsServiceTest extends TestCase
     /** @test */
     public function itShouldGetUserGroupsAllData(): void
     {
-        $userId = $this->getUserId();
-        $paginatorPage = ValueObjectFactory::createPaginatorPage(1);
-        $paginatorPageItems = ValueObjectFactory::createPaginatorPageItems(100);
         $expectedUserGroups = $this->getUserGroups();
         $expectedGroupsData = $this->getGroupsData();
         $groupGetDataDto = new GroupGetDataDto(array_map(
@@ -112,9 +109,10 @@ class GroupUserGetGroupsServiceTest extends TestCase
         ));
 
         $input = new GroupUserGetGroupsDto(
-            $userId,
-            $paginatorPage,
-            $paginatorPageItems,
+            $this->getUserId(),
+            ValueObjectFactory::createPaginatorPage(1),
+            ValueObjectFactory::createPaginatorPageItems(100),
+            null,
             ValueObjectFactory::createFilter(
                 'text_filter',
                 ValueObjectFactory::createFilterSection(FILTER_SECTION::GROUP),
@@ -131,7 +129,7 @@ class GroupUserGetGroupsServiceTest extends TestCase
         $this->userGroupRepository
             ->expects($this->once())
             ->method('findUserGroupsByName')
-            ->with($userId)
+            ->with($input->userId, $input->filterText, $input->groupType, $input->orderAsc)
             ->willReturn($expectedUserGroups);
 
         $this->mockGroupGetDataService($groupGetDataDto->groupsId, $expectedGroupsData, $this->once());
@@ -145,12 +143,14 @@ class GroupUserGetGroupsServiceTest extends TestCase
 
         foreach ($return->groups as $key => $groupData) {
             $this->assertArrayHasKey('group_id', $groupData);
+            $this->assertArrayHasKey('type', $groupData);
             $this->assertArrayHasKey('name', $groupData);
             $this->assertArrayHasKey('description', $groupData);
             $this->assertArrayHasKey('created_on', $groupData);
             $this->assertArrayHasKey('admin', $groupData);
 
             $this->assertEquals($expectedGroupsData[$key]->getId()->getValue(), $groupData['group_id']);
+            $this->assertEquals($expectedGroupsData[$key]->getType()->getValue()->value === GROUP_TYPE::GROUP->value ? 'group' : 'user', $groupData['type']);
             $this->assertEquals($expectedGroupsData[$key]->getName()->getValue(), $groupData['name']);
             $this->assertEquals($expectedGroupsData[$key]->getDescription()->getValue(), $groupData['description']);
             $this->assertEquals($expectedGroupsData[$key]->getCreatedOn()->format('Y-m-d H:i:s'), $groupData['created_on']);
@@ -174,6 +174,7 @@ class GroupUserGetGroupsServiceTest extends TestCase
             $userId,
             $paginatorPage,
             $paginatorPageItems,
+            null,
             ValueObjectFactory::createFilter(
                 'text_filter',
                 ValueObjectFactory::createFilterSection(FILTER_SECTION::GROUP),

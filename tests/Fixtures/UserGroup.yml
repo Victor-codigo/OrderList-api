@@ -29,11 +29,18 @@ Group\Domain\Model\UserGroup:
       roles: "@groupuser_roles_admin"
       group: "@entity-group_type_group"
 
+  entity-groupuser_roles_group_2:
+    __construct:
+      groupId: "@entity-group_type_group_2->getId"
+      userId: "@entity-user_active->getId"
+      roles: "@groupuser_roles_user"
+      group: "@entity-group_type_group_2"
+
   entity-groupuser_roles_user:
     __construct:
       groupId: "@entity-group_type_user->getId"
       userId: "@entity-user_active->getId"
-      roles: "@groupuser_roles_user"
+      roles: "@groupuser_roles_admin"
       group: "@entity-group_type_user"
 
   entity-groupuser_user_unique_group:

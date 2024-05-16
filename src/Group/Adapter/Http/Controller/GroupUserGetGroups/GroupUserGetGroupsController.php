@@ -40,6 +40,15 @@ use Symfony\Component\HttpFoundation\Response;
         ),
 
         new OA\Parameter(
+            name: 'group_type',
+            in: 'query',
+            required: false,
+            description: 'Type of groups to return',
+            example: 'user|group',
+            schema: new OA\Schema(type: 'string')
+        ),
+
+        new OA\Parameter(
             name: 'filter_section',
             in: 'query',
             required: false,
@@ -92,6 +101,7 @@ use Symfony\Component\HttpFoundation\Response;
                                 new OA\Property(property: 'groups', type: 'array', items: new OA\Items(
                                     properties: [
                                         new OA\Property(property: 'group_id', type: 'string', example: '1fcab788-0def-4e56-b441-935361678da9'),
+                                        new OA\Property(property: 'type', type: 'string', example: 'group|user'),
                                         new OA\Property(property: 'name', type: 'string', example: 'GroupName'),
                                         new OA\Property(property: 'description', type: 'string', example: 'Group description'),
                                         new OA\Property(property: 'image', type: 'string', example: 'Path to group Image'),
@@ -140,18 +150,18 @@ class GroupUserGetGroupsController extends AbstractController
     public function __invoke(GroupUserGetGroupsRequestDto $request): JsonResponse
     {
         $userGroups = $this->groupUserGetGroupsUseCase->__invoke(
-            $this->createGroupUserGetGroupsInputDto($request->page, $request->pageItems, $request->filterSection, $request->filterText, $request->filterValue, $request->orderAsc)
+            $this->createGroupUserGetGroupsInputDto($request->page, $request->pageItems, $request->groupType, $request->filterSection, $request->filterText, $request->filterValue, $request->orderAsc)
         );
 
         return $this->createResponse($userGroups);
     }
 
-    private function createGroupUserGetGroupsInputDto(int $page, int $pgaItem, ?string $filterSection, ?string $filterText, ?string $filterValue, bool $orderAsc): GroupUserGetGroupsInputDto
+    private function createGroupUserGetGroupsInputDto(int $page, int $pgaItem, ?string $groupType, ?string $filterSection, ?string $filterText, ?string $filterValue, bool $orderAsc): GroupUserGetGroupsInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();
 
-        return new GroupUserGetGroupsInputDto($userSharedAdapter->getUser(), $page, $pgaItem, $filterSection, $filterText, $filterValue, $orderAsc);
+        return new GroupUserGetGroupsInputDto($userSharedAdapter->getUser(), $page, $pgaItem, $groupType, $filterSection, $filterText, $filterValue, $orderAsc);
     }
 
     private function createResponse(ApplicationOutputInterface $userGroups): JsonResponse
