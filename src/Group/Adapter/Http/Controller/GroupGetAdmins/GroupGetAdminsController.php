@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 #[OA\Tag('Group')]
 #[OA\Get(
-    description: 'Get groups information',
+    description: 'Get admins of groups',
     parameters: [
         new OA\Parameter(
             name: 'group_id',
@@ -99,7 +99,7 @@ class GroupGetAdminsController extends AbstractController
         return $this->createResponse($groupAdmins);
     }
 
-    private function createGroupGetAdminsInputDto(string|null $groupId): GroupGetAdminsInputDto
+    private function createGroupGetAdminsInputDto(?string $groupId): GroupGetAdminsInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();
