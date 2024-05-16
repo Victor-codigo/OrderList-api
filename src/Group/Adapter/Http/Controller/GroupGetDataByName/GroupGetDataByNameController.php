@@ -42,6 +42,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'data', type: 'object',
                             properties: [
                                 new OA\Property(property: 'group_id', type: 'string', example: '1fcab788-0def-4e56-b441-935361678da9'),
+                                new OA\Property(property: 'type', type: 'string', example: 'group|user'),
                                 new OA\Property(property: 'name', type: 'string', example: 'GroupName'),
                                 new OA\Property(property: 'description', type: 'string', example: 'Group description'),
                                 new OA\Property(property: 'image', type: 'string', example: 'Path to the group image'),
@@ -116,7 +117,7 @@ class GroupGetDataByNameController extends AbstractController
         return $this->createResponse($groupData);
     }
 
-    private function createGroupGetDataByNameInputDto(string|null $groupName): GroupGetDataByNameInputDto
+    private function createGroupGetDataByNameInputDto(?string $groupName): GroupGetDataByNameInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();

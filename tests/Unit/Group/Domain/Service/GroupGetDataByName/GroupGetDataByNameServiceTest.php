@@ -50,6 +50,7 @@ class GroupGetDataByNameServiceTest extends TestCase
         $this->assertArrayHasKey('created_on', $groupDataActual);
 
         $this->assertEquals($groupDataExpected->getId()->getValue(), $groupDataActual['group_id']);
+        $this->assertEquals(GROUP_TYPE::GROUP === $groupDataExpected->getType()->getValue() ? 'group' : 'user', $groupDataActual['type']);
         $this->assertEquals($groupDataExpected->getName()->getValue(), $groupDataActual['name']);
         $this->assertEquals($groupDataExpected->getDescription()->getValue(), $groupDataActual['description']);
 

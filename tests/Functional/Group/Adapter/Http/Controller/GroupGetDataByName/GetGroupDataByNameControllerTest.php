@@ -35,12 +35,14 @@ class GetGroupDataByNameControllerTest extends WebClientTestCase
         $appProtocolAndDomain = static::getContainer()->getParameter('common.app.protocolAndDomain');
 
         $this->assertTrue(property_exists($groupDataActual, 'group_id'));
+        $this->assertTrue(property_exists($groupDataActual, 'type'));
         $this->assertTrue(property_exists($groupDataActual, 'name'));
         $this->assertTrue(property_exists($groupDataActual, 'description'));
         $this->assertTrue(property_exists($groupDataActual, 'image'));
         $this->assertTrue(property_exists($groupDataActual, 'created_on'));
 
         $this->assertEquals($groupDataExpected->getId()->getValue(), $groupDataActual->group_id);
+        $this->assertEquals(GROUP_TYPE::GROUP === $groupDataExpected->getType()->getValue() ? 'group' : 'user', $groupDataActual->type);
         $this->assertEquals($groupDataExpected->getName()->getValue(), $groupDataActual->name);
         $this->assertEquals($groupDataExpected->getDescription()->getValue(), $groupDataActual->description);
         $this->assertEquals($appProtocolAndDomain.$pathImageGroup.'/'.$groupDataExpected->getImage()->getValue(), $groupDataActual->image);
