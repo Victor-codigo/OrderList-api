@@ -7,9 +7,11 @@ namespace Group\Domain\Service\GroupRemove;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\Image\EntityImageRemove\EntityImageRemoveService;
+use Common\Domain\Validation\Group\GROUP_TYPE;
 use Group\Domain\Model\Group;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Service\GroupRemove\Dto\GroupRemoveDto;
+use Group\Domain\Service\GroupRemove\Exception\GroupRemovePermissionsException;
 
 class GroupRemoveService
 {
@@ -23,13 +25,29 @@ class GroupRemoveService
     /**
      * @throws DBNotFoundException
      * @throws DBConnectionException
+     * @throws GroupModifyPermissionsException
      */
     public function __invoke(GroupRemoveDto $input): void
     {
         $groups = $this->groupRepository->findGroupsByIdOrFail($input->groupsId);
+        $this->isGroupRemovable($groups);
 
         $this->removeGroupsImages($groups);
         $this->groupRepository->remove($groups);
+    }
+
+    /**
+     * @param Group[] $groups
+     *
+     * @throws GroupModifyPermissionsException
+     */
+    private function isGroupRemovable(array $groups): void
+    {
+        foreach ($groups as $group) {
+            if (GROUP_TYPE::USER === $group->getType()->getValue()) {
+                throw new GroupRemovePermissionsException();
+            }
+        }
     }
 
     /**

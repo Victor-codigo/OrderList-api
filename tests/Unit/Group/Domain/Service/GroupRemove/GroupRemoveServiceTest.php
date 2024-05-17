@@ -13,6 +13,7 @@ use Common\Domain\Validation\Group\GROUP_TYPE;
 use Group\Domain\Model\Group;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Service\GroupRemove\Dto\GroupRemoveDto;
+use Group\Domain\Service\GroupRemove\Exception\GroupRemovePermissionsException;
 use Group\Domain\Service\GroupRemove\GroupRemoveService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -160,6 +161,35 @@ class GroupRemoveServiceTest extends TestCase
             ->method('remove');
 
         $this->expectException(DBNotFoundException::class);
+        $this->object->__invoke($input);
+    }
+
+    /** @test */
+    public function itShouldFailGroupTypeIsUser(): void
+    {
+        $groupsId = [
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifier(self::GROUP_2_ID),
+        ];
+        $groups = $this->getGroupsData();
+        $groups[0]->setType(ValueObjectFactory::createGroupType(GROUP_TYPE::USER));
+        $input = new GroupRemoveDto($groupsId);
+
+        $this->groupRepository
+            ->expects($this->once())
+            ->method('findGroupsByIdOrFail')
+            ->with($groupsId)
+            ->willReturn($groups);
+
+        $this->entityImageRemoveService
+            ->expects($this->never())
+            ->method('__invoke');
+
+        $this->groupRepository
+            ->expects($this->never())
+            ->method('remove');
+
+        $this->expectException(GroupRemovePermissionsException::class);
         $this->object->__invoke($input);
     }
 

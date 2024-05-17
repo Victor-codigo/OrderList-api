@@ -20,6 +20,7 @@ use Group\Application\GroupRemove\Exception\GroupRemovePermissionsException;
 use Group\Domain\Model\Group;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Service\GroupRemove\Dto\GroupRemoveDto;
+use Group\Domain\Service\GroupRemove\Exception\GroupRemovePermissionsException as GroupRemovePermissionsServiceException;
 use Group\Domain\Service\GroupRemove\GroupRemoveService;
 use Group\Domain\Service\UserHasGroupAdminGrants\UserHasGroupAdminGrantsService;
 
@@ -51,6 +52,8 @@ class GroupRemoveUseCase extends ServiceBase
             $this->createNotificationGroupsRemoved($input->userSession->getId(), $groups, $this->systemKey);
 
             return $this->createGroupRemoveOutputDto($input->groupsId);
+        } catch (GroupRemovePermissionsServiceException) {
+            throw GroupRemovePermissionsException::fromMessage('Not permissions in this group');
         } catch (DBNotFoundException) {
             throw GroupRemoveGroupNotFoundException::fromMessage('Group not found');
         }

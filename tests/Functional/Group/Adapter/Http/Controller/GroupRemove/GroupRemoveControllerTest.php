@@ -109,6 +109,27 @@ class GroupRemoveControllerTest extends WebClientTestCase
     }
 
     /** @test */
+    public function itShouldFailGroupTypeUser(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'groups_id' => [self::GROUP_ID_USER_NOT_ADMIN],
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['permissions'], Response::HTTP_UNAUTHORIZED);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Not permissions in this group', $responseContent->message);
+        $this->assertSame('Not permissions in this group', $responseContent->errors->permissions);
+    }
+
+    /** @test */
     public function itShouldFailUserIdIsNotAdmin(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();
