@@ -16,6 +16,7 @@ use Group\Domain\Model\Group;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Service\GroupModify\BuiltInFunctionsReturn;
 use Group\Domain\Service\GroupModify\Dto\GroupModifyDto;
+use Group\Domain\Service\GroupModify\Exception\GroupModifyPermissionsException;
 use Group\Domain\Service\GroupModify\GroupModifyService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -356,6 +357,41 @@ class GroupModifyServiceTest extends TestCase
             ->method('save');
 
         $this->expectException(DBNotFoundException::class);
+        $this->object->__invoke($input);
+    }
+
+    /** @test */
+    public function itShouldFailGroupNoPermissions(): void
+    {
+        $group = $this->getGroup();
+        $group->setType(ValueObjectFactory::createGroupType(GROUP_TYPE::USER));
+        $input = new GroupModifyDto(
+            $group->getId(),
+            $group->getName(),
+            $group->getDescription(),
+            false,
+            ValueObjectFactory::createGroupImage($this->imageUploaded)
+        );
+
+        $this->groupRepository
+            ->expects($this->once())
+            ->method('findGroupsByIdOrFail')
+            ->with([$group->getId()])
+            ->willReturn([$group]);
+
+        $this->fileUpload
+            ->expects($this->never())
+            ->method('__invoke');
+
+        $this->fileUpload
+            ->expects($this->never())
+            ->method('getFileName');
+
+        $this->groupRepository
+            ->expects($this->never())
+            ->method('save');
+
+        $this->expectException(GroupModifyPermissionsException::class);
         $this->object->__invoke($input);
     }
 

@@ -15,6 +15,7 @@ use Group\Application\GroupModify\Dto\GroupModifyOutputDto;
 use Group\Application\GroupModify\Exception\GroupModifyGroupNotFoundException;
 use Group\Application\GroupModify\Exception\GroupModifyPermissionsException;
 use Group\Domain\Service\GroupModify\Dto\GroupModifyDto;
+use Group\Domain\Service\GroupModify\Exception\GroupModifyPermissionsException as GroupModifyPermissionsServiceException;
 use Group\Domain\Service\GroupModify\GroupModifyService;
 use Group\Domain\Service\UserHasGroupAdminGrants\UserHasGroupAdminGrantsService;
 
@@ -39,6 +40,8 @@ class GroupModifyUseCase extends ServiceBase
             return $this->createGroupModifyOutputDto($input->groupId);
         } catch (ValueObjectValidationException|GroupModifyPermissionsException $e) {
             throw $e;
+        } catch (GroupModifyPermissionsServiceException) {
+            throw GroupModifyPermissionsException::fromMessage('Not permissions in this group');
         } catch (DBNotFoundException) {
             throw GroupModifyGroupNotFoundException::fromMessage('Group not found');
         } catch (\Exception $e) {

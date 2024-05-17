@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace Group\Domain\Service\GroupModify;
 
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\FileSystem\DomainFileNotDeletedException;
 use Common\Domain\Model\ValueObject\Object\GroupImage;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
+use Common\Domain\Validation\Group\GROUP_TYPE;
 use Group\Domain\Model\Group;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Service\GroupModify\Dto\GroupModifyDto;
+use Group\Domain\Service\GroupModify\Exception\GroupModifyPermissionsException;
 
 class GroupModifyService
 {
@@ -25,16 +28,28 @@ class GroupModifyService
     /**
      * @throws DBNotFoundException
      * @throws DBConnectionException
+     * @throws GroupModifyPermissionsException
      */
     public function __invoke(GroupModifyDto $input): void
     {
         $group = $this->groupRepository->findGroupsByIdOrFail([$input->groupId]);
+        $this->isGroupModifiable($group[0]);
 
         $input->name->isNull() ?: $group[0]->setName($input->name);
         $input->description->isNull() ?: $group[0]->setDescription($input->description);
         $this->setGroupImage($group[0], $input->image, $input->imageRemove);
 
         $this->groupRepository->save($group[0]);
+    }
+
+    /**
+     * @throws GroupModifyPermissionsException
+     */
+    private function isGroupModifiable(Group $group): void
+    {
+        if (GROUP_TYPE::USER === $group->getType()->getValue()) {
+            throw new GroupModifyPermissionsException();
+        }
     }
 
     private function setGroupImage(Group $group, GroupImage $image, bool $imageRemove): void
@@ -63,7 +78,7 @@ class GroupModifyService
     private function uploadGroupImage(GroupImage $groupImageUploaded, Path $userCurrentFileName): Path
     {
         if ($groupImageUploaded->isNull()) {
-            return new path(null);
+            return new Path(null);
         }
 
         $uploadedFile = $groupImageUploaded->getValue();

@@ -17,6 +17,7 @@ class GroupModifyControllerTest extends WebClientTestCase
     private const ENDPOINT = '/api/v1/groups/modify';
     private const METHOD = 'PUT';
     private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const GROUP_TYPE_USER_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
 
     private const PATH_FIXTURES = __DIR__.'/Fixtures';
     private const PATH_IMAGE_UPLOAD = __DIR__.'/Fixtures/Image.png';
@@ -354,6 +355,33 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Group not found', $responseContent->message);
         $this->assertSame('Group not found', $responseContent->errors->group_not_found);
+    }
+
+    /** @test */
+    public function itShouldFailGroupTypeIsUser(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_TYPE_USER_ID,
+                'name' => 'GroupName',
+                'description' => 'Group description',
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            ]
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['permissions'], Response::HTTP_UNAUTHORIZED);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Not permissions in this group', $responseContent->message);
+        $this->assertSame('Not permissions in this group', $responseContent->errors->permissions);
     }
 
     /** @test */
