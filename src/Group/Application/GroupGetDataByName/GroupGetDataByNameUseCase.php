@@ -62,7 +62,7 @@ class GroupGetDataByNameUseCase extends ServiceBase
 
     private function createGroupGetDataByNameDto(GroupGetDataByNameInputDto $input): GroupGetDataByNameDto
     {
-        return new GroupGetDataByNameDto($input->groupName);
+        return new GroupGetDataByNameDto($input->groupName, $input->userSession->getImage());
     }
 
     private function createGroupGetDataByNameOutputDto(array $groupData): GroupGetDataByNameOutputDto

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\Group\Domain\Service\GroupGetDataByName;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Group\Domain\Model\Group;
@@ -41,7 +42,18 @@ class GroupGetDataByNameServiceTest extends TestCase
         );
     }
 
-    private function assertGroupIdOk(Group $groupDataExpected, array $groupDataActual): void
+    private function getGroupTypeUserData(): Group
+    {
+        return Group::fromPrimitives(
+            '0ed6999b-11b5-4a20-8e37-38f8d623caa7',
+            'groupForTesting',
+            GROUP_TYPE::USER,
+            'Description of the group',
+            'path/to/image'
+        );
+    }
+
+    private function assertGroupIdOk(Group $groupDataExpected, array $groupDataActual, Path $userImage): void
     {
         $this->assertArrayHasKey('group_id', $groupDataActual);
         $this->assertArrayHasKey('name', $groupDataActual);
@@ -56,8 +68,16 @@ class GroupGetDataByNameServiceTest extends TestCase
 
         if (null === $groupDataExpected->getImage()->getValue()) {
             $this->assertEquals(null, $groupDataActual['image']);
+        } elseif (GROUP_TYPE::USER === $groupDataExpected->getType()->getValue()) {
+            $this->assertEquals(
+                $userImage->getValue(),
+                $groupDataActual['image']
+            );
         } else {
-            $this->assertEquals(self::APP_PROTOCOL_AND_DOMAIN.self::GROUP_PUBLIC_PATH.'/'.$groupDataExpected->getImage()->getValue(), $groupDataActual['image']);
+            $this->assertEquals(
+                self::APP_PROTOCOL_AND_DOMAIN.self::GROUP_PUBLIC_PATH."/{$groupDataExpected->getImage()->getValue()}",
+                $groupDataActual['image']
+            );
         }
     }
 
@@ -66,7 +86,8 @@ class GroupGetDataByNameServiceTest extends TestCase
     {
         $groupDataExpected = $this->getGroupData();
         $input = new GroupGetDataByNameDto(
-            ValueObjectFactory::createNameWithSpaces('groupOne')
+            ValueObjectFactory::createNameWithSpaces('groupOne'),
+            ValueObjectFactory::createPath('image.file')
         );
 
         $this->groupRepository
@@ -77,7 +98,27 @@ class GroupGetDataByNameServiceTest extends TestCase
 
         $return = $this->object->__invoke($input);
 
-        $this->assertGroupIdOk($groupDataExpected, $return);
+        $this->assertGroupIdOk($groupDataExpected, $return, $input->userImage);
+    }
+
+    /** @test */
+    public function itShouldGetTheGroupDataGroupTypeUser(): void
+    {
+        $groupDataExpected = $this->getGroupTypeUserData();
+        $input = new GroupGetDataByNameDto(
+            ValueObjectFactory::createNameWithSpaces('groupOne'),
+            ValueObjectFactory::createPath('image.file')
+        );
+
+        $this->groupRepository
+            ->expects($this->once())
+            ->method('findGroupByNameOrFail')
+            ->with($input->groupName)
+            ->willReturn($groupDataExpected);
+
+        $return = $this->object->__invoke($input);
+
+        $this->assertGroupIdOk($groupDataExpected, $return, $input->userImage);
     }
 
     /** @test */
@@ -86,7 +127,8 @@ class GroupGetDataByNameServiceTest extends TestCase
         $groupDataExpected = $this->getGroupData();
         $groupDataExpected->setImage(ValueObjectFactory::createPath(null));
         $input = new GroupGetDataByNameDto(
-            ValueObjectFactory::createNameWithSpaces('groupOne')
+            ValueObjectFactory::createNameWithSpaces('groupOne'),
+            ValueObjectFactory::createPath('image.file')
         );
 
         $this->groupRepository
@@ -97,14 +139,15 @@ class GroupGetDataByNameServiceTest extends TestCase
 
         $return = $this->object->__invoke($input);
 
-        $this->assertGroupIdOk($groupDataExpected, $return);
+        $this->assertGroupIdOk($groupDataExpected, $return, $input->userImage);
     }
 
     /** @test */
     public function itShouldFailGettingTheGroupDataByTheName(): void
     {
         $input = new GroupGetDataByNameDto(
-            ValueObjectFactory::createNameWithSpaces('groupOne')
+            ValueObjectFactory::createNameWithSpaces('groupOne'),
+            ValueObjectFactory::createPath('image.file')
         );
 
         $this->groupRepository
