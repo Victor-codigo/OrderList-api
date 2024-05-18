@@ -8,6 +8,7 @@ use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\Group\GROUP_TYPE;
@@ -33,13 +34,13 @@ class GroupUserGetGroupsService
     {
         $userGroups = $this->userGroupRepository->findUserGroupsByName($input->userId, $input->filterText, $input->groupType, $input->orderAsc);
 
-        return $this->getUserGroups($userGroups, $input->groupType, $input->page, $input->pageItems);
+        return $this->getUserGroups($userGroups, $input->groupType, $input->page, $input->pageItems, $input->userImage);
     }
 
     /**
      * @throws DBNotFoundException
      */
-    private function getUserGroups(PaginatorInterface $userGroups, ?GROUP_TYPE $groupType, PaginatorPage $page, PaginatorPageItems $pageItems): GroupUserGetGroupsOutputDto
+    private function getUserGroups(PaginatorInterface $userGroups, ?GROUP_TYPE $groupType, PaginatorPage $page, PaginatorPageItems $pageItems, Path $userImage): GroupUserGetGroupsOutputDto
     {
         $userGroups->setPagination($page->getValue(), $pageItems->getValue());
 
@@ -59,7 +60,7 @@ class GroupUserGetGroupsService
         );
 
         $groupsData = iterator_to_array($this->groupGetDataService->__invoke(
-            $this->createGroupGetDataDto($groupsId, $groupType)
+            $this->createGroupGetDataDto($groupsId, $groupType, $userImage)
         ));
 
         array_walk(
@@ -73,8 +74,8 @@ class GroupUserGetGroupsService
     /**
      * @param Identifier[] $groupsId
      */
-    private function createGroupGetDataDto(array $groupsId, ?GROUP_TYPE $groupType): GroupGetDataDto
+    private function createGroupGetDataDto(array $groupsId, ?GROUP_TYPE $groupType, Path $userImage): GroupGetDataDto
     {
-        return new GroupGetDataDto($groupsId, $groupType);
+        return new GroupGetDataDto($groupsId, $groupType, $userImage);
     }
 }

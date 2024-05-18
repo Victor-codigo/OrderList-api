@@ -103,13 +103,18 @@ class GroupUserGetGroupsServiceTest extends TestCase
     {
         $expectedUserGroups = $this->getUserGroups();
         $expectedGroupsData = $this->getGroupsData();
-        $groupGetDataDto = new GroupGetDataDto(array_map(
-            fn (UserGroup $userGroup) => $userGroup->getGroupId(),
-            iterator_to_array($expectedUserGroups)
-        ));
+        $groupGetDataDto = new GroupGetDataDto(
+            array_map(
+                fn (UserGroup $userGroup) => $userGroup->getGroupId(),
+                iterator_to_array($expectedUserGroups)
+            ),
+            null,
+            ValueObjectFactory::createPath('image.file')
+        );
 
         $input = new GroupUserGetGroupsDto(
             $this->getUserId(),
+            $groupGetDataDto->userImage,
             ValueObjectFactory::createPaginatorPage(1),
             ValueObjectFactory::createPaginatorPageItems(100),
             null,
@@ -166,12 +171,17 @@ class GroupUserGetGroupsServiceTest extends TestCase
         $paginatorPageItems = ValueObjectFactory::createPaginatorPageItems(100);
         $expectedUserGroups = $this->getUserGroups();
         $expectedGroupsData = $this->getGroupsData();
-        $groupGetDataDto = new GroupGetDataDto(array_map(
-            fn (UserGroup $userGroup) => $userGroup->getGroupId(),
-            iterator_to_array($expectedUserGroups)
-        ));
+        $groupGetDataDto = new GroupGetDataDto(
+            array_map(
+                fn (UserGroup $userGroup) => $userGroup->getGroupId(),
+                iterator_to_array($expectedUserGroups)
+            ),
+            null,
+            ValueObjectFactory::createPath('image.file')
+        );
         $input = new GroupUserGetGroupsDto(
             $userId,
+            $groupGetDataDto->userImage,
             $paginatorPage,
             $paginatorPageItems,
             null,
