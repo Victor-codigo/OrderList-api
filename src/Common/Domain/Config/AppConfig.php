@@ -24,6 +24,11 @@ class AppConfig
     public const ENDPOINT_GROUP_USER_ADD_MAX_USERS = 50;
 
     /**
+     * Maximum number of users can be removed to a group per request.
+     */
+    public const ENDPOINT_GROUP_USER_REMOVE_MAX_USERS = 50;
+
+    /**
      * Maximum number of users can role be changed per request.
      */
     public const ENDPOINT_GROUP_USER_ROLE_CHANGE_MAX_USERS = 50;

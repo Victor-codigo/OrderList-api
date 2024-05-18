@@ -6,7 +6,7 @@ namespace Group\Domain\Service\GroupUserRemove\Exception;
 
 use Common\Domain\Exception\DomainException;
 
-class GroupUserRemoveGroupWithoutAdmin extends DomainException
+class GroupUserRemoveGroupWithoutAdminException extends DomainException
 {
     public static function fromMessage(string $message): static
     {

@@ -16,6 +16,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
     private const ENDPOINT = '/api/v1/groups/user';
     private const METHOD = 'DELETE';
     private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const GROUP_TYPE_USER_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
     private const GROUP_USER_ADMIN_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
     private const GROUP_USERS_TO_REMOVE_ID = [
         '1befdbe2-9c14-42f0-850f-63e061e33b8f',
@@ -264,6 +265,28 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Group or users not found', $responseContent->message);
         $this->assertEquals('Group or users not found', $responseContent->errors->group_users_not_found);
+    }
+
+    /** @test */
+    public function itShouldFailGroupTypeUser(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_TYPE_USER_ID,
+                'users_id' => self::GROUP_USERS_TO_REMOVE_ID,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['permissions'], Response::HTTP_UNAUTHORIZED);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Not permissions in this group', $responseContent->message);
+        $this->assertEquals('Not permissions in this group', $responseContent->errors->permissions);
     }
 
     /** @test */

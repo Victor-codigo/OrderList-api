@@ -25,7 +25,8 @@ use Group\Application\GroupUserRemove\Exception\GroupUserRemovePermissionsExcept
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Service\GroupUserRemove\Dto\GroupUserRemoveDto;
 use Group\Domain\Service\GroupUserRemove\Exception\GroupUserRemoveEmptyException;
-use Group\Domain\Service\GroupUserRemove\Exception\GroupUserRemoveGroupWithoutAdmin;
+use Group\Domain\Service\GroupUserRemove\Exception\GroupUserRemoveGroupWithoutAdminException as GroupUserRemoveGroupWithoutAdminServiceException;
+use Group\Domain\Service\GroupUserRemove\Exception\GroupUserRemovePermissionsException as GroupUserRemovePermissionsServiceException;
 use Group\Domain\Service\GroupUserRemove\GroupUserRemoveService;
 use Group\Domain\Service\UserHasGroupAdminGrants\UserHasGroupAdminGrantsService;
 
@@ -43,6 +44,8 @@ class GroupUserRemoveUseCase extends ServiceBase
 
     /**
      * @throws GroupUserRemoveGroupEmptyException
+     * @throws GroupUserRemoveGroupNotificationException
+     * @throws ValueObjectValidationException
      * @throws GroupUserRemoveGroupWithoutAdminException
      * @throws GroupUserRemoveGroupUsersNotFoundException
      * @throws GroupUserRemovePermissionsException
@@ -51,8 +54,9 @@ class GroupUserRemoveUseCase extends ServiceBase
      */
     public function __invoke(GroupUserRemoveInputDto $input): GroupUserRemoveOutputDto
     {
+        $this->validation($input);
+
         try {
-            $this->validation($input);
             $group = $this->groupRepository->findGroupsByIdOrFail([$input->groupId])[0];
             $usersRemovedId = $this->groupUserRemoveService->__invoke(
                 $this->createGroupUserRemoveDto($input)
@@ -63,16 +67,21 @@ class GroupUserRemoveUseCase extends ServiceBase
             return $this->createGroupUserRemoveOutputDto($usersRemovedId);
         } catch (GroupUserRemoveEmptyException) {
             throw GroupUserRemoveGroupEmptyException::fromMessage('Cannot remove all users form a group');
-        } catch (GroupUserRemoveGroupWithoutAdmin) {
+        } catch (GroupUserRemoveGroupWithoutAdminServiceException) {
             throw GroupUserRemoveGroupWithoutAdminException::fromMessage('Cannot remove all admins form a group');
-        } catch (DBNotFoundException) {
-            throw GroupUserRemoveGroupUsersNotFoundException::fromMessage('Group or users not found');
+        } catch (GroupUserRemovePermissionsServiceException) {
+            throw GroupUserRemovePermissionsException::fromMessage('Not permissions in this group');
+        } catch (GroupUserRemoveGroupNotificationException $e) {
+            throw $e;
+        } catch (\Throwable $e) {
+            throw DomainErrorException::fromMessage('An error has been occurred');
         }
     }
 
     /**
      * @throws GroupUserRemovePermissionsException
-     * @throws GroupUserRemovePermissionsException
+     * @throws ValueObjectValidationException
+     * @throws GroupUserRemoveGroupUsersNotFoundException
      */
     private function validation(GroupUserRemoveInputDto $input): void
     {
@@ -87,19 +96,25 @@ class GroupUserRemoveUseCase extends ServiceBase
 
     /**
      * @param Identifier[] $usersId
+     *
+     * @throws GroupUserRemoveGroupUsersNotFoundException
      */
     private function validateUserPrivileges(UserShared $userSession, Identifier $groupId, array $usersId): void
     {
-        if ($this->userHasGroupAdminGrantsService->__invoke($userSession, $groupId)) {
-            return;
-        }
+        try {
+            if ($this->userHasGroupAdminGrantsService->__invoke($userSession, $groupId)) {
+                return;
+            }
 
-        if (count($usersId) > 1) {
-            throw GroupUserRemovePermissionsException::fromMessage('Not permissions in this group');
-        }
+            if (count($usersId) > 1) {
+                throw GroupUserRemovePermissionsException::fromMessage('Not permissions in this group');
+            }
 
-        if (!$userSession->getId()->equalTo(reset($usersId))) {
-            throw GroupUserRemovePermissionsException::fromMessage('Not permissions in this group');
+            if (!$userSession->getId()->equalTo(reset($usersId))) {
+                throw GroupUserRemovePermissionsException::fromMessage('Not permissions in this group');
+            }
+        } catch (DBNotFoundException) {
+            throw GroupUserRemoveGroupUsersNotFoundException::fromMessage('Group or users not found');
         }
     }
 
