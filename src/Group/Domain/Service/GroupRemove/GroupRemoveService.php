@@ -25,7 +25,7 @@ class GroupRemoveService
     /**
      * @throws DBNotFoundException
      * @throws DBConnectionException
-     * @throws GroupModifyPermissionsException
+     * @throws GroupRemovePermissionsException
      */
     public function __invoke(GroupRemoveDto $input): void
     {
@@ -39,7 +39,7 @@ class GroupRemoveService
     /**
      * @param Group[] $groups
      *
-     * @throws GroupModifyPermissionsException
+     * @throws GroupRemovePermissionsException
      */
     private function isGroupRemovable(array $groups): void
     {

@@ -24,6 +24,7 @@ use Group\Application\GroupUserAdd\Exception\GroupUserAddAllUsersAreAlreadyInThe
 use Group\Application\GroupUserAdd\Exception\GroupUserAddGroupMaximumUsersNumberExceededException;
 use Group\Application\GroupUserAdd\Exception\GroupUserAddGroupNotFoundException;
 use Group\Application\GroupUserAdd\Exception\GroupUserAddNotificationException;
+use Group\Application\GroupUserAdd\Exception\GroupUserAddPermissionException;
 use Group\Application\GroupUserAdd\Exception\GroupUserAddUsersValidationException;
 use Group\Application\GroupUserRoleChange\Exception\GroupUserRoleChangePermissionException;
 use Group\Domain\Model\Group;
@@ -33,6 +34,7 @@ use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupUserAdd\Dto\GroupUserAddDto;
 use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersAlreadyInTheGroupException;
 use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersMaxNumberExceededException;
+use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersPermissionsException as GroupAddUsersPermissionsServiceException;
 use Group\Domain\Service\GroupUserAdd\GroupUserAddService;
 use Group\Domain\Service\UserHasGroupAdminGrants\UserHasGroupAdminGrantsService;
 
@@ -73,6 +75,8 @@ class GroupUserAddUseCase extends ServiceBase
             throw GroupUserAddGroupMaximumUsersNumberExceededException::fromMessage('Group User number exceeded');
         } catch (GroupAddUsersAlreadyInTheGroupException) {
             throw GroupUserAddAllUsersAreAlreadyInTheGroupException::fromMessage('All users are already in the group');
+        } catch (GroupAddUsersPermissionsServiceException) {
+            throw GroupUserAddPermissionException::fromMessage('Permissions denied');
         } catch (DBNotFoundException) {
             throw GroupUserAddGroupNotFoundException::fromMessage('Group not found');
         } catch (DBConnectionException|ModuleCommunicationException $e) {

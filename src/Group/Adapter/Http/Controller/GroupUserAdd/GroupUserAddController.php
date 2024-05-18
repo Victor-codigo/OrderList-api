@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Adapter\Http\Controller\GroupUserAdd;
 
-use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use Group\Adapter\Http\Controller\GroupUserAdd\Dto\GroupUserAddRequestDto;
@@ -127,10 +127,10 @@ class GroupUserAddController extends AbstractController
             $this->createGroupUserAddInputDto($request->groupId, $request->users, $request->identifierType, $request->admin)
         );
 
-        return $this->createResponse($usersModifiedId->usersId);
+        return $this->createResponse($usersModifiedId);
     }
 
-    private function createGroupUserAddInputDto(string|null $groupId, array|null $users, string|null $identifierType, bool|null $admin): GroupUserAddInputDto
+    private function createGroupUserAddInputDto(?string $groupId, ?array $users, ?string $identifierType, ?bool $admin): GroupUserAddInputDto
     {
         /** @var UserSharedSymfonyAdapter userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();
@@ -144,18 +144,10 @@ class GroupUserAddController extends AbstractController
         );
     }
 
-    /**
-     * @param Identifier[] $usersId
-     */
-    private function createResponse(array $usersId): JsonResponse
+    private function createResponse(ApplicationOutputInterface $usersModifiedId): JsonResponse
     {
-        $users = array_map(
-            fn (Identifier $userId) => $userId->getValue(),
-            $usersId
-        );
-
         $responseData = new ResponseDto(
-            ['id' => $users],
+            ['id' => $usersModifiedId->toArray()],
             [],
             'Users added to the group',
             RESPONSE_STATUS::OK

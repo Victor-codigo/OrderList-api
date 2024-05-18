@@ -17,6 +17,7 @@ use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupUserAdd\Dto\GroupUserAddDto;
 use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersAlreadyInTheGroupException;
 use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersMaxNumberExceededException;
+use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersPermissionsException;
 use Group\Domain\Service\GroupUserAdd\GroupUserAddService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -24,6 +25,7 @@ use PHPUnit\Framework\TestCase;
 class GroupUserAddServiceTest extends TestCase
 {
     private const GROUP_ID = '76033a53-371e-46df-ac6f-19e67b3263ad';
+    private const GROUP_TYPE_USER_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
 
     private GroupUserAddService $object;
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;
@@ -148,7 +150,7 @@ class GroupUserAddServiceTest extends TestCase
         return true;
     }
 
-    private function mockMethodsInvoke(GroupUserAddDto $groupUserAddDto, array $expectUsersGroup, \Exception|null $saveException = null): void
+    private function mockMethodsInvoke(GroupUserAddDto $groupUserAddDto, array $expectUsersGroup, ?\Exception $saveException = null): void
     {
         $this->userGroupRepository
             ->expects($this->once())
@@ -247,6 +249,36 @@ class GroupUserAddServiceTest extends TestCase
             ->expects($this->never())
             ->method('findGroupUsersOrFail');
 
+        $this->object->__invoke($groupUserAddDto);
+    }
+
+    private function getGroup(): Group
+    {
+        return Group::fromPrimitives(self::GROUP_TYPE_USER_ID, 'GroupTwo', GROUP_TYPE::USER, 'This is a group of one user', 'image_of_group_type_user');
+    }
+
+    /** @test */
+    public function itShouldFailGroupTypeUsers(): void
+    {
+        $usersId = [
+            '2606508b-4516-45d6-93a6-c7cb416b7f3f',
+            'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7',
+            'a004eb47-6d12-4467-a0d1-2d9fab757f19',
+        ];
+        $groupUserAddDto = $this->createGroupUserAddDto($usersId);
+        $group = $this->getGroup();
+
+        $this->groupRepository
+            ->expects($this->once())
+            ->method('findGroupsByIdOrFail')
+            ->with([$groupUserAddDto->groupId])
+            ->willReturn([$group]);
+
+        $this->userGroupRepository
+            ->expects($this->never())
+            ->method('findGroupUsersOrFail');
+
+        $this->expectException(GroupAddUsersPermissionsException::class);
         $this->object->__invoke($groupUserAddDto);
     }
 

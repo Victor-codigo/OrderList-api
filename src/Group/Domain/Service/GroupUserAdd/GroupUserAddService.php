@@ -9,6 +9,7 @@ use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use Common\Domain\Validation\Group\GROUP_TYPE;
 use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
@@ -16,6 +17,7 @@ use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupUserAdd\Dto\GroupUserAddDto;
 use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersAlreadyInTheGroupException;
 use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersMaxNumberExceededException;
+use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersPermissionsException;
 
 class GroupUserAddService
 {
@@ -34,11 +36,13 @@ class GroupUserAddService
      * @throws DBConnectionException
      * @throws GroupAddUsersMaxNumberExceededException
      * @throws GroupAddUsersAlreadyInTheGroupException
+     * @throws GroupAddUsersPermissionsException
      */
     public function __invoke(GroupUserAddDto $input): array
     {
         $this->validateGroupUsersNumber($input->groupId, count($input->usersId));
         $group = $this->groupRepository->findGroupsByIdOrFail([$input->groupId]);
+        $this->canAddUsers($group[0]);
         $groupUsers = $this->userGroupRepository->findGroupUsersOrFail($input->groupId);
         $groupUsersNew = $this->getUsersNotInGroup($groupUsers, $input->usersId);
         $usersGroupNewObjects = $this->createUserGroup($input->groupId, $groupUsersNew, $input->rol, $group[0]);
@@ -46,6 +50,16 @@ class GroupUserAddService
         $this->userGroupRepository->save($usersGroupNewObjects);
 
         return $usersGroupNewObjects;
+    }
+
+    /**
+     * @throws GroupAddUsersPermissionsException
+     */
+    private function canAddUsers(Group $group): void
+    {
+        if (GROUP_TYPE::USER === $group->getType()->getValue()) {
+            throw new GroupAddUsersPermissionsException();
+        }
     }
 
     /**

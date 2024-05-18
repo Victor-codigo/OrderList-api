@@ -16,6 +16,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     private const ENDPOINT = '/api/v1/groups/user';
     private const METHOD = 'POST';
     private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const GROUP_TYPE_USER_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
     private const GROUP_USERS_100_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const USER_TO_ADD_IDS = [
         '1552b279-5f78-4585-ae1b-31be2faabba8',
@@ -335,6 +336,30 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Wrong users', $responseContent->message);
         $this->assertSame(['users_validation' => 'Wrong users'], (array) $responseContent->errors);
+    }
+
+    /** @test */
+    public function itShouldFailGroupTypeIsUser22(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_TYPE_USER_ID,
+                'users' => self::USER_TO_ADD_IDS,
+                'identifier_type' => 'identifier',
+                'admin' => true,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['permission'], Response::HTTP_UNAUTHORIZED);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Permissions denied', $responseContent->message);
+        $this->assertSame(['permission' => 'Permissions denied'], (array) $responseContent->errors);
     }
 
     /** @test */
