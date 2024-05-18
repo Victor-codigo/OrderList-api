@@ -7,6 +7,7 @@ namespace Group\Application\GroupGetData;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\Group\GROUP_TYPE;
@@ -39,7 +40,7 @@ class GroupGetDataUseCase extends ServiceBase
             );
 
             $groupsData = $this->groupGetDataService->__invoke(
-                $this->createGroupGetDataDto($userGroupsValidIds)
+                $this->createGroupGetDataDto($userGroupsValidIds, $input->userSession->getImage())
             );
 
             return $this->createGroupGetDataOutputDto($groupsData);
@@ -87,9 +88,9 @@ class GroupGetDataUseCase extends ServiceBase
     /**
      * @param Identifier[] $groupsId
      */
-    private function createGroupGetDataDto(array $groupsId): GroupGetDataDto
+    private function createGroupGetDataDto(array $groupsId, Path $userImage): GroupGetDataDto
     {
-        return new GroupGetDataDto($groupsId, GROUP_TYPE::GROUP);
+        return new GroupGetDataDto($groupsId, GROUP_TYPE::GROUP, $userImage);
     }
 
     private function createGroupGetDataOutputDto(\Generator $groupsData): GroupGetDataOutputDto

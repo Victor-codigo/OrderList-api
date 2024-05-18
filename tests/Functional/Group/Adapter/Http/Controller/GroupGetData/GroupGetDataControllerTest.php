@@ -19,7 +19,6 @@ class GroupGetDataControllerTest extends WebClientTestCase
     private const METHOD = 'GET';
     private const GROUP_USER_ONLY_GROUP_EMAIL = 'email.other.active@host.com';
     private const GROUP_USER_ONLY_GROUP_PASSWORD = '123456';
-    private const PATH_GROUP_IMAGES_PUBLIC = '/assets/img/groups';
 
     private function getGroupsData(\DateTime $createdOn): array
     {
@@ -38,7 +37,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldGetGroupsData22(): void
+    public function itShouldGetGroupsData(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $patImageGroup = static::getContainer()->getParameter('group.public.image.path');

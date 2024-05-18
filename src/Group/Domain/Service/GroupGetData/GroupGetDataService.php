@@ -6,6 +6,7 @@ namespace Group\Domain\Service\GroupGetData;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Object\GroupType;
+use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Group\Domain\Model\Group;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
@@ -32,7 +33,7 @@ class GroupGetDataService
             throw DBNotFoundException::fromMessage('No groups found');
         }
 
-        return $this->getPrivateData($groupsValid);
+        return $this->getPrivateData($groupsValid, $input->userImage);
     }
 
     /**
@@ -55,17 +56,22 @@ class GroupGetDataService
     /**
      * @param Group[] $groups
      */
-    private function getPrivateData(array $groups): \Generator
+    private function getPrivateData(array $groups, Path $userImage): \Generator
     {
         foreach ($groups as $group) {
+            $image = null;
+            if (!$userImage->isNull() && GROUP_TYPE::USER == $group->getType()->getValue()) {
+                $image = $userImage->getValue();
+            } elseif (!$group->getImage()->isNull()) {
+                $image = "{$this->appProtocolAndDomain}{$this->groupPublicImagePath}/{$group->getImage()->getValue()}";
+            }
+
             yield [
                 'group_id' => $group->getId()->getValue(),
                 'type' => $this->getGroupType($group->getType()),
                 'name' => $group->getName()->getValue(),
                 'description' => $group->getDescription()->getValue(),
-                'image' => $group->getImage()->isNull()
-                    ? null
-                    : "{$this->appProtocolAndDomain}{$this->groupPublicImagePath}/{$group->getImage()->getValue()}",
+                'image' => $image,
                 'created_on' => $group->getCreatedOn()->format('Y-m-d H:i:s'),
             ];
         }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\Group\Domain\Service\GroupGetData;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Group\Domain\Model\Group;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
@@ -46,7 +47,7 @@ class GroupGetDataServiceTest extends TestCase
     private function getGroupsTypeUserData(): array
     {
         return [
-            Group::fromPrimitives('a5002966-dbf7-4f76-a862-23a04b5ca465', 'GroupTwo', GROUP_TYPE::USER, 'This is a group of one user', null),
+            Group::fromPrimitives('a5002966-dbf7-4f76-a862-23a04b5ca465', 'GroupTwo', GROUP_TYPE::USER, 'This is a group of one user', 'image.file'),
         ];
     }
 
@@ -70,7 +71,8 @@ class GroupGetDataServiceTest extends TestCase
             fn (Group $group) => $group->getId(),
             $expectedGroupsData
         );
-        $input = new GroupGetDataDto($groupsId, GROUP_TYPE::GROUP);
+        $userImage = ValueObjectFactory::createPath('image.file');
+        $input = new GroupGetDataDto($groupsId, GROUP_TYPE::GROUP, $userImage);
 
         $this->groupRepository
             ->expects($this->once())
@@ -113,7 +115,8 @@ class GroupGetDataServiceTest extends TestCase
             fn (Group $group) => $group->getId(),
             $expectedGroupsData
         );
-        $input = new GroupGetDataDto($groupsId, GROUP_TYPE::USER);
+        $userImage = ValueObjectFactory::createPath('image.file');
+        $input = new GroupGetDataDto($groupsId, GROUP_TYPE::USER, $userImage);
 
         $this->groupRepository
             ->expects($this->once())
@@ -139,7 +142,7 @@ class GroupGetDataServiceTest extends TestCase
                 $this->assertNull($groupData['image']);
             } else {
                 $this->assertEquals(
-                    self::PATH_GROUP_IMAGES_PUBLIC."/{$expectedGroupsData[$key]->getImage()->getValue()}",
+                    $userImage->getValue(),
                     $groupData['image']
                 );
             }
@@ -154,7 +157,8 @@ class GroupGetDataServiceTest extends TestCase
             fn (Group $group) => $group->getId(),
             $expectedGroupsData
         );
-        $input = new GroupGetDataDto($groupsId);
+        $userImage = ValueObjectFactory::createPath('image.file');
+        $input = new GroupGetDataDto($groupsId, null, $userImage);
 
         $this->groupRepository
             ->expects($this->once())
@@ -178,6 +182,11 @@ class GroupGetDataServiceTest extends TestCase
 
             if (null === $expectedGroupsData[$key]->getImage()->getValue()) {
                 $this->assertNull($groupData['image']);
+            } elseif (GROUP_TYPE::USER === $expectedGroupsData[$key]->getType()->getValue()) {
+                $this->assertEquals(
+                    $userImage->getValue(),
+                    $groupData['image']
+                );
             } else {
                 $this->assertEquals(
                     self::PATH_APP_PROTOCOL_AND_DOMAIN.self::PATH_GROUP_IMAGES_PUBLIC."/{$expectedGroupsData[$key]->getImage()->getValue()}",
@@ -195,13 +204,35 @@ class GroupGetDataServiceTest extends TestCase
             fn (Group $group) => $group->getId(),
             $expectedGroupsData
         );
-        $input = new GroupGetDataDto($groupsId);
+        $userImage = ValueObjectFactory::createPath('image.file');
+        $input = new GroupGetDataDto($groupsId, null, $userImage);
 
         $this->groupRepository
             ->expects($this->once())
             ->method('findGroupsByIdOrFail')
             ->with($input->groupsId)
             ->willThrowException(new DBNotFoundException());
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->__invoke($input);
+    }
+
+    /** @test */
+    public function itShouldFailNoGroupsOfTypeUserFound(): void
+    {
+        $expectedGroupsData = $this->getGroupsTypeGroupData();
+        $groupsId = array_map(
+            fn (Group $group) => $group->getId(),
+            $expectedGroupsData
+        );
+        $userImage = ValueObjectFactory::createPath('image.file');
+        $input = new GroupGetDataDto($groupsId, GROUP_TYPE::USER, $userImage);
+
+        $this->groupRepository
+            ->expects($this->once())
+            ->method('findGroupsByIdOrFail')
+            ->with($input->groupsId)
+            ->willReturn($expectedGroupsData);
 
         $this->expectException(DBNotFoundException::class);
         $this->object->__invoke($input);
