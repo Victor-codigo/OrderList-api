@@ -29,6 +29,10 @@ Common\Domain\Model\ValueObject\String\Identifier:
     __construct:
       value: "72f2f46d-3f3f-48d0-b4eb-5cbed7896cab"
 
+  order_id_7:
+    __construct:
+      value: "fad53d41-d396-4f5b-91c3-d30fd6b66845"
+
   # PRODUCT
   product_id:
     __construct:
@@ -180,5 +184,17 @@ Order\Domain\Model\Order:
       amount: "@order_amount_20"
       bought: true
       listOrders: "@entity-listOrder"
+      product: "@entity-product_4"
+      shop: null
+
+  entity-order_7:
+    __construct:
+      id: "@order_id_7"
+      groupId: "@order_group_id_group_exists"
+      userId: "@entity-user_active->getId"
+      description: "@order_description_null"
+      amount: "@order_amount_20"
+      bought: true
+      listOrders: "@entity-listOrder_4"
       product: "@entity-product_4"
       shop: null

@@ -32,6 +32,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         'c3734d1c-8b18-4bfd-95aa-06a261476d9d',
         'd351adba-c566-4fa5-bb5b-1a6f73b1d72f',
         '72f2f46d-3f3f-48d0-b4eb-5cbed7896cab',
+        'fad53d41-d396-4f5b-91c3-d30fd6b66845',
     ];
 
     private const USER_HAS_NO_GROUP_EMAIL = 'email.other_2.active@host.com';
@@ -70,6 +71,15 @@ class OrderGetDataControllerTest extends WebClientTestCase
             'List order name 3',
             'List order description 3',
             new \DateTime('2023-05-27 10:20:15')
+        );
+
+        $listOrders4 = ListOrders::fromPrimitives(
+            'f1559a23-2f92-4660-a335-b1052d7395da',
+            '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
+            '2606508b-4516-45d6-93a6-c7cb416b7f3f',
+            'List order name 4',
+            null,
+            new \DateTime('2024-05-28 13:45:22')
         );
 
         $product1 = Product::fromPrimitives(
@@ -195,6 +205,17 @@ class OrderGetDataControllerTest extends WebClientTestCase
                 $product3,
                 null
             ),
+            'fad53d41-d396-4f5b-91c3-d30fd6b66845' => Order::fromPrimitives(
+                'fad53d41-d396-4f5b-91c3-d30fd6b66845',
+                '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
+                '2606508b-4516-45d6-93a6-c7cb416b7f3f',
+                null,
+                20.050,
+                true,
+                $listOrders4,
+                $product3,
+                null
+            ),
         ];
     }
 
@@ -257,7 +278,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldGetOrdersDataByGroupId(): void
+    public function itShouldGetOrdersDataByGroupId22(): void
     {
         $groupId = self::GROUP_ID;
         $page = 1;

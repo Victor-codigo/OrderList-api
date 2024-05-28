@@ -17,6 +17,7 @@ class ListOrdersGetPriceControllerTest extends WebClientTestCase
     private const METHOD = 'GET';
 
     private const LIST_ORDERS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
+    private const LIST_ORDERS_PRODUCTS_HAS_NO_PRICE_ID = 'f1559a23-2f92-4660-a335-b1052d7395da';
     private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const PRICE_TOTAL = 514.115;
     private const PRICE_BOUGHT = 407.015;
@@ -40,6 +41,27 @@ class ListOrdersGetPriceControllerTest extends WebClientTestCase
         $this->assertSame('List orders price', $responseContent->message);
         $this->assertEquals(self::PRICE_TOTAL, round($responseContent->data->total, 3));
         $this->assertEquals(self::PRICE_BOUGHT, round($responseContent->data->bought, 3));
+    }
+
+    /** @test */
+    public function itShouldGetListOrdersPriceAllOrdersHasNotPrice(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                .'?list_orders_id='.self::LIST_ORDERS_PRODUCTS_HAS_NO_PRICE_ID
+                .'&group_id='.self::GROUP_ID
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['total', 'bought'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('List orders price', $responseContent->message);
+        $this->assertEquals(0, $responseContent->data->total);
+        $this->assertEquals(0, $responseContent->data->bought);
     }
 
     /** @test */

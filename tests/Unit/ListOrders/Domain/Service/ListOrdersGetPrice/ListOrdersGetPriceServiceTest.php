@@ -337,7 +337,7 @@ class ListOrdersGetPriceServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailGetPriceProductShopNotFound(): void
+    public function itShouldGetPriceProductsHasNotShop(): void
     {
         $orders = $this->getOrders();
         $input = new ListOrdersGetPriceDto(
@@ -369,7 +369,14 @@ class ListOrdersGetPriceServiceTest extends TestCase
             ->expects($this->never())
             ->method('getIterator');
 
-        $this->expectException(DBNotFoundException::class);
-        $this->object->__invoke($input);
+        $return = $this->object->__invoke($input);
+
+        $this->assertEquals(
+            new ListOrdersGetPriceOutputDto(
+                ValueObjectFactory::createMoney(0),
+                ValueObjectFactory::createMoney(0)
+            ),
+            $return
+        );
     }
 }

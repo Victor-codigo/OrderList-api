@@ -9,7 +9,6 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Model\ValueObject\Float\Money;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Common\Domain\Ports\Paginator\PaginatorInterface;
 use ListOrders\Domain\Service\ListOrdersGetPrice\Dto\ListOrdersGetPriceDto;
 use ListOrders\Domain\Service\ListOrdersGetPrice\Dto\ListOrdersGetPriceOutputDto;
 use Order\Domain\Model\Order;
@@ -44,11 +43,9 @@ class ListOrdersGetPriceService
     /**
      * @param Order[] $orders
      *
-     * @return array
-     *
      * @throws DBNotFoundException
      */
-    private function getProductsShopsPrices(array $orders, Identifier $groupId): PaginatorInterface
+    private function getProductsShopsPrices(array $orders, Identifier $groupId): iterable
     {
         $productsId = array_map(
             fn (Order $order) => $order->getProductId(),
@@ -59,7 +56,11 @@ class ListOrdersGetPriceService
             $orders
         );
 
-        return $this->productShopRepository->findProductsAndShopsOrFail($productsId, $shopsId, $groupId);
+        try {
+            return $this->productShopRepository->findProductsAndShopsOrFail($productsId, $shopsId, $groupId);
+        } catch (DBNotFoundException) {
+            return new \ArrayIterator([]);
+        }
     }
 
     private function calculateListOrdersPrice(array $orders, array $productsShops, bool $bought): Money

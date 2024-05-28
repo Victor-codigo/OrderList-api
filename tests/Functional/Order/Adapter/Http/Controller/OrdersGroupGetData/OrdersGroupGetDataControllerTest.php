@@ -116,6 +116,15 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
             new \DateTime('2023-05-27 10:20:15')
         );
 
+        $listOrders4 = ListOrders::fromPrimitives(
+            'f1559a23-2f92-4660-a335-b1052d7395da',
+            '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
+            '2606508b-4516-45d6-93a6-c7cb416b7f3f',
+            'List order name 4',
+            null,
+            new \DateTime('2024-05-28 13:45:22')
+        );
+
         $product1 = Product::fromPrimitives(
             '8b6d650b-7bb7-4850-bf25-36cda9bce801',
             '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
@@ -239,6 +248,17 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
                 $product3,
                 null
             ),
+            'fad53d41-d396-4f5b-91c3-d30fd6b66845' => Order::fromPrimitives(
+                'fad53d41-d396-4f5b-91c3-d30fd6b66845',
+                '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
+                '2606508b-4516-45d6-93a6-c7cb416b7f3f',
+                null,
+                20.050,
+                true,
+                $listOrders4,
+                $product3,
+                null
+            ),
         ];
     }
 
@@ -264,7 +284,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
 
         $this->assertEquals(1, $responseContent->data->page);
         $this->assertEquals(1, $responseContent->data->pages_total);
-        $this->assertCount(6, $responseContent->data->orders);
+        $this->assertCount(7, $responseContent->data->orders);
         $ordersExpected = $this->getOrdersData();
 
         foreach ($responseContent->data->orders as $orderActual) {
@@ -298,7 +318,7 @@ class OrdersGroupGetDataControllerTest extends WebClientTestCase
         $this->assertSame('Orders of the group data', $responseContent->message);
 
         $this->assertEquals(1, $responseContent->data->page);
-        $this->assertEquals(6, $responseContent->data->pages_total);
+        $this->assertEquals(7, $responseContent->data->pages_total);
         $this->assertCount(1, $responseContent->data->orders);
         $ordersExpected = $this->getOrdersData();
 

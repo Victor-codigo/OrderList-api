@@ -124,7 +124,7 @@ class AppConfig
     public const COOKIE_SESSION_NAME = 'TOKENSESSION';
 
     /**
-     * Module communication roxy URL.
+     * Module communication proxy URL.
      */
     public const MODULE_COMMUNICATION_REQUEST_PROXY = 'http://proxy:80';
 
@@ -135,11 +135,6 @@ class AppConfig
         'verify_peer' => false,
         'verify_host' => false,
     ];
-
-    /**
-     * Time in seconds for the token of the api calls.
-     */
-    public const API_TOKEN_REQUEST_EXPIRE_TIME = 300;
 
     /**
      * Api domain.
