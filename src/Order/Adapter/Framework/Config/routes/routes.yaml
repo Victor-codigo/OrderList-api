@@ -38,16 +38,6 @@ order_get_data:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
-# ORDERS GROUP GET DATA
-# -------------------------------------------------------------
-orders_group_get_data:
-  path: /api/v{api_version}/orders/group/{group_id}
-  methods: GET
-  controller: Order\Adapter\Http\Controller\OrdersGroupGetData\OrdersGroupGetDataController
-  requirements:
-    api_version: '\d+[.\d]?'
-
-# -------------------------------------------------------------
 # ORDER SET BOUGHT
 # -------------------------------------------------------------
 orders_bought:
