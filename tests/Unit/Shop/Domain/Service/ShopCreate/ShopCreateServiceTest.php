@@ -7,10 +7,12 @@ namespace Test\Unit\Shop\Domain\Service\ShopCreate;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\FileUpload\Exception\FileUploadException;
+use Common\Domain\Image\Exception\ImageResizeException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\FileInterface;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
+use Common\Domain\Ports\Image\ImageInterface;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -23,7 +25,7 @@ use Shop\Domain\Service\ShopCreate\ShopCreateService;
 class ShopCreateServiceTest extends TestCase
 {
     private const IMAGE_UPLOADED_FILE_NAME = 'Image.png';
-    private const PATH_IMAGE_UPLOAD = __DIR__.'/Fixtures/Image.png';
+    private const IMAGE_UPLOADED_PATH = '/uploaded/image/path';
     private const GROUP_ID = '82633054-84ad-4748-8ea2-8be0201c7b3a';
 
     private ShopCreateService $object;
@@ -31,6 +33,7 @@ class ShopCreateServiceTest extends TestCase
     private MockObject|FileUploadInterface $fileUpload;
     private MockObject|UploadedFileInterface $shopImageFile;
     private MockObject|PaginatorInterface $paginator;
+    private MockObject|ImageInterface $image;
 
     protected function setUp(): void
     {
@@ -40,7 +43,8 @@ class ShopCreateServiceTest extends TestCase
         $this->fileUpload = $this->createMock(FileUploadInterface::class);
         $this->shopImageFile = $this->createMock(UploadedFileInterface::class);
         $this->paginator = $this->createMock(PaginatorInterface::class);
-        $this->object = new ShopCreateService($this->shopRepository, $this->fileUpload, self::PATH_IMAGE_UPLOAD);
+        $this->image = $this->createMock(ImageInterface::class);
+        $this->object = new ShopCreateService($this->shopRepository, $this->fileUpload, $this->image, self::IMAGE_UPLOADED_PATH);
     }
 
     private function createShopCreateDto(string|null $description, FileInterface|null $shopImageFile): ShopCreateDto
@@ -73,12 +77,21 @@ class ShopCreateServiceTest extends TestCase
         $this->fileUpload
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->shopImageFile, self::PATH_IMAGE_UPLOAD);
+            ->with($this->shopImageFile, self::IMAGE_UPLOADED_PATH);
 
         $this->fileUpload
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getFileName')
             ->willReturn(self::IMAGE_UPLOADED_FILE_NAME);
+
+        $this->image
+            ->expects($this->once())
+            ->method('resizeToAFrame')
+            ->with(
+                ValueObjectFactory::createPath(self::IMAGE_UPLOADED_PATH.'/'.self::IMAGE_UPLOADED_FILE_NAME),
+                300,
+                300
+            );
 
         $this->shopRepository
             ->expects($this->once())
@@ -114,12 +127,21 @@ class ShopCreateServiceTest extends TestCase
         $this->fileUpload
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->shopImageFile, self::PATH_IMAGE_UPLOAD);
+            ->with($this->shopImageFile, self::IMAGE_UPLOADED_PATH);
 
         $this->fileUpload
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getFileName')
             ->willReturn(self::IMAGE_UPLOADED_FILE_NAME);
+
+        $this->image
+            ->expects($this->once())
+            ->method('resizeToAFrame')
+            ->with(
+                ValueObjectFactory::createPath(self::IMAGE_UPLOADED_PATH.'/'.self::IMAGE_UPLOADED_FILE_NAME),
+                300,
+                300
+            );
 
         $this->shopRepository
             ->expects($this->once())
@@ -160,6 +182,10 @@ class ShopCreateServiceTest extends TestCase
             ->expects($this->never())
             ->method('getFileName');
 
+        $this->image
+            ->expects($this->never())
+            ->method('resizeToAFrame');
+
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsByGroupAndNameOrFail')
@@ -199,6 +225,10 @@ class ShopCreateServiceTest extends TestCase
             ->expects($this->never())
             ->method('getFileName');
 
+        $this->image
+            ->expects($this->never())
+            ->method('resizeToAFrame');
+
         $this->shopRepository
             ->expects($this->once())
             ->method('findShopsByGroupAndNameOrFail')
@@ -226,12 +256,16 @@ class ShopCreateServiceTest extends TestCase
         $this->fileUpload
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->shopImageFile, self::PATH_IMAGE_UPLOAD)
+            ->with($this->shopImageFile, self::IMAGE_UPLOADED_PATH)
             ->willThrowException(new FileUploadException());
 
         $this->fileUpload
             ->expects($this->never())
             ->method('getFileName');
+
+        $this->image
+            ->expects($this->never())
+            ->method('resizeToAFrame');
 
         $this->shopRepository
             ->expects($this->once())
@@ -253,6 +287,51 @@ class ShopCreateServiceTest extends TestCase
     }
 
     /** @test */
+    public function itShouldFailResizeFileUploadedException(): void
+    {
+        $shopDescription = 'shop 1 description';
+        $input = $this->createShopCreateDto($shopDescription, $this->shopImageFile);
+
+        $this->fileUpload
+            ->expects($this->once())
+            ->method('__invoke')
+            ->with($this->shopImageFile, self::IMAGE_UPLOADED_PATH);
+
+        $this->fileUpload
+            ->expects($this->once())
+            ->method('getFileName')
+            ->willReturn(self::IMAGE_UPLOADED_FILE_NAME);
+
+        $this->image
+            ->expects($this->once())
+            ->method('resizeToAFrame')
+            ->with(
+                ValueObjectFactory::createPath(self::IMAGE_UPLOADED_PATH.'/'.self::IMAGE_UPLOADED_FILE_NAME),
+                300,
+                300
+            )
+            ->willThrowException(new ImageResizeException());
+
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('findShopsByGroupAndNameOrFail')
+            ->with($input->groupId, $input->name)
+            ->willThrowException(new DBNotFoundException());
+
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('generateId')
+            ->willReturn(self::GROUP_ID);
+
+        $this->shopRepository
+            ->expects($this->never())
+            ->method('save');
+
+        $this->expectException(ImageResizeException::class);
+        $this->object->__invoke($input);
+    }
+
+    /** @test */
     public function itShouldFailSaveError(): void
     {
         $shopDescription = 'shop 1 description';
@@ -261,12 +340,21 @@ class ShopCreateServiceTest extends TestCase
         $this->fileUpload
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->shopImageFile, self::PATH_IMAGE_UPLOAD);
+            ->with($this->shopImageFile, self::IMAGE_UPLOADED_PATH);
 
         $this->fileUpload
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getFileName')
             ->willReturn(self::IMAGE_UPLOADED_FILE_NAME);
+
+        $this->image
+            ->expects($this->once())
+            ->method('resizeToAFrame')
+            ->with(
+                ValueObjectFactory::createPath(self::IMAGE_UPLOADED_PATH.'/'.self::IMAGE_UPLOADED_FILE_NAME),
+                300,
+                300
+            );
 
         $this->shopRepository
             ->expects($this->once())
