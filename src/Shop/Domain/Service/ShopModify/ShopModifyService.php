@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shop\Domain\Service\ShopModify;
 
+use Common\Domain\Config\AppConfig;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\Model\ValueObject\Object\ShopImage;
@@ -12,6 +13,7 @@ use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
+use Common\Domain\Ports\Image\ImageInterface;
 use Shop\Domain\Model\Shop;
 use Shop\Domain\Port\Repository\ShopRepositoryInterface;
 use Shop\Domain\Service\ShopModify\Dto\ShopModifyDto;
@@ -22,6 +24,7 @@ class ShopModifyService
     public function __construct(
         private ShopRepositoryInterface $shopRepository,
         private FileUploadInterface $fileUpload,
+        private ImageInterface $image,
         private string $shopImagePath
     ) {
     }
@@ -39,6 +42,7 @@ class ShopModifyService
      * @throws FileUploadPartialFileException
      * @throws FileException
      * @throws FileUploadReplaceException
+     * @throws ImageResizeException
      */
     public function __invoke(ShopModifyDto $input): void
     {
@@ -67,6 +71,7 @@ class ShopModifyService
      * @throws FileUploadPartialFileException
      * @throws FileException
      * @throws FileUploadReplaceException
+     * @throws ImageResizeException
      */
     private function setShopImage(Shop $shop, ShopImage $imageNew, bool $imageRemove): void
     {
@@ -115,6 +120,7 @@ class ShopModifyService
      * @throws FileUploadPartialFileException
      * @throws FileException
      * @throws FileUploadReplaceException
+     * @throws ImageResizeException
      */
     private function shopImageUpload(ShopImage $imageNew, Path $shopCurrentFileName): Path
     {
@@ -123,6 +129,11 @@ class ShopModifyService
         }
 
         $this->fileUpload->__invoke($imageNew->getValue(), $this->shopImagePath, $shopCurrentFileName->getValue());
+        $this->image->resizeToAFrame(
+            ValueObjectFactory::createPath("{$this->shopImagePath}/{$this->fileUpload->getFileName()}"),
+            AppConfig::SHOP_IMAGE_FRAME_SIZE_WIDTH,
+            AppConfig::SHOP_IMAGE_FRAME_SIZE_HEIGHT
+        );
 
         return new Path($this->fileUpload->getFileName());
     }

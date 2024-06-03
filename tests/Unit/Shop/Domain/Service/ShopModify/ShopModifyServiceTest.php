@@ -7,9 +7,11 @@ namespace Test\Unit\Shop\Domain\Service\ShopModify;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\FileUpload\Exception\File\FileException;
+use Common\Domain\Image\Exception\ImageResizeException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
+use Common\Domain\Ports\Image\ImageInterface;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -33,6 +35,7 @@ class ShopModifyServiceTest extends TestCase
     private MockObject|FileUploadInterface $fileUpload;
     private MockObject|UploadedFileInterface $shopImage;
     private MockObject|PaginatorInterface $paginator;
+    private MockObject|ImageInterface $image;
 
     protected function setUp(): void
     {
@@ -42,7 +45,8 @@ class ShopModifyServiceTest extends TestCase
         $this->shopImage = $this->createMock(UploadedFileInterface::class);
         $this->fileUpload = $this->createMock(FileUploadInterface::class);
         $this->paginator = $this->createMock(PaginatorInterface::class);
-        $this->object = new ShopModifyService($this->shopRepository, $this->fileUpload, self::SHOP_IMAGE_PATH);
+        $this->image = $this->createMock(ImageInterface::class);
+        $this->object = new ShopModifyService($this->shopRepository, $this->fileUpload, $this->image, self::SHOP_IMAGE_PATH);
     }
 
     protected function tearDown(): void
@@ -110,15 +114,24 @@ class ShopModifyServiceTest extends TestCase
             ->with($input->image->getValue(), self::SHOP_IMAGE_PATH, $shopFromDb->getImage()->getValue());
 
         $this->fileUpload
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getFileName')
             ->willReturn($fileUploadedName);
+
+        $this->image
+            ->expects($this->once())
+            ->method('resizeToAFrame')
+            ->with(
+                ValueObjectFactory::createPath(self::SHOP_IMAGE_PATH.'/'.$fileUploadedName),
+                300,
+                300
+            );
 
         $this->object->__invoke($input);
     }
 
     /** @test */
-    public function itShouldModifyTheShopNameImageAndDescription(): void
+    public function itShouldModifyTheShopNameAndDescription(): void
     {
         $shopFromDb = $this->getShop();
         $input = new ShopModifyDto(
@@ -168,6 +181,10 @@ class ShopModifyServiceTest extends TestCase
         $this->fileUpload
             ->expects($this->never())
             ->method('getFileName');
+
+        $this->image
+            ->expects($this->never())
+            ->method('resizeToAFrame');
 
         $this->object->__invoke($input);
     }
@@ -223,6 +240,10 @@ class ShopModifyServiceTest extends TestCase
         $this->fileUpload
             ->expects($this->never())
             ->method('getFileName');
+
+        $this->image
+            ->expects($this->never())
+            ->method('resizeToAFrame');
 
         BuiltInFunctionsReturn::$file_exists = true;
         BuiltInFunctionsReturn::$unlink = true;
@@ -282,6 +303,10 @@ class ShopModifyServiceTest extends TestCase
             ->expects($this->never())
             ->method('getFileName');
 
+        $this->image
+            ->expects($this->never())
+            ->method('resizeToAFrame');
+
         BuiltInFunctionsReturn::$file_exists = true;
         BuiltInFunctionsReturn::$unlink = true;
         $this->object->__invoke($input);
@@ -338,6 +363,10 @@ class ShopModifyServiceTest extends TestCase
         $this->fileUpload
             ->expects($this->never())
             ->method('getFileName');
+
+        $this->image
+            ->expects($this->never())
+            ->method('resizeToAFrame');
 
         BuiltInFunctionsReturn::$file_exists = false;
         $this->object->__invoke($input);
@@ -396,6 +425,10 @@ class ShopModifyServiceTest extends TestCase
             ->expects($this->never())
             ->method('getFileName');
 
+        $this->image
+            ->expects($this->never())
+            ->method('resizeToAFrame');
+
         $this->object->__invoke($input);
     }
 
@@ -439,6 +472,10 @@ class ShopModifyServiceTest extends TestCase
         $this->fileUpload
             ->expects($this->never())
             ->method('getFileName');
+
+        $this->image
+            ->expects($this->never())
+            ->method('resizeToAFrame');
 
         $this->shopRepository
             ->expects($this->never())
@@ -488,6 +525,10 @@ class ShopModifyServiceTest extends TestCase
         $this->fileUpload
             ->expects($this->never())
             ->method('getFileName');
+
+        $this->image
+            ->expects($this->never())
+            ->method('resizeToAFrame');
 
         $this->shopRepository
             ->expects($this->never())
@@ -550,6 +591,10 @@ class ShopModifyServiceTest extends TestCase
             ->expects($this->never())
             ->method('getFileName');
 
+        $this->image
+            ->expects($this->never())
+            ->method('resizeToAFrame');
+
         $this->expectException(ShopModifyNameIsAlreadyInDataBaseException::class);
         $this->object->__invoke($input);
     }
@@ -603,7 +648,74 @@ class ShopModifyServiceTest extends TestCase
             ->expects($this->never())
             ->method('getFileName');
 
+        $this->image
+            ->expects($this->never())
+            ->method('resizeToAFrame');
+
         $this->expectException(FileException::class);
+        $this->object->__invoke($input);
+    }
+
+    /** @test */
+    public function itShouldFailImageResizeException(): void
+    {
+        $shopFromDb = $this->getShop();
+        $fileUploadedName = 'file_uploaded_name';
+        $input = new ShopModifyDto(
+            ValueObjectFactory::createIdentifier(self::SHOP_ID),
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            $shopFromDb->getName(),
+            ValueObjectFactory::createDescription('shop description modified'),
+            ValueObjectFactory::createShopImage($this->shopImage),
+            false
+        );
+        $shopExpected = clone $shopFromDb;
+        $shopExpected
+            ->setName($shopFromDb->getName())
+            ->setDescription($input->description)
+            ->setImage(ValueObjectFactory::createPath($fileUploadedName));
+
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('findShopsOrFail')
+            ->with($input->groupId, [$input->shopId])
+            ->willReturn($this->paginator);
+
+        $this->shopRepository
+            ->expects($this->never())
+            ->method('save');
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('setPagination')
+            ->with(1, 1);
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$shopFromDb]));
+
+        $this->fileUpload
+            ->expects($this->once())
+            ->method('__invoke')
+            ->with($input->image->getValue(), self::SHOP_IMAGE_PATH, $shopFromDb->getImage()->getValue());
+
+        $this->fileUpload
+            ->expects($this->once())
+            ->method('getFileName')
+            ->willReturn($fileUploadedName);
+
+        $this->image
+            ->expects($this->once())
+            ->method('resizeToAFrame')
+            ->with(
+                ValueObjectFactory::createPath(self::SHOP_IMAGE_PATH.'/'.$fileUploadedName),
+                300,
+                300
+            )
+            ->willThrowException(new ImageResizeException());
+
+        $this->expectException(ImageResizeException::class);
         $this->object->__invoke($input);
     }
 
@@ -653,6 +765,10 @@ class ShopModifyServiceTest extends TestCase
         $this->fileUpload
             ->expects($this->never())
             ->method('getFileName');
+
+        $this->image
+            ->expects($this->never())
+            ->method('resizeToAFrame');
 
         BuiltInFunctionsReturn::$file_exists = true;
         BuiltInFunctionsReturn::$unlink = false;
