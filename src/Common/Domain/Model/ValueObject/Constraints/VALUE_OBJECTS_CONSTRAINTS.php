@@ -68,8 +68,9 @@ final class VALUE_OBJECTS_CONSTRAINTS
     public const FILE_USER_IMAGE_DETECT_CORRUPTED = false;
     public const FILE_USER_IMAGE_MIME_TYPES = [
         'image/jpeg',
+        'image/jpg',
         'image/png',
-        'image/bmp',
+        'image/gif',
     ];
 
     /**
@@ -94,8 +95,9 @@ final class VALUE_OBJECTS_CONSTRAINTS
     public const FILE_GROUP_IMAGE_DETECT_CORRUPTED = false;
     public const FILE_GROUP_IMAGE_MIME_TYPES = [
         'image/jpeg',
+        'image/jpg',
         'image/png',
-        'image/bmp',
+        'image/gif',
     ];
 
     public const GROUP_TYPE_VALUES = [
@@ -154,8 +156,9 @@ final class VALUE_OBJECTS_CONSTRAINTS
     public const FILE_PRODUCT_IMAGE_DETECT_CORRUPTED = false;
     public const FILE_PRODUCT_IMAGE_MIME_TYPES = [
         'image/jpeg',
+        'image/jpg',
         'image/png',
-        'image/bmp',
+        'image/gif',
     ];
 
     /**
@@ -176,8 +179,9 @@ final class VALUE_OBJECTS_CONSTRAINTS
     public const FILE_SHOP_IMAGE_DETECT_CORRUPTED = false;
     public const FILE_SHOP_IMAGE_MIME_TYPES = [
         'image/jpeg',
+        'image/jpg',
         'image/png',
-        'image/bmp',
+        'image/gif',
     ];
 
     public const FILTER_STRING_COMPARISON_TYPES = [
