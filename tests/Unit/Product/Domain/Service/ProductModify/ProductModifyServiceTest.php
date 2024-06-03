@@ -126,7 +126,9 @@ class ProductModifyServiceTest extends TestCase
             $this->productFromDb,
             ValueObjectFactory::createPath(self::PRODUCT_IMAGE_PATH),
             $this->productImage,
-            $input->imageRemove
+            $input->imageRemove,
+            300,
+            300
         );
 
         $this->productRepository
@@ -255,7 +257,9 @@ class ProductModifyServiceTest extends TestCase
             $this->productFromDb,
             ValueObjectFactory::createPath(self::PRODUCT_IMAGE_PATH),
             $this->productImage,
-            $input->imageRemove
+            $input->imageRemove,
+            300,
+            300
         );
 
         $this->productRepository
@@ -328,7 +332,9 @@ class ProductModifyServiceTest extends TestCase
             $this->productFromDb,
             ValueObjectFactory::createPath(self::PRODUCT_IMAGE_PATH),
             $this->productImage,
-            $input->imageRemove
+            $input->imageRemove,
+            300,
+            300
         );
 
         $this->productRepository
@@ -397,7 +403,9 @@ class ProductModifyServiceTest extends TestCase
             $this->productFromDb,
             ValueObjectFactory::createPath(self::PRODUCT_IMAGE_PATH),
             $this->productImage,
-            $input->imageRemove
+            $input->imageRemove,
+            300,
+            300
         );
 
         $this->productRepository
@@ -470,7 +478,9 @@ class ProductModifyServiceTest extends TestCase
             $this->productFromDb,
             ValueObjectFactory::createPath(self::PRODUCT_IMAGE_PATH),
             $this->productImage,
-            $input->imageRemove
+            $input->imageRemove,
+            300,
+            300
         );
 
         $this->productRepository
@@ -543,7 +553,9 @@ class ProductModifyServiceTest extends TestCase
             $this->productFromDb,
             ValueObjectFactory::createPath(self::PRODUCT_IMAGE_PATH),
             $this->productImage,
-            $input->imageRemove
+            $input->imageRemove,
+            300,
+            300
         );
 
         $this->productRepository

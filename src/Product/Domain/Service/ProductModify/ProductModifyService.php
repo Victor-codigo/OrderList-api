@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Product\Domain\Service\ProductModify;
 
+use Common\Domain\Config\AppConfig;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\FileUpload\Exception\FileUploadCanNotWriteException;
@@ -53,6 +54,7 @@ class ProductModifyService
      * @throws FileUploadPartialFileException
      * @throws FileException
      * @throws FileUploadReplaceException
+     * @throws ImageResizeException
      */
     public function __invoke(ProductModifyDto $input): Product
     {
@@ -86,6 +88,7 @@ class ProductModifyService
      * @throws FileUploadPartialFileException
      * @throws FileException
      * @throws FileUploadReplaceException
+     * @throws ImageResizeException
      * @throws DBConnectionException
      */
     private function modifyProduct(Product $product, NameWithSpaces $name, Description $description, ProductImage $image, bool $imageRemove): void
@@ -105,7 +108,9 @@ class ProductModifyService
             $product,
             ValueObjectFactory::createPath($productImagePath),
             $imageUploaded,
-            $remove
+            $remove,
+            AppConfig::PRODUCT_IMAGE_FRAME_SIZE_WIDTH,
+            AppConfig::PRODUCT_IMAGE_FRAME_SIZE_HEIGHT
         );
     }
 
