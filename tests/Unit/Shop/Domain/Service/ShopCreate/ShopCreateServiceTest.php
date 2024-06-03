@@ -95,8 +95,8 @@ class ShopCreateServiceTest extends TestCase
 
         $this->shopRepository
             ->expects($this->once())
-            ->method('findShopsByGroupAndNameOrFail')
-            ->with($input->groupId, $input->name)
+            ->method('findShopByShopNameOrFail')
+            ->with($input->groupId, $input->name, true)
             ->willThrowException(new DBNotFoundException());
 
         $this->shopRepository
@@ -145,8 +145,8 @@ class ShopCreateServiceTest extends TestCase
 
         $this->shopRepository
             ->expects($this->once())
-            ->method('findShopsByGroupAndNameOrFail')
-            ->with($input->groupId, $input->name)
+            ->method('findShopByShopNameOrFail')
+            ->with($input->groupId, $input->name, true)
             ->willThrowException(new DBNotFoundException());
 
         $this->shopRepository
@@ -188,8 +188,8 @@ class ShopCreateServiceTest extends TestCase
 
         $this->shopRepository
             ->expects($this->once())
-            ->method('findShopsByGroupAndNameOrFail')
-            ->with($input->groupId, $input->name)
+            ->method('findShopByShopNameOrFail')
+            ->with($input->groupId, $input->name, true)
             ->willThrowException(new DBNotFoundException());
 
         $this->shopRepository
@@ -231,8 +231,8 @@ class ShopCreateServiceTest extends TestCase
 
         $this->shopRepository
             ->expects($this->once())
-            ->method('findShopsByGroupAndNameOrFail')
-            ->with($input->groupId, $input->name)
+            ->method('findShopByShopNameOrFail')
+            ->with($input->groupId, $input->name, true)
             ->willReturn($this->paginator);
 
         $this->shopRepository
@@ -269,8 +269,8 @@ class ShopCreateServiceTest extends TestCase
 
         $this->shopRepository
             ->expects($this->once())
-            ->method('findShopsByGroupAndNameOrFail')
-            ->with($input->groupId, $input->name)
+            ->method('findShopByShopNameOrFail')
+            ->with($input->groupId, $input->name, true)
             ->willThrowException(new DBNotFoundException());
 
         $this->shopRepository
@@ -314,8 +314,8 @@ class ShopCreateServiceTest extends TestCase
 
         $this->shopRepository
             ->expects($this->once())
-            ->method('findShopsByGroupAndNameOrFail')
-            ->with($input->groupId, $input->name)
+            ->method('findShopByShopNameOrFail')
+            ->with($input->groupId, $input->name, true)
             ->willThrowException(new DBNotFoundException());
 
         $this->shopRepository
@@ -358,8 +358,8 @@ class ShopCreateServiceTest extends TestCase
 
         $this->shopRepository
             ->expects($this->once())
-            ->method('findShopsByGroupAndNameOrFail')
-            ->with($input->groupId, $input->name)
+            ->method('findShopByShopNameOrFail')
+            ->with($input->groupId, $input->name, true)
             ->willThrowException(new DBNotFoundException());
 
         $this->shopRepository

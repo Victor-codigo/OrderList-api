@@ -64,39 +64,12 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
     }
 
     /**
-     * @throws DBNotFoundException
-     */
-    public function findShopsByGroupAndNameOrFail(Identifier $groupId, NameWithSpaces $name): PaginatorInterface
-    {
-        $queryBuilder = $this->entityManager
-            ->createQueryBuilder()
-            ->select('shop')
-            ->from(Shop::class, 'shop')
-            ->where('shop.groupId = :groupId')
-            ->setParameter('groupId', $groupId);
-
-        if (null !== $name) {
-            $queryBuilder
-                ->andWhere('shop.name = :name')
-                ->setParameter('name', $name);
-        }
-
-        $paginator = $this->paginator->createPaginator($queryBuilder);
-
-        if (0 === $paginator->getItemsTotal()) {
-            throw DBNotFoundException::fromMessage('Shops not found');
-        }
-
-        return $paginator;
-    }
-
-    /**
      * @param Identifier[]|null $shopsId
      * @param Identifier[]|null $productsId
      *
      * @throws DBNotFoundException
      */
-    public function findShopsOrFail(Identifier $groupId, array $shopsId = null, array $productsId = null, bool $orderAsc = true): PaginatorInterface
+    public function findShopsOrFail(Identifier $groupId, ?array $shopsId = null, ?array $productsId = null, bool $orderAsc = true): PaginatorInterface
     {
         $queryBuilder = $this->entityManager
             ->createQueryBuilder()

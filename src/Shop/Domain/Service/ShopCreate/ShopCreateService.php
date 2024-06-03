@@ -47,7 +47,7 @@ class ShopCreateService
     public function __invoke(ShopCreateDto $input): Shop
     {
         try {
-            $this->shopRepository->findShopsByGroupAndNameOrFail($input->groupId, $input->name);
+            $this->shopRepository->findShopByShopNameOrFail($input->groupId, $input->name, true);
 
             throw ShopCreateNameAlreadyExistsException::fromMessage('Shop name already exists');
         } catch (DBNotFoundException) {

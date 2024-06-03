@@ -27,17 +27,12 @@ interface ShopRepositoryInterface extends RepositoryInterface
     public function remove(array $shops): void;
 
     /**
-     * @throws DBNotFoundException
-     */
-    public function findShopsByGroupAndNameOrFail(Identifier $groupId, NameWithSpaces $name): PaginatorInterface;
-
-    /**
      * @param Identifier[]|null $shopsId
      * @param Identifier[]|null $productsId
      *
      * @throws DBNotFoundException
      */
-    public function findShopsOrFail(Identifier $groupId, array $shopsId = null, array $productsId = null, bool $orderAsc = true): PaginatorInterface;
+    public function findShopsOrFail(Identifier $groupId, ?array $shopsId = null, ?array $productsId = null, bool $orderAsc = true): PaginatorInterface;
 
     /**
      * @throws DBNotFoundException
