@@ -15,7 +15,9 @@ use Common\Domain\FileUpload\Exception\FileUploadTmpDirFileException;
 use Common\Domain\FileUpload\Exception\File\FileException;
 use Common\Domain\Model\ValueObject\Object\ObjectValueObject;
 use Common\Domain\Model\ValueObject\String\Path;
+use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
+use Common\Domain\Ports\Image\ImageInterface;
 use Common\Domain\Service\Image\EntityImageModifyInterface;
 use Common\Domain\Service\Image\UploadImage\Dto\UploadImageDto;
 use Symfony\Component\HttpFoundation\File\Exception\FormSizeFileException;
@@ -23,7 +25,8 @@ use Symfony\Component\HttpFoundation\File\Exception\FormSizeFileException;
 class UploadImageService
 {
     public function __construct(
-        private FileUploadInterface $fileUpload
+        private FileUploadInterface $fileUpload,
+        private ImageInterface $image
     ) {
     }
 
@@ -39,6 +42,7 @@ class UploadImageService
      * @throws FileUploadPartialFileException
      * @throws FileException
      * @throws FileUploadReplaceException
+     * @throws ImageResizeException
      */
     public function __invoke(UploadImageDto $input): Path
     {
@@ -46,7 +50,7 @@ class UploadImageService
             return $this->entityRemoveImage($input->entity, $input->imagesPathToStore);
         }
 
-        return $this->entitySetImage($input->entity, $input->imageUploaded, $input->imagesPathToStore);
+        return $this->entitySetImage($input->entity, $input->imageUploaded, $input->imagesPathToStore, $input->resizeWidth, $input->resizeHeight);
     }
 
     /**
@@ -59,14 +63,16 @@ class UploadImageService
      * @throws FileUploadTmpDirFileException
      * @throws FileUploadPartialFileException
      * @throws FileException
+     * @throws ImageResizeException
      */
-    private function entitySetImage(EntityImageModifyInterface $entity, ObjectValueObject $imageUploaded, Path $imagesPathToStore): Path
+    private function entitySetImage(EntityImageModifyInterface $entity, ObjectValueObject $imageUploaded, Path $imagesPathToStore, ?float $resizeWidth, ?float $resizeHeight): Path
     {
         if ($imageUploaded->isNull()) {
             return $entity->getImage();
         }
 
-        $fileUploadedName = $this->productImageUpload($entity->getImage(), $imageUploaded, $imagesPathToStore);
+        $fileUploadedName = $this->imageUpload($entity->getImage(), $imageUploaded, $imagesPathToStore);
+        $this->imageResize($fileUploadedName, $imagesPathToStore, $resizeWidth, $resizeHeight);
         $entity->setImage($fileUploadedName);
 
         return $fileUploadedName;
@@ -95,11 +101,31 @@ class UploadImageService
      * @throws FileUploadPartialFileException
      * @throws FileException
      */
-    private function productImageUpload(Path $imageCurrent, ObjectValueObject $imageUploaded, Path $pathImagesToStore): Path
+    private function imageUpload(Path $imageCurrent, ObjectValueObject $imageUploaded, Path $pathImagesToStore): Path
     {
         $this->fileUpload->__invoke($imageUploaded->getValue(), $pathImagesToStore->getValue(), $imageCurrent->getValue());
 
         return new Path($this->fileUpload->getFileName());
+    }
+
+    /**
+     * @throws ImageResizeException
+     */
+    private function imageResize(Path $image, Path $pathImagesToStore, ?float $resizeWidth, ?float $resizeHeight): void
+    {
+        if (null === $resizeWidth) {
+            return;
+        }
+
+        if (null === $resizeHeight) {
+            return;
+        }
+
+        $this->image->resizeToAFrame(
+            ValueObjectFactory::createPath("{$pathImagesToStore->getValue()}/{$image->getValue()}"),
+            $resizeWidth,
+            $resizeHeight
+        );
     }
 
     /**

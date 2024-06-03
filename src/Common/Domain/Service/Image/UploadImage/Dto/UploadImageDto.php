@@ -19,7 +19,9 @@ class UploadImageDto
         public readonly EntityImageModifyInterface $entity,
         public readonly Path $imagesPathToStore,
         public readonly ObjectValueObject|null $imageUploaded = null,
-        public readonly bool $remove = false,
+        public readonly bool $remove,
+        public readonly ?float $resizeWidth,
+        public readonly ?float $resizeHeight
     ) {
     }
 }
