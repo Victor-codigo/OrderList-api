@@ -70,7 +70,7 @@ class ImagineAdapter implements ImageInterface
     {
         $ratioWidth = $widthMax / $imageWidth;
 
-        if ($ratioWidth > 1) {
+        if ($ratioWidth >= 1) {
             return [
                 'width' => $imageWidth,
                 'height' => $imageHeight,
@@ -90,7 +90,7 @@ class ImagineAdapter implements ImageInterface
     {
         $ratioHeight = $heightMax / $imageHeight;
 
-        if ($ratioHeight > 1) {
+        if ($ratioHeight >= 1) {
             return [
                 'width' => $imageWidth,
                 'height' => $imageHeight,

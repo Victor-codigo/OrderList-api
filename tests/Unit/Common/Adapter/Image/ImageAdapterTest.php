@@ -140,6 +140,111 @@ class ImageAdapterTest extends TestCase
     }
 
     /** @test */
+    public function itShouldResizeImageWidthAndHeightAreTheSameThanFrame(): void
+    {
+        $filePath = ValueObjectFactory::createPath('file/path');
+
+        $this->imagine
+            ->expects($this->once())
+            ->method('open')
+            ->with($filePath->getValue())
+            ->willReturn($this->imageInterface);
+
+        $this->imageInterface
+            ->expects($this->once())
+            ->method('resize')
+            ->with($this->callback(function (Box $frame) {
+                $this->assertEquals(1000, $frame->getWidth());
+                $this->assertEquals(1000, $frame->getHeight());
+
+                return true;
+            }))
+            ->willReturn($this->imageInterface);
+
+        $this->imageInterface
+            ->expects($this->once())
+            ->method('save')
+            ->with($filePath->getValue());
+
+        BuiltInFunctionsReturn::$getimagesize = [1000, 1000];
+        $this->object->resizeToAFrame(
+            $filePath,
+            self::WIDTH_MAX,
+            self::HEIGHT_MAX
+        );
+    }
+
+    /** @test */
+    public function itShouldResizeImageWidthIsSmallerThanFrame(): void
+    {
+        $filePath = ValueObjectFactory::createPath('file/path');
+
+        $this->imagine
+            ->expects($this->once())
+            ->method('open')
+            ->with($filePath->getValue())
+            ->willReturn($this->imageInterface);
+
+        $this->imageInterface
+            ->expects($this->once())
+            ->method('resize')
+            ->with($this->callback(function (Box $frame) {
+                $this->assertEquals(250, $frame->getWidth());
+                $this->assertEquals(1000, $frame->getHeight());
+
+                return true;
+            }))
+            ->willReturn($this->imageInterface);
+
+        $this->imageInterface
+            ->expects($this->once())
+            ->method('save')
+            ->with($filePath->getValue());
+
+        BuiltInFunctionsReturn::$getimagesize = [500, 2000];
+        $this->object->resizeToAFrame(
+            $filePath,
+            self::WIDTH_MAX,
+            self::HEIGHT_MAX
+        );
+    }
+
+    /** @test */
+    public function itShouldResizeImageHeightIsSmallerThanFrame(): void
+    {
+        $filePath = ValueObjectFactory::createPath('file/path');
+
+        $this->imagine
+            ->expects($this->once())
+            ->method('open')
+            ->with($filePath->getValue())
+            ->willReturn($this->imageInterface);
+
+        $this->imageInterface
+            ->expects($this->once())
+            ->method('resize')
+            ->with($this->callback(function (Box $frame) {
+                $this->assertEquals(1000, $frame->getWidth());
+                $this->assertEquals(250, $frame->getHeight());
+
+                return true;
+            }))
+            ->willReturn($this->imageInterface);
+
+        $this->imageInterface
+            ->expects($this->once())
+            ->method('save')
+            ->with($filePath->getValue());
+
+        BuiltInFunctionsReturn::$getimagesize = [2000, 500];
+        $this->object->resizeToAFrame(
+            $filePath,
+            self::WIDTH_MAX,
+            self::HEIGHT_MAX
+        );
+    }
+
+    /** @test */
     public function itShouldResizeImageWidthAndHeightSmallerThanFrame(): void
     {
         $filePath = ValueObjectFactory::createPath('file/path');
