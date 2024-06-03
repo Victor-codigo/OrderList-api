@@ -58,3 +58,4 @@ services:
             - { name: controller.argument_value_resolver, priority: 50 }
 
     Test\Fixtures\Helpers\AliceBundleHelpers: ~
+    Imagine\Gd\Imagine:

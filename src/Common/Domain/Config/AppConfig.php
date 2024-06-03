@@ -171,6 +171,16 @@ class AppConfig
      */
     public const PAGINATION_PAGE_ITEMS_MAX = 100;
 
+    /**
+     * Maximum size of user image width.
+     */
+    public const USER_IMAGE_FRAME_SIZE_WIDTH = 300;
+
+    /**
+     * Maximum size of user image height.
+     */
+    public const USER_IMAGE_FRAME_SIZE_HEIGHT = 300;
+
     protected static ?AppConfig $instance = null;
     protected static VALUE_OBJECTS_CONSTRAINTS $valueObject;
 

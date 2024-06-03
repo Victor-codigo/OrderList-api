@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace User\Application\UserModify;
 
+use Common\Domain\Config\AppConfig;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Exception\FileSystem\DomainFileNotDeletedException;
 use Common\Domain\FileUpload\Exception\FileUploadCanNotWriteException;
@@ -17,6 +18,7 @@ use Common\Domain\Model\ValueObject\Object\UserImage;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
+use Common\Domain\Ports\Image\ImageInterface;
 use Common\Domain\Service\Exception\DomainErrorException;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
@@ -33,6 +35,7 @@ class UserModifyUseCase extends ServiceBase
         private ValidationInterface $validation,
         private UserRepositoryInterface $userRepository,
         private FileUploadInterface $fileUpload,
+        private ImageInterface $image,
         private string $userImagePath
     ) {
     }
@@ -107,7 +110,13 @@ class UserModifyUseCase extends ServiceBase
         $this->fileUpload->__invoke($uploadedFile, $this->userImagePath);
         $this->removeUserImage($userCurrentFileName);
 
-        return new Path($this->fileUpload->getFileName());
+        $this->image->resizeToAFrame(
+            ValueObjectFactory::createPath("{$this->userImagePath}/{$this->fileUpload->getFileName()}"),
+            AppConfig::USER_IMAGE_FRAME_SIZE_WIDTH,
+            AppConfig::USER_IMAGE_FRAME_SIZE_HEIGHT
+        );
+
+        return ValueObjectFactory::createPath($this->fileUpload->getFileName());
     }
 
     /**
