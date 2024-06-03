@@ -61,7 +61,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<order_id|group_id|order_not_found|group_error, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<order_id|group_id|order_not_found|permissions, string|array>')),
                     ]
                 )
             )

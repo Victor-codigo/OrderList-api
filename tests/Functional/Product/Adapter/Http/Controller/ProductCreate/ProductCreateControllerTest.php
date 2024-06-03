@@ -243,10 +243,10 @@ class ProductCreateControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['group_error'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['permissions'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error validating the group', $responseContent->message);
-        $this->assertEquals('Error validating the group', $responseContent->errors->group_error);
+        $this->assertEquals('Error validating the group', $responseContent->errors->permissions);
     }
 
     /** @test */
@@ -270,10 +270,10 @@ class ProductCreateControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [], ['group_error'], Response::HTTP_BAD_REQUEST);
+        $this->assertResponseStructureIsOk($response, [], ['permissions'], Response::HTTP_BAD_REQUEST);
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error validating the group', $responseContent->message);
-        $this->assertEquals('Error validating the group', $responseContent->errors->group_error);
+        $this->assertEquals('Error validating the group', $responseContent->errors->permissions);
     }
 
     /** @test */

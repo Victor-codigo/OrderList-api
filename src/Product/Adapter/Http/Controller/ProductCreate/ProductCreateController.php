@@ -64,7 +64,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<description|group_id|group_error|name|product_name_repeated|image, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<description|group_id|permissions|name|product_name_repeated|image, string|array>')),
                     ]
                 )
             )

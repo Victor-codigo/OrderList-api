@@ -6,7 +6,6 @@ namespace Order\Adapter\Http\Controller\OrderRemove;
 
 use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Application\ApplicationOutputInterface;
-use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use OpenApi\Attributes as OA;
@@ -61,7 +60,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|orders_empty|orders_id|group_error|orders_not_found, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|orders_empty|orders_id|permissions|orders_not_found, string|array>')),
                     ]
                 )
             )
@@ -93,9 +92,6 @@ class OrderRemoveController extends AbstractController
         return new OrderRemoveInputDto($userShared->getUser(), $ordersId, $groupId);
     }
 
-    /**
-     * @param Identifier[] $ordersRemovedId
-     */
     private function createResponse(ApplicationOutputInterface $ordersRemoved): JsonResponse
     {
         $responseDto = (new ResponseDto())
