@@ -181,6 +181,26 @@ class AppConfig
      */
     public const USER_IMAGE_FRAME_SIZE_HEIGHT = 300;
 
+    /**
+     * Maximum size of product image width.
+     */
+    public const PRODUCT_IMAGE_FRAME_SIZE_WIDTH = 300;
+
+    /**
+     * Maximum size of product image height.
+     */
+    public const PRODUCT_IMAGE_FRAME_SIZE_HEIGHT = 300;
+
+    /**
+     * Maximum size of shop image width.
+     */
+    public const SHOP_IMAGE_FRAME_SIZE_WIDTH = 300;
+
+    /**
+     * Maximum size of shop image height.
+     */
+    public const SHOP_IMAGE_FRAME_SIZE_HEIGHT = 300;
+
     protected static ?AppConfig $instance = null;
     protected static VALUE_OBJECTS_CONSTRAINTS $valueObject;
 

@@ -11,6 +11,7 @@ use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\FileInterface;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
+use Common\Domain\Ports\Image\ImageInterface;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -23,6 +24,7 @@ use Product\Domain\Service\ProductCreate\ProductCreateService;
 class ProductCreateServiceTest extends TestCase
 {
     private const IMAGE_UPLOADED_FILE_NAME = 'Image.png';
+    private const IMAGE_UPLOADED_PATH = '/uploaded/image/path';
     private const PATH_IMAGE_UPLOAD = __DIR__.'/Fixtures/Image.png';
     private const GROUP_ID = '82633054-84ad-4748-8ea2-8be0201c7b3a';
 
@@ -31,6 +33,7 @@ class ProductCreateServiceTest extends TestCase
     private MockObject|FileUploadInterface $fileUpload;
     private MockObject|UploadedFileInterface $productImageFile;
     private MockObject|PaginatorInterface $paginator;
+    private MockObject|ImageInterface $image;
 
     protected function setUp(): void
     {
@@ -40,7 +43,8 @@ class ProductCreateServiceTest extends TestCase
         $this->fileUpload = $this->createMock(FileUploadInterface::class);
         $this->productImageFile = $this->createMock(UploadedFileInterface::class);
         $this->paginator = $this->createMock(PaginatorInterface::class);
-        $this->object = new ProductCreateService($this->productRepository, $this->fileUpload, self::PATH_IMAGE_UPLOAD);
+        $this->image = $this->createMock(ImageInterface::class);
+        $this->object = new ProductCreateService($this->productRepository, $this->fileUpload, $this->image, self::IMAGE_UPLOADED_PATH);
     }
 
     private function createProductCreateDto(string|null $description, FileInterface|null $productImageFile): ProductCreateDto
@@ -73,12 +77,21 @@ class ProductCreateServiceTest extends TestCase
         $this->fileUpload
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->productImageFile, self::PATH_IMAGE_UPLOAD);
+            ->with($this->productImageFile, self::IMAGE_UPLOADED_PATH);
 
         $this->fileUpload
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getFileName')
             ->willReturn(self::IMAGE_UPLOADED_FILE_NAME);
+
+        $this->image
+            ->expects($this->once())
+            ->method('resizeToAFrame')
+            ->with(
+                ValueObjectFactory::createPath(self::IMAGE_UPLOADED_PATH.'/'.self::IMAGE_UPLOADED_FILE_NAME),
+                300,
+                300
+            );
 
         $this->productRepository
             ->expects($this->once())
@@ -114,12 +127,21 @@ class ProductCreateServiceTest extends TestCase
         $this->fileUpload
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->productImageFile, self::PATH_IMAGE_UPLOAD);
+            ->with($this->productImageFile, self::IMAGE_UPLOADED_PATH);
 
         $this->fileUpload
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getFileName')
             ->willReturn(self::IMAGE_UPLOADED_FILE_NAME);
+
+        $this->image
+            ->expects($this->once())
+            ->method('resizeToAFrame')
+            ->with(
+                ValueObjectFactory::createPath(self::IMAGE_UPLOADED_PATH.'/'.self::IMAGE_UPLOADED_FILE_NAME),
+                300,
+                300
+            );
 
         $this->productRepository
             ->expects($this->once())
@@ -160,6 +182,10 @@ class ProductCreateServiceTest extends TestCase
             ->expects($this->never())
             ->method('getFileName');
 
+        $this->image
+            ->expects($this->never())
+            ->method('resizeToAFrame');
+
         $this->productRepository
             ->expects($this->once())
             ->method('findProductsByGroupAndNameOrFail')
@@ -199,6 +225,10 @@ class ProductCreateServiceTest extends TestCase
             ->expects($this->never())
             ->method('getFileName');
 
+        $this->image
+            ->expects($this->never())
+            ->method('resizeToAFrame');
+
         $this->productRepository
             ->expects($this->once())
             ->method('findProductsByGroupAndNameOrFail')
@@ -226,12 +256,16 @@ class ProductCreateServiceTest extends TestCase
         $this->fileUpload
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->productImageFile, self::PATH_IMAGE_UPLOAD)
+            ->with($this->productImageFile, self::IMAGE_UPLOADED_PATH)
             ->willThrowException(new FileUploadException());
 
         $this->fileUpload
             ->expects($this->never())
             ->method('getFileName');
+
+        $this->image
+            ->expects($this->never())
+            ->method('resizeToAFrame');
 
         $this->productRepository
             ->expects($this->once())
@@ -261,12 +295,21 @@ class ProductCreateServiceTest extends TestCase
         $this->fileUpload
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->productImageFile, self::PATH_IMAGE_UPLOAD);
+            ->with($this->productImageFile, self::IMAGE_UPLOADED_PATH);
 
         $this->fileUpload
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getFileName')
             ->willReturn(self::IMAGE_UPLOADED_FILE_NAME);
+
+        $this->image
+            ->expects($this->once())
+            ->method('resizeToAFrame')
+            ->with(
+                ValueObjectFactory::createPath(self::IMAGE_UPLOADED_PATH.'/'.self::IMAGE_UPLOADED_FILE_NAME),
+                300,
+                300
+            );
 
         $this->productRepository
             ->expects($this->once())

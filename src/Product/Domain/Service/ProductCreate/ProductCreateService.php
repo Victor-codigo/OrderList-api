@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Product\Domain\Service\ProductCreate;
 
+use Common\Domain\Config\AppConfig;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Object\ProductImage;
 use Common\Domain\Model\ValueObject\String\Description;
@@ -12,6 +13,7 @@ use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
+use Common\Domain\Ports\Image\ImageInterface;
 use Product\Domain\Model\Product;
 use Product\Domain\Port\Repository\ProductRepositoryInterface;
 use Product\Domain\Service\ProductCreate\Dto\ProductCreateDto;
@@ -22,6 +24,7 @@ class ProductCreateService
     public function __construct(
         private ProductRepositoryInterface $productRepository,
         private FileUploadInterface $fileUpload,
+        private ImageInterface $image,
         private string $productImagePath
     ) {
     }
@@ -39,6 +42,7 @@ class ProductCreateService
      * @throws FileUploadTmpDirFileException
      * @throws FileUploadPartialFileException
      * @throws FileException
+     * @throws ImageResizeException
      */
     public function __invoke(ProductCreateDto $input): Product
     {
@@ -64,6 +68,7 @@ class ProductCreateService
      * @throws FileUploadTmpDirFileException
      * @throws FileUploadPartialFileException
      * @throws FileException
+     * @throws ImageResizeException
      */
     private function createProduct(Identifier $groupId, NameWithSpaces $name, Description $description, ProductImage $image): Product
     {
@@ -88,6 +93,7 @@ class ProductCreateService
      * @throws FileUploadTmpDirFileException
      * @throws FileUploadPartialFileException
      * @throws FileException
+     * @throws ImageResizeException
      */
     private function productImageUpload(ProductImage $image): Path
     {
@@ -97,6 +103,12 @@ class ProductCreateService
 
         $this->fileUpload->__invoke($image->getValue(), $this->productImagePath);
 
-        return new Path($this->fileUpload->getFileName());
+        $this->image->resizeToAFrame(
+            ValueObjectFactory::createPath("{$this->productImagePath}/{$this->fileUpload->getFileName()}"),
+            AppConfig::PRODUCT_IMAGE_FRAME_SIZE_WIDTH,
+            AppConfig::PRODUCT_IMAGE_FRAME_SIZE_HEIGHT
+        );
+
+        return ValueObjectFactory::createPath($this->fileUpload->getFileName());
     }
 }

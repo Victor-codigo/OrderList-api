@@ -75,6 +75,7 @@ class UserModifyUseCase extends ServiceBase
      * @throws FileUploadTmpDirFileException
      * @throws FileUploadPartialFileException
      * @throws DomainFileNotDeletedException
+     * @throws ImageResizeException
      */
     private function userModify(UserModifyInputDto $userModifyDto): void
     {
@@ -103,6 +104,7 @@ class UserModifyUseCase extends ServiceBase
      * @throws FileUploadPartialFileException
      * @throws FileException
      * @throws DomainFileNotDeletedException
+     * @throws ImageResizeException
      */
     private function uploadUserImage(UserImage $image, Path $userCurrentFileName): Path
     {
