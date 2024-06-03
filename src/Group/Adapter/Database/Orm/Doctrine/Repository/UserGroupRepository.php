@@ -7,11 +7,13 @@ namespace Group\Adapter\Database\Orm\Doctrine\Repository;
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\Group\GROUP_TYPE;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 use Group\Domain\Model\Group;
@@ -197,6 +199,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
      * @param UserGroup[] $usersGroup
      *
      * @throws DBConnectionException
+     * @throws DBUniqueConstraintException
      */
     public function save(array $usersGroup): void
     {
@@ -206,6 +209,8 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
             }
 
             $this->objectManager->flush();
+        } catch (UniqueConstraintViolationException $e) {
+            throw DBUniqueConstraintException::fromId($userGroup->getId(), $e->getCode());
         } catch (\Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }

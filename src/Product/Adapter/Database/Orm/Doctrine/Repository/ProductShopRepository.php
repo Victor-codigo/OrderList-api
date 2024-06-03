@@ -7,8 +7,10 @@ namespace Product\Adapter\Database\Orm\Doctrine\Repository;
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 use Product\Domain\Model\Product;
@@ -28,6 +30,7 @@ class ProductShopRepository extends RepositoryBase implements ProductShopReposit
      * @param ProductShop[] $productsShops
      *
      * @throws DBConnectionException
+     * @throws DBUniqueConstraintException
      */
     public function save(array $productsShops): void
     {
@@ -37,6 +40,8 @@ class ProductShopRepository extends RepositoryBase implements ProductShopReposit
             }
 
             $this->objectManager->flush();
+        } catch (UniqueConstraintViolationException $e) {
+            throw DBUniqueConstraintException::fromId($productShop->getId(), $e->getCode());
         } catch (\Throwable $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
@@ -63,7 +68,7 @@ class ProductShopRepository extends RepositoryBase implements ProductShopReposit
     /**
      * @throws DBNotFoundException
      */
-    public function findProductsAndShopsOrFail(array $productsId = null, array $shopsId = null, Identifier $groupId = null): PaginatorInterface
+    public function findProductsAndShopsOrFail(?array $productsId = null, ?array $shopsId = null, ?Identifier $groupId = null): PaginatorInterface
     {
         $query = $this->entityManager->createQueryBuilder()
             ->select('productShops')
