@@ -62,6 +62,7 @@ class NotificationGetDataService
             NOTIFICATION_TYPE::GROUP_REMOVED => 'notification.group.removed',
             NOTIFICATION_TYPE::GROUP_USER_ADDED => 'notification.group.user_added',
             NOTIFICATION_TYPE::GROUP_USER_REMOVED => 'notification.group.user_removed',
+            NOTIFICATION_TYPE::GROUP_USER_SET_AS_ADMIN => 'notification.group.set_as_admin',
 
             NOTIFICATION_TYPE::USER_EMAIL_CHANGED => 'notification.user.email_changed',
             NOTIFICATION_TYPE::USER_PASSWORD_CHANGED => 'notification.user.password_changed',

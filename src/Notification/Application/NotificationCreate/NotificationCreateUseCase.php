@@ -26,7 +26,7 @@ use Notification\Domain\Service\NotificationCreate\NotificationCreateService;
 class NotificationCreateUseCase extends ServiceBase
 {
     public function __construct(
-        private NotificationCreateService $NotificationCreateService,
+        private NotificationCreateService $notificationCreateService,
         private ValidationInterface $validator,
         private ModuleCommunicationInterface $moduleCommunication,
         private string $systemKey
@@ -37,7 +37,7 @@ class NotificationCreateUseCase extends ServiceBase
     {
         try {
             $this->validation($input);
-            $notification = $this->NotificationCreateService->__invoke(
+            $notification = $this->notificationCreateService->__invoke(
                 $this->createNotificationCreateDto($input->usersId, $input->notificationType, $input->notificationData)
             );
 
@@ -96,17 +96,11 @@ class NotificationCreateUseCase extends ServiceBase
         }
     }
 
-    /**
-     * @param Identifier[] $userId
-     */
     private function createNotificationCreateDto(array $usersId, NotificationType $notificationType, NotificationData $notificationData): NotificationCreateDto
     {
         return new NotificationCreateDto($usersId, $notificationType, $notificationData);
     }
 
-    /**
-     * @param Identifier[] $notificationId
-     */
     private function createNotificationCreateOutputDto(array $notifications): NotificationCreateOutputDto
     {
         $notificationsId = array_map(

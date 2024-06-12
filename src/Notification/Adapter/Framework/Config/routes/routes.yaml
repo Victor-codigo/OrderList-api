@@ -18,6 +18,16 @@ notification_remove:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
+# NOTIFICATION REMOVE
+# -------------------------------------------------------------
+notification_user_remove_all:
+  path: /api/v{api_version}/notification/user/remove-groups
+  methods: DELETE
+  controller: Notification\Adapter\Http\Controller\NotificationRemoveAllUserNotifications\NotificationRemoveAllUserNotificationsController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
 # NOTIFICATION GET DATA
 # -------------------------------------------------------------
 notification_get_data:

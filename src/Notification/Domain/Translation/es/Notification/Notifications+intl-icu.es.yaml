@@ -10,3 +10,4 @@ notification:
     user_removed: Has sido eliminado del grupo {group_name}
     created: Has creado el grupo {group_name}
     removed: Has eliminado el grupo {group_name}
+    set_as_admin: Has sido ascendido a administratod del grupo {group_name}
