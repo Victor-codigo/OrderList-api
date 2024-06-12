@@ -17,7 +17,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
 {
     public const MAX_RESULT_DEFAULT = AppConfig::PAGINATION_PAGE_ITEMS_MAX;
 
-    private Paginator|null $paginator = null;
+    private ?Paginator $paginator = null;
 
     public function createPaginator(Query|QueryBuilder $query): self
     {
@@ -84,6 +84,39 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
         return $this;
     }
 
+    /**
+     * @return \Generator<Traversable>
+     *
+     * @throws InvalidArgumentException
+     */
+    public function getPagesRange(int $pageIni, int $pageEnd, int $pageItems): \Generator
+    {
+        if ($pageIni <= 0) {
+            throw new InvalidArgumentException('PageIni, must by bigger than 0');
+        }
+
+        $hasNext = true;
+        while ($hasNext && $pageIni <= $pageEnd) {
+            $this->setPagination($pageIni, $pageItems);
+
+            yield $this->getIterator();
+
+            ++$pageIni;
+            $hasNext = $this->hasNext();
+        }
+    }
+
+    /**
+     * @return \Generator<Traversable>
+     *
+     * @throws InvalidArgumentException
+     */
+    public function getAllPages(int $pageItems): \Generator
+    {
+        $this->setPageItems($pageItems);
+        return $this->getPagesRange(1, $this->getPagesTotal(), $pageItems);
+    }
+
     public function getPageCurrent(): int
     {
         $this->validateQuery();
@@ -123,7 +156,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
         return $this->getPageCurrent() > 1;
     }
 
-    public function getPageNextNumber(): int|null
+    public function getPageNextNumber(): ?int
     {
         $this->validateQuery();
 
@@ -134,7 +167,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
         return $this->getPageCurrent() + 1;
     }
 
-    public function getPagePreviousNumber(): int|null
+    public function getPagePreviousNumber(): ?int
     {
         $this->validateQuery();
 

@@ -15,6 +15,20 @@ interface PaginatorInterface extends \IteratorAggregate, \Countable
 
     public function setPagination(int $page = 1, int $pageItems = 100): self;
 
+    /**
+     * @return \Generator<Traversable>
+     *
+     * @throws InvalidArgumentException
+     */
+    public function getPagesRange(int $pageIni, int $pageEnd, int $pageItems): \Generator;
+
+    /**
+     * @return \Generator<Traversable>
+     *
+     * @throws InvalidArgumentException
+     */
+    public function getAllPages(int $pageItems): \Generator;
+
     public function getPageCurrent(): int;
 
     public function getPagesTotal(): int;
@@ -23,9 +37,9 @@ interface PaginatorInterface extends \IteratorAggregate, \Countable
 
     public function hasPrevious(): bool;
 
-    public function getPageNextNumber(): int|null;
+    public function getPageNextNumber(): ?int;
 
-    public function getPagePreviousNumber(): int|null;
+    public function getPagePreviousNumber(): ?int;
 
     public function getItemsTotal(): int;
 }

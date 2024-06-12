@@ -75,9 +75,6 @@ class DoctrinePaginatorAdapterTest extends TestCase
         ];
     }
 
-    /**
-     * @param QueryResult[] $queryPageResult
-     */
     private function mockPaginator(Query $query, array $queryResult): MockObject|Paginator
     {
         /** @var MockObject|Paginator $paginator */
@@ -91,7 +88,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $paginator
             ->expects($this->any())
             ->method('count')
-            ->willReturn(count($this->queryResult));
+            ->willReturn(count($queryResult));
 
         return $paginator;
     }
@@ -108,9 +105,6 @@ class DoctrinePaginatorAdapterTest extends TestCase
         return $object;
     }
 
-    /**
-     * @param QueryResult[] $queryPageResult
-     */
     private function mockQuery(array $queryResult, EntityManager $entityManager, int $pageItems): MockObject|Query
     {
         /** @var MockObject|Query */
@@ -134,7 +128,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $query
             ->expects($this->any())
             ->method('getScalarResult')
-            ->willReturn($this->queryResult);
+            ->willReturn($queryResult);
 
         $query
             ->expects($this->any())
@@ -352,30 +346,190 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $object->setPagination($page, $pageItems);
     }
 
-     /** @test */
-     public function itShouldSetPaginationPageGreaterThanTotalPagesToLastPage(): void
-     {
-         $pageItems = 5;
-         $page = 5;
+    /** @test */
+    public function itShouldSetPaginationPageGreaterThanTotalPagesToLastPage(): void
+    {
+        $pageItems = 5;
+        $page = 5;
 
-         $query = $this->mockQuery($this->queryResult, $this->entityManager, $pageItems);
-         $paginator = $this->mockPaginator($query, $this->queryResult);
-         $object = $this->createObjectTest($query, $paginator);
+        $query = $this->mockQuery($this->queryResult, $this->entityManager, $pageItems);
+        $paginator = $this->mockPaginator($query, $this->queryResult);
+        $object = $this->createObjectTest($query, $paginator);
 
-         $query
-             ->expects($this->any())
-             ->method('setMaxResults')
-             ->with($pageItems);
-
-         $query
+        $query
             ->expects($this->any())
-            ->method('setFirstResult')
-            ->with($pageItems * (4 - 1));
+            ->method('setMaxResults')
+            ->with($pageItems);
 
-         $return = $object->setPagination($page, $pageItems);
+        $query
+           ->expects($this->any())
+           ->method('setFirstResult')
+           ->with($pageItems * (4 - 1));
 
-         $this->assertInstanceOf(DoctrinePaginatorAdapter::class, $return);
-     }
+        $return = $object->setPagination($page, $pageItems);
+
+        $this->assertInstanceOf(DoctrinePaginatorAdapter::class, $return);
+    }
+
+    /** @test */
+    public function itShouldGetAPageRange(): void
+    {
+        $pageIni = 1;
+        $pageEnd = 3;
+        $pageItems = 5;
+        $queryResult = $this->getQueryResult();
+        $queryPageItemsExpected = [
+            array_slice($queryResult, 0, 5),
+            array_slice($queryResult, 5, 5),
+            array_slice($queryResult, 10, 5),
+        ];
+
+        $query = $this->mockQuery($this->queryResult, $this->entityManager, $pageItems);
+        $paginator = $this->mockPaginator($query, $this->queryResult);
+        $object = $this->createObjectTest($query, $paginator);
+
+        $paginator
+            ->expects($this->exactly($pageEnd - $pageIni + 1))
+            ->method('getIterator')
+            ->willReturnOnConsecutiveCalls(
+                new \ArrayIterator($queryPageItemsExpected[0]),
+                new \ArrayIterator($queryPageItemsExpected[1]),
+                new \ArrayIterator($queryPageItemsExpected[2]),
+            );
+
+        $query
+            ->expects($this->exactly($pageEnd - $pageIni + 1))
+            ->method('getFirstResult')
+            ->willReturnOnConsecutiveCalls(
+                0,
+                5,
+                10
+            );
+
+        $return = $object->getPagesRange($pageIni, $pageEnd, $pageItems);
+
+        foreach ($return as $item) {
+            $this->assertInstanceOf(\Traversable::class, $item);
+            $this->assertContainsEquals(iterator_to_array($item), $queryPageItemsExpected);
+            $this->count($pageItems, $item);
+        }
+    }
+
+    /** @test */
+    public function itShouldFailPageIniIsSmallerThanZero(): void
+    {
+        $pageIni = 0;
+        $pageEnd = 3;
+        $pageItems = 1;
+
+        $query = $this->mockQuery($this->queryResult, $this->entityManager, $pageItems);
+        $paginator = $this->mockPaginator($query, $this->queryResult);
+        $object = $this->createObjectTest($query, $paginator);
+
+        $paginator
+            ->expects($this->never())
+            ->method('getIterator');
+
+        $this->expectException(InvalidArgumentException::class);
+        $return = $object->getPagesRange($pageIni, $pageEnd, $pageItems);
+
+        foreach ($return as $item) {
+        }
+    }
+
+    /** @test */
+    public function itShouldFailPageIniIsBiggerThanPageEnd(): void
+    {
+        $pageIni = 4;
+        $pageEnd = 3;
+        $pageItems = 5;
+
+        $query = $this->mockQuery($this->queryResult, $this->entityManager, $pageItems);
+        $paginator = $this->mockPaginator($query, $this->queryResult);
+        $object = $this->createObjectTest($query, $paginator);
+
+        $paginator
+            ->expects($this->never())
+            ->method('getIterator');
+
+        $return = $object->getPagesRange($pageIni, $pageEnd, $pageItems);
+
+        foreach ($return as $item) {
+        }
+    }
+
+    /** @test */
+    public function itShouldGetLessOfThePageRangeLimitPagesExceded(): void
+    {
+        $pageIni = 1;
+        $pageEnd = 3;
+        $pageItems = 10;
+        $queryResult = $this->getQueryResult();
+        $queryPageItemsExpected = [
+            array_slice($queryResult, 0, 10),
+            array_slice($queryResult, 10, 10),
+        ];
+
+        $query = $this->mockQuery($this->queryResult, $this->entityManager, $pageItems);
+        $paginator = $this->mockPaginator($query, $this->queryResult);
+        $object = $this->createObjectTest($query, $paginator);
+
+        $paginator
+            ->expects($this->exactly(2))
+            ->method('getIterator')
+            ->willReturnOnConsecutiveCalls(
+                new \ArrayIterator($queryPageItemsExpected[0]),
+                new \ArrayIterator($queryPageItemsExpected[1]),
+            );
+
+        $query
+            ->expects($this->exactly(2))
+            ->method('getFirstResult')
+            ->willReturnOnConsecutiveCalls(
+                0,
+                10,
+            );
+
+        $return = $object->getPagesRange($pageIni, $pageEnd, $pageItems);
+
+        foreach ($return as $item) {
+            $this->assertInstanceOf(\Traversable::class, $item);
+            $this->assertContainsEquals(iterator_to_array($item), $queryPageItemsExpected);
+            $this->count($pageItems, $item);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetOnlyOnePage(): void
+    {
+        $pageIni = 1;
+        $pageEnd = 1;
+        $pageItems = 20;
+        $queryResult = $this->getQueryResult();
+        $queryPageItemsExpected = $queryResult;
+
+        $query = $this->mockQuery($this->queryResult, $this->entityManager, $pageItems);
+        $paginator = $this->mockPaginator($query, $this->queryResult);
+        $object = $this->createObjectTest($query, $paginator);
+
+        $paginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($queryPageItemsExpected));
+
+        $query
+            ->expects($this->once())
+            ->method('getFirstResult')
+            ->willReturn(0);
+
+        $return = $object->getPagesRange($pageIni, $pageEnd, $pageItems);
+
+        foreach ($return as $item) {
+            $this->assertInstanceOf(\Traversable::class, $item);
+            $this->assertEquals($item, new \ArrayIterator($queryPageItemsExpected));
+            $this->count($pageItems, $item);
+        }
+    }
 
     /** @test */
     public function itShouldFailGettingPageCurrentPageQueryNotSet(): void
@@ -512,34 +666,34 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertTrue($return);
     }
 
-   /** @test */
-   public function itShouldHasNotNextPage(): void
-   {
-       $pageItems = 5;
+    /** @test */
+    public function itShouldHasNotNextPage(): void
+    {
+        $pageItems = 5;
 
-       $query = $this->mockQuery($this->queryResult, $this->entityManager, $pageItems);
-       $paginator = $this->mockPaginator($query, $this->queryResult);
-       $object = $this->createObjectTest($query, $paginator);
+        $query = $this->mockQuery($this->queryResult, $this->entityManager, $pageItems);
+        $paginator = $this->mockPaginator($query, $this->queryResult);
+        $object = $this->createObjectTest($query, $paginator);
 
-       $query
-           ->expects($this->any())
-           ->method('getFirstResult')
-           ->willReturn(15);
+        $query
+            ->expects($this->any())
+            ->method('getFirstResult')
+            ->willReturn(15);
 
-       $object->setPagination(4, $pageItems);
-       $return = $object->hasNext();
+        $object->setPagination(4, $pageItems);
+        $return = $object->hasNext();
 
-       $this->assertFalse($return);
-   }
+        $this->assertFalse($return);
+    }
 
-   /** @test */
-   public function itShouldFailHasNextPageQueryNotSet(): void
-   {
-       $object = new DoctrinePaginatorAdapter();
+    /** @test */
+    public function itShouldFailHasNextPageQueryNotSet(): void
+    {
+        $object = new DoctrinePaginatorAdapter();
 
-       $this->expectException(LogicException::class);
-       $object->hasNext();
-   }
+        $this->expectException(LogicException::class);
+        $object->hasNext();
+    }
 
     /** @test */
     public function itShouldHasPrevious(): void
@@ -581,14 +735,14 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertFalse($return);
     }
 
-   /** @test */
-   public function itShouldFailHasPreviousQueryNotSet(): void
-   {
-       $object = new DoctrinePaginatorAdapter();
+    /** @test */
+    public function itShouldFailHasPreviousQueryNotSet(): void
+    {
+        $object = new DoctrinePaginatorAdapter();
 
-       $this->expectException(LogicException::class);
-       $object->hasPrevious();
-   }
+        $this->expectException(LogicException::class);
+        $object->hasPrevious();
+    }
 
     /** @test */
     public function itShouldGetPageNextNumber(): void
@@ -628,14 +782,14 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertNull($return);
     }
 
-   /** @test */
-   public function itShouldFailGettingPageNextNumberQueryNotSet(): void
-   {
-       $object = new DoctrinePaginatorAdapter();
+    /** @test */
+    public function itShouldFailGettingPageNextNumberQueryNotSet(): void
+    {
+        $object = new DoctrinePaginatorAdapter();
 
-       $this->expectException(LogicException::class);
-       $object->getPageNextNumber();
-   }
+        $this->expectException(LogicException::class);
+        $object->getPageNextNumber();
+    }
 
     /** @test */
     public function itShouldGetPagePreviousNumber(): void
@@ -675,12 +829,12 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertNull($return);
     }
 
-   /** @test */
-   public function itShouldFailGettingPagePreviousNumberQueryNotSet(): void
-   {
-       $object = new DoctrinePaginatorAdapter();
+    /** @test */
+    public function itShouldFailGettingPagePreviousNumberQueryNotSet(): void
+    {
+        $object = new DoctrinePaginatorAdapter();
 
-       $this->expectException(LogicException::class);
-       $object->getPagePreviousNumber();
-   }
+        $this->expectException(LogicException::class);
+        $object->getPagePreviousNumber();
+    }
 }
