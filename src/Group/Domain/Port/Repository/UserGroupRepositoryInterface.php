@@ -19,6 +19,13 @@ interface UserGroupRepositoryInterface extends RepositoryInterface
     public function findGroupUsersOrFail(Identifier $groupId): PaginatorInterface;
 
     /**
+     * @param Identifier[] $groupsId
+     *
+     * @throws DBNotFoundException
+     */
+    public function findGroupsFirstUserByRolOrFail(array $groupsId, GROUP_ROLES $groupRole): array;
+
+    /**
      * @param Identifier[] $usersId
      *
      * @return UserGroup[]
@@ -48,6 +55,13 @@ interface UserGroupRepositoryInterface extends RepositoryInterface
      * @throws DBNotFoundException
      */
     public function findGroupUsersNumberOrFail(Identifier $groupId): int;
+
+    /**
+     * @param Identifier[] $groupsId
+     *
+     * @throws DBNotFoundException
+     */
+    public function findGroupsUsersNumberOrFail(array $groupsId): PaginatorInterface;
 
     /**
      * @param UserGroup[] $usersGroup

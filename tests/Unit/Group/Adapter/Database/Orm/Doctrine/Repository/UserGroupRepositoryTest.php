@@ -27,6 +27,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
     private const GROUP_2_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const GROUP_3_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
     private const GROUP_4_ID = 'e05b2466-9528-4815-ac7f-663c1d89ab55';
+    private const GROUP_5_ID = '78b96ac1-ffcc-458b-8f48-b40c6e65261f';
     private const GROUP_USER_ADMIN_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
     private UserGroupRepository $object;
@@ -72,6 +73,55 @@ class UserGroupRepositoryTest extends DataBaseTestCase
     {
         $this->expectException(DBNotFoundException::class);
         $this->object->findGroupUsersOrFail(ValueObjectFactory::createIdentifier('not a valid id'));
+    }
+
+    /** @test */
+    public function itShouldFindFirstUserOfAGroupByGroupRoleAdmin(): void
+    {
+        $groupsId = [
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifier(self::GROUP_2_ID),
+            ValueObjectFactory::createIdentifier(self::GROUP_3_ID),
+        ];
+
+        $return = $this->object->findGroupsFirstUserByRolOrFail($groupsId, GROUP_ROLES::ADMIN);
+        $expected = $this->object->findBy([
+            'groupId' => $groupsId,
+            'userId' => ValueObjectFactory::createIdentifier('2606508b-4516-45d6-93a6-c7cb416b7f3f'),
+        ]);
+
+        $this->assertEqualsCanonicalizing($expected, $return);
+    }
+
+    /** @test */
+    public function itShouldFindFirstUserOfAGroupByGroupRoleUser(): void
+    {
+        $groupsId = [
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifier(self::GROUP_2_ID),
+            ValueObjectFactory::createIdentifier(self::GROUP_3_ID),
+        ];
+
+        $return = $this->object->findGroupsFirstUserByRolOrFail($groupsId, GROUP_ROLES::USER);
+        $expected = $this->object->findBy([
+            'groupId' => $groupsId,
+            'userId' => [
+                ValueObjectFactory::createIdentifier('1befdbe2-9c14-42f0-850f-63e061e33b8f'),
+                ValueObjectFactory::createIdentifier('0b13e52d-b058-32fb-8507-10dec634a07c'),
+            ]]);
+
+        $this->assertEqualsCanonicalizing($expected, $return);
+    }
+
+    /** @test */
+    public function itShouldFailFindFirstUserOfAGroupByGroupRoleNotFound(): void
+    {
+        $groupsId = [
+            ValueObjectFactory::createIdentifier(self::GROUP_3_ID),
+        ];
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findGroupsFirstUserByRolOrFail($groupsId, GROUP_ROLES::USER);
     }
 
     /** @test */
@@ -326,11 +376,11 @@ class UserGroupRepositoryTest extends DataBaseTestCase
                 ValueObjectFactory::createIdentifier(self::GROUP_ID),
                 ValueObjectFactory::createIdentifier(self::GROUP_2_ID),
                 ValueObjectFactory::createIdentifier(self::GROUP_4_ID),
+                ValueObjectFactory::createIdentifier(self::GROUP_5_ID),
             ],
             'userId' => ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID),
         ]);
 
-        $r = iterator_to_array($return);
         $this->assertEqualsCanonicalizing($expectedGroups, iterator_to_array($return));
     }
 
@@ -371,6 +421,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
                 ValueObjectFactory::createIdentifier(self::GROUP_ID),
                 ValueObjectFactory::createIdentifier(self::GROUP_2_ID),
                 ValueObjectFactory::createIdentifier(self::GROUP_4_ID),
+                ValueObjectFactory::createIdentifier(self::GROUP_5_ID),
             ],
             'userId' => ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID),
         ]);
@@ -416,6 +467,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
                 ValueObjectFactory::createIdentifier(self::GROUP_ID),
                 ValueObjectFactory::createIdentifier(self::GROUP_3_ID),
                 ValueObjectFactory::createIdentifier(self::GROUP_4_ID),
+                ValueObjectFactory::createIdentifier(self::GROUP_5_ID),
             ],
             'userId' => ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID),
         ]);
@@ -495,6 +547,54 @@ class UserGroupRepositoryTest extends DataBaseTestCase
     {
         $this->expectException(DBNotFoundException::class);
         $this->object->findGroupUsersNumberOrFail(ValueObjectFactory::createIdentifier('invalid group'));
+    }
+
+    /** @test */
+    public function itShouldFindGroupsNumberOfUsers(): void
+    {
+        $groupsId = [
+            self::GROUP_ID => ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            self::GROUP_2_ID => ValueObjectFactory::createIdentifier(self::GROUP_2_ID),
+            self::GROUP_3_ID => ValueObjectFactory::createIdentifier(self::GROUP_3_ID),
+        ];
+        $return = $this->object->findGroupsUsersNumberOrFail($groupsId);
+
+        $groupIdUsers = $this->object->findBy([
+            'groupId' => $groupsId[self::GROUP_ID],
+        ]);
+        $group2IdUsers = $this->object->findBy([
+            'groupId' => $groupsId[self::GROUP_2_ID],
+        ]);
+        $group3IdUsers = $this->object->findBy([
+            'groupId' => $groupsId[self::GROUP_3_ID],
+        ]);
+
+        $expected = [
+            [
+                'groupId' => $groupsId[self::GROUP_2_ID],
+                'groupUsers' => count($group2IdUsers),
+            ],
+            [
+                'groupId' => $groupsId[self::GROUP_3_ID],
+                'groupUsers' => count($group3IdUsers),
+            ],
+            [
+                'groupId' => $groupsId[self::GROUP_ID],
+                'groupUsers' => count($groupIdUsers),
+            ],
+        ];
+
+        $this->assertEquals($expected, iterator_to_array($return));
+    }
+
+    /** @test */
+    public function itShouldFindGroupsNumberOfUsersNotFoundException(): void
+    {
+        $groupsId = [
+            ValueObjectFactory::createIdentifier('9b54e906-3a2f-406b-92c8-51b60143ec20'),
+        ];
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findGroupsUsersNumberOrFail($groupsId);
     }
 
     /** @test */

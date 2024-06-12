@@ -23,7 +23,8 @@ class UserGroup
     }
 
     /**
-     * @param Rol[] $roles
+     * @param Rol[]         $roles
+     * @param GROUP_ROLES[] $roles
      */
     public static function fromPrimitives(string $groupId, string $userId, array $roles, group $group): self
     {

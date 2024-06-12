@@ -11,6 +11,10 @@ Common\Domain\Model\ValueObject\String\Identifier:
     __construct:
       value: "e05b2466-9528-4815-ac7f-663c1d89ab55"
 
+  group_id_type_group_3:
+    __construct:
+      value: "78b96ac1-ffcc-458b-8f48-b40c6e65261f"
+
   group_id_type_user:
     __construct:
       value: "a5002966-dbf7-4f76-a862-23a04b5ca465"
@@ -18,6 +22,14 @@ Common\Domain\Model\ValueObject\String\Identifier:
   group_id_type_user_unique_group:
     __construct:
       value: "a1985210-71a4-4ef5-9909-9daadc9e0607"
+
+  group_id_one_user_1:
+    __construct:
+      value: "b4519488-0861-4827-b238-f21442bf4cbe"
+
+  group_id_one_user_2:
+    __construct:
+      value: "8bb9e2a0-2ded-429c-a0ee-599d46fa9ce7"
 
   group_id_users_100:
     __construct:
@@ -36,9 +48,21 @@ Common\Domain\Model\ValueObject\String\NameWithSpaces:
     __construct:
       value: "GroupThree"
 
+  group_name_type_group_3:
+    __construct:
+      value: "GroupFour"
+
   group_name_type_user:
     __construct:
       value: "GroupTwo"
+
+  group_name_one_user_1:
+    __construct:
+      value: "GroupOneUser1"
+
+  group_name_one_user_2:
+    __construct:
+      value: "GroupOneUser2"
 
   group_name_type_user_unique_group:
     __construct:
@@ -124,6 +148,14 @@ Group\Domain\Model\Group:
       description: "@group_description_type_group"
       image: "@group_image_type_group"
 
+  entity-group_type_group_3:
+    __construct:
+      id: "@group_id_type_group_3"
+      name: "@group_name_type_group_3"
+      type: "@group_type_group"
+      description: "@group_description_type_group"
+      image: "@group_image_type_group"
+
   entity-group_type_user:
     __construct:
       id: "@group_id_type_user"
@@ -137,6 +169,22 @@ Group\Domain\Model\Group:
       id: "@group_id_type_user_unique_group"
       name: "@group_name_type_user_unique_group"
       type: "@group_type_user"
+      description: "@group_description_type_user_unique_group"
+      image: "@group_image_type_user_unique_group"
+
+  entity-group_one_user_1:
+    __construct:
+      id: "@group_id_one_user_1"
+      name: "@group_name_one_user_1"
+      type: "@group_type_user"
+      description: "@group_description_type_user_unique_group"
+      image: "@group_image_type_user_unique_group"
+
+  entity-group_one_user_2:
+    __construct:
+      id: "@group_id_one_user_2"
+      name: "@group_name_one_user_2"
+      type: "@group_type_group"
       description: "@group_description_type_user_unique_group"
       image: "@group_image_type_user_unique_group"
 

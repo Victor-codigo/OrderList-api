@@ -19,7 +19,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
 
     private const ENDPOINT = '/api/v1/groups/user-groups';
     private const METHOD = 'GET';
-    private const GROUP_USER_ONLY_GROUP_EMAIL = 'email.other.active@host.com';
+    private const GROUP_USER_ONLY_GROUP_EMAIL = 'email.other_5.active@host.com';
     private const GROUP_USER_ONLY_GROUP_PASSWORD = '123456';
 
     /**
@@ -32,6 +32,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
             Group::fromPrimitives('4b513296-14ac-4fb1-a574-05bc9b1dbe3f', 'Group100Users', GROUP_TYPE::GROUP, 'This group contains 100 users', null),
             Group::fromPrimitives('a5002966-dbf7-4f76-a862-23a04b5ca465', 'GroupTwo', GROUP_TYPE::USER, 'This is a group of one user', 'image_of_group_type_user'),
             Group::fromPrimitives('e05b2466-9528-4815-ac7f-663c1d89ab55', 'GroupThree', GROUP_TYPE::GROUP, 'This is a group of users', 'image_of_group_type_group'),
+            Group::fromPrimitives('78b96ac1-ffcc-458b-8f48-b40c6e65261f', 'GroupFour', GROUP_TYPE::GROUP, 'This is a group of users', 'image_of_group_type_group'),
         ];
     }
 
@@ -70,7 +71,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldAllGroupsDataForTheUser(): void
+    public function itShouldGetAllGroupsDataForTheUser(): void
     {
         $groupCreatedOn = new \DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
@@ -84,7 +85,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT
                 .'?page=1'
-                .'&page_items=4'
+                .'&page_items=5'
                 .'&order_asc=true'
         );
 
@@ -151,7 +152,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT
                 .'?page=1'
-                .'&page_items=4'
+                .'&page_items=5'
                 ."&filter_section={$filterSection->value}"
                 ."&filter_text={$filterText->value}"
                 ."&filter_value={$filterValue}"
@@ -221,7 +222,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT
                 .'?page=1'
-                .'&page_items=4'
+                .'&page_items=5'
                 ."&filter_section={$filterSection->value}"
                 ."&filter_text={$filterText->value}"
                 ."&filter_value={$filterValue}"
@@ -286,7 +287,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT
                 .'?page=1'
-                .'&page_items=4'
+                .'&page_items=5'
                 ."&filter_section={$filterSection->value}"
                 ."&filter_text={$filterText->value}"
                 ."&filter_value={$filterValue}"

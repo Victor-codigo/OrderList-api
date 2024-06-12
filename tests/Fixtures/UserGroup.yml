@@ -33,8 +33,22 @@ Group\Domain\Model\UserGroup:
     __construct:
       groupId: "@entity-group_type_group_2->getId"
       userId: "@entity-user_active->getId"
-      roles: "@groupuser_roles_user"
+      roles: "@groupuser_roles_admin"
       group: "@entity-group_type_group_2"
+
+  entity-groupuser_role_admin_group_3:
+    __construct:
+      groupId: "@entity-group_type_group_3->getId"
+      userId: "@entity-user_other->getId"
+      roles: "@groupuser_roles_admin"
+      group: "@entity-group_type_group_3"
+
+  entity-groupuser_role_user_group_3:
+    __construct:
+      groupId: "@entity-group_type_group_3->getId"
+      userId: "@entity-user_active->getId"
+      roles: "@groupuser_roles_user"
+      group: "@entity-group_type_group_3"
 
   entity-groupuser_roles_user:
     __construct:
@@ -42,6 +56,20 @@ Group\Domain\Model\UserGroup:
       userId: "@entity-user_active->getId"
       roles: "@groupuser_roles_admin"
       group: "@entity-group_type_user"
+
+  entity-groupuser_one_user_1:
+    __construct:
+      groupId: "@entity-group_one_user_1->getId"
+      userId: "@entity-user_other_6->getId"
+      roles: "@groupuser_roles_admin"
+      group: "@entity-group_one_user_1"
+
+  entity-groupuser_one_user_2:
+    __construct:
+      groupId: "@entity-group_one_user_2->getId"
+      userId: "@entity-user_other_6->getId"
+      roles: "@groupuser_roles_admin"
+      group: "@entity-group_one_user_2"
 
   entity-groupuser_user_unique_group:
     __construct:

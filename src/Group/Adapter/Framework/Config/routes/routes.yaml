@@ -107,3 +107,13 @@ group_user_role_change:
   controller: Group\Adapter\Http\Controller\GroupUserRoleChange\GroupUserRoleChangeController
   requirements:
     api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# USER REMOVE ALL GROUPS
+# -------------------------------------------------------------
+group_user_remove_all_groups:
+  path: /api/v{api_version}/groups/user/remove-groups
+  methods: DELETE
+  controller: Group\Adapter\Http\Controller\GroupRemoveAllUserGroups\GroupRemoveAllUserGroupsController
+  requirements:
+    api_version: '\d+[.\d]?'

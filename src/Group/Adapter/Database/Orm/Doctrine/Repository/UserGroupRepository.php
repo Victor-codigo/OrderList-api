@@ -15,6 +15,7 @@ use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\Persistence\ManagerRegistry;
 use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
@@ -52,6 +53,53 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
         }
 
         return $paginator;
+    }
+
+    /**
+     * @param Identifier[] $groupsId
+     *
+     * @throws DBNotFoundException
+     */
+    public function findGroupsFirstUserByRolOrFail(array $groupsId, GROUP_ROLES $groupRole): array
+    {
+        $sql = <<<SQL
+            SELECT
+                userGroup.id,
+                userGroup.group_id,
+                userGroup.user_id,
+                userGroup.roles
+            FROM Users_Group userGroup
+                RIGHT JOIN (
+                    SELECT DISTINCT
+                        FIRST_VALUE(ugJoin.user_id) OVER (PARTITION by ugJoin.group_id) AS first_group_user
+                    FROM Users_Group AS ugJoin
+                    WHERE ugJoin.group_id IN (:groupsId)
+                        AND JSON_CONTAINS(ugJoin.roles, :groupRole) = 1
+                ) AS groupUserTypeFirst ON groupUserTypeFirst.first_group_user = userGroup.user_id
+
+            WHERE userGroup.group_id IN (:groupsId)
+        SQL;
+
+        $resultSetMapping = new ResultSetMapping();
+        $resultSetMapping->addEntityResult(UserGroup::class, 'userGroup');
+        $resultSetMapping->addFieldResult('userGroup', 'id', 'id');
+        $resultSetMapping->addFieldResult('userGroup', 'group_id', 'groupId');
+        $resultSetMapping->addFieldResult('userGroup', 'user_id', 'userId');
+        $resultSetMapping->addFieldResult('userGroup', 'roles', 'roles');
+
+        $query = $this->entityManager->createNativeQuery($sql, $resultSetMapping);
+        $query->setParameters([
+            'groupsId' => $groupsId,
+            'groupRole' => "\"{$groupRole->value}\"",
+        ]);
+
+        $result = $query->getResult();
+
+        if (empty($result)) {
+            throw DBNotFoundException::fromMessage('Group users not found');
+        }
+
+        return $result;
     }
 
     /**
@@ -193,6 +241,26 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
         }
 
         return (int) $result[1];
+    }
+
+    /**
+     * @param Identifier[] $groupsId
+     *
+     * @throws DBNotFoundException
+     */
+    public function findGroupsUsersNumberOrFail(array $groupsId): PaginatorInterface
+    {
+        $userGroupEntity = UserGroup::class;
+        $dql = <<<DQL
+            SELECT userGroup.groupId, COUNT(userGroup) AS groupUsers
+            FROM {$userGroupEntity} userGroup
+            WHERE userGroup.groupId IN (:groupsId)
+            GROUP BY userGroup.groupId
+        DQL;
+
+        return $this->dqlPaginationOrFail($dql, [
+            'groupsId' => $groupsId,
+        ]);
     }
 
     /**
