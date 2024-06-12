@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 #[OA\Tag('Group')]
 #[OA\Get(
-    description: 'Get user groups information',
+    description: 'Gets for user session, groups information',
     parameters: [
         new OA\Parameter(
             name: 'page',
@@ -58,7 +58,7 @@ use Symfony\Component\HttpFoundation\Response;
         ),
 
         new OA\Parameter(
-            name: 'filter_section',
+            name: 'filter_text',
             in: 'query',
             required: false,
             description: 'Text filter',

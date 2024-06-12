@@ -10,16 +10,16 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GroupGetDataRequestDto implements RequestDtoInterface
 {
-    private const GROUPS_NUM_MAX = AppConfig::ENDPOINT_GROUP_GET_DATA_MAX_USERS;
+    private const GROUPS_NUM_MAX = AppConfig::ENDPOINT_GROUP_GET_DATA_MAX_GROUPS;
 
-    public readonly array|null $groupsId;
+    public readonly ?array $groupsId;
 
     public function __construct(Request $request)
     {
         $this->groupsId = $this->removeGroupsOverflow($request->attributes->get('groups_id'));
     }
 
-    private function removeGroupsOverflow(string|null $groupsId): array|null
+    private function removeGroupsOverflow(?string $groupsId): ?array
     {
         if (null === $groupsId) {
             return null;

@@ -36,7 +36,7 @@ class AppConfig
     /**
      * Maximum number of users can get, per request.
      */
-    public const ENDPOINT_GROUP_GET_DATA_MAX_USERS = 50;
+    public const ENDPOINT_GROUP_GET_DATA_MAX_GROUPS = 50;
 
     /**
      * Maximum number of groups can be deleted, per request.
