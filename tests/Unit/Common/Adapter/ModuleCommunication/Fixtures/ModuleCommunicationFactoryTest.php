@@ -8,9 +8,6 @@ use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 
 class ModuleCommunicationFactoryTest
 {
-    /**
-     * @param string[] $usersId
-     */
     public static function json(bool $authentication, array $content = [], array $query = [], array $files = [], array $cookies = [], array $headers = []): ModuleCommunicationConfigDto
     {
         $attributes = [

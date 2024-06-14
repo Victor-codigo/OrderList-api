@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Common\Adapter\ModuleCommunication;
 
+use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationErrorResponseException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationTokenNotFoundInRequestException;
 use Common\Domain\Config\AppConfig;
+use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\HttpClient\Exception\Error400Exception;
 use Common\Domain\HttpClient\Exception\Error500Exception;
 use Common\Domain\HttpClient\Exception\NetworkException;
-use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
+use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDtoPaginatorInterface;
 use Common\Domain\Ports\DI\DIInterface;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
 use Common\Domain\Ports\HttpClient\HttpClientInterface;
@@ -47,7 +49,7 @@ class ModuleCommunication implements ModuleCommunicationInterface
      * @throws ValueError
      * @throws ModuleCommunicationTokenNotFoundInRequestException
      */
-    public function __invoke(ModuleCommunicationConfigDto $routeConfig): ResponseDto
+    public function __invoke(ModuleCommunicationConfigDtoPaginatorInterface $routeConfig): ResponseDto
     {
         try {
             $response = $this->httpClient->request(
@@ -77,6 +79,68 @@ class ModuleCommunication implements ModuleCommunicationInterface
         } catch (\JsonException $e) {
             throw ModuleCommunicationException::fromCommunicationError('Error json decode', $e);
         }
+    }
+
+    /**
+     * @throws ModuleCommunicationException
+     * @throws ValueError
+     * @throws ModuleCommunicationTokenNotFoundInRequestException
+     * @throws ModuleCommunicationErrorResponseException
+     * @throws InvalidArgumentException
+     */
+    public function getPagesRangeEndpoint(ModuleCommunicationConfigDtoPaginatorInterface $routeConfig, int $pageIni, ?int $pageEnd): \Generator
+    {
+        if ($pageIni < 1) {
+            throw new InvalidArgumentException('PageIni cannot be less than 1');
+        }
+
+        $hasPageEnd = null === $pageEnd ? false : true;
+        $pageEnd ??= $pageIni;
+        $pagesTotal = $pageIni;
+        $firstCall = true;
+        while ($pageIni <= $pagesTotal && $pageIni <= $pageEnd) {
+            $routeConfigActual = $routeConfig->cloneWithPage($pageIni);
+            $response = $this->__invoke($routeConfigActual);
+
+            if (RESPONSE_STATUS::OK !== $response->getStatus()
+            || !empty($response->getErrors())) {
+                throw ModuleCommunicationErrorResponseException::fromResponseError($response->getErrors());
+            }
+
+            yield $response->data;
+
+            if ($firstCall) {
+                $pagesTotal = $this->getArrayValueByPath($response->data, $routeConfig->getResponsePagesTotalPath());
+                $pageEnd = $hasPageEnd ? $pageEnd : $pagesTotal;
+                $firstCall = false;
+            }
+
+            ++$pageIni;
+        }
+    }
+
+    public function getAllPagesOfEndpoint(ModuleCommunicationConfigDtoPaginatorInterface $routeConfig): \Generator
+    {
+        return $this->getPagesRangeEndpoint($routeConfig, 1, null);
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    private function getArrayValueByPath(array $array, string $path): string|int|float|array
+    {
+        $pathInArray = explode('.', $path);
+
+        $arrayPointer = &$array;
+        foreach ($pathInArray as $index) {
+            if (!array_key_exists($index, $arrayPointer)) {
+                throw new InvalidArgumentException('Path not found in array');
+            }
+
+            $arrayPointer = &$arrayPointer[$index];
+        }
+
+        return $arrayPointer;
     }
 
     /**

@@ -2,10 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Common\Domain\ModuleCommunication;
+namespace Test\Unit\Common\Adapter\ModuleCommunication\Fixtures;
 
-class ModuleCommunicationConfigDto implements ModuleCommunicationConfigDtoPaginatorInterface
+use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDtoPaginatorInterface;
+
+class ModuleCommunicationConfigTestDto implements ModuleCommunicationConfigDtoPaginatorInterface
 {
+    private string $pagesTotalResponsePath;
+
     /** @param UploadedFileInterface[] $files */
     public function __construct(
         public readonly string $route,
@@ -50,6 +54,35 @@ class ModuleCommunicationConfigDto implements ModuleCommunicationConfigDtoPagina
      */
     public function getResponsePagesTotalPath(): string
     {
-        return 'pages_total';
+        if (null === $this->pagesTotalResponsePath) {
+            return 'pages_total';
+        }
+
+        return $this->pagesTotalResponsePath;
+    }
+
+    public static function json(bool $authentication, array $content = [], array $query = [], array $files = [], array $cookies = [], array $headers = []): self
+    {
+        $attributes = [
+            'api_version' => 1,
+        ];
+
+        return new self(
+            'user_get',
+            'GET',
+            $authentication,
+            $attributes,
+            $query,
+            $files,
+            'application/json',
+            $content,
+            $cookies,
+            $headers
+        );
+    }
+
+    public function setResponsePagesTotalPath(string $pagesTotalPath): void
+    {
+        $this->pagesTotalResponsePath = $pagesTotalPath;
     }
 }

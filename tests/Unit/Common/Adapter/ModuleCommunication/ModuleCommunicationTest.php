@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\ModuleCommunication;
 
+use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationErrorResponseException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationTokenNotFoundInRequestException;
 use Common\Adapter\ModuleCommunication\ModuleCommunication;
+use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\HttpClient\Exception\Error400Exception;
 use Common\Domain\HttpClient\Exception\Error500Exception;
 use Common\Domain\HttpClient\Exception\NetworkException;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
+use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDtoPaginatorInterface;
 use Common\Domain\Ports\DI\DIInterface;
 use Common\Domain\Ports\HttpClient\HttpClientInterface;
 use Common\Domain\Ports\HttpClient\HttpClientResponseInterface;
@@ -24,6 +27,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
 use Test\Unit\Common\Adapter\ModuleCommunication\Fixtures\AUTHENTICATION_SOURCE;
+use Test\Unit\Common\Adapter\ModuleCommunication\Fixtures\ModuleCommunicationConfigTestDto;
 use Test\Unit\Common\Adapter\ModuleCommunication\Fixtures\ModuleCommunicationFactoryTest;
 
 class ModuleCommunicationTest extends TestCase
@@ -520,5 +524,428 @@ class ModuleCommunicationTest extends TestCase
         $this->mockRequestMethod($routeConfig, self::URL, self::URL, AUTHENTICATION_SOURCE::REQUEST, NetworkException::fromMessage('', $httpExceptionInterface));
 
         $this->object->__invoke($routeConfig);
+    }
+
+    /** @test */
+    public function itShouldGetARangeOfPages(): void
+    {
+        $routeConfig = ModuleCommunicationFactoryTest::json(
+            true,
+            [],
+            [
+                'page' => 2,
+                'page_items' => 10,
+            ],
+            [],
+            [],
+            []
+        );
+
+        $responseExpected = new ResponseDto([
+            'page' => 1,
+            'pages_total' => 5,
+            'data' => [
+                'index1' => 'value',
+                'index2' => 'value',
+            ],
+        ]);
+
+        $objectMock = $this->createPartialMock(ModuleCommunication::class, [
+            '__invoke',
+        ]);
+
+        $objectMockMatcher = $this->exactly(4);
+        $objectMock
+            ->expects($objectMockMatcher)
+            ->method('__invoke')
+            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher) {
+                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
+
+                $this->assertEquals($routeConfigExpected, $routeConfigActual);
+
+                return true;
+            }))
+            ->willReturn($responseExpected);
+
+        $return = $objectMock->getPagesRangeEndpoint($routeConfig, 2, 5);
+
+        foreach ($return as $response) {
+            $this->assertEquals($responseExpected->data, $response);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetARangeOfPagesNoPageEndSet(): void
+    {
+        $routeConfig = ModuleCommunicationFactoryTest::json(
+            true,
+            [],
+            [
+                'page' => 2,
+                'page_items' => 10,
+            ],
+            [],
+            [],
+            []
+        );
+
+        $responseExpected = new ResponseDto([
+            'page' => 1,
+            'pages_total' => 5,
+            'data' => [
+                'index1' => 'value',
+                'index2' => 'value',
+            ],
+        ]);
+
+        $objectMock = $this->createPartialMock(ModuleCommunication::class, [
+            '__invoke',
+        ]);
+
+        $objectMockMatcher = $this->exactly(4);
+        $objectMock
+            ->expects($objectMockMatcher)
+            ->method('__invoke')
+            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher) {
+                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
+
+                $this->assertEquals($routeConfigExpected, $routeConfigActual);
+
+                return true;
+            }))
+            ->willReturn($responseExpected);
+
+        $return = $objectMock->getPagesRangeEndpoint($routeConfig, 2, null);
+
+        foreach ($return as $response) {
+            $this->assertEquals($responseExpected->data, $response);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetARangeOfPagesPageEndIsBiggerThanPagesTotal(): void
+    {
+        $routeConfig = ModuleCommunicationFactoryTest::json(
+            true,
+            [],
+            [
+                'page' => 2,
+                'page_items' => 10,
+            ],
+            [],
+            [],
+            []
+        );
+
+        $responseExpected = new ResponseDto([
+            'page' => 1,
+            'pages_total' => 5,
+            'data' => [
+                'index1' => 'value',
+                'index2' => 'value',
+            ],
+        ]);
+
+        $objectMock = $this->createPartialMock(ModuleCommunication::class, [
+            '__invoke',
+        ]);
+
+        $objectMockMatcher = $this->exactly(4);
+        $objectMock
+            ->expects($objectMockMatcher)
+            ->method('__invoke')
+            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher) {
+                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
+
+                $this->assertEquals($routeConfigExpected, $routeConfigActual);
+
+                return true;
+            }))
+            ->willReturn($responseExpected);
+
+        $return = $objectMock->getPagesRangeEndpoint($routeConfig, 2, 6);
+
+        foreach ($return as $response) {
+            $this->assertEquals($responseExpected->data, $response);
+        }
+    }
+
+    /** @test */
+    public function itShouldGetARangeOfPagesPagesTotalPathIsDeeperThanOne(): void
+    {
+        $routeConfig = ModuleCommunicationConfigTestDto::json(
+            true,
+            [],
+            [
+                'page' => 2,
+                'page_items' => 10,
+            ],
+            [],
+            [],
+            []
+        );
+        $routeConfig->setResponsePagesTotalPath('page.data.pages_total');
+
+        $responseExpected = new ResponseDto([
+            'page' => [
+                'data' => [
+                    'page' => 2,
+                    'pages_total' => 5,
+                ],
+            ],
+            'data' => [
+                'index1' => 'value',
+                'index2' => 'value',
+            ],
+        ]);
+
+        $objectMock = $this->createPartialMock(ModuleCommunication::class, [
+            '__invoke',
+        ]);
+
+        $objectMockMatcher = $this->exactly(4);
+        $objectMock
+            ->expects($objectMockMatcher)
+            ->method('__invoke')
+            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher) {
+                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
+
+                $this->assertEquals($routeConfigExpected, $routeConfigActual);
+
+                return true;
+            }))
+            ->willReturn($responseExpected);
+
+        $return = $objectMock->getPagesRangeEndpoint($routeConfig, 2, 5);
+
+        foreach ($return as $response) {
+            $this->assertEquals($responseExpected->data, $response);
+        }
+    }
+
+    /** @test */
+    public function itShouldFailPageIniIsLessThanZero(): void
+    {
+        $routeConfig = ModuleCommunicationFactoryTest::json(
+            true,
+            [],
+            [
+                'page' => 2,
+                'page_items' => 10,
+            ],
+            [],
+            [],
+            []
+        );
+
+        $objectMock = $this->createPartialMock(ModuleCommunication::class, [
+            '__invoke',
+        ]);
+
+        $objectMock
+            ->expects($this->never())
+            ->method('__invoke');
+
+        $this->expectException(InvalidArgumentException::class);
+        $return = $objectMock->getPagesRangeEndpoint($routeConfig, 0, 5);
+
+        foreach ($return as $response) {
+        }
+    }
+
+    /** @test */
+    public function itShouldFailResponseStatusIsNotOk(): void
+    {
+        $routeConfig = ModuleCommunicationFactoryTest::json(
+            true,
+            [],
+            [
+                'page' => 2,
+                'page_items' => 10,
+            ],
+            [],
+            [],
+            []
+        );
+
+        $responseExpected = new ResponseDto([
+            'page' => 1,
+            'pages_total' => 5,
+            'data' => [
+                'index1' => 'value',
+                'index2' => 'value',
+            ],
+        ]);
+        $responseExpectedError = new ResponseDto([
+            'page' => 1,
+            'pages_total' => 5,
+            'data' => [
+                'index1' => 'value',
+                'index2' => 'value',
+            ],
+        ],
+            [
+                'error' => 'description',
+            ],
+            '',
+            RESPONSE_STATUS::ERROR
+        );
+
+        $objectMock = $this->createPartialMock(ModuleCommunication::class, [
+            '__invoke',
+        ]);
+
+        $objectMockMatcher = $this->exactly(3);
+        $objectMock
+            ->expects($objectMockMatcher)
+            ->method('__invoke')
+            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher) {
+                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
+
+                $this->assertEquals($routeConfigExpected, $routeConfigActual);
+
+                return true;
+            }))
+            ->willReturnOnConsecutiveCalls(
+                $responseExpected,
+                $responseExpected,
+                $responseExpectedError
+            );
+
+        $return = $objectMock->getPagesRangeEndpoint($routeConfig, 2, 6);
+
+        try {
+            foreach ($return as $response) {
+            }
+
+            throw new \LogicException('No exceptions thrown: it should have thrown [ModuleCommunicationErrorResponseException]');
+        } catch (ModuleCommunicationErrorResponseException $e) {
+            $this->assertEquals($responseExpectedError->getErrors(), $e->getResponseErrors());
+        }
+    }
+
+    /** @test */
+    public function itShouldFailResponseHasErrors(): void
+    {
+        $routeConfig = ModuleCommunicationFactoryTest::json(
+            true,
+            [],
+            [
+                'page' => 2,
+                'page_items' => 10,
+            ],
+            [],
+            [],
+            []
+        );
+
+        $responseExpected = new ResponseDto([
+            'page' => 1,
+            'pages_total' => 5,
+            'data' => [
+                'index1' => 'value',
+                'index2' => 'value',
+            ],
+        ]);
+        $responseExpectedError = new ResponseDto([
+            'page' => 1,
+            'pages_total' => 5,
+            'data' => [
+                'index1' => 'value',
+                'index2' => 'value',
+            ],
+        ],
+            [
+                'error' => 'description',
+            ],
+            '',
+            RESPONSE_STATUS::OK
+        );
+
+        $objectMock = $this->createPartialMock(ModuleCommunication::class, [
+            '__invoke',
+        ]);
+
+        $objectMockMatcher = $this->exactly(3);
+        $objectMock
+            ->expects($objectMockMatcher)
+            ->method('__invoke')
+            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher) {
+                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
+
+                $this->assertEquals($routeConfigExpected, $routeConfigActual);
+
+                return true;
+            }))
+            ->willReturnOnConsecutiveCalls(
+                $responseExpected,
+                $responseExpected,
+                $responseExpectedError
+            );
+
+        $return = $objectMock->getPagesRangeEndpoint($routeConfig, 2, 6);
+
+        try {
+            foreach ($return as $response) {
+            }
+
+            throw new \LogicException('No exceptions thrown: it should have thrown [ModuleCommunicationErrorResponseException]');
+        } catch (ModuleCommunicationErrorResponseException $e) {
+            $this->assertEquals($responseExpectedError->getErrors(), $e->getResponseErrors());
+        }
+    }
+
+    /** @test */
+    public function itShouldFailResponsePagesTotalPathIsWrong(): void
+    {
+        $routeConfig = ModuleCommunicationConfigTestDto::json(
+            true,
+            [],
+            [
+                'page' => 2,
+                'page_items' => 10,
+            ],
+            [],
+            [],
+            []
+        );
+        $routeConfig->setResponsePagesTotalPath('page.wrong.pages_total');
+
+        $responseExpected = new ResponseDto([
+            'page' => [
+                'data' => [
+                    'page' => 2,
+                    'pages_total' => 5,
+                ],
+            ],
+            'data' => [
+                'index1' => 'value',
+                'index2' => 'value',
+            ],
+        ]);
+
+        $objectMock = $this->createPartialMock(ModuleCommunication::class, [
+            '__invoke',
+        ]);
+
+        $objectMockMatcher = $this->exactly(1);
+        $objectMock
+            ->expects($objectMockMatcher)
+            ->method('__invoke')
+            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher) {
+                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
+
+                $this->assertEquals($routeConfigExpected, $routeConfigActual);
+
+                return true;
+            }))
+            ->willReturn($responseExpected);
+
+        $this->expectException(InvalidArgumentException::class);
+        $return = $objectMock->getPagesRangeEndpoint($routeConfig, 2, 5);
+
+        foreach ($return as $response) {
+            $this->assertEquals($responseExpected->data, $response);
+        }
     }
 }

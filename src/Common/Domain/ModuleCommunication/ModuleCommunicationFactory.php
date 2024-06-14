@@ -11,6 +11,7 @@ use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\JwtToken;
+use Common\Domain\Model\ValueObject\String\Language;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
@@ -169,6 +170,38 @@ class ModuleCommunicationFactory
     /**
      * @param Identifier[] $groupsId
      */
+    public static function groupsRemove(array $groupsId): ModuleCommunicationConfigDto
+    {
+        $groupsIdString = array_map(
+            fn (Identifier $groupId) => $groupId->getValue(),
+            $groupsId
+        );
+
+        $attributes = [
+            'api_version' => static::API_VERSION,
+        ];
+
+        $content = [
+            'groups_id' => $groupsIdString,
+        ];
+
+        return new ModuleCommunicationConfigDto(
+            'group_remove',
+            'DELETE',
+            true,
+            $attributes,
+            [],
+            [],
+            self::CONTENT_TYPE_APPLICATION_JSON,
+            $content,
+            [],
+            []
+        );
+    }
+
+    /**
+     * @param Identifier[] $groupsId
+     */
     public static function groupGetData(array $groupsId): ModuleCommunicationConfigDto
     {
         $groupsIdPlain = array_map(
@@ -216,6 +249,100 @@ class ModuleCommunicationFactory
             [],
             self::CONTENT_TYPE_APPLICATION_FORM,
             [],
+            [],
+            []
+        );
+    }
+
+    public static function groupGetAdmins(Identifier $groupId): ModuleCommunicationConfigDto
+    {
+        $attributes = [
+            'api_version' => static::API_VERSION,
+            'group_id' => $groupId->getValue(),
+        ];
+
+        return new ModuleCommunicationConfigDto(
+            'group_get_admins',
+            'GET',
+            true,
+            $attributes,
+            [],
+            [],
+            self::CONTENT_TYPE_APPLICATION_FORM,
+            [],
+            [],
+            []
+        );
+    }
+
+    public static function groupUserGetGroups(?GROUP_TYPE $groupType, ?string $filterSection, ?string $filterText, ?string $filterValue, PaginatorPage $page, PaginatorPageItems $pageItems, bool $orderAsc): ModuleCommunicationConfigDto
+    {
+        $attributes = [
+            'api_version' => static::API_VERSION,
+        ];
+
+        $query = [
+            'page' => $page->getValue(),
+            'page_items' => $pageItems->getValue(),
+            'order_asc' => $orderAsc ? 'true' : 'false',
+        ];
+
+        if (null !== $groupType) {
+            $query['group_type'] = $groupType->value;
+        }
+
+        if (null !== $filterSection) {
+            $query['filter_section'] = $filterSection;
+        }
+
+        if (null !== $filterText) {
+            $query['filter_text'] = $filterText;
+        }
+
+        if (null !== $filterValue) {
+            $query['filter_value'] = $filterValue;
+        }
+
+        return new ModuleCommunicationConfigDto(
+            'group_user_get_groups',
+            'GET',
+            true,
+            $attributes,
+            $query,
+            [],
+            self::CONTENT_TYPE_APPLICATION_FORM,
+            [],
+            [],
+            []
+        );
+    }
+
+    /**
+     * @param Identifier[] $usersId
+     */
+    public static function groupUserRemove(Identifier $groupId, array $usersId): ModuleCommunicationConfigDto
+    {
+        $attributes = [
+            'api_version' => static::API_VERSION,
+        ];
+
+        $content = [
+            'group_id' => $groupId->getValue(),
+            'users_id' => array_map(
+                fn (Identifier $userId) => $userId->getValue(),
+                $usersId
+            ),
+        ];
+
+        return new ModuleCommunicationConfigDto(
+            'group_user_remove',
+            'DELETE',
+            true,
+            $attributes,
+            [],
+            [],
+            self::CONTENT_TYPE_APPLICATION_JSON,
+            $content,
             [],
             []
         );
@@ -353,6 +480,20 @@ class ModuleCommunicationFactory
         return self::notificationCreate($content, null);
     }
 
+    public static function notificationCreateGroupUserSetAsAdmin(Identifier $userId, NameWithSpaces $groupName, string $systemKey): ModuleCommunicationConfigDto
+    {
+        $content = [
+            'users_id' => [$userId->getValue()],
+            'type' => NOTIFICATION_TYPE::GROUP_USER_SET_AS_ADMIN->value,
+            'notification_data' => [
+                'group_name' => $groupName->getValue(),
+            ],
+            'system_key' => $systemKey,
+        ];
+
+        return self::notificationCreate($content, null);
+    }
+
     /**
      * @param Identifier[] $usersId
      */
@@ -434,6 +575,61 @@ class ModuleCommunicationFactory
             $content,
             [],
             $headers ?? []
+        );
+    }
+
+    public static function notificationsUserGetData(PaginatorPage $page, PaginatorPageItems $pageItems, Language $lang): ModuleCommunicationConfigDto
+    {
+        $attributes = [
+            'api_version' => static::API_VERSION,
+        ];
+
+        $query = [
+            'page' => $page->getValue(),
+            'page_items' => $pageItems->getValue(),
+            'lang' => $lang->getValue(),
+        ];
+
+        return new ModuleCommunicationConfigDto(
+            'notification_get_data',
+            'GET',
+            true,
+            $attributes,
+            $query,
+            [],
+            self::CONTENT_TYPE_APPLICATION_JSON,
+            [],
+            [],
+            []
+        );
+    }
+
+    /**
+     * @param Identifier[] $notificationsId
+     */
+    public static function notificationsRemove(array $notificationsId): ModuleCommunicationConfigDto
+    {
+        $notificationsIdString = array_map(
+            fn (Identifier $notificationId) => $notificationId->getValue(),
+            $notificationsId
+        );
+
+        $attributes = [
+            'api_version' => static::API_VERSION,
+            'notifications_id' => implode(',', $notificationsIdString),
+        ];
+
+        return new ModuleCommunicationConfigDto(
+            'notification_remove',
+            'DELETE',
+            true,
+            $attributes,
+            [],
+            [],
+            self::CONTENT_TYPE_APPLICATION_JSON,
+            [],
+            [],
+            []
         );
     }
 }
