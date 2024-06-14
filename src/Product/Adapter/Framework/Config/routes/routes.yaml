@@ -28,6 +28,16 @@ product_remove:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
+# PRODUCT REMOVE ALL GROUPS PRODUCTS
+# -------------------------------------------------------------
+product_remove_groups_products:
+  path: /api/v{api_version}/products/group/remove-products
+  methods: DELETE
+  controller: Product\Adapter\Http\Controller\ProductRemoveAllGroupsProducts\ProductRemoveAllGroupsProductsController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
 # PRODUCT GET DATA
 # -------------------------------------------------------------
 product_get_data:

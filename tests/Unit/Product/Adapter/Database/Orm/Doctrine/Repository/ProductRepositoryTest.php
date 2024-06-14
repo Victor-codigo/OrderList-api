@@ -25,6 +25,7 @@ class ProductRepositoryTest extends DataBaseTestCase
     use ReloadDatabaseTrait;
 
     private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const GROUP_ID_2 = 'faeb885d-d6c4-466d-ac4a-793d87e03e86';
     private const SHOP_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
     private const PRODUCT_ID = 'afc62bc9-c42c-4c4d-8098-09ce51414a92';
     private const PRODUCT_ID_2 = '8b6d650b-7bb7-4850-bf25-36cda9bce801';
@@ -427,5 +428,32 @@ class ProductRepositoryTest extends DataBaseTestCase
 
         $this->expectException(DBNotFoundException::class);
         $this->object->findProductsByShopNameFilterOrFail($groupId, $shopNameFilter);
+    }
+
+    /** @test */
+    public function itShouldFindAllProductsOfAGroups(): void
+    {
+        $groupsId = [
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifier(self::GROUP_ID_2),
+        ];
+
+        $return = $this->object->findGroupsProductsOrFail($groupsId);
+        $expect = $this->object->findBy([
+            'groupId' => $groupsId,
+        ]);
+
+        $this->assertEquals($expect, iterator_to_array($return));
+    }
+
+    /** @test */
+    public function itShouldFailNoProductsFoundInGroups(): void
+    {
+        $groupsId = [
+            ValueObjectFactory::createIdentifier('6f76bd87-7382-46fc-9746-ba983dbbfeba'),
+        ];
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findGroupsProductsOrFail($groupsId);
     }
 }

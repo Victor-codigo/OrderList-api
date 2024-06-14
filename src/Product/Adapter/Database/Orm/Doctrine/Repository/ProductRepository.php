@@ -96,7 +96,7 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
      *
      * @throws DBNotFoundException
      */
-    public function findProductsOrFail(Identifier $groupId, array $productsId = null, array $shopsId = null, bool $orderAsc = true): PaginatorInterface
+    public function findProductsOrFail(Identifier $groupId, ?array $productsId = null, ?array $shopsId = null, bool $orderAsc = true): PaginatorInterface
     {
         $query = $this->entityManager
             ->createQueryBuilder()
@@ -185,6 +185,25 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
         return $this->dqlPaginationOrFail($dql, [
             'groupId' => $groupId,
             'shopNameFilter' => $shopNameFilter->getValueWithFilter(),
+        ]);
+    }
+
+    /**
+     * @param Identifier[] $groupsId
+     *
+     * @throws DBNotFoundException
+     */
+    public function findGroupsProductsOrFail(array $groupsId): PaginatorInterface
+    {
+        $productEntity = Product::class;
+        $dql = <<<DQL
+            SELECT products
+            FROM {$productEntity} products
+            WHERE products.groupId IN (:groupsId)
+        DQL;
+
+        return $this->dqlPaginationOrFail($dql, [
+            'groupsId' => $groupsId,
         ]);
     }
 }

@@ -21,6 +21,10 @@ Common\Domain\Model\ValueObject\String\Identifier:
     __construct:
       value: "7e3021d4-2d02-4386-8bbe-887cfe8697a8"
 
+  product_id_5:
+    __construct:
+      value: "faeb885d-d6c4-466d-ac4a-793d87e03e86"
+
 Common\Domain\Model\ValueObject\String\NameWithSpaces:
   product_name:
     __construct:
@@ -37,6 +41,10 @@ Common\Domain\Model\ValueObject\String\NameWithSpaces:
   product_name_4:
     __construct:
       value: "Juanola"
+
+  product_name_5:
+    __construct:
+      value: "Patatas"
 
 Common\Domain\Model\ValueObject\String\Description:
   product_description:
@@ -86,5 +94,13 @@ Product\Domain\Model\Product:
       id: "@product_id_4"
       groupId: "@product_group_id_group_exists"
       name: "@product_name_4"
+      description: "@product_description"
+      image: "@product_image_null"
+
+  entity-product_5:
+    __construct:
+      id: "@product_id_5"
+      groupId: "@entity-group_type_group->getId"
+      name: "@product_name_5"
       description: "@product_description"
       image: "@product_image_null"
