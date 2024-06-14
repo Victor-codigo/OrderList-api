@@ -15,6 +15,10 @@ Common\Domain\Model\ValueObject\String\Identifier:
     __construct:
       value: "cc7f5dd6-02ba-4bd9-b5c1-5b65d81e59a0"
 
+  shop_id_5:
+    __construct:
+      value: "dc3d74ab-3d4d-4cf8-b7c2-020642778678"
+
 Common\Domain\Model\ValueObject\String\NameWithSpaces:
   shop_name:
     __construct:
@@ -31,6 +35,10 @@ Common\Domain\Model\ValueObject\String\NameWithSpaces:
   shop_name_4:
     __construct:
       value: "Shop name 4"
+
+  shop_name_5:
+    __construct:
+      value: "Shop name 5"
 
 Common\Domain\Model\ValueObject\String\Description:
   shop_description:
@@ -84,5 +92,13 @@ Shop\Domain\Model\Shop:
       id: "@shop_id_4"
       groupId: "@product_group_id_group_exists"
       name: "@shop_name_4"
+      description: "@shop_description_null"
+      image: "@shop_image_null"
+
+  entity-shop_5:
+    __construct:
+      id: "@shop_id_5"
+      groupId: "@entity-group_type_group->getId"
+      name: "@shop_name_5"
       description: "@shop_description_null"
       image: "@shop_image_null"

@@ -10,12 +10,13 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Service\Image\EntityImageModifyInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Order\Domain\Model\Order;
 use Product\Domain\Model\ProductShop;
 
-class Shop
+class Shop implements EntityImageModifyInterface
 {
     private Identifier $id;
     private Identifier $groupId;
@@ -144,7 +145,7 @@ class Shop
         $this->orders = new ArrayCollection();
     }
 
-    public static function fromPrimitives(string $id, string $groupId, string $name, string $description = null, string $image = null): self
+    public static function fromPrimitives(string $id, string $groupId, string $name, ?string $description = null, ?string $image = null): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),

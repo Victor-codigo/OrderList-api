@@ -29,6 +29,16 @@ shop_remove:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
+# SHOP REMOVE ALL GROUPS SHOPS
+# -------------------------------------------------------------
+shop_remove_groups_shops:
+  path: /api/v{api_version}/shops/group/remove-shops
+  methods: DELETE
+  controller: Shop\Adapter\Http\Controller\ShopRemoveAllGroupsShops\ShopRemoveAllGroupsShopsController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
 # SHOP GET DATA
 # -------------------------------------------------------------
 shop_get_data:

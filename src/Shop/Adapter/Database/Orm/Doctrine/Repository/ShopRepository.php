@@ -100,6 +100,25 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
     }
 
     /**
+     * @param Identifier[] $groupsId
+     *
+     * @throws DBNotFoundException
+     */
+    public function findGroupsShopsOrFail(array $groupsId): PaginatorInterface
+    {
+        $shopEntity = Shop::class;
+        $dql = <<<DQL
+            SELECT shops
+            FROM {$shopEntity} shops
+            WHERE shops.groupId IN (:groupsId)
+        DQL;
+
+        return $this->dqlPaginationOrFail($dql, [
+            'groupsId' => $groupsId,
+        ]);
+    }
+
+    /**
      * @throws DBNotFoundException
      */
     public function findShopByShopNameOrFail(Identifier $groupId, NameWithSpaces $shopName, bool $orderAsc = true): PaginatorInterface
