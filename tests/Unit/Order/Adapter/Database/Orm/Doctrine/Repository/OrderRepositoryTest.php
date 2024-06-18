@@ -28,6 +28,7 @@ class OrderRepositoryTest extends DataBaseTestCase
     use ReloadDatabaseTrait;
 
     private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const GROUP_ID_2 = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const LIST_ORDERS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
     private const ORDERS_ID = [
         '5cfe52e5-db78-41b3-9acd-c3c84924cb9b',
@@ -573,5 +574,32 @@ class OrderRepositoryTest extends DataBaseTestCase
 
         $this->expectException(DBNotFoundException::class);
         $this->object->findOrdersByListOrdersIdOrFail($listOrdersId, $groupId, $orderAsc);
+    }
+
+    /** @test */
+    public function itShouldFindAllOrdersOfAGroups(): void
+    {
+        $groupsId = [
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifier(self::GROUP_ID_2),
+        ];
+
+        $return = $this->object->findGroupsOrdersOrFail($groupsId);
+        $expect = $this->object->findBy([
+            'groupId' => $groupsId,
+        ]);
+
+        $this->assertEquals($expect, iterator_to_array($return));
+    }
+
+    /** @test */
+    public function itShouldFailNoOrdersFoundInGroups(): void
+    {
+        $groupsId = [
+            ValueObjectFactory::createIdentifier('6f76bd87-7382-46fc-9746-ba983dbbfeba'),
+        ];
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findGroupsOrdersOrFail($groupsId);
     }
 }

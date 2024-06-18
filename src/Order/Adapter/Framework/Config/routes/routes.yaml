@@ -28,6 +28,16 @@ order_remove:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
+# REMOVE AL ORDERS OF GROUPS ID TO REMOVE, AND  CHANGE USER ID
+# -------------------------------------------------------------
+order_remove_all_group_id_and_change_user_id:
+  path: /api/v{api_version}/orders/group/remove-change
+  methods: DELETE
+  controller: Order\Adapter\Http\Controller\OrderRemoveAllGroupsOrders\OrderRemoveAllGroupsOrdersController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
 # ORDER GET DATA
 # -------------------------------------------------------------
 order_get_data:

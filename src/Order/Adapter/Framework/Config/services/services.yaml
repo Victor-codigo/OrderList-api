@@ -11,6 +11,7 @@ services:
       $appProtocolAndDomain: "%common.app.protocolAndDomain%"
       $productPublicImagePath: "%product.public.image.path%"
       $shopPublicImagePath: "%order.shop.public.image.path%"
+      $systemKey: "%common.system.key%"
 
   # Adapter
   Order\Adapter\:

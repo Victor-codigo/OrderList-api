@@ -249,4 +249,23 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
             'listOrderId' => $listOrderId,
         ]);
     }
+
+    /**
+     * @param Identifier[] $groupsId
+     *
+     * @throws DBNotFoundException
+     */
+    public function findGroupsOrdersOrFail(array $groupsId): PaginatorInterface
+    {
+        $ordersEntity = Order::class;
+        $dql = <<<DQL
+            SELECT orders
+            FROM {$ordersEntity} orders
+            WHERE orders.groupId IN (:groupsId)
+        DQL;
+
+        return $this->dqlPaginationOrFail($dql, [
+            'groupsId' => $groupsId,
+        ]);
+    }
 }
