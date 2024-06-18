@@ -35,6 +35,9 @@
         <testsuite name="unitGroup">
             <directory suffix="Test.php">tests/Unit/Group</directory>
         </testsuite>
+        <testsuite name="unitListOrders">
+            <directory suffix="Test.php">tests/Unit/ListOrders</directory>
+        </testsuite>
         <testsuite name="functionalUser">
             <directory suffix="Test.php">tests/Functional/User</directory>
         </testsuite>
@@ -51,6 +54,9 @@
             <directory suffix="Test.php">tests/Functional/Shop</directory>
         </testsuite>
         <testsuite name="functionalOrder">
+            <directory suffix="Test.php">tests/Functional/Order</directory>
+        </testsuite>
+        <testsuite name="functionalListOrders">
             <directory suffix="Test.php">tests/Functional/Order</directory>
         </testsuite>
     </testsuites>

@@ -42,14 +42,16 @@ class ListOrdersCreateServiceTest extends TestCase
         );
     }
 
-    private function assertListOrderIsOk(ListOrders $listOrdersExpect, ListOrders $listOrdersActual): void
+    private function assertListOrderIsOk(array $listsOrdersExpect, array $listsOrdersActual): void
     {
-        $this->assertInstanceOf(Identifier::class, $listOrdersActual->getId());
-        $this->assertEquals($listOrdersExpect->getUserId(), $listOrdersActual->getUserId());
-        $this->assertEquals($listOrdersExpect->getName(), $listOrdersActual->getName());
-        $this->assertEquals($listOrdersExpect->getDescription(), $listOrdersActual->getDescription());
-        $this->assertEquals($listOrdersExpect->getDateToBuy(), $listOrdersActual->getDateToBuy());
-        $this->assertIsString($listOrdersExpect->getCreatedOn()->format('Y-m-d H:i:s'));
+        foreach ($listsOrdersExpect as $key => $listOrdersExpect) {
+            $this->assertInstanceOf(Identifier::class, $listsOrdersActual[$key]->getId());
+            $this->assertEquals($listOrdersExpect->getUserId(), $listsOrdersActual[$key]->getUserId());
+            $this->assertEquals($listOrdersExpect->getName(), $listsOrdersActual[$key]->getName());
+            $this->assertEquals($listOrdersExpect->getDescription(), $listsOrdersActual[$key]->getDescription());
+            $this->assertEquals($listOrdersExpect->getDateToBuy(), $listsOrdersActual[$key]->getDateToBuy());
+            $this->assertIsString($listOrdersExpect->getCreatedOn()->format('Y-m-d H:i:s'));
+        }
     }
 
     /** @test */
@@ -68,12 +70,12 @@ class ListOrdersCreateServiceTest extends TestCase
             ->expects($this->once())
             ->method('save')
             ->with($this->callback(
-                fn (ListOrders $listOrdersToSave) => $this->assertListOrderIsOk($listOrders, $listOrdersToSave) || true)
+                fn (array $listsOrdersToSave) => $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave) || true)
             );
 
         $return = $this->object->__invoke($input);
 
-        $this->assertListOrderIsOk($listOrders, $return);
+        $this->assertListOrderIsOk([$listOrders], [$return]);
     }
 
     /** @test */
@@ -92,7 +94,7 @@ class ListOrdersCreateServiceTest extends TestCase
             ->expects($this->once())
             ->method('save')
             ->with($this->callback(
-                fn (ListOrders $listOrdersToSave) => $this->assertListOrderIsOk($listOrders, $listOrdersToSave) || true)
+                fn (array $listsOrdersToSave) => $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave) || true)
             )
             ->willThrowException(new DBUniqueConstraintException());
 
@@ -116,7 +118,7 @@ class ListOrdersCreateServiceTest extends TestCase
             ->expects($this->once())
             ->method('save')
             ->with($this->callback(
-                fn (ListOrders $listOrdersToSave) => $this->assertListOrderIsOk($listOrders, $listOrdersToSave) || true)
+                fn (array $listsOrdersToSave) => $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave) || true)
             )
             ->willThrowException(new DBConnectionException());
 

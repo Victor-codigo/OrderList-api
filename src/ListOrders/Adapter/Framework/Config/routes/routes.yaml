@@ -48,6 +48,16 @@ list_orders_remove:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
+# LIST ORDERS REMOVE ALL GROUP LIST OF ORDERS
+# -------------------------------------------------------------
+list_order_remove_all_group_id_and_change_user_id:
+  path: /api/v{api_version}/list-orders/group/remove-change
+  methods: DELETE
+  controller: ListOrders\Adapter\Http\Controller\ListOrderRemoveAllGroupsListsOrders\ListOrderRemoveAllGroupsListsOrdersController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
 # LIST ORDERS GET PRICE
 # -------------------------------------------------------------
 list_orders_get_price:

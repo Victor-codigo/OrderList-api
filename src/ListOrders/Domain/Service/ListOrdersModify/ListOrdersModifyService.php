@@ -32,7 +32,7 @@ class ListOrdersModifyService
             ->setDescription($input->description)
             ->setDateToBuy($input->dateToBuy);
 
-        $this->listOrdersRepository->save($listOrders);
+        $this->listOrdersRepository->save([$listOrders]);
 
         return $listOrders;
     }

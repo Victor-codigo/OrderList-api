@@ -28,7 +28,7 @@ class ListOrdersCreateService
     {
         $listOrders = $this->createListOrders($input->groupId, $input->userId, $input->name, $input->description, $input->dateToBuy);
 
-        $this->listOrdersRepository->save($listOrders);
+        $this->listOrdersRepository->save([$listOrders]);
 
         return $listOrders;
     }

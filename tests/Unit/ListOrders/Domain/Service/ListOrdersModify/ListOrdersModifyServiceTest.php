@@ -44,14 +44,16 @@ class ListOrdersModifyServiceTest extends TestCase
         );
     }
 
-    private function assertListOrdersIsOk(ListOrders $listOrdersExpected, ListOrders $listOrdersActual): void
+    private function assertListOrdersIsOk(array $listsOrdersExpected, array $listsOrdersActual): void
     {
-        $this->assertEquals($listOrdersExpected->getId(), $listOrdersActual->getId());
-        $this->assertEquals($listOrdersExpected->getGroupId(), $listOrdersActual->getGroupId());
-        $this->assertEquals($listOrdersExpected->getUserId(), $listOrdersActual->getUserId());
-        $this->assertEquals($listOrdersExpected->getName(), $listOrdersActual->getName());
-        $this->assertEquals($listOrdersExpected->getDescription(), $listOrdersActual->getDescription());
-        $this->assertEquals($listOrdersExpected->getDateToBuy(), $listOrdersActual->getDateToBuy());
+        foreach ($listsOrdersExpected as $key => $listOrdersExpected) {
+            $this->assertEquals($listOrdersExpected->getId(), $listsOrdersActual[$key]->getId());
+            $this->assertEquals($listOrdersExpected->getGroupId(), $listsOrdersActual[$key]->getGroupId());
+            $this->assertEquals($listOrdersExpected->getUserId(), $listsOrdersActual[$key]->getUserId());
+            $this->assertEquals($listOrdersExpected->getName(), $listsOrdersActual[$key]->getName());
+            $this->assertEquals($listOrdersExpected->getDescription(), $listsOrdersActual[$key]->getDescription());
+            $this->assertEquals($listOrdersExpected->getDateToBuy(), $listsOrdersActual[$key]->getDateToBuy());
+        }
     }
 
     /** @test */
@@ -84,7 +86,7 @@ class ListOrdersModifyServiceTest extends TestCase
         $this->listOrdersToRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (ListOrders $listOrdersActual) => $this->assertListOrdersIsOk($listOrderExpected, $listOrdersActual) || true));
+            ->with($this->callback(fn (array $listsOrdersActual) => $this->assertListOrdersIsOk([$listOrderExpected], $listsOrdersActual) || true));
 
         $this->paginator
             ->expects($this->once())
@@ -93,7 +95,7 @@ class ListOrdersModifyServiceTest extends TestCase
 
         $return = $this->object->__invoke($input);
 
-        $this->assertListOrdersIsOk($listOrderExpected, $return);
+        $this->assertListOrdersIsOk([$listOrderExpected], [$return]);
     }
 
     /** @test */

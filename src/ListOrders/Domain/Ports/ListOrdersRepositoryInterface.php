@@ -13,10 +13,12 @@ use ListOrders\Domain\Model\ListOrders;
 interface ListOrdersRepositoryInterface extends RepositoryInterface
 {
     /**
+     * @param ListOrders[] $listsOrders
+     *
      * @throws DBUniqueConstraintException
      * @throws DBConnectionException
      */
-    public function save(ListOrders $orders): void;
+    public function save(array $listsOrders): void;
 
     /**
      * @throws DBUniqueConstraintException
@@ -57,4 +59,11 @@ interface ListOrdersRepositoryInterface extends RepositoryInterface
      * @throws DBNotFoundException
      */
     public function findListOrderByShopNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface;
+
+    /**
+     * @param Identifier[] $groupsId
+     *
+     * @throws DBNotFoundException
+     */
+    public function findGroupsListsOrdersOrFail(array $groupsId): PaginatorInterface;
 }

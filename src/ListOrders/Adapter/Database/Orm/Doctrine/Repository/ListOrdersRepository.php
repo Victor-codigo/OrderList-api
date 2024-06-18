@@ -29,13 +29,17 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     }
 
     /**
+     * @param ListOrders[] $listsOrders
+     *
      * @throws DBUniqueConstraintException
      * @throws DBConnectionException
      */
-    public function save(ListOrders $listOrders): void
+    public function save(array $listsOrders): void
     {
         try {
-            $this->objectManager->persist($listOrders);
+            foreach ($listsOrders as $listOrders) {
+                $this->objectManager->persist($listOrders);
+            }
 
             $this->objectManager->flush();
         } catch (UniqueConstraintViolationException $e) {
@@ -194,6 +198,25 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
         return $this->dqlPaginationOrFail($dql, [
             'groupId' => $groupId,
             'filterTextValue' => $filterText->getValueWithFilter(),
+        ]);
+    }
+
+    /**
+     * @param Identifier[] $groupsId
+     *
+     * @throws DBNotFoundException
+     */
+    public function findGroupsListsOrdersOrFail(array $groupsId): PaginatorInterface
+    {
+        $listOrdersEntity = ListOrders::class;
+        $dql = <<<DQL
+            SELECT listOrders
+            FROM {$listOrdersEntity} listOrders
+            WHERE listOrders.groupId IN (:groupsId)
+        DQL;
+
+        return $this->dqlPaginationOrFail($dql, [
+            'groupsId' => $groupsId,
         ]);
     }
 }

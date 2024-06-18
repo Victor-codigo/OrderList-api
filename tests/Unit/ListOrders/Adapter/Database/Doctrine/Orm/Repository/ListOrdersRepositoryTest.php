@@ -34,6 +34,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         'f2980f67-4eb9-41ca-b452-ffa2c7da6a37',
     ];
     private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const GROUP_ID_2 = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
     private const USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
     private ListOrdersRepository $object;
@@ -115,7 +116,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     {
         $listOrders = $this->getListOrders();
 
-        $this->object->save($listOrders);
+        $this->object->save([$listOrders]);
 
         /** @var Group $groupSaved */
         $listOrdersSaved = $this->object->findOneBy(['id' => $listOrders->getId()]);
@@ -129,7 +130,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $listOrders = $this->getListOrdersExists();
 
         $this->expectException(DBUniqueConstraintException::class);
-        $this->object->save($listOrders);
+        $this->object->save([$listOrders]);
     }
 
     /** @test */
@@ -145,7 +146,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->mockObjectManager($this->object, $objectManagerMock);
 
         $this->expectException(DBConnectionException::class);
-        $this->object->save($this->getListOrders());
+        $this->object->save([$this->getListOrders()]);
     }
 
     /** @test */
@@ -595,5 +596,32 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
             $filterText,
             true
         );
+    }
+
+    /** @test */
+    public function itShouldFindAllListsOrdersOfAGroups(): void
+    {
+        $groupsId = [
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifier(self::GROUP_ID_2),
+        ];
+
+        $return = $this->object->findGroupsListsOrdersOrFail($groupsId);
+        $expect = $this->object->findBy([
+            'groupId' => $groupsId,
+        ]);
+
+        $this->assertEquals($expect, iterator_to_array($return));
+    }
+
+    /** @test */
+    public function itShouldFailNoListsOrdersFoundInGroups(): void
+    {
+        $groupsId = [
+            ValueObjectFactory::createIdentifier('6f76bd87-7382-46fc-9746-ba983dbbfeba'),
+        ];
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findGroupsListsOrdersOrFail($groupsId);
     }
 }
