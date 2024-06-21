@@ -14,6 +14,13 @@ use Common\Domain\Validation\Group\GROUP_TYPE;
 interface UserGroupRepositoryInterface extends RepositoryInterface
 {
     /**
+     * @param Identifier[] $groupsId
+     *
+     * @throws DBNotFoundException
+     */
+    public function findGroupsUsersOrFail(array $groupsId, GROUP_ROLES $groupRole): PaginatorInterface;
+
+    /**
      * @throws DBNotFoundException
      */
     public function findGroupUsersOrFail(Identifier $groupId): PaginatorInterface;

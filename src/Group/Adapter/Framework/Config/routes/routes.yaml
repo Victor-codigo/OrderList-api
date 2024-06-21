@@ -59,6 +59,16 @@ group_get_admins:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
+# GROUP USER GET GROUPS ADMINS OR USERS
+# -------------------------------------------------------------
+group_get_groups_admins:
+  path: /api/v{api_version}/groups/all/admins/{groups_id}
+  methods: GET
+  controller: Group\Adapter\Http\Controller\GroupGetGroupsAdmins\GroupGetGroupsAdminsController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
 # GROUP GET DATA
 # -------------------------------------------------------------
 group_get_data:

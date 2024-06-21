@@ -39,6 +39,11 @@ class AppConfig
     public const ENDPOINT_GROUP_GET_DATA_MAX_GROUPS = 50;
 
     /**
+     * Maximum number of admins can get, per request.
+     */
+    public const ENDPOINT_GROUP_GET_GROUPS_ADMINS_MAX = 100;
+
+    /**
      * Maximum number of groups can be deleted, per request.
      */
     public const ENDPOINT_GROUP_DELETE_MAX = 50;

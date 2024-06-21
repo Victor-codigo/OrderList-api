@@ -60,6 +60,38 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
      *
      * @throws DBNotFoundException
      */
+    public function findGroupsUsersOrFail(array $groupsId, GROUP_ROLES $groupRole): PaginatorInterface
+    {
+        $userGroupTable = UserGroup::class;
+        $dql = <<<DQL
+            SELECT userGroup
+            FROM {$userGroupTable} userGroup
+            WHERE userGroup.groupId IN (:groupId)
+                AND JSON_CONTAINS(userGroup.roles, :groupRole) = 1
+            ORDER BY userGroup.groupId
+        DQL;
+
+        $query = $this->entityManager
+            ->createQuery($dql)
+            ->setParameters([
+                'groupId' => $groupsId,
+                'groupRole' => "\"{$groupRole->value}\"",
+            ]);
+
+        $paginator = $this->paginator->createPaginator($query);
+
+        if (0 === $paginator->getItemsTotal()) {
+            throw DBNotFoundException::fromMessage('UserGroup not found');
+        }
+
+        return $paginator;
+    }
+
+    /**
+     * @param Identifier[] $groupsId
+     *
+     * @throws DBNotFoundException
+     */
     public function findGroupsFirstUserByRolOrFail(array $groupsId, GROUP_ROLES $groupRole): array
     {
         $sql = <<<SQL
