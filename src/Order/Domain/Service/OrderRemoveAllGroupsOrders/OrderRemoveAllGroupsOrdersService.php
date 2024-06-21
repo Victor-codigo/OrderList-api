@@ -31,8 +31,8 @@ class OrderRemoveAllGroupsOrdersService
         }
 
         $ordersIdUserIdChanged = [];
-        if (!empty($input->groupsIdToChangeOrdersUser) && null !== $input->userIdToSet) {
-            $ordersIdUserIdChanged = $this->ordersChangeUserId($input->groupsIdToChangeOrdersUser, $input->userIdToSet);
+        if (!empty($input->groupsIdToChangeOrdersUser)) {
+            $ordersIdUserIdChanged = $this->ordersChangeUserId($input->groupsIdToChangeOrdersUser);
         }
 
         return $this->createOrderRemoveALlGroupsOrdersOutputDto($ordersIdRemoved, $ordersIdUserIdChanged);
@@ -66,13 +66,30 @@ class OrderRemoveAllGroupsOrdersService
     }
 
     /**
+     * @param array<int, array{group_id: Identifier, admin: Identifier}> $groupsIdAndAdminId
+     *
      * @return Identifier[]
      *
      * @throws DBConnectionException
      */
-    private function ordersChangeUserId(array $groupsId, Identifier $userIdToSet): array
+    private function ordersChangeUserId(array $groupsIdAndAdminId): array
     {
         try {
+            $groupsId = array_map(
+                fn (array $groupIdAndAdminId) => $groupIdAndAdminId['group_id'],
+                $groupsIdAndAdminId
+            );
+            $groupsIdAndAdminIdIndexedByGroupId = array_combine(
+                array_map(
+                    fn (Identifier $groupId) => $groupId->getValue(),
+                    $groupsId
+                ),
+                array_map(
+                    fn (array $groupIdAndAdminId) => $groupIdAndAdminId['admin'],
+                    $groupsIdAndAdminId
+                ),
+            );
+
             $ordersPaginator = $this->orderRepository->findGroupsOrdersOrFail($groupsId);
 
             foreach ($ordersPaginator->getAllPages(self::ORDERS_PAGINATOR_PAGE_ITEMS) as $orderIterator) {
@@ -84,7 +101,13 @@ class OrderRemoveAllGroupsOrdersService
 
                 array_walk(
                     $orders,
-                    fn (Order $order) => $order->setUserId($userIdToSet)
+                    function (Order $order) use ($groupsIdAndAdminIdIndexedByGroupId) {
+                        if (!isset($groupsIdAndAdminIdIndexedByGroupId[$order->getGroupId()->getValue()])) {
+                            return;
+                        }
+
+                        $order->setUserId($groupsIdAndAdminIdIndexedByGroupId[$order->getGroupId()->getValue()]);
+                    }
                 );
 
                 $this->orderRepository->save($orders);

@@ -29,7 +29,6 @@ use Symfony\Component\HttpFoundation\Response;
                     properties: [
                         new OA\Property(property: 'groups_id_remove', type: 'array', description: 'Groups id to remove orders', items: new OA\Items(type: 'string', example: 'f916d316-d03b-416c-9d03-8d2bd3cee3b9')),
                         new OA\Property(property: 'groups_id_change_user_id', type: 'array', description: 'Groups id to change orders user id', items: new OA\Items(type: 'string', example: '7cc20c53-7605-4e94-8df7-6df3ff8e013f')),
-                        new OA\Property(property: 'user_id_set', type: 'string', description: 'User id to set in orders', example: '2a812e0b-7559-4d8c-bd8d-4e44d7f08fed'),
                         new OA\Property(property: 'system_key', type: 'string', description: 'System key'),
                     ]
                 )
@@ -87,7 +86,6 @@ class OrderRemoveAllGroupsOrdersController extends AbstractController
             $this->createOrderRemoveAllGroupsOrdersInputDto(
                 $request->groupsIdToRemove,
                 $request->groupsIdToChangeUserId,
-                $request->userIdToSet,
                 $request->systemKey
             )
         );
@@ -99,7 +97,7 @@ class OrderRemoveAllGroupsOrdersController extends AbstractController
      * @param string[]|null $ordersIdToRemove
      * @param string[]|null $ordersIdToChangeUserId
      */
-    private function createOrderRemoveAllGroupsOrdersInputDto(?array $ordersIdToRemove, ?array $ordersIdToChangeUserId, ?string $userIdToSet, ?string $systemKey): OrderRemoveAllGroupsOrdersInputDto
+    private function createOrderRemoveAllGroupsOrdersInputDto(?array $ordersIdToRemove, ?array $ordersIdToChangeUserId, ?string $systemKey): OrderRemoveAllGroupsOrdersInputDto
     {
         /** @var UserSharedSymfonyAdapter $userShared */
         $userShared = $this->security->getUser();
@@ -108,7 +106,6 @@ class OrderRemoveAllGroupsOrdersController extends AbstractController
             $userShared->getUser(),
             $ordersIdToRemove,
             $ordersIdToChangeUserId,
-            $userIdToSet,
             $systemKey
         );
     }

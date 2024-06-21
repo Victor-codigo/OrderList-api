@@ -275,6 +275,36 @@ class ModuleCommunicationFactory
         );
     }
 
+    public static function groupGetGroupsAdmins(array $groupsId, PaginatorPage $page, PaginatorPageItems $pageItems): ModuleCommunicationConfigDto
+    {
+        $groupsIdString = array_map(
+            fn (Identifier $groupId) => $groupId->getValue(),
+            $groupsId
+        );
+
+        $attributes = [
+            'api_version' => static::API_VERSION,
+            'groups_id' => implode(',', $groupsIdString),
+        ];
+        $query = [
+            'page' => $page->getValue(),
+            'page_items' => $pageItems->getValue(),
+        ];
+
+        return new ModuleCommunicationConfigDto(
+            'group_get_groups_admins',
+            'GET',
+            true,
+            $attributes,
+            $query,
+            [],
+            self::CONTENT_TYPE_APPLICATION_JSON,
+            [],
+            [],
+            []
+        );
+    }
+
     public static function groupUserGetGroups(?GROUP_TYPE $groupType, ?string $filterSection, ?string $filterText, ?string $filterValue, PaginatorPage $page, PaginatorPageItems $pageItems, bool $orderAsc): ModuleCommunicationConfigDto
     {
         $attributes = [

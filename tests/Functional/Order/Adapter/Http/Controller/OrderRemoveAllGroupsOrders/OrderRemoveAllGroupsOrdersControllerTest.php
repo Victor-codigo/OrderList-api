@@ -240,63 +240,6 @@ class OrderRemoveAllGroupsOrdersControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailUserIdIsNull(): void
-    {
-        $client = $this->getNewClientAuthenticatedUser();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT,
-            content: json_encode([
-                'groups_id_remove' => [
-                    self::GROUP_ID_1,
-                ],
-                'groups_id_change_user_id' => [
-                    self::GROUP_ID_2,
-                ],
-                'system_key' => self::SYSTEM_KEY,
-            ])
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [], ['user_id_set'], Response::HTTP_BAD_REQUEST);
-        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Error', $responseContent->message);
-
-        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->user_id_set);
-    }
-
-    /** @test */
-    public function itShouldFailUserIdIsWrong(): void
-    {
-        $client = $this->getNewClientAuthenticatedUser();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT,
-            content: json_encode([
-                'groups_id_remove' => [
-                    self::GROUP_ID_1,
-                ],
-                'groups_id_change_user_id' => [
-                    self::GROUP_ID_2,
-                ],
-                'user_id_set' => 'wrong id',
-                'system_key' => self::SYSTEM_KEY,
-            ])
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [], ['user_id_set'], Response::HTTP_BAD_REQUEST);
-        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Error', $responseContent->message);
-
-        $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->user_id_set);
-    }
-
-    /** @test */
     public function itShouldFailSystemKeyIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();

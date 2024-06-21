@@ -91,8 +91,8 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         return [
             Order::fromPrimitives(
                 'order id 4',
-                'group id 2',
-                'user id 1',
+                'group id 4',
+                'user id 4',
                 'order description 4',
                 40,
                 true,
@@ -102,8 +102,8 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
             ),
             Order::fromPrimitives(
                 'order id 5',
-                'group id 2',
-                'user id 1',
+                'group id 5',
+                'user id 5',
                 'order description 5',
                 50,
                 true,
@@ -113,8 +113,8 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
             ),
             Order::fromPrimitives(
                 'order id 6',
-                'group id 2',
-                'user id 1',
+                'group id 6',
+                'user id 6',
                 'order description 6',
                 60,
                 true,
@@ -123,6 +123,25 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
                 null
             ),
         ];
+    }
+
+    /**
+     * @param Order[] $orders
+     *
+     * @return Order[]
+     */
+    private function getOrdersToChangeUserIdAlreadyChanged(array $orders): array
+    {
+        $ordersToModify = array_map(
+            fn (Order $order) => clone $order,
+            $orders
+        );
+
+        $ordersToModify[0]->setUserId(ValueObjectFactory::createIdentifier('admin id 4'));
+        $ordersToModify[1]->setUserId(ValueObjectFactory::createIdentifier('admin id 5'));
+        $ordersToModify[2]->setUserId(ValueObjectFactory::createIdentifier('admin id 6'));
+
+        return $ordersToModify;
     }
 
     /**
@@ -154,16 +173,32 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         ];
     }
 
+    private function getGroupsIdAndAdminToChangeUserId(): array
+    {
+        return [[
+            'group_id' => ValueObjectFactory::createIdentifier('group id 4'),
+            'admin' => ValueObjectFactory::createIdentifier('admin id 4'),
+        ], [
+            'group_id' => ValueObjectFactory::createIdentifier('group id 5'),
+            'admin' => ValueObjectFactory::createIdentifier('admin id 5'),
+        ], [
+            'group_id' => ValueObjectFactory::createIdentifier('group id 6'),
+            'admin' => ValueObjectFactory::createIdentifier('admin id 6'),
+        ]];
+    }
+
     /** @test */
     public function itShouldRemoveGroupOrdersAndSetOrdersUserId(): void
     {
         $ordersToRemove = $this->getOrdersToRemove();
         $ordersIdToRemove = $this->getOrdersId($ordersToRemove);
         $ordersToChangeUserId = $this->getOrdersToChangeUserId();
+        $ordersToChangeUserIdExpected = $this->getOrdersToChangeUserIdAlreadyChanged($ordersToChangeUserId);
         $ordersIdToChangeUserId = $this->getOrdersId($ordersToChangeUserId);
+        $groupsIdToChangeUserId = $this->getGroupsIdToChangeUserId();
         $input = new OrderRemoveAllGroupsOrdersDto(
             $this->getOrdersToRemove(),
-            $this->getGroupsIdToChangeUserId(),
+            $this->getGroupsIdAndAdminToChangeUserId(),
             ValueObjectFactory::createIdentifier('user id')
         );
 
@@ -171,10 +206,10 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $this->orderRepository
             ->expects($orderRepositoryMatcher)
             ->method('findGroupsOrdersOrFail')
-            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input) {
+            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId) {
                 match ($orderRepositoryMatcher->getInvocationCount()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveOrders, $groupsId),
-                    2 => $this->assertEquals($input->groupsIdToChangeOrdersUser, $groupsId)
+                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
                 };
 
                 return true;
@@ -204,7 +239,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $this->orderRepository
             ->expects($this->once())
             ->method('save')
-            ->with($ordersToChangeUserId);
+            ->with($ordersToChangeUserIdExpected);
 
         $return = $this->object->__invoke($input);
 
@@ -217,16 +252,18 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
     {
         $ordersToChangeUserId = $this->getOrdersToChangeUserId();
         $ordersIdToChangeUserId = $this->getOrdersId($ordersToChangeUserId);
+        $groupsIdToChangeUserId = $this->getGroupsIdToChangeUserId();
+        $ordersToChangeUserIdExpected = $this->getOrdersToChangeUserIdAlreadyChanged($ordersToChangeUserId);
         $input = new OrderRemoveAllGroupsOrdersDto(
             [],
-            $this->getGroupsIdToChangeUserId(),
+            $this->getGroupsIdAndAdminToChangeUserId(),
             ValueObjectFactory::createIdentifier('user id')
         );
 
         $this->orderRepository
             ->expects($this->once())
             ->method('findGroupsOrdersOrFail')
-            ->with($input->groupsIdToChangeOrdersUser)
+            ->with($groupsIdToChangeUserId)
             ->willReturn($this->ordersToChangeUserIdPaginator);
 
         $this->ordersToRemovePaginator
@@ -246,7 +283,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $this->orderRepository
             ->expects($this->once())
             ->method('save')
-            ->with($ordersToChangeUserId);
+            ->with($ordersToChangeUserIdExpected);
 
         $return = $this->object->__invoke($input);
 
@@ -259,9 +296,11 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
     {
         $ordersToChangeUserId = $this->getOrdersToChangeUserId();
         $ordersIdToChangeUserId = $this->getOrdersId($ordersToChangeUserId);
+        $groupsIdToChangeUserId = $this->getGroupsIdToChangeUserId();
+        $ordersToChangeUserIdExpected = $this->getOrdersToChangeUserIdAlreadyChanged($ordersToChangeUserId);
         $input = new OrderRemoveAllGroupsOrdersDto(
             $this->getOrdersToRemove(),
-            $this->getGroupsIdToChangeUserId(),
+            $this->getGroupsIdAndAdminToChangeUserId(),
             ValueObjectFactory::createIdentifier('user id')
         );
 
@@ -269,10 +308,10 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $this->orderRepository
             ->expects($orderRepositoryMatcher)
             ->method('findGroupsOrdersOrFail')
-            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input) {
+            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId) {
                 match ($orderRepositoryMatcher->getInvocationCount()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveOrders, $groupsId),
-                    2 => $this->assertEquals($input->groupsIdToChangeOrdersUser, $groupsId)
+                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
                 };
 
                 return true;
@@ -301,7 +340,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $this->orderRepository
             ->expects($this->once())
             ->method('save')
-            ->with($ordersToChangeUserId);
+            ->with($ordersToChangeUserIdExpected);
 
         $return = $this->object->__invoke($input);
 
@@ -315,7 +354,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $ordersToRemove = $this->getOrdersToRemove();
         $input = new OrderRemoveAllGroupsOrdersDto(
             $this->getGroupsIdToRemove(),
-            $this->getGroupsIdToChangeUserId(),
+            $this->getGroupsIdAndAdminToChangeUserId(),
             ValueObjectFactory::createIdentifier('user id')
         );
 
@@ -396,9 +435,10 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
     {
         $ordersToRemove = $this->getOrdersToRemove();
         $ordersIdToRemove = $this->getOrdersId($ordersToRemove);
+        $groupsIdToChangeUserId = $this->getGroupsIdToChangeUserId();
         $input = new OrderRemoveAllGroupsOrdersDto(
             $this->getOrdersToRemove(),
-            $this->getGroupsIdToChangeUserId(),
+            $this->getGroupsIdAndAdminToChangeUserId(),
             ValueObjectFactory::createIdentifier('user id')
         );
 
@@ -406,10 +446,10 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $this->orderRepository
             ->expects($orderRepositoryMatcher)
             ->method('findGroupsOrdersOrFail')
-            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input) {
+            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId) {
                 match ($orderRepositoryMatcher->getInvocationCount()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveOrders, $groupsId),
-                    2 => $this->assertEquals($input->groupsIdToChangeOrdersUser, $groupsId)
+                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
                 };
 
                 return true;
@@ -451,9 +491,11 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
     {
         $ordersToRemove = $this->getOrdersToRemove();
         $ordersToChangeUserId = $this->getOrdersToChangeUserId();
+        $groupsIdToChangeUserId = $this->getGroupsIdToChangeUserId();
+        $ordersToChangeUserIdExpected = $this->getOrdersToChangeUserIdAlreadyChanged($ordersToChangeUserId);
         $input = new OrderRemoveAllGroupsOrdersDto(
             $this->getGroupsIdToRemove(),
-            $this->getGroupsIdToChangeUserId(),
+            $this->getGroupsIdAndAdminToChangeUserId(),
             ValueObjectFactory::createIdentifier('user id')
         );
 
@@ -461,10 +503,10 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $this->orderRepository
             ->expects($orderRepositoryMatcher)
             ->method('findGroupsOrdersOrFail')
-            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input) {
+            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId) {
                 match ($orderRepositoryMatcher->getInvocationCount()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveOrders, $groupsId),
-                    2 => $this->assertEquals($input->groupsIdToChangeOrdersUser, $groupsId)
+                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
                 };
 
                 return true;
@@ -494,7 +536,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $this->orderRepository
             ->expects($this->once())
             ->method('save')
-            ->with($ordersToChangeUserId)
+            ->with($ordersToChangeUserIdExpected)
             ->willThrowException(new DBConnectionException());
 
         $this->expectException(DBConnectionException::class);

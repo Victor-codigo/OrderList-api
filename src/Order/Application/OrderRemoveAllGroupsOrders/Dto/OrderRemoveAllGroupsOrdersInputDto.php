@@ -22,10 +22,9 @@ class OrderRemoveAllGroupsOrdersInputDto implements ServiceInputDtoInterface
      * @var Identifier[]
      */
     public readonly array $groupsIdToChangeUserId;
-    public readonly Identifier $userIdToSet;
     public readonly string $systemKey;
 
-    public function __construct(UserShared $userSession, ?array $groupsIdToRemove, ?array $groupsIdToChangeUserId, ?string $userId, ?string $systemKey)
+    public function __construct(UserShared $userSession, ?array $groupsIdToRemove, ?array $groupsIdToChangeUserId, ?string $systemKey)
     {
         $this->userSession = $userSession;
         $this->groupsIdToRemove = array_map(
@@ -37,7 +36,6 @@ class OrderRemoveAllGroupsOrdersInputDto implements ServiceInputDtoInterface
             $groupsIdToChangeUserId ?? []
         );
 
-        $this->userIdToSet = ValueObjectFactory::createIdentifier($userId);
         $this->systemKey = $systemKey ?? '';
     }
 
@@ -45,7 +43,6 @@ class OrderRemoveAllGroupsOrdersInputDto implements ServiceInputDtoInterface
     {
         $errorListGroupsIdToRemove = $validator->validateValueObjectArray($this->groupsIdToRemove);
         $errorListGroupsIdToChangeUserId = $validator->validateValueObjectArray($this->groupsIdToChangeUserId);
-        $errorListUserId = $validator->validateValueObject($this->userIdToSet);
 
         $errorListSystemKey = $validator
             ->setValue($this->systemKey)
@@ -60,10 +57,6 @@ class OrderRemoveAllGroupsOrdersInputDto implements ServiceInputDtoInterface
 
         if (!empty($errorListGroupsIdToChangeUserId)) {
             $errorList = ['groups_id_change_user_id' => $errorListGroupsIdToChangeUserId];
-        }
-
-        if (!empty($errorListUserId) && !empty($this->groupsIdToChangeUserId)) {
-            $errorList = ['user_id_set' => $errorListUserId];
         }
 
         if (!empty($errorListSystemKey)) {
