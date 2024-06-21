@@ -109,6 +109,10 @@ class ModuleCommunication implements ModuleCommunicationInterface
 
             yield $response->data;
 
+            if (!$response->hasContent()) {
+                return;
+            }
+
             if ($firstCall) {
                 $pagesTotal = $this->getArrayValueByPath($response->data, $routeConfig->getResponsePagesTotalPath());
                 $pageEnd = $hasPageEnd ? $pageEnd : $pagesTotal;
@@ -119,6 +123,13 @@ class ModuleCommunication implements ModuleCommunicationInterface
         }
     }
 
+    /**
+     * @throws ModuleCommunicationException
+     * @throws ValueError
+     * @throws ModuleCommunicationTokenNotFoundInRequestException
+     * @throws ModuleCommunicationErrorResponseException
+     * @throws InvalidArgumentException
+     */
     public function getAllPagesOfEndpoint(ModuleCommunicationConfigDtoPaginatorInterface $routeConfig): \Generator
     {
         return $this->getPagesRangeEndpoint($routeConfig, 1, null);

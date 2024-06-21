@@ -575,6 +575,53 @@ class ModuleCommunicationTest extends TestCase
     }
 
     /** @test */
+    public function itShouldGetARangeOfPagesNoContent(): void
+    {
+        $routeConfig = ModuleCommunicationFactoryTest::json(
+            true,
+            [],
+            [
+                'page' => 2,
+                'page_items' => 10,
+            ],
+            [],
+            [],
+            []
+        );
+
+        $responseExpected = new ResponseDto(
+            [],
+            [],
+            '',
+            RESPONSE_STATUS::OK,
+            false,
+        );
+
+        $objectMock = $this->createPartialMock(ModuleCommunication::class, [
+            '__invoke',
+        ]);
+
+        $objectMockMatcher = $this->once();
+        $objectMock
+            ->expects($objectMockMatcher)
+            ->method('__invoke')
+            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher) {
+                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
+
+                $this->assertEquals($routeConfigExpected, $routeConfigActual);
+
+                return true;
+            }))
+            ->willReturn($responseExpected);
+
+        $return = $objectMock->getPagesRangeEndpoint($routeConfig, 2, 5);
+
+        foreach ($return as $response) {
+            $this->assertEquals($responseExpected->data, $response);
+        }
+    }
+
+    /** @test */
     public function itShouldGetARangeOfPagesNoPageEndSet(): void
     {
         $routeConfig = ModuleCommunicationFactoryTest::json(
