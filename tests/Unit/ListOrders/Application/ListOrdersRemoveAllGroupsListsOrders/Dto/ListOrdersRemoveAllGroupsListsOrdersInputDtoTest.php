@@ -2,19 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\ListOrders\Application\OrderRemoveAllGroupsOrders\Dto;
+namespace Test\Unit\ListOrders\Application\ListOrdersRemoveAllGroupsListsOrders\Dto;
 
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
-use ListOrders\Application\ListOrderRemoveAllGroupsListsOrders\Dto\ListOrderRemoveAllGroupsListsOrdersInputDto;
+use ListOrders\Application\ListOrdersRemoveAllGroupsListsOrders\Dto\ListOrdersRemoveAllGroupsListsOrdersInputDto;
 use PHPUnit\Framework\TestCase;
 
 class ListOrdersRemoveAllGroupsListsOrdersInputDtoTest extends TestCase
 {
     private const SYSTEM_KEY = 'systemKeyDev';
-    private const USER_ID = 'd888b345-2666-4bec-9e5c-daf68c1c68f4';
 
     private ValidationInterface $validator;
     private UserShared $userSession;
@@ -48,27 +47,10 @@ class ListOrdersRemoveAllGroupsListsOrdersInputDtoTest extends TestCase
     /** @test */
     public function itShouldValidate(): void
     {
-        $object = new ListOrderRemoveAllGroupsListsOrdersInputDto(
+        $object = new ListOrdersRemoveAllGroupsListsOrdersInputDto(
             $this->userSession,
             $this->getGroupsIdToRemove(),
             $this->getGroupsIdToChangeUserId(),
-            self::USER_ID,
-            self::SYSTEM_KEY
-        );
-
-        $return = $object->validate($this->validator);
-
-        $this->assertEmpty($return);
-    }
-
-    /** @test */
-    public function itShouldValidateGroupsIdToChangeUserIdIsEmptyAndUserIdIsNull(): void
-    {
-        $object = new ListOrderRemoveAllGroupsListsOrdersInputDto(
-            $this->userSession,
-            $this->getGroupsIdToRemove(),
-            null,
-            null,
             self::SYSTEM_KEY
         );
 
@@ -80,11 +62,10 @@ class ListOrdersRemoveAllGroupsListsOrdersInputDtoTest extends TestCase
     /** @test */
     public function itShouldValidateGroupsIdToRemoveIsNull(): void
     {
-        $object = new ListOrderRemoveAllGroupsListsOrdersInputDto(
+        $object = new ListOrdersRemoveAllGroupsListsOrdersInputDto(
             $this->userSession,
             null,
             $this->getGroupsIdToChangeUserId(),
-            self::USER_ID,
             self::SYSTEM_KEY
         );
 
@@ -96,11 +77,10 @@ class ListOrdersRemoveAllGroupsListsOrdersInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailGroupsIdToRemoveWrong(): void
     {
-        $object = new ListOrderRemoveAllGroupsListsOrdersInputDto(
+        $object = new ListOrdersRemoveAllGroupsListsOrdersInputDto(
             $this->userSession,
             array_merge($this->getGroupsIdToRemove(), ['wrong id']),
             $this->getGroupsIdToChangeUserId(),
-            self::USER_ID,
             self::SYSTEM_KEY
         );
 
@@ -112,11 +92,10 @@ class ListOrdersRemoveAllGroupsListsOrdersInputDtoTest extends TestCase
     /** @test */
     public function itShouldFailGroupsIdToChangeUserIdWrong(): void
     {
-        $object = new ListOrderRemoveAllGroupsListsOrdersInputDto(
+        $object = new ListOrdersRemoveAllGroupsListsOrdersInputDto(
             $this->userSession,
             $this->getGroupsIdToRemove(),
             array_merge($this->getGroupsIdToChangeUserId(), ['wrong id']),
-            self::USER_ID,
             self::SYSTEM_KEY
         );
 
@@ -126,45 +105,12 @@ class ListOrdersRemoveAllGroupsListsOrdersInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailGroupsIdToChangeUserIdUserIdIsNull(): void
-    {
-        $object = new ListOrderRemoveAllGroupsListsOrdersInputDto(
-            $this->userSession,
-            $this->getGroupsIdToRemove(),
-            $this->getGroupsIdToChangeUserId(),
-            null,
-            self::SYSTEM_KEY
-        );
-
-        $return = $object->validate($this->validator);
-
-        $this->assertEquals(['user_id_set' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
-    }
-
-    /** @test */
-    public function itShouldFailGroupsIdToChangeUserIdUserIdIsWrong(): void
-    {
-        $object = new ListOrderRemoveAllGroupsListsOrdersInputDto(
-            $this->userSession,
-            $this->getGroupsIdToRemove(),
-            $this->getGroupsIdToChangeUserId(),
-            'wrong id',
-            self::SYSTEM_KEY
-        );
-
-        $return = $object->validate($this->validator);
-
-        $this->assertEquals(['user_id_set' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
-    }
-
-    /** @test */
     public function itShouldFailSystemKeyIsNull(): void
     {
-        $object = new ListOrderRemoveAllGroupsListsOrdersInputDto(
+        $object = new ListOrdersRemoveAllGroupsListsOrdersInputDto(
             $this->userSession,
             $this->getGroupsIdToRemove(),
             $this->getGroupsIdToChangeUserId(),
-            self::USER_ID,
             null
         );
 

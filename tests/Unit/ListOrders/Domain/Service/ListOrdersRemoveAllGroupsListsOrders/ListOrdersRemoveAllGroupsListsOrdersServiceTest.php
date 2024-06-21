@@ -13,11 +13,10 @@ use ListOrders\Domain\Model\ListOrders;
 use ListOrders\Domain\Ports\ListOrdersRepositoryInterface;
 use ListOrders\Domain\Service\ListOrdersRemoveAllGroupsListsOrders\Dto\ListOrdersRemoveAllGroupsListsOrdersDto;
 use ListOrders\Domain\Service\ListOrdersRemoveAllGroupsListsOrders\ListOrdersRemoveAllGroupsListsOrdersService;
-use Order\Domain\Model\Order;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class ListOrderRemoveAllGroupsListsOrdersServiceTest extends TestCase
+class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
 {
     private ListOrdersRemoveAllGroupsListsOrdersService $object;
     private MockObject|ListOrdersRepositoryInterface $listOrdersRepository;
@@ -41,73 +40,92 @@ class ListOrderRemoveAllGroupsListsOrdersServiceTest extends TestCase
     {
         return [
             ListOrders::fromPrimitives(
-                'order id 1',
+                'listOrders id 1',
                 'group id 1',
                 'user id 1',
                 'listOrders name 1',
-                'order description 1',
+                'listOrders description 1',
                 null
             ),
             ListOrders::fromPrimitives(
-                'order id 2',
+                'listOrders id 2',
                 'group id 1',
                 'user id 2',
                 'listOrders name 2',
-                'order description 2',
+                'listOrders description 2',
                 null
             ),
             ListOrders::fromPrimitives(
-                'order id 3',
+                'listOrders id 3',
                 'group id 1',
                 'user id 3',
                 'listOrders name 3',
-                'order description 3',
+                'listOrders description 3',
                 null
             ),
         ];
     }
 
     /**
-     * @return Order[]
+     * @return ListOrders[]
      */
     private function getListsOrdersToChangeUserId(): array
     {
         return [
             ListOrders::fromPrimitives(
-                'order id 4',
-                'group id 2',
+                'listOrders id 4',
+                'group id 4',
                 'user id 4',
                 'listOrders name 4',
-                'order description 4',
+                'listOrders description 4',
                 null
             ),
             ListOrders::fromPrimitives(
-                'order id 5',
-                'group id 2',
+                'listOrders id 5',
+                'group id 5',
                 'user id 5',
                 'listOrders name 5',
-                'order description 5',
+                'listOrders description 5',
                 null
             ),
             ListOrders::fromPrimitives(
-                'order id 5',
-                'group id 2',
-                'user id 5',
-                'listOrders name 5',
-                'order description 5',
+                'listOrders id 6',
+                'group id 6',
+                'user id 6',
+                'listOrders name 6',
+                'listOrders description 6',
                 null
             ),
         ];
     }
 
     /**
+     * @param ListOrders[] $listsOrders
+     *
+     * @return ListOrders[]
+     */
+    private function getListsOrdersToChangeUserIdAlreadyChanged(array $listsOrders): array
+    {
+        $listsOrdersToModify = array_map(
+            fn (ListOrders $listOrders) => clone $listOrders,
+            $listsOrders
+        );
+
+        $listsOrdersToModify[0]->setUserId(ValueObjectFactory::createIdentifier('admin id 4'));
+        $listsOrdersToModify[1]->setUserId(ValueObjectFactory::createIdentifier('admin id 5'));
+        $listsOrdersToModify[2]->setUserId(ValueObjectFactory::createIdentifier('admin id 6'));
+
+        return $listsOrdersToModify;
+    }
+
+    /**
      * @return Identifier[]
      */
-    private function getListsOrdersId(array $orders): array
+    private function getListsOrdersId(array $listsOrders): array
     {
         return array_map(
-            fn (ListOrders $order) => $order->getId(),
-            $orders
+            fn (ListOrders $listOrders) => $listOrders->getId(),
+            $listsOrders
         );
     }
 
@@ -129,27 +147,43 @@ class ListOrderRemoveAllGroupsListsOrdersServiceTest extends TestCase
         ];
     }
 
-    /** @test */
-    public function itShouldRemoveGroupOrdersAndSetOrdersUserId(): void
+    private function getGroupsIdAndAdminToChangeUserId(): array
     {
-        $ordersToRemove = $this->getListsOrdersToRemove();
-        $ordersIdToRemove = $this->getListsOrdersId($ordersToRemove);
-        $ordersToChangeUserId = $this->getListsOrdersToChangeUserId();
-        $ordersIdToChangeUserId = $this->getListsOrdersId($ordersToChangeUserId);
+        return [[
+            'group_id' => ValueObjectFactory::createIdentifier('group id 4'),
+            'admin' => ValueObjectFactory::createIdentifier('admin id 4'),
+        ], [
+            'group_id' => ValueObjectFactory::createIdentifier('group id 5'),
+            'admin' => ValueObjectFactory::createIdentifier('admin id 5'),
+        ], [
+            'group_id' => ValueObjectFactory::createIdentifier('group id 6'),
+            'admin' => ValueObjectFactory::createIdentifier('admin id 6'),
+        ]];
+    }
+
+    /** @test */
+    public function itShouldRemoveGroupListsOrdersAndSetListsOrdersUserId(): void
+    {
+        $listsOrdersToRemove = $this->getListsOrdersToRemove();
+        $listsOrdersIdToRemove = $this->getListsOrdersId($listsOrdersToRemove);
+        $listsOrdersToChangeUserId = $this->getListsOrdersToChangeUserId();
+        $listsOrdersToChangeUserIdExpected = $this->getListsOrdersToChangeUserIdAlreadyChanged($listsOrdersToChangeUserId);
+        $listsOrdersIdToChangeUserId = $this->getListsOrdersId($listsOrdersToChangeUserId);
+        $groupsIdToChangeUserId = $this->getGroupsIdToChangeUserId();
         $input = new ListOrdersRemoveAllGroupsListsOrdersDto(
             $this->getListsOrdersToRemove(),
-            $this->getGroupsIdToChangeUserId(),
+            $this->getGroupsIdAndAdminToChangeUserId(),
             ValueObjectFactory::createIdentifier('user id')
         );
 
-        $orderRepositoryMatcher = $this->exactly(2);
+        $listOrdersRepositoryMatcher = $this->exactly(2);
         $this->listOrdersRepository
-            ->expects($orderRepositoryMatcher)
+            ->expects($listOrdersRepositoryMatcher)
             ->method('findGroupsListsOrdersOrFail')
-            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input) {
-                match ($orderRepositoryMatcher->getInvocationCount()) {
+            ->with($this->callback(function (array $groupsId) use ($listOrdersRepositoryMatcher, $input, $groupsIdToChangeUserId) {
+                match ($listOrdersRepositoryMatcher->getInvocationCount()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveListsOrders, $groupsId),
-                    2 => $this->assertEquals($input->groupsIdToChangeListsOrdersUser, $groupsId)
+                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
                 };
 
                 return true;
@@ -163,45 +197,47 @@ class ListOrderRemoveAllGroupsListsOrdersServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new \ArrayIterator($ordersToRemove));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($listsOrdersToRemove));
 
         $this->listsOrdersToChangeUserIdPaginator
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new \ArrayIterator($ordersToChangeUserId));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($listsOrdersToChangeUserId));
 
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('remove')
-            ->with($ordersToRemove);
+            ->with($listsOrdersToRemove);
 
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('save')
-            ->with($ordersToChangeUserId);
+            ->with($listsOrdersToChangeUserIdExpected);
 
         $return = $this->object->__invoke($input);
 
-        $this->assertEquals($ordersIdToRemove, $return->listOrdersIdRemoved);
-        $this->assertEquals($ordersIdToChangeUserId, $return->listOrdersIdChangedUserId);
+        $this->assertEquals($listsOrdersIdToRemove, $return->listsOrdersIdRemoved);
+        $this->assertEquals($listsOrdersIdToChangeUserId, $return->listsOrdersIdChangedUserId);
     }
 
     /** @test */
-    public function itShouldOnlyChangeOrdersUsersId(): void
+    public function itShouldOnlyChangeListsOrdersUsersId(): void
     {
-        $ordersToChangeUserId = $this->getListsOrdersToChangeUserId();
-        $ordersIdToChangeUserId = $this->getListsOrdersId($ordersToChangeUserId);
+        $listsOrdersToChangeUserId = $this->getListsOrdersToChangeUserId();
+        $listsOrdersIdToChangeUserId = $this->getListsOrdersId($listsOrdersToChangeUserId);
+        $groupsIdToChangeUserId = $this->getGroupsIdToChangeUserId();
+        $listsOrdersToChangeUserIdExpected = $this->getListsOrdersToChangeUserIdAlreadyChanged($listsOrdersToChangeUserId);
         $input = new ListOrdersRemoveAllGroupsListsOrdersDto(
             [],
-            $this->getGroupsIdToChangeUserId(),
+            $this->getGroupsIdAndAdminToChangeUserId(),
             ValueObjectFactory::createIdentifier('user id')
         );
 
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('findGroupsListsOrdersOrFail')
-            ->with($input->groupsIdToChangeListsOrdersUser)
+            ->with($groupsIdToChangeUserId)
             ->willReturn($this->listsOrdersToChangeUserIdPaginator);
 
         $this->listsOrdersToRemovePaginator
@@ -212,7 +248,7 @@ class ListOrderRemoveAllGroupsListsOrdersServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new \ArrayIterator($ordersToChangeUserId));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($listsOrdersToChangeUserId));
 
         $this->listOrdersRepository
             ->expects($this->never())
@@ -221,39 +257,41 @@ class ListOrderRemoveAllGroupsListsOrdersServiceTest extends TestCase
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('save')
-            ->with($ordersToChangeUserId);
+            ->with($listsOrdersToChangeUserIdExpected);
 
         $return = $this->object->__invoke($input);
 
-        $this->assertEmpty($return->listOrdersIdRemoved);
-        $this->assertEquals($ordersIdToChangeUserId, $return->listOrdersIdChangedUserId);
+        $this->assertEmpty($return->listsOrdersIdRemoved);
+        $this->assertEquals($listsOrdersIdToChangeUserId, $return->listsOrdersIdChangedUserId);
     }
 
     /** @test */
-    public function itShouldOnlyChangeOrdersUsersIdGroupsIdToRemoveNotFound(): void
+    public function itShouldOnlyChangeListsOrdersUsersIdGroupsIdToRemoveNotFound(): void
     {
-        $ordersToChangeUserId = $this->getListsOrdersToChangeUserId();
-        $ordersIdToChangeUserId = $this->getListsOrdersId($ordersToChangeUserId);
+        $listsOrdersToChangeUserId = $this->getListsOrdersToChangeUserId();
+        $listsOrdersIdToChangeUserId = $this->getListsOrdersId($listsOrdersToChangeUserId);
+        $groupsIdToChangeUserId = $this->getGroupsIdToChangeUserId();
+        $listsOrdersToChangeUserIdExpected = $this->getListsOrdersToChangeUserIdAlreadyChanged($listsOrdersToChangeUserId);
         $input = new ListOrdersRemoveAllGroupsListsOrdersDto(
             $this->getListsOrdersToRemove(),
-            $this->getGroupsIdToChangeUserId(),
+            $this->getGroupsIdAndAdminToChangeUserId(),
             ValueObjectFactory::createIdentifier('user id')
         );
 
-        $orderRepositoryMatcher = $this->exactly(2);
+        $listOrdersRepositoryMatcher = $this->exactly(2);
         $this->listOrdersRepository
-            ->expects($orderRepositoryMatcher)
+            ->expects($listOrdersRepositoryMatcher)
             ->method('findGroupsListsOrdersOrFail')
-            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input) {
-                match ($orderRepositoryMatcher->getInvocationCount()) {
+            ->with($this->callback(function (array $groupsId) use ($listOrdersRepositoryMatcher, $input, $groupsIdToChangeUserId) {
+                match ($listOrdersRepositoryMatcher->getInvocationCount()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveListsOrders, $groupsId),
-                    2 => $this->assertEquals($input->groupsIdToChangeListsOrdersUser, $groupsId)
+                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
                 };
 
                 return true;
             }))
-            ->willReturnCallback(function () use ($orderRepositoryMatcher) {
-                return match ($orderRepositoryMatcher->getInvocationCount()) {
+            ->willReturnCallback(function () use ($listOrdersRepositoryMatcher) {
+                return match ($listOrdersRepositoryMatcher->getInvocationCount()) {
                     1 => throw new DBNotFoundException(),
                     2 => $this->listsOrdersToChangeUserIdPaginator
                 };
@@ -267,7 +305,7 @@ class ListOrderRemoveAllGroupsListsOrdersServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new \ArrayIterator($ordersToChangeUserId));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($listsOrdersToChangeUserId));
 
         $this->listOrdersRepository
             ->expects($this->never())
@@ -276,21 +314,21 @@ class ListOrderRemoveAllGroupsListsOrdersServiceTest extends TestCase
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('save')
-            ->with($ordersToChangeUserId);
+            ->with($listsOrdersToChangeUserIdExpected);
 
         $return = $this->object->__invoke($input);
 
-        $this->assertEmpty($return->listOrdersIdRemoved);
-        $this->assertEquals($ordersIdToChangeUserId, $return->listOrdersIdChangedUserId);
+        $this->assertEmpty($return->listsOrdersIdRemoved);
+        $this->assertEquals($listsOrdersIdToChangeUserId, $return->listsOrdersIdChangedUserId);
     }
 
     /** @test */
-    public function itShouldFailRemoveOrdersError(): void
+    public function itShouldFailRemoveListsOrdersError(): void
     {
-        $ordersToRemove = $this->getListsOrdersToRemove();
+        $listsOrdersToRemove = $this->getListsOrdersToRemove();
         $input = new ListOrdersRemoveAllGroupsListsOrdersDto(
             $this->getGroupsIdToRemove(),
-            $this->getGroupsIdToChangeUserId(),
+            $this->getGroupsIdAndAdminToChangeUserId(),
             ValueObjectFactory::createIdentifier('user id')
         );
 
@@ -304,7 +342,7 @@ class ListOrderRemoveAllGroupsListsOrdersServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new \ArrayIterator($ordersToRemove));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($listsOrdersToRemove));
 
         $this->listsOrdersToChangeUserIdPaginator
             ->expects($this->never())
@@ -313,7 +351,7 @@ class ListOrderRemoveAllGroupsListsOrdersServiceTest extends TestCase
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('remove')
-            ->with($ordersToRemove)
+            ->with($listsOrdersToRemove)
             ->willThrowException(new DBConnectionException());
 
         $this->listOrdersRepository
@@ -325,10 +363,10 @@ class ListOrderRemoveAllGroupsListsOrdersServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldOnlyRemoveGroupOrders(): void
+    public function itShouldOnlyRemoveGroupListsOrders(): void
     {
-        $ordersToRemove = $this->getListsOrdersToRemove();
-        $ordersIdToRemove = $this->getListsOrdersId($ordersToRemove);
+        $listsOrdersToRemove = $this->getListsOrdersToRemove();
+        $listsOrdersIdToRemove = $this->getListsOrdersId($listsOrdersToRemove);
         $input = new ListOrdersRemoveAllGroupsListsOrdersDto(
             $this->getGroupsIdToRemove(),
             [],
@@ -345,7 +383,7 @@ class ListOrderRemoveAllGroupsListsOrdersServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new \ArrayIterator($ordersToRemove));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($listsOrdersToRemove));
 
         $this->listsOrdersToChangeUserIdPaginator
             ->expects($this->never())
@@ -354,7 +392,7 @@ class ListOrderRemoveAllGroupsListsOrdersServiceTest extends TestCase
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('remove')
-            ->with($ordersToRemove);
+            ->with($listsOrdersToRemove);
 
         $this->listOrdersRepository
             ->expects($this->never())
@@ -362,35 +400,36 @@ class ListOrderRemoveAllGroupsListsOrdersServiceTest extends TestCase
 
         $return = $this->object->__invoke($input);
 
-        $this->assertEquals($ordersIdToRemove, $return->listOrdersIdRemoved);
-        $this->assertEmpty($return->listOrdersIdChangedUserId);
+        $this->assertEquals($listsOrdersIdToRemove, $return->listsOrdersIdRemoved);
+        $this->assertEmpty($return->listsOrdersIdChangedUserId);
     }
 
     /** @test */
-    public function itShouldOnlyRemoveOrdersFromGroupsIdToRemoveOrdersToChangeUserIdGroupsIdNotFound(): void
+    public function itShouldOnlyRemoveListsOrdersFromGroupsIdToRemoveListsOrdersToChangeUserIdGroupsIdNotFound(): void
     {
-        $ordersToRemove = $this->getListsOrdersToRemove();
-        $ordersIdToRemove = $this->getListsOrdersId($ordersToRemove);
+        $listsOrdersToRemove = $this->getListsOrdersToRemove();
+        $listsOrdersIdToRemove = $this->getListsOrdersId($listsOrdersToRemove);
+        $groupsIdToChangeUserId = $this->getGroupsIdToChangeUserId();
         $input = new ListOrdersRemoveAllGroupsListsOrdersDto(
             $this->getListsOrdersToRemove(),
-            $this->getGroupsIdToChangeUserId(),
+            $this->getGroupsIdAndAdminToChangeUserId(),
             ValueObjectFactory::createIdentifier('user id')
         );
 
-        $orderRepositoryMatcher = $this->exactly(2);
+        $listOrdersRepositoryMatcher = $this->exactly(2);
         $this->listOrdersRepository
-            ->expects($orderRepositoryMatcher)
+            ->expects($listOrdersRepositoryMatcher)
             ->method('findGroupsListsOrdersOrFail')
-            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input) {
-                match ($orderRepositoryMatcher->getInvocationCount()) {
+            ->with($this->callback(function (array $groupsId) use ($listOrdersRepositoryMatcher, $input, $groupsIdToChangeUserId) {
+                match ($listOrdersRepositoryMatcher->getInvocationCount()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveListsOrders, $groupsId),
-                    2 => $this->assertEquals($input->groupsIdToChangeListsOrdersUser, $groupsId)
+                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
                 };
 
                 return true;
             }))
-            ->willReturnCallback(function () use ($orderRepositoryMatcher) {
-                return match ($orderRepositoryMatcher->getInvocationCount()) {
+            ->willReturnCallback(function () use ($listOrdersRepositoryMatcher) {
+                return match ($listOrdersRepositoryMatcher->getInvocationCount()) {
                     1 => $this->listsOrdersToRemovePaginator,
                     2 => throw new DBNotFoundException()
                 };
@@ -400,7 +439,7 @@ class ListOrderRemoveAllGroupsListsOrdersServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new \ArrayIterator($ordersToRemove));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($listsOrdersToRemove));
 
         $this->listsOrdersToChangeUserIdPaginator
             ->expects($this->never())
@@ -409,7 +448,7 @@ class ListOrderRemoveAllGroupsListsOrdersServiceTest extends TestCase
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('remove')
-            ->with($ordersToRemove);
+            ->with($listsOrdersToRemove);
 
         $this->listOrdersRepository
             ->expects($this->never())
@@ -417,29 +456,31 @@ class ListOrderRemoveAllGroupsListsOrdersServiceTest extends TestCase
 
         $return = $this->object->__invoke($input);
 
-        $this->assertEquals($ordersIdToRemove, $return->listOrdersIdRemoved);
-        $this->assertEmpty($return->listOrdersIdChangedUserId);
+        $this->assertEquals($listsOrdersIdToRemove, $return->listsOrdersIdRemoved);
+        $this->assertEmpty($return->listsOrdersIdChangedUserId);
     }
 
     /** @test */
-    public function itShouldFailChangingOrdersUserId(): void
+    public function itShouldFailChangingListsOrdersUserId(): void
     {
-        $ordersToRemove = $this->getListsOrdersToRemove();
-        $ordersToChangeUserId = $this->getListsOrdersToChangeUserId();
+        $listsOrdersToRemove = $this->getListsOrdersToRemove();
+        $listsOrdersToChangeUserId = $this->getListsOrdersToChangeUserId();
+        $groupsIdToChangeUserId = $this->getGroupsIdToChangeUserId();
+        $listsOrdersToChangeUserIdExpected = $this->getListsOrdersToChangeUserIdAlreadyChanged($listsOrdersToChangeUserId);
         $input = new ListOrdersRemoveAllGroupsListsOrdersDto(
             $this->getGroupsIdToRemove(),
-            $this->getGroupsIdToChangeUserId(),
+            $this->getGroupsIdAndAdminToChangeUserId(),
             ValueObjectFactory::createIdentifier('user id')
         );
 
-        $orderRepositoryMatcher = $this->exactly(2);
+        $listOrdersRepositoryMatcher = $this->exactly(2);
         $this->listOrdersRepository
-            ->expects($orderRepositoryMatcher)
+            ->expects($listOrdersRepositoryMatcher)
             ->method('findGroupsListsOrdersOrFail')
-            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input) {
-                match ($orderRepositoryMatcher->getInvocationCount()) {
+            ->with($this->callback(function (array $groupsId) use ($listOrdersRepositoryMatcher, $input, $groupsIdToChangeUserId) {
+                match ($listOrdersRepositoryMatcher->getInvocationCount()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveListsOrders, $groupsId),
-                    2 => $this->assertEquals($input->groupsIdToChangeListsOrdersUser, $groupsId)
+                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
                 };
 
                 return true;
@@ -453,23 +494,23 @@ class ListOrderRemoveAllGroupsListsOrdersServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new \ArrayIterator($ordersToRemove));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($listsOrdersToRemove));
 
         $this->listsOrdersToChangeUserIdPaginator
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new \ArrayIterator($ordersToChangeUserId));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($listsOrdersToChangeUserId));
 
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('remove')
-            ->with($ordersToRemove);
+            ->with($listsOrdersToRemove);
 
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('save')
-            ->with($ordersToChangeUserId)
+            ->with($listsOrdersToChangeUserIdExpected)
             ->willThrowException(new DBConnectionException());
 
         $this->expectException(DBConnectionException::class);

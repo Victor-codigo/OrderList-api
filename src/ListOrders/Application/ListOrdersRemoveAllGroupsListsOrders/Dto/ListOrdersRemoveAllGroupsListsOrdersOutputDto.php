@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace ListOrders\Application\ListOrderRemoveAllGroupsListsOrders\Dto;
+namespace ListOrders\Application\ListOrdersRemoveAllGroupsListsOrders\Dto;
 
 use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Model\ValueObject\String\Identifier;
 
-class ListOrderRemoveAllGroupsListsOrdersOutputDto implements ApplicationOutputInterface
+class ListOrdersRemoveAllGroupsListsOrdersOutputDto implements ApplicationOutputInterface
 {
     /**
      * @param Identifier[] $listsOrdersIdRemoved

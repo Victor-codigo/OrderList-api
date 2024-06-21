@@ -53,7 +53,7 @@ list_orders_remove:
 list_order_remove_all_group_id_and_change_user_id:
   path: /api/v{api_version}/list-orders/group/remove-change
   methods: DELETE
-  controller: ListOrders\Adapter\Http\Controller\ListOrderRemoveAllGroupsListsOrders\ListOrderRemoveAllGroupsListsOrdersController
+  controller: ListOrders\Adapter\Http\Controller\ListOrdersRemoveAllGroupsListsOrders\ListOrdersRemoveAllGroupsListsOrdersController
   requirements:
     api_version: '\d+[.\d]?'
 

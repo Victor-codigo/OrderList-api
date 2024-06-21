@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace ListOrders\Application\ListOrderRemoveAllGroupsListsOrders\Exception;
+namespace ListOrders\Application\ListOrdersRemoveAllGroupsListsOrders\Exception;
 
 use Common\Domain\Exception\DomainExceptionOutput;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\RESPONSE_STATUS_HTTP;
 
-class ListOrderRemoveAllGroupsListsOrdersSystemKeyException extends DomainExceptionOutput
+class ListOrdersRemoveAllGroupsListsOrdersSystemKeyException extends DomainExceptionOutput
 {
     public static function fromMessage(string $message): static
     {

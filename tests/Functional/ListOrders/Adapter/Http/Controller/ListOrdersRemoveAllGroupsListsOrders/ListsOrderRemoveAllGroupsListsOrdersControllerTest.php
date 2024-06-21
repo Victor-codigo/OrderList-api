@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Test\Functional\ListOrders\Adapter\Http\Controller\ListOrderRemoveAllGroupsListsOrders;
+namespace Test\Functional\ListOrders\Adapter\Http\Controller\ListOrdersRemoveAllGroupsListsOrders;
 
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
-class ListOrderRemoveAllGroupsListsOrdersControllerTest extends WebClientTestCase
+class ListsOrderRemoveAllGroupsListsOrdersControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
@@ -50,7 +50,7 @@ class ListOrderRemoveAllGroupsListsOrdersControllerTest extends WebClientTestCas
 
         $this->assertResponseStructureIsOk($response, ['lists_orders_id_removed', 'lists_orders_id_user_changed'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
-        $this->assertSame('Lists of orders removed and changed user', $responseContent->message);
+        $this->assertSame('lists of orders removed and changed user', $responseContent->message);
 
         $this->assertEqualsCanonicalizing(
             [...self::LIST_ORDERS_ID_GROUP_1, ...self::LIST_ORDERS_ID_GROUP_2],
@@ -81,7 +81,7 @@ class ListOrderRemoveAllGroupsListsOrdersControllerTest extends WebClientTestCas
 
         $this->assertResponseStructureIsOk($response, ['lists_orders_id_removed', 'lists_orders_id_user_changed'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
-        $this->assertSame('Lists of orders removed and changed user', $responseContent->message);
+        $this->assertSame('lists of orders removed and changed user', $responseContent->message);
 
         $this->assertEmpty($responseContent->data->lists_orders_id_removed);
         $this->assertEqualsCanonicalizing(
@@ -91,7 +91,7 @@ class ListOrderRemoveAllGroupsListsOrdersControllerTest extends WebClientTestCas
     }
 
     /** @test */
-    public function itShouldRemoveListOrdersAndChangeListsOrdersUserId(): void
+    public function itShouldRemoveListsOrdersAndChangeListsOrdersUserId(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -114,7 +114,7 @@ class ListOrderRemoveAllGroupsListsOrdersControllerTest extends WebClientTestCas
 
         $this->assertResponseStructureIsOk($response, ['lists_orders_id_removed', 'lists_orders_id_user_changed'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
-        $this->assertSame('Lists of orders removed and changed user', $responseContent->message);
+        $this->assertSame('lists of orders removed and changed user', $responseContent->message);
 
         $this->assertEqualsCanonicalizing(self::LIST_ORDERS_ID_GROUP_1, $responseContent->data->lists_orders_id_removed);
         $this->assertEqualsCanonicalizing(self::LIST_ORDERS_ID_GROUP_2, $responseContent->data->lists_orders_id_user_changed);
@@ -140,7 +140,7 @@ class ListOrderRemoveAllGroupsListsOrdersControllerTest extends WebClientTestCas
 
         $this->assertResponseStructureIsOk($response, ['lists_orders_id_removed', 'lists_orders_id_user_changed'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
-        $this->assertSame('Lists of orders removed and changed user', $responseContent->message);
+        $this->assertSame('lists of orders removed and changed user', $responseContent->message);
 
         $this->assertEmpty($responseContent->data->lists_orders_id_removed);
         $this->assertEmpty($responseContent->data->lists_orders_id_user_changed);
@@ -170,7 +170,7 @@ class ListOrderRemoveAllGroupsListsOrdersControllerTest extends WebClientTestCas
 
         $this->assertResponseStructureIsOk($response, ['lists_orders_id_removed', 'lists_orders_id_user_changed'], [], Response::HTTP_OK);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
-        $this->assertSame('Lists of orders removed and changed user', $responseContent->message);
+        $this->assertSame('lists of orders removed and changed user', $responseContent->message);
 
         $this->assertEmpty($responseContent->data->lists_orders_id_removed);
         $this->assertEmpty($responseContent->data->lists_orders_id_user_changed);
@@ -234,63 +234,6 @@ class ListOrderRemoveAllGroupsListsOrdersControllerTest extends WebClientTestCas
         $this->assertSame('Error', $responseContent->message);
 
         $this->assertEquals([['uuid_invalid_characters']], $responseContent->errors->groups_id_change_user_id);
-    }
-
-    /** @test */
-    public function itShouldFailUserIdIsNull(): void
-    {
-        $client = $this->getNewClientAuthenticatedUser();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT,
-            content: json_encode([
-                'groups_id_remove' => [
-                    self::GROUP_ID_1,
-                ],
-                'groups_id_change_user_id' => [
-                    self::GROUP_ID_2,
-                ],
-                'system_key' => self::SYSTEM_KEY,
-            ])
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [], ['user_id_set'], Response::HTTP_BAD_REQUEST);
-        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Error', $responseContent->message);
-
-        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->user_id_set);
-    }
-
-    /** @test */
-    public function itShouldFailUserIdIsWrong(): void
-    {
-        $client = $this->getNewClientAuthenticatedUser();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT,
-            content: json_encode([
-                'groups_id_remove' => [
-                    self::GROUP_ID_1,
-                ],
-                'groups_id_change_user_id' => [
-                    self::GROUP_ID_2,
-                ],
-                'user_id_set' => 'wrong id',
-                'system_key' => self::SYSTEM_KEY,
-            ])
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [], ['user_id_set'], Response::HTTP_BAD_REQUEST);
-        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Error', $responseContent->message);
-
-        $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->user_id_set);
     }
 
     /** @test */

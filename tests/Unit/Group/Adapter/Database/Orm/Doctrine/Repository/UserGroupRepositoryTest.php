@@ -76,6 +76,87 @@ class UserGroupRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
+    public function itShouldGetGroupsAdmins(): void
+    {
+        $groupsUsersIdExpected = [
+            self::GROUP_ID => [
+                '2606508b-4516-45d6-93a6-c7cb416b7f3f',
+            ],
+            self::GROUP_2_ID => [
+                '2606508b-4516-45d6-93a6-c7cb416b7f3f',
+            ],
+            self::GROUP_3_ID => [
+                '2606508b-4516-45d6-93a6-c7cb416b7f3f',
+            ],
+            self::GROUP_5_ID => [
+                'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7',
+            ],
+        ];
+
+        $return = $this->object->findGroupsUsersOrFail([
+            self::GROUP_ID,
+            self::GROUP_2_ID,
+            self::GROUP_3_ID,
+            self::GROUP_5_ID,
+        ],
+            GROUP_ROLES::ADMIN
+        );
+
+        /** @var UserGroup[] $usersGroups */
+        $usersGroups = iterator_to_array($return);
+        $this->assertCount(count($groupsUsersIdExpected), $usersGroups);
+
+        foreach ($usersGroups as $userGroup) {
+            $this->assertArrayHasKey($userGroup->getGroupId()->getValue(), $groupsUsersIdExpected);
+            $this->assertContains(
+                $userGroup->getUserId()->getValue(),
+                $groupsUsersIdExpected[$userGroup->getGroupId()->getValue()]
+            );
+        }
+    }
+
+    /** @test */
+    public function itShouldGetGroupsUsers(): void
+    {
+        $groupsUsersIdExpected = [
+            self::GROUP_ID => [
+                '1befdbe2-9c14-42f0-850f-63e061e33b8f',
+                '08eda546-739f-4ab7-917a-8a9dbee426ef',
+                '6df60afd-f7c3-4c2c-b920-e265f266c560',
+            ],
+            self::GROUP_5_ID => [
+                '2606508b-4516-45d6-93a6-c7cb416b7f3f',
+            ],
+        ];
+
+        $return = $this->object->findGroupsUsersOrFail([
+            self::GROUP_ID,
+            self::GROUP_5_ID,
+        ],
+            GROUP_ROLES::USER
+        );
+
+        /** @var UserGroup[] $usersGroups */
+        $usersGroups = iterator_to_array($return);
+        $this->assertCount(4, $usersGroups);
+
+        foreach ($usersGroups as $userGroup) {
+            $this->assertArrayHasKey($userGroup->getGroupId()->getValue(), $groupsUsersIdExpected);
+            $this->assertContains(
+                $userGroup->getUserId()->getValue(),
+                $groupsUsersIdExpected[$userGroup->getGroupId()->getValue()]
+            );
+        }
+    }
+
+    /** @test */
+    public function itShouldFailNoUsersGroupsFound(): void
+    {
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findGroupsUsersOrFail(['2eca818d-281f-4c7d-908e-b9b57017e1d0'], GROUP_ROLES::ADMIN);
+    }
+
+    /** @test */
     public function itShouldFindFirstUserOfAGroupByGroupRoleAdmin(): void
     {
         $groupsId = [
