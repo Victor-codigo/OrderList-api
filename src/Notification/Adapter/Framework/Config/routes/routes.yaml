@@ -18,7 +18,7 @@ notification_remove:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
-# NOTIFICATION REMOVE
+# NOTIFICATION REMOVE ALL USER NOTIFICATIONS
 # -------------------------------------------------------------
 notification_user_remove_all:
   path: /api/v{api_version}/notification/user/remove-groups

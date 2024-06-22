@@ -7,10 +7,12 @@ namespace Notification\Application\NotificationRemoveAllUserNotifications;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Service\ServiceBase;
+use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
 use Notification\Application\NotificationRemoveAllUserNotifications\Dto\NotificationRemoveAllUserNotificationsInputDto;
 use Notification\Application\NotificationRemoveAllUserNotifications\Dto\NotificationRemoveAllUserNotificationsOutputDto;
 use Notification\Application\NotificationRemoveAllUserNotifications\Exception\NotificationRemoveAllUserNotificationsNotFoundException;
+use Notification\Application\NotificationRemoveAllUserNotifications\Exception\NotificationRemoveAllUserNotificationsSystemKeyException;
 use Notification\Domain\Ports\Notification\NotificationRepositoryInterface;
 use Notification\Domain\Service\NotificationRemoveAllUserNotifications\Dto\NotificationRemoveAllUserNotificationsDto;
 use Notification\Domain\Service\NotificationRemoveAllUserNotifications\NotificationRemoveAllUserNotificationsService;
@@ -22,12 +24,19 @@ class NotificationRemoveAllUserNotificationsUseCase extends ServiceBase
         private NotificationRemoveAllUserNotificationsService $notificationRemoveAllUserNotificationsService,
         private NotificationRemoveService $NotificationRemoveService,
         private ValidationInterface $validator,
-        private NotificationRepositoryInterface $notificationRepository
+        private NotificationRepositoryInterface $notificationRepository,
+        private string $systemKey
     ) {
     }
 
+    /**
+     * @throws ValueObjectValidationException
+     * @throws NotificationRemoveAllUserNotificationsSystemKeyException
+     */
     public function __invoke(NotificationRemoveAllUserNotificationsInputDto $input): NotificationRemoveAllUserNotificationsOutputDto
     {
+        $this->validation($input);
+
         try {
             $notificationsRemovedId = $this->notificationRemoveAllUserNotificationsService->__invoke(
                 $this->createNotificationRemoveAllUserNotificationsDto($input)
@@ -38,6 +47,23 @@ class NotificationRemoveAllUserNotificationsUseCase extends ServiceBase
             throw NotificationRemoveAllUserNotificationsNotFoundException::fromMessage('Notifications not found');
         } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
+        }
+    }
+
+    /**
+     * @throws ValueObjectValidationException
+     * @throws NotificationRemoveAllUserNotificationsSystemKeyException
+     */
+    private function validation(NotificationRemoveAllUserNotificationsInputDto $input): void
+    {
+        $errorList = $input->validate($this->validator);
+
+        if (!empty($errorList)) {
+            throw ValueObjectValidationException::fromArray('Error', $errorList);
+        }
+
+        if ($this->systemKey !== $input->systemKey) {
+            throw NotificationRemoveAllUserNotificationsSystemKeyException::fromMessage('System key is wrong');
         }
     }
 

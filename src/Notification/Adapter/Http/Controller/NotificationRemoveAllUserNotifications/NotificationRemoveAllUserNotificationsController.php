@@ -20,6 +20,19 @@ use Symfony\Component\HttpFoundation\Response;
 #[OA\Tag('Notification')]
 #[OA\Delete(
     description: 'Removes all user session notifications',
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: [
+            new OA\MediaType(
+                mediaType: 'application/json',
+                schema: new OA\Schema(
+                    properties: [
+                        new OA\Property(property: 'system_key', type: 'string', description: 'System ke', example: 'asgasrhaetjr'),
+                    ]
+                )
+            ),
+        ]
+    ),
     responses: [
         new OA\Response(
             response: Response::HTTP_OK,
@@ -56,18 +69,18 @@ class NotificationRemoveAllUserNotificationsController extends AbstractControlle
     public function __invoke(NotificationRemoveAllUserNotificationsRequestDto $request): JsonResponse
     {
         $notifications = $this->notificationRemoveAllUserNotificationsUseCase->__invoke(
-            $this->createNotificationRemoveAllUserNotificationsInputDto()
+            $this->createNotificationRemoveAllUserNotificationsInputDto($request->systemKey)
         );
 
         return $this->createResponse($notifications);
     }
 
-    private function createNotificationRemoveAllUserNotificationsInputDto(): NotificationRemoveAllUserNotificationsInputDto
+    private function createNotificationRemoveAllUserNotificationsInputDto(?string $systemKey): NotificationRemoveAllUserNotificationsInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();
 
-        return new NotificationRemoveAllUserNotificationsInputDto($userSharedAdapter->getUser());
+        return new NotificationRemoveAllUserNotificationsInputDto($userSharedAdapter->getUser(), $systemKey);
     }
 
     private function createResponse(ApplicationOutputInterface $notifications): JsonResponse
