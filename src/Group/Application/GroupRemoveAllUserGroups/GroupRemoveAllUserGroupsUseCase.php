@@ -10,10 +10,12 @@ use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
+use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupRemoveAllUserGroups\Dto\GroupRemoveAllGroupsOutputDto;
 use Group\Application\GroupRemoveAllUserGroups\Dto\GroupRemoveAllUserGroupsInputDto;
 use Group\Application\GroupRemoveAllUserGroups\Exception\GroupRemoveAllUserGroupsNotFoundException;
 use Group\Application\GroupRemoveAllUserGroups\Exception\GroupRemoveAllUserGroupsNotificationException;
+use Group\Application\GroupRemoveAllUserGroups\Exception\GroupRemoveAllUserSystemKeyException;
 use Group\Application\GroupRemove\Exception\GroupRemoveGroupNotFoundException;
 use Group\Application\GroupRemove\Exception\GroupRemoveGroupNotificationException;
 use Group\Domain\Model\Group;
@@ -29,7 +31,8 @@ class GroupRemoveAllUserGroupsUseCase extends ServiceBase
         private GroupRemoveAllUserGroupsService $groupRemoveAllUserGroupsService,
         private UserHasGroupAdminGrantsService $userHasGroupAdminGrantsService,
         private ModuleCommunicationInterface $moduleCommunication,
-        private $systemKey
+        private ValidationInterface $validation,
+        private string $systemKey
     ) {
     }
 
@@ -37,9 +40,12 @@ class GroupRemoveAllUserGroupsUseCase extends ServiceBase
      * @throws GroupRemoveGroupNotificationException
      * @throws GroupRemoveGroupNotFoundException
      * @throws ValueObjectValidationException
+     * @throws GroupRemoveAllUserSystemKeyException
      */
     public function __invoke(GroupRemoveAllUserGroupsInputDto $input): GroupRemoveAllGroupsOutputDto
     {
+        $this->validate($input);
+
         try {
             $userGroupsRemovedPaginator = $this->groupRemoveAllUserGroupsService->__invoke(
                 $this->createGroupRemoveAllUserGroupsDto($input)
@@ -55,6 +61,22 @@ class GroupRemoveAllUserGroupsUseCase extends ServiceBase
             return $this->mergeGroupRemoveAllGroupsPages($groupRemoveAllGroupsPages);
         } catch (DBNotFoundException) {
             throw GroupRemoveAllUserGroupsNotFoundException::fromMessage('Group not found');
+        }
+    }
+
+    /**
+     * @throws GroupRemoveAllUserSystemKeyException
+     */
+    private function validate(GroupRemoveAllUserGroupsInputDto $input): void
+    {
+        $errorList = $input->validate($this->validation);
+
+        if (!empty($errorList)) {
+            throw ValueObjectValidationException::fromArray('Error', $errorList);
+        }
+
+        if ($input->systemKey !== $this->systemKey) {
+            throw GroupRemoveAllUserSystemKeyException::fromMessage('System key is wrong');
         }
     }
 

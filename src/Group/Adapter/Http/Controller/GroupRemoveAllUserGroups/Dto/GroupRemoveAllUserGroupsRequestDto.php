@@ -9,7 +9,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GroupRemoveAllUserGroupsRequestDto implements RequestDtoInterface
 {
+    public readonly ?string $systemKey;
+
     public function __construct(Request $request)
     {
+        $this->systemKey = $request->request->get('system_key');
     }
 }

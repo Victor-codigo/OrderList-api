@@ -15,6 +15,7 @@ class GroupRemoveAllUserGroupsControllerTest extends WebClientTestCase
 
     private const ENDPOINT = '/api/v1/groups/user/remove-groups';
     private const METHOD = 'DELETE';
+    private const SYSTEM_KEY = 'systemKeyForDev';
 
     protected function setUp(): void
     {
@@ -45,7 +46,9 @@ class GroupRemoveAllUserGroupsControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
-            content: json_encode([])
+            content: json_encode([
+                'system_key' => self::SYSTEM_KEY,
+            ])
         );
 
         $response = $client->getResponse();
@@ -75,7 +78,9 @@ class GroupRemoveAllUserGroupsControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
-            content: json_encode([])
+            content: json_encode([
+                'system_key' => self::SYSTEM_KEY,
+            ])
         );
 
         $response = $client->getResponse();
@@ -101,7 +106,9 @@ class GroupRemoveAllUserGroupsControllerTest extends WebClientTestCase
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT,
-            content: json_encode([])
+            content: json_encode([
+                'system_key' => self::SYSTEM_KEY,
+            ])
         );
 
         $response = $client->getResponse();
@@ -114,5 +121,47 @@ class GroupRemoveAllUserGroupsControllerTest extends WebClientTestCase
         $this->assertEmpty($responseContent->data->groups_id_removed);
         $this->assertEqualsCanonicalizing($groupsIdUserRemoved, $responseContent->data->groups_id_user_removed);
         $this->assertEmpty($responseContent->data->groups_id_user_set_as_admin);
+    }
+
+    /** @test */
+    public function itShouldFailSystemKeyIsNull(): void
+    {
+        $client = $this->getNewClientAuthenticated('email.other_3.active@host.com', '123456');
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['system_key'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['not_blank'], $responseContent->errors->system_key);
+    }
+
+    /** @test */
+    public function itShouldFailSystemKeyIsWrong(): void
+    {
+        $client = $this->getNewClientAuthenticated('email.other_3.active@host.com', '123456');
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'system_key' => 'wrong system key',
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['system_key'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('System key is wrong', $responseContent->message);
+
+        $this->assertEquals('System key is wrong', $responseContent->errors->system_key);
     }
 }

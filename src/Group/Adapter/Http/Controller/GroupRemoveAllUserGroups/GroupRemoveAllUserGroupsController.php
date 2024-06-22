@@ -18,8 +18,20 @@ use Symfony\Component\HttpFoundation\Response;
 
 #[OA\Tag('Group')]
 #[OA\Delete(
-    description: 'Removes the session user from all groups. Removes all groups that user administrate and is the unique user. In groups that user is the unique administrator, removes the user and set another administrator for the group',
-
+    description: 'Removes the user session from all groups. Removes all groups that user administrate and is the unique user. In groups that user is the unique administrator, removes the user and set another administrator for the group',
+    requestBody: new OA\RequestBody(
+        required: true,
+        content: [
+            new OA\MediaType(
+                mediaType: 'application/json',
+                schema: new OA\Schema(
+                    properties: [
+                        new OA\Property(property: 'system_key', type: 'string', description: 'System ke', example: 'asgasrhaetjr'),
+                    ]
+                )
+            ),
+        ]
+    ),
     responses: [
         new OA\Response(
             response: Response::HTTP_CREATED,
@@ -34,7 +46,12 @@ use Symfony\Component\HttpFoundation\Response;
                             properties: [
                                 new OA\Property(property: 'groups_id_removed', type: 'array', items: new OA\Items()),
                                 new OA\Property(property: 'groups_id_user_removed', type: 'array', items: new OA\Items()),
-                                new OA\Property(property: 'groups_id_user_set_as_admin', type: 'array', items: new OA\Items()),
+                                new OA\Property(property: 'groups_id_user_set_as_admin', type: 'array', items: new OA\Items(
+                                    properties: [
+                                        new OA\Property(property: 'group_id', type: 'string', example: '805f96cb-dbc1-44eb-b593-0c423acbebcf'),
+                                        new OA\Property(property: 'user_id', type: 'string', example: '291a0225-53ff-41d0-8821-0a96011de199'),
+                                    ]
+                                )),
                             ]
                         )),
                         new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),
@@ -70,18 +87,18 @@ class GroupRemoveAllUserGroupsController extends AbstractController
     public function __invoke(GroupRemoveAllUserGroupsRequestDto $request): JsonResponse
     {
         $groupRemoved = $this->groupRemoveAllUserGroupsUseCase->__invoke(
-            $this->createGroupRemoveInputDto()
+            $this->createGroupRemoveInputDto($request->systemKey)
         );
 
         return $this->createResponse($groupRemoved);
     }
 
-    private function createGroupRemoveInputDto(): GroupRemoveAllUserGroupsInputDto
+    private function createGroupRemoveInputDto(?string $systemKey): GroupRemoveAllUserGroupsInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();
 
-        return new GroupRemoveAllUserGroupsInputDto($userSharedAdapter->getUser());
+        return new GroupRemoveAllUserGroupsInputDto($userSharedAdapter->getUser(), $systemKey);
     }
 
     private function createResponse(ApplicationOutputInterface $groupsRemovedId): JsonResponse

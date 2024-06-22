@@ -17,10 +17,12 @@ use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
+use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupRemoveAllUserGroups\Dto\GroupRemoveAllGroupsOutputDto;
 use Group\Application\GroupRemoveAllUserGroups\Dto\GroupRemoveAllUserGroupsInputDto;
 use Group\Application\GroupRemoveAllUserGroups\Exception\GroupRemoveAllUserGroupsNotFoundException;
 use Group\Application\GroupRemoveAllUserGroups\Exception\GroupRemoveAllUserGroupsNotificationException;
+use Group\Application\GroupRemoveAllUserGroups\Exception\GroupRemoveAllUserSystemKeyException;
 use Group\Application\GroupRemoveAllUserGroups\GroupRemoveAllUserGroupsUseCase;
 use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
@@ -41,6 +43,7 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
     private MockObject|UserHasGroupAdminGrantsService $userHasGroupAdminGrantsService;
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|UserShared $userSession;
+    private MockObject|ValidationInterface $validation;
 
     protected function setUp(): void
     {
@@ -50,10 +53,12 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
         $this->userHasGroupAdminGrantsService = $this->createMock(UserHasGroupAdminGrantsService::class);
         $this->moduleCommunication = $this->createMock(ModuleCommunicationInterface::class);
         $this->userSession = $this->createMock(UserShared::class);
+        $this->validation = $this->createMock(ValidationInterface::class);
         $this->object = new GroupRemoveAllUserGroupsUseCase(
             $this->groupRemoveAllUserGroupsService,
             $this->userHasGroupAdminGrantsService,
             $this->moduleCommunication,
+            $this->validation,
             self::SYSTEM_KEY
         );
     }
@@ -212,7 +217,7 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
     }
 
     /** @test */
-    public function itShouldRemoveGroupsAndSendNotifications22(): void
+    public function itShouldRemoveGroupsAndSendNotifications(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
         $groupRemoveAllUserGroupsService = $this->getGroupRemoveAllUserGroupsOutputDto();
@@ -225,7 +230,10 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
             null,
         );
         $moduleCommunicationResponseDto = $this->getModuleCommunicationResponseDto(RESPONSE_STATUS::OK);
-        $input = new GroupRemoveAllUserGroupsInputDto($this->userSession);
+        $input = new GroupRemoveAllUserGroupsInputDto(
+            $this->userSession,
+            self::SYSTEM_KEY
+        );
 
         $this->userSession
             ->expects($this->once())
@@ -255,11 +263,14 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailNoGroupsFoundException22(): void
+    public function itShouldFailNoGroupsFoundException(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
         $getGroupRemoveAllUserGroupsDto = $this->getGroupRemoveAllUserGroupsDto($userId);
-        $input = new GroupRemoveAllUserGroupsInputDto($this->userSession);
+        $input = new GroupRemoveAllUserGroupsInputDto(
+            $this->userSession,
+            self::SYSTEM_KEY
+        );
 
         $this->userSession
             ->expects($this->once())
@@ -294,7 +305,10 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
             null,
         );
         $moduleCommunicationResponseDto = $this->getModuleCommunicationResponseDto(RESPONSE_STATUS::ERROR);
-        $input = new GroupRemoveAllUserGroupsInputDto($this->userSession);
+        $input = new GroupRemoveAllUserGroupsInputDto(
+            $this->userSession,
+            self::SYSTEM_KEY
+        );
 
         $this->userSession
             ->expects($this->once())
@@ -318,6 +332,54 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
             ->willReturn($moduleCommunicationResponseDto);
 
         $this->expectException(GroupRemoveAllUserGroupsNotificationException::class);
+        $this->object->__invoke($input);
+    }
+
+    /** @test */
+    public function itShouldFailSystemKeyIsNull(): void
+    {
+        $input = new GroupRemoveAllUserGroupsInputDto(
+            $this->userSession,
+            null
+        );
+
+        $this->userSession
+            ->expects($this->never())
+            ->method('getId');
+
+        $this->groupRemoveAllUserGroupsService
+            ->expects($this->never())
+            ->method('__invoke');
+
+        $this->moduleCommunication
+            ->expects($this->never())
+            ->method('__invoke');
+
+        $this->expectException(GroupRemoveAllUserSystemKeyException::class);
+        $this->object->__invoke($input);
+    }
+
+    /** @test */
+    public function itShouldFailSystemKeyIsWrong(): void
+    {
+        $input = new GroupRemoveAllUserGroupsInputDto(
+            $this->userSession,
+            'wrong system key'
+        );
+
+        $this->userSession
+            ->expects($this->never())
+            ->method('getId');
+
+        $this->groupRemoveAllUserGroupsService
+            ->expects($this->never())
+            ->method('__invoke');
+
+        $this->moduleCommunication
+            ->expects($this->never())
+            ->method('__invoke');
+
+        $this->expectException(GroupRemoveAllUserSystemKeyException::class);
         $this->object->__invoke($input);
     }
 }
