@@ -53,7 +53,7 @@ class ProfileRepositoryTest extends DataBaseTestCase
     {
         $this->expectException(DBNotFoundException::class);
 
-        $return = $this->object->findProfilesOrFail([]);
+        $this->object->findProfilesOrFail([]);
     }
 
     /** @test */
@@ -66,6 +66,6 @@ class ProfileRepositoryTest extends DataBaseTestCase
             ValueObjectFactory::createIdentifier('0b17ca3e-490b-3ddb-aa78-35b4ce668dcA'),
             ValueObjectFactory::createIdentifier('1befdbe2-9c14-42f0-850f-63e061e33b8A'),
         ];
-        $return = $this->object->findProfilesOrFail([]);
+        $this->object->findProfilesOrFail($usersId);
     }
 }

@@ -9,10 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UserRemoveRequestDto implements RequestDtoInterface
 {
-    public readonly string|null $userId;
-
     public function __construct(Request $request)
     {
-        $this->userId = $request->attributes->get('id');
     }
 }

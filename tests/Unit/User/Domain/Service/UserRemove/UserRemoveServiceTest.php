@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Domain\Service\UserRemove;
 
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
-use Common\Domain\Exception\DomainInternalErrorException;
-use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Service\Image\EntityImageRemove\EntityImageRemoveService;
 use Common\Domain\Validation\User\USER_ROLES;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use User\Domain\Model\User;
 use User\Domain\Port\Repository\UserRepositoryInterface;
-use User\Domain\Service\UserRemove\BuiltInFunctionsReturn;
 use User\Domain\Service\UserRemove\Dto\UserRemoveDto;
 use User\Domain\Service\UserRemove\UserRemoveService;
 
@@ -27,118 +26,110 @@ class UserRemoveServiceTest extends TestCase
 
     private UserRemoveService $object;
     private MockObject|UserRepositoryInterface $userRepository;
+    private MockObject|EntityImageRemoveService $entityImageRemoveService;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->userRepository = $this->createMock(UserRepositoryInterface::class);
-        $this->object = new UserRemoveService($this->userRepository, self::USER_IMAGE_PATH);
+        $this->entityImageRemoveService = $this->createMock(EntityImageRemoveService::class);
+        $this->object = new UserRemoveService(
+            $this->userRepository,
+            $this->entityImageRemoveService,
+            self::USER_IMAGE_PATH
+        );
     }
 
-    protected function tearDown(): void
+    private function getUser(): User
     {
-        parent::tearDown();
+        $user = User::fromPrimitives(
+            self::USER_ID,
+            'default@email.com',
+            'default password',
+            'default',
+            [USER_ROLES::USER]
+        );
 
-        BuiltInFunctionsReturn::$file_exists = null;
-        BuiltInFunctionsReturn::$unlink = null;
-    }
-
-    private function setUserAsDeleted(User $user): void
-    {
-        $user->setEmail(ValueObjectFactory::createEmail(''));
-        $user->setName(ValueObjectFactory::createNameWithSpaces(''));
-        $user->setPassword(ValueObjectFactory::createPassword(''));
-        $user->setRoles(ValueObjectFactory::createRoles([new Rol(USER_ROLES::DELETED)]));
-        $user->getProfile()->setImage(ValueObjectFactory::createPath(null));
-    }
-
-    private function createUserDefault(): User
-    {
-        $user = User::fromPrimitives(self::USER_ID, 'default@email.com', 'default password', 'default', [USER_ROLES::USER]);
         $user->getProfile()->setImage(ValueObjectFactory::createPath(self::USER_IMAGE_NAME));
 
         return $user;
     }
 
     /** @test */
-    public function itShouldRemoveTheUserUserHasImage(): void
+    public function itShouldRemoveTheUserUser(): void
     {
-        $userRemoveDto = new UserRemoveDto(ValueObjectFactory::createIdentifier(self::USER_ID));
-        $user = $this->createUserDefault();
-        $userDeleted = clone $user;
-        $userDeleted->setProfile(clone $user->getProfile());
-        $this->setUserAsDeleted($userDeleted);
+        $user = $this->getUser();
+        $userImagePath = ValueObjectFactory::createPath(self::USER_IMAGE_PATH);
+        $input = new UserRemoveDto(
+            ValueObjectFactory::createIdentifier(self::USER_ID)
+        );
 
         $this->userRepository
             ->expects($this->once())
             ->method('findUserByIdOrFail')
-            ->with($userRemoveDto->userId)
+            ->with($input->userId)
             ->willReturn($user);
 
-        $this->userRepository
+        $this->entityImageRemoveService
             ->expects($this->once())
-            ->method('save')
-            ->with($userDeleted);
-
-        $this->object->__invoke($userRemoveDto);
-    }
-
-    /** @test */
-    public function itShouldRemoveTheUserUserHasNoImage(): void
-    {
-        $userRemoveDto = new UserRemoveDto(ValueObjectFactory::createIdentifier(self::USER_ID));
-        $user = $this->createUserDefault();
-        $user->getProfile()->setImage(ValueObjectFactory::createPath(null));
-        $userDeleted = clone $user;
-        $userDeleted->setProfile(clone $user->getProfile());
-        $this->setUserAsDeleted($userDeleted);
+            ->method('__invoke')
+            ->with($user, $userImagePath);
 
         $this->userRepository
             ->expects($this->once())
-            ->method('findUserByIdOrFail')
-            ->with($userRemoveDto->userId)
-            ->willReturn($user);
+            ->method('remove')
+            ->with([$user]);
 
-        $this->userRepository
-            ->expects($this->once())
-            ->method('save')
-            ->with($userDeleted);
+        $return = $this->object->__invoke($input);
 
-        $this->object->__invoke($userRemoveDto);
+        $this->assertEquals(self::USER_ID, $return);
     }
 
     /** @test */
     public function itShouldFailUserIdDoesNotExist(): void
     {
-        $userRemoveDto = new UserRemoveDto(ValueObjectFactory::createIdentifier(self::USER_ID));
+        $input = new UserRemoveDto(
+            ValueObjectFactory::createIdentifier(self::USER_ID)
+        );
 
-        $this->expectException(DBNotFoundException::class);
         $this->userRepository
             ->expects($this->once())
             ->method('findUserByIdOrFail')
-            ->with($userRemoveDto->userId)
+            ->with($input->userId)
             ->willThrowException(DBNotFoundException::fromMessage());
 
-        $this->object->__invoke($userRemoveDto);
+        $this->expectException(DBNotFoundException::class);
+        $this->object->__invoke($input);
     }
 
     /** @test */
-    public function itShouldFailErrorDeletingUserImage(): void
+    public function itShouldFailRemovingTheUser(): void
     {
-        $userRemoveDto = new UserRemoveDto(ValueObjectFactory::createIdentifier(self::USER_ID));
-        $user = $this->createUserDefault();
-        $user->getProfile()->setImage(ValueObjectFactory::createPath(self::USER_IMAGE_NAME));
+        $user = $this->getUser();
+        $userImagePath = ValueObjectFactory::createPath(self::USER_IMAGE_PATH);
+        $input = new UserRemoveDto(
+            ValueObjectFactory::createIdentifier(self::USER_ID)
+        );
 
-        $this->expectException(DomainInternalErrorException::class);
         $this->userRepository
             ->expects($this->once())
             ->method('findUserByIdOrFail')
-            ->with($userRemoveDto->userId)
+            ->with($input->userId)
             ->willReturn($user);
 
-        BuiltInFunctionsReturn::$file_exists = true;
-        BuiltInFunctionsReturn::$unlink = false;
-        $this->object->__invoke($userRemoveDto);
+        $this->entityImageRemoveService
+            ->expects($this->once())
+            ->method('__invoke')
+            ->with($user, $userImagePath);
+
+        $this->userRepository
+            ->expects($this->once())
+            ->method('remove')
+            ->with([$user])
+            ->willThrowException(new DBConnectionException());
+
+        $this->expectException(DBConnectionException::class);
+        $this->object->__invoke($input);
     }
 }

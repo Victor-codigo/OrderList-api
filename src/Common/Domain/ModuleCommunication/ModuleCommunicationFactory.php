@@ -378,6 +378,29 @@ class ModuleCommunicationFactory
         );
     }
 
+    public static function groupRemoveAllUserGroups(string $systemKey): ModuleCommunicationConfigDto
+    {
+        $attributes = [
+            'api_version' => static::API_VERSION,
+        ];
+        $content = [
+            'system_key' => $systemKey,
+        ];
+
+        return new ModuleCommunicationConfigDto(
+            'group_user_remove_all_groups',
+            'DELETE',
+            true,
+            $attributes,
+            [],
+            [],
+            self::CONTENT_TYPE_APPLICATION_JSON,
+            $content,
+            [],
+            []
+        );
+    }
+
     public static function productGetData(Identifier $groupsId, array $productsId, array $shopsId = [], string $productNameStartsWith = ''): ModuleCommunicationConfigDto
     {
         $query = [
@@ -411,6 +434,37 @@ class ModuleCommunicationFactory
         );
     }
 
+    /**
+     * @param Identifier[] $groupsId
+     */
+    public static function productRemoveGroupsProducts(array $groupsId, string $systemKey): ModuleCommunicationConfigDto
+    {
+        $query = [
+            'api_version' => static::API_VERSION,
+        ];
+
+        $content = [
+            'groups_id' => array_map(
+                fn (Identifier $groupId) => $groupId->getValue(),
+                $groupsId
+            ),
+            'system_key' => $systemKey,
+        ];
+
+        return new ModuleCommunicationConfigDto(
+            'product_remove_groups_products',
+            'DELETE',
+            true,
+            [],
+            $query,
+            [],
+            self::CONTENT_TYPE_APPLICATION_JSON,
+            $content,
+            [],
+            []
+        );
+    }
+
     public static function shopGetData(Identifier $groupsId, array $shopsId, array $productsId = [], string $shopNameStartsWith = ''): ModuleCommunicationConfigDto
     {
         $query = [
@@ -439,6 +493,37 @@ class ModuleCommunicationFactory
             [],
             self::CONTENT_TYPE_APPLICATION_FORM,
             [],
+            [],
+            []
+        );
+    }
+
+    /**
+     * @param Identifier[] $groupsId
+     */
+    public static function shopRemoveGroupsShops(array $groupsId, string $systemKey): ModuleCommunicationConfigDto
+    {
+        $query = [
+            'api_version' => static::API_VERSION,
+        ];
+
+        $content = [
+            'groups_id' => array_map(
+                fn (Identifier $groupId) => $groupId->getValue(),
+                $groupsId
+            ),
+            'system_key' => $systemKey
+        ];
+
+        return new ModuleCommunicationConfigDto(
+            'shop_remove_groups_shops',
+            'DELETE',
+            true,
+            [],
+            $query,
+            [],
+            self::CONTENT_TYPE_APPLICATION_JSON,
+            $content,
             [],
             []
         );
@@ -658,6 +743,101 @@ class ModuleCommunicationFactory
             [],
             self::CONTENT_TYPE_APPLICATION_JSON,
             [],
+            [],
+            []
+        );
+    }
+
+    public static function notificationsRemoveAllUserNotifications(string $systemKey): ModuleCommunicationConfigDto
+    {
+        $attributes = [
+            'api_version' => static::API_VERSION,
+        ];
+        $content = [
+            'system_key' => $systemKey,
+        ];
+
+        return new ModuleCommunicationConfigDto(
+            'notification_user_remove_all',
+            'DELETE',
+            true,
+            $attributes,
+            [],
+            [],
+            self::CONTENT_TYPE_APPLICATION_JSON,
+            $content,
+            [],
+            []
+        );
+    }
+
+    /**
+     * @param Identifier[] $groupsIdToRemove
+     * @param Identifier[] $groupsIdToChangeUserId
+     */
+    public static function ordersRemoveAllUserOrdersOrChangeUserId(array $groupsIdToRemove, array $groupsIdToChangeUserId, string $systemKey): ModuleCommunicationConfigDto
+    {
+        $attributes = [
+            'api_version' => static::API_VERSION,
+        ];
+
+        $content = [
+            'groups_id_remove' => array_map(
+                fn (Identifier $groupId) => $groupId->getValue(),
+                $groupsIdToRemove
+            ),
+            'groups_id_change_user_id' => array_map(
+                fn (Identifier $groupId) => $groupId->getValue(),
+                $groupsIdToChangeUserId
+            ),
+            'system_key' => $systemKey,
+        ];
+
+        return new ModuleCommunicationConfigDto(
+            'order_remove_all_group_id_and_change_user_id',
+            'DELETE',
+            true,
+            $attributes,
+            [],
+            [],
+            self::CONTENT_TYPE_APPLICATION_JSON,
+            $content,
+            [],
+            []
+        );
+    }
+
+    /**
+     * @param Identifier[] $groupsIdToRemove
+     * @param Identifier[] $groupsIdToChangeUserId
+     */
+    public static function listOrdersRemoveAllUserListOrdersOrChangeUserId(array $groupsIdToRemove, array $groupsIdToChangeUserId, string $systemKey): ModuleCommunicationConfigDto
+    {
+        $attributes = [
+            'api_version' => static::API_VERSION,
+        ];
+
+        $content = [
+            'groups_id_remove' => array_map(
+                fn (Identifier $groupId) => $groupId->getValue(),
+                $groupsIdToRemove
+            ),
+            'groups_id_change_user_id' => array_map(
+                fn (Identifier $groupId) => $groupId->getValue(),
+                $groupsIdToChangeUserId
+            ),
+            'system_key' => $systemKey,
+        ];
+
+        return new ModuleCommunicationConfigDto(
+            'list_order_remove_all_group_id_and_change_user_id',
+            'DELETE',
+            true,
+            $attributes,
+            [],
+            [],
+            self::CONTENT_TYPE_APPLICATION_JSON,
+            $content,
             [],
             []
         );

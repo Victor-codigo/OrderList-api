@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace User\Adapter\Http\Controller\UserRemove;
 
+use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use OpenApi\Attributes as OA;
@@ -19,21 +20,6 @@ use User\Application\UserRemove\UserRemoveUseCase;
 #[OA\Tag('User')]
 #[OA\Delete(
     description: 'Deletes an user from database',
-    requestBody: new OA\RequestBody(
-        required: false,
-        description: 'Body is not required',
-        content: new OA\JsonContent()
-    ),
-    parameters: [
-        new OA\Parameter(
-            name: 'id',
-            in: 'path',
-            required: true,
-            description: 'User\'s id',
-            schema: new OA\Schema(type: 'string'),
-            example: '2606508b-4516-45d6-93a6-c7cb416b7f3f'
-        ),
-    ],
     responses: [
         new OA\Response(
             response: Response::HTTP_OK,
@@ -44,41 +30,19 @@ use User\Application\UserRemove\UserRemoveUseCase;
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'ok'),
                         new OA\Property(property: 'message', type: 'string', example: 'User Removed'),
-                        new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
+                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(
+                            properties: [
+                                new OA\Property(property: 'id', type: 'array', items: new OA\Items(type: 'string', example: 'bb1d3051-48b7-44d2-93d9-de58a2fcb5a8')
+                                ),
+                            ])),
                         new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),
                     ]
                 )
             )
         ),
         new OA\Response(
-            response: Response::HTTP_BAD_REQUEST,
-            description: 'An errors has been occurred with the request',
-            content: new OA\MediaType(
-                mediaType: 'application/json',
-                schema: new OA\Schema(
-                    properties: [
-                        new OA\Property(property: 'status', type: 'string', example: 'Error'),
-                        new OA\Property(property: 'message', type: 'string', example: 'An error messsage'),
-                        new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<id|permissions, string|array>')),
-                    ]
-                )
-            )
-        ),
-        new OA\Response(
-            response: Response::HTTP_NOT_FOUND,
-            description: 'User not found',
-            content: new OA\MediaType(
-                mediaType: 'application/json',
-                schema: new OA\Schema(
-                    properties: [
-                        new OA\Property(property: 'status', type: 'string', example: 'Error'),
-                        new OA\Property(property: 'message', type: 'string', example: 'User not found'),
-                        new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<user_not_found, string|array>')),
-                    ]
-                )
-            )
+            response: Response::HTTP_UNAUTHORIZED,
+            description: 'You have not permissions to remove the user',
         ),
     ]
 )]
@@ -92,24 +56,24 @@ class UserRemoveController extends AbstractController
 
     public function __invoke(UserRemoveRequestDto $request): JsonResponse
     {
-        $this->userRemoveUseCase->__invoke(
-            $this->createUseRemoveInputDto($request->userId)
+        $userRemovedId = $this->userRemoveUseCase->__invoke(
+            $this->createUseRemoveInputDto()
         );
 
-        return $this->createResponse();
+        return $this->createResponse($userRemovedId);
     }
 
-    private function createUseRemoveInputDto(string|null $userId): UserRemoveInputDto
+    private function createUseRemoveInputDto(): UserRemoveInputDto
     {
         /** @var UserSymfonyAdapter $user */
         $user = $this->security->getUser();
 
-        return new UserRemoveInputDto($user->getUser(), $userId);
+        return new UserRemoveInputDto($user->getUser());
     }
 
-    private function createResponse(): JsonResponse
+    private function createResponse(ApplicationOutputInterface $userRemovedId): JsonResponse
     {
-        $response = new ResponseDto([], [], 'User Removed', RESPONSE_STATUS::OK);
+        $response = new ResponseDto($userRemovedId->toArray(), [], 'User Removed', RESPONSE_STATUS::OK);
 
         return new JsonResponse($response, Response::HTTP_OK);
     }

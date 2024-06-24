@@ -64,7 +64,7 @@ user_login:
 # USER REMOVE
 # -------------------------------------------------------------
 user_delete:
-  path: /api/v{api_version}/users/remove/{id}
+  path: /api/v{api_version}/users/remove
   methods: DELETE
   controller: User\Adapter\Http\Controller\UserRemove\UserRemoveController
   requirements:

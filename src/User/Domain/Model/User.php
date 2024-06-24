@@ -13,10 +13,11 @@ use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserRolesGetterSetterTrait;
+use Common\Domain\Service\Image\EntityImageModifyInterface;
 use Common\Domain\Validation\User\USER_ROLES;
 use User\Domain\Event\UserPreRegistered\UserPreRegisteredEvent;
 
-class User
+class User implements EntityImageModifyInterface
 {
     use EventRegisterTrait;
     use UserRolesGetterSetterTrait;
@@ -85,6 +86,13 @@ class User
     public function getImage(): Path
     {
         return $this->profile->getImage();
+    }
+
+    public function setImage(Path $image): self
+    {
+        $this->profile->setImage($image);
+
+        return $this;
     }
 
     public function getCreatedOn(): \DateTime
