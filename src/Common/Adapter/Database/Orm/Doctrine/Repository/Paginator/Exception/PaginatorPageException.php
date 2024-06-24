@@ -6,7 +6,7 @@ namespace Common\Adapter\Database\Orm\Doctrine\Repository\Paginator\Exception;
 
 class PaginatorPageException extends \InvalidArgumentException
 {
-    public static function formMessage(string $message): static
+    public static function fromMessage(string $message): static
     {
         return new static($message);
     }

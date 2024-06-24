@@ -10,7 +10,7 @@ use Common\Domain\Response\RESPONSE_STATUS_HTTP;
 
 class UserRemoveUserNotFoundException extends DomainExceptionOutput
 {
-    public static function formMessage(string $message): static
+    public static function fromMessage(string $message): static
     {
         return new static($message,['user_not_found' => $message], RESPONSE_STATUS::ERROR, RESPONSE_STATUS_HTTP::NOT_FOUND);
     }

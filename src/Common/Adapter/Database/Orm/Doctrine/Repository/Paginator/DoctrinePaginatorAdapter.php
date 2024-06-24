@@ -57,7 +57,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
     private function setPage(int $page): self
     {
         if ($page <= 0) {
-            throw PaginatorPageException::formMessage('Wrong page. Page must be bigger than 1');
+            throw PaginatorPageException::fromMessage('Wrong page. Page must be bigger than 1');
         }
 
         $pagesTotal = $this->getPagesTotal();
@@ -114,6 +114,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
     public function getAllPages(int $pageItems): \Generator
     {
         $this->setPageItems($pageItems);
+
         return $this->getPagesRange(1, $this->getPagesTotal(), $pageItems);
     }
 

@@ -92,7 +92,7 @@ class NotificationCreateUseCase extends ServiceBase
     private function validateSystemKey(string $systemKey): void
     {
         if ($this->systemKey !== $systemKey) {
-            throw SystemKeyWrongException::formMessage('Wrong system key');
+            throw SystemKeyWrongException::fromMessage('Wrong system key');
         }
     }
 

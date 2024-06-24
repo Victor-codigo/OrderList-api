@@ -8,7 +8,7 @@ use Common\Domain\Exception\DomainException;
 
 class UserFirstLoginCreateGroupException extends DomainException
 {
-    public static function formMessage(string $message): static
+    public static function fromMessage(string $message): static
     {
         return new static ($message);
     }
