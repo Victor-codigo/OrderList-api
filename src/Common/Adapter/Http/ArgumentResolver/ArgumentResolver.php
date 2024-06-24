@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Http\ArgumentResolver;
 
+use Common\Adapter\Http\ArgumentResolver\Exception\ParametersException;
 use Common\Adapter\Http\Dto\RequestDtoInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -25,7 +26,11 @@ class ArgumentResolver implements ValueResolverInterface
         $this->requestValidation->__invoke($request);
         $requestDto = $argument->getType();
 
-        yield new $requestDto($request);
+        try {
+            yield new $requestDto($request);
+        } catch (\Exception $e) {
+            throw ParametersException::fromMessage('Some of the parameters passed are wrong: '.$e->getMessage());
+        }
     }
 
     private function supports(ArgumentMetadata $argument): bool
