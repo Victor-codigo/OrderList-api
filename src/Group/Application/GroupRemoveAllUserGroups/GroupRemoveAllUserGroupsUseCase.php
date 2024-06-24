@@ -99,7 +99,7 @@ class GroupRemoveAllUserGroupsUseCase extends ServiceBase
         foreach ($usersGroupsSetUserAsAdmin as $userGroup) {
             $response = $this->moduleCommunication->__invoke(
                 ModuleCommunicationFactory::notificationCreateGroupUserSetAsAdmin(
-                    $userGroup->getUserId(),
+                    [$userGroup->getUserId()],
                     $groupsIndexedById[$userGroup->getGroupId()->getValue()]->getName(),
                     $systemKey
                 )

@@ -113,7 +113,7 @@ class UserPasswordRememberChangeUseCase extends ServiceBase
     {
         $userId = ValueObjectFactory::createIdentifier($userIdPlain);
         $response = $this->moduleCommunication->__invoke(
-            ModuleCommunicationFactory::notificationUserPasswordRemember($userId, $tokenSession, $systemKey)
+            ModuleCommunicationFactory::notificationUserPasswordRemember([$userId], $tokenSession, $systemKey)
         );
 
         if (RESPONSE_STATUS::OK !== $response->getStatus()) {

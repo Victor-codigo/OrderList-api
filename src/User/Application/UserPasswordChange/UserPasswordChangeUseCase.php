@@ -102,7 +102,7 @@ class UserPasswordChangeUseCase extends ServiceBase
     private function createNotificationPasswordChanged(Identifier $userId, string $systemKey): void
     {
         $response = $this->moduleCommunication->__invoke(
-            ModuleCommunicationFactory::notificationUserPasswordChanged($userId, $systemKey)
+            ModuleCommunicationFactory::notificationUserPasswordChanged([$userId], $systemKey)
         );
 
         if (RESPONSE_STATUS::OK !== $response->getStatus()) {

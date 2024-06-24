@@ -84,7 +84,7 @@ class GroupRemoveUseCase extends ServiceBase
         $responses = [];
         foreach ($groups as $group) {
             $responses[] = $this->moduleCommunication->__invoke(
-                ModuleCommunicationFactory::notificationCreateGroupRemoved($userId, $group->getName(), $systemKey)
+                ModuleCommunicationFactory::notificationCreateGroupRemoved([$userId], $group->getName(), $systemKey)
             );
         }
 

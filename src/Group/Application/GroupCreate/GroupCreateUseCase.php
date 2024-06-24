@@ -79,7 +79,7 @@ class GroupCreateUseCase extends ServiceBase
     private function createNotificationGroupCreated(Identifier $userId, NameWithSpaces $groupName, string $systemKey): void
     {
         $response = $this->moduleCommunication->__invoke(
-            ModuleCommunicationFactory::notificationCreateGroupCreated($userId, $groupName, $systemKey)
+            ModuleCommunicationFactory::notificationCreateGroupCreated([$userId], $groupName, $systemKey)
         );
 
         if (RESPONSE_STATUS::OK !== $response->getStatus()) {

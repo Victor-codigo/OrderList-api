@@ -47,7 +47,7 @@ class UserFirstLoginService
 
             $this->changeRoleToUser($input->user);
             $this->createNotificationUserRegistered($input->user, $this->appName, $this->systemKey);
-        } catch (UserCreateGroupUserException) {
+        } catch (UserCreateGroupUserException $e) {
             throw UserFirstLoginCreateGroupException::fromMessage('Could not create the user\'s group');
         } catch (\Exception $e) {
             throw DomainErrorException::fromMessage('An error has been occurred');
@@ -87,7 +87,7 @@ class UserFirstLoginService
     private function createNotificationUserRegistered(User $user, string $appName, string $systemKey): void
     {
         $notificationData = ModuleCommunicationFactory::notificationCreateUserRegistered(
-            $user->getId(),
+            [$user->getId()],
             $user->getName(),
             $appName,
             $systemKey

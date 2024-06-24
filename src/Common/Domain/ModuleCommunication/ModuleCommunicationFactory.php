@@ -530,10 +530,16 @@ class ModuleCommunicationFactory
         );
     }
 
-    public static function notificationCreateUserRegistered(Identifier $recipientUserId, NameWithSpaces $userName, string $domainName, string $systemKey): ModuleCommunicationConfigDto
+    /**
+     * @param Identifier[] $recipientUsersId
+     */
+    public static function notificationCreateUserRegistered(array $recipientUsersId, NameWithSpaces $userName, string $domainName, string $systemKey): ModuleCommunicationConfigDto
     {
         $content = [
-            'users_id' => $recipientUserId->getValue(),
+            'users_id' => array_map(
+                fn (Identifier $userId) => $userId->getValue(),
+                $recipientUsersId
+            ),
             'type' => NOTIFICATION_TYPE::USER_REGISTERED->value,
             'notification_data' => [
                 'user_name' => $userName->getValue(),
@@ -568,10 +574,16 @@ class ModuleCommunicationFactory
         return self::notificationCreate($content, null);
     }
 
-    public static function notificationCreateGroupCreated(Identifier $userId, NameWithSpaces $groupName, string $systemKey): ModuleCommunicationConfigDto
+    /**
+     * @param Identifier[] $recipientUsersId
+     */
+    public static function notificationCreateGroupCreated(array $recipientUsersId, NameWithSpaces $groupName, string $systemKey): ModuleCommunicationConfigDto
     {
         $content = [
-            'users_id' => [$userId->getValue()],
+            'users_id' => array_map(
+                fn (Identifier $userId) => $userId->getValue(),
+                $recipientUsersId
+            ),
             'type' => NOTIFICATION_TYPE::GROUP_CREATED->value,
             'notification_data' => [
                 'group_name' => $groupName->getValue(),
@@ -582,10 +594,16 @@ class ModuleCommunicationFactory
         return self::notificationCreate($content, null);
     }
 
-    public static function notificationCreateGroupRemoved(Identifier $userId, NameWithSpaces $groupName, string $systemKey): ModuleCommunicationConfigDto
+    /**
+     * @param Identifier[] $recipientUsersId
+     */
+    public static function notificationCreateGroupRemoved(array $recipientUsersId, NameWithSpaces $groupName, string $systemKey): ModuleCommunicationConfigDto
     {
         $content = [
-            'users_id' => [$userId->getValue()],
+            'users_id' => array_map(
+                fn (Identifier $userId) => $userId->getValue(),
+                $recipientUsersId
+            ),
             'type' => NOTIFICATION_TYPE::GROUP_REMOVED->value,
             'notification_data' => [
                 'group_name' => $groupName->getValue(),
@@ -596,10 +614,16 @@ class ModuleCommunicationFactory
         return self::notificationCreate($content, null);
     }
 
-    public static function notificationCreateGroupUserSetAsAdmin(Identifier $userId, NameWithSpaces $groupName, string $systemKey): ModuleCommunicationConfigDto
+    /**
+     * @param Identifier[] $recipientUsersId
+     */
+    public static function notificationCreateGroupUserSetAsAdmin(array $recipientUsersId, NameWithSpaces $groupName, string $systemKey): ModuleCommunicationConfigDto
     {
         $content = [
-            'users_id' => [$userId->getValue()],
+            'users_id' => array_map(
+                fn (Identifier $userId) => $userId->getValue(),
+                $recipientUsersId
+            ),
             'type' => NOTIFICATION_TYPE::GROUP_USER_SET_AS_ADMIN->value,
             'notification_data' => [
                 'group_name' => $groupName->getValue(),
@@ -632,10 +656,16 @@ class ModuleCommunicationFactory
         return self::notificationCreate($content, null);
     }
 
-    public static function notificationUserEmailChanged(Identifier $userId, string $systemKey): ModuleCommunicationConfigDto
+    /**
+     * @param Identifier[] $recipientUsersId
+     */
+    public static function notificationUserEmailChanged(array $recipientUsersId, string $systemKey): ModuleCommunicationConfigDto
     {
         $content = [
-            'users_id' => [$userId->getValue()],
+            'users_id' => array_map(
+                fn (Identifier $userId) => $userId->getValue(),
+                $recipientUsersId
+            ),
             'type' => NOTIFICATION_TYPE::USER_EMAIL_CHANGED->value,
             'notification_data' => [],
             'system_key' => $systemKey,
@@ -644,10 +674,16 @@ class ModuleCommunicationFactory
         return self::notificationCreate($content, null);
     }
 
-    public static function notificationUserPasswordChanged(Identifier $userId, string $systemKey): ModuleCommunicationConfigDto
+    /**
+     * @param Identifier[] $recipientUsersId
+     */
+    public static function notificationUserPasswordChanged(array $recipientUsersId, string $systemKey): ModuleCommunicationConfigDto
     {
         $content = [
-            'users_id' => [$userId->getValue()],
+            'users_id' => array_map(
+                fn (Identifier $userId) => $userId->getValue(),
+                $recipientUsersId
+            ),
             'type' => NOTIFICATION_TYPE::USER_PASSWORD_CHANGED->value,
             'notification_data' => [],
             'system_key' => $systemKey,
@@ -656,10 +692,16 @@ class ModuleCommunicationFactory
         return self::notificationCreate($content, null);
     }
 
-    public static function notificationUserPasswordRemember(Identifier $userId, JwtToken $tokenSession, string $systemKey): ModuleCommunicationConfigDto
+    /**
+     * @param Identifier[] $recipientUsersId
+     */
+    public static function notificationUserPasswordRemember(array $recipientUsersId, JwtToken $tokenSession, string $systemKey): ModuleCommunicationConfigDto
     {
         $content = [
-            'users_id' => [$userId->getValue()],
+            'users_id' => array_map(
+                fn (Identifier $userId) => $userId->getValue(),
+                $recipientUsersId
+            ),
             'type' => NOTIFICATION_TYPE::USER_PASSWORD_REMEMBER->value,
             'notification_data' => [],
             'system_key' => $systemKey,

@@ -55,7 +55,7 @@ class UserEmailChangeUseCase extends ServiceBase
     private function createUserEmailChangedNotification(Identifier $userId, string $systemKey): void
     {
         $response = $this->moduleCommunication->__invoke(
-            ModuleCommunicationFactory::notificationUserEmailChanged($userId, $systemKey)
+            ModuleCommunicationFactory::notificationUserEmailChanged([$userId], $systemKey)
         );
 
         if (RESPONSE_STATUS::OK !== $response->getStatus()) {
