@@ -27,8 +27,13 @@ class UserCreateGroupService
     {
         $groupName = $this->generateGroupName($input->userName);
         $response = $this->moduleCommunication->__invoke(
-            ModuleCommunicationFactory::groupCreate(new NameWithSpaces($groupName), new Description(''), GROUP_TYPE::USER, [])
-        );
+            ModuleCommunicationFactory::groupCreate(
+                new NameWithSpaces($groupName),
+                new Description(''),
+                GROUP_TYPE::USER,
+                [],
+                false
+            ));
 
         if (RESPONSE_STATUS::OK !== $response->status || !empty($response->errors)) {
             throw UserCreateGroupUserException::fromMessage('It was not possible to create the user group');

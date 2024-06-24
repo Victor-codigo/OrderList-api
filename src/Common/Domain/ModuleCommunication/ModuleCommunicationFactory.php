@@ -151,7 +151,7 @@ class ModuleCommunicationFactory
             'name' => $name->getValue(),
             'description' => $description->getValue(),
             'type' => $type->value,
-            'notify' => $notifyUser ?? true,
+            'notify' => ($notifyUser ?? true) ? 'true' : 'false',
         ];
 
         return new ModuleCommunicationConfigDto(

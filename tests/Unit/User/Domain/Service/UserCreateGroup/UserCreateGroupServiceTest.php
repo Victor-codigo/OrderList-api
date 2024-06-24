@@ -43,6 +43,7 @@ class UserCreateGroupServiceTest extends TestCase
                 'name' => 'userName',
                 'description' => '',
                 'type' => GROUP_TYPE::USER->value,
+                'notify' => false,
             ],
             [],
             []
@@ -69,6 +70,7 @@ class UserCreateGroupServiceTest extends TestCase
                 $this->assertStringStartsWith($requestConfiguration->content['name'], $config->content['name']);
                 $this->assertEquals($requestConfiguration->content['description'], $config->content['description']);
                 $this->assertEquals($requestConfiguration->content['type'], $config->content['type']);
+                $this->assertEquals($requestConfiguration->content['notify'], $config->content['notify']);
                 $this->assertEquals($requestConfiguration->cookies, $config->cookies);
                 $this->assertEquals($requestConfiguration->authentication, $config->authentication);
 
@@ -100,6 +102,7 @@ class UserCreateGroupServiceTest extends TestCase
                 $this->assertStringStartsWith($requestConfiguration->content['name'], $config->content['name']);
                 $this->assertEquals($requestConfiguration->content['description'], $config->content['description']);
                 $this->assertEquals($requestConfiguration->content['type'], $config->content['type']);
+                $this->assertEquals($requestConfiguration->content['notify'], $config->content['notify']);
                 $this->assertEquals($requestConfiguration->cookies, $config->cookies);
                 $this->assertEquals($requestConfiguration->authentication, $config->authentication);
 
@@ -131,6 +134,7 @@ class UserCreateGroupServiceTest extends TestCase
                 $this->assertStringStartsWith($requestConfiguration->content['name'], $config->content['name']);
                 $this->assertEquals($requestConfiguration->content['description'], $config->content['description']);
                 $this->assertEquals($requestConfiguration->content['type'], $config->content['type']);
+                $this->assertEquals($requestConfiguration->content['notify'], $config->content['notify']);
                 $this->assertEquals($requestConfiguration->cookies, $config->cookies);
                 $this->assertEquals($requestConfiguration->authentication, $config->authentication);
 
