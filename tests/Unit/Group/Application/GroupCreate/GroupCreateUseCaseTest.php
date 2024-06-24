@@ -49,7 +49,7 @@ class GroupCreateUseCaseTest extends TestCase
     }
 
     /** @test */
-    public function itShouldCreateTheGroup(): void
+    public function itShouldCreateTheGroupWithCreateNotification(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -57,7 +57,7 @@ class GroupCreateUseCaseTest extends TestCase
         $description = ValueObjectFactory::createDescription('description');
         $groupType = ValueObjectFactory::createGroupType(GROUP_TYPE::GROUP);
         $image = ValueObjectFactory::createGroupImage($this->createMock(UploadedFileInterface::class));
-        $input = new GroupCreateInputDto($userId, $groupName->getValue(), $description->getValue(), $groupType->getValue()->value, $image->getValue());
+        $input = new GroupCreateInputDto($userId, $groupName->getValue(), $description->getValue(), $groupType->getValue()->value, $image->getValue(), true);
 
         $this->validator
             ->expects($this->once())
@@ -107,6 +107,54 @@ class GroupCreateUseCaseTest extends TestCase
     }
 
     /** @test */
+    public function itShouldCreateTheGroupWithoutCreateNotification(): void
+    {
+        $userId = ValueObjectFactory::createIdentifier('user id');
+        $groupId = ValueObjectFactory::createIdentifier('group id');
+        $groupName = ValueObjectFactory::createNameWithSpaces('group name');
+        $description = ValueObjectFactory::createDescription('description');
+        $groupType = ValueObjectFactory::createGroupType(GROUP_TYPE::GROUP);
+        $image = ValueObjectFactory::createGroupImage($this->createMock(UploadedFileInterface::class));
+        $input = new GroupCreateInputDto($userId, $groupName->getValue(), $description->getValue(), $groupType->getValue()->value, $image->getValue(), false);
+
+        $this->validator
+            ->expects($this->once())
+            ->method('validateValueObjectArray')
+            ->willReturn([]);
+
+        $this->groupCreateService
+            ->expects($this->once())
+            ->method('__invoke')
+            ->with($this->callback(function (GroupCreateDto $input) use ($userId, $groupName, $description, $groupType, $image) {
+                $this->assertEquals($userId, $input->userCreatorId);
+                $this->assertEquals($groupName, $input->name);
+                $this->assertEquals($description, $input->description);
+                $this->assertEquals($groupType, $input->type);
+                $this->assertEquals($image, $input->image);
+
+                return true;
+            }))
+            ->willReturn($this->group);
+
+        $this->moduleCommunication
+            ->expects($this->never())
+            ->method('__invoke');
+
+        $this->group
+            ->expects($this->never())
+            ->method('getName');
+
+        $this->group
+            ->expects($this->once())
+            ->method('getId')
+            ->willReturn($groupId);
+
+        $return = $this->object->__invoke($input);
+
+        $this->assertEquals($groupId, $return);
+    }
+
+    /** @test */
     public function itShouldFailCreateTheGroupNotificationError(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
@@ -114,7 +162,7 @@ class GroupCreateUseCaseTest extends TestCase
         $description = ValueObjectFactory::createDescription('description');
         $groupType = ValueObjectFactory::createGroupType(GROUP_TYPE::GROUP);
         $image = ValueObjectFactory::createGroupImage($this->createMock(UploadedFileInterface::class));
-        $input = new GroupCreateInputDto($userId, $groupName->getValue(), $description->getValue(), $groupType->getValue()->value, $image->getValue());
+        $input = new GroupCreateInputDto($userId, $groupName->getValue(), $description->getValue(), $groupType->getValue()->value, $image->getValue(), true);
 
         $this->validator
             ->expects($this->once())

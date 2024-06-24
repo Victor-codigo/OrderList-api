@@ -48,7 +48,9 @@ class GroupCreateUseCase extends ServiceBase
                 $this->createGroupCreateDto($input)
             );
 
-            $this->createNotificationGroupCreated($input->userCreatorId, $group->getName(), $this->systemKey);
+            if ($input->notify) {
+                $this->createNotificationGroupCreated($input->userCreatorId, $group->getName(), $this->systemKey);
+            }
 
             return $group->getId();
         } catch (DBUniqueConstraintException) {

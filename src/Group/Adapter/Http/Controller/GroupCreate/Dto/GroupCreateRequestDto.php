@@ -14,6 +14,7 @@ class GroupCreateRequestDto implements RequestDtoInterface
     public readonly string|null $description;
     public readonly string|null $type;
     public readonly UploadedFile|null $image;
+    public readonly bool $notify;
 
     public function __construct(Request $request)
     {
@@ -21,5 +22,6 @@ class GroupCreateRequestDto implements RequestDtoInterface
         $this->description = $request->request->get('description');
         $this->type = $request->request->get('type');
         $this->image = $request->files->get('image');
+        $this->notify = $request->request->getBoolean('notify', true);
     }
 }

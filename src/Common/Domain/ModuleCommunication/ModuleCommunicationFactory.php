@@ -141,7 +141,7 @@ class ModuleCommunicationFactory
     /**
      * @param UploadedFileInterface[] $files
      */
-    public static function groupCreate(NameWithSpaces $name, Description $description, GROUP_TYPE $type, array $files = []): ModuleCommunicationConfigDto
+    public static function groupCreate(NameWithSpaces $name, Description $description, GROUP_TYPE $type, array $files, ?bool $notifyUser): ModuleCommunicationConfigDto
     {
         $attributes = [
             'api_version' => static::API_VERSION,
@@ -151,6 +151,7 @@ class ModuleCommunicationFactory
             'name' => $name->getValue(),
             'description' => $description->getValue(),
             'type' => $type->value,
+            'notify' => $notifyUser ?? true,
         ];
 
         return new ModuleCommunicationConfigDto(
@@ -512,7 +513,7 @@ class ModuleCommunicationFactory
                 fn (Identifier $groupId) => $groupId->getValue(),
                 $groupsId
             ),
-            'system_key' => $systemKey
+            'system_key' => $systemKey,
         ];
 
         return new ModuleCommunicationConfigDto(

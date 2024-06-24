@@ -57,7 +57,8 @@ class GroupCreateInputDtoTest extends TestCase
             'GroupName',
             'this is a description of the group',
             'TYPE_USER',
-            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK)
+            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            true
         );
         $return = $object->validate($this->validator);
 
@@ -72,7 +73,8 @@ class GroupCreateInputDtoTest extends TestCase
             'GroupName',
             'this is a description of the group',
             'TYPE_GROUP',
-            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK)
+            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            false
         );
         $return = $object->validate($this->validator);
 
@@ -87,7 +89,8 @@ class GroupCreateInputDtoTest extends TestCase
             'GroupName',
             null,
             'TYPE_GROUP',
-            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK)
+            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            true
         );
         $return = $object->validate($this->validator);
 
@@ -102,7 +105,8 @@ class GroupCreateInputDtoTest extends TestCase
             null,
             'This is a description of the group',
             'TYPE_GROUP',
-            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK)
+            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            true
         );
         $return = $object->validate($this->validator);
 
@@ -117,7 +121,8 @@ class GroupCreateInputDtoTest extends TestCase
             'Group Name-',
             'This is a description of the group',
             'TYPE_GROUP',
-            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK)
+            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            true
         );
         $return = $object->validate($this->validator);
 
@@ -132,7 +137,8 @@ class GroupCreateInputDtoTest extends TestCase
             'GroupName',
             str_pad('', 501, 'f'),
             'TYPE_GROUP',
-            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK)
+            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            true
         );
         $return = $object->validate($this->validator);
 
@@ -147,7 +153,8 @@ class GroupCreateInputDtoTest extends TestCase
             'GroupName',
             'This is a description of the group',
             'WRONG_TYPE',
-            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK)
+            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            true
         );
         $return = $object->validate($this->validator);
 
@@ -162,7 +169,8 @@ class GroupCreateInputDtoTest extends TestCase
             'GroupName',
             'This is a description of the group',
             'TYPE_GROUP',
-            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_OK)
+            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_OK),
+            true
         );
 
         $return = $object->validate($this->validator);
@@ -178,7 +186,8 @@ class GroupCreateInputDtoTest extends TestCase
             'GroupName',
             'This is a description of the group',
             'TYPE_GROUP',
-            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_OK)
+            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_OK),
+            true
         );
 
         BuiltInFunctionsReturn::$filesize = 2 * 1_000_000 + 1;
@@ -195,7 +204,8 @@ class GroupCreateInputDtoTest extends TestCase
             'GroupName',
             'This is a description of the group',
             'TYPE_GROUP',
-            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_INI_SIZE)
+            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_INI_SIZE),
+            true
         );
 
         BuiltInFunctionsReturn::$filesize = 2 * 1_000_000 + 1;
@@ -212,7 +222,8 @@ class GroupCreateInputDtoTest extends TestCase
             'GroupName',
             'This is a description of the group',
             'TYPE_GROUP',
-            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_NO_FILE)
+            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_NO_FILE),
+            true
         );
 
         $return = $object->validate($this->validator);
@@ -228,7 +239,8 @@ class GroupCreateInputDtoTest extends TestCase
             'GroupName',
             'This is a description of the group',
             'TYPE_GROUP',
-            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_PARTIAL)
+            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_PARTIAL),
+            true
         );
 
         $return = $object->validate($this->validator);
@@ -244,7 +256,8 @@ class GroupCreateInputDtoTest extends TestCase
             'GroupName',
             'This is a description of the group',
             'TYPE_GROUP',
-            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_CANT_WRITE)
+            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_CANT_WRITE),
+            true
         );
 
         $return = $object->validate($this->validator);
@@ -260,7 +273,8 @@ class GroupCreateInputDtoTest extends TestCase
             'GroupName',
             'This is a description of the group',
             'TYPE_GROUP',
-            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_EXTENSION)
+            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_EXTENSION),
+            true
         );
 
         $return = $object->validate($this->validator);
@@ -276,7 +290,8 @@ class GroupCreateInputDtoTest extends TestCase
             'GroupName',
             'This is a description of the group',
             'TYPE_GROUP',
-            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_NO_TMP_DIR)
+            $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_NO_TMP_DIR),
+            true
         );
 
         $return = $object->validate($this->validator);

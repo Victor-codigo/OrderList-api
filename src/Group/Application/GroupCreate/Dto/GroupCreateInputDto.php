@@ -22,14 +22,16 @@ class GroupCreateInputDto implements ServiceInputDtoInterface
     public readonly Description $description;
     public readonly GroupType $type;
     public readonly GroupImage $image;
+    public readonly bool $notify;
 
-    public function __construct(Identifier $userCreatorId, ?string $name, ?string $description, ?string $type, ?UploadedFileInterface $image)
+    public function __construct(Identifier $userCreatorId, ?string $name, ?string $description, ?string $type, ?UploadedFileInterface $image, ?bool $notify)
     {
         $this->userCreatorId = $userCreatorId;
         $this->name = ValueObjectFactory::createNameWithSpaces($name);
         $this->description = ValueObjectFactory::createDescription($description);
         $this->type = ValueObjectFactory::createGroupType(GROUP_TYPE::tryFrom($type));
         $this->image = ValueObjectFactory::createGroupImage($image);
+        $this->notify = $notify ?? true;
     }
 
     public function validate(ValidationInterface $validator): array

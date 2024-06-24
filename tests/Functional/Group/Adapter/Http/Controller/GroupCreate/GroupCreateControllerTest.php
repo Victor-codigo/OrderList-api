@@ -73,6 +73,7 @@ class GroupCreateControllerTest extends WebClientTestCase
                 'name' => 'GroupName',
                 'description' => str_pad('', 500, 'd'),
                 'type' => 'TYPE_GROUP',
+                'notify' => true,
             ]),
             files: [
                 'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
@@ -100,6 +101,7 @@ class GroupCreateControllerTest extends WebClientTestCase
                 'name' => 'GroupName',
                 'description' => str_pad('', 500, 'd'),
                 'type' => 'TYPE_USER',
+                'notify' => false,
             ]),
             files: [
                 'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),

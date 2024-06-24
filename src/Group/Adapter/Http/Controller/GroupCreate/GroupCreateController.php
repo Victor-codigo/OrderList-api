@@ -34,6 +34,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'description', type: 'string', maxLength: VALUE_OBJECTS_CONSTRAINTS::DESCRIPTION_MAX_LENGTH, description: 'Group description', example: 'This is the description of the group'),
                         new OA\Property(property: 'type', type: 'string', description: 'Group type', example: 'TYPE_USER | TYPE_GROUP'),
                         new OA\Property(property: 'image', type: 'string', format: 'binary', description: 'Group image'),
+                        new OA\Property(property: 'notify', type: 'boolean', description: 'Indicates if notify user of the creation of the group'),
                     ]
                 )
             ),
@@ -83,13 +84,13 @@ class GroupCreateController extends AbstractController
     public function __invoke(GroupCreateRequestDto $request): JsonResponse
     {
         $groupId = $this->groupCreateUseCase->__invoke(
-            $this->createGroupCreateInputDto($request->name, $request->description, $request->type, $request->image)
+            $this->createGroupCreateInputDto($request->name, $request->description, $request->type, $request->image, $request->notify)
         );
 
         return $this->createResponse($groupId);
     }
 
-    private function createGroupCreateInputDto(string|null $name, string|null $description, string|null $type, UploadedFile|null $image): GroupCreateInputDto
+    private function createGroupCreateInputDto(?string $name, ?string $description, ?string $type, ?UploadedFile $image, ?bool $notify): GroupCreateInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();
@@ -99,7 +100,8 @@ class GroupCreateController extends AbstractController
             $name,
             $description,
             $type,
-            null === $image ? null : new UploadedFileSymfonyAdapter($image)
+            null === $image ? null : new UploadedFileSymfonyAdapter($image),
+            $notify
         );
     }
 
