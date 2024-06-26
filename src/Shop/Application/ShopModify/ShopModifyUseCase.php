@@ -68,7 +68,15 @@ class ShopModifyUseCase extends ServiceBase
 
     private function createShopModifyDto(ShopModifyInputDto $input): ShopModifyDto
     {
-        return new ShopModifyDto($input->shopId, $input->groupId, $input->name, $input->description, $input->image, $input->imageRemove);
+        return new ShopModifyDto(
+            $input->shopId,
+            $input->groupId,
+            $input->name,
+            $input->address,
+            $input->description,
+            $input->image,
+            $input->imageRemove
+        );
     }
 
     private function createShopModifyOutputDto(Identifier $shopId): ShopModifyOutputDto

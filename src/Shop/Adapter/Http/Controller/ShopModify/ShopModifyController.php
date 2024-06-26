@@ -32,6 +32,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'shop_id', type: 'string', description: 'Shop\'s id', example: '396e0152-d501-45d9-bf58-7498e11ea6c5'),
                         new OA\Property(property: 'group_id', type: 'string', description: 'Group\'s id', example: 'fdb242b4-bac8-4463-88d0-0941bb0beee0'),
                         new OA\Property(property: 'name', type: 'string', minLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MIN_LENGTH, maxLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MAX_LENGTH, description: 'Shop\'s name', example: 'Shop name'),
+                        new OA\Property(property: 'address', type: 'string', minLength: VALUE_OBJECTS_CONSTRAINTS::ADDRESS_MIN_LENGTH, maxLength: VALUE_OBJECTS_CONSTRAINTS::ADDRESS_MAX_LENGTH, description: 'Shop\'s address', example: 'Shop address'),
                         new OA\Property(property: 'description', type: 'string', maxLength: VALUE_OBJECTS_CONSTRAINTS::DESCRIPTION_MAX_LENGTH, description: 'Shop description', example: 'This is the description of the shop'),
                         new OA\Property(property: 'image_remove', type: 'boolean', description: 'TRUE if the shop image is removed, FALSE no'),
                         new OA\Property(property: 'image', type: 'string', format: 'binary', description: 'Shop image'),
@@ -66,7 +67,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<shop_id|group_id|name|description|shop_not_found|shop_name_repeated|image, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<shop_id|group_id|name|address|description|shop_not_found|shop_name_repeated|image, string|array>')),
                     ]
                 )
             )
@@ -99,13 +100,13 @@ class ShopModifyController extends AbstractController
     public function __invoke(ShopModifyRequestDto $request): JsonResponse
     {
         $userModified = $this->ShopModifyUseCase->__invoke(
-            $this->createShopModifyInputDto($request->shopId, $request->groupId, $request->name, $request->description, $request->image, $request->imageRemove)
+            $this->createShopModifyInputDto($request->shopId, $request->groupId, $request->name, $request->address, $request->description, $request->image, $request->imageRemove)
         );
 
         return $this->createResponse($userModified);
     }
 
-    private function createShopModifyInputDto(string|null $shopId, string|null $groupId, string|null $name, string|null $description, UploadedFile|null $image, bool $imageRemove): ShopModifyInputDto
+    private function createShopModifyInputDto(?string $shopId, ?string $groupId, ?string $name, ?string $address, ?string $description, ?UploadedFile $image, bool $imageRemove): ShopModifyInputDto
     {
         /** @var UserSharedSymfonyAdapter $userAdapter */
         $userAdapter = $this->security->getUser();
@@ -115,6 +116,7 @@ class ShopModifyController extends AbstractController
             $shopId,
             $groupId,
             $name,
+            $address,
             $description,
             null === $image ? null : new UploadedFileSymfonyAdapter($image),
             $imageRemove

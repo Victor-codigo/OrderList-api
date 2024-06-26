@@ -61,6 +61,7 @@ class ShopModifyInputDtoTest extends TestCase
             self::SHOP_ID,
             self::GROUP_ID,
             'Shop name',
+            'Shop address',
             'shop description',
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK),
             false
@@ -78,6 +79,26 @@ class ShopModifyInputDtoTest extends TestCase
             $this->userSession,
             self::SHOP_ID,
             self::GROUP_ID,
+            null,
+            'Shop address',
+            'shop description',
+            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK),
+            false
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
+    public function itShouldValidateAddressIsNull(): void
+    {
+        $object = new ShopModifyInputDto(
+            $this->userSession,
+            self::SHOP_ID,
+            self::GROUP_ID,
+            'shop name',
             null,
             'shop description',
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK),
@@ -97,6 +118,7 @@ class ShopModifyInputDtoTest extends TestCase
             self::SHOP_ID,
             self::GROUP_ID,
             'Shop name',
+            'Shop address',
             null,
             null,
             false
@@ -115,6 +137,7 @@ class ShopModifyInputDtoTest extends TestCase
             null,
             self::GROUP_ID,
             'Shop name',
+            'Shop address',
             'shop description',
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK),
             false
@@ -133,6 +156,7 @@ class ShopModifyInputDtoTest extends TestCase
             'not valid id',
             self::GROUP_ID,
             'Shop name',
+            'Shop address',
             'shop description',
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK),
             false
@@ -151,6 +175,7 @@ class ShopModifyInputDtoTest extends TestCase
             self::SHOP_ID,
             null,
             'Shop name',
+            'Shop address',
             'shop description',
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK),
             false
@@ -169,6 +194,7 @@ class ShopModifyInputDtoTest extends TestCase
             self::SHOP_ID,
             'not a valid group id',
             'Shop name',
+            'Shop address',
             'shop description',
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK),
             false
@@ -187,6 +213,7 @@ class ShopModifyInputDtoTest extends TestCase
             self::SHOP_ID,
             self::GROUP_ID,
             'Shop name wrong-',
+            'Shop address',
             'shop description',
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK),
             false
@@ -198,6 +225,25 @@ class ShopModifyInputDtoTest extends TestCase
     }
 
     /** @test */
+    public function itShouldFailAddressIsWrong(): void
+    {
+        $object = new ShopModifyInputDto(
+            $this->userSession,
+            self::SHOP_ID,
+            self::GROUP_ID,
+            'Shop name ',
+            'Shop address *wrong*',
+            'shop description',
+            $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK),
+            false
+        );
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['address' => [VALIDATION_ERRORS::REGEX_FAIL]], $return);
+    }
+
+    /** @test */
     public function itShouldFailDescriptionIsNull(): void
     {
         $object = new ShopModifyInputDto(
@@ -205,6 +251,7 @@ class ShopModifyInputDtoTest extends TestCase
             self::SHOP_ID,
             self::GROUP_ID,
             'Shop name',
+            'Shop address',
             null,
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK),
             false
@@ -223,6 +270,7 @@ class ShopModifyInputDtoTest extends TestCase
             self::SHOP_ID,
             self::GROUP_ID,
             'Shop name',
+            'Shop address',
             str_pad('', 501, 'm'),
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'Image.png', 'image/png', UPLOAD_ERR_OK),
             false
@@ -241,6 +289,7 @@ class ShopModifyInputDtoTest extends TestCase
             self::SHOP_ID,
             self::GROUP_ID,
             'Shop name',
+            'Shop address',
             'Shop description',
             $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_OK),
             false
@@ -259,6 +308,7 @@ class ShopModifyInputDtoTest extends TestCase
             self::SHOP_ID,
             self::GROUP_ID,
             'Shop name',
+            'Shop address',
             'Shop description',
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'file.txt', 'text/plain', UPLOAD_ERR_OK),
             false
@@ -278,6 +328,7 @@ class ShopModifyInputDtoTest extends TestCase
             self::SHOP_ID,
             self::GROUP_ID,
             'Shop name',
+            'Shop address',
             'Shop description',
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'file.txt', 'text/plain', UPLOAD_ERR_INI_SIZE),
             false
@@ -297,6 +348,7 @@ class ShopModifyInputDtoTest extends TestCase
             self::SHOP_ID,
             self::GROUP_ID,
             'Shop name',
+            'Shop address',
             'Shop description',
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'file.txt', 'text/plain', UPLOAD_ERR_NO_FILE),
             false
@@ -316,6 +368,7 @@ class ShopModifyInputDtoTest extends TestCase
             self::SHOP_ID,
             self::GROUP_ID,
             'Shop name',
+            'Shop address',
             'Shop description',
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'file.txt', 'text/plain', UPLOAD_ERR_PARTIAL),
             false
@@ -335,6 +388,7 @@ class ShopModifyInputDtoTest extends TestCase
             self::SHOP_ID,
             self::GROUP_ID,
             'Shop name',
+            'Shop address',
             'Shop description',
             $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'file.txt', 'text/plain', UPLOAD_ERR_CANT_WRITE),
             false

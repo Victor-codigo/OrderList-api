@@ -54,6 +54,7 @@ class ShopModifyService
             $shopToModify->setName($input->name);
         }
 
+        $input->address->isNull() ?: $shopToModify->setAddress($input->address);
         $input->description->isNull() ?: $shopToModify->setDescription($input->description);
         $this->setShopImage($shopToModify, $input->image, $input->imageRemove);
 

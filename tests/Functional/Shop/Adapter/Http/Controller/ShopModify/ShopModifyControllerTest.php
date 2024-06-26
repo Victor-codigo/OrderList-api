@@ -74,6 +74,7 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
                 'name' => 'Shop name modified',
+                'address' => 'Shop address modified',
                 'description' => 'shop description modified',
                 'image_remove' => false,
             ]),
@@ -104,6 +105,38 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
                 'name' => null,
+                'address' => 'Shop address modified',
+                'description' => 'Shop description modified',
+                'image_remove' => false,
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            ]
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Shop modified', $responseContent->message);
+
+        $this->assertSame(self::SHOP_ID, $responseContent->data->id);
+    }
+
+    /** @test */
+    public function itShouldModifyTheShopAddressIsNull(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'shop_id' => self::SHOP_ID,
+                'group_id' => self::GROUP_ID,
+                'name' => 'Shop name modified',
+                'address' => null,
                 'description' => 'Shop description modified',
                 'image_remove' => false,
             ]),
@@ -134,6 +167,7 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
                 'name' => 'Shop name modified',
+                'address' => 'Shop address modified',
                 'description' => null,
                 'image_remove' => false,
             ]),
@@ -164,6 +198,7 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
                 'name' => 'Shop name modified',
+                'address' => 'Shop address modified',
                 'description' => 'Shop description modified',
                 'image_remove' => false,
             ]),
@@ -191,6 +226,7 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
                 'name' => 'Shop name modified',
+                'address' => 'Shop address modified',
                 'description' => 'Shop description modified',
                 'image_remove' => true,
             ]),
@@ -218,6 +254,7 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => null,
                 'group_id' => self::GROUP_ID,
                 'name' => 'Shop name modified',
+                'address' => 'Shop address modified',
                 'description' => 'Shop description modified',
                 'image_remove' => false,
             ]),
@@ -248,6 +285,7 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'group_id' => null,
                 'name' => 'Shop name modified',
+                'address' => 'Shop address modified',
                 'description' => 'Shop description modified',
                 'image_remove' => false,
             ]),
@@ -278,6 +316,7 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
                 'name' => 'Shop name wrong-',
+                'address' => 'Shop address modified',
                 'description' => 'Shop description modified',
                 'image_remove' => false,
             ]),
@@ -297,6 +336,37 @@ class ShopModifyControllerTest extends WebClientTestCase
     }
 
     /** @test */
+    public function itShouldFailModifyingTheShopAddressIsWrong(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'shop_id' => self::SHOP_ID,
+                'group_id' => self::GROUP_ID,
+                'name' => 'Shop name modified',
+                'address' => 'Shop *address* modified',
+                'description' => 'Shop description modified',
+                'image_remove' => false,
+            ]),
+            files: [
+                'image' => $this->getImageUploaded(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            ]
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['address'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertSame(['regex_fail'], $responseContent->errors->address);
+    }
+
+    /** @test */
     public function itShouldFailModifyingTheShopDescriptionIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -308,6 +378,7 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
                 'name' => 'Shop name modified',
+                'address' => 'Shop address modified',
                 'description' => str_pad('', 501, 'm'),
                 'image_remove' => false,
             ]),
@@ -338,6 +409,7 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => '396e0152-d501-45d9-bf58-7498e11ea6c5',
                 'group_id' => self::GROUP_ID,
                 'name' => 'Shop name modified',
+                'address' => 'Shop address modified',
                 'description' => 'Shop description modified',
                 'image_remove' => false,
             ]),
@@ -368,6 +440,7 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'group_id' => self::USER_OTHER_GROUP_ID,
                 'name' => 'Shop name modified',
+                'address' => 'Shop address modified',
                 'description' => 'Shop description modified',
                 'image_remove' => false,
             ]),
@@ -398,6 +471,7 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
                 'name' => 'Shop name 4',
+                'address' => 'Shop address modified',
                 'description' => 'Shop description modified',
                 'image_remove' => false,
             ]),
@@ -428,6 +502,7 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
                 'name' => 'Shop name modified',
+                'address' => 'Shop address modified',
                 'description' => 'shop name modified',
                 'image_remove' => false,
             ]),
@@ -457,6 +532,7 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
                 'name' => 'Shop name modified',
+                'address' => 'Shop address modified',
                 'description' => 'shop name modified',
                 'image_remove' => false,
             ]),
@@ -486,6 +562,7 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
                 'name' => 'Shop name modified',
+                'address' => 'Shop address modified',
                 'description' => 'shop name modified',
                 'image_remove' => false,
             ]),
@@ -515,6 +592,7 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
                 'name' => 'Shop name modified',
+                'address' => 'Shop address modified',
                 'description' => 'shop name modified',
                 'image_remove' => false,
             ]),
@@ -544,6 +622,7 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
                 'name' => 'Shop name modified',
+                'address' => 'Shop address modified',
                 'description' => 'shop name modified',
                 'image_remove' => false,
             ]),
@@ -573,6 +652,7 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
                 'name' => 'Shop name modified',
+                'address' => 'Shop address modified',
                 'description' => 'shop name modified',
                 'image_remove' => false,
             ]),
@@ -602,6 +682,7 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
                 'name' => 'Shop name modified',
+                'address' => 'Shop address modified',
                 'description' => 'shop name modified',
                 'image_remove' => false,
             ]),
@@ -631,6 +712,7 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
                 'name' => 'Shop name modified',
+                'address' => 'Shop address modified',
                 'description' => 'shop name modified',
                 'image_remove' => false,
             ]),
@@ -660,6 +742,7 @@ class ShopModifyControllerTest extends WebClientTestCase
                 'shop_id' => self::SHOP_ID,
                 'group_id' => self::GROUP_ID,
                 'name' => 'Shop name 4',
+                'address' => 'Shop address modified',
                 'description' => 'Shop description modified',
                 'image_remove' => false,
             ]),

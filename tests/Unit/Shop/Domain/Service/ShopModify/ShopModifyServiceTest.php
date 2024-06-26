@@ -69,7 +69,7 @@ class ShopModifyServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldModifyTheShopImageAndDescription(): void
+    public function itShouldModifyTheShopImageDescriptionAndAddress(): void
     {
         $shopFromDb = $this->getShop();
         $fileUploadedName = 'file_uploaded_name';
@@ -77,6 +77,7 @@ class ShopModifyServiceTest extends TestCase
             ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             $shopFromDb->getName(),
+            ValueObjectFactory::createAddress('shop address modified'),
             ValueObjectFactory::createDescription('shop description modified'),
             ValueObjectFactory::createShopImage($this->shopImage),
             false
@@ -84,6 +85,7 @@ class ShopModifyServiceTest extends TestCase
         $shopExpected = clone $shopFromDb;
         $shopExpected
             ->setName($shopFromDb->getName())
+            ->setAddress($input->address)
             ->setDescription($input->description)
             ->setImage(ValueObjectFactory::createPath($fileUploadedName));
 
@@ -131,19 +133,21 @@ class ShopModifyServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldModifyTheShopNameAndDescription(): void
+    public function itShouldModifyTheShopNameDescriptionAndAddress(): void
     {
         $shopFromDb = $this->getShop();
         $input = new ShopModifyDto(
             ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             ValueObjectFactory::createNameWithSpaces('shop name modified'),
+            ValueObjectFactory::createAddress('shop address modified'),
             ValueObjectFactory::createDescription('shop description modified'),
             ValueObjectFactory::createShopImage(null),
             false
         );
         $shopExpected = (clone $shopFromDb)
             ->setName($input->name)
+            ->setAddress($input->address)
             ->setDescription($input->description)
             ->setImage($shopFromDb->getImage());
 
@@ -190,19 +194,21 @@ class ShopModifyServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldModifyTheShopNameDescriptionImageRemoved(): void
+    public function itShouldModifyTheShopNameDescriptionAddressImageRemoved(): void
     {
         $shopFromDb = $this->getShop();
         $input = new ShopModifyDto(
             ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             ValueObjectFactory::createNameWithSpaces('shop name modified'),
+            ValueObjectFactory::createAddress('shop address modified'),
             ValueObjectFactory::createDescription('shop description modified'),
             ValueObjectFactory::createShopImage(null),
             true
         );
         $shopExpected = (clone $shopFromDb)
             ->setName($input->name)
+            ->setAddress($input->address)
             ->setDescription($input->description)
             ->setImage(ValueObjectFactory::createPath(null));
 
@@ -251,7 +257,7 @@ class ShopModifyServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldModifyTheShopNameDescriptionImageRemovedNoImageSetToTheShop(): void
+    public function itShouldModifyTheShopNameDescriptionAddressImageRemovedNoImageSetToTheShop(): void
     {
         $shopFromDb = $this->getShop();
         $shopFromDb->setImage(ValueObjectFactory::createPath(null));
@@ -259,12 +265,14 @@ class ShopModifyServiceTest extends TestCase
             ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             ValueObjectFactory::createNameWithSpaces('shop name modified'),
+            ValueObjectFactory::createAddress('shop address modified'),
             ValueObjectFactory::createDescription('shop description modified'),
             ValueObjectFactory::createShopImage(null),
             true
         );
         $shopExpected = (clone $shopFromDb)
             ->setName($input->name)
+            ->setAddress($input->address)
             ->setDescription($input->description)
             ->setImage(ValueObjectFactory::createPath(null));
 
@@ -313,19 +321,21 @@ class ShopModifyServiceTest extends TestCase
     }
 
     /** @test */
-    public function itShouldModifyTheShopNameDescriptionImageNotExists(): void
+    public function itShouldModifyTheShopNameDescriptionAddressImageNotExists(): void
     {
         $shopFromDb = $this->getShop();
         $input = new ShopModifyDto(
             ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             ValueObjectFactory::createNameWithSpaces('shop name modified'),
+            ValueObjectFactory::createAddress('shop address modified'),
             ValueObjectFactory::createDescription('shop description modified'),
             ValueObjectFactory::createShopImage(null),
             true
         );
         $shopExpected = (clone $shopFromDb)
             ->setName($input->name)
+            ->setAddress($input->address)
             ->setDescription($input->description)
             ->setImage(ValueObjectFactory::createPath(null));
 
@@ -380,6 +390,7 @@ class ShopModifyServiceTest extends TestCase
             ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             ValueObjectFactory::createNameWithSpaces('shop name modified'),
+            ValueObjectFactory::createAddress('shop address modified'),
             ValueObjectFactory::createDescription(null),
             ValueObjectFactory::createShopImage(null),
             false
@@ -387,6 +398,7 @@ class ShopModifyServiceTest extends TestCase
         $shopExpected = clone $shopFromDb;
         $shopExpected
             ->setName($input->name)
+            ->setAddress($input->address)
             ->setDescription($shopFromDb->getDescription())
             ->setImage($shopFromDb->getImage());
 
@@ -441,6 +453,7 @@ class ShopModifyServiceTest extends TestCase
             ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createIdentifier('396e0152-d501-45d9-bf58-7498e11ea6c5'),
             $shopFromDb->getName(),
+            ValueObjectFactory::createAddress('shop address modified'),
             ValueObjectFactory::createDescription('shop description modified'),
             ValueObjectFactory::createShopImage($this->shopImage),
             false
@@ -448,6 +461,7 @@ class ShopModifyServiceTest extends TestCase
         $shopExpected = clone $shopFromDb;
         $shopExpected
             ->setName($shopFromDb->getName())
+            ->setAddress($input->address)
             ->setDescription($input->description)
             ->setImage(ValueObjectFactory::createPath($fileUploadedName));
 
@@ -494,6 +508,7 @@ class ShopModifyServiceTest extends TestCase
             ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             $shopFromDb->getName(),
+            ValueObjectFactory::createAddress('shop address modified'),
             ValueObjectFactory::createDescription('shop description modified'),
             ValueObjectFactory::createShopImage($this->shopImage),
             false
@@ -502,6 +517,7 @@ class ShopModifyServiceTest extends TestCase
         $shopExpected
             ->setName($shopFromDb->getName())
             ->setDescription($input->description)
+            ->setAddress($input->address)
             ->setImage(ValueObjectFactory::createPath($fileUploadedName));
 
         $this->shopRepository
@@ -547,6 +563,7 @@ class ShopModifyServiceTest extends TestCase
             ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             ValueObjectFactory::createNameWithSpaces('shop`name modified'),
+            ValueObjectFactory::createAddress('shop address modified'),
             ValueObjectFactory::createDescription('shop description modified'),
             ValueObjectFactory::createShopImage($this->shopImage),
             false
@@ -608,6 +625,7 @@ class ShopModifyServiceTest extends TestCase
             ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             $shopFromDb->getName(),
+            ValueObjectFactory::createAddress('shop address modified'),
             ValueObjectFactory::createDescription('shop description modified'),
             ValueObjectFactory::createShopImage($this->shopImage),
             false
@@ -615,6 +633,7 @@ class ShopModifyServiceTest extends TestCase
         $shopExpected = clone $shopFromDb;
         $shopExpected
             ->setName($shopFromDb->getName())
+            ->setAddress($input->address)
             ->setDescription($input->description)
             ->setImage(ValueObjectFactory::createPath($fileUploadedName));
 
@@ -665,6 +684,7 @@ class ShopModifyServiceTest extends TestCase
             ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             $shopFromDb->getName(),
+            ValueObjectFactory::createAddress('shop address modified'),
             ValueObjectFactory::createDescription('shop description modified'),
             ValueObjectFactory::createShopImage($this->shopImage),
             false
@@ -672,6 +692,7 @@ class ShopModifyServiceTest extends TestCase
         $shopExpected = clone $shopFromDb;
         $shopExpected
             ->setName($shopFromDb->getName())
+            ->setAddress($input->address)
             ->setDescription($input->description)
             ->setImage(ValueObjectFactory::createPath($fileUploadedName));
 
@@ -723,14 +744,23 @@ class ShopModifyServiceTest extends TestCase
     public function itShouldFailErrorRemovingImage(): void
     {
         $shopFromDb = $this->getShop();
+        $fileUploadedName = 'file_uploaded_name';
         $input = new ShopModifyDto(
             ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             ValueObjectFactory::createNameWithSpaces('shop name modified'),
+            ValueObjectFactory::createAddress('shop address modified'),
             ValueObjectFactory::createDescription('shop description modified'),
             ValueObjectFactory::createShopImage(null),
             true
         );
+
+        $shopExpected = clone $shopFromDb;
+        $shopExpected
+            ->setName($shopFromDb->getName())
+            ->setAddress($input->address)
+            ->setDescription($input->description)
+            ->setImage(ValueObjectFactory::createPath($fileUploadedName));
 
         $this->shopRepository
             ->expects($this->once())
@@ -756,7 +786,7 @@ class ShopModifyServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$shopFromDb]));
+            ->willReturn(new \ArrayIterator([$shopExpected]));
 
         $this->fileUpload
             ->expects($this->never())
