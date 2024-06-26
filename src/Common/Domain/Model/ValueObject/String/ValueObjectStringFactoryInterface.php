@@ -6,25 +6,27 @@ namespace Common\Domain\Model\ValueObject\String;
 
 interface ValueObjectStringFactoryInterface
 {
-    public static function createEmail(string|null $email): Email;
+    public static function createEmail(?string $email): Email;
 
-    public static function createIdentifier(string|null $id): Identifier;
+    public static function createIdentifier(?string $id): Identifier;
 
-    public static function createIdentifierNullAble(string|null $id): IdentifierNullable;
+    public static function createIdentifierNullAble(?string $id): IdentifierNullable;
 
-    public static function createName(string|null $name): Name;
+    public static function createName(?string $name): Name;
 
-    public static function createNameWithSpaces(string|null $name): NameWithSpaces;
+    public static function createNameWithSpaces(?string $name): NameWithSpaces;
 
-    public static function createDescription(string|null $description): Description;
+    public static function createAddress(?string $address): Address;
 
-    public static function createPassword(string|null $password): Password;
+    public static function createDescription(?string $description): Description;
 
-    public static function createPath(string|null $path): Path;
+    public static function createPassword(?string $password): Password;
 
-    public static function createJwtToken(string|null $path): JwtToken;
+    public static function createPath(?string $path): Path;
 
-    public static function createUrl(string|null $url): Url;
+    public static function createJwtToken(?string $path): JwtToken;
 
-    public static function createLanguage(string|null $lang): Language;
+    public static function createUrl(?string $url): Url;
+
+    public static function createLanguage(?string $lang): Language;
 }

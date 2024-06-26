@@ -17,6 +17,7 @@ class ShopTest extends TestCase
             'id' => 'shop id',
             'group_id' => 'group_id',
             'name' => 'shop name',
+            'address' => 'shop address',
             'description' => 'shop description',
             'image' => 'shop image',
         ];
@@ -26,6 +27,28 @@ class ShopTest extends TestCase
         $this->assertEquals($shopData['id'], $return->getId()->getValue());
         $this->assertEquals($shopData['group_id'], $return->getGroupId()->getValue());
         $this->assertEquals($shopData['name'], $return->getName()->getValue());
+        $this->assertEquals($shopData['address'], $return->getAddress()->getValue());
+        $this->assertEquals($shopData['description'], $return->getDescription()->getValue());
+        $this->assertEquals($shopData['image'], $return->getImage()->getValue());
+    }
+
+    /** @test */
+    public function itShouldCreateAShopFromArrayAddressNotExists(): void
+    {
+        $shopData = [
+            'id' => 'shop id',
+            'group_id' => 'group_id',
+            'name' => 'shop name',
+            'description' => 'shop description',
+            'image' => 'shop image',
+        ];
+
+        $return = Shop::fromPrimitiveArrayOfData($shopData);
+
+        $this->assertEquals($shopData['id'], $return->getId()->getValue());
+        $this->assertEquals($shopData['group_id'], $return->getGroupId()->getValue());
+        $this->assertEquals($shopData['name'], $return->getName()->getValue());
+        $this->assertEquals(null, $return->getAddress()->getValue());
         $this->assertEquals($shopData['description'], $return->getDescription()->getValue());
         $this->assertEquals($shopData['image'], $return->getImage()->getValue());
     }
@@ -37,6 +60,7 @@ class ShopTest extends TestCase
             'id' => 'shop id',
             'group_id' => 'group_id',
             'name' => 'shop name',
+            'address' => 'shop address',
             'image' => 'shop image',
         ];
 
@@ -45,6 +69,7 @@ class ShopTest extends TestCase
         $this->assertEquals($shopData['id'], $return->getId()->getValue());
         $this->assertEquals($shopData['group_id'], $return->getGroupId()->getValue());
         $this->assertEquals($shopData['name'], $return->getName()->getValue());
+        $this->assertEquals($shopData['address'], $return->getAddress()->getValue());
         $this->assertEquals(null, $return->getDescription()->getValue());
         $this->assertEquals($shopData['image'], $return->getImage()->getValue());
     }
@@ -56,6 +81,7 @@ class ShopTest extends TestCase
             'id' => 'shop id',
             'group_id' => 'group_id',
             'name' => 'shop name',
+            'address' => 'shop address',
             'description' => 'shop description',
         ];
 
@@ -64,6 +90,7 @@ class ShopTest extends TestCase
         $this->assertEquals($shopData['id'], $return->getId()->getValue());
         $this->assertEquals($shopData['group_id'], $return->getGroupId()->getValue());
         $this->assertEquals($shopData['name'], $return->getName()->getValue());
+        $this->assertEquals($shopData['address'], $return->getAddress()->getValue());
         $this->assertEquals($shopData['description'], $return->getDescription()->getValue());
         $this->assertEquals(null, $return->getImage()->getValue());
     }
@@ -74,6 +101,7 @@ class ShopTest extends TestCase
         $shopData = [
             'group_id' => 'group_id',
             'name' => 'shop name',
+            'address' => 'shop address',
             'description' => 'shop description',
             'image' => 'shop image',
         ];
@@ -88,6 +116,7 @@ class ShopTest extends TestCase
         $shopData = [
             'id' => 'shop id',
             'name' => 'shop name',
+            'address' => 'shop address',
             'description' => 'shop description',
             'image' => 'shop image',
         ];
@@ -102,6 +131,7 @@ class ShopTest extends TestCase
         $shopData = [
             'id' => 'shop id',
             'group_id' => 'group_id',
+            'address' => 'shop address',
             'description' => 'shop description',
             'image' => 'shop image',
         ];

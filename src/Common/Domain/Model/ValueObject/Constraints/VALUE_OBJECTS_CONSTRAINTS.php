@@ -112,6 +112,10 @@ final class VALUE_OBJECTS_CONSTRAINTS
     public const DESCRIPTION_MAX_LENGTH = 500;
     public const DESCRIPTION_TYPE = 'string';
 
+    public const ADDRESS_MIN_LENGTH = 5;
+    public const ADDRESS_MAX_LENGTH = 100;
+    public const ADDRESS_TYPE = 'string';
+
     public const NOTIFICATION_TYPES = [
         NOTIFICATION_TYPE::USER_REGISTERED,
         NOTIFICATION_TYPE::USER_EMAIL_CHANGED,

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shop\Domain\Model;
 
 use Common\Domain\Exception\LogicException;
+use Common\Domain\Model\ValueObject\String\Address;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
@@ -21,6 +22,7 @@ class Shop implements EntityImageModifyInterface
     private Identifier $id;
     private Identifier $groupId;
     private NameWithSpaces $name;
+    private Address $address;
     private Description $description;
     private Path $image;
     private \DateTime $createdOn;
@@ -52,6 +54,18 @@ class Shop implements EntityImageModifyInterface
     public function setName(NameWithSpaces $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getAddress(): Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(Address $address): self
+    {
+        $this->address = $address;
 
         return $this;
     }
@@ -132,11 +146,12 @@ class Shop implements EntityImageModifyInterface
         return $this;
     }
 
-    public function __construct(Identifier $id, Identifier $groupId, NameWithSpaces $name, Description $description, Path $image)
+    public function __construct(Identifier $id, Identifier $groupId, NameWithSpaces $name, Address $address, Description $description, Path $image)
     {
         $this->id = $id;
         $this->groupId = $groupId;
         $this->name = $name;
+        $this->address = $address;
         $this->description = $description;
         $this->image = $image;
         $this->createdOn = new \DateTime();
@@ -145,12 +160,13 @@ class Shop implements EntityImageModifyInterface
         $this->orders = new ArrayCollection();
     }
 
-    public static function fromPrimitives(string $id, string $groupId, string $name, ?string $description = null, ?string $image = null): self
+    public static function fromPrimitives(string $id, string $groupId, string $name, ?string $address, ?string $description = null, ?string $image = null): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),
             ValueObjectFactory::createIdentifier($groupId),
             ValueObjectFactory::createNameWithSpaces($name),
+            ValueObjectFactory::createAddress($address),
             ValueObjectFactory::createDescription($description),
             ValueObjectFactory::createPath($image),
         );
@@ -168,6 +184,7 @@ class Shop implements EntityImageModifyInterface
             $data['id'],
             $data['group_id'],
             $data['name'],
+            $data['address'] ?? null,
             $data['description'] ?? null,
             $data['image'] ?? null,
         );

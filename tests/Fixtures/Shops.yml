@@ -40,6 +40,27 @@ Common\Domain\Model\ValueObject\String\NameWithSpaces:
     __construct:
       value: "Shop name 5"
 
+Common\Domain\Model\ValueObject\String\Address:
+  shop_address:
+    __construct:
+      value: "Shop address 1"
+
+  shop_address_2:
+    __construct:
+      value: "Shop address 2"
+
+  shop_address_3:
+    __construct:
+      value: "Shop address 3"
+
+  shop_address_4:
+    __construct:
+      value: "Shop address 4"
+
+  shop_address_5:
+    __construct:
+      value: "Shop address 5"
+
 Common\Domain\Model\ValueObject\String\Description:
   shop_description:
     __construct:
@@ -68,6 +89,7 @@ Shop\Domain\Model\Shop:
       id: "@shop_id"
       groupId: "@product_group_id_group_exists"
       name: "@shop_name"
+      address: "@shop_address"
       description: "@shop_description"
       image: "@shop_image_with_image"
 
@@ -76,6 +98,7 @@ Shop\Domain\Model\Shop:
       id: "@shop_id_2"
       groupId: "@product_group_id_group_exists"
       name: "@shop_name_2"
+      address: "@shop_address_2"
       description: "@shop_description_2"
       image: "@shop_image_null"
 
@@ -84,6 +107,7 @@ Shop\Domain\Model\Shop:
       id: "@shop_id_3"
       groupId: "@product_group_id_group_exists"
       name: "@shop_name_3"
+      address: "@shop_address_3"
       description: "@shop_description_null"
       image: "@shop_image_null"
 
@@ -92,6 +116,7 @@ Shop\Domain\Model\Shop:
       id: "@shop_id_4"
       groupId: "@product_group_id_group_exists"
       name: "@shop_name_4"
+      address: "@shop_address_4"
       description: "@shop_description_null"
       image: "@shop_image_null"
 
@@ -100,5 +125,6 @@ Shop\Domain\Model\Shop:
       id: "@shop_id_5"
       groupId: "@entity-group_type_group->getId"
       name: "@shop_name_5"
+      address: "@shop_address_5"
       description: "@shop_description_null"
       image: "@shop_image_null"

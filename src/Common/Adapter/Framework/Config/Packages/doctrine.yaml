@@ -9,6 +9,7 @@ doctrine:
             PasswordType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\PasswordType
             NameType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\NameType
             NameWithSpacesType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\NameWithSpacesType
+            AddressType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\AddressType
             DescriptionType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\DescriptionType
             PathType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\PathType
             LanguageType: Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\LanguageType

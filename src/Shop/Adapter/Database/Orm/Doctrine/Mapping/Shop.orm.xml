@@ -18,6 +18,10 @@
                      type="NameWithSpacesType"
                      length="50"/>
 
+              <field name="address"
+                     type="AddressType"
+                     length="100"/>
+
               <field name="image"
                      type="PathType"
                      length="250"

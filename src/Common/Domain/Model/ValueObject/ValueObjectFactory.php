@@ -36,6 +36,7 @@ use Common\Domain\Model\ValueObject\Object\UnitMeasure;
 use Common\Domain\Model\ValueObject\Object\UserImage;
 use Common\Domain\Model\ValueObject\Object\ValueObjectObjectFactory;
 use Common\Domain\Model\ValueObject\Object\ValueObjectObjectFactoryInterface;
+use Common\Domain\Model\ValueObject\String\Address;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -60,147 +61,152 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
     /**
      * @param Rol[]|null $roles
      */
-    public static function createRoles(array|null $roles): Roles
+    public static function createRoles(?array $roles): Roles
     {
         return valueObjectArrayFactory::createRoles($roles);
     }
 
-    public static function createRol(\BackedEnum|null $roles): Rol
+    public static function createRol(?\BackedEnum $roles): Rol
     {
         return ValueObjectObjectFactory::createRol($roles);
     }
 
-    public static function createNotificationData(array|null $data): NotificationData
+    public static function createNotificationData(?array $data): NotificationData
     {
         return valueObjectArrayFactory::createNotificationData($data);
     }
 
-    public static function createEmail(string|null $email): Email
+    public static function createEmail(?string $email): Email
     {
         return ValueObjectStringFactory::createEmail($email);
     }
 
-    public static function createIdentifier(string|null $id): Identifier
+    public static function createIdentifier(?string $id): Identifier
     {
         return ValueObjectStringFactory::createIdentifier($id);
     }
 
-    public static function createIdentifierNullable(string|null $id): IdentifierNullable
+    public static function createIdentifierNullable(?string $id): IdentifierNullable
     {
         return ValueObjectStringFactory::createIdentifierNullAble($id);
     }
 
-    public static function createName(string|null $name): Name
+    public static function createName(?string $name): Name
     {
         return ValueObjectStringFactory::createName($name);
     }
 
-    public static function createNameWithSpaces(string|null $name): NameWithSpaces
+    public static function createNameWithSpaces(?string $name): NameWithSpaces
     {
         return ValueObjectStringFactory::createNameWithSpaces($name);
     }
 
-    public static function createDescription(string|null $description): Description
+    public static function createAddress(?string $address): Address
+    {
+        return ValueObjectStringFactory::createAddress($address);
+    }
+
+    public static function createDescription(?string $description): Description
     {
         return ValueObjectStringFactory::createDescription($description);
     }
 
-    public static function createPassword(string|null $password): Password
+    public static function createPassword(?string $password): Password
     {
         return ValueObjectStringFactory::createPassword($password);
     }
 
-    public static function createPath(string|null $path): Path
+    public static function createPath(?string $path): Path
     {
         return ValueObjectStringFactory::createPath($path);
     }
 
-    public static function createJwtToken(string|null $path): JwtToken
+    public static function createJwtToken(?string $path): JwtToken
     {
         return ValueObjectStringFactory::createJwtToken($path);
     }
 
-    public static function createUrl(string|null $url): Url
+    public static function createUrl(?string $url): Url
     {
         return ValueObjectStringFactory::createUrl($url);
     }
 
-    public static function createLanguage(string|null $language): Language
+    public static function createLanguage(?string $language): Language
     {
         return ValueObjectStringFactory::createLanguage($language);
     }
 
-    public static function createFile(FileInterface|null $file): File
+    public static function createFile(?FileInterface $file): File
     {
         return ValueObjectObjectFactory::createFile($file);
     }
 
-    public static function createUserImage(FileInterface|null $file): UserImage
+    public static function createUserImage(?FileInterface $file): UserImage
     {
         return ValueObjectObjectFactory::createUserImage($file);
     }
 
-    public static function createGroupImage(FileInterface|null $file): GroupImage
+    public static function createGroupImage(?FileInterface $file): GroupImage
     {
         return ValueObjectObjectFactory::createGroupImage($file);
     }
 
-    public static function createGroupType(GROUP_TYPE|null $type): GroupType
+    public static function createGroupType(?GROUP_TYPE $type): GroupType
     {
         return ValueObjectObjectFactory::createGroupType($type);
     }
 
-    public static function createPaginatorPage(int|null $page): PaginatorPage
+    public static function createPaginatorPage(?int $page): PaginatorPage
     {
         return ValueObjectIntegerFactory::createPaginatorPage($page);
     }
 
-    public static function createPaginatorPageItems(int|null $pageItems): PaginatorPageItems
+    public static function createPaginatorPageItems(?int $pageItems): PaginatorPageItems
     {
         return ValueObjectIntegerFactory::createPaginatorPageItems($pageItems);
     }
 
-    public static function createMoney(float|null $money): Money
+    public static function createMoney(?float $money): Money
     {
         return ValueObjectFloatFactory::createMoney($money);
     }
 
-    public static function createAmount(float|null $amount): Amount
+    public static function createAmount(?float $amount): Amount
     {
         return ValueObjectFloatFactory::createAmount($amount);
     }
 
-    public static function createNotificationType(NOTIFICATION_TYPE|null $type): NotificationType
+    public static function createNotificationType(?NOTIFICATION_TYPE $type): NotificationType
     {
         return ValueObjectObjectFactory::createNotificationType($type);
     }
 
-    public static function createUnit(UNIT_MEASURE_TYPE|null $type): UnitMeasure
+    public static function createUnit(?UNIT_MEASURE_TYPE $type): UnitMeasure
     {
         return ValueObjectObjectFactory::createUnit($type);
     }
 
-    public static function createProductImage(FileInterface|null $type): ProductImage
+    public static function createProductImage(?FileInterface $type): ProductImage
     {
         return ValueObjectObjectFactory::createProductImage($type);
     }
 
-    public static function createShopImage(FileInterface|null $type): ShopImage
+    public static function createShopImage(?FileInterface $type): ShopImage
     {
         return ValueObjectObjectFactory::createShopImage($type);
     }
 
-    public static function createDateNowToFuture(\DateTime|null $date): DateNowToFuture
+    public static function createDateNowToFuture(?\DateTime $date): DateNowToFuture
     {
         return ValueObjectDateFactory::createDateNowToFuture($date);
     }
 
-    public static function createFilterDbLikeComparison(\BackedEnum|null $filter): FilterDbLikeComparison
+    public static function createFilterDbLikeComparison(?\BackedEnum $filter): FilterDbLikeComparison
     {
         return ValueObjectObjectFactory::createFilterDbLikeComparison($filter);
     }
 
-    public static function createFilterSection(FILTER_SECTION|null $filter): FilterSection
+    public static function createFilterSection(?FILTER_SECTION $filter): FilterSection
     {
         return ValueObjectObjectFactory::createFilterSection($filter);
     }
