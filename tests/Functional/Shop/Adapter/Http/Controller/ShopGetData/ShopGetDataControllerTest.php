@@ -43,6 +43,7 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $this->assertTrue(property_exists($shopDataActual, 'id'));
         $this->assertTrue(property_exists($shopDataActual, 'group_id'));
         $this->assertTrue(property_exists($shopDataActual, 'name'));
+        $this->assertTrue(property_exists($shopDataActual, 'address'));
         $this->assertTrue(property_exists($shopDataActual, 'description'));
         $this->assertTrue(property_exists($shopDataActual, 'image'));
         $this->assertTrue(property_exists($shopDataActual, 'created_on'));
@@ -50,6 +51,7 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $this->assertEquals($shopsDataExpected['id'], $shopDataActual->id);
         $this->assertEquals($shopsDataExpected['group_id'], $shopDataActual->group_id);
         $this->assertEquals($shopsDataExpected['name'], $shopDataActual->name);
+        $this->assertEquals($shopsDataExpected['address'], $shopDataActual->address);
         $this->assertEquals($shopsDataExpected['image'], $shopDataActual->image);
         $this->assertIsString($shopDataActual->created_on);
     }
@@ -64,6 +66,7 @@ class ShopGetDataControllerTest extends WebClientTestCase
                 'id' => 'e6c1d350-f010-403c-a2d4-3865c14630ec',
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Shop name 1',
+                'address' => 'Shop address 1',
                 'description' => 'Dolorem omnis accusamus iusto qui rerum eligendi. Ipsa omnis autem totam est vero qui. Voluptas quisquam cumque dolorem ut debitis recusandae veniam. Quam repellendus est sed enim doloremque eum eius. Ut est odio est. Voluptates dolorem et nisi voluptatum. Voluptas vitae deserunt mollitia consequuntur eos. Suscipit recusandae hic cumque voluptatem officia. Exercitationem quibusdam ea qui laudantium est non quis. Vero dicta et voluptas explicabo.',
                 'image' => "{$appProtocolAndDomain}{$shopPublicImagePath}/fileName.file",
                 'created_on' => '',
@@ -72,6 +75,7 @@ class ShopGetDataControllerTest extends WebClientTestCase
                 'id' => 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Shop name 2',
+                'address' => 'Shop address 2',
                 'description' => 'Dolorem omnis accusamus iusto qui rerum eligendi. Ipsa omnis autem totam est vero qui. Voluptas quisquam cumque dolorem ut debitis recusandae veniam. Quam repellendus est sed enim doloremque eum eius. Ut est odio est. Voluptates dolorem et nisi voluptatum. Voluptas vitae deserunt mollitia consequuntur eos. Suscipit recusandae hic cumque voluptatem officia. Exercitationem quibusdam ea qui laudantium est non quis. Vero dicta et voluptas explicabo.',
                 'image' => null,
                 'created_on' => '',
@@ -80,6 +84,7 @@ class ShopGetDataControllerTest extends WebClientTestCase
                 'id' => 'b9b1c541-d41e-4751-9ecb-4a1d823c0405',
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Shop name 3',
+                'address' => 'Shop address 3',
                 'description' => null,
                 'image' => null,
                 'created_on' => '',
@@ -88,6 +93,7 @@ class ShopGetDataControllerTest extends WebClientTestCase
                 'id' => 'cc7f5dd6-02ba-4bd9-b5c1-5b65d81e59a0',
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Shop name 4',
+                'address' => 'Shop address 4',
                 'description' => null,
                 'image' => null,
                 'created_on' => '',
@@ -96,7 +102,7 @@ class ShopGetDataControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldGetShopsOfAGroupBOrdersAsc(): void
+    public function itShouldGetShopsOfAGroupOrdersAsc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
         $orderAsc = true;

@@ -116,6 +116,7 @@ class ShopGetDataService
                 'id' => $shop->getId()->getValue(),
                 'group_id' => $shop->getGroupId()->getValue(),
                 'name' => $shop->getName()->getValue(),
+                'address' => $shop->getAddress()->getValue(),
                 'description' => $shop->getDescription()->getValue(),
                 'image' => $shop->getImage()->isNull()
                     ? null

@@ -120,6 +120,7 @@ use Symfony\Component\HttpFoundation\Response;
                                         new OA\Property(property: 'id', type: 'string'),
                                         new OA\Property(property: 'group_id', type: 'string'),
                                         new OA\Property(property: 'name', type: 'string'),
+                                        new OA\Property(property: 'address', type: 'string'),
                                         new OA\Property(property: 'description', type: 'string'),
                                         new OA\Property(property: 'image', type: 'string'),
                                         new OA\Property(property: 'created_on', type: 'string'),
@@ -178,15 +179,15 @@ class ShopGetDataController extends AbstractController
     }
 
     private function createShopGetDataInputDto(
-        string|null $groupId,
-        array|null $shopsId,
-        array|null $productsId,
-        string|null $shopNameFilterType,
+        ?string $groupId,
+        ?array $shopsId,
+        ?array $productsId,
+        ?string $shopNameFilterType,
         string|int|float|null $shopNameFilterValue,
-        string|null $shopName,
-        bool|null $orderAsc,
-        int|null $page,
-        int|null $pageItems,
+        ?string $shopName,
+        ?bool $orderAsc,
+        ?int $page,
+        ?int $pageItems,
     ): ShopGetDataInputDto {
         return new ShopGetDataInputDto(
             $groupId,

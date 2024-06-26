@@ -38,9 +38,9 @@ class ShopGetDataServiceTest extends TestCase
     private function getShops(): array
     {
         return [
-            Shop::fromPrimitives('shop 1 id', 'group id', 'shop 1 name', 'shop 1 description', 'fileName.file'),
-            Shop::fromPrimitives('shop 2 id', 'group id', 'shop 2 name', 'shop 2 description', null),
-            Shop::fromPrimitives('shop 3 id', 'group id', 'shop 3 name', 'shop 3 description', null),
+            Shop::fromPrimitives('shop 1 id', 'group id', 'shop 1 name', 'shop 1 address', 'shop 1 description', 'fileName.file'),
+            Shop::fromPrimitives('shop 2 id', 'group id', 'shop 2 name', 'shop 2 address', 'shop 2 description', null),
+            Shop::fromPrimitives('shop 3 id', 'group id', 'shop 3 name', 'shop 3 address', 'shop 3 description', null),
         ];
     }
 
@@ -67,6 +67,7 @@ class ShopGetDataServiceTest extends TestCase
         $this->assertArrayHasKey('id', $shopDataActual);
         $this->assertArrayHasKey('group_id', $shopDataActual);
         $this->assertArrayHasKey('name', $shopDataActual);
+        $this->assertArrayHasKey('address', $shopDataActual);
         $this->assertArrayHasKey('description', $shopDataActual);
         $this->assertArrayHasKey('image', $shopDataActual);
         $this->assertArrayHasKey('created_on', $shopDataActual);
@@ -74,6 +75,7 @@ class ShopGetDataServiceTest extends TestCase
         $this->assertEquals($shopsDataExpected->getId()->getValue(), $shopDataActual['id']);
         $this->assertEquals($shopsDataExpected->getGroupId()->getValue(), $shopDataActual['group_id']);
         $this->assertEquals($shopsDataExpected->getName()->getValue(), $shopDataActual['name']);
+        $this->assertEquals($shopsDataExpected->getAddress()->getValue(), $shopDataActual['address']);
         $this->assertEquals($shopsDataExpected->getDescription()->getValue(), $shopDataActual['description']);
         $this->assertEquals($shopsDataExpected->getImage()->getValue(), $shopDataActual['image']);
         $this->assertIsString($shopDataActual['created_on']);
