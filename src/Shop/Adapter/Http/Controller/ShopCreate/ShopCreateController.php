@@ -32,6 +32,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'group_id', type: 'string', description: 'Group id to add the shop', example: '0290bf7e-2e68-4698-ba2e-d2394c239572'),
                         new OA\Property(property: 'name', type: 'string', minLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MIN_LENGTH, maxLength: VALUE_OBJECTS_CONSTRAINTS::NAME_MAX_LENGTH, description: 'Shop\'s name', example: 'Shop name'),
                         new OA\Property(property: 'description', type: 'string', maxLength: VALUE_OBJECTS_CONSTRAINTS::DESCRIPTION_MAX_LENGTH, description: 'Shop description', example: 'This is the description of the shop'),
+                        new OA\Property(property: 'address', type: 'string', maxLength: VALUE_OBJECTS_CONSTRAINTS::ADDRESS_MAX_LENGTH, description: 'Shop address', example: 'Calle Vitoria, 10 3b'),
                         new OA\Property(property: 'image', type: 'string', format: 'binary', description: 'Shop\'s image'),
                     ]
                 )
@@ -64,7 +65,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<description|group_id|permissions|name|shop_name_repeated|image, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<description|address|group_id|permissions|name|shop_name_repeated|image, string|array>')),
                     ]
                 )
             )
@@ -82,13 +83,13 @@ class ShopCreateController extends AbstractController
     public function __invoke(ShopCreateRequestDto $request): JsonResponse
     {
         $shop = $this->shopCreateUseCase->__invoke(
-            $this->createShopCreateInputDto($request->groupId, $request->name, $request->description, $request->image)
+            $this->createShopCreateInputDto($request->groupId, $request->name, $request->address, $request->description, $request->image)
         );
 
         return $this->createResponse($shop);
     }
 
-    private function createShopCreateInputDto(string|null $groupId, string|null $name, string|null $description, UploadedFile|null $image): ShopCreateInputDto
+    private function createShopCreateInputDto(?string $groupId, ?string $name, ?string $address, ?string $description, ?UploadedFile $image): ShopCreateInputDto
     {
         /** @var UserSharedSymfonyAdapter $userAdapterSymfony */
         $userAdapterSymfony = $this->security->getUser();
@@ -97,6 +98,7 @@ class ShopCreateController extends AbstractController
             $userAdapterSymfony->getUser(),
             $groupId,
             $name,
+            $address,
             $description,
             null === $image ? null : new UploadedFileSymfonyAdapter($image)
         );

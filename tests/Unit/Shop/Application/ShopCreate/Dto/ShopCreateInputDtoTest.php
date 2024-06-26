@@ -61,9 +61,10 @@ class ShopCreateInputDtoTest extends TestCase
     {
         $groupId = self::GROUP_ID;
         $name = 'shop name';
+        $address = 'shop address';
         $description = 'shop description';
         $shopImageFile = $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK);
-        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $description, $shopImageFile);
+        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $address, $description, $shopImageFile);
 
         $return = $object->validate($this->validator);
 
@@ -75,9 +76,10 @@ class ShopCreateInputDtoTest extends TestCase
     {
         $groupId = null;
         $name = 'shop name';
+        $address = 'shop address';
         $description = 'shop description';
         $shopImageFile = $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK);
-        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $description, $shopImageFile);
+        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $address, $description, $shopImageFile);
 
         $return = $object->validate($this->validator);
 
@@ -89,9 +91,10 @@ class ShopCreateInputDtoTest extends TestCase
     {
         $groupId = 'group id wrong';
         $name = 'shop name';
+        $address = 'shop address';
         $description = 'shop description';
         $shopImageFile = $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK);
-        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $description, $shopImageFile);
+        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $address, $description, $shopImageFile);
 
         $return = $object->validate($this->validator);
 
@@ -103,9 +106,10 @@ class ShopCreateInputDtoTest extends TestCase
     {
         $groupId = self::GROUP_ID;
         $name = null;
+        $address = 'shop address';
         $description = 'shop description';
         $shopImageFile = $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK);
-        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $description, $shopImageFile);
+        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $address, $description, $shopImageFile);
 
         $return = $object->validate($this->validator);
 
@@ -117,9 +121,10 @@ class ShopCreateInputDtoTest extends TestCase
     {
         $groupId = self::GROUP_ID;
         $name = 'shop-name';
+        $address = 'shop address';
         $description = 'shop description';
         $shopImageFile = $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK);
-        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $description, $shopImageFile);
+        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $address, $description, $shopImageFile);
 
         $return = $object->validate($this->validator);
 
@@ -127,13 +132,44 @@ class ShopCreateInputDtoTest extends TestCase
     }
 
     /** @test */
+    public function itShouldFailAddressIsWrong(): void
+    {
+        $groupId = self::GROUP_ID;
+        $name = 'shop name';
+        $address = 'shop address wrong &';
+        $description = 'shop description';
+        $shopImageFile = $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK);
+        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $address, $description, $shopImageFile);
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEquals(['address' => [VALIDATION_ERRORS::REGEX_FAIL]], $return);
+    }
+
+    /** @test */
+    public function itShouldFailAddressIsNull(): void
+    {
+        $groupId = self::GROUP_ID;
+        $name = 'shop name';
+        $address = null;
+        $description = 'shop description';
+        $shopImageFile = $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK);
+        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $address, $description, $shopImageFile);
+
+        $return = $object->validate($this->validator);
+
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
     public function itShouldFailDescriptionWrong(): void
     {
         $groupId = self::GROUP_ID;
         $name = 'shop name';
+        $address = 'shop address';
         $description = str_pad('', 501, 'f');
         $shopImageFile = $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK);
-        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $description, $shopImageFile);
+        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $address, $description, $shopImageFile);
 
         $return = $object->validate($this->validator);
 
@@ -145,9 +181,10 @@ class ShopCreateInputDtoTest extends TestCase
     {
         $groupId = self::GROUP_ID;
         $name = 'shop name';
+        $address = 'shop address';
         $description = null;
         $shopImageFile = $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK);
-        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $description, $shopImageFile);
+        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $address, $description, $shopImageFile);
 
         $return = $object->validate($this->validator);
 
@@ -159,9 +196,10 @@ class ShopCreateInputDtoTest extends TestCase
     {
         $groupId = self::GROUP_ID;
         $name = 'shop name';
+        $address = 'shop address';
         $description = 'shop description';
         $shopImageFile = $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_NO_FILE);
-        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $description, $shopImageFile);
+        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $address, $description, $shopImageFile);
 
         $return = $object->validate($this->validator);
 
@@ -173,9 +211,10 @@ class ShopCreateInputDtoTest extends TestCase
     {
         $groupId = self::GROUP_ID;
         $name = 'shop name';
+        $address = 'shop address';
         $description = 'shop description';
         $shopImageFile = null;
-        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $description, $shopImageFile);
+        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $address, $description, $shopImageFile);
 
         $return = $object->validate($this->validator);
 
@@ -187,18 +226,19 @@ class ShopCreateInputDtoTest extends TestCase
     {
         $groupId = 'group id wrong';
         $name = 'shop-name';
+        $address = 'shop address';
         $description = str_pad('', 501, 'f');
         $shopImageFile = $this->getUploadedImage(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_NO_FILE);
-        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $description, $shopImageFile);
+        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $address, $description, $shopImageFile);
 
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
-                'group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
-                'name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
-                'description' => [VALIDATION_ERRORS::STRING_TOO_LONG],
-                'image' => [VALIDATION_ERRORS::FILE_UPLOAD_NO_FILE],
-            ],
+            'group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
+            'name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
+            'description' => [VALIDATION_ERRORS::STRING_TOO_LONG],
+            'image' => [VALIDATION_ERRORS::FILE_UPLOAD_NO_FILE],
+        ],
             $return
         );
     }
@@ -208,9 +248,10 @@ class ShopCreateInputDtoTest extends TestCase
     {
         $groupId = self::GROUP_ID;
         $name = 'shop name';
+        $address = 'shop address';
         $description = 'shop description';
         $shopImageFile = $this->getUploadedImage(self::PATH_FILE, 'image.png', 'image/png', UPLOAD_ERR_OK);
-        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $description, $shopImageFile);
+        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $address, $description, $shopImageFile);
 
         $return = $object->validate($this->validator);
 
@@ -222,9 +263,10 @@ class ShopCreateInputDtoTest extends TestCase
     {
         $groupId = self::GROUP_ID;
         $name = 'shop name';
+        $address = 'shop address';
         $description = 'shop description';
         $shopImageFile = $this->getUploadedImage(self::PATH_FILE, 'image.png', 'image/png', UPLOAD_ERR_OK);
-        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $description, $shopImageFile);
+        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $address, $description, $shopImageFile);
 
         BuiltInFunctionsReturn::$filesize = 2 * 1_000_000 + 1;
         $return = $object->validate($this->validator);
@@ -237,9 +279,10 @@ class ShopCreateInputDtoTest extends TestCase
     {
         $groupId = self::GROUP_ID;
         $name = 'shop name';
+        $address = 'shop address';
         $description = 'shop description';
         $shopImageFile = $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_INI_SIZE);
-        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $description, $shopImageFile);
+        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $address, $description, $shopImageFile);
 
         BuiltInFunctionsReturn::$filesize = 2 * 1_000_000 + 1;
         $return = $object->validate($this->validator);
@@ -252,9 +295,10 @@ class ShopCreateInputDtoTest extends TestCase
     {
         $groupId = self::GROUP_ID;
         $name = 'shop name';
+        $address = 'shop address';
         $description = 'shop description';
         $shopImageFile = $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_NO_FILE);
-        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $description, $shopImageFile);
+        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $address, $description, $shopImageFile);
 
         $return = $object->validate($this->validator);
 
@@ -266,9 +310,10 @@ class ShopCreateInputDtoTest extends TestCase
     {
         $groupId = self::GROUP_ID;
         $name = 'shop name';
+        $address = 'shop address';
         $description = 'shop description';
         $shopImageFile = $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_PARTIAL);
-        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $description, $shopImageFile);
+        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $address, $description, $shopImageFile);
 
         $return = $object->validate($this->validator);
 
@@ -280,9 +325,10 @@ class ShopCreateInputDtoTest extends TestCase
     {
         $groupId = self::GROUP_ID;
         $name = 'shop name';
+        $address = 'shop address';
         $description = 'shop description';
         $shopImageFile = $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_CANT_WRITE);
-        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $description, $shopImageFile);
+        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $address, $description, $shopImageFile);
 
         $return = $object->validate($this->validator);
 
@@ -294,9 +340,10 @@ class ShopCreateInputDtoTest extends TestCase
     {
         $groupId = self::GROUP_ID;
         $name = 'shop name';
+        $address = 'shop address';
         $description = 'shop description';
         $shopImageFile = $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_EXTENSION);
-        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $description, $shopImageFile);
+        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $address, $description, $shopImageFile);
 
         $return = $object->validate($this->validator);
 
@@ -308,9 +355,10 @@ class ShopCreateInputDtoTest extends TestCase
     {
         $groupId = self::GROUP_ID;
         $name = 'shop name';
+        $address = 'shop address';
         $description = 'shop description';
         $shopImageFile = $this->getUploadedImage(self::PATH_FILE, 'file.txt', 'text/plain', UPLOAD_ERR_NO_TMP_DIR);
-        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $description, $shopImageFile);
+        $object = new ShopCreateInputDto($this->userSession, $groupId, $name, $address, $description, $shopImageFile);
 
         $return = $object->validate($this->validator);
 

@@ -54,6 +54,7 @@ class GetProductShopPriceServiceTest extends TestCase
                 ValueObjectFactory::createIdentifier('shop id'),
                 ValueObjectFactory::createIdentifier('group id'),
                 ValueObjectFactory::createNameWithSpaces('shop name'),
+                ValueObjectFactory::createAddress('shop address'),
                 ValueObjectFactory::createDescription('shop description'),
                 ValueObjectFactory::createPath('shop image path'),
             ])

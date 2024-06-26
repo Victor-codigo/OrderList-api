@@ -7,6 +7,7 @@ namespace Shop\Domain\Service\ShopCreate;
 use Common\Domain\Config\AppConfig;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Object\ShopImage;
+use Common\Domain\Model\ValueObject\String\Address;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
@@ -51,7 +52,7 @@ class ShopCreateService
 
             throw ShopCreateNameAlreadyExistsException::fromMessage('Shop name already exists');
         } catch (DBNotFoundException) {
-            $shop = $this->createShop($input->groupId, $input->name, $input->description, $input->image);
+            $shop = $this->createShop($input->groupId, $input->name, $input->address, $input->description, $input->image);
             $this->shopRepository->save($shop);
 
             return $shop;
@@ -70,7 +71,7 @@ class ShopCreateService
      * @throws FileException
      * @throws ImageResizeException
      */
-    private function createShop(Identifier $groupId, NameWithSpaces $name, Description $description, ShopImage $image): Shop
+    private function createShop(Identifier $groupId, NameWithSpaces $name, Address $address, Description $description, ShopImage $image): Shop
     {
         $shopId = ValueObjectFactory::createIdentifier($this->shopRepository->generateId());
 
@@ -78,6 +79,7 @@ class ShopCreateService
             $shopId,
             $groupId,
             $name,
+            $address,
             $description,
             $this->shopImageUpload($image)
         );

@@ -10,16 +10,18 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ShopCreateRequestDto implements RequestDtoInterface
 {
-    public readonly string|null $groupId;
-    public readonly string|null $name;
-    public readonly string|null $description;
-    public readonly UploadedFile|null $image;
+    public readonly ?string $groupId;
+    public readonly ?string $name;
+    public readonly ?string $description;
+    public readonly ?string $address;
+    public readonly ?UploadedFile $image;
 
     public function __construct(Request $request)
     {
         $this->groupId = $request->request->get('group_id');
         $this->name = $request->request->get('name');
         $this->description = $request->request->get('description');
+        $this->address = $request->request->get('address');
         $this->image = $request->files->get('image');
     }
 }

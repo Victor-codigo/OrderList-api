@@ -44,12 +44,13 @@ class ShopRemoveServiceTest extends TestCase
         BuiltInFunctionsReturn::$unlink = null;
     }
 
-    private function getShop(Identifier $shopId, Identifier $groupId, string $image = null): Shop
+    private function getShop(Identifier $shopId, Identifier $groupId, ?string $image = null): Shop
     {
         return new Shop(
             $shopId,
             $groupId,
             ValueObjectFactory::createNameWithSpaces('shop name'),
+            ValueObjectFactory::createAddress('shop address'),
             ValueObjectFactory::createDescription('shop description'),
             ValueObjectFactory::createPath($image)
         );

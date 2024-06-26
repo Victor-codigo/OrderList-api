@@ -48,6 +48,7 @@ class ShopRepositoryTest extends DataBaseTestCase
             '263878c8-20c4-457e-b1cf-7e0c1208a402',
             self::GROUP_ID,
             'Shop new name',
+            'Shop new address',
             'Shop new description',
             null
         );
@@ -59,6 +60,7 @@ class ShopRepositoryTest extends DataBaseTestCase
             'e6c1d350-f010-403c-a2d4-3865c14630ec',
             '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
             'Shop 1 name',
+            'Shop 1 address',
             'Quae suscipit ea sit est exercitationem aliquid nobis. Qui quidem aut non quia cupiditate. Neque sunt aperiam cum quis quia aspernatur quia. Ratione enim eos rerum et. Ducimus voluptatem nam porro et est molestiae. Rerum perspiciatis et distinctio totam culpa et quaerat temporibus. Suscipit occaecati rerum molestiae voluptas odio eos. Sunt labore quia asperiores laborum. Unde explicabo et aspernatur vel odio modi qui. Ipsa recusandae eveniet doloribus quisquam. Nam aut ut omnis qui possimus.',
             null,
         );

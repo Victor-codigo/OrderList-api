@@ -77,7 +77,7 @@ class ShopCreateUseCase extends ServiceBase
 
     private function createShopCreateDto(ShopCreateInputDto $input): ShopCreateDto
     {
-        return new ShopCreateDto($input->groupId, $input->name, $input->description, $input->image);
+        return new ShopCreateDto($input->groupId, $input->name, $input->address, $input->description, $input->image);
     }
 
     private function createShopCreateOutputDto(Identifier $shopId): ShopCreateOutputDto

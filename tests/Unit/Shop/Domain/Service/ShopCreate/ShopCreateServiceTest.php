@@ -47,17 +47,18 @@ class ShopCreateServiceTest extends TestCase
         $this->object = new ShopCreateService($this->shopRepository, $this->fileUpload, $this->image, self::IMAGE_UPLOADED_PATH);
     }
 
-    private function createShopCreateDto(string|null $description, FileInterface|null $shopImageFile): ShopCreateDto
+    private function createShopCreateDto(?string $description, ?string $address, ?FileInterface $shopImageFile): ShopCreateDto
     {
         return new ShopCreateDto(
             ValueObjectFactory::createIdentifier('276865ee-d120-46e9-a3f7-16f7c923a990'),
             ValueObjectFactory::createNameWithSpaces('shop 1'),
+            ValueObjectFactory::createAddress($address),
             ValueObjectFactory::createDescription($description),
             ValueObjectFactory::createShopImage($shopImageFile),
         );
     }
 
-    private function assertShopIsCreated(Shop $shop, ShopCreateDto $input, string|null $expectedImageShopName): bool
+    private function assertShopIsCreated(Shop $shop, ShopCreateDto $input, ?string $expectedImageShopName): bool
     {
         $this->assertEquals(self::GROUP_ID, $shop->getId());
         $this->assertEquals($input->groupId, $shop->getGroupId());
@@ -72,7 +73,8 @@ class ShopCreateServiceTest extends TestCase
     public function itShouldCreateAShopAllData(): void
     {
         $shopDescription = 'shop 1 description';
-        $input = $this->createShopCreateDto($shopDescription, $this->shopImageFile);
+        $shopAddress = 'Shop address';
+        $input = $this->createShopCreateDto($shopDescription, $shopAddress, $this->shopImageFile);
 
         $this->fileUpload
             ->expects($this->once())
@@ -114,6 +116,7 @@ class ShopCreateServiceTest extends TestCase
         $this->assertEquals(self::GROUP_ID, $return->getId());
         $this->assertEquals($input->groupId, $return->getGroupId());
         $this->assertEquals($input->name, $return->getName());
+        $this->assertEquals($input->address, $return->getAddress());
         $this->assertEquals($input->description, $return->getDescription());
         $this->assertEquals(self::IMAGE_UPLOADED_FILE_NAME, $return->getImage()->getValue());
     }
@@ -122,7 +125,8 @@ class ShopCreateServiceTest extends TestCase
     public function itShouldCreateAShopDescriptionIsNull(): void
     {
         $shopDescription = null;
-        $input = $this->createShopCreateDto($shopDescription, $this->shopImageFile);
+        $shopAddress = 'Shop address';
+        $input = $this->createShopCreateDto($shopDescription, $shopAddress, $this->shopImageFile);
 
         $this->fileUpload
             ->expects($this->once())
@@ -164,6 +168,59 @@ class ShopCreateServiceTest extends TestCase
         $this->assertEquals(self::GROUP_ID, $return->getId());
         $this->assertEquals($input->groupId, $return->getGroupId());
         $this->assertEquals($input->name, $return->getName());
+        $this->assertEquals($input->address, $return->getAddress());
+        $this->assertEquals($input->description, $return->getDescription());
+        $this->assertEquals(self::IMAGE_UPLOADED_FILE_NAME, $return->getImage()->getValue());
+    }
+
+    /** @test */
+    public function itShouldCreateAShopAddressIsNull(): void
+    {
+        $shopDescription = 'shop 1 description';
+        $shopAddress = null;
+        $input = $this->createShopCreateDto($shopDescription, $shopAddress, $this->shopImageFile);
+
+        $this->fileUpload
+            ->expects($this->once())
+            ->method('__invoke')
+            ->with($this->shopImageFile, self::IMAGE_UPLOADED_PATH);
+
+        $this->fileUpload
+            ->expects($this->exactly(2))
+            ->method('getFileName')
+            ->willReturn(self::IMAGE_UPLOADED_FILE_NAME);
+
+        $this->image
+            ->expects($this->once())
+            ->method('resizeToAFrame')
+            ->with(
+                ValueObjectFactory::createPath(self::IMAGE_UPLOADED_PATH.'/'.self::IMAGE_UPLOADED_FILE_NAME),
+                300,
+                300
+            );
+
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('findShopByShopNameOrFail')
+            ->with($input->groupId, $input->name, true)
+            ->willThrowException(new DBNotFoundException());
+
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('generateId')
+            ->willReturn(self::GROUP_ID);
+
+        $this->shopRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($this->callback(fn (Shop $shop) => $this->assertShopIsCreated($shop, $input, self::IMAGE_UPLOADED_FILE_NAME)));
+
+        $return = $this->object->__invoke($input);
+
+        $this->assertEquals(self::GROUP_ID, $return->getId());
+        $this->assertEquals($input->groupId, $return->getGroupId());
+        $this->assertEquals($input->name, $return->getName());
+        $this->assertEquals($input->address, $return->getAddress());
         $this->assertEquals($input->description, $return->getDescription());
         $this->assertEquals(self::IMAGE_UPLOADED_FILE_NAME, $return->getImage()->getValue());
     }
@@ -172,7 +229,8 @@ class ShopCreateServiceTest extends TestCase
     public function itShouldCreateAShopImageIsNull(): void
     {
         $shopDescription = 'shop 1 description';
-        $input = $this->createShopCreateDto($shopDescription, null);
+        $shopAddress = 'Shop address';
+        $input = $this->createShopCreateDto($shopDescription, $shopAddress, null);
 
         $this->fileUpload
             ->expects($this->never())
@@ -207,6 +265,7 @@ class ShopCreateServiceTest extends TestCase
         $this->assertEquals(self::GROUP_ID, $return->getId());
         $this->assertEquals($input->groupId, $return->getGroupId());
         $this->assertEquals($input->name, $return->getName());
+        $this->assertEquals($input->address, $return->getAddress());
         $this->assertEquals($input->description, $return->getDescription());
         $this->assertNull($return->getImage()->getValue());
     }
@@ -215,7 +274,8 @@ class ShopCreateServiceTest extends TestCase
     public function itShouldFailShopNameAlreadyExists(): void
     {
         $shopDescription = 'shop 1 description';
-        $input = $this->createShopCreateDto($shopDescription, $this->shopImageFile);
+        $shopAddress = 'Shop address';
+        $input = $this->createShopCreateDto($shopDescription, $shopAddress, $this->shopImageFile);
 
         $this->fileUpload
             ->expects($this->never())
@@ -251,7 +311,8 @@ class ShopCreateServiceTest extends TestCase
     public function itShouldFailFileUploadException(): void
     {
         $shopDescription = 'shop 1 description';
-        $input = $this->createShopCreateDto($shopDescription, $this->shopImageFile);
+        $shopAddress = 'Shop address';
+        $input = $this->createShopCreateDto($shopDescription, $shopAddress, $this->shopImageFile);
 
         $this->fileUpload
             ->expects($this->once())
@@ -290,7 +351,8 @@ class ShopCreateServiceTest extends TestCase
     public function itShouldFailResizeFileUploadedException(): void
     {
         $shopDescription = 'shop 1 description';
-        $input = $this->createShopCreateDto($shopDescription, $this->shopImageFile);
+        $shopAddress = 'Shop address';
+        $input = $this->createShopCreateDto($shopDescription, $shopAddress, $this->shopImageFile);
 
         $this->fileUpload
             ->expects($this->once())
@@ -335,7 +397,8 @@ class ShopCreateServiceTest extends TestCase
     public function itShouldFailSaveError(): void
     {
         $shopDescription = 'shop 1 description';
-        $input = $this->createShopCreateDto($shopDescription, $this->shopImageFile);
+        $shopAddress = 'Shop address';
+        $input = $this->createShopCreateDto($shopDescription, $shopAddress, $this->shopImageFile);
 
         $this->fileUpload
             ->expects($this->once())

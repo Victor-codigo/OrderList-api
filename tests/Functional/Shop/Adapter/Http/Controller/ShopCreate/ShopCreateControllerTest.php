@@ -74,6 +74,34 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'shop name',
+                'address' => 'shop address',
+                'description' => 'shop description',
+            ]),
+            files: [
+                'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            ]
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_CREATED);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Shop created', $responseContent->message);
+        $this->assertIsString($responseContent->data->id);
+    }
+
+    /** @test */
+    public function itShouldCreateAShopAddressIsNull(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_EXISTS_ID,
+                'name' => 'shop name',
                 'description' => 'shop description',
             ]),
             files: [
@@ -101,6 +129,7 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'shop name',
+                'address' => 'shop address',
                 'description' => null,
             ]),
             files: [
@@ -128,6 +157,7 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'shop name',
+                'address' => 'shop address',
                 'description' => 'shop description',
             ])
         );
@@ -142,6 +172,34 @@ class ShopCreateControllerTest extends WebClientTestCase
     }
 
     /** @test */
+    public function itShouldFailAddressIsWrong(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $this->createImageTestPath();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_EXISTS_ID,
+                'name' => 'shop name',
+                'address' => 'wrong *address*',
+                'description' => 'shop description',
+            ]),
+            files: [
+                'image' => $this->getImageUpload(self::PATH_IMAGE_UPLOAD, 'image.png', 'image/png', UPLOAD_ERR_OK),
+            ]
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['address'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+        $this->assertEquals(['regex_fail'], $responseContent->errors->address);
+    }
+
+    /** @test */
     public function itShouldFailDescriptionIsTooLong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -152,6 +210,7 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'shop name',
+                'address' => 'shop address',
                 'description' => str_pad('', 501, 'd'),
             ]),
             files: [
@@ -179,6 +238,7 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => null,
                 'name' => 'shop name',
+                'address' => 'shop address',
                 'description' => 'shop description',
             ]),
             files: [
@@ -206,6 +266,7 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => 'group id not wrong',
                 'name' => 'shop name',
+                'address' => 'shop address',
                 'description' => 'shop description',
             ]),
             files: [
@@ -233,6 +294,7 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => '6f4f22b3-08a6-44ca-a69e-2aae43651f98',
                 'name' => 'shop name',
+                'address' => 'shop address',
                 'description' => 'shop description',
             ]),
             files: [
@@ -260,6 +322,7 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_ID_EXISTS_USER_NOT_BELONGS,
                 'name' => 'shop name',
+                'address' => 'shop address',
                 'description' => 'shop description',
             ]),
             files: [
@@ -287,6 +350,7 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => null,
+                'address' => 'shop address',
                 'description' => 'shop description',
             ]),
             files: [
@@ -314,6 +378,7 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => '',
+                'address' => 'shop address',
                 'description' => 'shop description',
             ]),
             files: [
@@ -341,6 +406,7 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => str_pad('', 51, 'h'),
+                'address' => 'shop address',
                 'description' => 'shop description',
             ]),
             files: [
@@ -368,6 +434,7 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Shop name 1',
+                'address' => 'shop address',
                 'description' => 'shop description',
             ]),
             files: [
@@ -394,6 +461,7 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Shop name',
+                'address' => 'shop address',
                 'description' => 'shop description',
             ]),
             files: [
@@ -416,6 +484,7 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Shop name',
+                'address' => 'shop address',
                 'description' => 'shop description',
             ]),
             files: [
@@ -443,6 +512,7 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Shop name',
+                'address' => 'shop address',
                 'description' => 'shop description',
             ]),
             files: [
@@ -470,6 +540,7 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Shop name',
+                'address' => 'shop address',
                 'description' => 'shop description',
             ]),
             files: [
@@ -487,7 +558,7 @@ class ShopCreateControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldFailImageNoUploaded(): void
+    public function itShouldFailImageNoUploaded22(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $this->createImageTestPath();
@@ -497,6 +568,7 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Shop name',
+                'address' => 'shop address',
                 'description' => 'shop description',
             ]),
             files: [
@@ -524,6 +596,7 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Shop name',
+                'address' => 'shop address',
                 'description' => 'shop description',
             ]),
             files: [
@@ -551,6 +624,7 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Shop name',
+                'address' => 'shop address',
                 'description' => 'shop description',
             ]),
             files: [
@@ -578,6 +652,7 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Shop name',
+                'address' => 'shop address',
                 'description' => 'shop description',
             ]),
             files: [
@@ -605,6 +680,7 @@ class ShopCreateControllerTest extends WebClientTestCase
             content: json_encode([
                 'group_id' => self::GROUP_EXISTS_ID,
                 'name' => 'Shop name',
+                'address' => 'shop address',
                 'description' => 'shop description',
             ]),
             files: [
