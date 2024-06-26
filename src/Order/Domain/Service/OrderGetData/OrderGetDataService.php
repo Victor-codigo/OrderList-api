@@ -193,6 +193,7 @@ class OrderGetDataService
         return [
             'id' => $order->getShop()->getId()->getValue(),
             'name' => $order->getShop()->getName()->getValue(),
+            'address' => $order->getShop()->getAddress()->getValue(),
             'description' => $order->getShop()->getDescription()->getValue(),
             'image' => $order->getShop()->getImage()->isNull()
                 ? null

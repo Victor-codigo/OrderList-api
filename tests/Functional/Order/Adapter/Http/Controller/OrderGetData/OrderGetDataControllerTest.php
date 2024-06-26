@@ -115,6 +115,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
             'e6c1d350-f010-403c-a2d4-3865c14630ec',
             '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
             'Shop name 1',
+            'Shop address 1',
             'Shop description 1',
             "{$appProtocolAndDomain}{$shopPublicImagePath}/fileName.file"
         );
@@ -122,6 +123,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
             'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
             '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
             'Shop name 2',
+            'Shop address 2',
             'Shop description 2',
             null
         );
@@ -129,6 +131,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
             'b9b1c541-d41e-4751-9ecb-4a1d823c0405',
             '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
             'Shop name 3',
+            'Shop address 3',
             null,
             null
         );
@@ -241,6 +244,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         if (!$orderExpected->getShopId()->isNull()) {
             $this->assertArrayHasKey('id', $orderActual['shop']);
             $this->assertArrayHasKey('name', $orderActual['shop']);
+            $this->assertArrayHasKey('address', $orderActual['shop']);
             $this->assertArrayHasKey('description', $orderActual['shop']);
             $this->assertArrayHasKey('image', $orderActual['shop']);
             $this->assertArrayHasKey('created_on', $orderActual['shop']);
@@ -267,6 +271,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
             $shop = $orderExpected->getShop();
             $this->assertEquals($shop->getId()->getValue(), $orderActual['shop']['id']);
             $this->assertEquals($shop->getName(), $orderActual['shop']['name']);
+            $this->assertEquals($shop->getAddress(), $orderActual['shop']['address']);
             $this->assertEquals($shop->getDescription()->getValue(), $orderActual['shop']['description']);
             $this->assertEquals($shop->getImage()->getValue(), $orderActual['shop']['image']);
 

@@ -87,6 +87,7 @@ class OrderModifyServiceTest extends TestCase
             ValueObjectFactory::createIdentifier(self::SHOP_ID),
             ValueObjectFactory::createIdentifier(self::GROUP_ID),
             ValueObjectFactory::createNameWithSpaces('shop name modified'),
+            ValueObjectFactory::createAddress('shop address modified'),
             ValueObjectFactory::createDescription('shop description modified'),
             ValueObjectFactory::createPath('shop image path modified')
         );

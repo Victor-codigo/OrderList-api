@@ -131,6 +131,7 @@ use Symfony\Component\HttpFoundation\Response;
                                             properties: [
                                                 new OA\Property(property: 'id', type: 'string'),
                                                 new OA\Property(property: 'name', type: 'string'),
+                                                new OA\Property(property: 'address', type: 'string'),
                                                 new OA\Property(property: 'description', type: 'string'),
                                                 new OA\Property(property: 'image', type: 'string'),
                                                 new OA\Property(property: 'created_on', type: 'datetime'),
