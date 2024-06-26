@@ -43,7 +43,7 @@ class UserCreateGroupServiceTest extends TestCase
                 'name' => 'userName',
                 'description' => '',
                 'type' => GROUP_TYPE::USER->value,
-                'notify' => false,
+                'notify' => 'false',
             ],
             [],
             []

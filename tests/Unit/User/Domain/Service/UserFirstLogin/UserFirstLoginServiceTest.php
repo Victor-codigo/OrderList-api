@@ -148,7 +148,7 @@ class UserFirstLoginServiceTest extends TestCase
             ->expects($this->once())
             ->method('__invoke')
             ->with($this->callback(function (ModuleCommunicationConfigDto $notificationData) use ($userId, $userName, $appName, $systemKey) {
-                $this->assertEquals($userId, $notificationData->content['users_id']);
+                $this->assertEquals([$userId], $notificationData->content['users_id']);
                 $this->assertEquals('NOTIFICATION_USER_REGISTERED', $notificationData->content['type']);
                 $this->assertEquals($systemKey, $notificationData->content['system_key']);
                 $this->assertEquals($userName, $notificationData->content['notification_data']['user_name']);
@@ -205,7 +205,7 @@ class UserFirstLoginServiceTest extends TestCase
             ->expects($this->once())
             ->method('__invoke')
             ->with($this->callback(function (ModuleCommunicationConfigDto $notificationData) use ($userId, $userName, $appName, $systemKey) {
-                $this->assertEquals($userId, $notificationData->content['users_id']);
+                $this->assertEquals([$userId], $notificationData->content['users_id']);
                 $this->assertEquals('NOTIFICATION_USER_REGISTERED', $notificationData->content['type']);
                 $this->assertEquals($systemKey, $notificationData->content['system_key']);
                 $this->assertEquals($userName, $notificationData->content['notification_data']['user_name']);
