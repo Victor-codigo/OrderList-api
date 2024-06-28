@@ -206,6 +206,49 @@ class AppConfig
      */
     public const SHOP_IMAGE_FRAME_SIZE_HEIGHT = 300;
 
+    public const ROUTES_NAMES_ALLOWED = [
+        'user_get',
+        'user_get_by_name',
+        'user_modify',
+        'group_create',
+        'group_remove',
+        'group_modify',
+        'group_user_get_groups',
+        'group_group_get_users',
+        'group_get_admins',
+        'group_get_groups_admins',
+        'group_get_data',
+        'group_get_data_by_name',
+        'group_user_remove',
+        'group_user_role_change',
+        'notification_create',
+        'notification_remove',
+        'notification_user_remove_all',
+        'notification_get_data',
+        'notification_mark_as_viewed',
+        'product_create',
+        'product_modify',
+        'product_remove',
+        'product_get_data',
+        'product_set_price',
+        'product_get_price',
+        'shop_create',
+        'shop_modify',
+        'shop_remove',
+        'shop_get_data',
+        'order_create',
+        'order_modify',
+        'order_remove',
+        'order_get_data',
+        'orders_bought',
+        'list_orders_create',
+        'list_orders_create_from',
+        'list_orders_modify',
+        'list_orders_get_data',
+        'list_orders_remove',
+        'list_orders_get_price',
+    ];
+
     protected static ?AppConfig $instance = null;
     protected static VALUE_OBJECTS_CONSTRAINTS $valueObject;
 

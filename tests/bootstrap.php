@@ -14,8 +14,9 @@ if (file_exists(dirname(__DIR__).'/config/bootstrap.php')) {
 // BYPASS FINAL CLASSES
 BypassFinals::setWhitelist([
     '*/Doctrine/ORM/Query.php',
+    '*/symfony/http-kernel/Event/ControllerEvent.php',
 ]);
-BypassFinals::enable();
+BypassFinals::enable(false, true);
 
 if ($_SERVER['APP_DEBUG']) {
     umask(0000);
