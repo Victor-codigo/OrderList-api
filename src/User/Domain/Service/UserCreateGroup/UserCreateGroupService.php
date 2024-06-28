@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace User\Domain\Service\UserCreateGroup;
 
-use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
+use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
@@ -28,12 +28,13 @@ class UserCreateGroupService
         $groupName = $this->generateGroupName($input->userName);
         $response = $this->moduleCommunication->__invoke(
             ModuleCommunicationFactory::groupCreate(
-                new NameWithSpaces($groupName),
-                new Description(''),
+                ValueObjectFactory::createNameWithSpaces($groupName),
+                ValueObjectFactory::createDescription(null),
                 GROUP_TYPE::USER,
                 [],
                 false
-            ));
+            )
+        );
 
         if (RESPONSE_STATUS::OK !== $response->status || !empty($response->errors)) {
             throw UserCreateGroupUserException::fromMessage('It was not possible to create the user group');

@@ -149,10 +149,13 @@ class ModuleCommunicationFactory
 
         $content = [
             'name' => $name->getValue(),
-            'description' => $description->getValue(),
             'type' => $type->value,
             'notify' => ($notifyUser ?? true) ? 'true' : 'false',
         ];
+
+        if (!$description->isNull()) {
+            $content['description'] = $description->getValue();
+        }
 
         return new ModuleCommunicationConfigDto(
             'group_create',
