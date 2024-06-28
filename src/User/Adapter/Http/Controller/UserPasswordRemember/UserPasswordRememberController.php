@@ -32,13 +32,13 @@ use User\Application\UserPasswordRemember\UserPasswordRememberUseCase;
     responses: [
         new OA\Response(
             response: Response::HTTP_OK,
-            description: 'Request acepted',
+            description: 'Request accepted',
             content: new OA\MediaType(
                 mediaType: 'application/json',
                 schema: new OA\Schema(
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'ok'),
-                        new OA\Property(property: 'message', type: 'string', example: 'Request acepted'),
+                        new OA\Property(property: 'message', type: 'string', example: 'Request accepted'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
                         new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),
                     ]
@@ -80,13 +80,13 @@ class UserPasswordRememberController extends AbstractController
         return $this->json($this->createResponseDto(), Response::HTTP_OK);
     }
 
-    private function createUserPasswordRememberInputDto(string|null $email, string|null $passwordRememberUrl): UserPasswordRememberInputDto
+    private function createUserPasswordRememberInputDto(?string $email, ?string $passwordRememberUrl): UserPasswordRememberInputDto
     {
         return new UserPasswordRememberInputDto($email, $passwordRememberUrl);
     }
 
     private function createResponseDto(): ResponseDto
     {
-        return new ResponseDto(message: 'Request acepted', status: RESPONSE_STATUS::OK);
+        return new ResponseDto(message: 'Request accepted', status: RESPONSE_STATUS::OK);
     }
 }

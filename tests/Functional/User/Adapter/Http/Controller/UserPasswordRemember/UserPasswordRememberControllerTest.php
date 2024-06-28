@@ -42,7 +42,7 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
 
         $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_OK);
         $this->assertSame(RESPONSE_STATUS::OK->value, $responseContent->status);
-        $this->assertSame('Request acepted', $responseContent->message);
+        $this->assertSame('Request accepted', $responseContent->message);
 
         $this->assertEmailIsSent(self::EMAIL_ALREADY_EXISTS);
     }
