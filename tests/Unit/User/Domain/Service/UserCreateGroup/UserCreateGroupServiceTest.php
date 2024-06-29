@@ -41,7 +41,7 @@ class UserCreateGroupServiceTest extends TestCase
             'multipart/form-data',
             [
                 'name' => 'userName',
-                'description' => '',
+                'description' => null,
                 'type' => GROUP_TYPE::USER->value,
                 'notify' => 'false',
             ],
@@ -68,7 +68,13 @@ class UserCreateGroupServiceTest extends TestCase
                 $this->assertEquals($requestConfiguration->files, $config->files);
                 $this->assertEquals($requestConfiguration->contentType, $config->contentType);
                 $this->assertStringStartsWith($requestConfiguration->content['name'], $config->content['name']);
-                $this->assertEquals($requestConfiguration->content['description'], $config->content['description']);
+
+                if (null === $requestConfiguration->content['description']) {
+                    $this->assertArrayNotHasKey('description', $config->content);
+                } else {
+                    $this->assertEquals($requestConfiguration->content['description'], $config->content['description']);
+                }
+
                 $this->assertEquals($requestConfiguration->content['type'], $config->content['type']);
                 $this->assertEquals($requestConfiguration->content['notify'], $config->content['notify']);
                 $this->assertEquals($requestConfiguration->cookies, $config->cookies);
@@ -100,7 +106,13 @@ class UserCreateGroupServiceTest extends TestCase
                 $this->assertEquals($requestConfiguration->files, $config->files);
                 $this->assertEquals($requestConfiguration->contentType, $config->contentType);
                 $this->assertStringStartsWith($requestConfiguration->content['name'], $config->content['name']);
-                $this->assertEquals($requestConfiguration->content['description'], $config->content['description']);
+
+                if (null === $requestConfiguration->content['description']) {
+                    $this->assertArrayNotHasKey('description', $config->content);
+                } else {
+                    $this->assertEquals($requestConfiguration->content['description'], $config->content['description']);
+                }
+
                 $this->assertEquals($requestConfiguration->content['type'], $config->content['type']);
                 $this->assertEquals($requestConfiguration->content['notify'], $config->content['notify']);
                 $this->assertEquals($requestConfiguration->cookies, $config->cookies);
@@ -132,7 +144,13 @@ class UserCreateGroupServiceTest extends TestCase
                 $this->assertEquals($requestConfiguration->files, $config->files);
                 $this->assertEquals($requestConfiguration->contentType, $config->contentType);
                 $this->assertStringStartsWith($requestConfiguration->content['name'], $config->content['name']);
-                $this->assertEquals($requestConfiguration->content['description'], $config->content['description']);
+
+                if (null === $requestConfiguration->content['description']) {
+                    $this->assertArrayNotHasKey('description', $config->content);
+                } else {
+                    $this->assertEquals($requestConfiguration->content['description'], $config->content['description']);
+                }
+
                 $this->assertEquals($requestConfiguration->content['type'], $config->content['type']);
                 $this->assertEquals($requestConfiguration->content['notify'], $config->content['notify']);
                 $this->assertEquals($requestConfiguration->cookies, $config->cookies);

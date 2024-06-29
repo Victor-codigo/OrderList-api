@@ -84,8 +84,6 @@ class ControllerEventSubscriberTest extends TestCase
     /** @test */
     public function itShouldValidateNoSessionUser(): void
     {
-        $userSessionId = ValueObjectFactory::createIdentifier(self::USER_SESSION_ID);
-
         $this->controllerEvent
             ->expects($this->once())
             ->method('getRequest')
@@ -94,12 +92,11 @@ class ControllerEventSubscriberTest extends TestCase
         $this->security
             ->expects($this->once())
             ->method('getUser')
-            ->willReturn($this->userSymfonyAdapter);
+            ->willReturn(null);
 
         $this->userSymfonyAdapter
-            ->expects($this->once())
-            ->method('getUser')
-            ->willReturn(null);
+            ->expects($this->never())
+            ->method('getUser');
 
         $this->user
             ->expects($this->never())
