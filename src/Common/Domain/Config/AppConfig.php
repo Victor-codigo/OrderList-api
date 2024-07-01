@@ -206,10 +206,12 @@ class AppConfig
      */
     public const SHOP_IMAGE_FRAME_SIZE_HEIGHT = 300;
 
-    public const ROUTES_NAMES_ALLOWED = [
+    /**
+     * Routes tha the user Guest is allowed to use.
+     */
+    public const USER_GUEST_ROUTES_NAMES_ALLOWED = [
         'user_get',
         'user_get_by_name',
-        'user_modify',
         'group_create',
         'group_remove',
         'group_modify',
@@ -222,7 +224,6 @@ class AppConfig
         'group_user_remove',
         'group_user_role_change',
         'notification_create',
-        'notification_remove',
         'notification_user_remove_all',
         'notification_get_data',
         'notification_mark_as_viewed',

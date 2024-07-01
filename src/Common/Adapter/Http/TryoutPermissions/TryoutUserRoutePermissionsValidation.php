@@ -10,7 +10,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 
 class TryoutUserRoutePermissionsValidation
 {
-    public const ROUTES_NAMES_ALLOWED = AppConfig::ROUTES_NAMES_ALLOWED;
+    public const ROUTES_NAMES_ALLOWED = AppConfig::USER_GUEST_ROUTES_NAMES_ALLOWED;
 
     public function __construct(
         private readonly string $userTryoutId
