@@ -5,7 +5,7 @@
             repository-class="Product\Adapter\Database\Orm\Doctrine\Repository\ProductShopRepository">
 
        <id name="id"
-            type="integer">
+            type="bigint">
 
             <generator strategy="AUTO" />
         </id>

@@ -6,7 +6,7 @@
             repository-class="Group\Adapter\Database\Orm\Doctrine\Repository\UserGroupRepository">
 
         <id name="id"
-            type="integer">
+            type="bigint">
 
             <generator strategy="AUTO" />
         </id>
