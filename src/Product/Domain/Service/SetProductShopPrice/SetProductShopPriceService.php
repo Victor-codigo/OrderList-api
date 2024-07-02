@@ -81,7 +81,7 @@ class SetProductShopPriceService
             );
 
             return iterator_to_array($productsShopsPaginator);
-        } catch (DBNotFoundException $e) {
+        } catch (DBNotFoundException) {
             return [];
         }
     }

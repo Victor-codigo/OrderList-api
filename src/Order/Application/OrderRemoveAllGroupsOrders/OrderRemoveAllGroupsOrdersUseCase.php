@@ -54,7 +54,7 @@ class OrderRemoveAllGroupsOrdersUseCase extends ServiceBase
             }
 
             return $this->createOrderRemoveAllGroupsOrdersOutputDto($ordersIdRemovedAndUserIdChanged);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }
@@ -102,7 +102,7 @@ class OrderRemoveAllGroupsOrdersUseCase extends ServiceBase
 
                 yield $responseData['groups'];
             }
-        } catch (ModuleCommunicationException|\ValueError|ModuleCommunicationTokenNotFoundInRequestException|ModuleCommunicationErrorResponseException|\InvalidArgumentException $e) {
+        } catch (ModuleCommunicationException|\ValueError|ModuleCommunicationTokenNotFoundInRequestException|ModuleCommunicationErrorResponseException|\InvalidArgumentException) {
             throw OrderRemoveAllGroupsOrdersGroupsAdminsRequestException::fromMessage('Error getting groups admins');
         }
     }

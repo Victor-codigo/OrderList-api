@@ -42,7 +42,7 @@ class NotificationMarkAsViewedUseCase extends ServiceBase
             return $this->createNotificationMarkAsViewedOutputDto($notification);
         } catch (DBNotFoundException) {
             throw NotificationNotFoundException::fromMessage('Notifications not found');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

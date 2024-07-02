@@ -55,7 +55,7 @@ class GroupGetUsersUseCase extends ServiceBase
             throw $e;
         } catch (DBNotFoundException) {
             throw GroupGetUsersGroupNotFoundException::fromMessage('Group not found');
-        } catch (\Throwable $e) {
+        } catch (\Throwable) {
             throw DomainErrorException::fromMessage('An error has been occurred');
         }
     }

@@ -49,7 +49,7 @@ class OrderGetDataUseCase extends ServiceBase
             throw OrderGetDataValidateGroupAndUserException::fromMessage('You not belong to the group');
         } catch (DBNotFoundException) {
             throw OrderGetDataOrdersNotFoundException::fromMessage('Orders not found');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

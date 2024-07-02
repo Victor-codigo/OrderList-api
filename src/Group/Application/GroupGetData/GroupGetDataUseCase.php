@@ -46,7 +46,7 @@ class GroupGetDataUseCase extends ServiceBase
             return $this->createGroupGetDataOutputDto($groupsData);
         } catch (ValueObjectValidationException|GroupGetDataUserNotBelongsToTheGroupException $e) {
             throw $e;
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

@@ -79,7 +79,7 @@ class GroupUserAddUseCase extends ServiceBase
             throw GroupUserAddPermissionException::fromMessage('Permissions denied');
         } catch (DBNotFoundException) {
             throw GroupUserAddGroupNotFoundException::fromMessage('Group not found');
-        } catch (DBConnectionException|ModuleCommunicationException $e) {
+        } catch (DBConnectionException|ModuleCommunicationException) {
             throw DomainErrorException::fromMessage('An error has been occurred');
         }
     }

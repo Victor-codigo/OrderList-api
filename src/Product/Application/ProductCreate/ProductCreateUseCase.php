@@ -57,7 +57,7 @@ class ProductCreateUseCase extends ServiceBase
             throw ProductCreateCanNotUploadFileException::fromMessage('An error occurred while file was uploading');
         } catch (ValidateGroupAndUserException) {
             throw ProductCreateGroupException::fromMessage('Error validating the group');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

@@ -170,7 +170,7 @@ class ProductRepositoryTest extends DataBaseTestCase
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
         $productName = ValueObjectFactory::createNameWithSpaces('Juanola');
-        $return = $this->object->findProductsByGroupAndNameOrFail($groupId, $productName, 'Ju');
+        $return = $this->object->findProductsByGroupAndNameOrFail($groupId, $productName);
 
         $this->assertCount(1, $return);
 

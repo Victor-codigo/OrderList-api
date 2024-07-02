@@ -57,7 +57,7 @@ class ShopCreateUseCase extends ServiceBase
             throw ShopCreateCanNotUploadFileException::fromMessage('An error occurred while file was uploading');
         } catch (ValidateGroupAndUserException) {
             throw ShopCreateGroupException::fromMessage('Error validating the group');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

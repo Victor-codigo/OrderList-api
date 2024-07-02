@@ -48,7 +48,7 @@ class UsersRemoveActivationExpiredCommand extends Command
             $output->writeln('No users to remove');
 
             return Command::SUCCESS;
-        } catch (\Throwable $th) {
+        } catch (\Throwable) {
             return Command::FAILURE;
         }
     }

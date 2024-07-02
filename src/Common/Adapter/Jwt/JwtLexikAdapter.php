@@ -37,7 +37,7 @@ class JwtLexikAdapter implements JwtHS256Interface
     {
         try {
             return JWT::decode($token, $this->secretKey, true);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw JwtException::fromMessage('Provided JWT was invalid');
         }
     }

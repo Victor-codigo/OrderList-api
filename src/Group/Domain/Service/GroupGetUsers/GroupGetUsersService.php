@@ -109,7 +109,7 @@ class GroupGetUsersService
             return $this->getUserData($usersSortedByName);
         } catch (DBNotFoundException $th) {
             throw $th;
-        } catch (\Throwable $th) {
+        } catch (\Throwable) {
             throw new DomainInternalErrorException();
         }
     }

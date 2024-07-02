@@ -39,7 +39,7 @@ class NotificationGetDataUseCase extends ServiceBase
             return $this->createNotificationGetDataOutputDto($notificationsData);
         } catch (DBNotFoundException) {
             throw NotificationGetDataNotFoundException::fromMessage('Notifications not found');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

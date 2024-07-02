@@ -34,8 +34,7 @@ class UserRegisterInputDtoTest extends TestCase
             'password',
             'John',
             [new rol(USER_ROLES::USER)],
-            self::URL_EMAIL_CONFIRMATION,
-            self::REGISTRATION_KEY
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
@@ -51,8 +50,7 @@ class UserRegisterInputDtoTest extends TestCase
             'password',
             'John',
             [new rol(USER_ROLES::USER)],
-            self::URL_EMAIL_CONFIRMATION,
-            self::REGISTRATION_KEY
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
@@ -68,8 +66,7 @@ class UserRegisterInputDtoTest extends TestCase
             'password',
             'John',
             [new rol(USER_ROLES::USER)],
-            self::URL_EMAIL_CONFIRMATION,
-            self::REGISTRATION_KEY
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
@@ -85,8 +82,7 @@ class UserRegisterInputDtoTest extends TestCase
             null,
             'John',
             [new rol(USER_ROLES::USER)],
-            self::URL_EMAIL_CONFIRMATION,
-            self::REGISTRATION_KEY
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
@@ -102,8 +98,7 @@ class UserRegisterInputDtoTest extends TestCase
             'short',
             'John',
             [new rol(USER_ROLES::USER)],
-            self::URL_EMAIL_CONFIRMATION,
-            self::REGISTRATION_KEY
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
@@ -119,8 +114,7 @@ class UserRegisterInputDtoTest extends TestCase
             'password',
             null,
             [new rol(USER_ROLES::USER)],
-            self::URL_EMAIL_CONFIRMATION,
-            self::REGISTRATION_KEY
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
@@ -136,8 +130,7 @@ class UserRegisterInputDtoTest extends TestCase
             'password',
             '',
             [new rol(USER_ROLES::USER)],
-            self::URL_EMAIL_CONFIRMATION,
-            self::REGISTRATION_KEY
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
@@ -153,8 +146,7 @@ class UserRegisterInputDtoTest extends TestCase
             'password',
             'John',
             null,
-            self::URL_EMAIL_CONFIRMATION,
-            self::REGISTRATION_KEY
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
@@ -170,8 +162,7 @@ class UserRegisterInputDtoTest extends TestCase
             'password',
             'John',
             [],
-            self::URL_EMAIL_CONFIRMATION,
-            self::REGISTRATION_KEY
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);

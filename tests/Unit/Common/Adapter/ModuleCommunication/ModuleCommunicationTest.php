@@ -521,7 +521,7 @@ class ModuleCommunicationTest extends TestCase
             'header2',
         ];
         $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
-        $this->mockRequestMethod($routeConfig, self::URL, self::URL, AUTHENTICATION_SOURCE::REQUEST, NetworkException::fromMessage('', $httpExceptionInterface));
+        $this->mockRequestMethod($routeConfig, self::URL, self::URL, AUTHENTICATION_SOURCE::REQUEST, NetworkException::fromMessage(''));
 
         $this->object->__invoke($routeConfig);
     }

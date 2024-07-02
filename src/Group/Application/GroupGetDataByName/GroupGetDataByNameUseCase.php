@@ -44,7 +44,7 @@ class GroupGetDataByNameUseCase extends ServiceBase
             return $this->createGroupGetDataByNameOutputDto($groupData);
         } catch (DBNotFoundException) {
             throw GroupGetDataByNameGroupNotFoundException::fromMessage('Group not found');
-        } catch (ValidateGroupAndUserException $e) {
+        } catch (ValidateGroupAndUserException) {
             throw GroupGetDataUserNotBelongsToTheGroupException::fromMessage('You not belong to the group');
         } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');

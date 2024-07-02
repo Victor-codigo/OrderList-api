@@ -51,7 +51,7 @@ class ListOrdersRemoveAllGroupsListsOrdersUseCase extends ServiceBase
             }
 
             return $this->createListOrdersRemoveAllGroupsListsOrdersOutputDto($listsOrdersIdRemovedAndUserIdChanged);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }
@@ -99,7 +99,7 @@ class ListOrdersRemoveAllGroupsListsOrdersUseCase extends ServiceBase
 
                 yield $responseData['groups'];
             }
-        } catch (ModuleCommunicationException|\ValueError|ModuleCommunicationTokenNotFoundInRequestException|ModuleCommunicationErrorResponseException|\InvalidArgumentException $e) {
+        } catch (ModuleCommunicationException|\ValueError|ModuleCommunicationTokenNotFoundInRequestException|ModuleCommunicationErrorResponseException|\InvalidArgumentException) {
             throw ListOrdersRemoveAllGroupsListsOrdersGroupsAdminsRequestException::fromMessage('Error getting groups admins');
         }
     }

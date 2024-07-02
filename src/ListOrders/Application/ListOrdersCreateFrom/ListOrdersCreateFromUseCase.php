@@ -53,7 +53,7 @@ class ListOrdersCreateFromUseCase extends ServiceBase
             throw ListOrdersCreateFromIdNotFoundException::fromMessage('The list orders id to create from, not found');
         } catch (ListOrdersCreateFromServiceNameAlreadyExistsException) {
             throw ListOrdersCreateFromNameAlreadyExistsException::fromMessage('The name already exists');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

@@ -61,7 +61,7 @@ class OrderCreateUseCase extends ServiceBase
             throw OrderCreateProductShopRepeatedException::fromMessage('Product and shop are already in the order list');
         } catch (OrderCreateServiceShopNotFoundException) {
             throw OrderCreateShopNotFoundException::fromMessage('Shop or shops not found');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

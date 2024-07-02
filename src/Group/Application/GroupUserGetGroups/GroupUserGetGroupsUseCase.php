@@ -38,9 +38,9 @@ class GroupUserGetGroupsUseCase extends ServiceBase
             );
 
             return $this->createGroupUserGetGroupsOutputDto($input->page, $userGroups);
-        } catch (DBNotFoundException $e) {
+        } catch (DBNotFoundException) {
             throw GroupUserGetGroupsNoGroupsFoundException::fromMessage('No groups found');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

@@ -70,7 +70,7 @@ class UserRemoveUseCase extends ServiceBase
             return $this->createUserRemoveOutputDto($userRemovedId);
         } catch (DBNotFoundException) {
             throw UserRemoveUserNotFoundException::fromMessage('User not found');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainErrorException::fromMessage('An error has been occurred');
         }
     }

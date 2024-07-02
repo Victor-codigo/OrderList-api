@@ -49,7 +49,7 @@ class ListOrdersRemoveUseCase extends ServiceBase
             throw ListOrdersValidationGroupAndUserException::fromMessage('You not belong to the group');
         } catch (DBNotFoundException) {
             throw ListOrdersListOrdersNotFoundException::fromMessage('List orders not found');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }
