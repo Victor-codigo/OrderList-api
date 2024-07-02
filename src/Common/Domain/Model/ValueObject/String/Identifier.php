@@ -7,7 +7,7 @@ namespace Common\Domain\Model\ValueObject\String;
 use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\ConstraintFactory;
 
-class Identifier extends StringValueObject
+class Identifier extends StringValueObject implements \Stringable
 {
     protected function defineConstraints(): void
     {
@@ -24,6 +24,6 @@ class Identifier extends StringValueObject
             return '';
         }
 
-        return $this->getValue();
+        return (string) $this->getValue();
     }
 }

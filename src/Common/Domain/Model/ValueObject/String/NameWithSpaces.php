@@ -9,7 +9,7 @@ use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\ConstraintFactory;
 
-class NameWithSpaces extends StringValueObject
+class NameWithSpaces extends StringValueObject implements \Stringable
 {
     protected function defineConstraints(): void
     {
@@ -21,9 +21,9 @@ class NameWithSpaces extends StringValueObject
             ->setConstraint(ConstraintFactory::stringRange(VALUE_OBJECTS_CONSTRAINTS::NAME_WITH_SPACES_MIN_LENGTH, VALUE_OBJECTS_CONSTRAINTS::NAME_WITH_SPACES_MAX_LENGTH));
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->getValue();
+        return (string) $this->getValue();
     }
 
     public function witheSpacesToSlashes()

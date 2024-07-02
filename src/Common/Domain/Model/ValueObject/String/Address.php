@@ -8,7 +8,7 @@ use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\ConstraintFactory;
 
-class Address extends StringValueObject
+class Address extends StringValueObject implements \Stringable
 {
     protected function defineConstraints(): void
     {
@@ -18,8 +18,8 @@ class Address extends StringValueObject
             ->setConstraint(ConstraintFactory::regEx('/^[a-zÀ-ÿ0-9\s,_\-\\\\\.\#]+$/ui', true));
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->getValue();
+        return (string) $this->getValue();
     }
 }

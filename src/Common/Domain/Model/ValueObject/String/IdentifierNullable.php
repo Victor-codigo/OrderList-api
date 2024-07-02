@@ -8,7 +8,7 @@ use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\ConstraintFactory;
 
-class IdentifierNullable extends StringValueObject
+class IdentifierNullable extends StringValueObject implements \Stringable
 {
     protected function defineConstraints(): void
     {
@@ -28,6 +28,6 @@ class IdentifierNullable extends StringValueObject
             return '';
         }
 
-        return $this->getValue();
+        return (string) $this->getValue();
     }
 }
