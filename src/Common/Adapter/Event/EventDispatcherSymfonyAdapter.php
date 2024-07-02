@@ -20,7 +20,7 @@ class EventDispatcherSymfonyAdapter implements EventDispatcherInterface
 
     public function dispatch(EventDomainInterface $event): void
     {
-        $listeners = $this->eventDispatcher->getListeners(get_class($event));
+        $listeners = $this->eventDispatcher->getListeners($event::class);
 
         foreach ($listeners as $listener) {
             $listener($event);
