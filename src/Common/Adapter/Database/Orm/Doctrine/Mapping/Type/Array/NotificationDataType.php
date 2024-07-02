@@ -52,7 +52,7 @@ class NotificationDataType extends TypeBase
         }
 
         try {
-            $notificationData = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+            $notificationData = json_decode((string) $value, true, 512, JSON_THROW_ON_ERROR);
 
             return parent::convertToPHPValue($notificationData, $platform);
         } catch (\JsonException) {

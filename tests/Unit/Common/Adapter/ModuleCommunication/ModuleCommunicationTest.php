@@ -103,7 +103,7 @@ class ModuleCommunicationTest extends TestCase
             $this->assertArrayHasKey('body', $options);
             $this->assertArrayHasKey('headers', $options);
             $this->assertInstanceOf(\Generator::class, $options['body']);
-            $this->assertEquals('Content-Type: multipart/form-data', explode(';', end($options['headers']))[0]);
+            $this->assertEquals('Content-Type: multipart/form-data', explode(';', (string) end($options['headers']))[0]);
             $this->assertCount(1 + count($routeConfig->headers) + count($routeConfig->cookies), $options['headers']);
         }
 

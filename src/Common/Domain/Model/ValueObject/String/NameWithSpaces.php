@@ -28,14 +28,14 @@ class NameWithSpaces extends StringValueObject
 
     public function witheSpacesToSlashes()
     {
-        $nameWithSlashes = mb_ereg_replace(' ', '-', $this->getValue());
+        $nameWithSlashes = mb_ereg_replace(' ', '-', (string) $this->getValue());
 
         return ValueObjectFactory::createNameWithSpaces($nameWithSlashes);
     }
 
     public function slashesToWiteSpaces()
     {
-        $nameWithWhiteSpaces = mb_ereg_replace('-', ' ', $this->getValue());
+        $nameWithWhiteSpaces = mb_ereg_replace('-', ' ', (string) $this->getValue());
 
         return ValueObjectFactory::createNameWithSpaces($nameWithWhiteSpaces);
     }

@@ -59,7 +59,7 @@ class RolesType extends TypeBase
         }
 
         try {
-            $roles = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+            $roles = json_decode((string) $value, true, 512, JSON_THROW_ON_ERROR);
             $rolesObject = [];
 
             foreach ($roles as $rol) {

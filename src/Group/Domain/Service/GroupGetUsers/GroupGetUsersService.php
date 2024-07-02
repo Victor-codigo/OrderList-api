@@ -134,7 +134,7 @@ class GroupGetUsersService
             return $usersData;
         }
 
-        $pattern = preg_quote($filterText->getValue());
+        $pattern = preg_quote((string) $filterText->getValue());
 
         return match ($filterText->getFilter()->getValue()) {
             FILTER_STRING_COMPARISON::EQUALS => array_filter(

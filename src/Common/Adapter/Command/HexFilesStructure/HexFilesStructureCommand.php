@@ -110,7 +110,7 @@ class HexFilesStructureCommand extends Command
         $layer = $input->getArgument('layer');
         $outputPath = $input->getArgument('outputPath');
 
-        $this->layer = mb_strtolower($layer ?? $this->layer);
+        $this->layer = mb_strtolower((string) ($layer ?? $this->layer));
         $this->outputPath = $outputPath ?? $this->outputPath;
     }
 
