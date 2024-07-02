@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class TemplateTest extends TestCase
 {
-    private const TEMPLATE_PATH = __DIR__.'/Fixtures/Output/Template/Template/Template.php';
+    private const TEMPLATE_PATH = __DIR__.'/Fixtures/Output/Template/Template/Template.php.template';
     private const TEMPLATE_EXPECTED_PATH = __DIR__.'/Fixtures/Output/Template/Expected/TemplateExpected.php';
     private const TEMPLATE_OUTPUT_PATH = __DIR__.'/Fixtures/Output/Template/Output/TemplateOutput.php';
 
