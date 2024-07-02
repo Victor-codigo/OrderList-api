@@ -18,16 +18,16 @@ use PHPUnit\Framework\TestCase;
 
 class NotificationGetDataServiceTest extends TestCase
 {
-    private const NOTIFICATION_ID_1 = '2d208936-a7e9-32c1-963f-0df7f57ae463';
-    private const NOTIFICATION_ID_2 = '38dac117-2d4f-4057-8bc6-c972b5f439c6';
-    private const NOTIFICATION_ID_3 = '79a674c7-e109-3094-b8d5-c19cc00f5519';
-    private const NOTIFICATION_ID_4 = '26884a81-c072-4af9-bbdb-6045d827b4ac';
-    private const NOTIFICATION_ID_5 = '10332278-54b9-4f2a-a307-ecf10cc49a2b';
-    private const NOTIFICATION_ID_6 = '0776d4da-edc9-4337-80d5-57e12ac51b17';
-    private const NOTIFICATION_ID_7 = 'a43d386d-c878-40bf-a9bf-0aedea922260';
-    private const NOTIFICATION_ID_8 = '67d5ab78-5f19-40f0-869c-d079f6983bb3';
+    private const string NOTIFICATION_ID_1 = '2d208936-a7e9-32c1-963f-0df7f57ae463';
+    private const string NOTIFICATION_ID_2 = '38dac117-2d4f-4057-8bc6-c972b5f439c6';
+    private const string NOTIFICATION_ID_3 = '79a674c7-e109-3094-b8d5-c19cc00f5519';
+    private const string NOTIFICATION_ID_4 = '26884a81-c072-4af9-bbdb-6045d827b4ac';
+    private const string NOTIFICATION_ID_5 = '10332278-54b9-4f2a-a307-ecf10cc49a2b';
+    private const string NOTIFICATION_ID_6 = '0776d4da-edc9-4337-80d5-57e12ac51b17';
+    private const string NOTIFICATION_ID_7 = 'a43d386d-c878-40bf-a9bf-0aedea922260';
+    private const string NOTIFICATION_ID_8 = '67d5ab78-5f19-40f0-869c-d079f6983bb3';
 
-    private const TRANSLATOR_DOMAIN = 'Notifications';
+    private const string TRANSLATOR_DOMAIN = 'Notifications';
 
     private NotificationGetDataService $object;
     private MockObject|NotificationRepositoryInterface $notificationRepository;

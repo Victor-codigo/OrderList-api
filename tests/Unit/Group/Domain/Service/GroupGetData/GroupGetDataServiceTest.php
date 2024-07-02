@@ -16,8 +16,8 @@ use PHPUnit\Framework\TestCase;
 
 class GroupGetDataServiceTest extends TestCase
 {
-    private const PATH_APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
-    private const PATH_GROUP_IMAGES_PUBLIC = '/assets/img/groups';
+    private const string PATH_APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const string PATH_GROUP_IMAGES_PUBLIC = '/assets/img/groups';
 
     private GroupGetDataService $object;
     private MockObject|GroupRepositoryInterface $groupRepository;

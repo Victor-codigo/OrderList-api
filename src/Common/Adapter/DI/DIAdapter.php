@@ -22,8 +22,8 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 class DIAdapter implements DIInterface, ServiceSubscriberInterface
 {
-    private const API_DOMAIN = AppConfig::API_DOMAIN;
-    private const API_PROTOCOL = AppConfig::API_PROTOCOL;
+    private const string API_DOMAIN = AppConfig::API_DOMAIN;
+    private const string API_PROTOCOL = AppConfig::API_PROTOCOL;
 
     public function __construct(
         private ContainerInterface $DI

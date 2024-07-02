@@ -17,8 +17,8 @@ use User\Domain\Service\GetUsersProfilePublicData\GetUsersProfilePublicDataServi
 
 class GetUsersProfilePublcDataServiceTest extends TestCase
 {
-    private const USER_PUBLIC_IMAGE_PATH = '/userPublicImagePath';
-    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const string USER_PUBLIC_IMAGE_PATH = '/userPublicImagePath';
+    private const string APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
 
     private GetUsersProfilePublicDataService $object;
     private MockObject|ProfileRepositoryInterface $profileRepository;

@@ -24,9 +24,9 @@ use Shop\Domain\Model\Shop;
 
 class ListOrdersGetPriceServiceTest extends TestCase
 {
-    private const LIST_ORDERS_MAX_ORDERS = 500;
-    private const PRICE_TOTAL = 140;
-    private const PRICE_BOUGHT = 100;
+    private const int LIST_ORDERS_MAX_ORDERS = 500;
+    private const int PRICE_TOTAL = 140;
+    private const int PRICE_BOUGHT = 100;
 
     private ListOrdersGetPriceService $object;
     private MockObject|OrderRepositoryInterface $orderRepository;

@@ -15,12 +15,12 @@ require_once 'tests/BuiltinFunctions/SymfonyComponentValidatorConstraints.php';
 
 class ValidationFileTest extends TestCase
 {
-    private const PATH_IMAGE = 'tests/Fixtures/Files/Image.png';
-    private const PATH_IMAGE_LANDSCAPE = 'tests/Fixtures/Files/Landscape.png';
-    private const PATH_IMAGE_PORTRAIT = 'tests/Fixtures/Files/Portrait.png';
-    private const PATH_IMAGE_EMPTY = 'tests/Fixtures/Files/FileEmpty.txt';
+    private const string PATH_IMAGE = 'tests/Fixtures/Files/Image.png';
+    private const string PATH_IMAGE_LANDSCAPE = 'tests/Fixtures/Files/Landscape.png';
+    private const string PATH_IMAGE_PORTRAIT = 'tests/Fixtures/Files/Portrait.png';
+    private const string PATH_IMAGE_EMPTY = 'tests/Fixtures/Files/FileEmpty.txt';
 
-    private const IMAGE_DATA = [
+    private const array IMAGE_DATA = [
         'size' => 48_864,
         'mimeType' => 'image/png',
         'widthMin' => 1024,
@@ -33,7 +33,7 @@ class ValidationFileTest extends TestCase
         'aspectRatioMax' => 1,
     ];
 
-    private const LANDSCAPE_DATA = [
+    private const array LANDSCAPE_DATA = [
         'size' => 602_468,
         'mimeType' => 'image/png',
         'widthMin' => 776,
@@ -46,7 +46,7 @@ class ValidationFileTest extends TestCase
         'aspectRatioMax' => 1.779,
     ];
 
-    private const PORTRAIT_DATA = [
+    private const array PORTRAIT_DATA = [
         'size' => 623_595,
         'mimeType' => 'image/png',
         'widthMin' => 436,

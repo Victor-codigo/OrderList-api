@@ -13,7 +13,7 @@ use ListOrders\Domain\Service\ListOrdersRemoveAllGroupsListsOrders\Dto\ListOrder
 
 class ListOrdersRemoveAllGroupsListsOrdersService
 {
-    private const LISTS_ORDERS_PAGINATOR_PAGE_ITEMS = 100;
+    private const int LISTS_ORDERS_PAGINATOR_PAGE_ITEMS = 100;
 
     public function __construct(
         private ListOrdersRepositoryInterface $listOrdersRepository

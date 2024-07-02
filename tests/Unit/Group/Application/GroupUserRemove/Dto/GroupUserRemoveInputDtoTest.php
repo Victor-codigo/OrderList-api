@@ -14,8 +14,8 @@ use PHPUnit\Framework\TestCase;
 
 class GroupUserRemoveInputDtoTest extends TestCase
 {
-    private const GROUP_ID = '1dd8f1a0-1ddf-4363-81ce-8ac4e28a410b';
-    private const USERS_TO_REMOVE_ID = [
+    private const string GROUP_ID = '1dd8f1a0-1ddf-4363-81ce-8ac4e28a410b';
+    private const array USERS_TO_REMOVE_ID = [
         'a69386cc-1662-41b3-a39a-55216c115d72',
         'ace4bd94-4771-4a1f-970d-1f33887f3a51',
         '38ce9a0d-f9db-4cdd-ab5e-5c6fd0367a7a',

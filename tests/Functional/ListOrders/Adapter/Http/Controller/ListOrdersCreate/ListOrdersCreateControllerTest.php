@@ -13,8 +13,8 @@ class ListOrdersCreateControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/list-orders';
-    private const METHOD = 'POST';
+    private const string ENDPOINT = '/api/v1/list-orders';
+    private const string METHOD = 'POST';
 
     private function getListOrders(): array
     {

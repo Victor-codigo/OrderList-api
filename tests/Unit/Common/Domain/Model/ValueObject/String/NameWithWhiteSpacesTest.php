@@ -14,7 +14,7 @@ class NameWithWhiteSpacesTest extends TestCase
 {
     private ValidationInterface $validation;
 
-    private const VALID_NAME = 'Juan_6 Carlos';
+    private const string VALID_NAME = 'Juan_6 Carlos';
 
     public function setUp(): void
     {

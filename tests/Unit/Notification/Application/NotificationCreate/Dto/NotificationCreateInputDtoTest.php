@@ -15,8 +15,8 @@ use PHPUnit\Framework\TestCase;
 
 class NotificationCreateInputDtoTest extends TestCase
 {
-    private const USER_ID = '38dac117-2d4f-4057-8bc6-c972b5f439c6';
-    private const SYSTEM_KEY = 'system key';
+    private const string USER_ID = '38dac117-2d4f-4057-8bc6-c972b5f439c6';
+    private const string SYSTEM_KEY = 'system key';
 
     private ValidationInterface $validator;
     private MockObject|UserShared $user;

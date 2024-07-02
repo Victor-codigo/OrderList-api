@@ -17,9 +17,9 @@ use PHPUnit\Framework\TestCase;
 
 class NotificationRemoveServiceTest extends TestCase
 {
-    private const NOTIFICATION_ID_1 = '2d208936-a7e9-32c1-963f-0df7f57ae463';
-    private const NOTIFICATION_ID_2 = '38dac117-2d4f-4057-8bc6-c972b5f439c6';
-    private const NOTIFICATION_ID_3 = '79a674c7-e109-3094-b8d5-c19cc00f5519';
+    private const string NOTIFICATION_ID_1 = '2d208936-a7e9-32c1-963f-0df7f57ae463';
+    private const string NOTIFICATION_ID_2 = '38dac117-2d4f-4057-8bc6-c972b5f439c6';
+    private const string NOTIFICATION_ID_3 = '79a674c7-e109-3094-b8d5-c19cc00f5519';
 
     private NotificationRemoveService $object;
     private MockObject|NotificationRepositoryInterface $notificationRepository;

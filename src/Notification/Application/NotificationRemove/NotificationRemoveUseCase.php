@@ -22,8 +22,8 @@ use Notification\Domain\Service\NotificationRemove\NotificationRemoveService;
 
 class NotificationRemoveUseCase extends ServiceBase
 {
-    private const PAGINATION_PAGE = 1;
-    private const PAGINATION_PAGE_ITEMS = AppConfig::ENDPOINT_NOTIFICATION_REMOVE_MAX;
+    private const int PAGINATION_PAGE = 1;
+    private const int PAGINATION_PAGE_ITEMS = AppConfig::ENDPOINT_NOTIFICATION_REMOVE_MAX;
 
     public function __construct(
         private NotificationRemoveService $NotificationRemoveService,

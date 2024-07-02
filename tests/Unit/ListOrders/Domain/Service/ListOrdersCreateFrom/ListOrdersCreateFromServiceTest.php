@@ -25,9 +25,9 @@ use Shop\Domain\Model\Shop;
 
 class ListOrdersCreateFromServiceTest extends TestCase
 {
-    private const LIST_ORDERS_ID_OLD = 'list orders old';
-    private const LIST_ORDERS_ID_NEW = 'list orders new';
-    private const ORDER_ID_NEW = 'order id new';
+    private const string LIST_ORDERS_ID_OLD = 'list orders old';
+    private const string LIST_ORDERS_ID_NEW = 'list orders new';
+    private const string ORDER_ID_NEW = 'order id new';
 
     private ListOrdersCreateFromService $object;
     private MockObject|ListOrdersRepositoryInterface $listOrdersRepository;

@@ -20,10 +20,10 @@ use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 
 class ModuleCommunicationFactory
 {
-    private const API_VERSION = AppConfig::API_VERSION;
-    private const COOKIE_SESSION_NAME = AppConfig::COOKIE_SESSION_NAME;
-    private const CONTENT_TYPE_APPLICATION_JSON = 'application/json';
-    private const CONTENT_TYPE_APPLICATION_FORM = 'multipart/form-data';
+    private const string API_VERSION = AppConfig::API_VERSION;
+    private const string COOKIE_SESSION_NAME = AppConfig::COOKIE_SESSION_NAME;
+    private const string CONTENT_TYPE_APPLICATION_JSON = 'application/json';
+    private const string CONTENT_TYPE_APPLICATION_FORM = 'multipart/form-data';
 
     public static function userLogin(Email $email, Password $password): ModuleCommunicationConfigDto
     {

@@ -19,8 +19,8 @@ use Shop\Domain\Service\ShopGetData\ShopGetDataService;
 
 class ShopGetDataServiceTest extends TestCase
 {
-    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
-    private const SHOP_PUBLIC_IMAGE_PATH = '/shopPublicImagePath';
+    private const string APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const string SHOP_PUBLIC_IMAGE_PATH = '/shopPublicImagePath';
 
     private ShopGetDataService $object;
     private MockObject|ShopRepositoryInterface $shopRepository;

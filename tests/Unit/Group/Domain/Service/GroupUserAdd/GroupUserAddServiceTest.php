@@ -24,8 +24,8 @@ use PHPUnit\Framework\TestCase;
 
 class GroupUserAddServiceTest extends TestCase
 {
-    private const GROUP_ID = '76033a53-371e-46df-ac6f-19e67b3263ad';
-    private const GROUP_TYPE_USER_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
+    private const string GROUP_ID = '76033a53-371e-46df-ac6f-19e67b3263ad';
+    private const string GROUP_TYPE_USER_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
 
     private GroupUserAddService $object;
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;

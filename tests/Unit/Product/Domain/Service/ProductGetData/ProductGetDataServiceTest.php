@@ -18,8 +18,8 @@ use Product\Domain\Service\ProductGetData\ProductGetDataService;
 
 class ProductGetDataServiceTest extends TestCase
 {
-    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
-    private const PRODUCT_PUBLIC_PATH = '/group/public/path';
+    private const string APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const string PRODUCT_PUBLIC_PATH = '/group/public/path';
 
     private ProductGetDataService $object;
     private MockObject|ProductRepositoryInterface $productRepository;

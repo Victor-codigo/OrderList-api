@@ -14,7 +14,7 @@ use User\Domain\Model\User;
 
 class GetUsersInputDtoTest extends TestCase
 {
-    private const NUM_MAX_USERS = 50;
+    private const int NUM_MAX_USERS = 50;
 
     private GetUsersInputDto $object;
     private ValidationInterface $validator;

@@ -17,7 +17,7 @@ use Common\Domain\Validation\ValidationInterface;
 
 class ProductGetDataInputDto implements ServiceInputDtoInterface
 {
-    private const PRODUCT_NAME_STARTS_BY_LENGTH_MAX = VALUE_OBJECTS_CONSTRAINTS::NAME_WITH_SPACES_MAX_LENGTH;
+    private const int PRODUCT_NAME_STARTS_BY_LENGTH_MAX = VALUE_OBJECTS_CONSTRAINTS::NAME_WITH_SPACES_MAX_LENGTH;
 
     public readonly Identifier $groupId;
     /**

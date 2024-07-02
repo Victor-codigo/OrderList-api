@@ -20,9 +20,9 @@ use PHPUnit\Framework\TestCase;
 
 class GroupRemoveServiceTest extends TestCase
 {
-    private const GROUP_ID = 'id group 1';
-    private const GROUP_2_ID = 'id group 2';
-    private const PATH_GROUP_IMAGES = 'path/to/group/images';
+    private const string GROUP_ID = 'id group 1';
+    private const string GROUP_2_ID = 'id group 2';
+    private const string PATH_GROUP_IMAGES = 'path/to/group/images';
 
     private GroupRemoveService $object;
     private MockObject|GroupRepositoryInterface $groupRepository;

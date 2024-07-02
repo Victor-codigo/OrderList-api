@@ -13,17 +13,17 @@ class ShopRemoveControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/shops';
-    private const METHOD = 'DELETE';
-    private const USER_HAS_NO_GROUP_EMAIL = 'email.other_2.active@host.com';
-    private const USER_HAS_NO_GROUP_PASSWORD = '123456';
-    private const GROUP_EXISTS_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const SHOP_EXISTS_ID = [
+    private const string ENDPOINT = '/api/v1/shops';
+    private const string METHOD = 'DELETE';
+    private const string USER_HAS_NO_GROUP_EMAIL = 'email.other_2.active@host.com';
+    private const string USER_HAS_NO_GROUP_PASSWORD = '123456';
+    private const string GROUP_EXISTS_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const array SHOP_EXISTS_ID = [
         'e6c1d350-f010-403c-a2d4-3865c14630ec',
         'cc7f5dd6-02ba-4bd9-b5c1-5b65d81e59a0',
         'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
     ];
-    private const PRODUCT_EXISTS_ID = 'afc62bc9-c42c-4c4d-8098-09ce51414a92';
+    private const string PRODUCT_EXISTS_ID = 'afc62bc9-c42c-4c4d-8098-09ce51414a92';
 
     /** @test */
     public function itShouldRemoveShops(): void

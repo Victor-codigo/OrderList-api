@@ -11,8 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GetProductShopPriceRequestDtoTest extends TestCase
 {
-    private const ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
-    private const NUM_MAX = 100;
+    private const string ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
+    private const int NUM_MAX = 100;
 
     private function createRequest(array|null $requestData): GetProductShopPriceRequestDto
     {

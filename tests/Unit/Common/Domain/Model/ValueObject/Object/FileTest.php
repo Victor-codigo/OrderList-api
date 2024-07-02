@@ -17,9 +17,9 @@ require_once 'tests/BuiltinFunctions/SymfonyComponentValidatorConstraints.php';
 
 class FileTest extends TestCase
 {
-    private const PATH_FILE = 'tests/Fixtures/Files/file.txt';
-    private const PATH_FILE_NOT_FOUND = 'tests/Fixtures/Files/FileNotFound.txt';
-    private const PATH_FILE_EMPTY = 'tests/Fixtures/Files/FileEmpty.txt';
+    private const string PATH_FILE = 'tests/Fixtures/Files/file.txt';
+    private const string PATH_FILE_NOT_FOUND = 'tests/Fixtures/Files/FileNotFound.txt';
+    private const string PATH_FILE_EMPTY = 'tests/Fixtures/Files/FileEmpty.txt';
 
     private File $object;
     private ValidationChain $validator;

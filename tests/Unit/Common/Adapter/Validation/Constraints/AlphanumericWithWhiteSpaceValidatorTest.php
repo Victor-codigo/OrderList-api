@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class AlphanumericWithWhiteSpaceValidatorTest extends TestCase
 {
-    private const PATTERN = '/^[A-Za-zÀ-ÿ0-9_\s]+$/i';
+    private const string PATTERN = '/^[A-Za-zÀ-ÿ0-9_\s]+$/i';
 
     private AlphanumericWithWhiteSpaceValidator $object;
     private MockObject|AlphanumericWithWhiteSpace $alphanumericWithWhiteSpace;

@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UserGetByNameRequestDto implements RequestDtoInterface
 {
-    private const USERS_NUM_MAX = 50;
+    private const int USERS_NUM_MAX = 50;
 
     public readonly array|null $usersName;
 

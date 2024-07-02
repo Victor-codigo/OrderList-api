@@ -18,8 +18,8 @@ require_once 'tests/BuiltinFunctions/SymfonyComponentValidatorConstraints.php';
 
 class UserModifyInputDtoTest extends TestCase
 {
-    private const PATH_IMAGE_UPLOAD = 'tests/Fixtures/Files/Image.png';
-    private const PATH_FILE = 'tests/Fixtures/Files/file.txt';
+    private const string PATH_IMAGE_UPLOAD = 'tests/Fixtures/Files/Image.png';
+    private const string PATH_FILE = 'tests/Fixtures/Files/file.txt';
 
     private ValidationChain $validator;
 

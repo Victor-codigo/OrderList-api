@@ -18,8 +18,8 @@ use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
 class ControllerEventSubscriberTest extends TestCase
 {
-    private const USER_SESSION_ID = '372c70ab-2aca-4d47-99f1-e8ea45baaef3';
-    private const ROUTE_CURRENT = 'current_route';
+    private const string USER_SESSION_ID = '372c70ab-2aca-4d47-99f1-e8ea45baaef3';
+    private const string ROUTE_CURRENT = 'current_route';
 
     private ControllerEventSubscriber $object;
     private MockObject|TryoutUserRoutePermissionsValidation $tryoutUserPermissionsValidation;

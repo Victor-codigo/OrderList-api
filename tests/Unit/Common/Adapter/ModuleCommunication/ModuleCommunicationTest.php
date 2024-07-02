@@ -32,8 +32,8 @@ use Test\Unit\Common\Adapter\ModuleCommunication\Fixtures\ModuleCommunicationFac
 
 class ModuleCommunicationTest extends TestCase
 {
-    private const URL = 'http://domain.com/url/to/resource';
-    private const JWT_TOKEN = 'asdgasdfbadsfhaetrhadfhbadfhbaerth';
+    private const string URL = 'http://domain.com/url/to/resource';
+    private const string JWT_TOKEN = 'asdgasdfbadsfhaetrhadfhbadfhbaerth';
 
     private ModuleCommunication $object;
     private MockObject|HttpClientInterface $httpClient;

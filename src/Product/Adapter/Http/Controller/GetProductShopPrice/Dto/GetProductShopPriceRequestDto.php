@@ -10,8 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GetProductShopPriceRequestDto implements RequestDtoInterface
 {
-    private const PRODUCTS_MAX = AppConfig::ENDPOINT_PRODUCT_GET_PRODUCTS_MAX;
-    private const SHOPS_MAX = AppConfig::ENDPOINT_PRODUCT_GET_SHOPS_MAX;
+    private const int PRODUCTS_MAX = AppConfig::ENDPOINT_PRODUCT_GET_PRODUCTS_MAX;
+    private const int SHOPS_MAX = AppConfig::ENDPOINT_PRODUCT_GET_SHOPS_MAX;
 
     public readonly array|null $productsId;
     public readonly array|null $shopsId;

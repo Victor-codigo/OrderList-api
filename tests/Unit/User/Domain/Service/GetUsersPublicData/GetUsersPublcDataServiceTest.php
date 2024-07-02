@@ -19,8 +19,8 @@ use User\Domain\Service\GetUsersPublicData\GeUsersPublicDataService;
 
 class GetUsersPublcDataServiceTest extends TestCase
 {
-    private const USER_PUBLIC_IMAGE_PATH = 'userPublicImagePath';
-    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const string USER_PUBLIC_IMAGE_PATH = 'userPublicImagePath';
+    private const string APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
 
     private GeUsersPublicDataService $object;
     private MockObject|UserRepositoryInterface $userRepository;

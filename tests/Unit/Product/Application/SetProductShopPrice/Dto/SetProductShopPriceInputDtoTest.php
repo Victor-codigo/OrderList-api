@@ -15,9 +15,9 @@ use Product\Application\SetProductShopPrice\Dto\SetProductShopPriceInputDto;
 
 class SetProductShopPriceInputDtoTest extends TestCase
 {
-    private const PRODUCT_ID = 'c4e3c6c4-bcb4-46ec-ae00-71858ba6d46d';
-    private const SHOP_ID = '7ba97dfe-ed91-4795-849e-7c07a700cd98';
-    private const GROUP_ID = 'c9466728-e96c-4a68-8e33-479d524cf81b';
+    private const string PRODUCT_ID = 'c4e3c6c4-bcb4-46ec-ae00-71858ba6d46d';
+    private const string SHOP_ID = '7ba97dfe-ed91-4795-849e-7c07a700cd98';
+    private const string GROUP_ID = 'c9466728-e96c-4a68-8e33-479d524cf81b';
 
     private ValidationInterface $validator;
     private MockObject|UserShared $userSession;

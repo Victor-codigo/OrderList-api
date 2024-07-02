@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 
 class ListOrdersRemoveAllGroupsListsOrdersInputDtoTest extends TestCase
 {
-    private const SYSTEM_KEY = 'systemKeyDev';
+    private const string SYSTEM_KEY = 'systemKeyDev';
 
     private ValidationInterface $validator;
     private UserShared $userSession;

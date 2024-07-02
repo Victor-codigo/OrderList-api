@@ -14,16 +14,16 @@ class GroupModifyControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/groups/modify';
-    private const METHOD = 'PUT';
-    private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const GROUP_TYPE_USER_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
+    private const string ENDPOINT = '/api/v1/groups/modify';
+    private const string METHOD = 'PUT';
+    private const string GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const string GROUP_TYPE_USER_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
 
-    private const PATH_FIXTURES = __DIR__.'/Fixtures';
-    private const PATH_IMAGE_UPLOAD = __DIR__.'/Fixtures/Image.png';
-    private const PATH_IMAGE_BACKUP = 'tests/Fixtures/Files/Image.png';
-    private const PATH_IMAGE_NOT_ALLOWED = __DIR__.'/Fixtures/MimeTypeNotAllowed.txt';
-    private const PATH_IMAGE_NOT_ALLOWED_BACKUP = 'tests/Fixtures/Files/MimeTypeNotAllowed.txt';
+    private const string PATH_FIXTURES = __DIR__.'/Fixtures';
+    private const string PATH_IMAGE_UPLOAD = __DIR__.'/Fixtures/Image.png';
+    private const string PATH_IMAGE_BACKUP = 'tests/Fixtures/Files/Image.png';
+    private const string PATH_IMAGE_NOT_ALLOWED = __DIR__.'/Fixtures/MimeTypeNotAllowed.txt';
+    private const string PATH_IMAGE_NOT_ALLOWED_BACKUP = 'tests/Fixtures/Files/MimeTypeNotAllowed.txt';
 
     private string $patImageGroup;
 

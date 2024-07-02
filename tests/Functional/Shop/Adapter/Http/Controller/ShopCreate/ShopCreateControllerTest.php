@@ -14,18 +14,18 @@ class ShopCreateControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/shops';
-    private const METHOD = 'POST';
-    private const PATH_IMAGE_UPLOAD = __DIR__.'/Fixtures/Image.png';
-    private const PATH_FIXTURES = __DIR__.'/Fixtures';
-    private const PATH_IMAGE_BACKUP = 'tests/Fixtures/Files/Image.png';
-    private const PATH_IMAGE_NOT_ALLOWED = __DIR__.'/Fixtures/MimeTypeNotAllowed.txt';
-    private const PATH_IMAGE_NOT_ALLOWED_BACKUP = 'tests/Fixtures/Files/MimeTypeNotAllowed.txt';
-    private const PATH_IMAGES_SHOP_PUBLIC = 'public/assets/img/shops';
-    private const USER_HAS_NO_GROUP_EMAIL = 'email.other_2.active@host.com';
-    private const USER_HAS_NO_GROUP_PASSWORD = '123456';
-    private const GROUP_EXISTS_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const GROUP_ID_EXISTS_USER_NOT_BELONGS = '4d52266f-aa7e-324e-b92d-6152635dd09e';
+    private const string ENDPOINT = '/api/v1/shops';
+    private const string METHOD = 'POST';
+    private const string PATH_IMAGE_UPLOAD = __DIR__.'/Fixtures/Image.png';
+    private const string PATH_FIXTURES = __DIR__.'/Fixtures';
+    private const string PATH_IMAGE_BACKUP = 'tests/Fixtures/Files/Image.png';
+    private const string PATH_IMAGE_NOT_ALLOWED = __DIR__.'/Fixtures/MimeTypeNotAllowed.txt';
+    private const string PATH_IMAGE_NOT_ALLOWED_BACKUP = 'tests/Fixtures/Files/MimeTypeNotAllowed.txt';
+    private const string PATH_IMAGES_SHOP_PUBLIC = 'public/assets/img/shops';
+    private const string USER_HAS_NO_GROUP_EMAIL = 'email.other_2.active@host.com';
+    private const string USER_HAS_NO_GROUP_PASSWORD = '123456';
+    private const string GROUP_EXISTS_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string GROUP_ID_EXISTS_USER_NOT_BELONGS = '4d52266f-aa7e-324e-b92d-6152635dd09e';
 
     private string $pathImageShop;
 

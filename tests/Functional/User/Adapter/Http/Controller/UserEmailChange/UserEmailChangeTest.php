@@ -15,9 +15,9 @@ class UserEmailChangeTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/users/email';
-    private const METHOD = 'PATCH';
-    private const USER_PASSWORD = '123456';
+    private const string ENDPOINT = '/api/v1/users/email';
+    private const string METHOD = 'PATCH';
+    private const string USER_PASSWORD = '123456';
 
     protected function setUp(): void
     {

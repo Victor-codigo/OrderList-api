@@ -13,9 +13,9 @@ class GroupGetGroupsAdminsControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/groups/all/admins/';
-    private const METHOD = 'GET';
-    private const GROUP_ID = [
+    private const string ENDPOINT = '/api/v1/groups/all/admins/';
+    private const string METHOD = 'GET';
+    private const array GROUP_ID = [
         'fdb242b4-bac8-4463-88d0-0941bb0beee0',
         '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
         '78b96ac1-ffcc-458b-8f48-b40c6e65261f',

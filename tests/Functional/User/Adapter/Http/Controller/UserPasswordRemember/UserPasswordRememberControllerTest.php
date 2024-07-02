@@ -14,10 +14,10 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
 {
     use RefreshDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/users/remember';
-    private const METHOD = 'POST';
-    private const EMAIL_ALREADY_EXISTS = 'email.already.exists@host.com';
-    private const EMAIL_NOT_FOUND = 'email.not.found@host.com';
+    private const string ENDPOINT = '/api/v1/users/remember';
+    private const string METHOD = 'POST';
+    private const string EMAIL_ALREADY_EXISTS = 'email.already.exists@host.com';
+    private const string EMAIL_NOT_FOUND = 'email.not.found@host.com';
 
     private KernelBrowser $client;
 

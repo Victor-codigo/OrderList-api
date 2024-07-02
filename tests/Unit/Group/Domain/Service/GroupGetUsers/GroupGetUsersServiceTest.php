@@ -26,8 +26,8 @@ use User\Domain\Model\User;
 
 class GroupGetUsersServiceTest extends TestCase
 {
-    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
-    private const USER_PUBLIC_IMAGE_PATH = '/userPublicImagePath';
+    private const string APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const string USER_PUBLIC_IMAGE_PATH = '/userPublicImagePath';
 
     private GroupGetUsersService $object;
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;

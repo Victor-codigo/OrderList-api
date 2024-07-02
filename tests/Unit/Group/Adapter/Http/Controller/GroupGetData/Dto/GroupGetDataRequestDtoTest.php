@@ -11,8 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GroupGetDataRequestDtoTest extends TestCase
 {
-    private const GROUP_ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
-    private const GROUP_NUM_MAX = 50;
+    private const string GROUP_ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
+    private const int GROUP_NUM_MAX = 50;
 
     protected function setUp(): void
     {

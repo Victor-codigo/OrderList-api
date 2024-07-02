@@ -10,8 +10,8 @@ use User\Adapter\Http\Controller\GetUsers\Dto\GetUsersRequestDto;
 
 class GetUsersRequestDtoTest extends TestCase
 {
-    private const USER_ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
-    private const USERS_NUM_MAX = 50;
+    private const string USER_ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
+    private const int USERS_NUM_MAX = 50;
 
     protected function setUp(): void
     {

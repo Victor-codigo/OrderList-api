@@ -15,9 +15,9 @@ class GetUsersControllerTest extends WebClientTestCase
 {
     use RefreshDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/users';
-    private const METHOD = 'GET';
-    private const USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
+    private const string ENDPOINT = '/api/v1/users';
+    private const string METHOD = 'GET';
+    private const string USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
     protected function setUp(): void
     {

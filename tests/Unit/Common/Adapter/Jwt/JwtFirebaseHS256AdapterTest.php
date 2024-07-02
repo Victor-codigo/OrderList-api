@@ -12,8 +12,8 @@ use PHPUnit\Framework\TestCase;
 
 class JwtFirebaseHS256AdapterTest extends TestCase
 {
-    private const SECRET_KEY = 'this is a secret key';
-    private const PAYLOAD = [
+    private const string SECRET_KEY = 'this is a secret key';
+    private const array PAYLOAD = [
         'param1' => 1,
         'param2' => 'two',
         'param3' => true,

@@ -15,11 +15,11 @@ class GroupGetUsersControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/groups/user';
-    private const METHOD = 'GET';
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const USER_EMAIL = 'email.already.active@host.com';
-    private const USER_PASSWORD = '123456';
+    private const string ENDPOINT = '/api/v1/groups/user';
+    private const string METHOD = 'GET';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string USER_EMAIL = 'email.already.active@host.com';
+    private const string USER_PASSWORD = '123456';
 
     private function assertUsersAreOk(object $responseContent, int $expectedUsersCount, int $expectedPage, int $expectedPagesTotal): void
     {

@@ -13,14 +13,14 @@ class ListOrdersGetPriceControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/list-orders/price';
-    private const METHOD = 'GET';
+    private const string ENDPOINT = '/api/v1/list-orders/price';
+    private const string METHOD = 'GET';
 
-    private const LIST_ORDERS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
-    private const LIST_ORDERS_PRODUCTS_HAS_NO_PRICE_ID = 'f1559a23-2f92-4660-a335-b1052d7395da';
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const PRICE_TOTAL = 514.115;
-    private const PRICE_BOUGHT = 407.015;
+    private const string LIST_ORDERS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
+    private const string LIST_ORDERS_PRODUCTS_HAS_NO_PRICE_ID = 'f1559a23-2f92-4660-a335-b1052d7395da';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const float PRICE_TOTAL = 514.115;
+    private const float PRICE_BOUGHT = 407.015;
 
     /** @test */
     public function itShouldGetListOrdersPrice(): void

@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GroupUserRoleChangeRequestDto implements RequestDtoInterface
 {
-    private const USERS_NUM_MAX = AppConfig::ENDPOINT_GROUP_USER_ROLE_CHANGE_MAX_USERS;
+    private const int USERS_NUM_MAX = AppConfig::ENDPOINT_GROUP_USER_ROLE_CHANGE_MAX_USERS;
 
     public readonly string|null $groupId;
     /**

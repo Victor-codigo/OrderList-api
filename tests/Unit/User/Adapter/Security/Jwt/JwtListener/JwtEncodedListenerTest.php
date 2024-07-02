@@ -18,7 +18,7 @@ use User\Domain\Model\User;
 
 class JwtEncodedListenerTest extends TestCase
 {
-    private const TOKEN = 'token string';
+    private const string TOKEN = 'token string';
 
     private JwtEncodedListener $object;
     private MockObject|JWTEncodedEvent $jwtEventEncoded;

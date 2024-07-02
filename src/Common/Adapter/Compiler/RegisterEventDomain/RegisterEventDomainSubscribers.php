@@ -16,8 +16,8 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class RegisterEventDomainSubscribers implements CompilerPassInterface
 {
-    private const EVENT_DISPATCHER_SERVICE = 'event_dispatcher';
-    public const EVENT_DOMAIN_SUBSCRIBER_TAG = 'common.event_subscriber';
+    private const string EVENT_DISPATCHER_SERVICE = 'event_dispatcher';
+    public const string EVENT_DOMAIN_SUBSCRIBER_TAG = 'common.event_subscriber';
 
     public function process(ContainerBuilder $container): void
     {

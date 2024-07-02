@@ -13,7 +13,7 @@ use Order\Domain\Service\OrderRemoveAllGroupsOrders\Dto\OrderRemoveAllGroupsOrde
 
 class OrderRemoveAllGroupsOrdersService
 {
-    private const ORDERS_PAGINATOR_PAGE_ITEMS = 100;
+    private const int ORDERS_PAGINATOR_PAGE_ITEMS = 100;
 
     public function __construct(
         private OrderRepositoryInterface $orderRepository

@@ -13,10 +13,10 @@ class ListOrdersCreateFromControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/list-orders/create-from';
-    private const METHOD = 'POST';
-    private const LIST_ORDERS_CREATE_FROM_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string ENDPOINT = '/api/v1/list-orders/create-from';
+    private const string METHOD = 'POST';
+    private const string LIST_ORDERS_CREATE_FROM_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
 
     /** @test */
     public function itShouldCreateListOrdersFromOther(): void

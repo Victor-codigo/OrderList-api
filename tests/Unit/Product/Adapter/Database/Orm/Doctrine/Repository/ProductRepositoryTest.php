@@ -24,14 +24,14 @@ class ProductRepositoryTest extends DataBaseTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const GROUP_ID_2 = 'faeb885d-d6c4-466d-ac4a-793d87e03e86';
-    private const SHOP_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
-    private const PRODUCT_ID = 'afc62bc9-c42c-4c4d-8098-09ce51414a92';
-    private const PRODUCT_ID_2 = '8b6d650b-7bb7-4850-bf25-36cda9bce801';
-    private const PRODUCT_ID_3 = 'ca10c90a-c7e6-4594-89e9-71d2f5e74710';
-    private const PRODUCT_ID_4 = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
-    private const PRODUCT_NAME_EXISTS = 'Perico';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string GROUP_ID_2 = 'faeb885d-d6c4-466d-ac4a-793d87e03e86';
+    private const string SHOP_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
+    private const string PRODUCT_ID = 'afc62bc9-c42c-4c4d-8098-09ce51414a92';
+    private const string PRODUCT_ID_2 = '8b6d650b-7bb7-4850-bf25-36cda9bce801';
+    private const string PRODUCT_ID_3 = 'ca10c90a-c7e6-4594-89e9-71d2f5e74710';
+    private const string PRODUCT_ID_4 = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
+    private const string PRODUCT_NAME_EXISTS = 'Perico';
 
     private ProductRepository $object;
 

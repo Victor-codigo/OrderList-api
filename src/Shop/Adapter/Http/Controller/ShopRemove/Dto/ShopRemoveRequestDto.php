@@ -13,7 +13,7 @@ class ShopRemoveRequestDto implements RequestDtoInterface
 {
     use RequestDataValidation;
 
-    private const SHOPS_MAX = AppConfig::ENDPOINT_SHOP_REMOVE_MAX;
+    private const int SHOPS_MAX = AppConfig::ENDPOINT_SHOP_REMOVE_MAX;
 
     public readonly array|null $shopsId;
     public readonly string|null $groupId;

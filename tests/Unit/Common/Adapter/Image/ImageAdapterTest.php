@@ -18,8 +18,8 @@ require_once '/usr/src/tests/BuiltinFunctions/ImageAdapter.php';
 
 class ImageAdapterTest extends TestCase
 {
-    private const WIDTH_MAX = 1000;
-    private const HEIGHT_MAX = 1000;
+    private const int WIDTH_MAX = 1000;
+    private const int HEIGHT_MAX = 1000;
 
     private ImagineAdapter $object;
     private MockObject|Imagine $imagine;

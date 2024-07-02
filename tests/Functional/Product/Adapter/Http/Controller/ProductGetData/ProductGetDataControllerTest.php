@@ -14,18 +14,18 @@ class ProductGetDataControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/products';
-    private const METHOD = 'GET';
-    private const USER_HAS_NO_GROUP_EMAIL = 'email.other_2.active@host.com';
-    private const USER_HAS_NO_GROUP_PASSWORD = '123456';
-    private const GROUP_EXISTS_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const GROUP_ID_NOT_PERMISSIONS = '0dc4ec43-13c4-31cf-a3a3-aca81e96a4c8';
-    private const PRODUCTS_ID = [
+    private const string ENDPOINT = '/api/v1/products';
+    private const string METHOD = 'GET';
+    private const string USER_HAS_NO_GROUP_EMAIL = 'email.other_2.active@host.com';
+    private const string USER_HAS_NO_GROUP_PASSWORD = '123456';
+    private const string GROUP_EXISTS_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string GROUP_ID_NOT_PERMISSIONS = '0dc4ec43-13c4-31cf-a3a3-aca81e96a4c8';
+    private const array PRODUCTS_ID = [
         '8b6d650b-7bb7-4850-bf25-36cda9bce801',
         '7e3021d4-2d02-4386-8bbe-887cfe8697a8',
         'afc62bc9-c42c-4c4d-8098-09ce51414a92',
     ];
-    private const SHOPS_ID = [
+    private const array SHOPS_ID = [
         'e6c1d350-f010-403c-a2d4-3865c14630ec',
         'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
     ];

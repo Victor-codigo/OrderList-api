@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 
 class GroupUserRemoveServiceTest extends TestCase
 {
-    private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const string GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
 
     private GroupUserRemoveService $object;
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;

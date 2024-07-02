@@ -18,9 +18,9 @@ require_once 'tests/BuiltinFunctions/SymfonyComponentValidatorConstraints.php';
 
 class GroupCreateInputDtoTest extends TestCase
 {
-    private const GROUP_ID = '452618d5-17fa-4c16-8825-f4f540fca822';
-    private const PATH_IMAGE_UPLOAD = 'tests/Fixtures/Files/Image.png';
-    private const PATH_FILE = 'tests/Fixtures/Files/file.txt';
+    private const string GROUP_ID = '452618d5-17fa-4c16-8825-f4f540fca822';
+    private const string PATH_IMAGE_UPLOAD = 'tests/Fixtures/Files/Image.png';
+    private const string PATH_FILE = 'tests/Fixtures/Files/file.txt';
 
     private ValidationInterface $validator;
 

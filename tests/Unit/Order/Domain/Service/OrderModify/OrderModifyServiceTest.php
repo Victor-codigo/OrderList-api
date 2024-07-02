@@ -27,12 +27,12 @@ use Shop\Domain\Port\Repository\ShopRepositoryInterface;
 
 class OrderModifyServiceTest extends TestCase
 {
-    private const ORDER_ID = 'a0b4760a-9037-477a-8b84-d059ae5ee7e9';
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const LIST_ORDERS_ID = '218ee820-fd4b-4a4c-abc3-0e26ac437dd9';
-    private const PRODUCT_ID = '8b6d650b-7bb7-4850-bf25-36cda9bce801';
-    private const SHOP_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
-    private const USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
+    private const string ORDER_ID = 'a0b4760a-9037-477a-8b84-d059ae5ee7e9';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string LIST_ORDERS_ID = '218ee820-fd4b-4a4c-abc3-0e26ac437dd9';
+    private const string PRODUCT_ID = '8b6d650b-7bb7-4850-bf25-36cda9bce801';
+    private const string SHOP_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
+    private const string USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
     private OrderModifyService $object;
     private MockObject|OrderRepositoryInterface $orderRepository;

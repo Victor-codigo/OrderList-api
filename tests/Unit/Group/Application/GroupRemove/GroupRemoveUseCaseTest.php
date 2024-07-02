@@ -30,7 +30,7 @@ use PHPUnit\Framework\TestCase;
 
 class GroupRemoveUseCaseTest extends TestCase
 {
-    private const SYSTEM_KEY = 'systemKeForDev';
+    private const string SYSTEM_KEY = 'systemKeForDev';
 
     private GroupRemoveUseCase $object;
     private MockObject|GroupRemoveService $groupRemoveService;

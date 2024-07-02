@@ -14,16 +14,16 @@ class GroupCreateControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/groups';
-    private const METHOD = 'POST';
-    private const PATH_IMAGE_UPLOAD = __DIR__.'/Fixtures/Image.png';
-    private const PATH_FIXTURES = __DIR__.'/Fixtures';
-    private const PATH_IMAGE_BACKUP = 'tests/Fixtures/Files/Image.png';
-    private const PATH_IMAGE_NOT_ALLOWED = __DIR__.'/Fixtures/MimeTypeNotAllowed.txt';
-    private const PATH_IMAGE_NOT_ALLOWED_BACKUP = 'tests/Fixtures/Files/MimeTypeNotAllowed.txt';
-    private const PATH_IMAGES_GROUP_PUBLIC = 'public/assets/img/groups';
-    private const USER_HAS_NO_GROUP_EMAIL = 'email.other_2.active@host.com';
-    private const USER_HAS_NO_GROUP_PASSWORD = '123456';
+    private const string ENDPOINT = '/api/v1/groups';
+    private const string METHOD = 'POST';
+    private const string PATH_IMAGE_UPLOAD = __DIR__.'/Fixtures/Image.png';
+    private const string PATH_FIXTURES = __DIR__.'/Fixtures';
+    private const string PATH_IMAGE_BACKUP = 'tests/Fixtures/Files/Image.png';
+    private const string PATH_IMAGE_NOT_ALLOWED = __DIR__.'/Fixtures/MimeTypeNotAllowed.txt';
+    private const string PATH_IMAGE_NOT_ALLOWED_BACKUP = 'tests/Fixtures/Files/MimeTypeNotAllowed.txt';
+    private const string PATH_IMAGES_GROUP_PUBLIC = 'public/assets/img/groups';
+    private const string USER_HAS_NO_GROUP_EMAIL = 'email.other_2.active@host.com';
+    private const string USER_HAS_NO_GROUP_PASSWORD = '123456';
 
     private string $patImageGroup;
 

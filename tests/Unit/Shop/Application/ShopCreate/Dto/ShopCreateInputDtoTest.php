@@ -19,9 +19,9 @@ require_once 'tests/BuiltinFunctions/SymfonyComponentValidatorConstraints.php';
 
 class ShopCreateInputDtoTest extends TestCase
 {
-    private const GROUP_ID = '046030fa-cbc9-4751-b277-40622e94eda3';
-    private const PATH_IMAGE_UPLOAD = 'tests/Fixtures/Files/Image.png';
-    private const PATH_FILE = 'tests/Fixtures/Files/file.txt';
+    private const string GROUP_ID = '046030fa-cbc9-4751-b277-40622e94eda3';
+    private const string PATH_IMAGE_UPLOAD = 'tests/Fixtures/Files/Image.png';
+    private const string PATH_FILE = 'tests/Fixtures/Files/file.txt';
 
     private ValidationInterface $validator;
     private MockObject|UserShared $userSession;

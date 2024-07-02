@@ -13,9 +13,9 @@ class GroupRemoveAllUserGroupsControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/groups/user/remove-groups';
-    private const METHOD = 'DELETE';
-    private const SYSTEM_KEY = 'systemKeyForDev';
+    private const string ENDPOINT = '/api/v1/groups/user/remove-groups';
+    private const string METHOD = 'DELETE';
+    private const string SYSTEM_KEY = 'systemKeyForDev';
 
     protected function setUp(): void
     {

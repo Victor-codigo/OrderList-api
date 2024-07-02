@@ -13,13 +13,13 @@ class OrderRemoveAllGroupsOrdersControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/orders/group/remove-change';
-    private const METHOD = 'DELETE';
-    private const USER_ID = 'a3ca650a-a26a-4198-9317-ff3797dcca25';
-    private const SYSTEM_KEY = 'systemKeyForDev';
-    private const GROUP_ID_1 = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const GROUP_ID_2 = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const ORDERS_ID_GROUP_1 = [
+    private const string ENDPOINT = '/api/v1/orders/group/remove-change';
+    private const string METHOD = 'DELETE';
+    private const string USER_ID = 'a3ca650a-a26a-4198-9317-ff3797dcca25';
+    private const string SYSTEM_KEY = 'systemKeyForDev';
+    private const string GROUP_ID_1 = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string GROUP_ID_2 = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const array ORDERS_ID_GROUP_1 = [
         '5cfe52e5-db78-41b3-9acd-c3c84924cb9b',
         '72f2f46d-3f3f-48d0-b4eb-5cbed7896cab',
         '9a48ac5b-4571-43fd-ac80-28b08124ffb8',
@@ -28,7 +28,7 @@ class OrderRemoveAllGroupsOrdersControllerTest extends WebClientTestCase
         'd351adba-c566-4fa5-bb5b-1a6f73b1d72f',
         'fad53d41-d396-4f5b-91c3-d30fd6b66845',
     ];
-    private const ORDERS_ID_GROUP_2 = [
+    private const array ORDERS_ID_GROUP_2 = [
         '376008f2-4d7e-4072-8bd3-1e42ebe0c6da',
     ];
 

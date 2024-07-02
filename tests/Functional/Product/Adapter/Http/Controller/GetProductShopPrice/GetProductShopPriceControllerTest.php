@@ -14,16 +14,16 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/products/price';
-    private const METHOD = 'GET';
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const GROUP_OTHER_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const SHOP_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
-    private const SHOP_ID_2 = 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e';
-    private const SHOP_ID_3 = 'b9b1c541-d41e-4751-9ecb-4a1d823c0405';
-    private const PRODUCT_ID = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
-    private const PRODUCT_ID_2 = 'afc62bc9-c42c-4c4d-8098-09ce51414a92';
-    private const PRODUCT_ID_3 = '8b6d650b-7bb7-4850-bf25-36cda9bce801';
+    private const string ENDPOINT = '/api/v1/products/price';
+    private const string METHOD = 'GET';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string GROUP_OTHER_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const string SHOP_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
+    private const string SHOP_ID_2 = 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e';
+    private const string SHOP_ID_3 = 'b9b1c541-d41e-4751-9ecb-4a1d823c0405';
+    private const string PRODUCT_ID = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
+    private const string PRODUCT_ID_2 = 'afc62bc9-c42c-4c4d-8098-09ce51414a92';
+    private const string PRODUCT_ID_3 = '8b6d650b-7bb7-4850-bf25-36cda9bce801';
 
     private function assertProductShopIsOk(object $productShopExpected, object $productShopActual): void
     {

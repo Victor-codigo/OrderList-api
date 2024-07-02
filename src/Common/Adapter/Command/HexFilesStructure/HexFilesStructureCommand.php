@@ -21,15 +21,15 @@ use Symfony\Component\HttpKernel\KernelInterface;
 )]
 class HexFilesStructureCommand extends Command
 {
-    private const TEMPLATES_PATH = __DIR__.'/Template';
-    private const OUTPUT_DEFAULT_PATH = 'src/';
+    private const string TEMPLATES_PATH = __DIR__.'/Template';
+    private const string OUTPUT_DEFAULT_PATH = 'src/';
 
-    private const PERMISSIONS = 0o755;
+    private const int PERMISSIONS = 0o755;
 
-    private const LAYER_ADAPTER_NAME = 'adapter';
-    private const LAYER_APPLICATION_NAME = 'application';
-    private const LAYER_DOMAIN_NAME = 'domain';
-    private const LAYER_ALL_NAME = 'all';
+    private const string LAYER_ADAPTER_NAME = 'adapter';
+    private const string LAYER_APPLICATION_NAME = 'application';
+    private const string LAYER_DOMAIN_NAME = 'domain';
+    private const string LAYER_ALL_NAME = 'all';
 
     private KernelInterface $kernel;
 

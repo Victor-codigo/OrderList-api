@@ -13,9 +13,9 @@ class NotificationMarkAsViewedControllerTest extends WebClientTestCase
 {
     use RefreshDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/notification/mark-as-viewed';
-    private const METHOD = 'PATCH';
-    private const NOTIFICATIONS_ID = [
+    private const string ENDPOINT = '/api/v1/notification/mark-as-viewed';
+    private const string METHOD = 'PATCH';
+    private const array NOTIFICATIONS_ID = [
         '84a08f7c-30a6-4bd5-8e5b-b2d49948e72c',
         'd75a3fb1-42aa-46c0-be4c-1147f0808d60',
         'f7621fbd-0c8e-4a8a-8059-9e87b8ea4fe1',

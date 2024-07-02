@@ -13,13 +13,13 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
 {
     use RefreshDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/groups/user/role';
-    private const METHOD = 'PUT';
-    private const USER_NOT_GROUP_ADMIN_NAME = 'email.other.active@host.com';
-    private const USER_NOT_GROUP_ADMINPASSWORD = '123456';
-    private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const GROUP_USER_ADMIN_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
-    private const USERS_ID = [
+    private const string ENDPOINT = '/api/v1/groups/user/role';
+    private const string METHOD = 'PUT';
+    private const string USER_NOT_GROUP_ADMIN_NAME = 'email.other.active@host.com';
+    private const string USER_NOT_GROUP_ADMINPASSWORD = '123456';
+    private const string GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const string GROUP_USER_ADMIN_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
+    private const array USERS_ID = [
         self::GROUP_USER_ADMIN_ID,
         '1befdbe2-9c14-42f0-850f-63e061e33b8f',
         '6df60afd-f7c3-4c2c-b920-e265f266c560',

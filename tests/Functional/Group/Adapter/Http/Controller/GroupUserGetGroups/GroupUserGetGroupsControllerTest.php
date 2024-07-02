@@ -17,10 +17,10 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/groups/user-groups';
-    private const METHOD = 'GET';
-    private const GROUP_USER_ONLY_GROUP_EMAIL = 'email.other_5.active@host.com';
-    private const GROUP_USER_ONLY_GROUP_PASSWORD = '123456';
+    private const string ENDPOINT = '/api/v1/groups/user-groups';
+    private const string METHOD = 'GET';
+    private const string GROUP_USER_ONLY_GROUP_EMAIL = 'email.other_5.active@host.com';
+    private const string GROUP_USER_ONLY_GROUP_PASSWORD = '123456';
 
     /**
      * @return Group[]

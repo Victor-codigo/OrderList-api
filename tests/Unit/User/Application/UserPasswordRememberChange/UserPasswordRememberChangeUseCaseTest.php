@@ -21,7 +21,7 @@ use User\Domain\Service\UserPasswordChange\UserPasswordChangeService;
 
 class UserPasswordRememberChangeUseCaseTest extends TestCase
 {
-    private const SYSTEM_KEY = 'systemKeyForDev';
+    private const string SYSTEM_KEY = 'systemKeyForDev';
 
     private UserPasswordRememberChangeUseCase $object;
     private MockObject|UserPasswordChangeService $userPasswordChangeService;

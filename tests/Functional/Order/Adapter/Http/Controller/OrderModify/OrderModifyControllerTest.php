@@ -13,15 +13,15 @@ class OrderModifyControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/orders';
-    private const METHOD = 'PUT';
-    private const ORDER_ID = 'a0b4760a-9037-477a-8b84-d059ae5ee7e9';
-    private const LIST_ORDERS_ID = 'd446eab9-5199-48d0-91f5-0407a86bcb4f';
-    private const LIST_ORDERS_ID_2 = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const PRODUCT_ID = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
-    private const PRODUCT_NOT_IN_A_SHOP_ID = 'ca10c90a-c7e6-4594-89e9-71d2f5e74710';
-    private const SHOP_ID = 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e';
+    private const string ENDPOINT = '/api/v1/orders';
+    private const string METHOD = 'PUT';
+    private const string ORDER_ID = 'a0b4760a-9037-477a-8b84-d059ae5ee7e9';
+    private const string LIST_ORDERS_ID = 'd446eab9-5199-48d0-91f5-0407a86bcb4f';
+    private const string LIST_ORDERS_ID_2 = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string PRODUCT_ID = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
+    private const string PRODUCT_NOT_IN_A_SHOP_ID = 'ca10c90a-c7e6-4594-89e9-71d2f5e74710';
+    private const string SHOP_ID = 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e';
 
     /** @test */
     public function itShouldModifyOrder(): void

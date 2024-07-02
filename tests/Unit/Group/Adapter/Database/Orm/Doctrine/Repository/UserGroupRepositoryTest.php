@@ -23,12 +23,12 @@ class UserGroupRepositoryTest extends DataBaseTestCase
 {
     use RefreshDatabaseTrait;
 
-    private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const GROUP_2_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const GROUP_3_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
-    private const GROUP_4_ID = 'e05b2466-9528-4815-ac7f-663c1d89ab55';
-    private const GROUP_5_ID = '78b96ac1-ffcc-458b-8f48-b40c6e65261f';
-    private const GROUP_USER_ADMIN_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
+    private const string GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const string GROUP_2_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string GROUP_3_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
+    private const string GROUP_4_ID = 'e05b2466-9528-4815-ac7f-663c1d89ab55';
+    private const string GROUP_5_ID = '78b96ac1-ffcc-458b-8f48-b40c6e65261f';
+    private const string GROUP_USER_ADMIN_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
     private UserGroupRepository $object;
     private GroupRepositoryInterface $groupRepository;

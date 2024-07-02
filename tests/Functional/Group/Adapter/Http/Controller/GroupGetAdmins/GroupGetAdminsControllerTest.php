@@ -13,12 +13,12 @@ class GroupGetAdminsControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/groups/admins/';
-    private const METHOD = 'GET';
-    private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const GROUP_USER_ADMIN_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
-    private const GROUP_USER_EMAIL_NOT_BELONGS_TO_THE_GROUP = 'email.other.active@host.com';
-    private const GROUP_USER_PASSWORD_NOT_BELONGS_TO_THE_GROUP = '123456';
+    private const string ENDPOINT = '/api/v1/groups/admins/';
+    private const string METHOD = 'GET';
+    private const string GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const string GROUP_USER_ADMIN_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
+    private const string GROUP_USER_EMAIL_NOT_BELONGS_TO_THE_GROUP = 'email.other.active@host.com';
+    private const string GROUP_USER_PASSWORD_NOT_BELONGS_TO_THE_GROUP = '123456';
 
     /** @test */
     public function itShouldGetTheAdminsOfTheGroup(): void

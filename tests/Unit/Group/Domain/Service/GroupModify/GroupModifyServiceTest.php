@@ -24,10 +24,10 @@ use PHPUnit\Framework\TestCase;
 require_once 'tests/BuiltinFunctions/GroupApplicationGroupModify.php';
 class GroupModifyServiceTest extends TestCase
 {
-    private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const PATH_UPLOAD_GROUP_IMAGE = 'path/uploaded/images';
-    private const FILE_NAME_FILE_UPLOADED = 'image.png';
-    private const FILE_NAME_FILE_UPLOADED_MODIFIED = 'imageModified.png';
+    private const string GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const string PATH_UPLOAD_GROUP_IMAGE = 'path/uploaded/images';
+    private const string FILE_NAME_FILE_UPLOADED = 'image.png';
+    private const string FILE_NAME_FILE_UPLOADED_MODIFIED = 'imageModified.png';
 
     private GroupModifyService $object;
     private MockObject|GroupRepositoryInterface $groupRepository;

@@ -22,8 +22,8 @@ use PHPUnit\Framework\TestCase;
 
 class GroupUserRoleChangeTest extends TestCase
 {
-    private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const USERS_ID = [
+    private const string GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const array USERS_ID = [
         'f425bf79-5a19-31d4-ab56-ed4ca30a7b1a',
         '0b13e52d-b058-32fb-8507-10dec634a07c',
         '896c6153-794e-3e94-b62d-95997c8b60ad',

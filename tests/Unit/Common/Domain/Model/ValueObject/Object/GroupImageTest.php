@@ -17,9 +17,9 @@ require_once 'tests/BuiltinFunctions/SymfonyComponentValidatorConstraints.php';
 
 class GroupImageTest extends TestCase
 {
-    private const PATH_FILE = 'tests/Fixtures/Files/file.txt';
-    private const PATH_FILE_NOT_FOUND = 'tests/Fixtures/Files/fileNotFound.txt';
-    private const PATH_FILE_EMPTY = 'tests/Fixtures/Files/FileEmpty.txt';
+    private const string PATH_FILE = 'tests/Fixtures/Files/file.txt';
+    private const string PATH_FILE_NOT_FOUND = 'tests/Fixtures/Files/fileNotFound.txt';
+    private const string PATH_FILE_EMPTY = 'tests/Fixtures/Files/FileEmpty.txt';
 
     private GroupImage $object;
     private ValidationChain $validator;

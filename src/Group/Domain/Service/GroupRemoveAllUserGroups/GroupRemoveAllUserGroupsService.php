@@ -13,7 +13,7 @@ use Group\Domain\Service\GroupRemoveAllUserGroups\Dto\GroupRemoveAllUserGroupsDt
 
 class GroupRemoveAllUserGroupsService
 {
-    private const PAGINATION_PAGE_ITEMS = 100;
+    private const int PAGINATION_PAGE_ITEMS = 100;
 
     public function __construct(
         private GroupRepositoryInterface $groupRepository,

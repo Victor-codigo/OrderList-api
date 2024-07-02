@@ -28,16 +28,16 @@ class OrderGetDataServiceTest extends DataBaseTestCase
 {
     use RefreshDatabaseTrait;
 
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const ORDERS_ID = [
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const array ORDERS_ID = [
         '9a48ac5b-4571-43fd-ac80-28b08124ffb8',
         'a0b4760a-9037-477a-8b84-d059ae5ee7e9',
         'c3734d1c-8b18-4bfd-95aa-06a261476d9d',
         'd351adba-c566-4fa5-bb5b-1a6f73b1d72f',
     ];
-    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
-    private const PRODUCT_PUBLIC_PATH = '/productPublicPath';
-    private const SHOP_PUBLIC_PATH = '/shopPublicPath';
+    private const string APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const string PRODUCT_PUBLIC_PATH = '/productPublicPath';
+    private const string SHOP_PUBLIC_PATH = '/shopPublicPath';
 
     private OrderGetDataService $object;
     private MockObject|OrderRepositoryInterface $orderRepository;

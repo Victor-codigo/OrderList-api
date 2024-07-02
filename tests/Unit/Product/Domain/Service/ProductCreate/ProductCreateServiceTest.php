@@ -23,9 +23,9 @@ use Product\Domain\Service\ProductCreate\ProductCreateService;
 
 class ProductCreateServiceTest extends TestCase
 {
-    private const IMAGE_UPLOADED_FILE_NAME = 'Image.png';
-    private const IMAGE_UPLOADED_PATH = '/uploaded/image/path';
-    private const GROUP_ID = '82633054-84ad-4748-8ea2-8be0201c7b3a';
+    private const string IMAGE_UPLOADED_FILE_NAME = 'Image.png';
+    private const string IMAGE_UPLOADED_PATH = '/uploaded/image/path';
+    private const string GROUP_ID = '82633054-84ad-4748-8ea2-8be0201c7b3a';
 
     private ProductCreateService $object;
     private MockObject|ProductRepositoryInterface $productRepository;

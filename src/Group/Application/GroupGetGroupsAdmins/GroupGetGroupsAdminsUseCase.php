@@ -21,7 +21,7 @@ use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 
 class GroupGetGroupsAdminsUseCase extends ServiceBase
 {
-    private const USERS_GROUP_PAGE_ITEMS = AppConfig::ENDPOINT_GROUP_GET_GROUPS_ADMINS_MAX;
+    private const int USERS_GROUP_PAGE_ITEMS = AppConfig::ENDPOINT_GROUP_GET_GROUPS_ADMINS_MAX;
 
     public function __construct(
         private ValidationInterface $validator,

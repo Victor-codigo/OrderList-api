@@ -13,7 +13,7 @@ class ListOrdersGetDataRequestDto implements RequestDtoInterface
 {
     use RequestDataValidation;
 
-    private const LIST_ORDERS_IDS_MAX = AppConfig::ENDPOINT_LIST_ORDERS_GET_DATA_MAX;
+    private const int LIST_ORDERS_IDS_MAX = AppConfig::ENDPOINT_LIST_ORDERS_GET_DATA_MAX;
 
     public readonly string|null $groupId;
     /**

@@ -19,9 +19,9 @@ use Shop\Domain\Service\ShopRemoveAllGroupsShops\ShopRemoveAllGroupsShopsService
 
 class ShopRemoveAllGroupsShopsServiceTest extends TestCase
 {
-    private const SHOP_IMAGE_PATH = 'path/to/shop/images';
-    private const GROUP_ID_1 = 'group id 1';
-    private const GROUP_ID_2 = 'group id 2';
+    private const string SHOP_IMAGE_PATH = 'path/to/shop/images';
+    private const string GROUP_ID_1 = 'group id 1';
+    private const string GROUP_ID_2 = 'group id 2';
 
     private ShopRemoveAllGroupsShopsService $object;
     private MockObject|ShopRepositoryInterface $shopRepository;

@@ -13,7 +13,7 @@ class GroupUserAddRequestDto implements RequestDtoInterface
 {
     use RequestDataValidation;
 
-    private const USERS_NUM_MAX = AppConfig::ENDPOINT_GROUP_USER_ADD_MAX_USERS;
+    private const int USERS_NUM_MAX = AppConfig::ENDPOINT_GROUP_USER_ADD_MAX_USERS;
 
     public readonly ?string $groupId;
     public readonly ?array $users;

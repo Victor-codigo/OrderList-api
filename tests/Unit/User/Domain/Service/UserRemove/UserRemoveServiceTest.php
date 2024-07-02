@@ -20,9 +20,9 @@ require_once 'tests/BuiltinFunctions/UserRemoveService.php';
 
 class UserRemoveServiceTest extends TestCase
 {
-    private const USER_IMAGE_PATH = 'image';
-    private const USER_ID = 'user_id';
-    private const USER_IMAGE_NAME = 'IMAGE NAME';
+    private const string USER_IMAGE_PATH = 'image';
+    private const string USER_ID = 'user_id';
+    private const string USER_IMAGE_NAME = 'IMAGE NAME';
 
     private UserRemoveService $object;
     private MockObject|UserRepositoryInterface $userRepository;

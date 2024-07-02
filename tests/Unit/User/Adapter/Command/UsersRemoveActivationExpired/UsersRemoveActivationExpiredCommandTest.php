@@ -18,7 +18,7 @@ use User\Domain\Port\Repository\UserRepositoryInterface;
 
 class UsersRemoveActivationExpiredCommandTest extends TestCase
 {
-    private const USER_NOT_ACTIVE_TIME_TO_EXPIRE = 100;
+    private const int USER_NOT_ACTIVE_TIME_TO_EXPIRE = 100;
 
     private MockObject|UserRepositoryInterface $userRepository;
     private MockObject|User $userNotActive;

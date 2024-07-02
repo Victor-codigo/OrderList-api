@@ -35,8 +35,8 @@ use PHPUnit\Framework\TestCase;
 
 class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
 {
-    private const CONTENT_TYPE_APPLICATION_JSON = 'application/json';
-    private const SYSTEM_KEY = 'systemKey';
+    private const string CONTENT_TYPE_APPLICATION_JSON = 'application/json';
+    private const string SYSTEM_KEY = 'systemKey';
 
     private GroupRemoveAllUserGroupsUseCase $object;
     private MockObject|GroupRemoveAllUserGroupsService $groupRemoveAllUserGroupsService;

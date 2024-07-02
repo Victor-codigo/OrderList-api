@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GroupGetUsersRequestDto implements RequestDtoInterface
 {
-    private const LIMIT_USERS_MAX = AppConfig::ENDPOINT_GROUP_GET_USERS_MAX_USERS;
+    private const int LIMIT_USERS_MAX = AppConfig::ENDPOINT_GROUP_GET_USERS_MAX_USERS;
 
     public readonly ?string $groupId;
     public readonly ?int $page;

@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class OrderRemoveRequestDto implements RequestDtoInterface
 {
-    private const ORDERS_MAX = AppConfig::ENDPOINT_ORDER_REMOVE_MAX;
+    private const int ORDERS_MAX = AppConfig::ENDPOINT_ORDER_REMOVE_MAX;
 
     public readonly array|null $ordersId;
     public readonly string|null $groupId;

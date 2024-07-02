@@ -20,8 +20,8 @@ class UserRegisterControllerTest extends WebClientTestCase
 {
     use RefreshDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/users';
-    private const METHOD = 'POST';
+    private const string ENDPOINT = '/api/v1/users';
+    private const string METHOD = 'POST';
 
     public function setUp(): void
     {

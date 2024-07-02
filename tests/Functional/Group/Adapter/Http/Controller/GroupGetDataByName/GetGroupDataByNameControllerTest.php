@@ -15,8 +15,8 @@ class GetGroupDataByNameControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/groups/data/name/';
-    private const METHOD = 'GET';
+    private const string ENDPOINT = '/api/v1/groups/data/name/';
+    private const string METHOD = 'GET';
 
     private function getGroupData(): Group
     {

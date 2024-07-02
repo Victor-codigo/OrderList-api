@@ -15,8 +15,8 @@ class NotificationGetDataControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/notification';
-    private const METHOD = 'GET';
+    private const string ENDPOINT = '/api/v1/notification';
+    private const string METHOD = 'GET';
 
     private function getNotificationsDatabaseData(): array
     {

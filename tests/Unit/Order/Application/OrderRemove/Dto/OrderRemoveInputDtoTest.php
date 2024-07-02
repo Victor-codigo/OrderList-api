@@ -14,8 +14,8 @@ use PHPUnit\Framework\TestCase;
 
 class OrderRemoveInputDtoTest extends TestCase
 {
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const ORDERS_ID = [
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const array ORDERS_ID = [
         '9fc56488-e0e2-416e-b241-f8e7b868b0cb',
         '7dbcafd9-327a-46f4-8bc6-09614a26b1d7',
     ];

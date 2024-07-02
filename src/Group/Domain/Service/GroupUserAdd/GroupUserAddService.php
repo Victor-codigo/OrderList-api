@@ -21,7 +21,7 @@ use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersPermissionsExceptio
 
 class GroupUserAddService
 {
-    private const GROUP_USERS_MAX = AppConfig::GROUP_USERS_MAX;
+    private const int GROUP_USERS_MAX = AppConfig::GROUP_USERS_MAX;
 
     public function __construct(
         private UserGroupRepositoryInterface $userGroupRepository,

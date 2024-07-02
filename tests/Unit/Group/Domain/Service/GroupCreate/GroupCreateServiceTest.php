@@ -27,8 +27,8 @@ use Test\Unit\DataBaseTestCase;
 
 class GroupCreateServiceTest extends DataBaseTestCase
 {
-    private const IMAGE_UPLOADED_FILE_NAME = 'Image.png';
-    private const PATH_IMAGE_UPLOAD = __DIR__.'/Fixtures/Image.png';
+    private const string IMAGE_UPLOADED_FILE_NAME = 'Image.png';
+    private const string PATH_IMAGE_UPLOAD = __DIR__.'/Fixtures/Image.png';
 
     private GroupCreateService $object;
     private MockObject|GroupRepositoryInterface $groupRepository;

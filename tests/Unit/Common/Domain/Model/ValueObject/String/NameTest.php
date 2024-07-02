@@ -14,7 +14,7 @@ class NameTest extends TestCase
 {
     private ValidationInterface $validation;
 
-    private const VALID_NAME = 'Juan_6';
+    private const string VALID_NAME = 'Juan_6';
 
     public function setUp(): void
     {

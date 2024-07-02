@@ -14,7 +14,7 @@ class UsersRemoveActivationExpiredCommandTest extends KernelTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const COMMAND = 'app:user:remove-not-active-expired';
+    private const string COMMAND = 'app:user:remove-not-active-expired';
 
     private Command $command;
     private Application $application;

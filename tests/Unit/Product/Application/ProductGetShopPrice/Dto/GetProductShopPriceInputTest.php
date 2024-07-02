@@ -14,9 +14,9 @@ use Product\Application\GetProductShopPrice\Dto\GetProductShopPriceInputDto;
 
 class GetProductShopPriceInputTest extends TestCase
 {
-    private const PRODUCT_ID = '36e3e209-7ba4-4595-bde5-5e23375449f0';
-    private const SHOP_ID = '6313e09c-3eb7-4ff0-995c-a4a02e2390e4';
-    private const GROUP_ID = 'b7ce77da-8741-4e32-b408-12e63459a1d2';
+    private const string PRODUCT_ID = '36e3e209-7ba4-4595-bde5-5e23375449f0';
+    private const string SHOP_ID = '6313e09c-3eb7-4ff0-995c-a4a02e2390e4';
+    private const string GROUP_ID = 'b7ce77da-8741-4e32-b408-12e63459a1d2';
 
     private ValidationInterface $validator;
     private MockObject|UserShared $userSession;

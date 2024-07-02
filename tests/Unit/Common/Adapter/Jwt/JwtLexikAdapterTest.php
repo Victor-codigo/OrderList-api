@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 class JwtLexikAdapterTest extends TestCase
 {
-    private const TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImxvbGFpbG8iLCJpYXQiOjE2Njc2NDM1NDQsImV4cCI6MTY2NzY0NzE0NH0.ThN7W_5WGhq7AzO7Jfz9GvgGrG_YJVbalwa5qDxJkfU';
+    private const string TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImxvbGFpbG8iLCJpYXQiOjE2Njc2NDM1NDQsImV4cCI6MTY2NzY0NzE0NH0.ThN7W_5WGhq7AzO7Jfz9GvgGrG_YJVbalwa5qDxJkfU';
 
     private JwtLexikAdapter $object;
 

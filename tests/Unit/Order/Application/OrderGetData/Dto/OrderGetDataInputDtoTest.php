@@ -15,9 +15,9 @@ use PHPUnit\Framework\TestCase;
 
 class OrderGetDataInputDtoTest extends TestCase
 {
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const LIST_ORDERS_ID = 'cd82abda-3bd6-44b8-8ff6-4ecd80ea6840';
-    private const ORDERS_ID = [
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string LIST_ORDERS_ID = 'cd82abda-3bd6-44b8-8ff6-4ecd80ea6840';
+    private const array ORDERS_ID = [
         '9a48ac5b-4571-43fd-ac80-28b08124ffb8',
         'a0b4760a-9037-477a-8b84-d059ae5ee7e9',
         'c3734d1c-8b18-4bfd-95aa-06a261476d9d',

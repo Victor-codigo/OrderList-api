@@ -11,7 +11,7 @@ use Notification\Domain\Service\NotificationRemoveAllUserNotifications\Dto\Notif
 
 class NotificationRemoveAllUserNotificationsService
 {
-    private const NOTIFICATION_PAGINATION_ITEMS = 100;
+    private const int NOTIFICATION_PAGINATION_ITEMS = 100;
 
     public function __construct(
         private NotificationRepositoryInterface $notificationRepository,

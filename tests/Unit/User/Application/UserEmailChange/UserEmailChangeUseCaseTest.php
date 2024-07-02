@@ -21,7 +21,7 @@ use User\Domain\Service\UserEmailChange\UserEmailChangeService;
 
 class UserEmailChangeUseCaseTest extends TestCase
 {
-    private const SYSTEM_KEY = 'systemKeyForDev';
+    private const string SYSTEM_KEY = 'systemKeyForDev';
 
     private UserEmailChangeUseCase $object;
     private MockObject|ValidationInterface $validator;

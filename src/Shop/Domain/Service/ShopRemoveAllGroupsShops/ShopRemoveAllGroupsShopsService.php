@@ -13,7 +13,7 @@ use Shop\Domain\Service\ShopRemoveAllGroupsShops\Dto\ShopRemoveAllGroupsShopsDto
 
 class ShopRemoveAllGroupsShopsService
 {
-    private const SHOP_PAGINATION_PAGE_ITEMS = 100;
+    private const int SHOP_PAGINATION_PAGE_ITEMS = 100;
 
     public function __construct(
         private ShopRepositoryInterface $shopRepository,

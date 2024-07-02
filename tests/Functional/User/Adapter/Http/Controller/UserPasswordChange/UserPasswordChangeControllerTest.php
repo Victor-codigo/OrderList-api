@@ -16,12 +16,12 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/users/password';
-    private const METHOD = 'PATCH';
-    private const ID_USER = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
-    private const USER_PASSWORD = '123456';
-    private const ID_USER_NOT_ACTIVE = 'bd2cbad1-6ccf-48e3-bb92-bc9961bc011e';
-    private const ID_USER_OTHER = 'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7';
+    private const string ENDPOINT = '/api/v1/users/password';
+    private const string METHOD = 'PATCH';
+    private const string ID_USER = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
+    private const string USER_PASSWORD = '123456';
+    private const string ID_USER_NOT_ACTIVE = 'bd2cbad1-6ccf-48e3-bb92-bc9961bc011e';
+    private const string ID_USER_OTHER = 'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7';
 
     /** @test */
     public function itShouldChangeTheUserPasswordUserSessionIsItself(): void

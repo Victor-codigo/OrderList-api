@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 class ListOrdersModifyServiceTest extends TestCase
 {
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
 
     private ListOrdersModifyService $object;
     private MockObject|ListOrdersRepositoryInterface $listOrdersToRepository;

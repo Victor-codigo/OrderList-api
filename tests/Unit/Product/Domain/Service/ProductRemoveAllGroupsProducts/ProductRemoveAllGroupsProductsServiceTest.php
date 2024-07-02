@@ -19,9 +19,9 @@ use Product\Domain\Service\ProductRemoveAllGroupsProducts\ProductRemoveAllGroups
 
 class ProductRemoveAllGroupsProductsServiceTest extends TestCase
 {
-    private const PRODUCT_IMAGE_PATH = 'path/to/product/images';
-    private const GROUP_ID_1 = 'group id 1';
-    private const GROUP_ID_2 = 'group id 2';
+    private const string PRODUCT_IMAGE_PATH = 'path/to/product/images';
+    private const string GROUP_ID_1 = 'group id 1';
+    private const string GROUP_ID_2 = 'group id 2';
 
     private ProductRemoveAllGroupsProductsService $object;
     private MockObject|ProductRepositoryInterface $productRepository;

@@ -26,7 +26,7 @@ use PHPUnit\Framework\TestCase;
 
 class GroupUserRemoveUseCaseTest extends TestCase
 {
-    private const SYSTEM_KEY = 'systemKeyForDev';
+    private const string SYSTEM_KEY = 'systemKeyForDev';
 
     private GroupUserRemoveUseCase $object;
     private MockObject|ValidationInterface $validator;

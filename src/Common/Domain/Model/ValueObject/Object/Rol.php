@@ -13,7 +13,7 @@ use Common\Domain\Validation\User\USER_ROLES;
 
 class Rol extends ObjectValueObject
 {
-    private const ROL_TYPES = [
+    private const array ROL_TYPES = [
         USER_ROLES::class,
         GROUP_ROLES::class,
     ];

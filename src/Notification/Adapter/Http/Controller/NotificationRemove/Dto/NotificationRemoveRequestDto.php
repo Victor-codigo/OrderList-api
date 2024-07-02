@@ -13,7 +13,7 @@ class NotificationRemoveRequestDto implements RequestDtoInterface
 {
     use RequestDataValidation;
 
-    private const NOTIFICATIONS_NUM_MAX = AppConfig::ENDPOINT_NOTIFICATION_REMOVE_MAX;
+    private const int NOTIFICATIONS_NUM_MAX = AppConfig::ENDPOINT_NOTIFICATION_REMOVE_MAX;
 
     public readonly array|null $notificationsId;
 

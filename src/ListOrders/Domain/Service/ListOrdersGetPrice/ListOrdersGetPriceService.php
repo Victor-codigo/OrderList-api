@@ -18,7 +18,7 @@ use Product\Domain\Port\Repository\ProductShopRepositoryInterface;
 
 class ListOrdersGetPriceService
 {
-    private const LIST_ORDERS_MAX_ORDERS = AppConfig::LIST_ORDERS_MAX_ORDERS;
+    private const int LIST_ORDERS_MAX_ORDERS = AppConfig::LIST_ORDERS_MAX_ORDERS;
 
     public function __construct(
         private readonly OrderRepositoryInterface $orderRepository,

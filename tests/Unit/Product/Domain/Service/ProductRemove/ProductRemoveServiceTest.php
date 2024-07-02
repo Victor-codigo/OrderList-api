@@ -23,7 +23,7 @@ require_once 'tests/BuiltinFunctions/ProductRemoveService.php';
 
 class ProductRemoveServiceTest extends TestCase
 {
-    private const PRODUCT_IMAGE_PATH = 'path/to/product/image';
+    private const string PRODUCT_IMAGE_PATH = 'path/to/product/image';
 
     private ProductRemoveService $object;
     private MockObject|ProductRepositoryInterface $productRepository;

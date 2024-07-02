@@ -24,7 +24,7 @@ require_once 'tests/BuiltinFunctions/UploadImageService.php';
 
 class UploadImageServiceTest extends TestCase
 {
-    private const IMAGES_PATH = 'path/to/images';
+    private const string IMAGES_PATH = 'path/to/images';
 
     private UploadImageService $object;
     private MockObject|FileUploadInterface $fileUpload;

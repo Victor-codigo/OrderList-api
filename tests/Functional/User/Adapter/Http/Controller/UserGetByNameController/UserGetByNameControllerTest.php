@@ -16,8 +16,8 @@ class UserGetByNameControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/users/name';
-    private const METHOD = 'GET';
+    private const string ENDPOINT = '/api/v1/users/name';
+    private const string METHOD = 'GET';
 
     private UserGetByNameController $object;
 

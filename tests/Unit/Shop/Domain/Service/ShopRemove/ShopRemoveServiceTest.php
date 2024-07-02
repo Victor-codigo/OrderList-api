@@ -21,7 +21,7 @@ require_once 'tests/BuiltinFunctions/ShopRemoveService.php';
 
 class ShopRemoveServiceTest extends TestCase
 {
-    private const SHOP_IMAGE_PATH = 'path/to/shop/image';
+    private const string SHOP_IMAGE_PATH = 'path/to/shop/image';
 
     private ShopRemoveService $object;
     private MockObject|ShopRepositoryInterface $shopRepository;

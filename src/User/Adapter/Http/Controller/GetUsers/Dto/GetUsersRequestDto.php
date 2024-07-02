@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GetUsersRequestDto implements RequestDtoInterface
 {
-    private const USERS_NUM_MAX = 50;
+    private const int USERS_NUM_MAX = 50;
 
     /**
      * @var string[]

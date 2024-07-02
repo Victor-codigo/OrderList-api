@@ -14,9 +14,9 @@ use Product\Application\ProductRemove\Dto\ProductRemoveInputDto;
 
 class ProductRemoveInputDtoTest extends TestCase
 {
-    private const GROUP_ID = '82281bf4-e6b6-4488-b907-fb1fd81ad509';
-    private const PRODUCT_ID = '671bce77-d29d-46b9-8522-832527f496fa';
-    private const SHOP_ID = 'de2cd24f-aaa6-46cd-9e60-875332f30d91';
+    private const string GROUP_ID = '82281bf4-e6b6-4488-b907-fb1fd81ad509';
+    private const string PRODUCT_ID = '671bce77-d29d-46b9-8522-832527f496fa';
+    private const string SHOP_ID = 'de2cd24f-aaa6-46cd-9e60-875332f30d91';
 
     private ValidationInterface $validator;
     private MockObject|UserShared $userShared;

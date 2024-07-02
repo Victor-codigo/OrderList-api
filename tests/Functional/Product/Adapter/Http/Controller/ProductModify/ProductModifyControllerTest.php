@@ -14,17 +14,17 @@ class ProductModifyControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/products';
-    private const METHOD = 'PUT';
-    private const PRODUCT_ID = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const USER_OTHER_GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const string ENDPOINT = '/api/v1/products';
+    private const string METHOD = 'PUT';
+    private const string PRODUCT_ID = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string USER_OTHER_GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
 
-    private const PATH_FIXTURES = __DIR__.'/Fixtures';
-    private const PATH_IMAGE_UPLOAD = __DIR__.'/Fixtures/Image.png';
-    private const PATH_IMAGE_BACKUP = 'tests/Fixtures/Files/Image.png';
-    private const PATH_IMAGE_NOT_ALLOWED = __DIR__.'/Fixtures/MimeTypeNotAllowed.txt';
-    private const PATH_IMAGE_NOT_ALLOWED_BACKUP = 'tests/Fixtures/Files/MimeTypeNotAllowed.txt';
+    private const string PATH_FIXTURES = __DIR__.'/Fixtures';
+    private const string PATH_IMAGE_UPLOAD = __DIR__.'/Fixtures/Image.png';
+    private const string PATH_IMAGE_BACKUP = 'tests/Fixtures/Files/Image.png';
+    private const string PATH_IMAGE_NOT_ALLOWED = __DIR__.'/Fixtures/MimeTypeNotAllowed.txt';
+    private const string PATH_IMAGE_NOT_ALLOWED_BACKUP = 'tests/Fixtures/Files/MimeTypeNotAllowed.txt';
 
     private string $pathImageProduct;
 

@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 class GroupRemoveAllUserGroupsInputDtoTest extends TestCase
 {
-    private const SYSTEM_KEY = 'systemKeyForDev';
+    private const string SYSTEM_KEY = 'systemKeyForDev';
 
     private ValidationInterface $validator;
     private MockObject|UserShared $userSession;

@@ -26,16 +26,16 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const LIST_ORDERS_EXISTS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
-    private const LIST_ORDERS_ID = [
+    private const string LIST_ORDERS_EXISTS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
+    private const array LIST_ORDERS_ID = [
         'ba6bed75-4c6e-4ac3-8787-5bded95dac8d',
         'd446eab9-5199-48d0-91f5-0407a86bcb4f',
         'f1559a23-2f92-4660-a335-b1052d7395da',
         'f2980f67-4eb9-41ca-b452-ffa2c7da6a37',
     ];
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const GROUP_ID_2 = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string GROUP_ID_2 = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const string USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
     private ListOrdersRepository $object;
     private ProductRepository $productRepository;

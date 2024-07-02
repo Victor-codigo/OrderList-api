@@ -19,7 +19,7 @@ class JwtCreatedListenerTest extends TestCase
     private MockObject|UserSymfonyAdapter $userAdapter;
     private MockObject|User $user;
 
-    private const EVENT_PARAMS = [
+    private const array EVENT_PARAMS = [
         'param1' => 1,
         'param2' => 2,
     ];

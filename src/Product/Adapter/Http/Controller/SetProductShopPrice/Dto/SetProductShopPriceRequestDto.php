@@ -13,7 +13,7 @@ class SetProductShopPriceRequestDto implements RequestDtoInterface
 {
     use RequestDataValidation;
 
-    private const PRODUCTS_SHOPS_NUM_MAX = AppConfig::ENDPOINT_PRODUCT_PATCH_PRICES_SHOPS_MAX;
+    private const int PRODUCTS_SHOPS_NUM_MAX = AppConfig::ENDPOINT_PRODUCT_PATCH_PRICES_SHOPS_MAX;
 
     public readonly string|null $groupId;
     public readonly string|null $productId;

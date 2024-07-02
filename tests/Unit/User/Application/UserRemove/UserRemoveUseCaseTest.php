@@ -26,8 +26,8 @@ use User\Domain\Service\UserRemove\UserRemoveService;
 
 class UserRemoveUseCaseTest extends TestCase
 {
-    private const USER_ID = '0dc1d61f-10e0-40f4-8296-d0aca1c13991';
-    private const SYSTEM_KEY = 'SystemDevKey';
+    private const string USER_ID = '0dc1d61f-10e0-40f4-8296-d0aca1c13991';
+    private const string SYSTEM_KEY = 'SystemDevKey';
 
     private UserRemoveUseCase $object;
     private MockObject|UserRemoveService $userRemoveService;
