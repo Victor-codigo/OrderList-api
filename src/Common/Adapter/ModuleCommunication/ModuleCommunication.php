@@ -160,9 +160,9 @@ class ModuleCommunication implements ModuleCommunicationInterface
     private function createResponseDto(array $responseContent, array $responseHeaders): ResponseDto
     {
         return new ResponseDto(
-            isset($responseContent['data']) ? $responseContent['data'] : [],
-            isset($responseContent['errors']) ? $responseContent['errors'] : [],
-            isset($responseContent['message']) ? $responseContent['message'] : '',
+            $responseContent['data'] ?? [],
+            $responseContent['errors'] ?? [],
+            $responseContent['message'] ?? '',
             isset($responseContent['status']) ? RESPONSE_STATUS::from($responseContent['status']) : RESPONSE_STATUS::OK,
             empty($responseContent) ? false : true,
             $responseHeaders

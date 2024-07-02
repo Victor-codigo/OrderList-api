@@ -29,7 +29,7 @@ class NotificationCreateInputDto implements ServiceInputDtoInterface
      */
     public function __construct(UserShared $userSession, array|null $usersId, string|null $notificationType, array|null $notificationData, string|null $systemKey)
     {
-        $this->systemKey = null === $systemKey ? '' : $systemKey;
+        $this->systemKey = $systemKey ?? '';
         $this->notificationData = ValueObjectFactory::createNotificationData($notificationData);
         $this->userSession = $userSession;
         $this->usersId = null === $usersId

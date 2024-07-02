@@ -120,9 +120,7 @@ class GroupGetUsersService
             fn (array $userData) => [
                 'id' => $userData['id'],
                 'name' => $userData['name'],
-                'image' => null === $userData['image']
-                    ? null
-                    : $userData['image'],
+                'image' => $userData['image'] ?? null,
                 'created_on' => $userData['created_on'] ?? null,
                 'admin' => $userData['admin'],
             ],

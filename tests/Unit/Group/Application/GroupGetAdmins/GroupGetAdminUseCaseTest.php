@@ -51,7 +51,7 @@ class GroupGetAdminUseCaseTest extends TestCase
             UserGroup::fromPrimitives('group id 1', 'user id 1', [GROUP_ROLES::ADMIN], $group),
             UserGroup::fromPrimitives('group id 2', 'user id 2', [GROUP_ROLES::USER], $group),
             UserGroup::fromPrimitives('group id 3', 'user id 3', [GROUP_ROLES::USER], $group),
-            UserGroup::fromPrimitives(null === $setGroupId ? 'group id 4' : $setGroupId, 'user id 4', [GROUP_ROLES::ADMIN], $group),
+            UserGroup::fromPrimitives($setGroupId ?? 'group id 4', 'user id 4', [GROUP_ROLES::ADMIN], $group),
         ]);
 
         return $usersGroup;
