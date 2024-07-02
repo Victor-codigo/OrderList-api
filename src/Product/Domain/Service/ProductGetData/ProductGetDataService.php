@@ -18,7 +18,7 @@ use Product\Domain\Service\ProductGetData\Dto\ProductGetDataDto;
 
 class ProductGetDataService
 {
-    private ?PaginatorInterface $productsPaginator;
+    private ?PaginatorInterface $productsPaginator = null;
 
     public function __construct(
         private ProductRepositoryInterface $productRepository,

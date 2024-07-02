@@ -18,7 +18,7 @@ use Shop\Domain\Service\ShopGetData\Dto\ShopGetDataDto;
 
 class ShopGetDataService
 {
-    private ?PaginatorInterface $shopsPaginator;
+    private ?PaginatorInterface $shopsPaginator = null;
 
     public function __construct(
         private ShopRepositoryInterface $shopRepository,

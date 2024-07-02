@@ -20,7 +20,7 @@ use Product\Domain\Model\ProductShop;
 
 class OrderGetDataService
 {
-    private ?PaginatorInterface $ordersPaginator;
+    private ?PaginatorInterface $ordersPaginator = null;
 
     public function __construct(
         private OrderRepositoryInterface $orderRepository,
