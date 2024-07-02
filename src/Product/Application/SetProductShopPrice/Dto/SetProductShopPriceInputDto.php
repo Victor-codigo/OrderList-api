@@ -141,12 +141,10 @@ class SetProductShopPriceInputDto implements ServiceInputDtoInterface
     {
         $errorList = [];
         $errorListUnits = $validator->validateValueObjectArray($this->units);
-        $errorsNullToChoiceNoSuch = function (array $errors) {
-            return array_map(
-                fn (VALIDATION_ERRORS $error) => VALIDATION_ERRORS::NOT_NULL === $error ? VALIDATION_ERRORS::CHOICE_NOT_SUCH : $error,
-                $errors
-            );
-        };
+        $errorsNullToChoiceNoSuch = fn(array $errors) => array_map(
+            fn (VALIDATION_ERRORS $error) => VALIDATION_ERRORS::NOT_NULL === $error ? VALIDATION_ERRORS::CHOICE_NOT_SUCH : $error,
+            $errors
+        );
 
         if (!empty($errorListUnits)) {
             $errorList['units'] = array_map($errorsNullToChoiceNoSuch, $errorListUnits);

@@ -290,11 +290,9 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
 
                 return true;
             }))
-            ->willReturnCallback(function () use ($listOrdersRepositoryMatcher) {
-                return match ($listOrdersRepositoryMatcher->getInvocationCount()) {
-                    1 => throw new DBNotFoundException(),
-                    2 => $this->listsOrdersToChangeUserIdPaginator
-                };
+            ->willReturnCallback(fn() => match ($listOrdersRepositoryMatcher->getInvocationCount()) {
+                1 => throw new DBNotFoundException(),
+                2 => $this->listsOrdersToChangeUserIdPaginator
             });
 
         $this->listsOrdersToRemovePaginator
@@ -428,11 +426,9 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
 
                 return true;
             }))
-            ->willReturnCallback(function () use ($listOrdersRepositoryMatcher) {
-                return match ($listOrdersRepositoryMatcher->getInvocationCount()) {
-                    1 => $this->listsOrdersToRemovePaginator,
-                    2 => throw new DBNotFoundException()
-                };
+            ->willReturnCallback(fn() => match ($listOrdersRepositoryMatcher->getInvocationCount()) {
+                1 => $this->listsOrdersToRemovePaginator,
+                2 => throw new DBNotFoundException()
             });
 
         $this->listsOrdersToRemovePaginator

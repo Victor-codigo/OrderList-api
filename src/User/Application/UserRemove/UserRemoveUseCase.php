@@ -38,13 +38,13 @@ class UserRemoveUseCase extends ServiceBase
     {
         try {
             $userGroupsRemoved = $this->removeUserGroups($this->systemKey);
-        } catch (UserRemoveGroupsNotFoundException $e) {
+        } catch (UserRemoveGroupsNotFoundException) {
             $userGroupsRemoved = [
                 'groups_id_removed' => [],
                 'groups_id_user_removed' => [],
                 'groups_id_user_set_as_admin' => [],
             ];
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainErrorException::fromMessage('An error has been occurred');
         }
 

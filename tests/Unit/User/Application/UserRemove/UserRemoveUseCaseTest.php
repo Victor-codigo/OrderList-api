@@ -277,11 +277,9 @@ class UserRemoveUseCaseTest extends TestCase
             ->expects($moduleCommunicationMatcher)
             ->method('__invoke')
             ->with($this->callback(fn (ModuleCommunicationConfigDto $config) => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
-            ->willReturnCallback(function () use ($moduleCommunicationMatcher, $removeGroupsResponse, $removeNotificationsResponse) {
-                return match ($moduleCommunicationMatcher->getInvocationCount()) {
-                    1 => $removeGroupsResponse ,
-                    2 => $removeNotificationsResponse,
-                };
+            ->willReturnCallback(fn() => match ($moduleCommunicationMatcher->getInvocationCount()) {
+                1 => $removeGroupsResponse ,
+                2 => $removeNotificationsResponse,
             });
 
         $this->userSession
