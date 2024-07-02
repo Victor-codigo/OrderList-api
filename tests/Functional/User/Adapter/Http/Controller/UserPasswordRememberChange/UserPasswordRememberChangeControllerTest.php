@@ -72,7 +72,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
 
         $this->assertResponseStructureIsOk(response: $response, errors: ['token_wrong'], responseCode: Response::HTTP_BAD_REQUEST);
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Wrong token', $responseContent->message);
+        $this->assertSame('Wrong token jwt', $responseContent->message);
     }
 
     /** @test */
@@ -91,7 +91,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
 
         $this->assertResponseStructureIsOk(response: $response, errors: ['token_wrong'], responseCode: Response::HTTP_BAD_REQUEST);
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('Wrong token', $responseContent->message);
+        $this->assertSame('Wrong token jwt', $responseContent->message);
     }
 
     /** @test */
