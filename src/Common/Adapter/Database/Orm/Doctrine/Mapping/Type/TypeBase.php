@@ -14,7 +14,7 @@ abstract class TypeBase extends Type
 
     public function getName(): string
     {
-        return $this::class;
+        return static::class;
     }
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
