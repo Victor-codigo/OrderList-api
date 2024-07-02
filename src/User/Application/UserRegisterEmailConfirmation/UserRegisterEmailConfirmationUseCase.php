@@ -44,9 +44,7 @@ class UserRegisterEmailConfirmationUseCase extends ServiceBase
             return new UserEmailConfirmationOutputDto($user->getId());
         } catch (JwtTokenExpiredException) {
             throw EmailConfigurationJwtTokenHasExpiredException::fromMessage('Token has expired');
-        } catch (JwtException) {
-            throw EmailConfirmationJwtTokenNotValidException::fromMessage('Wrong token');
-        } catch (DBNotFoundException) {
+        } catch (JwtException|DBNotFoundException) {
             throw EmailConfirmationJwtTokenNotValidException::fromMessage('Wrong token');
         } catch (InvalidArgumentException) {
             throw EmailConfirmationUserAlreadyActiveException::fromMessage('User already active');

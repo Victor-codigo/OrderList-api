@@ -56,12 +56,10 @@ class UserPasswordRememberChangeUseCase extends ServiceBase
             );
 
             $this->createNotificationPasswordRemember($tokenDecoded->username, $passwordChangeDto->token, $this->systemKey);
-        } catch (\InvalidArgumentException) {
+        } catch (\InvalidArgumentException|JwtException) {
             throw UserPasswordRememberChangeTokenWrongException::fromMessage('Wrong token');
         } catch (JwtTokenExpiredException) {
             throw UserPasswordRememberChangeTokenExpiredException::fromMessage('Token has expired');
-        } catch (JwtException) {
-            throw UserPasswordRememberChangeTokenWrongException::fromMessage('Wrong token');
         } catch (DBNotFoundException) {
             throw UserPasswordRememberChangeUserNotFoundException::fromMessage('It could not change password');
         } catch (PasswordNewAndRepeatAreNotTheSameException) {
