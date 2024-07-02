@@ -38,6 +38,15 @@ class AddressTest extends TestCase
     }
 
     /** @test */
+    public function itShouldValidateIsNull(): void
+    {
+        $address = $this->createAddress(null);
+        $return = $this->validation->validateValueObject($address);
+
+        $this->assertEmpty($return);
+    }
+
+    /** @test */
     public function itShouldFail(): void
     {
         $address = $this->createAddress('C\ igual=');
