@@ -101,7 +101,7 @@ class OrderRemoveAllGroupsOrdersService
 
                 array_walk(
                     $orders,
-                    function (Order $order) use ($groupsIdAndAdminIdIndexedByGroupId) {
+                    function (Order $order) use ($groupsIdAndAdminIdIndexedByGroupId): void {
                         if (!isset($groupsIdAndAdminIdIndexedByGroupId[$order->getGroupId()->getValue()])) {
                             return;
                         }

@@ -46,7 +46,7 @@ class GroupUserRemoveInputDto implements ServiceInputDtoInterface
 
         // flat user errors
         $usersIdErrorList = [];
-        array_walk_recursive($usersIdErrorListValueObject, function ($error) use (&$usersIdErrorList) { $usersIdErrorList[] = $error; });
+        array_walk_recursive($usersIdErrorListValueObject, function ($error) use (&$usersIdErrorList): void { $usersIdErrorList[] = $error; });
         $usersIdErrorList = array_merge($usersIdErrorListNotBlank, $usersIdErrorList);
         $usersIdErrorList = array_unique($usersIdErrorList, SORT_REGULAR);
 

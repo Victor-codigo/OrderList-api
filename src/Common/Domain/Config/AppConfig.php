@@ -11,132 +11,132 @@ class AppConfig
     /**
      * Maximum number of users per group.
      */
-    public const GROUP_USERS_MAX = 100;
+    public const int GROUP_USERS_MAX = 100;
 
     /**
      * Maximum number of orders per list of orders.
      */
-    public const LIST_ORDERS_MAX_ORDERS = 500;
+    public const int LIST_ORDERS_MAX_ORDERS = 500;
 
     /**
      * Maximum number of users can be added to a group per request.
      */
-    public const ENDPOINT_GROUP_USER_ADD_MAX_USERS = 50;
+    public const int ENDPOINT_GROUP_USER_ADD_MAX_USERS = 50;
 
     /**
      * Maximum number of users can be removed to a group per request.
      */
-    public const ENDPOINT_GROUP_USER_REMOVE_MAX_USERS = 50;
+    public const int ENDPOINT_GROUP_USER_REMOVE_MAX_USERS = 50;
 
     /**
      * Maximum number of users can role be changed per request.
      */
-    public const ENDPOINT_GROUP_USER_ROLE_CHANGE_MAX_USERS = 50;
+    public const int ENDPOINT_GROUP_USER_ROLE_CHANGE_MAX_USERS = 50;
 
     /**
      * Maximum number of users can get, per request.
      */
-    public const ENDPOINT_GROUP_GET_DATA_MAX_GROUPS = 50;
+    public const int ENDPOINT_GROUP_GET_DATA_MAX_GROUPS = 50;
 
     /**
      * Maximum number of admins can get, per request.
      */
-    public const ENDPOINT_GROUP_GET_GROUPS_ADMINS_MAX = 100;
+    public const int ENDPOINT_GROUP_GET_GROUPS_ADMINS_MAX = 100;
 
     /**
      * Maximum number of groups can be deleted, per request.
      */
-    public const ENDPOINT_GROUP_DELETE_MAX = 50;
+    public const int ENDPOINT_GROUP_DELETE_MAX = 50;
 
     /**
      * Maximum number of users can get, per request.
      */
-    public const ENDPOINT_GROUP_GET_USERS_MAX_USERS = 50;
+    public const int ENDPOINT_GROUP_GET_USERS_MAX_USERS = 50;
 
     /**
      * Maximum number of notifications can be removed per request.
      */
-    public const ENDPOINT_NOTIFICATION_REMOVE_MAX = 100;
+    public const int ENDPOINT_NOTIFICATION_REMOVE_MAX = 100;
 
     /**
      * Maximum number of notifications can be removed per request.
      */
-    public const ENDPOINT_NOTIFICATION_MARK_AS_VIEWED_MAX = 100;
+    public const int ENDPOINT_NOTIFICATION_MARK_AS_VIEWED_MAX = 100;
 
     /**
      * Maximum number of products can be removed per request.
      */
-    public const ENDPOINT_PRODUCT_GET_PRODUCTS_MAX = 100;
+    public const int ENDPOINT_PRODUCT_GET_PRODUCTS_MAX = 100;
 
     /**
      * Maximum number of shops can be removed per request.
      */
-    public const ENDPOINT_PRODUCT_GET_SHOPS_MAX = 100;
+    public const int ENDPOINT_PRODUCT_GET_SHOPS_MAX = 100;
 
     /**
      * Maximum number of shops and prices can be set by request.
      */
-    public const ENDPOINT_PRODUCT_PATCH_PRICES_SHOPS_MAX = 50;
+    public const int ENDPOINT_PRODUCT_PATCH_PRICES_SHOPS_MAX = 50;
 
     /**
      * Maximum number of shops can be removed per request.
      */
-    public const ENDPOINT_SHOP_GET_SHOPS_MAX = 100;
+    public const int ENDPOINT_SHOP_GET_SHOPS_MAX = 100;
 
     /**
      * Maximum number of products can be removed per request.
      */
-    public const ENDPOINT_SHOP_GET_PRODUCTS_MAX = 100;
+    public const int ENDPOINT_SHOP_GET_PRODUCTS_MAX = 100;
 
     /**
      * Maximum number of shops can be removed per request.
      */
-    public const ENDPOINT_SHOP_REMOVE_MAX = 100;
+    public const int ENDPOINT_SHOP_REMOVE_MAX = 100;
 
     /**
      * Maximum number of orders can be obtained per request.
      */
-    public const ENDPOINT_ORDER_GET_MAX = 100;
+    public const int ENDPOINT_ORDER_GET_MAX = 100;
 
     /**
      * Maximum number of orders can be removed per request.
      */
-    public const ENDPOINT_ORDER_REMOVE_MAX = 100;
+    public const int ENDPOINT_ORDER_REMOVE_MAX = 100;
 
     /**
      * Maximum number of list orders can get data per request.
      */
-    public const ENDPOINT_LIST_ORDERS_GET_DATA_MAX = 100;
+    public const int ENDPOINT_LIST_ORDERS_GET_DATA_MAX = 100;
 
     /**
      * Maximum number of orders can added to a list of orders per request.
      */
-    public const ENDPOINT_LIST_ORDERS_ADD_ORDERS_MAX = 100;
+    public const int ENDPOINT_LIST_ORDERS_ADD_ORDERS_MAX = 100;
 
     /**
      * Maximum number of list orders can removed per request.
      */
-    public const ENDPOINT_LIST_ORDERS_REMOVE_MAX = 100;
+    public const int ENDPOINT_LIST_ORDERS_REMOVE_MAX = 100;
 
     /**
      * Version of the api used.
      */
-    public const API_VERSION = 1;
+    public const string API_VERSION = '1';
 
     /**
      * Name of the cookie for the token session.
      */
-    public const COOKIE_SESSION_NAME = 'TOKENSESSION';
+    public const string COOKIE_SESSION_NAME = 'TOKENSESSION';
 
     /**
      * Module communication proxy URL.
      */
-    public const MODULE_COMMUNICATION_REQUEST_PROXY = 'http://proxy:80';
+    public const string MODULE_COMMUNICATION_REQUEST_PROXY = 'http://proxy:80';
 
     /**
      * Module communication HTTPS.
      */
-    public const MODULE_COMMUNICATION_REQUEST_HTTPS = [
+    public const array MODULE_COMMUNICATION_REQUEST_HTTPS = [
         'verify_peer' => false,
         'verify_host' => false,
     ];
@@ -144,72 +144,72 @@ class AppConfig
     /**
      * Api domain.
      */
-    public const API_DOMAIN = 'orderlist.api';
+    public const string API_DOMAIN = 'orderlist.api';
 
     /**
      * Api protocol.
      */
-    public const API_PROTOCOL = 'http';
+    public const string API_PROTOCOL = 'http';
 
     /**
      * Message Error for error 404.
      */
-    public const ERROR_404_MESSAGE = 'Not found: error 404';
+    public const string ERROR_404_MESSAGE = 'Not found: error 404';
 
     /**
      * Message error for error 403.
      */
-    public const ERROR_403_MESSAGE = 'Access denied: error 403';
+    public const string ERROR_403_MESSAGE = 'Access denied: error 403';
 
     /**
      * Message error for error 500.
      */
-    public const ERROR_500_MESSAGE = 'Internal server error: error 500';
+    public const string ERROR_500_MESSAGE = 'Internal server error: error 500';
 
     /**
      * Message error for method not allowed.
      */
-    public const ERROR_METHOD_NOT_ALLOWED = 'Method not allowed';
+    public const string ERROR_METHOD_NOT_ALLOWED = 'Method not allowed';
 
     /**
      * Maximum number of items per page in pagination.
      */
-    public const PAGINATION_PAGE_ITEMS_MAX = 100;
+    public const int PAGINATION_PAGE_ITEMS_MAX = 100;
 
     /**
      * Maximum size of user image width.
      */
-    public const USER_IMAGE_FRAME_SIZE_WIDTH = 300;
+    public const int USER_IMAGE_FRAME_SIZE_WIDTH = 300;
 
     /**
      * Maximum size of user image height.
      */
-    public const USER_IMAGE_FRAME_SIZE_HEIGHT = 300;
+    public const int USER_IMAGE_FRAME_SIZE_HEIGHT = 300;
 
     /**
      * Maximum size of product image width.
      */
-    public const PRODUCT_IMAGE_FRAME_SIZE_WIDTH = 300;
+    public const int PRODUCT_IMAGE_FRAME_SIZE_WIDTH = 300;
 
     /**
      * Maximum size of product image height.
      */
-    public const PRODUCT_IMAGE_FRAME_SIZE_HEIGHT = 300;
+    public const int PRODUCT_IMAGE_FRAME_SIZE_HEIGHT = 300;
 
     /**
      * Maximum size of shop image width.
      */
-    public const SHOP_IMAGE_FRAME_SIZE_WIDTH = 300;
+    public const int SHOP_IMAGE_FRAME_SIZE_WIDTH = 300;
 
     /**
      * Maximum size of shop image height.
      */
-    public const SHOP_IMAGE_FRAME_SIZE_HEIGHT = 300;
+    public const int SHOP_IMAGE_FRAME_SIZE_HEIGHT = 300;
 
     /**
      * Routes tha the user Guest is allowed to use.
      */
-    public const USER_GUEST_ROUTES_NAMES_ALLOWED = [
+    public const array USER_GUEST_ROUTES_NAMES_ALLOWED = [
         'user_get',
         'user_get_by_name',
         'group_create',
