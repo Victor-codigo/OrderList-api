@@ -23,7 +23,7 @@ class EventRegisterTraitTest extends TestCase
     }
 
     /** @test */
-    public function getEventsRegistered()
+    public function getEventsRegistered(): void
     {
         $return = $this->object->getEventsRegistered();
 

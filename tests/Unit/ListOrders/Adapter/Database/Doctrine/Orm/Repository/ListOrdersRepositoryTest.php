@@ -126,7 +126,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldFailListOrdersIdAlreadyExists()
+    public function itShouldFailListOrdersIdAlreadyExists(): void
     {
         $listOrders = $this->getListOrdersExists();
 

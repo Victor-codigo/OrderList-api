@@ -33,7 +33,7 @@ class JwtTokenTest extends TestCase
     }
 
     /** @test */
-    public function tokenOk()
+    public function tokenOk(): void
     {
         $token = $this->createToken();
         $return = $this->validator->validateValueObject($token);
@@ -42,7 +42,7 @@ class JwtTokenTest extends TestCase
     }
 
     /** @test */
-    public function tokenNotBlank()
+    public function tokenNotBlank(): void
     {
         $return = $this->validator->validateValueObject(new JwtToken(''));
 
@@ -50,7 +50,7 @@ class JwtTokenTest extends TestCase
     }
 
     /** @test */
-    public function tokenNotNull()
+    public function tokenNotNull(): void
     {
         $return = $this->validator->validateValueObject(new JwtToken(null));
 
@@ -58,7 +58,7 @@ class JwtTokenTest extends TestCase
     }
 
     /** @test */
-    public function tokenTooShort()
+    public function tokenTooShort(): void
     {
         $return = $this->validator->validateValueObject(new JwtToken(str_pad('', 35, '-')));
 

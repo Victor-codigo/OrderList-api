@@ -37,7 +37,7 @@ class TemplateDtoBaseTest extends TestCase
     }
 
     /** @test */
-    public function translateThrowsInvalidArguemtexception()
+    public function translateThrowsInvalidArguemtexception(): void
     {
         $templateId = TemplateId::create('id', []);
 
@@ -53,7 +53,7 @@ class TemplateDtoBaseTest extends TestCase
     }
 
     /** @test */
-    public function translateIsOk()
+    public function translateIsOk(): void
     {
         $templateId = TemplateId::create('id', []);
         $locale = 'es';

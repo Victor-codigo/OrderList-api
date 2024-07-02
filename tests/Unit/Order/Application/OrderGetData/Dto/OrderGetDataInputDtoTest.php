@@ -163,7 +163,7 @@ class OrderGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailPageIsNull()
+    public function itShouldFailPageIsNull(): void
     {
         $object = new OrderGetDataInputDto(
             $this->userSession,
@@ -184,7 +184,7 @@ class OrderGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailPageIsWrong()
+    public function itShouldFailPageIsWrong(): void
     {
         $object = new OrderGetDataInputDto(
             $this->userSession,
@@ -205,7 +205,7 @@ class OrderGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailPageItemsIsNull()
+    public function itShouldFailPageItemsIsNull(): void
     {
         $object = new OrderGetDataInputDto(
             $this->userSession,
@@ -226,7 +226,7 @@ class OrderGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailPageItemsIsWrong()
+    public function itShouldFailPageItemsIsWrong(): void
     {
         $object = new OrderGetDataInputDto(
             $this->userSession,
@@ -247,7 +247,7 @@ class OrderGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailFilterSectionIsWrong()
+    public function itShouldFailFilterSectionIsWrong(): void
     {
         $object = new OrderGetDataInputDto(
             $this->userSession,
@@ -268,7 +268,7 @@ class OrderGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailFilterTextIsWrong()
+    public function itShouldFailFilterTextIsWrong(): void
     {
         $object = new OrderGetDataInputDto(
             $this->userSession,
@@ -289,7 +289,7 @@ class OrderGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailFilterValueIsNull()
+    public function itShouldFailFilterValueIsNull(): void
     {
         $object = new OrderGetDataInputDto(
             $this->userSession,
@@ -315,7 +315,7 @@ class OrderGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailFilterSectionOrFilterTextIsNull()
+    public function itShouldFailFilterSectionOrFilterTextIsNull(): void
     {
         $object = new OrderGetDataInputDto(
             $this->userSession,

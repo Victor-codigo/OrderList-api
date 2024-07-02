@@ -100,7 +100,7 @@ class GroupUserRoleChangeTest extends TestCase
     }
 
     /** @test */
-    public function itShouldChangeUsersRoleToGroupAdmin()
+    public function itShouldChangeUsersRoleToGroupAdmin(): void
     {
         $expectUsersToSave = $this->getFindGroupUsersOrFailReturn(self::USERS_ID, GROUP_ROLES::USER);
         $this->userGroupRepository
@@ -126,7 +126,7 @@ class GroupUserRoleChangeTest extends TestCase
     }
 
     /** @test */
-    public function itShouldChangeUsersRoleToGroupUser()
+    public function itShouldChangeUsersRoleToGroupUser(): void
     {
         $users = $this->getFindGroupUsersOrFailReturn(self::USERS_ID, GROUP_ROLES::ADMIN);
         $expectUsersToSave = $this->getFindGroupUsersOrFailReturn([self::USERS_ID[1], self::USERS_ID[2]], GROUP_ROLES::USER);
@@ -153,7 +153,7 @@ class GroupUserRoleChangeTest extends TestCase
     }
 
     /** @test */
-    public function itShouldChangeThreeUsersOneOfThenIsNotFromTheGroup()
+    public function itShouldChangeThreeUsersOneOfThenIsNotFromTheGroup(): void
     {
         $expectUsersToSave = $this->getFindGroupUsersOrFailReturn(self::USERS_ID, GROUP_ROLES::ADMIN);
         $this->userGroupRepository
@@ -181,7 +181,7 @@ class GroupUserRoleChangeTest extends TestCase
     }
 
     /** @test */
-    public function itShouldNotChangeUsersRolNoneOfTheUsersBelongsToTheGroup()
+    public function itShouldNotChangeUsersRolNoneOfTheUsersBelongsToTheGroup(): void
     {
         $this->userGroupRepository
             ->expects($this->once())
@@ -201,7 +201,7 @@ class GroupUserRoleChangeTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailNoAdminsInTheGroup()
+    public function itShouldFailNoAdminsInTheGroup(): void
     {
         $this->expectException(GroupWithoutAdminsException::class);
         $this->userGroupRepository
@@ -226,7 +226,7 @@ class GroupUserRoleChangeTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailGroupNotFound()
+    public function itShouldFailGroupNotFound(): void
     {
         $this->expectException(DBNotFoundException::class);
         $this->userGroupRepository

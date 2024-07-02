@@ -92,7 +92,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
     }
 
     /** @test */
-    public function itShouldNotBeExpiredNotAttributeExpired()
+    public function itShouldNotBeExpiredNotAttributeExpired(): void
     {
         $token = $this->object->encode(self::PAYLOAD);
         $tokenDecoded = $this->object->decode($token);
@@ -110,7 +110,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
     }
 
     /** @test */
-    public function itShouldNotBeExpiredTimeToExpireIsTheSameAsTimeNow()
+    public function itShouldNotBeExpiredTimeToExpireIsTheSameAsTimeNow(): void
     {
         $expirationInSeconds = 60 * 60 * 24;
         $dateTimeNow = new \DateTime();
@@ -141,7 +141,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
     }
 
     /** @test */
-    public function itShouldNotBeExpiredTimeToExpireIsHigherThanTimeNow()
+    public function itShouldNotBeExpiredTimeToExpireIsHigherThanTimeNow(): void
     {
         $expirationInSeconds = 60 * 60 * 24;
         $dateTimeNow = new \DateTime();
@@ -175,7 +175,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
     }
 
     /** @test */
-    public function itShouldBeExpiredTimeToExpireIsLowerThanTimeNow()
+    public function itShouldBeExpiredTimeToExpireIsLowerThanTimeNow(): void
     {
         $expirationInSeconds = 60 * 60 * 24;
         $dateTimeNow = new \DateTime();

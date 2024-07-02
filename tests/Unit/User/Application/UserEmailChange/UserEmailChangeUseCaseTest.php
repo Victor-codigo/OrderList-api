@@ -45,7 +45,7 @@ class UserEmailChangeUseCaseTest extends TestCase
     }
 
     /** @test */
-    public function itShouldChangeUserEmail()
+    public function itShouldChangeUserEmail(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
         $userEmail = 'user@email.com';
@@ -84,7 +84,7 @@ class UserEmailChangeUseCaseTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailChangeUserEmailNotificationError()
+    public function itShouldFailChangeUserEmailNotificationError(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
         $userEmail = 'user@email.com';

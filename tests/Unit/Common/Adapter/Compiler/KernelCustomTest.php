@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 class KernelCustomTest extends TestCase
 {
     /** @test */
-    public function itShouldReturnDevEnvironmentParameterIsDev()
+    public function itShouldReturnDevEnvironmentParameterIsDev(): void
     {
         $environment = 'dev';
         $return = KernelCustom::changeEnvironmentByRequestQuery($environment);
@@ -20,7 +20,7 @@ class KernelCustomTest extends TestCase
     }
 
     /** @test */
-    public function itShouldReturnDevEnvironmentParameterDevRequestQueryNotEnvParameter()
+    public function itShouldReturnDevEnvironmentParameterDevRequestQueryNotEnvParameter(): void
     {
         $environment = 'dev';
         $return = KernelCustom::changeEnvironmentByRequestQuery($environment);
@@ -30,7 +30,7 @@ class KernelCustomTest extends TestCase
     }
 
     /** @test */
-    public function itShouldReturnDevEnvironmentParameterDevRequestQueryNotValid()
+    public function itShouldReturnDevEnvironmentParameterDevRequestQueryNotValid(): void
     {
         $environment = 'dev';
         $_REQUEST['env'] = 'not valid environment';
@@ -41,7 +41,7 @@ class KernelCustomTest extends TestCase
     }
 
     /** @test */
-    public function itShouldReturnTestEnvironmentParameterDevRequestQueryTest()
+    public function itShouldReturnTestEnvironmentParameterDevRequestQueryTest(): void
     {
         $environment = 'dev';
         $_REQUEST['env'] = 'test';
@@ -52,7 +52,7 @@ class KernelCustomTest extends TestCase
     }
 
     /** @test */
-    public function itShouldReturnDevEnvironmentParameterDevRequestQueryNotValidType()
+    public function itShouldReturnDevEnvironmentParameterDevRequestQueryNotValidType(): void
     {
         $environment = 'dev';
         $_REQUEST['env'] = [];

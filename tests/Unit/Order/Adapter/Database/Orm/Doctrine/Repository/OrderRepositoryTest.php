@@ -160,7 +160,7 @@ class OrderRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldFailOrderIdAlreadyExists()
+    public function itShouldFailOrderIdAlreadyExists(): void
     {
         $orderExists = $this->getExistsOrder();
         $listOrders = $this->listOrdersRepository->findOneby(['id' => ValueObjectFactory::createIdentifier('ba6bed75-4c6e-4ac3-8787-5bded95dac8d')]);

@@ -28,7 +28,7 @@ class UrlTest extends TestCase
     }
 
     /** @test */
-    public function urlWithHttpOk()
+    public function urlWithHttpOk(): void
     {
         $url = $this->createUrl('http://www.domain.com');
         $return = $this->validator->validateValueObject($url);
@@ -37,7 +37,7 @@ class UrlTest extends TestCase
     }
 
     /** @test */
-    public function urlWithHttpsOk()
+    public function urlWithHttpsOk(): void
     {
         $url = $this->createUrl('https://www.domain.com');
         $return = $this->validator->validateValueObject($url);
@@ -46,7 +46,7 @@ class UrlTest extends TestCase
     }
 
     /** @test */
-    public function urlNotBlank()
+    public function urlNotBlank(): void
     {
         $email = $this->createUrl('');
         $return = $this->validator->validateValueObject($email);
@@ -55,7 +55,7 @@ class UrlTest extends TestCase
     }
 
     /** @test */
-    public function urlNotNull()
+    public function urlNotNull(): void
     {
         $url = $this->createUrl(null);
         $return = $this->validator->validateValueObject($url);
@@ -64,7 +64,7 @@ class UrlTest extends TestCase
     }
 
     /** @test */
-    public function urlNotValid()
+    public function urlNotValid(): void
     {
         $url = $this->createUrl('www.domain.com');
         $return = $this->validator->validateValueObject($url);

@@ -28,7 +28,7 @@ class UserRegisterInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function validationWorks()
+    public function validationWorks(): void
     {
         $this->object = UserRegisterInputDto::create(
             'email@host.com',
@@ -44,7 +44,7 @@ class UserRegisterInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function validationEmailMissing()
+    public function validationEmailMissing(): void
     {
         $this->object = UserRegisterInputDto::create(
             null,
@@ -60,7 +60,7 @@ class UserRegisterInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function validationEmailWrong()
+    public function validationEmailWrong(): void
     {
         $this->object = UserRegisterInputDto::create(
             'email@host',
@@ -76,7 +76,7 @@ class UserRegisterInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function validationPasswordMissing()
+    public function validationPasswordMissing(): void
     {
         $this->object = UserRegisterInputDto::create(
             'email@host.com',
@@ -92,7 +92,7 @@ class UserRegisterInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function validationPasswordWrong()
+    public function validationPasswordWrong(): void
     {
         $this->object = UserRegisterInputDto::create(
             'email@host.com',
@@ -108,7 +108,7 @@ class UserRegisterInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function validationNameMissing()
+    public function validationNameMissing(): void
     {
         $this->object = UserRegisterInputDto::create(
             'email@host.com',
@@ -124,7 +124,7 @@ class UserRegisterInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function validationNameWrong()
+    public function validationNameWrong(): void
     {
         $this->object = UserRegisterInputDto::create(
             'email@host.com',
@@ -140,7 +140,7 @@ class UserRegisterInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function validationRolesMissing()
+    public function validationRolesMissing(): void
     {
         $this->object = UserRegisterInputDto::create(
             'email@host.com',
@@ -156,7 +156,7 @@ class UserRegisterInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function validationRolesWrong()
+    public function validationRolesWrong(): void
     {
         $this->object = UserRegisterInputDto::create(
             'email@host.com',

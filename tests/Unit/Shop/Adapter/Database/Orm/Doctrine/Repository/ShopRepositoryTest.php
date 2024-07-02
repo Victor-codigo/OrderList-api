@@ -91,7 +91,7 @@ class ShopRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldFailShopIdAlreadyExists()
+    public function itShouldFailShopIdAlreadyExists(): void
     {
         $this->expectException(DBUniqueConstraintException::class);
 

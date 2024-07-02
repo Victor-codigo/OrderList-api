@@ -28,7 +28,7 @@ class LanguageTest extends TestCase
     }
 
     /** @test */
-    public function languageOk()
+    public function languageOk(): void
     {
         $token = $this->createLanguage('en');
         $return = $this->validator->validateValueObject($token);
@@ -37,7 +37,7 @@ class LanguageTest extends TestCase
     }
 
     /** @test */
-    public function languageNotBlank()
+    public function languageNotBlank(): void
     {
         $language = $this->createLanguage('');
         $return = $this->validator->validateValueObject($language);
@@ -46,7 +46,7 @@ class LanguageTest extends TestCase
     }
 
     /** @test */
-    public function languageNotNull()
+    public function languageNotNull(): void
     {
         $language = $this->createLanguage(null);
         $return = $this->validator->validateValueObject($language);
@@ -55,7 +55,7 @@ class LanguageTest extends TestCase
     }
 
     /** @test */
-    public function languageNoValid()
+    public function languageNoValid(): void
     {
         $language = $this->createLanguage('eng');
         $return = $this->validator->validateValueObject($language);
@@ -64,7 +64,7 @@ class LanguageTest extends TestCase
     }
 
     /** @test */
-    public function languageNotEnglishOrSpanishLanguage()
+    public function languageNotEnglishOrSpanishLanguage(): void
     {
         $language = $this->createLanguage('fr');
         $return = $this->validator->validateValueObject($language);

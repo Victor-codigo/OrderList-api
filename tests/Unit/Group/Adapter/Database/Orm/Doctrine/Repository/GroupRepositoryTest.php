@@ -93,7 +93,7 @@ class GroupRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldFailIdAlreadyExists()
+    public function itShouldFailIdAlreadyExists(): void
     {
         $this->expectException(DBUniqueConstraintException::class);
 

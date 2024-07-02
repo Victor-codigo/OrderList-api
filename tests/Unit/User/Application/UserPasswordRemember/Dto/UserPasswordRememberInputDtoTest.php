@@ -23,7 +23,7 @@ class UserPasswordRememberInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldValidateEmailIsCorrect()
+    public function itShouldValidateEmailIsCorrect(): void
     {
         $userPasswordRememberDto = new UserPasswordRememberInputDto(
             'email@host.com',
@@ -35,7 +35,7 @@ class UserPasswordRememberInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailEmailIsNull()
+    public function itShouldFailEmailIsNull(): void
     {
         $userPasswordRememberDto = new UserPasswordRememberInputDto(
             null,
@@ -47,7 +47,7 @@ class UserPasswordRememberInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailEmailIsBlank()
+    public function itShouldFailEmailIsBlank(): void
     {
         $userPasswordRememberDto = new UserPasswordRememberInputDto(
             '',
@@ -59,7 +59,7 @@ class UserPasswordRememberInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailEmailIsWrong()
+    public function itShouldFailEmailIsWrong(): void
     {
         $userPasswordRememberDto = new UserPasswordRememberInputDto(
             'this is not an email',
@@ -70,7 +70,7 @@ class UserPasswordRememberInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailUrlIsNull()
+    public function itShouldFailUrlIsNull(): void
     {
         $userPasswordRememberDto = new UserPasswordRememberInputDto(
             'email@host.com',
@@ -82,7 +82,7 @@ class UserPasswordRememberInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailUrlIsBlank()
+    public function itShouldFailUrlIsBlank(): void
     {
         $userPasswordRememberDto = new UserPasswordRememberInputDto(
             'email@host.com',
@@ -94,7 +94,7 @@ class UserPasswordRememberInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailUrlIsWrong()
+    public function itShouldFailUrlIsWrong(): void
     {
         $userPasswordRememberDto = new UserPasswordRememberInputDto(
             'email@host.com',

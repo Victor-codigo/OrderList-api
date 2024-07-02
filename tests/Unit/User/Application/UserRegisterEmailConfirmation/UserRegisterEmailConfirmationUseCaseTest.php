@@ -50,7 +50,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
     }
 
     /** @test */
-    public function itShouldConfirmUserRegistration()
+    public function itShouldConfirmUserRegistration(): void
     {
         $token = 'token valid';
         $userId = ValueObjectFactory::createIdentifier('user id');
@@ -102,7 +102,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailInputValidationError()
+    public function itShouldFailInputValidationError(): void
     {
         $token = 'token valid';
         /** @var MockObject|UserEmailConfirmationInputDto $input */
@@ -122,7 +122,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailTokenExpired()
+    public function itShouldFailTokenExpired(): void
     {
         $token = 'token expired';
         /** @var MockObject|UserEmailConfirmationInputDto $input */
@@ -152,7 +152,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailErrorOnToken()
+    public function itShouldFailErrorOnToken(): void
     {
         $token = 'token expired';
         /** @var MockObject|UserEmailConfirmationInputDto $input */
@@ -182,7 +182,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailUserNotFound()
+    public function itShouldFailUserNotFound(): void
     {
         $token = 'token expired';
         /** @var MockObject|UserEmailConfirmationInputDto $input */
@@ -212,7 +212,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailUserIsAlreadyActive()
+    public function itShouldFailUserIsAlreadyActive(): void
     {
         $token = 'token expired';
         /** @var MockObject|UserEmailConfirmationInputDto $input */

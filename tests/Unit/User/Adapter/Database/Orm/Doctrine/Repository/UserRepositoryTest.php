@@ -48,7 +48,7 @@ class UserRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldFailEmailAlreadyExists()
+    public function itShouldFailEmailAlreadyExists(): void
     {
         $this->expectException(DBUniqueConstraintException::class);
 

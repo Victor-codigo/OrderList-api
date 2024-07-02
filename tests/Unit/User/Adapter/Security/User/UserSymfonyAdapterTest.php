@@ -123,7 +123,7 @@ class UserSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function itShouldHashTheUserPassword()
+    public function itShouldHashTheUserPassword(): void
     {
         $plainPassword = 'my password';
         $hashedPassword = $plainPassword.'-hashed';
@@ -141,7 +141,7 @@ class UserSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function itShouldCheckIfThePasswordNeedRehash()
+    public function itShouldCheckIfThePasswordNeedRehash(): void
     {
         $this->passwordHAsher
             ->expects($this->once())
@@ -155,7 +155,7 @@ class UserSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function itShouldCheckIfAPasswordIsValidAndNeedRehash()
+    public function itShouldCheckIfAPasswordIsValidAndNeedRehash(): void
     {
         $plainPassword = 'my password';
         $hashedPassword = $plainPassword.'-hashed';
@@ -184,7 +184,7 @@ class UserSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function itShouldCheckIfAPasswordIsValidAndNotNeedRehash()
+    public function itShouldCheckIfAPasswordIsValidAndNotNeedRehash(): void
     {
         $plainPassword = 'my password';
 
@@ -210,7 +210,7 @@ class UserSymfonyAdapterTest extends TestCase
     }
 
     /** @test */
-    public function itShouldCheckIfAPasswordIsValidAndItIsNot()
+    public function itShouldCheckIfAPasswordIsValidAndItIsNot(): void
     {
         $plainPassword = 'my password';
 
