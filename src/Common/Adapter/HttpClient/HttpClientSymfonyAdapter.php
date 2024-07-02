@@ -23,6 +23,7 @@ class HttpClientSymfonyAdapter implements HttpClientInterface
     /**
      * @throws UnsupportedOptionException
      */
+    #[\Override]
     public function request(string $method, string $url, array $options = []): HttpClientResponseInterface
     {
         try {
@@ -34,6 +35,7 @@ class HttpClientSymfonyAdapter implements HttpClientInterface
         }
     }
 
+    #[\Override]
     public function getNewInstance(array $options = []): static
     {
         return new static($this->httpClient->withOptions($options));

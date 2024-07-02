@@ -45,6 +45,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
     private MockObject|PaginatorInterface $ordersPaginator;
     private MockObject|PaginatorInterface $productsShopsPaginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

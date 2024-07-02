@@ -34,6 +34,7 @@ class UserRemoveUseCaseTest extends TestCase
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|User $userSession;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

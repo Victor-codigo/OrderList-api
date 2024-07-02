@@ -17,6 +17,7 @@ class ArgumentResolver implements ValueResolverInterface
     ) {
     }
 
+    #[\Override]
     public function resolve(Request $request, ArgumentMetadata $argument): \Generator
     {
         if (!$this->supports($argument)) {

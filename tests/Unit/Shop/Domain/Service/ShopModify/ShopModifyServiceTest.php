@@ -37,6 +37,7 @@ class ShopModifyServiceTest extends TestCase
     private MockObject|PaginatorInterface $paginator;
     private MockObject|ImageInterface $image;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -49,6 +50,7 @@ class ShopModifyServiceTest extends TestCase
         $this->object = new ShopModifyService($this->shopRepository, $this->fileUpload, $this->image, self::SHOP_IMAGE_PATH);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

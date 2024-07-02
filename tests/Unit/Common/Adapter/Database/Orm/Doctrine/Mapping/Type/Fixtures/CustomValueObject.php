@@ -20,20 +20,24 @@ class CustomValueObject extends ValueObjectBase
         return self::class;
     }
 
+    #[\Override]
     public function getValue(): int|null
     {
         return $this->value;
     }
 
+    #[\Override]
     public function getValidationValue(): mixed
     {
         return $this->value;
     }
 
+    #[\Override]
     protected function defineConstraints(): void
     {
     }
 
+    #[\Override]
     public function getValueObjects(): array
     {
         return [];

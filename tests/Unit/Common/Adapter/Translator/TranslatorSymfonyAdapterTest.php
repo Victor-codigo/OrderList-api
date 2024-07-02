@@ -17,6 +17,7 @@ class TranslatorSymfonyAdapterTest extends TestCase
     private MockObject|TranslatorInterface $translator;
     private MockObject|LocaleSwitcher $localeSwitcher;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

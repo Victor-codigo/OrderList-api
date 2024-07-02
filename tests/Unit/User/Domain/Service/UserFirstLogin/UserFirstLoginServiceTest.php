@@ -32,6 +32,7 @@ class UserFirstLoginServiceTest extends TestCase
     private string $appName;
     private string $systemKey;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

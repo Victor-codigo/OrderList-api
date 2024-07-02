@@ -20,6 +20,7 @@ class UsersRemoveActivationExpiredCommandTest extends KernelTestCase
     private Application $application;
     private CommandTester $commandTester;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

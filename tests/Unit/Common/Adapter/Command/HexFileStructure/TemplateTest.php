@@ -18,6 +18,7 @@ class TemplateTest extends TestCase
     private Template $object;
     private array $templatePlaceholder;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -29,6 +30,7 @@ class TemplateTest extends TestCase
         ];
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

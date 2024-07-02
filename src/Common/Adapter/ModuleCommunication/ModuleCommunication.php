@@ -49,6 +49,7 @@ class ModuleCommunication implements ModuleCommunicationInterface
      * @throws ValueError
      * @throws ModuleCommunicationTokenNotFoundInRequestException
      */
+    #[\Override]
     public function __invoke(ModuleCommunicationConfigDtoPaginatorInterface $routeConfig): ResponseDto
     {
         try {
@@ -88,6 +89,7 @@ class ModuleCommunication implements ModuleCommunicationInterface
      * @throws ModuleCommunicationErrorResponseException
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function getPagesRangeEndpoint(ModuleCommunicationConfigDtoPaginatorInterface $routeConfig, int $pageIni, ?int $pageEnd): \Generator
     {
         if ($pageIni < 1) {
@@ -130,6 +132,7 @@ class ModuleCommunication implements ModuleCommunicationInterface
      * @throws ModuleCommunicationErrorResponseException
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function getAllPagesOfEndpoint(ModuleCommunicationConfigDtoPaginatorInterface $routeConfig): \Generator
     {
         return $this->getPagesRangeEndpoint($routeConfig, 1, null);

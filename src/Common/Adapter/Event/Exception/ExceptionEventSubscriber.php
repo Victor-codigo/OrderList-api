@@ -28,6 +28,7 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
     public const ERROR_500_MESSAGE = AppConfig::ERROR_500_MESSAGE;
     public const ERROR_METHOD_NOT_ALLOWED = AppConfig::ERROR_METHOD_NOT_ALLOWED;
 
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [KernelEvents::EXCEPTION => ['__invoke']];

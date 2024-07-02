@@ -29,6 +29,7 @@ class UserRepositoryTest extends DataBaseTestCase
 
     private UserRepository $userRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

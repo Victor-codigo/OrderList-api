@@ -34,6 +34,7 @@ class ListOrdersCreateFromServiceTest extends TestCase
     private MockObject|OrderRepositoryInterface $ordersRepository;
     private MockObject|PaginatorInterface $paginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

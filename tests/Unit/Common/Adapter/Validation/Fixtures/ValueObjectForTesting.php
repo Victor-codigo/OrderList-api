@@ -14,6 +14,7 @@ class ValueObjectForTesting extends IntegerValueObject
         parent::__construct($age);
     }
 
+    #[\Override]
     public function defineConstraints(): void
     {
         $this

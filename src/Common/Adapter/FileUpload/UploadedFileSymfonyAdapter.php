@@ -43,6 +43,7 @@ class UploadedFileSymfonyAdapter extends FileSymfonyAdapter implements UploadedF
      * It is extracted from the request from which the file has been uploaded.
      * Then it should not be considered as a safe value.
      */
+    #[\Override]
     public function getClientOriginalName(): string
     {
         return $this->file->getClientOriginalName();
@@ -54,6 +55,7 @@ class UploadedFileSymfonyAdapter extends FileSymfonyAdapter implements UploadedF
      * It is extracted from the original file name that was uploaded.
      * Then it should not be considered as a safe value.
      */
+    #[\Override]
     public function getClientOriginalExtension(): string
     {
         return $this->file->getClientOriginalExtension();
@@ -70,6 +72,7 @@ class UploadedFileSymfonyAdapter extends FileSymfonyAdapter implements UploadedF
      *
      * @see getMimeType()
      */
+    #[\Override]
     public function getClientMimeType(): string
     {
         return $this->file->getClientMimeType();
@@ -90,6 +93,7 @@ class UploadedFileSymfonyAdapter extends FileSymfonyAdapter implements UploadedF
      * @see guessExtension()
      * @see getClientMimeType()
      */
+    #[\Override]
     public function guessClientExtension(): ?string
     {
         return $this->file->guessClientExtension();
@@ -101,6 +105,7 @@ class UploadedFileSymfonyAdapter extends FileSymfonyAdapter implements UploadedF
      * If the upload was successful, the constant UPLOAD_ERR_OK is returned.
      * Otherwise one of the other UPLOAD_ERR_XXX constants is returned.
      */
+    #[\Override]
     public function getError(): int
     {
         return $this->file->getError();
@@ -109,6 +114,7 @@ class UploadedFileSymfonyAdapter extends FileSymfonyAdapter implements UploadedF
     /**
      * Returns whether the file has been uploaded with HTTP and no error occurred.
      */
+    #[\Override]
     public function isValid(): bool
     {
         return $this->file->isValid();
@@ -119,6 +125,7 @@ class UploadedFileSymfonyAdapter extends FileSymfonyAdapter implements UploadedF
      *
      * @throws FileException if, for any reason, the file could not have been moved
      */
+    #[\Override]
     public function move(string $directory, string $name = null): FileInterface
     {
         try {
@@ -149,6 +156,7 @@ class UploadedFileSymfonyAdapter extends FileSymfonyAdapter implements UploadedF
      *
      * @return int|float The maximum size of an uploaded file in bytes (returns float if size > PHP_INT_MAX)
      */
+    #[\Override]
     public static function getMaxFilesize(): int|float
     {
         return UploadedFile::getMaxFilesize();

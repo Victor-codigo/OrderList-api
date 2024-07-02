@@ -17,6 +17,7 @@ class OrderRemoveOutputDto implements ApplicationOutputInterface
     ) {
     }
 
+    #[\Override]
     public function toArray(): array
     {
         $ordersIdPlain = array_map(

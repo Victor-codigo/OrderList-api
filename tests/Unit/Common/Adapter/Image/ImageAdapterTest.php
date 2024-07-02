@@ -25,6 +25,7 @@ class ImageAdapterTest extends TestCase
     private MockObject|Imagine $imagine;
     private MockObject|ImageInterface $imageInterface;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

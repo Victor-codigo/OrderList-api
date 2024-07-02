@@ -17,16 +17,19 @@ abstract class IntegerValueObject extends ValueObjectBase
         $this->defineConstraints();
     }
 
+    #[\Override]
     public function getValue(): int|null
     {
         return $this->value;
     }
 
+    #[\Override]
     public function getValidationValue(): mixed
     {
         return $this->value;
     }
 
+    #[\Override]
     public function getValueObjects(): array
     {
         return [];

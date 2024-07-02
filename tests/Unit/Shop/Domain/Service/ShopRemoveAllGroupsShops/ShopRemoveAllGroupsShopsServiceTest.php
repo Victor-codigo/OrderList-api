@@ -28,6 +28,7 @@ class ShopRemoveAllGroupsShopsServiceTest extends TestCase
     private MockObject|EntityImageRemoveService $entityImageRemoveService;
     private MockObject|PaginatorInterface $shopsPaginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

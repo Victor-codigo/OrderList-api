@@ -29,6 +29,7 @@ class ShopRemoveAllGroupsShopsInputDto implements ServiceInputDtoInterface
         $this->systemKey = $systemKey ?? '';
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListGroupsIdBlank = $validator

@@ -28,6 +28,7 @@ class UserEmailChangeUseCaseTest extends TestCase
     private MockObject|UserEmailChangeService $userEmailChangeService;
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

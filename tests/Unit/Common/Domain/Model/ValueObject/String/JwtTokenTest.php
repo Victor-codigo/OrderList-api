@@ -16,6 +16,7 @@ class JwtTokenTest extends TestCase
     private ValidationInterface $validator;
     private const string PATH_PRIVATE_KEY = 'src/Common/Adapter/Framework/Config/JwtKeys/Lexik/private.pem';
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

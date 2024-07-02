@@ -54,6 +54,7 @@ class HttpResponseException extends Exception implements HttpExceptionInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getStatusCode(): int
     {
         return $this->statusCode;
@@ -69,6 +70,7 @@ class HttpResponseException extends Exception implements HttpExceptionInterface
     /**
      * {@inheritDoc}
      */
+    #[\Override]
     public function getHeaders(): array
     {
         return $this->headers;

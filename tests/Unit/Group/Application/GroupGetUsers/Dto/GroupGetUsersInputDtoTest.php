@@ -20,6 +20,7 @@ class GroupGetUsersInputDtoTest extends TestCase
 
     private MockObject|ValidationInterface $validator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -21,6 +21,7 @@ class GroupGetGroupsAdminsControllerTest extends WebClientTestCase
         '78b96ac1-ffcc-458b-8f48-b40c6e65261f',
     ];
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

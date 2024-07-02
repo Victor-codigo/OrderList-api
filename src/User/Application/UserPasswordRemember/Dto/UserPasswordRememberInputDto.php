@@ -21,6 +21,7 @@ class UserPasswordRememberInputDto implements ServiceInputDtoInterface
         $this->passwordRememberUrl = ValueObjectFactory::createUrl($passwordRememberUrl);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

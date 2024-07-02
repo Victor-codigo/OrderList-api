@@ -23,6 +23,7 @@ class NotificationRemoveAllUserNotificationsControllerTest extends WebClientTest
         'f79ddff5-486b-4b5f-af64-b99fe9154fc1',
     ];
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

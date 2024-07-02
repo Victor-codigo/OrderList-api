@@ -22,6 +22,7 @@ class GroupGetDataServiceTest extends TestCase
     private GroupGetDataService $object;
     private MockObject|GroupRepositoryInterface $groupRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

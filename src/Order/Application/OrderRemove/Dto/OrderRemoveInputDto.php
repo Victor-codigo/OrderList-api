@@ -34,6 +34,7 @@ class OrderRemoveInputDto implements ServiceInputDtoInterface
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListNoOrdersId = $validator

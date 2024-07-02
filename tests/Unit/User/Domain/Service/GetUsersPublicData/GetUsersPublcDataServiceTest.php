@@ -25,6 +25,7 @@ class GetUsersPublcDataServiceTest extends TestCase
     private GeUsersPublicDataService $object;
     private MockObject|UserRepositoryInterface $userRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

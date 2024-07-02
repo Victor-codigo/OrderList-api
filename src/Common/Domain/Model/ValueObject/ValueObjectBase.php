@@ -32,16 +32,19 @@ abstract class ValueObjectBase implements ValueObjectValidationInterface, ValueO
     /**
      * @var ConstraintDto[]
      */
+    #[\Override]
     public function getConstraints(): array
     {
         return $this->constraints;
     }
 
+    #[\Override]
     public function getValueObjects(): array
     {
         return [];
     }
 
+    #[\Override]
     public function isNull(): bool
     {
         return null === $this->value;

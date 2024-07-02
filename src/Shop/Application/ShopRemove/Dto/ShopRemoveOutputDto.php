@@ -17,6 +17,7 @@ class ShopRemoveOutputDto implements ApplicationOutputInterface
     ) {
     }
 
+    #[\Override]
     public function toArray(): array
     {
         $shopsIds = array_map(

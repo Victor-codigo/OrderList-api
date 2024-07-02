@@ -47,6 +47,7 @@ class ListOrdersCreateInputDto implements ServiceInputDtoInterface
         return null;
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

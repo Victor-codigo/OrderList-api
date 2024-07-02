@@ -11,6 +11,7 @@ use Common\Domain\Validation\ConstraintFactory;
 
 class NameWithSpaces extends StringValueObject implements \Stringable
 {
+    #[\Override]
     protected function defineConstraints(): void
     {
         $this
@@ -21,6 +22,7 @@ class NameWithSpaces extends StringValueObject implements \Stringable
             ->setConstraint(ConstraintFactory::stringRange(VALUE_OBJECTS_CONSTRAINTS::NAME_WITH_SPACES_MIN_LENGTH, VALUE_OBJECTS_CONSTRAINTS::NAME_WITH_SPACES_MAX_LENGTH));
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getValue();

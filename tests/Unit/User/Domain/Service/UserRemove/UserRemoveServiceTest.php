@@ -28,6 +28,7 @@ class UserRemoveServiceTest extends TestCase
     private MockObject|UserRepositoryInterface $userRepository;
     private MockObject|EntityImageRemoveService $entityImageRemoveService;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

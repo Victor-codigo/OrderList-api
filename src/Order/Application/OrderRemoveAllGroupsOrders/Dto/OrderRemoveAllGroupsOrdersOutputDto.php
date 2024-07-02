@@ -19,6 +19,7 @@ class OrderRemoveAllGroupsOrdersOutputDto implements ApplicationOutputInterface
     ) {
     }
 
+    #[\Override]
     public function toArray(): array
     {
         $ordersIdRemoved = array_map(

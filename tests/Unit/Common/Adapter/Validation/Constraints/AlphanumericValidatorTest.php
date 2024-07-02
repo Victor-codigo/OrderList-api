@@ -19,6 +19,7 @@ class AlphanumericValidatorTest extends TestCase
     private MockObject|Alphanumeric $alphanumeric;
     private MockObject|Constraint $constraint;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

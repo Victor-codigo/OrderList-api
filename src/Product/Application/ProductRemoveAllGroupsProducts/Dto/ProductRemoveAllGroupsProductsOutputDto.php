@@ -17,6 +17,7 @@ class ProductRemoveAllGroupsProductsOutputDto implements ApplicationOutputInterf
     ) {
     }
 
+    #[\Override]
     public function toArray(): array
     {
         $productsIds = array_map(

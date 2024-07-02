@@ -10,6 +10,7 @@ use Common\Domain\Validation\ConstraintFactory;
 
 class IdentifierNullable extends StringValueObject implements \Stringable
 {
+    #[\Override]
     protected function defineConstraints(): void
     {
         $this
@@ -22,6 +23,7 @@ class IdentifierNullable extends StringValueObject implements \Stringable
         return ValueObjectFactory::createIdentifier($this->getValue());
     }
 
+    #[\Override]
     public function __toString(): string
     {
         if ($this->isNull()) {

@@ -17,6 +17,7 @@ class ValidationConstraintTest extends TestCase
     private ValidationConstraint $object;
     private MockObject|Constraint $constraint;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

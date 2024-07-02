@@ -83,11 +83,13 @@ class User implements EntityImageModifyInterface
         return $this;
     }
 
+    #[\Override]
     public function getImage(): Path
     {
         return $this->profile->getImage();
     }
 
+    #[\Override]
     public function setImage(Path $image): self
     {
         $this->profile->setImage($image);

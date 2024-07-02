@@ -23,6 +23,7 @@ class UserHasGroupAdminGrantsServiceTest extends TestCase
     private UserHasGroupAdminGrantsService $object;
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

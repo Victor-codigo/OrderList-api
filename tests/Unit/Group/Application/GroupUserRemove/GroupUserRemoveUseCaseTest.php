@@ -37,6 +37,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
     private MockObject|UserShared $userSession;
     private MockObject|Group $group;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

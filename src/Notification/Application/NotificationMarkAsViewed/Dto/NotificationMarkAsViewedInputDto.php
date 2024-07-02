@@ -30,6 +30,7 @@ class NotificationMarkAsViewedInputDto implements ServiceInputDtoInterface
         );
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = [];

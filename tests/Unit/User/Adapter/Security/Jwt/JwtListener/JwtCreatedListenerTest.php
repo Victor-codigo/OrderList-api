@@ -24,6 +24,7 @@ class JwtCreatedListenerTest extends TestCase
         'param2' => 2,
     ];
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

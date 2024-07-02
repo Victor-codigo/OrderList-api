@@ -25,6 +25,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
         '6df60afd-f7c3-4c2c-b920-e265f266c560',
      ];
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

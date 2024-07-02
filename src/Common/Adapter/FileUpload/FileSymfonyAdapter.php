@@ -13,6 +13,7 @@ class FileSymfonyAdapter implements FileInterface
 {
     protected File $file;
 
+    #[\Override]
     public function getFile(): File
     {
         return $this->file;
@@ -34,6 +35,7 @@ class FileSymfonyAdapter implements FileInterface
      * @see MimeTypes
      * @see getMimeType()
      */
+    #[\Override]
     public function guessExtension(): ?string
     {
         return $this->file->guessExtension();
@@ -48,6 +50,7 @@ class FileSymfonyAdapter implements FileInterface
      *
      * @see MimeTypes
      */
+    #[\Override]
     public function getMimeType(): ?string
     {
         return $this->file->getMimeType();
@@ -58,6 +61,7 @@ class FileSymfonyAdapter implements FileInterface
      *
      * @throws FileException if the target file could not be created
      */
+    #[\Override]
     public function move(string $directory, string $name = null): FileInterface
     {
         try {
@@ -67,6 +71,7 @@ class FileSymfonyAdapter implements FileInterface
         }
     }
 
+    #[\Override]
     public function getContent(): string
     {
         return $this->file->getContent();

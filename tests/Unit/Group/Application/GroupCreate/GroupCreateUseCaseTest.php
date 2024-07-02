@@ -32,6 +32,7 @@ class GroupCreateUseCaseTest extends TestCase
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|Group $group;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

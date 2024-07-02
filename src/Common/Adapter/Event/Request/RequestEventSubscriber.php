@@ -19,6 +19,7 @@ class RequestEventSubscriber implements EventSubscriberInterface
     ) {
     }
 
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [KernelEvents::REQUEST => ['__invoke', 101]];

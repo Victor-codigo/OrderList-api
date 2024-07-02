@@ -28,6 +28,7 @@ class ProductRemoveAllGroupsProductsServiceTest extends TestCase
     private MockObject|EntityImageRemoveService $entityImageRemoveService;
     private MockObject|PaginatorInterface $productsPaginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -11,6 +11,7 @@ use Common\Domain\Validation\User\USER_ROLES;
 
 class Roles extends ArrayValueObject
 {
+    #[\Override]
     protected function defineConstraints(): void
     {
         $this
@@ -19,6 +20,7 @@ class Roles extends ArrayValueObject
             ->setConstraint(ConstraintFactory::type(TYPES::ARRAY));
     }
 
+    #[\Override]
     public function getValueObjects(): array
     {
         if (null === $this->getValue()) {

@@ -19,6 +19,7 @@ class ValidateGroupAndUserServiceTest extends TestCase
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|ResponseDto $response;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

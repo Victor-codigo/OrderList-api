@@ -16,6 +16,7 @@ class NameTest extends TestCase
 
     private const string VALID_NAME = 'Juan_6';
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

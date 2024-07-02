@@ -21,6 +21,7 @@ class UserPasswordRememberChangeControllerTest extends WebClientTestCase
     private const string USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
     private const string USER_ID_NOT_EXISTS = '1befdbe2-9c14-42f0-850f-63e061e33b8k';
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

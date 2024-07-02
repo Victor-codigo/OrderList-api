@@ -33,6 +33,7 @@ class UserModifyControllerTest extends WebClientTestCase
     private readonly string $pathImageUser;
     private KernelBrowser|null $client;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -52,6 +53,7 @@ class UserModifyControllerTest extends WebClientTestCase
         }
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

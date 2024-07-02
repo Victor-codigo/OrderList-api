@@ -15,6 +15,7 @@ class FilterSectionTest extends TestCase
     private FilterSection $object;
     private ValidationChain $validator;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

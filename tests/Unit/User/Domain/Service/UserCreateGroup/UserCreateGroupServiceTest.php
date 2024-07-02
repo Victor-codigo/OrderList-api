@@ -21,6 +21,7 @@ class UserCreateGroupServiceTest extends TestCase
     private UserCreateGroupService $object;
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

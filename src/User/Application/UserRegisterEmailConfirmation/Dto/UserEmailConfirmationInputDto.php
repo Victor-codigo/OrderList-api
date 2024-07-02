@@ -18,6 +18,7 @@ class UserEmailConfirmationInputDto implements ServiceInputDtoInterface
         $this->token = ValueObjectFactory::createJwtToken($token);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray(['token' => $this->token]);

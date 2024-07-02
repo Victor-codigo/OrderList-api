@@ -34,6 +34,7 @@ class NotificationGetDataServiceTest extends TestCase
     private MockObject|PaginatorInterface $paginator;
     private MockObject|TranslatorInterface $translator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

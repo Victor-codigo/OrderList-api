@@ -28,6 +28,7 @@ class OrderRemoveServiceTest extends TestCase
     private MockObject|OrderRepositoryInterface $orderRepository;
     private MockObject|PaginatorInterface $paginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

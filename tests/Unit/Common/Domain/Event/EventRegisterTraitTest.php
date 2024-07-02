@@ -13,6 +13,7 @@ class EventRegisterTraitTest extends TestCase
     private TraitClass $object;
     private CustomEvent $event;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

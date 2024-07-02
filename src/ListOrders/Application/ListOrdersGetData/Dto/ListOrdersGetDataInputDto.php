@@ -55,6 +55,7 @@ class ListOrdersGetDataInputDto implements ServiceInputDtoInterface
         $this->pageItems = ValueObjectFactory::createPaginatorPageItems($pageItems);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListGroupId = $validator->validateValueObjectArray([

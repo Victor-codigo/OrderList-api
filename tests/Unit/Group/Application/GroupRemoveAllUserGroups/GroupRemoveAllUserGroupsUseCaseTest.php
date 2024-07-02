@@ -45,6 +45,7 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
     private MockObject|UserShared $userSession;
     private MockObject|ValidationInterface $validation;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

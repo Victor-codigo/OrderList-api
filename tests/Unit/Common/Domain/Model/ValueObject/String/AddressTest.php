@@ -16,6 +16,7 @@ class AddressTest extends TestCase
 
     private const string VALID_ADDRESS = 'C\ Cristóbal, 10. #3-b';
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

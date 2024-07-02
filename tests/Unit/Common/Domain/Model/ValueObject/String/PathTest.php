@@ -15,6 +15,7 @@ class PathTest extends TestCase
 {
     private ValidationInterface $validation;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

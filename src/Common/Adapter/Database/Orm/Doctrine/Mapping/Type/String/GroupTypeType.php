@@ -13,16 +13,19 @@ use Error;
 
 class GroupTypeType extends TypeBase
 {
+    #[\Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return sprintf('VARCHAR(%d)', $column['length']);
     }
 
+    #[\Override]
     public function getClassImplementationName(): string
     {
         return GroupType::class;
     }
 
+    #[\Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         $groupType = parent::convertToDatabaseValue($value, $platform);
@@ -30,6 +33,7 @@ class GroupTypeType extends TypeBase
         return null === $groupType ? null : $groupType->value;
     }
 
+    #[\Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
         try {

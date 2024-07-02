@@ -24,6 +24,7 @@ class GroupRemoveAllGroupsOutputDto implements ApplicationOutputInterface
     /**
      * @return string[]
      */
+    #[\Override]
     public function toArray(): array
     {
         return [

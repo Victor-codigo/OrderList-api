@@ -32,6 +32,7 @@ class SetProductShopPriceServiceTest extends TestCase
     private MockObject|PaginatorInterface $productsPaginator;
     private MockObject|PaginatorInterface $shopsPaginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

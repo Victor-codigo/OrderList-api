@@ -10,6 +10,7 @@ use Common\Domain\Validation\ConstraintFactory;
 
 class Name extends StringValueObject implements \Stringable
 {
+    #[\Override]
     protected function defineConstraints(): void
     {
         $this
@@ -20,6 +21,7 @@ class Name extends StringValueObject implements \Stringable
             ->setConstraint(ConstraintFactory::stringRange(VALUE_OBJECTS_CONSTRAINTS::NAME_MIN_LENGTH, VALUE_OBJECTS_CONSTRAINTS::NAME_MAX_LENGTH));
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getValue();

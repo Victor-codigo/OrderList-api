@@ -34,6 +34,7 @@ class GroupModifyServiceTest extends TestCase
     private MockObject|FileUploadInterface $fileUpload;
     private MockObject|UploadedFileInterface $imageUploaded;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -44,6 +45,7 @@ class GroupModifyServiceTest extends TestCase
         $this->object = new GroupModifyService($this->groupRepository, $this->fileUpload, self::PATH_UPLOAD_GROUP_IMAGE);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         BuiltInFunctionsReturn::$file_exists = null;

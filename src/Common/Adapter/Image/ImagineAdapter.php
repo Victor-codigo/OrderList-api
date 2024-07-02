@@ -20,6 +20,7 @@ class ImagineAdapter implements ImageInterface
     /**
      * @throws ImageResizeException
      */
+    #[\Override]
     public function resizeToAFrame(Path $filePath, float $widthMax, float $heightMax): void
     {
         if (0 == $widthMax || 0 == $heightMax) {

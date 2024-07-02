@@ -10,11 +10,13 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 class UrlType extends TypeBase
 {
+    #[\Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return sprintf('VARCHAR(%d)', $column['length']);
     }
 
+    #[\Override]
     public function getClassImplementationName(): string
     {
         return Url::class;

@@ -21,6 +21,7 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
 
     private KernelBrowser $client;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

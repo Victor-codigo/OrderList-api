@@ -33,6 +33,7 @@ class ProductShopRepositoryTest extends DataBaseTestCase
     private ProductRepositoryInterface $productRepository;
     private ShopRepositoryInterface $shopRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -37,6 +37,7 @@ class ProductModifyServiceTest extends TestCase
     private MockObject|ProductImage $productImage;
     private MockObject|Product $productFromDb;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

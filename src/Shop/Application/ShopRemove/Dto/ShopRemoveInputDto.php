@@ -29,6 +29,7 @@ class ShopRemoveInputDto implements ServiceInputDtoInterface
         );
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListNoShopsId = $validator

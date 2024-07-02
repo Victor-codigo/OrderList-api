@@ -44,6 +44,7 @@ class OrderModifyInputDto implements ServiceInputDtoInterface
         $this->amount = ValueObjectFactory::createAmount($amount);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

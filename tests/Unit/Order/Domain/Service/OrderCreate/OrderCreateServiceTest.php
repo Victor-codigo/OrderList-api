@@ -40,6 +40,7 @@ class OrderCreateServiceTest extends TestCase
     private MockObject|PaginatorInterface $paginator;
     private Identifier $groupId;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

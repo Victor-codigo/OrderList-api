@@ -63,6 +63,7 @@ class ShopGetDataInputDto implements ServiceInputDtoInterface
         );
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray(['group_id' => $this->groupId]);

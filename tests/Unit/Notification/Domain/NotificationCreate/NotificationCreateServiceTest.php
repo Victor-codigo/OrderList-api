@@ -21,6 +21,7 @@ class NotificationCreateServiceTest extends TestCase
     private NotificationCreateService $object;
     private MockObject|NotificationRepositoryInterface $notificationRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

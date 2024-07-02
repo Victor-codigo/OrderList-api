@@ -16,6 +16,7 @@ class PasswordTest extends TestCase
     private ValidationInterface $validation;
     private string $validPassword = '123456';
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

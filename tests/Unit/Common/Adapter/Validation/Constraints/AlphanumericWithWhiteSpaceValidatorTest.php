@@ -19,6 +19,7 @@ class AlphanumericWithWhiteSpaceValidatorTest extends TestCase
     private MockObject|AlphanumericWithWhiteSpace $alphanumericWithWhiteSpace;
     private MockObject|Constraint $constraint;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

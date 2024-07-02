@@ -16,6 +16,7 @@ class EmailTest extends TestCase
     private string $validEmail = 'a.valid.email@host.com';
     private string $invalidEmail = 'this is an invalid email';
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

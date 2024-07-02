@@ -16,6 +16,7 @@ class GroupGetUsersOutputDto implements ApplicationOutputInterface
     ) {
     }
 
+    #[\Override]
     public function toArray(): array
     {
         return [

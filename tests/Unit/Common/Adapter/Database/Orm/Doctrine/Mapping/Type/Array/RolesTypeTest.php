@@ -18,6 +18,7 @@ class RolesTypeTest extends TestCase
     private RolesType $object;
     private AbstractPlatform $abstractPlatform;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

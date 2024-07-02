@@ -17,6 +17,7 @@ class GroupTypeTypeTest extends TestCase
     private GroupTypeType $object;
     private MockObject|AbstractPlatform $platform;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

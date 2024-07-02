@@ -23,6 +23,7 @@ class UserRegisterControllerTest extends WebClientTestCase
     private const string ENDPOINT = '/api/v1/users';
     private const string METHOD = 'POST';
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

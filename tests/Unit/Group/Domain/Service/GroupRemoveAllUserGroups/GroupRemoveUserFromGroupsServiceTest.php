@@ -28,6 +28,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;
     private MockObject|PaginatorInterface $groupsUsersNumPaginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

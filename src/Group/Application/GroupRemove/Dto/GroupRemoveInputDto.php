@@ -30,6 +30,7 @@ class GroupRemoveInputDto implements ServiceInputDtoInterface
         );
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListGroupsIdEmpty = $validator

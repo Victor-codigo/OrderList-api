@@ -16,6 +16,7 @@ class OrderCreateOutputDto implements ApplicationOutputInterface
     ) {
     }
 
+    #[\Override]
     public function toArray(): array
     {
         return [

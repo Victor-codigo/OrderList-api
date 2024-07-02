@@ -19,6 +19,7 @@ class UserRegisteredEventSubscriberTest extends TestCase
     private MockObject|EntityManagerInterface $entityManager;
     private MockObject|User $user;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

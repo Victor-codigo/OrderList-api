@@ -18,6 +18,7 @@ class TryoutUserRoutePermissionsValidationTest extends TestCase
 
     private TryoutUserRoutePermissionsValidation $object;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

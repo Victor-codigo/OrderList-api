@@ -28,6 +28,7 @@ class JwtEncodedListenerTest extends TestCase
     private MockObject|RequestStack $requestStack;
     private MockObject|Request $request;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

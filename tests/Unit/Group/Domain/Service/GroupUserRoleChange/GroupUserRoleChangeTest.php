@@ -33,6 +33,7 @@ class GroupUserRoleChangeTest extends TestCase
     private Group $group;
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

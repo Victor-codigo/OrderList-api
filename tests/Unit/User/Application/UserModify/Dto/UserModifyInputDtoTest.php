@@ -23,6 +23,7 @@ class UserModifyInputDtoTest extends TestCase
 
     private ValidationChain $validator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -30,6 +31,7 @@ class UserModifyInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

@@ -27,6 +27,7 @@ class ShopRemoveServiceTest extends TestCase
     private MockObject|ShopRepositoryInterface $shopRepository;
     private MockObject|PaginatorInterface $paginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -36,6 +37,7 @@ class ShopRemoveServiceTest extends TestCase
         $this->object = new ShopRemoveService($this->shopRepository, self::SHOP_IMAGE_PATH);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

@@ -28,6 +28,7 @@ class UserPasswordChangeInputDto implements ServiceInputDtoInterface
         $this->passwordNewRepeat = ValueObjectFactory::createPassword($passwordNewRepeat);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

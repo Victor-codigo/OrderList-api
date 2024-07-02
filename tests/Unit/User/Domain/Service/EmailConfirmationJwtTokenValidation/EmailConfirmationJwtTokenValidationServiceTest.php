@@ -26,6 +26,7 @@ class EmailConfirmationJwtTokenValidationServiceTest extends TestCase
     private MockObject|UserRepositoryInterface $userRepository;
     private MockObject|User $user;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

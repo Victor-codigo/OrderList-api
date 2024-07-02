@@ -25,6 +25,7 @@ class ProductGetDataServiceTest extends TestCase
     private MockObject|ProductRepositoryInterface $productRepository;
     private MockObject|PaginatorInterface $paginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

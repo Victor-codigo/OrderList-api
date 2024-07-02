@@ -34,6 +34,7 @@ class GroupUserRoleChangeInputDto implements ServiceInputDtoInterface
         $this->rol = ValueObjectFactory::createRol($admin ? GROUP_ROLES::ADMIN : GROUP_ROLES::USER);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray([

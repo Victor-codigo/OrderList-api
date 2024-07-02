@@ -21,6 +21,7 @@ class ProductRemoveInputDtoTest extends TestCase
     private ValidationInterface $validator;
     private MockObject|UserShared $userShared;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

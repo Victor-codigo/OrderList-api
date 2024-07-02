@@ -23,6 +23,7 @@ class GetProductShopPriceServiceTest extends TestCase
     private MockObject|ProductShopRepositoryInterface $productShopRepository;
     private MockObject|PaginatorInterface $paginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

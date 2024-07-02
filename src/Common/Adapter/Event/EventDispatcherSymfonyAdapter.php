@@ -18,6 +18,7 @@ class EventDispatcherSymfonyAdapter implements EventDispatcherInterface
         $this->eventDispatcher = $eventDispatcher;
     }
 
+    #[\Override]
     public function dispatch(EventDomainInterface $event): void
     {
         $listeners = $this->eventDispatcher->getListeners($event::class);
@@ -27,6 +28,7 @@ class EventDispatcherSymfonyAdapter implements EventDispatcherInterface
         }
     }
 
+    #[\Override]
     public function addSubscriber(EventDomainSubscriberInterface $subscriber): void
     {
         foreach ($subscriber->getSubscribedEvents() as $eventName => $eventParams) {
@@ -43,6 +45,7 @@ class EventDispatcherSymfonyAdapter implements EventDispatcherInterface
         }
     }
 
+    #[\Override]
     public function addListener(string $eventName, array|callable $listener, int $priority = 0): void
     {
         $this->eventDispatcher->addListener($eventName, $listener, $priority);

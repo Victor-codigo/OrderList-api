@@ -34,6 +34,7 @@ class ListOrdersGetPriceServiceTest extends TestCase
     private MockObject|PaginatorInterface $ordersPagination;
     private MockObject|PaginatorInterface $productShopsPagination;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

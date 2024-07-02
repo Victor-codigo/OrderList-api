@@ -29,11 +29,13 @@ class OrderCreateControllerTest extends WebClientTestCase
 
     private string $pathImageProduct;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

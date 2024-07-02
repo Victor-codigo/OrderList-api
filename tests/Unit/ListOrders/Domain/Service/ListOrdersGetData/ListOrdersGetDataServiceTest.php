@@ -22,6 +22,7 @@ class ListOrdersGetDataServiceTest extends TestCase
     private MockObject|ListOrdersRepositoryInterface $listOrdersRepository;
     private MockObject|PaginatorInterface $paginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

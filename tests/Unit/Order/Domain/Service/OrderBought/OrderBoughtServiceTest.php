@@ -24,6 +24,7 @@ class OrderBoughtServiceTest extends TestCase
     private MockObject|PaginatorInterface $paginator;
     private MockObject|Order $order;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

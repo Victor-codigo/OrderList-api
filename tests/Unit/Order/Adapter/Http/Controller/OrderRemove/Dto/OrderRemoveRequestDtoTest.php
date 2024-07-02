@@ -21,6 +21,7 @@ class OrderRemoveRequestDtoTest extends TestCase
     private OrderRemoveRequestDto $object;
     private MockObject|RequestStack $request;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

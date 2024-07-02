@@ -19,6 +19,7 @@ class UserSharedSymfonyAdapter implements UserInterface, UserSharedInterface
     /**
      * @return string[]
      */
+    #[\Override]
     public function getRoles(): array
     {
         $roles = $this->user
@@ -31,20 +32,24 @@ class UserSharedSymfonyAdapter implements UserInterface, UserSharedInterface
         );
     }
 
+    #[\Override]
     public function eraseCredentials(): void
     {
     }
 
+    #[\Override]
     public function getUserIdentifier(): string
     {
         return $this->user->getId()->getValue();
     }
 
+    #[\Override]
     public function getUser(): UserShared
     {
         return $this->user;
     }
 
+    #[\Override]
     public function setUser(UserShared $user): self
     {
         $this->user = $user;

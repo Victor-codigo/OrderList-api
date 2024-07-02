@@ -27,6 +27,7 @@ class NotificationGetDataInputDto implements ServiceInputDtoInterface
         $this->lang = ValueObjectFactory::createLanguage($lang);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

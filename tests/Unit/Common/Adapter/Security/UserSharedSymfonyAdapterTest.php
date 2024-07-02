@@ -16,6 +16,7 @@ class UserSharedSymfonyAdapterTest extends TestCase
     private UserSharedSymfonyAdapter $object;
     private MockObject|UserShared $userShared;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

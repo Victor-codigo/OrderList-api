@@ -33,6 +33,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
     /**
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function findGroupUsersOrFail(Identifier $groupId): PaginatorInterface
     {
         $userGroupTable = UserGroup::class;
@@ -60,6 +61,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
      *
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function findGroupsUsersOrFail(array $groupsId, GROUP_ROLES $groupRole): PaginatorInterface
     {
         $userGroupTable = UserGroup::class;
@@ -92,6 +94,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
      *
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function findGroupsFirstUserByRolOrFail(array $groupsId, GROUP_ROLES $groupRole): array
     {
         $sql = <<<SQL
@@ -141,6 +144,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
      *
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function findGroupUsersByUserIdOrFail(Identifier $groupId, array $usersId): array
     {
         /** @var UserGroup[] $groupUsers */
@@ -161,6 +165,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
      *
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function findGroupUsersByRol(Identifier $groupId, GROUP_ROLES $groupRol): array
     {
         $userGroupEntity = UserGroup::class;
@@ -190,6 +195,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
     /**
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function findUserGroupsById(Identifier $userId, ?GROUP_ROLES $groupRol = null, ?GROUP_TYPE $groupType = null): PaginatorInterface
     {
         $queryBuilder = $this->entityManager
@@ -224,6 +230,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
     /**
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function findUserGroupsByName(Identifier $userId, ?Filter $filterText, ?GROUP_TYPE $groupType, bool $orderAsc): PaginatorInterface
     {
         $query = $this->entityManager
@@ -253,6 +260,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
     /**
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function findGroupUsersNumberOrFail(Identifier $groupId): int
     {
         $userGroupEntity = UserGroup::class;
@@ -280,6 +288,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
      *
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function findGroupsUsersNumberOrFail(array $groupsId): PaginatorInterface
     {
         $userGroupEntity = UserGroup::class;
@@ -301,6 +310,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
      * @throws DBConnectionException
      * @throws DBUniqueConstraintException
      */
+    #[\Override]
     public function save(array $usersGroup): void
     {
         try {
@@ -319,6 +329,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
     /**
      * @param UserGroup[] $usersGroup
      */
+    #[\Override]
     public function removeUsers(array $usersGroup): void
     {
         try {

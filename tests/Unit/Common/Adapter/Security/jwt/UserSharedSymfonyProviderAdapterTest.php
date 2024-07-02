@@ -26,6 +26,7 @@ class UserSharedSymfonyProviderAdapterTest extends TestCase
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|RequestStack $request;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

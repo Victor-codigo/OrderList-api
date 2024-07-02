@@ -9,11 +9,13 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class TransportException extends Exception implements TransportExceptionInterface
 {
+    #[\Override]
     public function getDebug(): string
     {
         return '';
     }
 
+    #[\Override]
     public function appendDebug(string $debug): void
     {
     }

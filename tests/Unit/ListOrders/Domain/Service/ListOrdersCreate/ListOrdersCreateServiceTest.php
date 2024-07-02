@@ -22,6 +22,7 @@ class ListOrdersCreateServiceTest extends TestCase
     private ListOrdersCreateService $object;
     private MockObject|ListOrdersRepositoryInterface $listOrdersRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

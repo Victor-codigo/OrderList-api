@@ -23,6 +23,7 @@ class ProfileRepository extends RepositoryBase implements ProfileRepositoryInter
      *
      * @return Profile[]
      */
+    #[\Override]
     public function findProfilesOrFail(array $id): array
     {
         $profiles = $this->findBy(['id' => $id]);

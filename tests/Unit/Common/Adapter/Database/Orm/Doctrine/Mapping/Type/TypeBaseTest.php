@@ -17,6 +17,7 @@ class TypeBaseTest extends TestCase
     private MockObject|TypeBase $object;
     private MockObject|AbstractPlatform $platform;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->platform = $this->createMock(AbstractPlatform::class);

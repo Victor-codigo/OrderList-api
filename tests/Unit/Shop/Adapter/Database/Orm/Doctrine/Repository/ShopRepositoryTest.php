@@ -35,6 +35,7 @@ class ShopRepositoryTest extends DataBaseTestCase
 
     private ShopRepository $object;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

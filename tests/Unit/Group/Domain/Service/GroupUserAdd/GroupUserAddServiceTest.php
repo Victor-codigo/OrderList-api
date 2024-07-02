@@ -31,6 +31,7 @@ class GroupUserAddServiceTest extends TestCase
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;
     private MockObject|GroupRepositoryInterface $groupRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

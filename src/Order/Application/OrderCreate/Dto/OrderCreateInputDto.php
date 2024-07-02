@@ -45,6 +45,7 @@ class OrderCreateInputDto implements ServiceInputDtoInterface
         );
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $ordersDataArrayError = $validator

@@ -22,6 +22,7 @@ class EntityImageRemoveServiceTest extends TestCase
     private MockObject|Path $imagesPathToStorage;
     private MockObject|Path $entityImageName;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

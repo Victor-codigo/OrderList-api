@@ -33,6 +33,7 @@ class GroupModifyInputDto implements ServiceInputDtoInterface
         $this->image = ValueObjectFactory::createGroupImage($image);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

@@ -27,6 +27,7 @@ class OrderGetDataInputDtoTest extends TestCase
     private ValidationInterface $validator;
     private UserShared $userSession;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

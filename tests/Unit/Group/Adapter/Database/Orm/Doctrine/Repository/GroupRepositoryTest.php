@@ -25,6 +25,7 @@ class GroupRepositoryTest extends DataBaseTestCase
 
     private GroupRepository $object;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

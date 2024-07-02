@@ -17,6 +17,7 @@ class ProfileRepositoryTest extends DataBaseTestCase
 
     private ProfileRepository $object;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -29,6 +29,7 @@ class NotificationRemoveInputDto implements ServiceInputDtoInterface
             );
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorsList = $validator

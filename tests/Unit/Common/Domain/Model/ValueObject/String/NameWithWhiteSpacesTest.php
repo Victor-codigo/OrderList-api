@@ -16,6 +16,7 @@ class NameWithWhiteSpacesTest extends TestCase
 
     private const string VALID_NAME = 'Juan_6 Carlos';
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

@@ -16,6 +16,7 @@ class ListOrdersRemoveInputDtoTest extends TestCase
     private UserShared $userSession;
     private ValidationInterface $validator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

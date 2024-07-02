@@ -21,6 +21,7 @@ class JwtLexikAdapter implements JwtHS256Interface
         $this->secretKey = $secretKey;
     }
 
+    #[\Override]
     public function encode(array $data, float $expireTimeInSeconds = 3600): string
     {
         $data[self::KEY_ISSUED_AT] = (new \DateTimeImmutable())->getTimestamp();
@@ -33,6 +34,7 @@ class JwtLexikAdapter implements JwtHS256Interface
     /**
      * @throws JwtException
      */
+    #[\Override]
     public function decode(string $token): \stdClass
     {
         try {
@@ -42,6 +44,7 @@ class JwtLexikAdapter implements JwtHS256Interface
         }
     }
 
+    #[\Override]
     public function hasExpired(object $tokenDecoded): bool
     {
         if (!isset($tokenDecoded->{self::KEY_ISSUED_AT}) || !isset($tokenDecoded->{self::KEY_EXPIRE})) {

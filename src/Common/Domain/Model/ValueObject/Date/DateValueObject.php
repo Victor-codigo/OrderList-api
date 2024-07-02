@@ -17,16 +17,19 @@ abstract class DateValueObject extends ValueObjectBase
         $this->defineConstraints();
     }
 
+    #[\Override]
     public function getValue(): \DateTime|null
     {
         return $this->value;
     }
 
+    #[\Override]
     public function getValidationValue(): mixed
     {
         return $this->value;
     }
 
+    #[\Override]
     public function getValueObjects(): array
     {
         return [];

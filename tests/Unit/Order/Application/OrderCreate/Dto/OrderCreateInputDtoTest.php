@@ -20,6 +20,7 @@ class OrderCreateInputDtoTest extends TestCase
     private MockObject|UserShared $userSession;
     private ValidationInterface $validator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -23,6 +23,7 @@ class TemplateDtoBaseTest extends TestCase
     private MockObject|SymfonyTranslatorInterface $symfonyTranslator;
     private MockObject|LocaleSwitcher $symfonyLocaleSwitcher;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

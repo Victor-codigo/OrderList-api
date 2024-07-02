@@ -17,6 +17,7 @@ class UnitMeasureTypeTest extends TestCase
     private UnitMeasureType $object;
     private MockObject|AbstractPlatform $platform;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

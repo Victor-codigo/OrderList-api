@@ -10,6 +10,7 @@ use Common\Domain\Validation\ConstraintFactory;
 
 class Address extends StringValueObject implements \Stringable
 {
+    #[\Override]
     protected function defineConstraints(): void
     {
         $this
@@ -18,6 +19,7 @@ class Address extends StringValueObject implements \Stringable
             ->setConstraint(ConstraintFactory::regEx('/^[a-zÀ-ÿ0-9\s,_\-\\\\\.\#]+$/ui', true));
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getValue();

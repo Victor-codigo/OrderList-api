@@ -29,6 +29,7 @@ class UserPasswordRememberChangeUseCaseTest extends TestCase
     private MockObject|ValidationInterface $validator;
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

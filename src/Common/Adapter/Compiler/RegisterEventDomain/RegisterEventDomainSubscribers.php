@@ -19,6 +19,7 @@ class RegisterEventDomainSubscribers implements CompilerPassInterface
     private const string EVENT_DISPATCHER_SERVICE = 'event_dispatcher';
     public const string EVENT_DOMAIN_SUBSCRIBER_TAG = 'common.event_subscriber';
 
+    #[\Override]
     public function process(ContainerBuilder $container): void
     {
         $eventDispatcherService = $container->get(static::EVENT_DISPATCHER_SERVICE);

@@ -37,6 +37,7 @@ class GetProductShopPriceInputDto implements ServiceInputDtoInterface
         );
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListGroupId = $validator->validateValueObject($this->groupId);

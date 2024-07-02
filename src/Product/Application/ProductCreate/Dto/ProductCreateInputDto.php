@@ -31,6 +31,7 @@ class ProductCreateInputDto implements ServiceInputDtoInterface
         $this->image = ValueObjectFactory::createProductImage($image);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

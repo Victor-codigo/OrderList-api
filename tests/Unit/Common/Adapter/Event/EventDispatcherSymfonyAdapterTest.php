@@ -19,6 +19,7 @@ class EventDispatcherSymfonyAdapterTest extends TestCase
     private EventDispatcherSymfonyAdapter $object;
     private MockObject|EventDispatcher $eventDispatcher;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

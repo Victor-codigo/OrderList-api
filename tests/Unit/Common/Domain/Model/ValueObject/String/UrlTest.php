@@ -14,6 +14,7 @@ class UrlTest extends TestCase
 {
     private ValidationInterface $validator;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

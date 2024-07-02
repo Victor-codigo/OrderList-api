@@ -33,6 +33,7 @@ class UploadImageServiceTest extends TestCase
     private MockObject|UploadedFileInterface $uploadedFile;
     private MockObject|ImageInterface $image;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -45,6 +46,7 @@ class UploadImageServiceTest extends TestCase
         $this->object = new UploadImageService($this->fileUpload, $this->image);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

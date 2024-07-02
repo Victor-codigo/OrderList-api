@@ -23,6 +23,7 @@ class ListOrdersGetPriceInputDto implements ServiceInputDtoInterface
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

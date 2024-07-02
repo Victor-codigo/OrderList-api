@@ -10,11 +10,13 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 class DateNowToFutureType extends DateType
 {
+    #[\Override]
     public function getClassImplementationName(): string
     {
         return DateNowToFuture::class;
     }
 
+    #[\Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
         if (null === $value) {
@@ -24,6 +26,7 @@ class DateNowToFutureType extends DateType
         return parent::convertToPHPValue(new \DateTime($value), $platform);
     }
 
+    #[\Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         /** @var \DateTime $dateTime */

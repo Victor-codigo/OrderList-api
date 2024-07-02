@@ -27,6 +27,7 @@ class GroupUserRolChangeInputDtoTest extends TestCase
     private ValidationInterface $validator;
     private UserShared $userSesion;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

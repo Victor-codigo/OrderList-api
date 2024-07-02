@@ -25,6 +25,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
     private MockObject|PaginatorInterface $ordersToRemovePaginator;
     private MockObject|PaginatorInterface $ordersToChangeUserIdPaginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

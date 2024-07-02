@@ -27,6 +27,7 @@ class HexFileStructureCommandTest extends KernelTestCase
     private Application $application;
     private CommandTester $commandTester;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -37,6 +38,7 @@ class HexFileStructureCommandTest extends KernelTestCase
         $this->commandTester = new CommandTester($this->command);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

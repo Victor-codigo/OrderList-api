@@ -19,6 +19,7 @@ class UserEmailChangeTest extends WebClientTestCase
     private const string METHOD = 'PATCH';
     private const string USER_PASSWORD = '123456';
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

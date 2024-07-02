@@ -10,6 +10,7 @@ use Common\Domain\Validation\ConstraintFactory;
 
 class ValueObjectChildValueObjects extends ArrayValueObject
 {
+    #[\Override]
     public function defineConstraints(): void
     {
         $this

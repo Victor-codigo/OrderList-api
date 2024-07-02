@@ -15,6 +15,7 @@ class FilterDbLikeComparisonTest extends TestCase
     private FilterDbLikeComparison $object;
     private ValidationChain $validator;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

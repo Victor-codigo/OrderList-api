@@ -24,6 +24,7 @@ class CustomEventSubscriberWithManyMethods implements EventDomainSubscriberInter
     {
     }
 
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [

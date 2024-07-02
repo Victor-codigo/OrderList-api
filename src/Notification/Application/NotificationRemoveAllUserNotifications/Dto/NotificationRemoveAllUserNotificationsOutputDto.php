@@ -17,6 +17,7 @@ class NotificationRemoveAllUserNotificationsOutputDto implements ApplicationOutp
     ) {
     }
 
+    #[\Override]
     public function toArray(): array
     {
         return array_map(

@@ -19,6 +19,7 @@ class UserRegisterInputDtoTest extends TestCase
     private UserRegisterInputDto $object;
     private ValidationChain $validator;
 
+    #[\Override]
     public function setup(): void
     {
         parent::setUp();

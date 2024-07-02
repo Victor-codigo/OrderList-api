@@ -16,6 +16,7 @@ class RolesTest extends TestCase
     private Roles $object;
     private ValidationChain $validator;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

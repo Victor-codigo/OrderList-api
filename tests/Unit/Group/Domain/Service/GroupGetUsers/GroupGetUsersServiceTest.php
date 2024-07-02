@@ -34,6 +34,7 @@ class GroupGetUsersServiceTest extends TestCase
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|PaginatorInterface $pagination;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -25,6 +25,7 @@ class JwtAuthenticatedListenerTest extends TestCase
     private MockObject|UserInterface $userAuthenticationEvent;
     private MockObject|User $user;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

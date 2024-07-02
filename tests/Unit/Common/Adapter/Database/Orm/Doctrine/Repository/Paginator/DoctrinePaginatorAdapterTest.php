@@ -29,6 +29,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
      */
     private array $queryResult;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

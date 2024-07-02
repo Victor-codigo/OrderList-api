@@ -22,6 +22,7 @@ class NotificationMarkAsViewedServiceTest extends TestCase
     private MockObject|NotificationRepositoryInterface $notificationRepository;
     private MockObject|PaginatorInterface $paginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

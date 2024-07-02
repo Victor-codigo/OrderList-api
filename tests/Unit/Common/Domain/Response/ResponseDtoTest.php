@@ -11,6 +11,7 @@ class ResponseDtoTest extends TestCase
 {
     private ResponseDto $object;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

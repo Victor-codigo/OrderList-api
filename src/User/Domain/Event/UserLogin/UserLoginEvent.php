@@ -17,6 +17,7 @@ class UserLoginEvent implements EventDomainInterface
         $this->occurredOn = new \DateTimeImmutable();
     }
 
+    #[\Override]
     public function getOccurredOn(): \DateTimeImmutable
     {
         return $this->occurredOn;

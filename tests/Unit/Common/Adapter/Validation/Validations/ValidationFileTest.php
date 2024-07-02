@@ -61,6 +61,7 @@ class ValidationFileTest extends TestCase
 
     private ValidationInterface $object;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -68,6 +69,7 @@ class ValidationFileTest extends TestCase
         $this->object = new ValidationChain();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

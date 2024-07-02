@@ -29,6 +29,7 @@ class UserSharedSymfonyProviderAdapter implements UserProviderInterface
     /**
      * @throws UnsupportedUserException if the user is not supported
      */
+    #[\Override]
     public function refreshUser(UserInterface $user): UserInterface
     {
         if (!$user instanceof UserSharedSymfonyAdapter) {
@@ -41,6 +42,7 @@ class UserSharedSymfonyProviderAdapter implements UserProviderInterface
     /**
      * Whether this provider supports the given user class.
      */
+    #[\Override]
     public function supportsClass(string $class): bool
     {
         return UserSharedSymfonyAdapter::class === $class;
@@ -49,6 +51,7 @@ class UserSharedSymfonyProviderAdapter implements UserProviderInterface
     /**
      * @throws UserNotFoundException
      */
+    #[\Override]
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
         try {

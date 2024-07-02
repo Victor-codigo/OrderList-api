@@ -17,6 +17,7 @@ class GroupRemoveAllUserGroupsControllerTest extends WebClientTestCase
     private const string METHOD = 'DELETE';
     private const string SYSTEM_KEY = 'systemKeyForDev';
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -26,6 +26,7 @@ class UserEmailChangeInputDto implements ServiceInputDtoInterface
         $this->password = ValueObjectFactory::createPassword($password);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

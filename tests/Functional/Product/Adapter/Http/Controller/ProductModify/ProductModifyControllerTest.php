@@ -28,6 +28,7 @@ class ProductModifyControllerTest extends WebClientTestCase
 
     private string $pathImageProduct;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -40,6 +41,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         copy(self::PATH_IMAGE_NOT_ALLOWED_BACKUP, self::PATH_IMAGE_NOT_ALLOWED);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

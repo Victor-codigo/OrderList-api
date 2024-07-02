@@ -31,6 +31,7 @@ class ProductRemoveServiceTest extends TestCase
     private MockObject|PaginatorInterface $paginator;
     private Path $productImagePath;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -42,6 +43,7 @@ class ProductRemoveServiceTest extends TestCase
         $this->object = new ProductRemoveService($this->productRepository, $this->entityImageRemoveService, $this->productImagePath->getValue());
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

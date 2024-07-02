@@ -29,6 +29,7 @@ class ShopCreateControllerTest extends WebClientTestCase
 
     private string $pathImageShop;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -41,6 +42,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         copy(self::PATH_IMAGE_NOT_ALLOWED_BACKUP, self::PATH_IMAGE_NOT_ALLOWED);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

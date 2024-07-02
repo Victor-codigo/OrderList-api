@@ -17,6 +17,7 @@ class NotificationMarkAsViewedOutputDto implements ApplicationOutputInterface
     ) {
     }
 
+    #[\Override]
     public function toArray(): array
     {
         return array_map(

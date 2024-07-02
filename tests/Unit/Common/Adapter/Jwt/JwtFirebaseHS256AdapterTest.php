@@ -22,6 +22,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
     private MockObject|JwtFirebaseHS256Adapter $object;
     private Key $secretKey;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->markTestSkipped('Install library [composer require firebase/php-jwt]');

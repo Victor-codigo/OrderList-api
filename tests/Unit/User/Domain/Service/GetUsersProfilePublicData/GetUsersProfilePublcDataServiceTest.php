@@ -23,6 +23,7 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
     private GetUsersProfilePublicDataService $object;
     private MockObject|ProfileRepositoryInterface $profileRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

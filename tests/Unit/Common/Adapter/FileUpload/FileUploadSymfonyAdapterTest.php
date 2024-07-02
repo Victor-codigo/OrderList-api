@@ -34,6 +34,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
     private MockObject|FileUploadSymfonyAdapter $object;
     private MockObject|UploadedFileInterface $file;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -42,6 +43,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
         $this->object = $this->createPartialMock(FileUploadSymfonyAdapter::class, ['uniqid', 'slug']);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

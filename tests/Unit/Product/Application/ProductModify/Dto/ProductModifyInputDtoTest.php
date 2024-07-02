@@ -27,6 +27,7 @@ class ProductModifyInputDtoTest extends TestCase
     private ValidationInterface $validator;
     private MockObject|UserShared $userSession;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -35,6 +36,7 @@ class ProductModifyInputDtoTest extends TestCase
         $this->userSession = $this->createMock(UserShared::class);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

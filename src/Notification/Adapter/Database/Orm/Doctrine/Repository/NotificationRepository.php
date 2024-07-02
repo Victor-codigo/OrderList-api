@@ -30,6 +30,7 @@ class NotificationRepository extends RepositoryBase implements NotificationRepos
      * @throws DBUniqueConstraintException
      * @throws DBConnectionException
      */
+    #[\Override]
     public function save(array $notifications): void
     {
         try {
@@ -50,6 +51,7 @@ class NotificationRepository extends RepositoryBase implements NotificationRepos
      *
      * @throws DBConnectionException
      */
+    #[\Override]
     public function remove(array $notifications): void
     {
         try {
@@ -68,6 +70,7 @@ class NotificationRepository extends RepositoryBase implements NotificationRepos
      *
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function getNotificationsByIdOrFail(array $notificationsId): PaginatorInterface
     {
         if (empty($notificationsId)) {
@@ -105,6 +108,7 @@ class NotificationRepository extends RepositoryBase implements NotificationRepos
      *
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function getNotificationByUserIdOrFail(Identifier $userId): PaginatorInterface
     {
         $notificationEntity = Notification::class;

@@ -30,6 +30,7 @@ abstract class TemplateDtoBase implements TemplateDtoInterface
         return $this;
     }
 
+    #[\Override]
     public function getPath(): string
     {
         return static::TEMPLATE_PATH;

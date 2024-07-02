@@ -19,6 +19,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
 
     private ?Paginator $paginator = null;
 
+    #[\Override]
     public function createPaginator(Query|QueryBuilder $query): self
     {
         $paginator = new self();
@@ -45,6 +46,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
         return $this;
     }
 
+    #[\Override]
     public function getPageItems(): int
     {
         $this->validateQuery();
@@ -73,6 +75,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
         return $this;
     }
 
+    #[\Override]
     public function setPagination(int $page = 1, int $pageItems = self::MAX_RESULT_DEFAULT): self
     {
         $this->validateQuery();
@@ -89,6 +92,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
      *
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function getPagesRange(int $pageIni, int $pageEnd, int $pageItems): \Generator
     {
         if ($pageIni <= 0) {
@@ -111,6 +115,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
      *
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function getAllPages(int $pageItems): \Generator
     {
         $this->setPageItems($pageItems);
@@ -118,6 +123,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
         return $this->getPagesRange(1, $this->getPagesTotal(), $pageItems);
     }
 
+    #[\Override]
     public function getPageCurrent(): int
     {
         $this->validateQuery();
@@ -132,6 +138,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
                 : (int) floor($firstResult / $pageItems) + 1;
     }
 
+    #[\Override]
     public function getPagesTotal(): int
     {
         $this->validateQuery();
@@ -143,6 +150,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
             : 1;
     }
 
+    #[\Override]
     public function hasNext(): bool
     {
         $this->validateQuery();
@@ -150,6 +158,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
         return $this->getPageCurrent() < $this->getPagesTotal();
     }
 
+    #[\Override]
     public function hasPrevious(): bool
     {
         $this->validateQuery();
@@ -157,6 +166,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
         return $this->getPageCurrent() > 1;
     }
 
+    #[\Override]
     public function getPageNextNumber(): ?int
     {
         $this->validateQuery();
@@ -168,6 +178,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
         return $this->getPageCurrent() + 1;
     }
 
+    #[\Override]
     public function getPagePreviousNumber(): ?int
     {
         $this->validateQuery();
@@ -179,6 +190,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
         return $this->getPageCurrent() - 1;
     }
 
+    #[\Override]
     public function getItemsTotal(): int
     {
         $this->validateQuery();
@@ -186,11 +198,13 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
         return count($this->paginator);
     }
 
+    #[\Override]
     public function count(): int
     {
         return $this->getItemsTotal();
     }
 
+    #[\Override]
     public function getIterator(): \Traversable
     {
         $this->validateQuery();

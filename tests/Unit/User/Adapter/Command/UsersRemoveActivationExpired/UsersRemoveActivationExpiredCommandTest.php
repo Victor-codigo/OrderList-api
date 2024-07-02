@@ -26,6 +26,7 @@ class UsersRemoveActivationExpiredCommandTest extends TestCase
     private MockObject|InputInterface $input;
     private MockObject|OutputInterface $output;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

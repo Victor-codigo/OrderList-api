@@ -10,11 +10,13 @@ abstract class ArrayValueObject extends ValueObjectBase
 {
     protected readonly array|null $value;
 
+    #[\Override]
     public function getValue(): array|null
     {
         return $this->value;
     }
 
+    #[\Override]
     public function getValidationValue(): mixed
     {
         return $this->value;
@@ -27,6 +29,7 @@ abstract class ArrayValueObject extends ValueObjectBase
         $this->defineConstraints();
     }
 
+    #[\Override]
     public function getValueObjects(): array
     {
         return $this->getValue();

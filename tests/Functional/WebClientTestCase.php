@@ -29,6 +29,7 @@ class WebClientTestCase extends WebTestCase
      */
     private array $entityManagerArray = [];
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

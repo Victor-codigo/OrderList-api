@@ -28,6 +28,7 @@ class GroupRemoveServiceTest extends TestCase
     private MockObject|GroupRepositoryInterface $groupRepository;
     private MockObject|EntityImageRemoveService $entityImageRemoveService;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

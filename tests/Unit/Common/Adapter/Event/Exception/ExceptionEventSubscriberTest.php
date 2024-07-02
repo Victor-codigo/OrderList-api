@@ -29,6 +29,7 @@ class ExceptionEventSubscriberTest extends TestCase
     private MockObject|Request $request;
     private ExceptionEvent $event;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

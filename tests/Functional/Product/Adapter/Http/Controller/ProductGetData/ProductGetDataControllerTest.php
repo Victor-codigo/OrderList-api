@@ -30,6 +30,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
     ];
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

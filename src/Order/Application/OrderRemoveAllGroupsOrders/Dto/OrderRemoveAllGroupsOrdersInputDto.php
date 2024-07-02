@@ -39,6 +39,7 @@ class OrderRemoveAllGroupsOrdersInputDto implements ServiceInputDtoInterface
         $this->systemKey = $systemKey ?? '';
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListGroupsIdToRemove = $validator->validateValueObjectArray($this->groupsIdToRemove);

@@ -42,6 +42,7 @@ class ProductModifyInputDto implements ServiceInputDtoInterface
         $this->imageRemove = $imageRemove;
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $valueObjects = [

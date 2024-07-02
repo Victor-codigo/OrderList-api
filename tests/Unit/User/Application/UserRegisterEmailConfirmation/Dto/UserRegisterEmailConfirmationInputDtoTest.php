@@ -16,6 +16,7 @@ class UserRegisterEmailConfirmationInputDtoTest extends TestCase
 
     private ValidationInterface $validator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

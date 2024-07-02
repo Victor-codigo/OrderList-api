@@ -36,6 +36,7 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
      * @throws DBUniqueConstraintException
      * @throws DBConnectionException
      */
+    #[\Override]
     public function save(array $orders): void
     {
         try {
@@ -56,6 +57,7 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
      *
      * @throws DBConnectionException
      */
+    #[\Override]
     public function remove(array $orders): void
     {
         try {
@@ -74,6 +76,7 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
      *
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function findOrdersByIdOrFail(Identifier $groupId, array $ordersId, bool $orderAsc): PaginatorInterface
     {
         $orderEntity = Order::class;
@@ -97,6 +100,7 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
     /**
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function findOrdersByListOrdersNameOrFail(Identifier $groupId, NameWithSpaces $listOrderName, bool $orderAsc): PaginatorInterface
     {
         $ordersEntity = Order::class;
@@ -122,6 +126,7 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
     /**
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function findOrdersByProductNameFilterOrFail(Identifier $groupId, ?Identifier $listOrdersId, Filter $filterText, bool $orderAsc): PaginatorInterface
     {
         $query = $this->entityManager
@@ -149,6 +154,7 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
     /**
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function findOrdersByShopNameFilterOrFail(Identifier $groupId, ?Identifier $listOrdersId, Filter $filterText, bool $orderAsc): PaginatorInterface
     {
         $query = $this->entityManager
@@ -176,6 +182,7 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
     /**
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function findOrdersByGroupIdOrFail(Identifier $groupId, bool $orderAsc): PaginatorInterface
     {
         $ordersEntity = Order::class;
@@ -202,6 +209,7 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
      *
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function findOrdersByListOrdersIdProductIdAndShopIdOrFail(Identifier $groupId, Identifier $listOrdersId, array $productsId, array $shopsId): PaginatorInterface
     {
         $query = $this->entityManager->createQueryBuilder()
@@ -228,6 +236,7 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
     /**
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function findOrdersByListOrdersIdOrFail(Identifier $listOrderId, Identifier $groupId, bool $orderAsc): PaginatorInterface
     {
         $ordersEntity = Order::class;
@@ -255,6 +264,7 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
      *
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function findGroupsOrdersOrFail(array $groupsId): PaginatorInterface
     {
         $ordersEntity = Order::class;

@@ -18,6 +18,7 @@ class Rol extends ObjectValueObject
         GROUP_ROLES::class,
     ];
 
+    #[\Override]
     public function defineConstraints(): void
     {
         $this

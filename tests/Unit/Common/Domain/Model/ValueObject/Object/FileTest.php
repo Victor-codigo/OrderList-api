@@ -25,6 +25,7 @@ class FileTest extends TestCase
     private ValidationChain $validator;
     private MockObject|FileInterface $fileInterface;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -34,6 +35,7 @@ class FileTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

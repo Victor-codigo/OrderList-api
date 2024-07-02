@@ -20,6 +20,7 @@ class GroupRemoveOutputDto implements ApplicationOutputInterface
     /**
      * @return string[]
      */
+    #[\Override]
     public function toArray(): array
     {
         return array_map(

@@ -14,6 +14,7 @@ class AlphanumericValidator extends RegexValidator
     /**
      * {@inheritdoc}
      */
+    #[\Override]
     public function validate(mixed $value, Constraint $constraint)
     {
         if (!$constraint instanceof Alphanumeric) {

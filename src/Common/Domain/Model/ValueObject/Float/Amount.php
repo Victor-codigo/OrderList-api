@@ -9,6 +9,7 @@ use Common\Domain\Validation\ConstraintFactory;
 
 class Amount extends FloatValueObject
 {
+    #[\Override]
     protected function defineConstraints(): void
     {
         $this

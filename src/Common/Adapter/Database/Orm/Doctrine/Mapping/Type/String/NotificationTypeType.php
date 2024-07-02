@@ -13,16 +13,19 @@ use Error;
 
 class NotificationTypeType extends TypeBase
 {
+    #[\Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return sprintf('VARCHAR(%d)', $column['length']);
     }
 
+    #[\Override]
     public function getClassImplementationName(): string
     {
         return NotificationType::class;
     }
 
+    #[\Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         /** @var NOTIFICATION_TYPE $notificationType */
@@ -31,6 +34,7 @@ class NotificationTypeType extends TypeBase
         return null === $notificationType ? null : $notificationType->value;
     }
 
+    #[\Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
         try {

@@ -19,6 +19,7 @@ class GetUsersInputDtoTest extends TestCase
     private GetUsersInputDto $object;
     private ValidationInterface $validator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

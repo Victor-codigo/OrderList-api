@@ -22,6 +22,7 @@ class NotificationRemoveAllUserNotificationsServiceTest extends TestCase
     private MockObject|NotificationRepositoryInterface $notificationRepository;
     private MockObject|PaginatorInterface $notificationPaginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

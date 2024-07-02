@@ -15,6 +15,7 @@ class OrderTest extends TestCase
 {
     private Order $object;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

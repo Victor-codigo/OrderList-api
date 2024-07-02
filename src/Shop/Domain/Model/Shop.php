@@ -82,11 +82,13 @@ class Shop implements EntityImageModifyInterface
         return $this;
     }
 
+    #[\Override]
     public function getImage(): Path
     {
         return $this->image;
     }
 
+    #[\Override]
     public function setImage(Path $image): self
     {
         $this->image = $image;

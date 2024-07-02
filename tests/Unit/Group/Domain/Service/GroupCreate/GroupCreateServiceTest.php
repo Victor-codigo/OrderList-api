@@ -36,6 +36,7 @@ class GroupCreateServiceTest extends DataBaseTestCase
     private MockObject|FileUploadInterface $fileUpload;
     private MockObject|UploadedFileInterface $imageUploaded;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -52,6 +52,7 @@ class HexFilesStructureCommand extends Command
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this->addArgument(
@@ -79,6 +80,7 @@ class HexFilesStructureCommand extends Command
         );
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->getInput($input);

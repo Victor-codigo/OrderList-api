@@ -46,6 +46,7 @@ class ModuleCommunicationTest extends TestCase
     private string $responseContentExpected;
     private int $getContentNumCalls;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -16,6 +16,7 @@ class DateNowToFutureTypeTest extends TestCase
     private MockObject|AbstractPlatform $platform;
     private DateNowToFutureType $object;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

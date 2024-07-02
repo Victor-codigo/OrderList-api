@@ -35,6 +35,7 @@ class NotificationRepositoryTest extends DataBaseTestCase
 
     private NotificationRepository $object;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

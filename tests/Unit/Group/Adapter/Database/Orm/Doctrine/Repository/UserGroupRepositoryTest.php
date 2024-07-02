@@ -33,6 +33,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
     private UserGroupRepository $object;
     private GroupRepositoryInterface $groupRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

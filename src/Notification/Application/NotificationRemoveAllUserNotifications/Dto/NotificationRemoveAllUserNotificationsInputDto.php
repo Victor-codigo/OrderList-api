@@ -19,6 +19,7 @@ class NotificationRemoveAllUserNotificationsInputDto implements ServiceInputDtoI
         $this->systemKey = $systemKey ?? '';
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListSystemKey = $validator

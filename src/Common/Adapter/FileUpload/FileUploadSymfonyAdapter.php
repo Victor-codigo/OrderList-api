@@ -39,6 +39,7 @@ class FileUploadSymfonyAdapter implements FileUploadInterface
     /**
      * @throws LogicException
      */
+    #[\Override]
     public function getFileName(): string
     {
         if (!isset($this->fileName)) {
@@ -61,6 +62,7 @@ class FileUploadSymfonyAdapter implements FileUploadInterface
      * @throws FileUploadPartialFileException
      * @throws FileUploadReplaceException
      */
+    #[\Override]
     public function __invoke(UploadedFileInterface $file, string $pathToSaveFile, string $fileNameToReplace = null): FileInterface
     {
         try {

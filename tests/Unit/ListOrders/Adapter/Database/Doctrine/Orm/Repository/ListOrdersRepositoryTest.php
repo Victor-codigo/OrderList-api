@@ -41,6 +41,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     private ProductRepository $productRepository;
     private ShopRepository $shopRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

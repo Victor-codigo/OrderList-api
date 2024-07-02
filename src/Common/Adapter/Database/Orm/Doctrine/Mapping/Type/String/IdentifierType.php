@@ -10,11 +10,13 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 class IdentifierType extends TypeBase
 {
+    #[\Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return sprintf('CHAR(%d)', $column['length']);
     }
 
+    #[\Override]
     public function getClassImplementationName(): string
     {
         return Identifier::class;

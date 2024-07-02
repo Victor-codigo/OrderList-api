@@ -30,6 +30,7 @@ class GroupRemoveAllUserGroupsServiceTest extends TestCase
     private MockObject|GroupRemoveUserFromGroupsService $groupRemoveUserFromGroupsService;
     private MockObject|PaginatorInterface $userGroupsPaginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

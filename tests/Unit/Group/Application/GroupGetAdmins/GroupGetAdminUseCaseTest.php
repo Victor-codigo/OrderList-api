@@ -32,6 +32,7 @@ class GroupGetAdminUseCaseTest extends TestCase
     private MockObject|PaginatorInterface $paginator;
     private MockObject|UserShared $userSession;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

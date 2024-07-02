@@ -21,6 +21,7 @@ class UserGetByNameControllerTest extends WebClientTestCase
 
     private UserGetByNameController $object;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

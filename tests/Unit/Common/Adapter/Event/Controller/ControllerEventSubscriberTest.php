@@ -29,6 +29,7 @@ class ControllerEventSubscriberTest extends TestCase
     private MockObject|UserShared $user;
     private Request $request;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

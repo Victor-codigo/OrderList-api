@@ -25,6 +25,7 @@ class RepositoryBaseTest extends DataBaseTestCase
     private MockObject|ClassMetadata $classMetadata;
     private MockObject|PaginatorInterface $paginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

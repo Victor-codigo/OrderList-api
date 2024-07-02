@@ -27,6 +27,7 @@ class GroupModifyControllerTest extends WebClientTestCase
 
     private string $patImageGroup;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -39,6 +40,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         copy(self::PATH_IMAGE_NOT_ALLOWED_BACKUP, self::PATH_IMAGE_NOT_ALLOWED);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

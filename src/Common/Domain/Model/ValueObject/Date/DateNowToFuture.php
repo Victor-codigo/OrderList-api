@@ -9,6 +9,7 @@ use Common\Domain\Validation\ConstraintFactory;
 
 class DateNowToFuture extends DateValueObject
 {
+    #[\Override]
     protected function defineConstraints(): void
     {
         $dateTimeNow = new \DateTime();

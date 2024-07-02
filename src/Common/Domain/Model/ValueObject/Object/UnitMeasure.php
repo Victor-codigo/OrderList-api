@@ -12,6 +12,7 @@ use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 
 class UnitMeasure extends ObjectValueObject
 {
+    #[\Override]
     public function defineConstraints(): void
     {
         $this

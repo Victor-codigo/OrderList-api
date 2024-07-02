@@ -15,6 +15,7 @@ class EventDispatchTraitTest extends TestCase
     private MockObject|TraitClass $object;
     private MockObject|EventDispatcherInterface $eventDispatcher;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

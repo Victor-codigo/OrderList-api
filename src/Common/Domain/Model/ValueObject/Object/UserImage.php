@@ -9,6 +9,7 @@ use Common\Domain\Validation\ConstraintFactory;
 
 class UserImage extends ObjectValueObject
 {
+    #[\Override]
     public function getValidationValue(): mixed
     {
         if (null === $this->value) {
@@ -18,6 +19,7 @@ class UserImage extends ObjectValueObject
         return $this->value->getFile();
     }
 
+    #[\Override]
     public function defineConstraints(): void
     {
         $this

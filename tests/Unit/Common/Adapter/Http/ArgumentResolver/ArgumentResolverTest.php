@@ -22,6 +22,7 @@ class ArgumentResolverTest extends TestCase
     private Request $request;
     private MockObject|ArgumentMetadata $argumentMetaData;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->argumentMetaData = $this->createPartialMock(ArgumentMetadata::class, ['getType']);

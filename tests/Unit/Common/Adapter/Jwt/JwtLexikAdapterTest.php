@@ -14,6 +14,7 @@ class JwtLexikAdapterTest extends TestCase
 
     private JwtLexikAdapter $object;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

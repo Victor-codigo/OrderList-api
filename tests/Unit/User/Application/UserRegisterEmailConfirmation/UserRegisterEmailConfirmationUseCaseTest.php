@@ -33,6 +33,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
     private MockObject|EmailConfirmationJwtTokenValidationService $emailConfirmationJwtTokenValidation;
     private MockObject|EventDispatcherInterface $eventDispatcherService;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
