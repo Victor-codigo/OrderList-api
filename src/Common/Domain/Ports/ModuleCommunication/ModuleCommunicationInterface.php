@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Domain\Ports\ModuleCommunication;
 
-use Generator;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDtoPaginatorInterface;
 use Common\Domain\Response\ResponseDto;
@@ -25,7 +24,7 @@ interface ModuleCommunicationInterface
      * @throws ModuleCommunicationErrorResponseException
      * @throws InvalidArgumentException
      */
-    public function getPagesRangeEndpoint(ModuleCommunicationConfigDtoPaginatorInterface $routeConfig, int $pageIni, ?int $pageEnd): Generator;
+    public function getPagesRangeEndpoint(ModuleCommunicationConfigDtoPaginatorInterface $routeConfig, int $pageIni, ?int $pageEnd): \Generator;
 
     /**
      * @throws ModuleCommunicationException
@@ -34,5 +33,5 @@ interface ModuleCommunicationInterface
      * @throws ModuleCommunicationErrorResponseException
      * @throws InvalidArgumentException
      */
-    public function getAllPagesOfEndpoint(ModuleCommunicationConfigDtoPaginatorInterface $routeConfig): Generator;
+    public function getAllPagesOfEndpoint(ModuleCommunicationConfigDtoPaginatorInterface $routeConfig): \Generator;
 }

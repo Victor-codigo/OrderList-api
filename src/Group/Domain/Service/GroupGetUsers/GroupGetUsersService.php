@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Group\Domain\Service\GroupGetUsers;
 
-use Throwable;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\Group\Filter;
@@ -110,7 +109,7 @@ class GroupGetUsersService
             return $this->getUserData($usersSortedByName);
         } catch (DBNotFoundException $th) {
             throw $th;
-        } catch (Throwable) {
+        } catch (\Throwable) {
             throw new DomainInternalErrorException();
         }
     }

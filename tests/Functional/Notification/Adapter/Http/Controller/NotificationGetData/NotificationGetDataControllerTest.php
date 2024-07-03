@@ -145,7 +145,7 @@ class NotificationGetDataControllerTest extends WebClientTestCase
 
         $response = $client->getResponse();
 
-        $this->assertEquals(response::HTTP_NO_CONTENT, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
     /** @test */
@@ -259,6 +259,6 @@ class NotificationGetDataControllerTest extends WebClientTestCase
 
         $response = $client->getResponse();
 
-        $this->assertEquals(response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Object;
 
-use BackedEnum;
 use Common\Domain\Model\ValueObject\Object\Filter\FilterDbLikeComparison;
 use Common\Domain\Model\ValueObject\Object\Filter\FilterSection;
 use Common\Domain\Ports\FileUpload\FileInterface;
@@ -15,57 +14,57 @@ use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 
 class ValueObjectObjectFactory
 {
-    public static function createRol(BackedEnum|null $rol): Rol
+    public static function createRol(?\BackedEnum $rol): Rol
     {
         return new Rol($rol);
     }
 
-    public static function createFile(FileInterface|null $file): File
+    public static function createFile(?FileInterface $file): File
     {
         return new File($file);
     }
 
-    public static function createUserImage(FileInterface|null $file): UserImage
+    public static function createUserImage(?FileInterface $file): UserImage
     {
         return new UserImage($file);
     }
 
-    public static function createGroupImage(FileInterface|null $file): GroupImage
+    public static function createGroupImage(?FileInterface $file): GroupImage
     {
         return new GroupImage($file);
     }
 
-    public static function createGroupType(GROUP_TYPE|null $type): GroupType
+    public static function createGroupType(?GROUP_TYPE $type): GroupType
     {
         return new GroupType($type);
     }
 
-    public static function createNotificationType(NOTIFICATION_TYPE|null $type): NotificationType
+    public static function createNotificationType(?NOTIFICATION_TYPE $type): NotificationType
     {
         return new NotificationType($type);
     }
 
-    public static function createUnit(UNIT_MEASURE_TYPE|null $type): UnitMeasure
+    public static function createUnit(?UNIT_MEASURE_TYPE $type): UnitMeasure
     {
         return new UnitMeasure($type);
     }
 
-    public static function createProductImage(FileInterface|null $file): ProductImage
+    public static function createProductImage(?FileInterface $file): ProductImage
     {
         return new ProductImage($file);
     }
 
-    public static function createShopImage(FileInterface|null $file): ShopImage
+    public static function createShopImage(?FileInterface $file): ShopImage
     {
         return new ShopImage($file);
     }
 
-    public static function createFilterDbLikeComparison(BackedEnum|null $filter): FilterDbLikeComparison
+    public static function createFilterDbLikeComparison(?\BackedEnum $filter): FilterDbLikeComparison
     {
         return new FilterDbLikeComparison($filter);
     }
 
-    public static function createFilterSection(FILTER_SECTION|null $filter): FilterSection
+    public static function createFilterSection(?FILTER_SECTION $filter): FilterSection
     {
         return new FilterSection($filter);
     }

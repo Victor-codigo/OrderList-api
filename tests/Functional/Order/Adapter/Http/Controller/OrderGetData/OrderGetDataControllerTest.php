@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Functional\Order\Adapter\Http\Controller\OrderGetData;
 
-use DateTime;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\Filter\FILTER_SECTION;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
@@ -53,7 +52,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
             '2606508b-4516-45d6-93a6-c7cb416b7f3f',
             'List order name 2',
             'List order description 2',
-            new DateTime('2023-05-28 10:20:15')
+            new \DateTime('2023-05-28 10:20:15')
         );
 
         $listOrders2 = ListOrders::fromPrimitives(
@@ -62,7 +61,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
             '2606508b-4516-45d6-93a6-c7cb416b7f3f',
             'List order name 1',
             'List order description 1',
-            new DateTime('2023-05-29 10:20:15')
+            new \DateTime('2023-05-29 10:20:15')
         );
 
         $listOrders3 = ListOrders::fromPrimitives(
@@ -71,7 +70,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
             '2606508b-4516-45d6-93a6-c7cb416b7f3f',
             'List order name 3',
             'List order description 3',
-            new DateTime('2023-05-27 10:20:15')
+            new \DateTime('2023-05-27 10:20:15')
         );
 
         $listOrders4 = ListOrders::fromPrimitives(
@@ -80,7 +79,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
             '2606508b-4516-45d6-93a6-c7cb416b7f3f',
             'List order name 4',
             null,
-            new DateTime('2024-05-28 13:45:22')
+            new \DateTime('2024-05-28 13:45:22')
         );
 
         $product1 = Product::fromPrimitives(

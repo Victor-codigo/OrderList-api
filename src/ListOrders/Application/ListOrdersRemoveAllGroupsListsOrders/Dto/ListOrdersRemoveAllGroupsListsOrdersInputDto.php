@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ListOrders\Application\ListOrdersRemoveAllGroupsListsOrders\Dto;
 
-use Override;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
@@ -40,7 +39,7 @@ class ListOrdersRemoveAllGroupsListsOrdersInputDto implements ServiceInputDtoInt
         $this->systemKey = $systemKey ?? '';
     }
 
-    #[Override]
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListGroupsIdToRemove = $validator->validateValueObjectArray($this->groupsIdToRemove);

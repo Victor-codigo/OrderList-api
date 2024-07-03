@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupUserRoleChange;
 
-use Override;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,9 +23,9 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
         self::GROUP_USER_ADMIN_ID,
         '1befdbe2-9c14-42f0-850f-63e061e33b8f',
         '6df60afd-f7c3-4c2c-b920-e265f266c560',
-     ];
+    ];
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

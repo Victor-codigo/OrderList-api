@@ -6,7 +6,7 @@ namespace Common\Domain\Model\ValueObject\Float;
 
 interface ValueObjectFloatFactoryInterface
 {
-    public static function createMoney(float|null $money): Money;
+    public static function createMoney(?float $money): Money;
 
-    public static function createAmount(float|null $amount): Amount;
+    public static function createAmount(?float $amount): Amount;
 }

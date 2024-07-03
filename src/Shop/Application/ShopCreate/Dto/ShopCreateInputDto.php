@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Shop\Application\ShopCreate\Dto;
 
-use Override;
 use Common\Domain\Model\ValueObject\Object\ShopImage;
 use Common\Domain\Model\ValueObject\String\Address;
 use Common\Domain\Model\ValueObject\String\Description;
@@ -35,7 +34,7 @@ class ShopCreateInputDto implements ServiceInputDtoInterface
         $this->image = ValueObjectFactory::createShopImage($image);
     }
 
-    #[Override]
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

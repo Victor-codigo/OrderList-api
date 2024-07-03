@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Validation\Validations;
 
-use DateTimeZone;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\DateTime;
@@ -48,9 +47,9 @@ class ValidationDateTime extends ValidationConstraintBase
     }
 
     /**
-     * @param DateTimeZone|null $timeZone
+     * @param \DateTimeZone|null $timeZone
      */
-    public function timeZone(int|null $timeZone): ValidationConstraint
+    public function timeZone(?int $timeZone): ValidationConstraint
     {
         return $this->createConstraint(
             new Timezone($timeZone),

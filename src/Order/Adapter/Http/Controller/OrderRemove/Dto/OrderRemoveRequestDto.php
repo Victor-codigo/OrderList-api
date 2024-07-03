@@ -12,8 +12,8 @@ class OrderRemoveRequestDto implements RequestDtoInterface
 {
     private const int ORDERS_MAX = AppConfig::ENDPOINT_ORDER_REMOVE_MAX;
 
-    public readonly array|null $ordersId;
-    public readonly string|null $groupId;
+    public readonly ?array $ordersId;
+    public readonly ?string $groupId;
 
     public function __construct(Request $request)
     {
@@ -21,7 +21,7 @@ class OrderRemoveRequestDto implements RequestDtoInterface
         $this->groupId = $request->request->get('group_id');
     }
 
-    private function removeOrdersOverflow(array|null $ordersId): array|null
+    private function removeOrdersOverflow(?array $ordersId): ?array
     {
         $ordersIdValid = $ordersId;
         if (count($ordersId) > self::ORDERS_MAX) {

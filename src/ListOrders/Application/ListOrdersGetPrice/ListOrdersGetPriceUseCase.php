@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ListOrders\Application\ListOrdersGetPrice;
 
-use Exception;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Service\ServiceBase;
@@ -53,7 +52,7 @@ class ListOrdersGetPriceUseCase extends ServiceBase
             throw ListOrdersGetPriceNotFoundException::fromMessage('List of orders not found');
         } catch (ValidateGroupAndUserException) {
             throw ListOrdersGetPriceValidateGroupAndUserException::fromMessage('You not belong to the group');
-        } catch (Exception) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

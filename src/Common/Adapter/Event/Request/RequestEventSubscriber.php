@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Event\Request;
 
-use Override;
 use Common\Adapter\Http\TryoutPermissions\Exception\TryoutUserRoutePermissionsException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\ValidationInterface;
@@ -20,7 +19,7 @@ class RequestEventSubscriber implements EventSubscriberInterface
     ) {
     }
 
-    #[Override]
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [KernelEvents::REQUEST => ['__invoke', 101]];

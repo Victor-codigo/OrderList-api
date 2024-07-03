@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace User\Application\UserGetByName\Dto;
 
-use Override;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\ServiceInputDtoInterface;
@@ -28,7 +27,7 @@ class UserGetByNameInputDto implements ServiceInputDtoInterface
         );
     }
 
-    #[Override]
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator

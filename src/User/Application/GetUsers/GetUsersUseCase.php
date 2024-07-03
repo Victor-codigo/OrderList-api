@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace User\Application\GetUsers;
 
-use DateTime;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Object\Rol;
@@ -128,7 +127,7 @@ class GetUsersUseCase extends ServiceBase
             $itemPlain[$key] = match (true) {
                 $value instanceof Roles => $value->getRolesEnums(),
                 $value instanceof ValueObjectBase => $value->getValue(),
-                $value instanceof DateTime => $value->format('Y-m-d H:i:s'),
+                $value instanceof \DateTime => $value->format('Y-m-d H:i:s'),
                 default => $value
             };
         }

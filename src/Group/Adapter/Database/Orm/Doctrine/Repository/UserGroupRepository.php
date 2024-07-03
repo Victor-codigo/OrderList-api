@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Group\Adapter\Database\Orm\Doctrine\Repository;
 
-use Override;
-use Exception;
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
@@ -35,7 +33,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
     /**
      * @throws DBNotFoundException
      */
-    #[Override]
+    #[\Override]
     public function findGroupUsersOrFail(Identifier $groupId): PaginatorInterface
     {
         $userGroupTable = UserGroup::class;
@@ -63,7 +61,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
      *
      * @throws DBNotFoundException
      */
-    #[Override]
+    #[\Override]
     public function findGroupsUsersOrFail(array $groupsId, GROUP_ROLES $groupRole): PaginatorInterface
     {
         $userGroupTable = UserGroup::class;
@@ -96,7 +94,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
      *
      * @throws DBNotFoundException
      */
-    #[Override]
+    #[\Override]
     public function findGroupsFirstUserByRolOrFail(array $groupsId, GROUP_ROLES $groupRole): array
     {
         $sql = <<<SQL
@@ -146,7 +144,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
      *
      * @throws DBNotFoundException
      */
-    #[Override]
+    #[\Override]
     public function findGroupUsersByUserIdOrFail(Identifier $groupId, array $usersId): array
     {
         /** @var UserGroup[] $groupUsers */
@@ -167,7 +165,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
      *
      * @throws DBNotFoundException
      */
-    #[Override]
+    #[\Override]
     public function findGroupUsersByRol(Identifier $groupId, GROUP_ROLES $groupRol): array
     {
         $userGroupEntity = UserGroup::class;
@@ -197,7 +195,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
     /**
      * @throws DBNotFoundException
      */
-    #[Override]
+    #[\Override]
     public function findUserGroupsById(Identifier $userId, ?GROUP_ROLES $groupRol = null, ?GROUP_TYPE $groupType = null): PaginatorInterface
     {
         $queryBuilder = $this->entityManager
@@ -232,7 +230,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
     /**
      * @throws DBNotFoundException
      */
-    #[Override]
+    #[\Override]
     public function findUserGroupsByName(Identifier $userId, ?Filter $filterText, ?GROUP_TYPE $groupType, bool $orderAsc): PaginatorInterface
     {
         $query = $this->entityManager
@@ -262,7 +260,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
     /**
      * @throws DBNotFoundException
      */
-    #[Override]
+    #[\Override]
     public function findGroupUsersNumberOrFail(Identifier $groupId): int
     {
         $userGroupEntity = UserGroup::class;
@@ -290,7 +288,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
      *
      * @throws DBNotFoundException
      */
-    #[Override]
+    #[\Override]
     public function findGroupsUsersNumberOrFail(array $groupsId): PaginatorInterface
     {
         $userGroupEntity = UserGroup::class;
@@ -312,7 +310,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
      * @throws DBConnectionException
      * @throws DBUniqueConstraintException
      */
-    #[Override]
+    #[\Override]
     public function save(array $usersGroup): void
     {
         try {
@@ -323,7 +321,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
             $this->objectManager->flush();
         } catch (UniqueConstraintViolationException $e) {
             throw DBUniqueConstraintException::fromId($userGroup->getId(), $e->getCode());
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
     }
@@ -331,7 +329,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
     /**
      * @param UserGroup[] $usersGroup
      */
-    #[Override]
+    #[\Override]
     public function removeUsers(array $usersGroup): void
     {
         try {
@@ -340,7 +338,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
             }
 
             $this->objectManager->flush();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
     }

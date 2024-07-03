@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Array;
 
-use Override;
 use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\ConstraintFactory;
 
 class NotificationData extends ArrayValueObject
 {
-    #[Override]
+    #[\Override]
     public function defineConstraints(): void
     {
         $this
@@ -18,7 +17,7 @@ class NotificationData extends ArrayValueObject
             ->setConstraint(ConstraintFactory::type(TYPES::ARRAY));
     }
 
-    #[Override]
+    #[\Override]
     public function getValueObjects(): array
     {
         return [];

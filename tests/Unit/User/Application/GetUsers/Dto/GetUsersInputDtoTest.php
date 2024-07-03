@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\GetUsers\Dto;
 
-use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -20,7 +19,7 @@ class GetUsersInputDtoTest extends TestCase
     private GetUsersInputDto $object;
     private ValidationInterface $validator;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -28,7 +27,7 @@ class GetUsersInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    private function createGetUsersInputDto(array|null $usersId): GetUsersInputDto
+    private function createGetUsersInputDto(?array $usersId): GetUsersInputDto
     {
         $user = $this->createMock(User::class);
 

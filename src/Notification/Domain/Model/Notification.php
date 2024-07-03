@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Notification\Domain\Model;
 
-use DateTime;
 use Common\Domain\Model\ValueObject\Array\NotificationData;
 use Common\Domain\Model\ValueObject\Object\NotificationType;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -18,7 +17,7 @@ final class Notification
     private NotificationType $type;
     private NotificationData $data;
     private bool $viewed;
-    private DateTime $createdOn;
+    private \DateTime $createdOn;
 
     public function getId(): Identifier
     {
@@ -64,7 +63,7 @@ final class Notification
         $this->viewed = $viewed;
     }
 
-    public function getCreatedOn(): DateTime
+    public function getCreatedOn(): \DateTime
     {
         return $this->createdOn;
     }
@@ -76,7 +75,7 @@ final class Notification
         $this->type = $type;
         $this->viewed = false;
         $this->data = $data;
-        $this->createdOn = new DateTime();
+        $this->createdOn = new \DateTime();
     }
 
     public static function fromPrimitives(string $id, string $userId, NOTIFICATION_TYPE $type, array $data): self

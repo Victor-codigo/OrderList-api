@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace User\Domain\Event\UserLogin;
 
-use Override;
 use Common\Domain\Event\EventDomainSubscriberInterface;
 use User\Domain\Model\User;
 use User\Domain\Service\UserFirstLogin\Dto\UserFirstLoginDto;
@@ -15,7 +14,7 @@ class UserLoginSubscriber implements EventDomainSubscriberInterface
     /**
      * @return array<string, array<string, int>>
      */
-    #[Override]
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [

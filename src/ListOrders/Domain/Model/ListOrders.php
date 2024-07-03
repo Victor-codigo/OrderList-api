@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ListOrders\Domain\Model;
 
-use DateTime;
 use Common\Domain\Model\ValueObject\Date\DateNowToFuture;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -22,7 +21,7 @@ class ListOrders
     private NameWithSpaces $name;
     private Description $description;
     private DateNowToFuture $dateToBuy;
-    private DateTime $createdOn;
+    private \DateTime $createdOn;
 
     /**
      * @var Collection<Order>
@@ -87,7 +86,7 @@ class ListOrders
         return $this;
     }
 
-    public function getCreatedOn(): DateTime
+    public function getCreatedOn(): \DateTime
     {
         return $this->createdOn;
     }
@@ -122,12 +121,12 @@ class ListOrders
         $this->name = $name;
         $this->description = $description;
         $this->dateToBuy = $dateToBuy;
-        $this->createdOn = new DateTime();
+        $this->createdOn = new \DateTime();
 
         $this->orders = new ArrayCollection();
     }
 
-    public static function fromPrimitives(string $id, string $groupId, string $userId, string $name, string|null $description, DateTime|null $dateToBuy): self
+    public static function fromPrimitives(string $id, string $groupId, string $userId, string $name, ?string $description, ?\DateTime $dateToBuy): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),

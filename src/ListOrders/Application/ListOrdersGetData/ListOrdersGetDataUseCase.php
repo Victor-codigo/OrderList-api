@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ListOrders\Application\ListOrdersGetData;
 
-use Exception;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
@@ -53,7 +52,7 @@ class ListOrdersGetDataUseCase extends ServiceBase
             throw ListOrdersGetDataValidateUserAndGroupException::fromMessage('You not belong to the group');
         } catch (DBNotFoundException) {
             throw ListOrdersGetDataListOrdersNotFoundException::fromMessage('List orders ids not found');
-        } catch (Exception) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

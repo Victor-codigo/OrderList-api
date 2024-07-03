@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Validation\Constraints\Alphanumeric;
 
-use Attribute;
 use Symfony\Component\Validator\Constraints\Regex;
 
-#[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
+#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class Alphanumeric extends Regex
 {
     public const ALPHANUMERIC_FAILED_ERROR = '93b433da-0054-405c-ba5c-3bf1a26f2254';

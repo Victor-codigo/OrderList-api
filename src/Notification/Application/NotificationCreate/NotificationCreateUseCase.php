@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Notification\Application\NotificationCreate;
 
-use Exception;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Exception\System\SystemKeyWrongException;
@@ -47,7 +46,7 @@ class NotificationCreateUseCase extends ServiceBase
             throw $e;
         } catch (SystemKeyWrongException) {
             throw NotificationCreateSystemKeyWrongException::fromMessage('The system key is wrong');
-        } catch (Exception) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

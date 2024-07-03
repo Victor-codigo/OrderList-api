@@ -90,7 +90,7 @@ class NotificationCreateController extends AbstractController
     /**
      * @param string[]|null $userId
      */
-    private function createNotificationCreateInputDto(array|null $userId, string|null $notificationType, array|null $notificationData, string|null $systemKey): NotificationCreateInputDto
+    private function createNotificationCreateInputDto(?array $userId, ?string $notificationType, ?array $notificationData, ?string $systemKey): NotificationCreateInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();

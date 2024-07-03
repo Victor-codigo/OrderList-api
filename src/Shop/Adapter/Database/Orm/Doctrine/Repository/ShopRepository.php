@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Shop\Adapter\Database\Orm\Doctrine\Repository;
 
-use Override;
-use Exception;
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
@@ -35,7 +33,7 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
      * @throws DBUniqueConstraintException
      * @throws DBConnectionException
      */
-    #[Override]
+    #[\Override]
     public function save(Shop $shop): void
     {
         try {
@@ -43,7 +41,7 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
             $this->objectManager->flush();
         } catch (UniqueConstraintViolationException $e) {
             throw DBUniqueConstraintException::fromId($shop->getId()->getValue(), $e->getCode());
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
     }
@@ -53,7 +51,7 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
      *
      * @throws DBConnectionException
      */
-    #[Override]
+    #[\Override]
     public function remove(array $shops): void
     {
         try {
@@ -62,7 +60,7 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
             }
 
             $this->objectManager->flush();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
     }
@@ -73,7 +71,7 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
      *
      * @throws DBNotFoundException
      */
-    #[Override]
+    #[\Override]
     public function findShopsOrFail(Identifier $groupId, ?array $shopsId = null, ?array $productsId = null, bool $orderAsc = true): PaginatorInterface
     {
         $queryBuilder = $this->entityManager
@@ -109,7 +107,7 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
      *
      * @throws DBNotFoundException
      */
-    #[Override]
+    #[\Override]
     public function findGroupsShopsOrFail(array $groupsId): PaginatorInterface
     {
         $shopEntity = Shop::class;
@@ -127,7 +125,7 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
     /**
      * @throws DBNotFoundException
      */
-    #[Override]
+    #[\Override]
     public function findShopByShopNameOrFail(Identifier $groupId, NameWithSpaces $shopName, bool $orderAsc = true): PaginatorInterface
     {
         $shopEntity = Shop::class;
@@ -151,7 +149,7 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
     /**
      * @throws DBNotFoundException
      */
-    #[Override]
+    #[\Override]
     public function findShopByShopNameFilterOrFail(Identifier $groupId, Filter $shopNameFilter, bool $orderAsc = true): PaginatorInterface
     {
         $shopEntity = Shop::class;

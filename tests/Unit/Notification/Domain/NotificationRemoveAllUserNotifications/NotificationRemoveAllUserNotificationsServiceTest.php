@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Domain\NotificationRemoveAllUserNotifications;
 
-use Common\Domain\Model\ValueObject\String\Identifier;
-use Override;
-use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
@@ -25,7 +23,7 @@ class NotificationRemoveAllUserNotificationsServiceTest extends TestCase
     private MockObject|NotificationRepositoryInterface $notificationRepository;
     private MockObject|PaginatorInterface $notificationPaginator;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -99,7 +97,7 @@ class NotificationRemoveAllUserNotificationsServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new ArrayIterator($userNotifications));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($userNotifications));
 
         $return = $this->object->__invoke($input);
 
@@ -155,7 +153,7 @@ class NotificationRemoveAllUserNotificationsServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new ArrayIterator($userNotifications));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($userNotifications));
 
         $this->expectException(DBConnectionException::class);
         $this->object->__invoke($input);

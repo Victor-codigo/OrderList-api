@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Notification\Application\NotificationRemoveAllUserNotifications\Dto;
 
-use Override;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
 use Common\Domain\Validation\ValidationInterface;
@@ -20,7 +19,7 @@ class NotificationRemoveAllUserNotificationsInputDto implements ServiceInputDtoI
         $this->systemKey = $systemKey ?? '';
     }
 
-    #[Override]
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListSystemKey = $validator

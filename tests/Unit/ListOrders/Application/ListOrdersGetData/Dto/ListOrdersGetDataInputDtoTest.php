@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Application\ListOrdersGetData\Dto;
 
-use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -19,7 +18,7 @@ class ListOrdersGetDataInputDtoTest extends TestCase
     private ValidationInterface $validator;
     private UserShared $userSession;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -240,9 +239,9 @@ class ListOrdersGetDataInputDtoTest extends TestCase
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
-                'section_filter_value' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
-                'text_filter_value' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
-            ],
+            'section_filter_value' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
+            'text_filter_value' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
+        ],
             $return
         );
     }

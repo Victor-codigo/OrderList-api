@@ -134,9 +134,9 @@ class OrderRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
         $this->assertEquals([
-                ['uuid_invalid_characters'],
-                ['uuid_invalid_characters'],
-            ],
+            ['uuid_invalid_characters'],
+            ['uuid_invalid_characters'],
+        ],
             $responseContent->errors->orders_id
         );
     }

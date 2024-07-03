@@ -15,8 +15,8 @@ class ShopRemoveRequestDto implements RequestDtoInterface
 
     private const int SHOPS_MAX = AppConfig::ENDPOINT_SHOP_REMOVE_MAX;
 
-    public readonly array|null $shopsId;
-    public readonly string|null $groupId;
+    public readonly ?array $shopsId;
+    public readonly ?string $groupId;
 
     public function __construct(Request $request)
     {

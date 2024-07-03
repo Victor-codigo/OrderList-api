@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Functional\Notification\Adapter\Http\Controller\NotificationRemove;
 
-use Override;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +19,7 @@ class NotificationRemoveControllerTest extends WebClientTestCase
     private const string NOTIFICATION_ID_2 = 'd75a3fb1-42aa-46c0-be4c-1147f0808d60';
     private const string NOTIFICATION_ID_3 = 'f7621fbd-0c8e-4a8a-8059-9e87b8ea4fe1';
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ListOrders\Application\ListOrdersRemove\Dto;
 
-use Override;
 use Common\Domain\Application\ApplicationOutputInterface;
 use ListOrders\Domain\Model\ListOrders;
 
@@ -18,7 +17,7 @@ class ListOrdersRemoveOutputDto implements ApplicationOutputInterface
     ) {
     }
 
-    #[Override]
+    #[\Override]
     public function toArray(): array
     {
         return [

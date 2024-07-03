@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\String;
 
-use Override;
 use Common\Domain\Validation\Common\PROTOCOLS;
 use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\ConstraintFactory;
 
 class Url extends StringValueObject
 {
-    #[Override]
+    #[\Override]
     protected function defineConstraints(): void
     {
         $this

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Domain\Service\UserFirstLogin;
 
-use Override;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
@@ -33,7 +32,7 @@ class UserFirstLoginServiceTest extends TestCase
     private string $appName;
     private string $systemKey;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

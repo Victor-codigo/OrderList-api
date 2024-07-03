@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Domain\Service\OrderRemoveAllGroupsOrders;
 
-use Override;
-use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -27,7 +25,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
     private MockObject|PaginatorInterface $ordersToRemovePaginator;
     private MockObject|PaginatorInterface $ordersToChangeUserIdPaginator;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -226,13 +224,13 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new ArrayIterator($ordersToRemove));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($ordersToRemove));
 
         $this->ordersToChangeUserIdPaginator
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new ArrayIterator($ordersToChangeUserId));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($ordersToChangeUserId));
 
         $this->orderRepository
             ->expects($this->once())
@@ -277,7 +275,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new ArrayIterator($ordersToChangeUserId));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($ordersToChangeUserId));
 
         $this->orderRepository
             ->expects($this->never())
@@ -319,7 +317,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
 
                 return true;
             }))
-            ->willReturnCallback(fn(): MockObject|PaginatorInterface => match ($orderRepositoryMatcher->getInvocationCount()) {
+            ->willReturnCallback(fn (): MockObject|PaginatorInterface => match ($orderRepositoryMatcher->getInvocationCount()) {
                 1 => throw new DBNotFoundException(),
                 2 => $this->ordersToChangeUserIdPaginator
             });
@@ -332,7 +330,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new ArrayIterator($ordersToChangeUserId));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($ordersToChangeUserId));
 
         $this->orderRepository
             ->expects($this->never())
@@ -369,7 +367,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new ArrayIterator($ordersToRemove));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($ordersToRemove));
 
         $this->ordersToChangeUserIdPaginator
             ->expects($this->never())
@@ -410,7 +408,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new ArrayIterator($ordersToRemove));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($ordersToRemove));
 
         $this->ordersToChangeUserIdPaginator
             ->expects($this->never())
@@ -455,7 +453,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
 
                 return true;
             }))
-            ->willReturnCallback(fn(): MockObject|PaginatorInterface => match ($orderRepositoryMatcher->getInvocationCount()) {
+            ->willReturnCallback(fn (): MockObject|PaginatorInterface => match ($orderRepositoryMatcher->getInvocationCount()) {
                 1 => $this->ordersToRemovePaginator,
                 2 => throw new DBNotFoundException()
             });
@@ -464,7 +462,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new ArrayIterator($ordersToRemove));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($ordersToRemove));
 
         $this->ordersToChangeUserIdPaginator
             ->expects($this->never())
@@ -519,13 +517,13 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new ArrayIterator($ordersToRemove));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($ordersToRemove));
 
         $this->ordersToChangeUserIdPaginator
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new ArrayIterator($ordersToChangeUserId));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($ordersToChangeUserId));
 
         $this->orderRepository
             ->expects($this->once())

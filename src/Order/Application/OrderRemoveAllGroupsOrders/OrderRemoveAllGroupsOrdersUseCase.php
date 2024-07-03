@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Order\Application\OrderRemoveAllGroupsOrders;
 
-use Exception;
-use Generator;
-use ValueError;
-use InvalidArgumentException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationErrorResponseException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationTokenNotFoundInRequestException;
@@ -20,12 +16,12 @@ use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
+use Order\Application\OrderRemove\Exception\OrderRemoveGroupAndUserValidationException;
+use Order\Application\OrderRemove\Exception\OrderRemoveOrdersNotFoundException;
 use Order\Application\OrderRemoveAllGroupsOrders\Dto\OrderRemoveAllGroupsOrdersInputDto;
 use Order\Application\OrderRemoveAllGroupsOrders\Dto\OrderRemoveAllGroupsOrdersOutputDto;
 use Order\Application\OrderRemoveAllGroupsOrders\Exception\OrderRemoveAllGroupsOrdersGroupsAdminsRequestException;
 use Order\Application\OrderRemoveAllGroupsOrders\Exception\OrderRemoveAllGroupsOrdersSystemKeyException;
-use Order\Application\OrderRemove\Exception\OrderRemoveGroupAndUserValidationException;
-use Order\Application\OrderRemove\Exception\OrderRemoveOrdersNotFoundException;
 use Order\Domain\Service\OrderRemoveAllGroupsOrders\Dto\OrderRemoveAllGroupsOrdersDto;
 use Order\Domain\Service\OrderRemoveAllGroupsOrders\Dto\OrderRemoveAllGroupsOrdersOutputDto as OrderRemoveAllGroupsOrdersOutputDtoService;
 use Order\Domain\Service\OrderRemoveAllGroupsOrders\OrderRemoveAllGroupsOrdersService;
@@ -58,7 +54,7 @@ class OrderRemoveAllGroupsOrdersUseCase extends ServiceBase
             }
 
             return $this->createOrderRemoveAllGroupsOrdersOutputDto($ordersIdRemovedAndUserIdChanged);
-        } catch (Exception) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }
@@ -82,7 +78,7 @@ class OrderRemoveAllGroupsOrdersUseCase extends ServiceBase
     /**
      * @param Identifier[] $groupsId
      */
-    private function getGroupsAdmins(array $groupsId): Generator
+    private function getGroupsAdmins(array $groupsId): \Generator
     {
         if (empty($groupsId)) {
             yield [];
@@ -106,7 +102,7 @@ class OrderRemoveAllGroupsOrdersUseCase extends ServiceBase
 
                 yield $responseData['groups'];
             }
-        } catch (ModuleCommunicationException|ValueError|ModuleCommunicationTokenNotFoundInRequestException|ModuleCommunicationErrorResponseException|InvalidArgumentException) {
+        } catch (ModuleCommunicationException|\ValueError|ModuleCommunicationTokenNotFoundInRequestException|ModuleCommunicationErrorResponseException|\InvalidArgumentException) {
             throw OrderRemoveAllGroupsOrdersGroupsAdminsRequestException::fromMessage('Error getting groups admins');
         }
     }

@@ -11,12 +11,12 @@ class valueObjectArrayFactory
     /**
      * @param Rol[]|null $roles
      */
-    public static function createRoles(array|null $roles): Roles
+    public static function createRoles(?array $roles): Roles
     {
         return new Roles($roles);
     }
 
-    public static function createNotificationData(array|null $data): NotificationData
+    public static function createNotificationData(?array $data): NotificationData
     {
         return new NotificationData($data);
     }

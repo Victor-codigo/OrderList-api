@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Domain\Service\GroupUserAdd\Exception;
 
-use DomainException;
-class GroupAddUsersAlreadyInTheGroupException extends DomainException
+class GroupAddUsersAlreadyInTheGroupException extends \DomainException
 {
     public static function fromMessage(string $message): static
     {

@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Integer;
 
-use Override;
 use Common\Domain\Config\AppConfig;
 use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\ConstraintFactory;
 
 class PaginatorPageItems extends IntegerValueObject
 {
-    #[Override]
+    #[\Override]
     protected function defineConstraints(): void
     {
         $this

@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupGetAdmins;
 
-use Override;
-use Iterator;
-use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -35,7 +32,7 @@ class GroupGetAdminUseCaseTest extends TestCase
     private MockObject|PaginatorInterface $paginator;
     private MockObject|UserShared $userSession;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -47,11 +44,11 @@ class GroupGetAdminUseCaseTest extends TestCase
         $this->object = new GroupGetAdminsUseCase($this->validator, $this->userGroupRepository);
     }
 
-    private function getGroupUsers(string|null $setGroupId = null): Iterator
+    private function getGroupUsers(?string $setGroupId = null): \Iterator
     {
         $group = $this->createMock(Group::class);
 
-        $usersGroup = new ArrayIterator([
+        $usersGroup = new \ArrayIterator([
             UserGroup::fromPrimitives('group id 1', 'user id 1', [GROUP_ROLES::ADMIN], $group),
             UserGroup::fromPrimitives('group id 2', 'user id 2', [GROUP_ROLES::USER], $group),
             UserGroup::fromPrimitives('group id 3', 'user id 3', [GROUP_ROLES::USER], $group),

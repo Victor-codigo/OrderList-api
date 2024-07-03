@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Order\Application\OrderModify\Dto;
 
-use Override;
 use Common\Domain\Application\ApplicationOutputInterface;
 use Order\Domain\Model\Order;
 
@@ -15,7 +14,7 @@ class OrderModifyOutputDto implements ApplicationOutputInterface
     ) {
     }
 
-    #[Override]
+    #[\Override]
     public function toArray(): array
     {
         return [

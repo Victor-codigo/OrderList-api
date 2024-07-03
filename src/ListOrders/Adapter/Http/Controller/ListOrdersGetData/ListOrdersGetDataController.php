@@ -161,7 +161,7 @@ class ListOrdersGetDataController extends AbstractController
         return $this->createResponse($listOrderData);
     }
 
-    private function createListOrdersGetDataInputDto(string|null $groupId, array|null $listOrdersIds, string|null $filterValue, bool $orderAsc, string|null $filterSection, string|null $filterText, int|null $page, int|null $pageItems): ListOrdersGetDataInputDto
+    private function createListOrdersGetDataInputDto(?string $groupId, ?array $listOrdersIds, ?string $filterValue, bool $orderAsc, ?string $filterSection, ?string $filterText, ?int $page, ?int $pageItems): ListOrdersGetDataInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();

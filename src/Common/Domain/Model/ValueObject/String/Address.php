@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\String;
 
-use Stringable;
-use Override;
 use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\ConstraintFactory;
 
-class Address extends StringValueObject implements Stringable
+class Address extends StringValueObject implements \Stringable
 {
-    #[Override]
+    #[\Override]
     protected function defineConstraints(): void
     {
         $this
@@ -21,7 +19,7 @@ class Address extends StringValueObject implements Stringable
             ->setConstraint(ConstraintFactory::regEx('/^[a-zÀ-ÿ0-9\s,_\-\\\\\.\#]+$/ui', true));
     }
 
-    #[Override]
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->getValue();

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation;
 
-use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
@@ -16,7 +15,7 @@ class ValidatorTest extends TestCase
 {
     private ValidationInterface $object;
 
-    #[Override]
+    #[\Override]
     public function setUp(): void
     {
         $this->object = new ValidationChain();

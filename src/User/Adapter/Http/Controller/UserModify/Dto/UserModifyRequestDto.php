@@ -10,9 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UserModifyRequestDto implements RequestDtoInterface
 {
-    public readonly string|null $name;
-    public readonly bool|null $imageRemove;
-    public readonly UploadedFile|null $image;
+    public readonly ?string $name;
+    public readonly ?bool $imageRemove;
+    public readonly ?UploadedFile $image;
 
     public function __construct(Request $request)
     {

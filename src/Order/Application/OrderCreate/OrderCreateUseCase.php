@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Order\Application\OrderCreate;
 
-use Exception;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -62,7 +61,7 @@ class OrderCreateUseCase extends ServiceBase
             throw OrderCreateProductShopRepeatedException::fromMessage('Product and shop are already in the order list');
         } catch (OrderCreateServiceShopNotFoundException) {
             throw OrderCreateShopNotFoundException::fromMessage('Shop or shops not found');
-        } catch (Exception) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

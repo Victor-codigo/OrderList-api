@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
-use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -17,7 +16,7 @@ class EmailTest extends TestCase
     private string $validEmail = 'a.valid.email@host.com';
     private string $invalidEmail = 'this is an invalid email';
 
-    #[Override]
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -25,7 +24,7 @@ class EmailTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    private function createEmail(string|null $email): Email
+    private function createEmail(?string $email): Email
     {
         return new Email($email);
     }

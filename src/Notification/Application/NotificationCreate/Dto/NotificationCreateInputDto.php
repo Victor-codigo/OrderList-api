@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Notification\Application\NotificationCreate\Dto;
 
-use Override;
 use Common\Domain\Model\ValueObject\Array\NotificationData;
 use Common\Domain\Model\ValueObject\Object\NotificationType;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -25,10 +24,7 @@ class NotificationCreateInputDto implements ServiceInputDtoInterface
     public readonly NotificationData $notificationData;
     public readonly string $systemKey;
 
-    /**
-     * @param string[]|null $userId
-     */
-    public function __construct(UserShared $userSession, array|null $usersId, string|null $notificationType, array|null $notificationData, string|null $systemKey)
+    public function __construct(UserShared $userSession, ?array $usersId, ?string $notificationType, ?array $notificationData, ?string $systemKey)
     {
         $this->systemKey = $systemKey ?? '';
         $this->notificationData = ValueObjectFactory::createNotificationData($notificationData);
@@ -44,7 +40,7 @@ class NotificationCreateInputDto implements ServiceInputDtoInterface
         );
     }
 
-    #[Override]
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray([

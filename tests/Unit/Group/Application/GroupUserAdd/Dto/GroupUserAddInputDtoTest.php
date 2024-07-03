@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupUserAdd\Dto;
 
-use Override;
-use DateTime;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Security\UserShared;
@@ -28,7 +26,7 @@ class GroupUserAddInputDtoTest extends TestCase
     private ValidationInterface $validator;
     private UserShared $userSession;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -40,7 +38,7 @@ class GroupUserAddInputDtoTest extends TestCase
             'UserName',
             [USER_ROLES::USER],
             null,
-            new DateTime()
+            new \DateTime()
         );
     }
 

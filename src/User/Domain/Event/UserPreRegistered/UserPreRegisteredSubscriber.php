@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace User\Domain\Event\UserPreRegistered;
 
-use Override;
 use Common\Domain\Event\EventDomainSubscriberInterface;
 use User\Domain\Service\SendEmailRegisterConfirm\Dto\SendEmailRegistrationConfirmInputDto;
 use User\Domain\Service\SendEmailRegisterConfirm\SendEmailRegistrationConfirmationService;
@@ -18,7 +17,7 @@ class UserPreRegisteredSubscriber implements EventDomainSubscriberInterface
         $this->sendEmailRegistrationConfirmationService = $sendEmailRegistrationConfirmationService;
     }
 
-    #[Override]
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [UserPreRegisteredEvent::class];

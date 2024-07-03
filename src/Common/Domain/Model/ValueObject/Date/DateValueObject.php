@@ -4,34 +4,32 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Date;
 
-use DateTime;
-use Override;
 use Common\Domain\Model\ValueObject\ValueObjectBase;
 
 abstract class DateValueObject extends ValueObjectBase
 {
-    protected readonly DateTime|null $value;
+    protected readonly ?\DateTime $value;
 
-    public function __construct(DateTime|null $value)
+    public function __construct(?\DateTime $value)
     {
         $this->value = $value;
 
         $this->defineConstraints();
     }
 
-    #[Override]
-    public function getValue(): DateTime|null
+    #[\Override]
+    public function getValue(): ?\DateTime
     {
         return $this->value;
     }
 
-    #[Override]
+    #[\Override]
     public function getValidationValue(): mixed
     {
         return $this->value;
     }
 
-    #[Override]
+    #[\Override]
     public function getValueObjects(): array
     {
         return [];

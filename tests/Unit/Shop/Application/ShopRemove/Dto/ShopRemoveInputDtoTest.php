@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Application\ShopRemove\Dto;
 
-use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -21,7 +20,7 @@ class ShopRemoveInputDtoTest extends TestCase
     private ValidationInterface $validator;
     private MockObject|UserShared $userShared;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -132,9 +131,9 @@ class ShopRemoveInputDtoTest extends TestCase
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
-                'group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
-                'shops_id_empty' => [VALIDATION_ERRORS::NOT_BLANK],
-            ],
+            'group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
+            'shops_id_empty' => [VALIDATION_ERRORS::NOT_BLANK],
+        ],
             $return
         );
     }

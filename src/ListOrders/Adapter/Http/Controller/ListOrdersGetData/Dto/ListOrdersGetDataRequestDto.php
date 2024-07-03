@@ -15,19 +15,19 @@ class ListOrdersGetDataRequestDto implements RequestDtoInterface
 
     private const int LIST_ORDERS_IDS_MAX = AppConfig::ENDPOINT_LIST_ORDERS_GET_DATA_MAX;
 
-    public readonly string|null $groupId;
+    public readonly ?string $groupId;
     /**
      * @var string[]|null
      */
-    public readonly array|null $listOrdersIds;
+    public readonly ?array $listOrdersIds;
     public readonly bool $orderAsc;
 
-    public readonly string|null $filterValue;
-    public readonly string|null $filterSection;
-    public readonly string|null $filterText;
+    public readonly ?string $filterValue;
+    public readonly ?string $filterSection;
+    public readonly ?string $filterText;
 
-    public readonly int|null $page;
-    public readonly int|null $pageItems;
+    public readonly ?int $page;
+    public readonly ?int $pageItems;
 
     public function __construct(Request $request)
     {

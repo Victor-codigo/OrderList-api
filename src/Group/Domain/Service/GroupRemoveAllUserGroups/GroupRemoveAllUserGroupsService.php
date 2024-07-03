@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Group\Domain\Service\GroupRemoveAllUserGroups;
 
-use Common\Domain\Model\ValueObject\String\Identifier;
-use Generator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
@@ -25,11 +24,11 @@ class GroupRemoveAllUserGroupsService
     }
 
     /**
-     * @return Generator<GroupRemoveAllUserGroupsOutputDto>
+     * @return \Generator<GroupRemoveAllUserGroupsOutputDto>
      *
      * @throws DBNotFoundException
      */
-    public function __invoke(GroupRemoveAllUserGroupsDto $input): Generator
+    public function __invoke(GroupRemoveAllUserGroupsDto $input): \Generator
     {
         $groupsPaginator = $this->userGroupRepository->findUserGroupsById($input->userId, null, null);
 

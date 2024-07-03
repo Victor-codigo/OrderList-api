@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Response;
 
-use Override;
 use Common\Domain\Response\ResponseDto;
 use PHPUnit\Framework\TestCase;
 
@@ -12,7 +11,7 @@ class ResponseDtoTest extends TestCase
 {
     private ResponseDto $object;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

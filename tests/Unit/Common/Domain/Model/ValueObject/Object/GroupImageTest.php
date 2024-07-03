@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Object;
 
-use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\GroupImage;
 use Common\Domain\Ports\FileUpload\FileInterface;
@@ -26,7 +25,7 @@ class GroupImageTest extends TestCase
     private ValidationChain $validator;
     private MockObject|FileInterface $fileInterface;
 
-    #[Override]
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -36,7 +35,7 @@ class GroupImageTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    #[Override]
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

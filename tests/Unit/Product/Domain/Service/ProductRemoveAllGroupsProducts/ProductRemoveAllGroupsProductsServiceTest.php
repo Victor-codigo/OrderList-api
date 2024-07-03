@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ProductRemoveAllGroupsProducts;
 
-use Common\Domain\Model\ValueObject\String\Identifier;
-use Override;
-use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Service\Image\EntityImageRemove\EntityImageRemoveService;
@@ -31,7 +29,7 @@ class ProductRemoveAllGroupsProductsServiceTest extends TestCase
     private MockObject|EntityImageRemoveService $entityImageRemoveService;
     private MockObject|PaginatorInterface $productsPaginator;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -112,7 +110,7 @@ class ProductRemoveAllGroupsProductsServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new ArrayIterator($products));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($products));
 
         $this->entityImageRemoveService
             ->expects($this->exactly(count($products)))
@@ -182,7 +180,7 @@ class ProductRemoveAllGroupsProductsServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new ArrayIterator($products));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($products));
 
         $this->entityImageRemoveService
             ->expects($this->once())
@@ -221,7 +219,7 @@ class ProductRemoveAllGroupsProductsServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new ArrayIterator($products));
+            ->willReturnCallback(fn () => yield new \ArrayIterator($products));
 
         $this->entityImageRemoveService
             ->expects($this->exactly(count($products)))

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Domain\Service\OrderBought;
 
-use Override;
-use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -26,7 +24,7 @@ class OrderBoughtServiceTest extends TestCase
     private MockObject|PaginatorInterface $paginator;
     private MockObject|Order $order;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -90,7 +88,7 @@ class OrderBoughtServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new ArrayIterator([$this->order]));
+            ->willReturn(new \ArrayIterator([$this->order]));
 
         $this->order
             ->expects($this->once())

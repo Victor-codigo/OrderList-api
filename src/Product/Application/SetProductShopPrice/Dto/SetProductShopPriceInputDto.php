@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Product\Application\SetProductShopPrice\Dto;
 
-use Override;
 use Common\Domain\Model\ValueObject\Float\Money;
 use Common\Domain\Model\ValueObject\Object\UnitMeasure;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -39,27 +38,27 @@ class SetProductShopPriceInputDto implements ServiceInputDtoInterface
      * @param float[]|null  $prices
      * @param string[]|null $units
      */
-    public function __construct(UserShared $userSession, string|null $groupId, string|null $productId, string|null $shopId, array|null $productsOrShopsId, array|null $prices, array|null $units)
+    public function __construct(UserShared $userSession, ?string $groupId, ?string $productId, ?string $shopId, ?array $productsOrShopsId, ?array $prices, ?array $units)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
         $this->productId = ValueObjectFactory::createIdentifier($productId);
         $this->shopId = ValueObjectFactory::createIdentifier($shopId);
         $this->productsOrShopsId = array_map(
-            fn (string|null $productOrShopId): Identifier => ValueObjectFactory::createIdentifier($productOrShopId),
+            fn (?string $productOrShopId): Identifier => ValueObjectFactory::createIdentifier($productOrShopId),
             $productsOrShopsId ?? []
         );
         $this->prices = array_map(
-            fn (float|null $price): Money => ValueObjectFactory::createMoney($price),
+            fn (?float $price): Money => ValueObjectFactory::createMoney($price),
             $prices ?? []
         );
         $this->units = array_map(
-            fn (string|null $unit): UnitMeasure => ValueObjectFactory::createUnit(UNIT_MEASURE_TYPE::tryFrom($unit ?? '')),
+            fn (?string $unit): UnitMeasure => ValueObjectFactory::createUnit(UNIT_MEASURE_TYPE::tryFrom($unit ?? '')),
             $units ?? []
         );
     }
 
-    #[Override]
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray([
@@ -143,7 +142,7 @@ class SetProductShopPriceInputDto implements ServiceInputDtoInterface
     {
         $errorList = [];
         $errorListUnits = $validator->validateValueObjectArray($this->units);
-        $errorsNullToChoiceNoSuch = fn(array $errors): array => array_map(
+        $errorsNullToChoiceNoSuch = fn (array $errors): array => array_map(
             fn (VALIDATION_ERRORS $error): VALIDATION_ERRORS => VALIDATION_ERRORS::NOT_NULL === $error ? VALIDATION_ERRORS::CHOICE_NOT_SUCH : $error,
             $errors
         );

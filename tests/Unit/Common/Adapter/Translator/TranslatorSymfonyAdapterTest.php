@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Translator;
 
-use Override;
 use Common\Adapter\Translator\TranslatorSymfonyAdapter;
 use Common\Domain\Exception\InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -18,7 +17,7 @@ class TranslatorSymfonyAdapterTest extends TestCase
     private MockObject|TranslatorInterface $translator;
     private MockObject|LocaleSwitcher $localeSwitcher;
 
-    #[Override]
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

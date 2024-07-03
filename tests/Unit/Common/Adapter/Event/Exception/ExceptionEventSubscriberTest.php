@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Event\Exception;
 
-use Override;
-use Exception;
 use Common\Adapter\Event\Exception\ExceptionEventSubscriber;
 use Common\Adapter\Http\Exception\HttpResponseException;
 use Common\Domain\Exception\DomainInternalErrorException;
@@ -31,7 +29,7 @@ class ExceptionEventSubscriberTest extends TestCase
     private MockObject|Request $request;
     private ExceptionEvent $event;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -39,7 +37,7 @@ class ExceptionEventSubscriberTest extends TestCase
         $this->object = new ExceptionEventSubscriber();
         $this->kernel = $this->createMock(KernelInterface::class);
         $this->request = $this->createMock(Request::class);
-        $this->event = new ExceptionEvent($this->kernel, $this->request, HttpKernelInterface::MAIN_REQUEST, new Exception());
+        $this->event = new ExceptionEvent($this->kernel, $this->request, HttpKernelInterface::MAIN_REQUEST, new \Exception());
     }
 
     private function getResponseDto(): ResponseDto
@@ -174,7 +172,7 @@ class ExceptionEventSubscriberTest extends TestCase
     /** @test */
     public function itShouldReturnHttpResponseExceptionThrownNotADomainExceptionOutput(): void
     {
-        $expectedException = new Exception('Exception');
+        $expectedException = new \Exception('Exception');
         $this->event->setThrowable($expectedException);
         $this->object->__invoke($this->event);
 

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Common\Adapter\FileUpload;
 
-use Override;
 use Common\Domain\Exception\LogicException;
+use Common\Domain\FileUpload\Exception\File\FileException;
 use Common\Domain\FileUpload\Exception\FileUploadCanNotWriteException;
 use Common\Domain\FileUpload\Exception\FileUploadException;
 use Common\Domain\FileUpload\Exception\FileUploadExtensionFileException;
@@ -15,7 +15,6 @@ use Common\Domain\FileUpload\Exception\FileUploadPartialFileException;
 use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\FileUpload\Exception\FileUploadSizeException;
 use Common\Domain\FileUpload\Exception\FileUploadTmpDirFileException;
-use Common\Domain\FileUpload\Exception\File\FileException;
 use Common\Domain\Ports\FileUpload\FileInterface;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
@@ -40,7 +39,7 @@ class FileUploadSymfonyAdapter implements FileUploadInterface
     /**
      * @throws LogicException
      */
-    #[Override]
+    #[\Override]
     public function getFileName(): string
     {
         if (!isset($this->fileName)) {
@@ -63,8 +62,8 @@ class FileUploadSymfonyAdapter implements FileUploadInterface
      * @throws FileUploadPartialFileException
      * @throws FileUploadReplaceException
      */
-    #[Override]
-    public function __invoke(UploadedFileInterface $file, string $pathToSaveFile, string $fileNameToReplace = null): FileInterface
+    #[\Override]
+    public function __invoke(UploadedFileInterface $file, string $pathToSaveFile, ?string $fileNameToReplace = null): FileInterface
     {
         try {
             $this->fileName = $this->generateFileName($file);
@@ -109,7 +108,7 @@ class FileUploadSymfonyAdapter implements FileUploadInterface
     /**
      * This method exits, just because phpunit error: eval emits an error that shows in console all code of the class.
      */
-    protected function slug(string $string, string $separator = '-', string $locale = null): string
+    protected function slug(string $string, string $separator = '-', ?string $locale = null): string
     {
         return (string) $this->slugger->slug($string, $separator, $locale);
     }

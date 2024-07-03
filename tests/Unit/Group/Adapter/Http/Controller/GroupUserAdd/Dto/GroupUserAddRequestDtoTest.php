@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Group\Adapter\Http\Controller\GroupUserAdd\Dto;
 
-use Override;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,13 +13,13 @@ class GroupUserAddRequestDtoTest extends TestCase
     private const string USER_ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
     private const int USERS_NUM_MAX = 50;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
     }
 
-    private function createRequest(array|null $attributes): GroupUserAddRequestDto
+    private function createRequest(?array $attributes): GroupUserAddRequestDto
     {
         $requestAttributes = [
             'group_id' => null,

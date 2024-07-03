@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Application\ProductCreate\Dto;
 
-use Override;
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
@@ -27,7 +26,7 @@ class ProductCreateInputDtoTest extends TestCase
     private ValidationInterface $validator;
     private MockObject|UserShared $userSession;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -36,7 +35,7 @@ class ProductCreateInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    #[Override]
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -193,11 +192,11 @@ class ProductCreateInputDtoTest extends TestCase
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
-                'group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
-                'name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
-                'description' => [VALIDATION_ERRORS::STRING_TOO_LONG],
-                'image' => [VALIDATION_ERRORS::FILE_UPLOAD_NO_FILE],
-            ],
+            'group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
+            'name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
+            'description' => [VALIDATION_ERRORS::STRING_TOO_LONG],
+            'image' => [VALIDATION_ERRORS::FILE_UPLOAD_NO_FILE],
+        ],
             $return
         );
     }

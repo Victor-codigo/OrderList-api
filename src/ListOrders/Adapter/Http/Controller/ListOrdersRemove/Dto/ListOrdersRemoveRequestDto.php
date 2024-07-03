@@ -9,11 +9,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ListOrdersRemoveRequestDto implements RequestDtoInterface
 {
-    public readonly string|null $groupId;
+    public readonly ?string $groupId;
     /**
      * @var string[]|null
      */
-    public readonly array|null $listsOrdersId;
+    public readonly ?array $listsOrdersId;
 
     public function __construct(Request $request)
     {

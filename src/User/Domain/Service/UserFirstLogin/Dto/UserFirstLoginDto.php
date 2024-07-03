@@ -10,6 +10,6 @@ class UserFirstLoginDto
 {
     public function __construct(
         public readonly User $user
-        ) {
+    ) {
     }
 }

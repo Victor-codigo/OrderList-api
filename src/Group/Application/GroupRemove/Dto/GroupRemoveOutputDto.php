@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupRemove\Dto;
 
-use Override;
 use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Model\ValueObject\String\Identifier;
 
@@ -21,7 +20,7 @@ class GroupRemoveOutputDto implements ApplicationOutputInterface
     /**
      * @return string[]
      */
-    #[Override]
+    #[\Override]
     public function toArray(): array
     {
         return array_map(

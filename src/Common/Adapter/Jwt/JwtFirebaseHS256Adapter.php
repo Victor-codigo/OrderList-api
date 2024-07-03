@@ -28,7 +28,7 @@ class JwtFirebaseHS256Adapter /* implements JwtHS256Interface */
         $this->secretKey = $this->getKey($secretKey);
     }
 
-    public function encode(array $data, float|null $expireTimeInSeconds = null): string
+    public function encode(array $data, ?float $expireTimeInSeconds = null): string
     {
         if (null !== $expireTimeInSeconds) {
             $data[self::KEY_TOKEN_DATA]['expire'] = $this->getDateTime()
@@ -74,7 +74,7 @@ class JwtFirebaseHS256Adapter /* implements JwtHS256Interface */
         return $this->getDateTime($tokenDecoded->{self::KEY_TOKEN_DATA}->expire) < $this->getDateTime();
     }
 
-    protected function getDateTime(int|null $timestamp = null): \DateTime
+    protected function getDateTime(?int $timestamp = null): \DateTime
     {
         if (null === $timestamp) {
             return new \DateTime();

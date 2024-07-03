@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Database\Orm\Doctrine\Repository\Paginator;
 
-use Override;
-use Generator;
-use Traversable;
 use Common\Adapter\Database\Orm\Doctrine\Repository\Paginator\Exception\PaginatorPageException;
 use Common\Domain\Config\AppConfig;
 use Common\Domain\Exception\InvalidArgumentException;
@@ -22,7 +19,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
 
     private ?Paginator $paginator = null;
 
-    #[Override]
+    #[\Override]
     public function createPaginator(Query|QueryBuilder $query): self
     {
         $paginator = new self();
@@ -49,7 +46,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
         return $this;
     }
 
-    #[Override]
+    #[\Override]
     public function getPageItems(): int
     {
         $this->validateQuery();
@@ -78,7 +75,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
         return $this;
     }
 
-    #[Override]
+    #[\Override]
     public function setPagination(int $page = 1, int $pageItems = self::MAX_RESULT_DEFAULT): self
     {
         $this->validateQuery();
@@ -91,12 +88,12 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
     }
 
     /**
-     * @return Generator<Traversable>
+     * @return \Generator<\Traversable>
      *
      * @throws InvalidArgumentException
      */
-    #[Override]
-    public function getPagesRange(int $pageIni, int $pageEnd, int $pageItems): Generator
+    #[\Override]
+    public function getPagesRange(int $pageIni, int $pageEnd, int $pageItems): \Generator
     {
         if ($pageIni <= 0) {
             throw new InvalidArgumentException('PageIni, must by bigger than 0');
@@ -114,19 +111,19 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
     }
 
     /**
-     * @return Generator<Traversable>
+     * @return \Generator<\Traversable>
      *
      * @throws InvalidArgumentException
      */
-    #[Override]
-    public function getAllPages(int $pageItems): Generator
+    #[\Override]
+    public function getAllPages(int $pageItems): \Generator
     {
         $this->setPageItems($pageItems);
 
         return $this->getPagesRange(1, $this->getPagesTotal(), $pageItems);
     }
 
-    #[Override]
+    #[\Override]
     public function getPageCurrent(): int
     {
         $this->validateQuery();
@@ -141,7 +138,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
                 : (int) floor($firstResult / $pageItems) + 1;
     }
 
-    #[Override]
+    #[\Override]
     public function getPagesTotal(): int
     {
         $this->validateQuery();
@@ -153,7 +150,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
             : 1;
     }
 
-    #[Override]
+    #[\Override]
     public function hasNext(): bool
     {
         $this->validateQuery();
@@ -161,7 +158,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
         return $this->getPageCurrent() < $this->getPagesTotal();
     }
 
-    #[Override]
+    #[\Override]
     public function hasPrevious(): bool
     {
         $this->validateQuery();
@@ -169,7 +166,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
         return $this->getPageCurrent() > 1;
     }
 
-    #[Override]
+    #[\Override]
     public function getPageNextNumber(): ?int
     {
         $this->validateQuery();
@@ -181,7 +178,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
         return $this->getPageCurrent() + 1;
     }
 
-    #[Override]
+    #[\Override]
     public function getPagePreviousNumber(): ?int
     {
         $this->validateQuery();
@@ -193,7 +190,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
         return $this->getPageCurrent() - 1;
     }
 
-    #[Override]
+    #[\Override]
     public function getItemsTotal(): int
     {
         $this->validateQuery();
@@ -201,14 +198,14 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
         return count($this->paginator);
     }
 
-    #[Override]
+    #[\Override]
     public function count(): int
     {
         return $this->getItemsTotal();
     }
 
-    #[Override]
-    public function getIterator(): Traversable
+    #[\Override]
+    public function getIterator(): \Traversable
     {
         $this->validateQuery();
 

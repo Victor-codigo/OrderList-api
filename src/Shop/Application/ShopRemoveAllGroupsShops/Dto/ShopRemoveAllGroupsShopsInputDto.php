@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Shop\Application\ShopRemoveAllGroupsShops\Dto;
 
-use Override;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
@@ -30,7 +29,7 @@ class ShopRemoveAllGroupsShopsInputDto implements ServiceInputDtoInterface
         $this->systemKey = $systemKey ?? '';
     }
 
-    #[Override]
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListGroupsIdBlank = $validator

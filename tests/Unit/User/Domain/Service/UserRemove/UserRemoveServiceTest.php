@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Domain\Service\UserRemove;
 
-use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -29,7 +28,7 @@ class UserRemoveServiceTest extends TestCase
     private MockObject|UserRepositoryInterface $userRepository;
     private MockObject|EntityImageRemoveService $entityImageRemoveService;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

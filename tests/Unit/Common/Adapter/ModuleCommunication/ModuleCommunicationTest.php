@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\ModuleCommunication;
 
-use Override;
-use Generator;
-use DomainException;
-use LogicException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationErrorResponseException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationTokenNotFoundInRequestException;
@@ -50,7 +46,7 @@ class ModuleCommunicationTest extends TestCase
     private string $responseContentExpected;
     private int $getContentNumCalls;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -107,7 +103,7 @@ class ModuleCommunicationTest extends TestCase
         if ('multipart/form-data' === $routeConfig->contentType) {
             $this->assertArrayHasKey('body', $options);
             $this->assertArrayHasKey('headers', $options);
-            $this->assertInstanceOf(Generator::class, $options['body']);
+            $this->assertInstanceOf(\Generator::class, $options['body']);
             $this->assertEquals('Content-Type: multipart/form-data', explode(';', (string) end($options['headers']))[0]);
             $this->assertCount(1 + count($routeConfig->headers) + count($routeConfig->cookies), $options['headers']);
         }
@@ -141,7 +137,7 @@ class ModuleCommunicationTest extends TestCase
         $this->assertEquals(self::JWT_TOKEN, $options['auth_bearer']);
     }
 
-    private function mockRequestMethod(ModuleCommunicationConfigDto $routeConfig, string $url, string $expectedUrl, AUTHENTICATION_SOURCE $authenticationSource, ?DomainException $requestException = null): void
+    private function mockRequestMethod(ModuleCommunicationConfigDto $routeConfig, string $url, string $expectedUrl, AUTHENTICATION_SOURCE $authenticationSource, ?\DomainException $requestException = null): void
     {
         $this->DI
             ->expects($this->once())
@@ -870,7 +866,7 @@ class ModuleCommunicationTest extends TestCase
             foreach ($return as $response) {
             }
 
-            throw new LogicException('No exceptions thrown: it should have thrown [ModuleCommunicationErrorResponseException]');
+            throw new \LogicException('No exceptions thrown: it should have thrown [ModuleCommunicationErrorResponseException]');
         } catch (ModuleCommunicationErrorResponseException $e) {
             $this->assertEquals($responseExpectedError->getErrors(), $e->getResponseErrors());
         }
@@ -941,7 +937,7 @@ class ModuleCommunicationTest extends TestCase
             foreach ($return as $response) {
             }
 
-            throw new LogicException('No exceptions thrown: it should have thrown [ModuleCommunicationErrorResponseException]');
+            throw new \LogicException('No exceptions thrown: it should have thrown [ModuleCommunicationErrorResponseException]');
         } catch (ModuleCommunicationErrorResponseException $e) {
             $this->assertEquals($responseExpectedError->getErrors(), $e->getResponseErrors());
         }

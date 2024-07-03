@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupGetUsers;
 
-use Override;
-use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -36,7 +34,7 @@ class GroupGetUsersServiceTest extends TestCase
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|PaginatorInterface $pagination;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -292,7 +290,7 @@ class GroupGetUsersServiceTest extends TestCase
         $this->pagination
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new ArrayIterator($groupUsersData));
+            ->willReturn(new \ArrayIterator($groupUsersData));
 
         $this->moduleCommunication
             ->expects($this->once())
@@ -342,7 +340,7 @@ class GroupGetUsersServiceTest extends TestCase
         $this->pagination
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new ArrayIterator($groupUsersData));
+            ->willReturn(new \ArrayIterator($groupUsersData));
 
         $this->moduleCommunication
             ->expects($this->once())
@@ -415,7 +413,7 @@ class GroupGetUsersServiceTest extends TestCase
         $this->pagination
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new ArrayIterator($groupUsersData));
+            ->willReturn(new \ArrayIterator($groupUsersData));
 
         $this->moduleCommunication
             ->expects($this->once())

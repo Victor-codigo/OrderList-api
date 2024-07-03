@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ListOrders\Application\ListOrdersRemoveAllGroupsListsOrders\Dto;
 
-use Override;
 use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Model\ValueObject\String\Identifier;
 
@@ -20,7 +19,7 @@ class ListOrdersRemoveAllGroupsListsOrdersOutputDto implements ApplicationOutput
     ) {
     }
 
-    #[Override]
+    #[\Override]
     public function toArray(): array
     {
         $listsOrdersIdRemoved = array_map(

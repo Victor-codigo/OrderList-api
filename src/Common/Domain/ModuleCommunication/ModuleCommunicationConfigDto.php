@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Domain\ModuleCommunication;
 
-use Override;
 class ModuleCommunicationConfigDto implements ModuleCommunicationConfigDtoPaginatorInterface
 {
     /** @param UploadedFileInterface[] $files */
@@ -22,7 +21,7 @@ class ModuleCommunicationConfigDto implements ModuleCommunicationConfigDtoPagina
     ) {
     }
 
-    #[Override]
+    #[\Override]
     public function cloneWithPage(int $page): self
     {
         $query = $this->query;
@@ -42,7 +41,7 @@ class ModuleCommunicationConfigDto implements ModuleCommunicationConfigDtoPagina
         );
     }
 
-    #[Override]
+    #[\Override]
     public function getPage(): int
     {
         return $this->query['page'];
@@ -51,7 +50,7 @@ class ModuleCommunicationConfigDto implements ModuleCommunicationConfigDtoPagina
     /**
      * Gets the path (separated by ".") where pages total is set in array response.
      */
-    #[Override]
+    #[\Override]
     public function getResponsePagesTotalPath(): string
     {
         return 'pages_total';

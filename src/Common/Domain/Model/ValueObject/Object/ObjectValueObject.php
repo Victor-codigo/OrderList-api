@@ -4,33 +4,32 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Object;
 
-use Override;
 use Common\Domain\Model\ValueObject\ValueObjectBase;
 
 abstract class ObjectValueObject extends ValueObjectBase
 {
-    protected readonly object|null $value;
+    protected readonly ?object $value;
 
-    #[Override]
-    public function getValue(): object|null
+    #[\Override]
+    public function getValue(): ?object
     {
         return $this->value;
     }
 
-    #[Override]
+    #[\Override]
     public function getValidationValue(): mixed
     {
         return $this->value;
     }
 
-    public function __construct(object|null $value)
+    public function __construct(?object $value)
     {
         $this->value = $value;
 
         $this->defineConstraints();
     }
 
-    #[Override]
+    #[\Override]
     public function getValueObjects(): array
     {
         return [];

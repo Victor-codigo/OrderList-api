@@ -88,7 +88,7 @@ class ProductCreateController extends AbstractController
         return $this->createResponse($product);
     }
 
-    private function createProductCreateInputDto(string|null $groupId, string|null $name, string|null $description, UploadedFile|null $image): ProductCreateInputDto
+    private function createProductCreateInputDto(?string $groupId, ?string $name, ?string $description, ?UploadedFile $image): ProductCreateInputDto
     {
         /** @var UserSharedSymfonyAdapter $userAdapterSymfony */
         $userAdapterSymfony = $this->security->getUser();

@@ -20,8 +20,6 @@ class NotificationCreateService
     }
 
     /**
-     * @param Identifier[] $usersId
-     *
      * @return Notification[]
      *
      * @throws DBUniqueConstraintException

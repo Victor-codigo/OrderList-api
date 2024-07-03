@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Command\UsersRemoveActivationExpired;
 
-use Override;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -21,7 +20,7 @@ class UsersRemoveActivationExpiredCommandTest extends KernelTestCase
     private Application $application;
     private CommandTester $commandTester;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

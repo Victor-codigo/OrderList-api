@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Domain\Event;
 
-use DateTimeImmutable;
 interface EventDomainInterface
 {
-    public function getOccurredOn(): DateTimeImmutable;
+    public function getOccurredOn(): \DateTimeImmutable;
 }

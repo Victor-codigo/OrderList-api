@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserRemove;
 
-use Common\Domain\Model\ValueObject\String\Identifier;
-use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
@@ -36,7 +35,7 @@ class UserRemoveUseCaseTest extends TestCase
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|User $userSession;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -280,7 +279,7 @@ class UserRemoveUseCaseTest extends TestCase
             ->expects($moduleCommunicationMatcher)
             ->method('__invoke')
             ->with($this->callback(fn (ModuleCommunicationConfigDto $config): bool => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
-            ->willReturnCallback(fn(): ResponseDto => match ($moduleCommunicationMatcher->getInvocationCount()) {
+            ->willReturnCallback(fn (): ResponseDto => match ($moduleCommunicationMatcher->getInvocationCount()) {
                 1 => $removeGroupsResponse ,
                 2 => $removeNotificationsResponse,
             });

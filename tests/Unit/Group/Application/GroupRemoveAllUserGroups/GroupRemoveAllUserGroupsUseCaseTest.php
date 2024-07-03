@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupRemoveAllUserGroups;
 
-use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\JwtToken;
@@ -46,7 +45,7 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
     private MockObject|UserShared $userSession;
     private MockObject|ValidationInterface $validation;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

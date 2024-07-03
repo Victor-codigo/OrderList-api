@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Domain\HttpClient\Exception;
 
-use DomainException;
-class NetworkException extends DomainException
+class NetworkException extends \DomainException
 {
     public static function fromMessage(string $message): static
     {

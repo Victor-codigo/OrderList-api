@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ListOrders\Domain\Service\ListOrdersGetPrice;
 
-use ArrayIterator;
 use Common\Domain\Config\AppConfig;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Float\Money;
@@ -60,7 +59,7 @@ class ListOrdersGetPriceService
         try {
             return $this->productShopRepository->findProductsAndShopsOrFail($productsId, $shopsId, $groupId);
         } catch (DBNotFoundException) {
-            return new ArrayIterator([]);
+            return new \ArrayIterator([]);
         }
     }
 

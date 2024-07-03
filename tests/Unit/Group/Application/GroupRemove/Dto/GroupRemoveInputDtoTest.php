@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupRemove\Dto;
 
-use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -20,7 +19,7 @@ class GroupRemoveInputDtoTest extends TestCase
     private UserShared $userSession;
     private ValidationInterface $validator;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

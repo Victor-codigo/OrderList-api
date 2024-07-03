@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Translator;
 
-use Override;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Ports\Translator\TranslatorInterface;
 use Symfony\Component\Translation\LocaleSwitcher;
@@ -24,8 +23,8 @@ class TranslatorSymfonyAdapter implements TranslatorInterface
     /**
      * @throws InvalidArgumentException
      */
-    #[Override]
-    public function translate(string $id, array $params = [], string|null $domain = null, string|null $locale = null): string
+    #[\Override]
+    public function translate(string $id, array $params = [], ?string $domain = null, ?string $locale = null): string
     {
         try {
             return $this->translator->trans($id, $params, $domain, $locale);
@@ -34,25 +33,25 @@ class TranslatorSymfonyAdapter implements TranslatorInterface
         }
     }
 
-    #[Override]
+    #[\Override]
     public function setLocale(string $locale): void
     {
         $this->localeSwitcher->setLocale($locale);
     }
 
-    #[Override]
+    #[\Override]
     public function getLocale(): string
     {
         return $this->translator->getLocale();
     }
 
-    #[Override]
+    #[\Override]
     public function resetLocale(): void
     {
         $this->localeSwitcher->reset();
     }
 
-    #[Override]
+    #[\Override]
     public function runWithLocale(string $locale, callable $callback): void
     {
         $this->localeSwitcher->runWithLocale($locale, $callback);

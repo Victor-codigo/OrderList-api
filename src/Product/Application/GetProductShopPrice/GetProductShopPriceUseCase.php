@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Product\Application\GetProductShopPrice;
 
-use Exception;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Service\ServiceBase;
@@ -50,7 +49,7 @@ class GetProductShopPriceUseCase extends ServiceBase
             throw GetProductShopPriceValidateGroupAndUserException::fromMessage('You not belong to the group');
         } catch (DBNotFoundException) {
             throw GetProductShopPriceProductNotFoundException::fromMessage('Product not found');
-        } catch (Exception) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

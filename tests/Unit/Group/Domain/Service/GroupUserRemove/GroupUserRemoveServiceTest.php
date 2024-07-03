@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupUserRemove;
 
-use Common\Domain\Model\ValueObject\String\Identifier;
-use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\Group\GROUP_TYPE;
@@ -30,7 +29,7 @@ class GroupUserRemoveServiceTest extends TestCase
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;
     private MockObject|GroupRepositoryInterface $groupRepository;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -70,7 +70,7 @@ interface UploadedFileInterface extends FileInterface
      *
      * @throws FileException if, for any reason, the file could not have been moved
      */
-    public function move(string $directory, string $name = null): FileInterface;
+    public function move(string $directory, ?string $name = null): FileInterface;
 
     /**
      * Returns the maximum size of an uploaded file as configured in php.ini.

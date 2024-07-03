@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\String;
 
-use Override;
 use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Validation\ConstraintFactory;
 
 class JwtToken extends StringValueObject
 {
-    #[Override]
+    #[\Override]
     protected function defineConstraints(): void
     {
         $this

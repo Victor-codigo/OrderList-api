@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Application\OrderRemove\Dto;
 
-use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -24,7 +23,7 @@ class OrderRemoveInputDtoTest extends TestCase
     private ValidationInterface $validator;
     private MockObject|UserShared $userSession;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -91,9 +90,9 @@ class OrderRemoveInputDtoTest extends TestCase
         $return = $object->validate($this->validator);
 
         $this->assertEquals(['orders_id' => [
-                [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
-                [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
-            ]],
+            [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
+            [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
+        ]],
             $return
         );
     }

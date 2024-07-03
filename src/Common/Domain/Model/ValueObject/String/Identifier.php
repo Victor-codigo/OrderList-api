@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\String;
 
-use Stringable;
-use Override;
 use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\ConstraintFactory;
 
-class Identifier extends StringValueObject implements Stringable
+class Identifier extends StringValueObject implements \Stringable
 {
-    #[Override]
+    #[\Override]
     protected function defineConstraints(): void
     {
         $this
@@ -21,7 +19,7 @@ class Identifier extends StringValueObject implements Stringable
             ->setConstraint(ConstraintFactory::uuId());
     }
 
-    #[Override]
+    #[\Override]
     public function __toString(): string
     {
         if ($this->isNull()) {

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Functional\Order\Adapter\Http\Controller\OrderCreate;
 
-use Override;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,13 +29,13 @@ class OrderCreateControllerTest extends WebClientTestCase
 
     private string $pathImageProduct;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
     }
 
-    #[Override]
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

@@ -71,7 +71,7 @@ class GroupUserRoleChangeUseCase extends ServiceBase
         }
     }
 
-    private function createGroupUserRoleChangeDto(Identifier|null $groupId, array $usersId, Rol $rol): GroupUserRoleChangeDto
+    private function createGroupUserRoleChangeDto(?Identifier $groupId, array $usersId, Rol $rol): GroupUserRoleChangeDto
     {
         return new GroupUserRoleChangeDto($groupId, $usersId, $rol);
     }

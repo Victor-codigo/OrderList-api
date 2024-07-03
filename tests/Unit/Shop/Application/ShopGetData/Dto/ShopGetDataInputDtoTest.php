@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Application\ShopGetData\Dto;
 
-use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
@@ -26,7 +25,7 @@ class ShopGetDataInputDtoTest extends TestCase
 
     private ValidationInterface $validator;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -404,15 +403,15 @@ class ShopGetDataInputDtoTest extends TestCase
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
-                'group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
-                'shops_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS], [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]],
-                'products_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS], [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]],
-                'shop_filter_type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
-                'shop_filter_value' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
-                'shop_name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
-                'page' => [VALIDATION_ERRORS::GREATER_THAN],
-                'page_items' => [VALIDATION_ERRORS::LESS_THAN_OR_EQUAL],
-            ],
+            'group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
+            'shops_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS], [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]],
+            'products_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS], [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]],
+            'shop_filter_type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
+            'shop_filter_value' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
+            'shop_name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
+            'page' => [VALIDATION_ERRORS::GREATER_THAN],
+            'page_items' => [VALIDATION_ERRORS::LESS_THAN_OR_EQUAL],
+        ],
             $return
         );
     }

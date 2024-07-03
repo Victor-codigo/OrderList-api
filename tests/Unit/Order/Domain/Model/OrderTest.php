@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Domain\Model;
 
-use Override;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use ListOrders\Domain\Model\ListOrders;
 use Order\Domain\Model\Order;
@@ -16,7 +15,7 @@ class OrderTest extends TestCase
 {
     private Order $object;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

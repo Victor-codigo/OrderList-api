@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Service\Image\EntityImageRemove;
 
-use Override;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -23,7 +22,7 @@ class EntityImageRemoveServiceTest extends TestCase
     private MockObject|Path $imagesPathToStorage;
     private MockObject|Path $entityImageName;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

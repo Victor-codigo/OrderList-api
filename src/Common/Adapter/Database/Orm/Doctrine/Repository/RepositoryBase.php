@@ -18,9 +18,9 @@ abstract class RepositoryBase extends ServiceEntityRepository
 {
     protected ObjectManager $objectManager;
     protected EntityManagerInterface $entityManager;
-    protected PaginatorInterface|null $paginator;
+    protected ?PaginatorInterface $paginator;
 
-    public function __construct(ManagerRegistry $managerRegistry, string $entityClass, PaginatorInterface $paginator = null)
+    public function __construct(ManagerRegistry $managerRegistry, string $entityClass, ?PaginatorInterface $paginator = null)
     {
         parent::__construct($managerRegistry, $entityClass);
 

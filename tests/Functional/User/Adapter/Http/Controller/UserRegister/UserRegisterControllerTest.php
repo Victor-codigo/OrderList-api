@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserRegister;
 
-use Override;
-use DateTime;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -25,7 +23,7 @@ class UserRegisterControllerTest extends WebClientTestCase
     private const string ENDPOINT = '/api/v1/users';
     private const string METHOD = 'POST';
 
-    #[Override]
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -584,7 +582,7 @@ class UserRegisterControllerTest extends WebClientTestCase
 
         $this->assertSame($name, $userSaved->getName()->getValue());
         $this->assertSame($email, $userSaved->getEmail()->getValue());
-        $this->assertEquals((new DateTime())->format('Y-m-d H:m'), $userSaved->getCreatedOn()->format('Y-m-d H:m'));
+        $this->assertEquals((new \DateTime())->format('Y-m-d H:m'), $userSaved->getCreatedOn()->format('Y-m-d H:m'));
         $this->assertNotEmpty($password);
 
         $rolesSaved = array_map(fn (Rol $rol): ?object => $rol->getValue(), $userSaved->getRoles()->getValue());

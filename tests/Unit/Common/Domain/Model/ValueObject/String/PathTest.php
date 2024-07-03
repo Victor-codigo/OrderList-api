@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
-use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Model\ValueObject\String\Path;
@@ -16,7 +15,7 @@ class PathTest extends TestCase
 {
     private ValidationInterface $validation;
 
-    #[Override]
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -24,7 +23,7 @@ class PathTest extends TestCase
         $this->validation = new ValidationChain();
     }
 
-    private function createPath(string|null $path): Path
+    private function createPath(?string $path): Path
     {
         return new Path($path);
     }

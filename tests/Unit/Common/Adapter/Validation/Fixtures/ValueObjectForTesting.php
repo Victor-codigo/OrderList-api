@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation\Fixtures;
 
-use Override;
 use Common\Domain\Model\ValueObject\Integer\IntegerValueObject;
 use Common\Domain\Validation\ConstraintFactory;
 
@@ -15,7 +14,7 @@ class ValueObjectForTesting extends IntegerValueObject
         parent::__construct($age);
     }
 
-    #[Override]
+    #[\Override]
     public function defineConstraints(): void
     {
         $this

@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Jwt;
 
-use Override;
-use DateTime;
-use DateInterval;
-use LogicException;
 use Common\Adapter\Jwt\JwtFirebaseHS256Adapter;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -26,7 +22,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
     private MockObject|JwtFirebaseHS256Adapter $object;
     private Key $secretKey;
 
-    #[Override]
+    #[\Override]
     public function setUp(): void
     {
         $this->markTestSkipped('Install library [composer require firebase/php-jwt]');
@@ -59,7 +55,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
     public function itShouldEncodeWitExpirationTimeAt3600Seconds(): void
     {
         $expirationInSeconds = 60 * 60 * 24;
-        $dateTimeTokenExpiration = (new DateTime())->add(new DateInterval("PT{$expirationInSeconds}S"));
+        $dateTimeTokenExpiration = (new \DateTime())->add(new \DateInterval("PT{$expirationInSeconds}S"));
 
         $this->object
             ->expects($this->once())
@@ -117,21 +113,21 @@ class JwtFirebaseHS256AdapterTest extends TestCase
     public function itShouldNotBeExpiredTimeToExpireIsTheSameAsTimeNow(): void
     {
         $expirationInSeconds = 60 * 60 * 24;
-        $dateTimeNow = new DateTime();
-        $dateTimeTokenExpiration = (clone $dateTimeNow)->add(new DateInterval("PT{$expirationInSeconds}S"));
+        $dateTimeNow = new \DateTime();
+        $dateTimeTokenExpiration = (clone $dateTimeNow)->add(new \DateInterval("PT{$expirationInSeconds}S"));
 
         $matcher = $this->exactly(3);
         $this->object
             ->expects($matcher)
             ->method('getDateTime')
-            ->willReturnCallback(function (float|null $timestamp) use ($matcher, $dateTimeTokenExpiration, $dateTimeNow) {
+            ->willReturnCallback(function (?float $timestamp) use ($matcher, $dateTimeTokenExpiration, $dateTimeNow) {
                 $expectedNumCall = $matcher->getInvocationCount();
 
                 return match ([$expectedNumCall, $timestamp]) {
                     [1, null] => $dateTimeNow ,
                     [2, $dateTimeTokenExpiration->getTimestamp()] => $dateTimeTokenExpiration,
                     [3, null] => $dateTimeTokenExpiration,
-                    default => throw new LogicException()
+                    default => throw new \LogicException()
                 };
             });
 
@@ -148,9 +144,9 @@ class JwtFirebaseHS256AdapterTest extends TestCase
     public function itShouldNotBeExpiredTimeToExpireIsHigherThanTimeNow(): void
     {
         $expirationInSeconds = 60 * 60 * 24;
-        $dateTimeNow = new DateTime();
-        $dateTimeTokenExpiration = (clone $dateTimeNow)->add(new DateInterval("PT{$expirationInSeconds}S"));
-        $intervalLessOneSecond = new DateInterval('PT1S');
+        $dateTimeNow = new \DateTime();
+        $dateTimeTokenExpiration = (clone $dateTimeNow)->add(new \DateInterval("PT{$expirationInSeconds}S"));
+        $intervalLessOneSecond = new \DateInterval('PT1S');
         $intervalLessOneSecond->invert = true;
         $dateTimeTokenExpirationLessOne = (clone $dateTimeTokenExpiration)->add($intervalLessOneSecond);
 
@@ -165,7 +161,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
                     [1, null] => $dateTimeNow,
                     [2, $dateTimeTokenExpiration->getTimestamp()] => $dateTimeTokenExpiration,
                     [3, null] => $dateTimeTokenExpirationLessOne,
-                    default => throw new LogicException()
+                    default => throw new \LogicException()
                 };
             });
 
@@ -182,9 +178,9 @@ class JwtFirebaseHS256AdapterTest extends TestCase
     public function itShouldBeExpiredTimeToExpireIsLowerThanTimeNow(): void
     {
         $expirationInSeconds = 60 * 60 * 24;
-        $dateTimeNow = new DateTime();
-        $dateTimeTokenExpiration = (clone $dateTimeNow)->add(new DateInterval("PT{$expirationInSeconds}S"));
-        $dataTimeTokenExpirationPlusOne = (clone $dateTimeTokenExpiration)->add(new DateInterval('PT1S'));
+        $dateTimeNow = new \DateTime();
+        $dateTimeTokenExpiration = (clone $dateTimeNow)->add(new \DateInterval("PT{$expirationInSeconds}S"));
+        $dataTimeTokenExpirationPlusOne = (clone $dateTimeTokenExpiration)->add(new \DateInterval('PT1S'));
 
         $matcher = $this->exactly(3);
         $this->object
@@ -197,7 +193,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
                     [1, null] => $dateTimeNow,
                     [2, $dateTimeTokenExpiration->getTimestamp()] => $dateTimeTokenExpiration,
                     [3, null] => $dataTimeTokenExpirationPlusOne,
-                    default => throw new LogicException()
+                    default => throw new \LogicException()
                 };
             });
 

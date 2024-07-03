@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\ModuleCommunication\Fixtures;
 
-use Override;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDtoPaginatorInterface;
 
 class ModuleCommunicationConfigTestDto implements ModuleCommunicationConfigDtoPaginatorInterface
@@ -26,7 +25,7 @@ class ModuleCommunicationConfigTestDto implements ModuleCommunicationConfigDtoPa
     ) {
     }
 
-    #[Override]
+    #[\Override]
     public function cloneWithPage(int $page): self
     {
         $query = $this->query;
@@ -46,7 +45,7 @@ class ModuleCommunicationConfigTestDto implements ModuleCommunicationConfigDtoPa
         );
     }
 
-    #[Override]
+    #[\Override]
     public function getPage(): int
     {
         return $this->query['page'];
@@ -55,7 +54,7 @@ class ModuleCommunicationConfigTestDto implements ModuleCommunicationConfigDtoPa
     /**
      * Gets the path (separated by ".") where pages total is set in array response.
      */
-    #[Override]
+    #[\Override]
     public function getResponsePagesTotalPath(): string
     {
         if (null === $this->pagesTotalResponsePath) {

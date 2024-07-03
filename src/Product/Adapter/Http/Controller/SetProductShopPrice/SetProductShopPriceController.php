@@ -106,7 +106,7 @@ class SetProductShopPriceController extends AbstractController
     /**
      * @param float[]|null $prices
      */
-    private function createShopProductSetPriceInputDto(string|null $groupId, string|null $productId, string|null $shopId, array|null $productsOrShopsId, array|null $prices, array|null $units): SetProductShopPriceInputDto
+    private function createShopProductSetPriceInputDto(?string $groupId, ?string $productId, ?string $shopId, ?array $productsOrShopsId, ?array $prices, ?array $units): SetProductShopPriceInputDto
     {
         /** @var UserSharedSymfonyAdapter $userAdapterShared */
         $userAdapterShared = $this->security->getUser();

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Functional\Product\Adapter\Http\Controller\SetProductShopPrice;
 
-use stdClass;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -62,13 +61,13 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
 
         foreach (self::PRODUCTS_ID as $index => $productId) {
             $this->assertContainsEquals([
-                    'group_id' => self::GROUP_ID,
-                    'product_id' => self::PRODUCTS_ID[0],
-                    'shop_id' => self::SHOPS_ID[$index],
-                    'price' => self::PRICES[$index],
-                    'unit' => self::UNITS[$index]->value,
-                ],
-                array_map(fn (stdClass $productShop): array => (array) $productShop, $responseContent->data)
+                'group_id' => self::GROUP_ID,
+                'product_id' => self::PRODUCTS_ID[0],
+                'shop_id' => self::SHOPS_ID[$index],
+                'price' => self::PRICES[$index],
+                'unit' => self::UNITS[$index]->value,
+            ],
+                array_map(fn (\stdClass $productShop): array => (array) $productShop, $responseContent->data)
             );
         }
     }
@@ -99,13 +98,13 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
 
         foreach (self::PRODUCTS_ID as $index => $productId) {
             $this->assertContainsEquals([
-                    'group_id' => self::GROUP_ID,
-                    'product_id' => self::PRODUCTS_ID[$index],
-                    'shop_id' => self::SHOPS_ID[0],
-                    'price' => self::PRICES[$index],
-                    'unit' => self::UNITS[$index]->value,
-                ],
-                array_map(fn (stdClass $productShop): array => (array) $productShop, $responseContent->data)
+                'group_id' => self::GROUP_ID,
+                'product_id' => self::PRODUCTS_ID[$index],
+                'shop_id' => self::SHOPS_ID[0],
+                'price' => self::PRICES[$index],
+                'unit' => self::UNITS[$index]->value,
+            ],
+                array_map(fn (\stdClass $productShop): array => (array) $productShop, $responseContent->data)
             );
         }
     }

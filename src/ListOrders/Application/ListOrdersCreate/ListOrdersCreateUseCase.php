@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ListOrders\Application\ListOrdersCreate;
 
-use Exception;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -50,7 +49,7 @@ class ListOrdersCreateUseCase extends ServiceBase
             throw ListOrdersCreateValidateGroupAndUserException::fromMessage('You not belong to the group');
         } catch (DBUniqueConstraintException) {
             throw ListOrdersCreateNameAlreadyExistsException::fromMessage('The name already exists');
-        } catch (Exception) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

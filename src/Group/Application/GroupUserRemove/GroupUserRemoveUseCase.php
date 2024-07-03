@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupUserRemove;
 
-use Throwable;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
@@ -74,7 +73,7 @@ class GroupUserRemoveUseCase extends ServiceBase
             throw GroupUserRemovePermissionsException::fromMessage('Not permissions in this group');
         } catch (GroupUserRemoveGroupNotificationException $e) {
             throw $e;
-        } catch (Throwable) {
+        } catch (\Throwable) {
             throw DomainErrorException::fromMessage('An error has been occurred');
         }
     }

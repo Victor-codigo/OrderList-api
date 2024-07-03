@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Functional\Product\Adapter\Http\Controller\ProductCreate;
 
-use Override;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -30,7 +29,7 @@ class ProductCreateControllerTest extends WebClientTestCase
 
     private string $pathImageProduct;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -43,7 +42,7 @@ class ProductCreateControllerTest extends WebClientTestCase
         copy(self::PATH_IMAGE_NOT_ALLOWED_BACKUP, self::PATH_IMAGE_NOT_ALLOWED);
     }
 
-    #[Override]
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

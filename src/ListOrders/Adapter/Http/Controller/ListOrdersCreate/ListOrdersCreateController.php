@@ -86,7 +86,7 @@ class ListOrdersCreateController extends AbstractController
         return $this->createResponse($listOrdersIdCreated);
     }
 
-    private function createListOrdersCreateInputDto(string|null $groupId, string|null $name, string|null $description, string|null $dateToBuy): ListOrdersCreateInputDto
+    private function createListOrdersCreateInputDto(?string $groupId, ?string $name, ?string $description, ?string $dateToBuy): ListOrdersCreateInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();

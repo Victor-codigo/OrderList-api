@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Http\ArgumentResolver;
 
-use Override;
-use stdClass;
 use Common\Adapter\Http\ArgumentResolver\ArgumentResolver;
 use Common\Adapter\Http\ArgumentResolver\Exception\InvalidJsonException;
 use Common\Adapter\Http\ArgumentResolver\Exception\InvalidMimeTypeException;
@@ -24,7 +22,7 @@ class ArgumentResolverTest extends TestCase
     private Request $request;
     private MockObject|ArgumentMetadata $argumentMetaData;
 
-    #[Override]
+    #[\Override]
     public function setUp(): void
     {
         $this->argumentMetaData = $this->createPartialMock(ArgumentMetadata::class, ['getType']);
@@ -39,7 +37,7 @@ class ArgumentResolverTest extends TestCase
         $this->argumentMetaData
             ->expects($this->exactly(2))
             ->method('getType')
-            ->willReturn(stdClass::class);
+            ->willReturn(\stdClass::class);
 
         $return = $this->object->resolve($this->request, $this->argumentMetaData);
 

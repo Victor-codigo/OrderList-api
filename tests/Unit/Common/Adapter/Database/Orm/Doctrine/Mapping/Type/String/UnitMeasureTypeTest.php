@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String;
 
-use Override;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\UnitMeasureType;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -18,7 +17,7 @@ class UnitMeasureTypeTest extends TestCase
     private UnitMeasureType $object;
     private MockObject|AbstractPlatform $platform;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

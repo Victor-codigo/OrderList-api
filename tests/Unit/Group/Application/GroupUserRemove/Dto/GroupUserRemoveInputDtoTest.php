@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupUserRemove\Dto;
 
-use Override;
-use DateTime;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -25,7 +23,7 @@ class GroupUserRemoveInputDtoTest extends TestCase
 
     private ValidationInterface $validator;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -35,7 +33,7 @@ class GroupUserRemoveInputDtoTest extends TestCase
 
     private function getUserSession(): UserShared
     {
-        return UserShared::fromPrimitives('', '', '', [USER_ROLES::USER], null, new DateTime());
+        return UserShared::fromPrimitives('', '', '', [USER_ROLES::USER], null, new \DateTime());
     }
 
     /** @test */

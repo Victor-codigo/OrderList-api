@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Shop\Application\ShopRemoveAllGroupsShops;
 
-use Exception;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -41,7 +40,7 @@ class ShopRemoveAllGroupsShopsUseCase extends ServiceBase
             return $this->createShopRemoveAllGroupsShopsOutputDto($shopRemovedId);
         } catch (DBNotFoundException) {
             throw ShopRemoveAllGroupsShopsNotFoundException::fromMessage('Shops not found');
-        } catch (Exception) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

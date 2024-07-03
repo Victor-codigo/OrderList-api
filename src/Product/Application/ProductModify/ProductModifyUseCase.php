@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Product\Application\ProductModify;
 
-use Throwable;
 use Common\Domain\Exception\DomainInternalErrorException;
-use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\FileUpload\Exception\File\FileException;
+use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
@@ -53,7 +52,7 @@ class ProductModifyUseCase extends ServiceBase
             throw ProductModifyProductNotFoundException::fromMessage('Product not found');
         } catch (FileException|FileUploadReplaceException) {
             throw ProductModifyImageException::fromMessage('Image error');
-        } catch (Throwable) {
+        } catch (\Throwable) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

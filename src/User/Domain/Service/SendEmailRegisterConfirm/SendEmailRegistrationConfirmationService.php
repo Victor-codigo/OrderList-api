@@ -32,7 +32,7 @@ class SendEmailRegistrationConfirmationService
         string $adminEmail,
         string $appName,
         int $emailUserRegistrationConfirmationExpire
-        ) {
+    ) {
         $this->mailer = $mailer;
         $this->translator = $translator;
         $this->jwt = $jwt;

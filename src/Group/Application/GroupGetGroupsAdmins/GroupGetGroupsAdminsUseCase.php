@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupGetGroupsAdmins;
 
-use Exception;
 use Common\Domain\Config\AppConfig;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
@@ -49,7 +48,7 @@ class GroupGetGroupsAdminsUseCase extends ServiceBase
             return $this->createGroupGetAdminsOutputDto($usersGroupedByGroupId, $input->page, $groupUsersPaginator->getPagesTotal());
         } catch (DBNotFoundException) {
             throw GroupGetGroupsAdminsNotFoundException::fromMessage('Groups not Found');
-        } catch (Exception) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

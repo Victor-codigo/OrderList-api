@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Module\Application\Endpoint;
 
-use Exception;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
@@ -32,7 +31,7 @@ class EndpointUseCase extends ServiceBase
             );
 
             return $this->createEndpointOutputDto();
-        } catch (Exception) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

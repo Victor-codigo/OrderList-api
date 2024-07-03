@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Product\Application\ProductGetData\Dto;
 
-use Override;
 use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
@@ -40,15 +39,15 @@ class ProductGetDataInputDto implements ServiceInputDtoInterface
     public readonly PaginatorPageItems $pageItems;
 
     public function __construct(
-        string|null $groupId,
-        array|null $productsId,
-        array|null $shopsId,
-        string|null $productName,
+        ?string $groupId,
+        ?array $productsId,
+        ?array $shopsId,
+        ?string $productName,
 
-        string|null $productNameFilterType,
-        string|null $productNameFilterValue,
-        string|null $shopNameFilterType,
-        string|null $shopNameFilterValue,
+        ?string $productNameFilterType,
+        ?string $productNameFilterValue,
+        ?string $shopNameFilterType,
+        ?string $shopNameFilterValue,
 
         bool $orderAsc,
 
@@ -81,7 +80,7 @@ class ProductGetDataInputDto implements ServiceInputDtoInterface
         $this->pageItems = ValueObjectFactory::createPaginatorPageItems($pageItems);
     }
 
-    #[Override]
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray(['group_id' => $this->groupId]);

@@ -9,11 +9,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ListOrdersModifyRequestDto implements RequestDtoInterface
 {
-    public readonly string|null $listOrdersId;
-    public readonly string|null $groupId;
-    public readonly string|null $name;
-    public readonly string|null $description;
-    public readonly string|null $dateToBuy;
+    public readonly ?string $listOrdersId;
+    public readonly ?string $groupId;
+    public readonly ?string $name;
+    public readonly ?string $description;
+    public readonly ?string $dateToBuy;
 
     public function __construct(Request $request)
     {

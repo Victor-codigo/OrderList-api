@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Database\Orm\Doctrine\Repository;
 
-use Common\Domain\Model\ValueObject\String\NameWithSpaces;
-use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\User\USER_ROLES;
 use Doctrine\DBAL\Exception\ConnectionException;
@@ -31,7 +30,7 @@ class UserRepositoryTest extends DataBaseTestCase
 
     private UserRepository $userRepository;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

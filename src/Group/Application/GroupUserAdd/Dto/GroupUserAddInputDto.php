@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupUserAdd\Dto;
 
-use Override;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
@@ -41,7 +40,7 @@ class GroupUserAddInputDto implements ServiceInputDtoInterface
         );
     }
 
-    #[Override]
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray([

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Group\Domain\Service\GroupGetData;
 
-use Generator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Object\GroupType;
 use Common\Domain\Model\ValueObject\String\Path;
@@ -25,7 +24,7 @@ class GroupGetDataService
     /**
      * @throws DBNotFoundException
      */
-    public function __invoke(GroupGetDataDto $input): Generator
+    public function __invoke(GroupGetDataDto $input): \Generator
     {
         $groups = $this->groupRepository->findGroupsByIdOrFail($input->groupsId);
         $groupsValid = $this->getGroupsByType($groups, $input->groupType);
@@ -57,7 +56,7 @@ class GroupGetDataService
     /**
      * @param Group[] $groups
      */
-    private function getPrivateData(array $groups, Path $userImage): Generator
+    private function getPrivateData(array $groups, Path $userImage): \Generator
     {
         foreach ($groups as $group) {
             $image = null;

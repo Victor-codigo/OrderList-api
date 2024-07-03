@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation\Validations;
 
-use Override;
 use Common\Adapter\Validation\Validations\ValidationConstraint;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -18,7 +17,7 @@ class ValidationConstraintTest extends TestCase
     private ValidationConstraint $object;
     private MockObject|Constraint $constraint;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

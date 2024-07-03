@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Product\Application\GetProductShopPrice\Dto;
 
-use Override;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
@@ -24,7 +23,7 @@ class GetProductShopPriceInputDto implements ServiceInputDtoInterface
     public readonly array $shopsId;
     public readonly Identifier $groupId;
 
-    public function __construct(UserShared $userSession, array|null $productsId, array|null $shopsId, string|null $groupId)
+    public function __construct(UserShared $userSession, ?array $productsId, ?array $shopsId, ?string $groupId)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
@@ -38,7 +37,7 @@ class GetProductShopPriceInputDto implements ServiceInputDtoInterface
         );
     }
 
-    #[Override]
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListGroupId = $validator->validateValueObject($this->groupId);

@@ -20,7 +20,7 @@ class ConstraintDto
      * @var array key = param name
      *            value = param value
      */
-    public function __construct(CONSTRAINTS_NAMES $type, array|null $params)
+    public function __construct(CONSTRAINTS_NAMES $type, ?array $params)
     {
         $this->type = $type;
 

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Security\Jwt\JwtListener;
 
-use Override;
-use DateTimeImmutable;
 use Common\Domain\Ports\Event\EventDispatcherInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -27,7 +25,7 @@ class JwtAuthenticatedListenerTest extends TestCase
     private MockObject|UserInterface $userAuthenticationEvent;
     private MockObject|User $user;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -62,7 +60,7 @@ class JwtAuthenticatedListenerTest extends TestCase
             ->method('dispatch')
             ->with($this->callback(function (UserLoginEvent $event) use ($eventUserLoginEvent): bool {
                 $this->assertEquals($eventUserLoginEvent->user, $event->user);
-                $this->assertInstanceOf(DateTimeImmutable::class, $event->getOccurredOn());
+                $this->assertInstanceOf(\DateTimeImmutable::class, $event->getOccurredOn());
 
                 return true;
             }));

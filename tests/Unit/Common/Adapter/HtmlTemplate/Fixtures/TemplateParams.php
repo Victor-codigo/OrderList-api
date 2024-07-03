@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\HtmlTemplate\Fixtures;
 
-use Override;
 use Common\Domain\Ports\HtmlTemplate\TemplateDtoInterface;
 
 class TemplateParams implements TemplateDtoInterface
@@ -18,7 +17,7 @@ class TemplateParams implements TemplateDtoInterface
         $this->param2 = $param2;
     }
 
-    #[Override]
+    #[\Override]
     public function toArray(): array
     {
         return [
@@ -27,7 +26,7 @@ class TemplateParams implements TemplateDtoInterface
         ];
     }
 
-    #[Override]
+    #[\Override]
     public function getPath(): string
     {
         return '';

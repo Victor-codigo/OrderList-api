@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Security\Jwt;
 
-use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\User\USER_ROLES;
@@ -27,7 +26,7 @@ class UserSymfonyProviderAdapterTest extends TestCase
     private MockObject|UserPasswordHasherInterface $passwordHasher;
     private MockObject|UserAdapter $user;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Event\Controller;
 
-use Override;
 use Common\Adapter\Event\Controller\ControllerEventSubscriber;
 use Common\Adapter\Http\TryoutPermissions\Exception\TryoutUserRoutePermissionsException;
 use Common\Adapter\Http\TryoutPermissions\TryoutUserRoutePermissionsValidation;
@@ -30,7 +29,7 @@ class ControllerEventSubscriberTest extends TestCase
     private MockObject|UserShared $user;
     private Request $request;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

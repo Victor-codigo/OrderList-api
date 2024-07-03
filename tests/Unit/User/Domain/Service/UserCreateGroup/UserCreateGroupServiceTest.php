@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Domain\Service\UserCreateGroup;
 
-use Override;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -22,7 +21,7 @@ class UserCreateGroupServiceTest extends TestCase
     private UserCreateGroupService $object;
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

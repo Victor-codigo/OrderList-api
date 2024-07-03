@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersGetPrice;
 
-use Override;
-use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -36,7 +34,7 @@ class ListOrdersGetPriceServiceTest extends TestCase
     private MockObject|PaginatorInterface $ordersPagination;
     private MockObject|PaginatorInterface $productShopsPagination;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -286,12 +284,12 @@ class ListOrdersGetPriceServiceTest extends TestCase
         $this->ordersPagination
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new ArrayIterator($orders));
+            ->willReturn(new \ArrayIterator($orders));
 
         $this->productShopsPagination
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new ArrayIterator($productsShops));
+            ->willReturn(new \ArrayIterator($productsShops));
 
         $return = $this->object->__invoke($input);
 
@@ -366,7 +364,7 @@ class ListOrdersGetPriceServiceTest extends TestCase
         $this->ordersPagination
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new ArrayIterator($orders));
+            ->willReturn(new \ArrayIterator($orders));
 
         $this->productShopsPagination
             ->expects($this->never())

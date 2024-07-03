@@ -102,7 +102,7 @@ class GetProductShopPriceController extends AbstractController
         return $this->createResponse($productsPrice);
     }
 
-    private function createGetProductShopPriceInputDto(array|null $productsId, array|null $shopsId, string|null $groupId): GetProductShopPriceInputDto
+    private function createGetProductShopPriceInputDto(?array $productsId, ?array $shopsId, ?string $groupId): GetProductShopPriceInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();

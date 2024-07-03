@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
-use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -17,7 +16,7 @@ class IdentifierTest extends TestCase
     private string $validId = '77020b89-fb7b-416c-9987-bffbeb3af6f8';
     private string $notValidId = 'not valid id';
 
-    #[Override]
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -25,7 +24,7 @@ class IdentifierTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    private function createIdentifier(string|null $id): Identifier
+    private function createIdentifier(?string $id): Identifier
     {
         return new Identifier($id);
     }

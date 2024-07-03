@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupModify;
 
-use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\FileSystem\DomainFileNotDeletedException;
@@ -35,7 +34,7 @@ class GroupModifyServiceTest extends TestCase
     private MockObject|FileUploadInterface $fileUpload;
     private MockObject|UploadedFileInterface $imageUploaded;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -46,7 +45,7 @@ class GroupModifyServiceTest extends TestCase
         $this->object = new GroupModifyService($this->groupRepository, $this->fileUpload, self::PATH_UPLOAD_GROUP_IMAGE);
     }
 
-    #[Override]
+    #[\Override]
     protected function tearDown(): void
     {
         BuiltInFunctionsReturn::$file_exists = null;

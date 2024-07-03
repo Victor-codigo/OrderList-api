@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserPasswordRememberChange;
 
-use Override;
-use stdClass;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\JwtToken\JwtHS256Interface;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -31,7 +29,7 @@ class UserPasswordRememberChangeUseCaseTest extends TestCase
     private MockObject|ValidationInterface $validator;
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -54,7 +52,7 @@ class UserPasswordRememberChangeUseCaseTest extends TestCase
     {
         $token = 'token';
         $userId = 'user id';
-        $tokenDecoded = new stdClass();
+        $tokenDecoded = new \stdClass();
         $tokenDecoded->username = $userId;
         $passwordNew = 'passwordNew';
         $passwordNewRepeat = 'passwordNewRepeat';
@@ -108,7 +106,7 @@ class UserPasswordRememberChangeUseCaseTest extends TestCase
     {
         $token = 'token';
         $userId = 'user id';
-        $tokenDecoded = new stdClass();
+        $tokenDecoded = new \stdClass();
         $tokenDecoded->username = $userId;
         $passwordNew = 'passwordNew';
         $passwordNewRepeat = 'passwordNewRepeat';

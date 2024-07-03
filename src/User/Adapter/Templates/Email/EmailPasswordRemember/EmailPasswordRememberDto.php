@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace User\Adapter\Templates\Email\EmailPasswordRemember;
 
-use Override;
 use Common\Domain\HtmlTemplate\TemplateDtoBase;
 use Common\Domain\HtmlTemplate\TemplateId;
 
@@ -35,7 +34,7 @@ final class EmailPasswordRememberDto extends TemplateDtoBase
         return $this;
     }
 
-    #[Override]
+    #[\Override]
     protected function setStaticData(): void
     {
         $this->title = TemplateId::create('title');
@@ -44,7 +43,7 @@ final class EmailPasswordRememberDto extends TemplateDtoBase
         $this->farewell = TemplateId::create('farewell', ['hoursToExpire' => $this->emailUserPasswordRememberExpireInSeconds / 60 / 60]);
     }
 
-    #[Override]
+    #[\Override]
     public function toArray(): array
     {
         return [

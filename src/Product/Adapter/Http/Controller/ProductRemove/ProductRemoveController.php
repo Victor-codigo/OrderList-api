@@ -46,8 +46,8 @@ use Symfony\Component\HttpFoundation\Response;
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'ok'),
                         new OA\Property(property: 'message', type: 'string', example: 'Product removed'),
-                        new OA\Property(property: 'data', type: 'array', items: new OA\Items(default: '<id, string>')),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),
+                        new OA\Property(property: 'data', type: 'array', items: new Items(default: '<id, string>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new Items()),
                     ]
                 )
             )
@@ -61,8 +61,8 @@ use Symfony\Component\HttpFoundation\Response;
                     properties: [
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
-                        new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<group_id|product_id|shop_id|product_not_found|permissions, string|array>')),
+                        new OA\Property(property: 'data', type: 'array', items: new Items()),
+                        new OA\Property(property: 'errors', type: 'array', items: new Items(default: '<group_id|product_id|shop_id|product_not_found|permissions, string|array>')),
                     ]
                 )
             )
@@ -90,7 +90,7 @@ class ProductRemoveController extends AbstractController
      * @param string[]|null $productsId
      * @param string[]|null $shopsId    $name
      */
-    private function createProductRemoveInputDto(string|null $groupId, array|null $productsId, array|null $shopsId): ProductRemoveInputDto
+    private function createProductRemoveInputDto(?string $groupId, ?array $productsId, ?array $shopsId): ProductRemoveInputDto
     {
         /** @var UserSharedInterface $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();

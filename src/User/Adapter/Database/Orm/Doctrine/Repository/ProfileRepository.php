@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace User\Adapter\Database\Orm\Doctrine\Repository;
 
-use Override;
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -24,7 +23,7 @@ class ProfileRepository extends RepositoryBase implements ProfileRepositoryInter
      *
      * @return Profile[]
      */
-    #[Override]
+    #[\Override]
     public function findProfilesOrFail(array $id): array
     {
         $profiles = $this->findBy(['id' => $id]);

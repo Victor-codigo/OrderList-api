@@ -7,7 +7,6 @@ namespace Common\Adapter\Http\ArgumentResolver;
 use Common\Adapter\Http\ArgumentResolver\Exception\InvalidJsonException;
 use Common\Adapter\Http\ArgumentResolver\Exception\InvalidMimeTypeException;
 use Common\Domain\Exception\InvalidArgumentException;
-use JsonException;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -27,13 +26,13 @@ class RequestValidation
 
             $this->validateContentType($request);
             $request->request = $this->createParams($request);
-        } catch (JsonException) {
+        } catch (\JsonException) {
             throw InvalidJsonException::fromMessage('Invalid JSON');
         }
     }
 
     /**
-     * @throws JsonException
+     * @throws \JsonException
      */
     private function createParams(Request $request): InputBag
     {

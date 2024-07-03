@@ -9,7 +9,7 @@ interface ValueObjectArrayFactoryInterface
     /**
      * @param USER_ROLES[]|null $roles
      */
-    public static function createRoles(array|null $roles): Roles;
+    public static function createRoles(?array $roles): Roles;
 
-    public static function createNotificationData(array|null $data): NotificationData;
+    public static function createNotificationData(?array $data): NotificationData;
 }

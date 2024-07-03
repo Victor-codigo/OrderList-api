@@ -6,7 +6,7 @@ namespace Common\Domain\Model\ValueObject\Integer;
 
 interface ValueObjectIntegerFactoryInterface
 {
-    public static function createPaginatorPage(int|null $page): PaginatorPage;
+    public static function createPaginatorPage(?int $page): PaginatorPage;
 
-    public static function createPaginatorPageItems(int|null $pageItems): PaginatorPageItems;
+    public static function createPaginatorPageItems(?int $pageItems): PaginatorPageItems;
 }

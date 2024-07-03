@@ -10,12 +10,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ProductModifyRequestDto implements RequestDtoInterface
 {
-    public readonly string|null $groupId;
-    public readonly string|null $productId;
-    public readonly string|null $name;
-    public readonly string|null $description;
-    public readonly float|null $price;
-    public readonly UploadedFile|null $image;
+    public readonly ?string $groupId;
+    public readonly ?string $productId;
+    public readonly ?string $name;
+    public readonly ?string $description;
+    public readonly ?float $price;
+    public readonly ?UploadedFile $image;
     public readonly bool $imageRemove;
 
     public function __construct(Request $request)

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace User\Application\UserPasswordRememberChange\Dto;
 
-use Override;
 use Common\Domain\Model\ValueObject\String\JwtToken;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -17,14 +16,14 @@ class UserPasswordRememberChangeInputDto implements ServiceInputDtoInterface
     public readonly Password $passwordNew;
     public readonly Password $passwordNewRepeat;
 
-    public function __construct(string|null $token, string|null $passwordNew, string|null $passwordNewRepeat)
+    public function __construct(?string $token, ?string $passwordNew, ?string $passwordNewRepeat)
     {
         $this->token = ValueObjectFactory::createJwtToken($token);
         $this->passwordNew = ValueObjectFactory::createPassword($passwordNew);
         $this->passwordNewRepeat = ValueObjectFactory::createPassword($passwordNewRepeat);
     }
 
-    #[Override]
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Common\Domain\FileUpload\Exception;
 
-use Override;
 class FileUploadCanNotWriteException extends FileUploadException
 {
-    #[Override]
+    #[\Override]
     public static function fromMessage(string $message): static
     {
         return new static($message);

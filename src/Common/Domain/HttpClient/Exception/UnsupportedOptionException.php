@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Domain\HttpClient\Exception;
 
-use DomainException;
-class UnsupportedOptionException extends DomainException
+class UnsupportedOptionException extends \DomainException
 {
     public static function fromMessage(string $message): static
     {

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupGetDataByName;
 
-use Exception;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -13,10 +12,10 @@ use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserExc
 use Common\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
+use Group\Application\GroupGetData\Exception\GroupGetDataUserNotBelongsToTheGroupException;
 use Group\Application\GroupGetDataByName\Dto\GroupGetDataByNameInputDto;
 use Group\Application\GroupGetDataByName\Dto\GroupGetDataByNameOutputDto;
 use Group\Application\GroupGetDataByName\Exception\GroupGetDataByNameGroupNotFoundException;
-use Group\Application\GroupGetData\Exception\GroupGetDataUserNotBelongsToTheGroupException;
 use Group\Domain\Service\GroupGetDataByName\Dto\GroupGetDataByNameDto;
 use Group\Domain\Service\GroupGetDataByName\GroupGetDataByNameService;
 
@@ -47,7 +46,7 @@ class GroupGetDataByNameUseCase extends ServiceBase
             throw GroupGetDataByNameGroupNotFoundException::fromMessage('Group not found');
         } catch (ValidateGroupAndUserException) {
             throw GroupGetDataUserNotBelongsToTheGroupException::fromMessage('You not belong to the group');
-        } catch (Exception) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

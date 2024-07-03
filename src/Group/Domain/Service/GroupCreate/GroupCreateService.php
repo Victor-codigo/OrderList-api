@@ -125,7 +125,7 @@ class GroupCreateService
     private function uploadGroupImage(GroupImage $image): Path
     {
         if ($image->isNull()) {
-            return new path(null);
+            return new Path(null);
         }
 
         $uploadedFile = $image->getValue();

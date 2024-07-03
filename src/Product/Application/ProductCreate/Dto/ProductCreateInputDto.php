@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Product\Application\ProductCreate\Dto;
 
-use Override;
 use Common\Domain\Model\ValueObject\Object\ProductImage;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -23,7 +22,7 @@ class ProductCreateInputDto implements ServiceInputDtoInterface
     public readonly Description $description;
     public readonly ProductImage $image;
 
-    public function __construct(UserShared $userSession, string|null $groupId, string|null $name, string|null $description, UploadedFileInterface|null $image)
+    public function __construct(UserShared $userSession, ?string $groupId, ?string $name, ?string $description, ?UploadedFileInterface $image)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
@@ -32,7 +31,7 @@ class ProductCreateInputDto implements ServiceInputDtoInterface
         $this->image = ValueObjectFactory::createProductImage($image);
     }
 
-    #[Override]
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

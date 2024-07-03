@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Command\HexFileStructure;
 
-use Override;
 use Common\Adapter\Command\HexFilesStructure\Exception\TemplateErrorException;
 use Common\Adapter\Command\HexFilesStructure\PLACEHOLDER;
 use Common\Adapter\Command\HexFilesStructure\Template;
@@ -19,7 +18,7 @@ class TemplateTest extends TestCase
     private Template $object;
     private array $templatePlaceholder;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -31,7 +30,7 @@ class TemplateTest extends TestCase
         ];
     }
 
-    #[Override]
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

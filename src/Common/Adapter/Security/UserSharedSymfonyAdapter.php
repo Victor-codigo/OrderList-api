@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Security;
 
-use Override;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Ports\Security\UserSharedInterface;
 use Common\Domain\Security\UserShared;
@@ -20,7 +19,7 @@ class UserSharedSymfonyAdapter implements UserInterface, UserSharedInterface
     /**
      * @return string[]
      */
-    #[Override]
+    #[\Override]
     public function getRoles(): array
     {
         $roles = $this->user
@@ -33,24 +32,24 @@ class UserSharedSymfonyAdapter implements UserInterface, UserSharedInterface
         );
     }
 
-    #[Override]
+    #[\Override]
     public function eraseCredentials(): void
     {
     }
 
-    #[Override]
+    #[\Override]
     public function getUserIdentifier(): string
     {
         return $this->user->getId()->getValue();
     }
 
-    #[Override]
+    #[\Override]
     public function getUser(): UserShared
     {
         return $this->user;
     }
 
-    #[Override]
+    #[\Override]
     public function setUser(UserShared $user): self
     {
         $this->user = $user;

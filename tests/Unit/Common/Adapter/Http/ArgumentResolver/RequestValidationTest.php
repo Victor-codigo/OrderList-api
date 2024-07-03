@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Http\ArgumentResolver;
 
-use Override;
 use Common\Adapter\Http\ArgumentResolver\Exception\InvalidJsonException;
 use Common\Adapter\Http\ArgumentResolver\Exception\InvalidMimeTypeException;
 use Common\Adapter\Http\ArgumentResolver\RequestValidation;
@@ -15,7 +14,7 @@ class RequestValidationTest extends TestCase
 {
     private RequestValidation $requestValidation;
 
-    #[Override]
+    #[\Override]
     public function setUp(): void
     {
         $this->requestValidation = new RequestValidation();

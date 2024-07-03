@@ -92,7 +92,7 @@ class NotificationRemoveController extends AbstractController
     /**
      * @param string[]|null $notificationsId
      */
-    private function createNotificationRemoveInputDto(array|null $notificationsId): NotificationRemoveInputDto
+    private function createNotificationRemoveInputDto(?array $notificationsId): NotificationRemoveInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();

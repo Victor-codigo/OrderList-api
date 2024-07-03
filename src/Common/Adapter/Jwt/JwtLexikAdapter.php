@@ -4,11 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Jwt;
 
-use Override;
-use DateTimeImmutable;
-use stdClass;
-use Exception;
-use DateTime;
 use Common\Adapter\Jwt\Exception\JwtException;
 use Common\Domain\Ports\JwtToken\JwtHS256Interface;
 use JWT\Authentication\JWT;
@@ -26,10 +21,10 @@ class JwtLexikAdapter implements JwtHS256Interface
         $this->secretKey = $secretKey;
     }
 
-    #[Override]
+    #[\Override]
     public function encode(array $data, float $expireTimeInSeconds = 3600): string
     {
-        $data[self::KEY_ISSUED_AT] = (new DateTimeImmutable())->getTimestamp();
+        $data[self::KEY_ISSUED_AT] = (new \DateTimeImmutable())->getTimestamp();
         $data[self::KEY_EXPIRE] = $data[self::KEY_ISSUED_AT] + $expireTimeInSeconds;
         $token = JWT::encode($data, $this->secretKey, self::ALGORITHM);
 
@@ -39,17 +34,17 @@ class JwtLexikAdapter implements JwtHS256Interface
     /**
      * @throws JwtException
      */
-    #[Override]
-    public function decode(string $token): stdClass
+    #[\Override]
+    public function decode(string $token): \stdClass
     {
         try {
             return JWT::decode($token, $this->secretKey, true);
-        } catch (Exception) {
+        } catch (\Exception) {
             throw JwtException::fromMessage('Provided JWT was invalid');
         }
     }
 
-    #[Override]
+    #[\Override]
     public function hasExpired(object $tokenDecoded): bool
     {
         if (!isset($tokenDecoded->{self::KEY_ISSUED_AT}) || !isset($tokenDecoded->{self::KEY_EXPIRE})) {
@@ -59,12 +54,12 @@ class JwtLexikAdapter implements JwtHS256Interface
         return $this->getDateTime($tokenDecoded->{self::KEY_EXPIRE}) < $this->getDateTime();
     }
 
-    protected function getDateTime(int|null $timestamp = null): DateTime
+    protected function getDateTime(?int $timestamp = null): \DateTime
     {
         if (null === $timestamp) {
-            return new DateTime();
+            return new \DateTime();
         }
 
-        return (new DateTime())->setTimestamp($timestamp);
+        return (new \DateTime())->setTimestamp($timestamp);
     }
 }

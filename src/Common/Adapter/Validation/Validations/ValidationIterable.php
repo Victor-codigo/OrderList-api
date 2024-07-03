@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints\Count;
 
 class ValidationIterable extends ValidationConstraintBase
 {
-    public function countRange(int|null $min = null, int|null $max = null): ValidationConstraint
+    public function countRange(?int $min = null, ?int $max = null): ValidationConstraint
     {
         return $this->createConstraint(
             new Count(null, $min, $max),

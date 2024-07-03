@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Shop\Application\ShopGetData\Dto;
 
-use Override;
 use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
@@ -26,22 +25,22 @@ class ShopGetDataInputDto implements ServiceInputDtoInterface
      * @var Identifier[]
      */
     public readonly array $productsId;
-    public readonly NameWithSpaces|null $shopName;
-    public readonly Filter|null $shopNameFilter;
+    public readonly ?NameWithSpaces $shopName;
+    public readonly ?Filter $shopNameFilter;
     public readonly PaginatorPage $page;
     public readonly PaginatorPageItems $pageItems;
     public readonly bool $orderAsc;
 
     public function __construct(
-        string|null $groupId,
-        array|null $shopsId,
-        array|null $productsId,
-        string|null $shopNameFilterType,
-        string|null $shopNameFilterValue,
-        string|null $shopName,
-        bool|null $orderAsc,
-        int|null $page,
-        int|null $pageItems
+        ?string $groupId,
+        ?array $shopsId,
+        ?array $productsId,
+        ?string $shopNameFilterType,
+        ?string $shopNameFilterValue,
+        ?string $shopName,
+        ?bool $orderAsc,
+        ?int $page,
+        ?int $pageItems
     ) {
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
         $this->shopName = ValueObjectFactory::createNameWithSpaces($shopName);
@@ -64,7 +63,7 @@ class ShopGetDataInputDto implements ServiceInputDtoInterface
         );
     }
 
-    #[Override]
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray(['group_id' => $this->groupId]);

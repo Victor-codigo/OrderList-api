@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests\Unit\User\Application\UserPasswordChange\Dto;
 
-use Override;
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -24,7 +23,7 @@ class UserModifyInputDtoTest extends TestCase
 
     private ValidationChain $validator;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -32,7 +31,7 @@ class UserModifyInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    #[Override]
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

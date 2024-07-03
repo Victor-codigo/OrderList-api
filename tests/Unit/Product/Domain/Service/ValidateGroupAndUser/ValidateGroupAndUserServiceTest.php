@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ValidateGroupAndUser;
 
-use Override;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\ResponseDto;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
 use Common\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class ValidateGroupAndUserServiceTest extends TestCase
 {
@@ -20,7 +19,7 @@ class ValidateGroupAndUserServiceTest extends TestCase
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|ResponseDto $response;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

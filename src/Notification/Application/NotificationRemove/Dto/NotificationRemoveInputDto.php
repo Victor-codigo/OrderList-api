@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Notification\Application\NotificationRemove\Dto;
 
-use Override;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
@@ -19,7 +18,7 @@ class NotificationRemoveInputDto implements ServiceInputDtoInterface
      */
     public readonly array $notificationIds;
 
-    public function __construct(UserShared $userSession, array|null $notificationsId)
+    public function __construct(UserShared $userSession, ?array $notificationsId)
     {
         $this->userSession = $userSession;
         $this->notificationIds = null === $notificationsId
@@ -30,7 +29,7 @@ class NotificationRemoveInputDto implements ServiceInputDtoInterface
             );
     }
 
-    #[Override]
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorsList = $validator

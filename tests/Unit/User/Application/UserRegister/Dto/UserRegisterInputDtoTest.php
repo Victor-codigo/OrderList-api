@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserRegister\Dto;
 
-use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -20,7 +19,7 @@ class UserRegisterInputDtoTest extends TestCase
     private UserRegisterInputDto $object;
     private ValidationChain $validator;
 
-    #[Override]
+    #[\Override]
     public function setup(): void
     {
         parent::setUp();
@@ -35,7 +34,7 @@ class UserRegisterInputDtoTest extends TestCase
             'email@host.com',
             'password',
             'John',
-            [new rol(USER_ROLES::USER)],
+            [new Rol(USER_ROLES::USER)],
             self::URL_EMAIL_CONFIRMATION
         );
 
@@ -51,7 +50,7 @@ class UserRegisterInputDtoTest extends TestCase
             null,
             'password',
             'John',
-            [new rol(USER_ROLES::USER)],
+            [new Rol(USER_ROLES::USER)],
             self::URL_EMAIL_CONFIRMATION
         );
 
@@ -67,7 +66,7 @@ class UserRegisterInputDtoTest extends TestCase
             'email@host',
             'password',
             'John',
-            [new rol(USER_ROLES::USER)],
+            [new Rol(USER_ROLES::USER)],
             self::URL_EMAIL_CONFIRMATION
         );
 
@@ -83,7 +82,7 @@ class UserRegisterInputDtoTest extends TestCase
             'email@host.com',
             null,
             'John',
-            [new rol(USER_ROLES::USER)],
+            [new Rol(USER_ROLES::USER)],
             self::URL_EMAIL_CONFIRMATION
         );
 
@@ -99,7 +98,7 @@ class UserRegisterInputDtoTest extends TestCase
             'email@host.com',
             'short',
             'John',
-            [new rol(USER_ROLES::USER)],
+            [new Rol(USER_ROLES::USER)],
             self::URL_EMAIL_CONFIRMATION
         );
 
@@ -115,7 +114,7 @@ class UserRegisterInputDtoTest extends TestCase
             'email@host.com',
             'password',
             null,
-            [new rol(USER_ROLES::USER)],
+            [new Rol(USER_ROLES::USER)],
             self::URL_EMAIL_CONFIRMATION
         );
 
@@ -131,7 +130,7 @@ class UserRegisterInputDtoTest extends TestCase
             'email@host.com',
             'password',
             '',
-            [new rol(USER_ROLES::USER)],
+            [new Rol(USER_ROLES::USER)],
             self::URL_EMAIL_CONFIRMATION
         );
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject;
 
-use Override;
 use Common\Domain\Validation\Common\CONSTRAINTS_NAMES;
 use Common\Domain\Validation\ConstraintDto;
 use Common\Domain\Validation\ValueObjectValidationInterface;
@@ -33,19 +32,19 @@ abstract class ValueObjectBase implements ValueObjectValidationInterface, ValueO
     /**
      * @var ConstraintDto[]
      */
-    #[Override]
+    #[\Override]
     public function getConstraints(): array
     {
         return $this->constraints;
     }
 
-    #[Override]
+    #[\Override]
     public function getValueObjects(): array
     {
         return [];
     }
 
-    #[Override]
+    #[\Override]
     public function isNull(): bool
     {
         return null === $this->value;

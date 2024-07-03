@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
-use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Url;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -15,7 +14,7 @@ class UrlTest extends TestCase
 {
     private ValidationInterface $validator;
 
-    #[Override]
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -23,7 +22,7 @@ class UrlTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    private function createUrl(string|null $url): Url
+    private function createUrl(?string $url): Url
     {
         return new Url($url);
     }

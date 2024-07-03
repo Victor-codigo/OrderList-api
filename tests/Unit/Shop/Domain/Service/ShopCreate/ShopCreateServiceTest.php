@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Domain\Service\ShopCreate;
 
-use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\FileUpload\Exception\FileUploadException;
@@ -35,7 +34,7 @@ class ShopCreateServiceTest extends TestCase
     private MockObject|PaginatorInterface $paginator;
     private MockObject|ImageInterface $image;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

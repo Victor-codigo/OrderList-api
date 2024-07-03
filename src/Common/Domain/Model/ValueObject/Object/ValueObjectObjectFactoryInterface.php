@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Object;
 
-use BackedEnum;
 use Common\Domain\Model\ValueObject\Object\Filter\FilterDbLikeComparison;
 use Common\Domain\Model\ValueObject\Object\Filter\FilterSection;
 use Common\Domain\Ports\FileUpload\FileInterface;
@@ -15,25 +14,25 @@ use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 
 interface ValueObjectObjectFactoryInterface
 {
-    public static function createRol(BackedEnum|null $rol): Rol;
+    public static function createRol(?\BackedEnum $rol): Rol;
 
-    public static function createFile(FileInterface|null $file): File;
+    public static function createFile(?FileInterface $file): File;
 
-    public static function createUserImage(FileInterface|null $file): UserImage;
+    public static function createUserImage(?FileInterface $file): UserImage;
 
-    public static function createGroupImage(FileInterface|null $file): GroupImage;
+    public static function createGroupImage(?FileInterface $file): GroupImage;
 
-    public static function createGroupType(GROUP_TYPE|null $type): GroupType;
+    public static function createGroupType(?GROUP_TYPE $type): GroupType;
 
-    public static function createNotificationType(NOTIFICATION_TYPE|null $type): NotificationType;
+    public static function createNotificationType(?NOTIFICATION_TYPE $type): NotificationType;
 
-    public static function createUnit(UNIT_MEASURE_TYPE|null $type): UnitMeasure;
+    public static function createUnit(?UNIT_MEASURE_TYPE $type): UnitMeasure;
 
-    public static function createProductImage(FileInterface|null $file): ProductImage;
+    public static function createProductImage(?FileInterface $file): ProductImage;
 
-    public static function createShopImage(FileInterface|null $file): ShopImage;
+    public static function createShopImage(?FileInterface $file): ShopImage;
 
-    public static function createFilterDbLikeComparison(BackedEnum|null $filter): FilterDbLikeComparison;
+    public static function createFilterDbLikeComparison(?\BackedEnum $filter): FilterDbLikeComparison;
 
-    public static function createFilterSection(FILTER_SECTION|null $filter): FilterSection;
+    public static function createFilterSection(?FILTER_SECTION $filter): FilterSection;
 }

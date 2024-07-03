@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\String;
 
-use Stringable;
-use Override;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\ConstraintFactory;
 
-class IdentifierNullable extends StringValueObject implements Stringable
+class IdentifierNullable extends StringValueObject implements \Stringable
 {
-    #[Override]
+    #[\Override]
     protected function defineConstraints(): void
     {
         $this
@@ -25,7 +23,7 @@ class IdentifierNullable extends StringValueObject implements Stringable
         return ValueObjectFactory::createIdentifier($this->getValue());
     }
 
-    #[Override]
+    #[\Override]
     public function __toString(): string
     {
         if ($this->isNull()) {

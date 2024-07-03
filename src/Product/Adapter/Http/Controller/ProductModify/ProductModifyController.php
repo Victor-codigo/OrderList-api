@@ -112,7 +112,7 @@ class ProductModifyController extends AbstractController
         return $this->createResponse($productModified);
     }
 
-    private function createProductModifyInputDto(string|null $groupId, string|null $productId, string|null $name, string|null $description, UploadedFile|null $image, bool $imageRemove): ProductModifyInputDto
+    private function createProductModifyInputDto(?string $groupId, ?string $productId, ?string $name, ?string $description, ?UploadedFile $image, bool $imageRemove): ProductModifyInputDto
     {
         /** @var UserSharedSymfonyAdapter $userAdapter */
         $userAdapter = $this->security->getUser();

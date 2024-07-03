@@ -84,7 +84,7 @@ class ShopRemoveController extends AbstractController
         return $this->createResponse($shopRemoved);
     }
 
-    private function createShopRemoveInputDto(string|null $groupId, array|null $shopsId): ShopRemoveInputDto
+    private function createShopRemoveInputDto(?string $groupId, ?array $shopsId): ShopRemoveInputDto
     {
         /** @var UserSharedInterface $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();

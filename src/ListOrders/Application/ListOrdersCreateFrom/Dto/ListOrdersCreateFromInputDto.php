@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ListOrders\Application\ListOrdersCreateFrom\Dto;
 
-use Override;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -27,7 +26,7 @@ class ListOrdersCreateFromInputDto implements ServiceInputDtoInterface
         $this->name = ValueObjectFactory::createNameWithSpaces($name);
     }
 
-    #[Override]
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

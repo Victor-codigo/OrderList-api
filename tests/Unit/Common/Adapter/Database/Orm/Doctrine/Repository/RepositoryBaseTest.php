@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Repository;
 
-use Override;
-use ReflectionClass;
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -27,7 +25,7 @@ class RepositoryBaseTest extends DataBaseTestCase
     private MockObject|ClassMetadata $classMetadata;
     private MockObject|PaginatorInterface $paginator;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -61,7 +59,7 @@ class RepositoryBaseTest extends DataBaseTestCase
 
     private function invokeProtectedMethod(object $object, string $name, array $args = []): mixed
     {
-        $reflection = new ReflectionClass($object);
+        $reflection = new \ReflectionClass($object);
         $method = $reflection->getMethod($name);
         $method->setAccessible(true);
 

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupModify\Dto;
 
-use Override;
-use DateTime;
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
@@ -27,7 +25,7 @@ class GroupModifyInputDtoTest extends TestCase
 
     private ValidationInterface $validator;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -35,7 +33,7 @@ class GroupModifyInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    #[Override]
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -49,7 +47,7 @@ class GroupModifyInputDtoTest extends TestCase
 
     private function getUser(): UserShared
     {
-        return UserShared::fromPrimitives(self::GROUP_USER_ID, 'email@domain.com', 'UserName', [USER_ROLES::USER], null, new DateTime());
+        return UserShared::fromPrimitives(self::GROUP_USER_ID, 'email@domain.com', 'UserName', [USER_ROLES::USER], null, new \DateTime());
     }
 
     private function getUploadedImage(string $path, string $originalName, string $mimeType, int $error): UploadedFileSymfonyAdapter

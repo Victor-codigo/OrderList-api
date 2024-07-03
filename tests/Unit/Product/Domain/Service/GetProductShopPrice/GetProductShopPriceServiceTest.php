@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\GetProductShopPrice;
 
-use Override;
-use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -25,7 +23,7 @@ class GetProductShopPriceServiceTest extends TestCase
     private MockObject|ProductShopRepositoryInterface $productShopRepository;
     private MockObject|PaginatorInterface $paginator;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -122,7 +120,7 @@ class GetProductShopPriceServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new ArrayIterator([$productsExpected[0]]));
+            ->willReturn(new \ArrayIterator([$productsExpected[0]]));
 
         $return = $this->object->__invoke($input);
 

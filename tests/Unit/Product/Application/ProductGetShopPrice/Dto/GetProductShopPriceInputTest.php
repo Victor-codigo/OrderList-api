@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Application\ProductGetShopPrice\Dto;
 
-use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -22,7 +21,7 @@ class GetProductShopPriceInputTest extends TestCase
     private ValidationInterface $validator;
     private MockObject|UserShared $userSession;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -99,9 +98,9 @@ class GetProductShopPriceInputTest extends TestCase
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
-                'products_id_empty' => [VALIDATION_ERRORS::NOT_BLANK],
-                'shops_id_empty' => [VALIDATION_ERRORS::NOT_BLANK],
-            ],
+            'products_id_empty' => [VALIDATION_ERRORS::NOT_BLANK],
+            'shops_id_empty' => [VALIDATION_ERRORS::NOT_BLANK],
+        ],
             $return
         );
     }

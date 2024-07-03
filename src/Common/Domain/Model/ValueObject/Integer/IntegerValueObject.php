@@ -4,33 +4,32 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Integer;
 
-use Override;
 use Common\Domain\Model\ValueObject\ValueObjectBase;
 
 abstract class IntegerValueObject extends ValueObjectBase
 {
-    protected readonly int|null $value;
+    protected readonly ?int $value;
 
-    public function __construct(int|null $value)
+    public function __construct(?int $value)
     {
         $this->value = $value;
 
         $this->defineConstraints();
     }
 
-    #[Override]
-    public function getValue(): int|null
+    #[\Override]
+    public function getValue(): ?int
     {
         return $this->value;
     }
 
-    #[Override]
+    #[\Override]
     public function getValidationValue(): mixed
     {
         return $this->value;
     }
 
-    #[Override]
+    #[\Override]
     public function getValueObjects(): array
     {
         return [];

@@ -15,22 +15,22 @@ class SetProductShopPriceRequestDto implements RequestDtoInterface
 
     private const int PRODUCTS_SHOPS_NUM_MAX = AppConfig::ENDPOINT_PRODUCT_PATCH_PRICES_SHOPS_MAX;
 
-    public readonly string|null $groupId;
-    public readonly string|null $productId;
-    public readonly string|null $shopId;
+    public readonly ?string $groupId;
+    public readonly ?string $productId;
+    public readonly ?string $shopId;
     /**
      * @var string[]|null
      */
-    public readonly array|null $productsOrShopsId;
+    public readonly ?array $productsOrShopsId;
     /**
      * @var float[]|null
      */
-    public readonly array|null $prices;
+    public readonly ?array $prices;
 
     /**
      * @var string[]|null
      */
-    public readonly array|null $units;
+    public readonly ?array $units;
 
     public function __construct(Request $request)
     {

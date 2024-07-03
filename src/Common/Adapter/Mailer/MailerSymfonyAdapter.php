@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Mailer;
 
-use Override;
 use Common\Domain\Mailer\Exception\MailerSentException;
 use Common\Domain\Ports\HtmlTemplate\TemplateDtoInterface;
 use Common\Domain\Ports\Mailer\MailerInterface;
@@ -26,7 +25,7 @@ class MailerSymfonyAdapter implements MailerInterface
     /**
      * @throws MailerSentException
      */
-    #[Override]
+    #[\Override]
     public function send(): void
     {
         try {
@@ -36,7 +35,7 @@ class MailerSymfonyAdapter implements MailerInterface
         }
     }
 
-    #[Override]
+    #[\Override]
     public function from(string $from): self
     {
         $this->email->from($from);
@@ -44,7 +43,7 @@ class MailerSymfonyAdapter implements MailerInterface
         return $this;
     }
 
-    #[Override]
+    #[\Override]
     public function to(string $to): self
     {
         $this->email->to($to);
@@ -52,7 +51,7 @@ class MailerSymfonyAdapter implements MailerInterface
         return $this;
     }
 
-    #[Override]
+    #[\Override]
     public function subject(string $subject): self
     {
         $this->email->subject($subject);
@@ -60,7 +59,7 @@ class MailerSymfonyAdapter implements MailerInterface
         return $this;
     }
 
-    #[Override]
+    #[\Override]
     public function text(string $text): self
     {
         $this->email->text($text);
@@ -68,7 +67,7 @@ class MailerSymfonyAdapter implements MailerInterface
         return $this;
     }
 
-    #[Override]
+    #[\Override]
     public function html(string $html): self
     {
         $this->email->html($html);
@@ -76,7 +75,7 @@ class MailerSymfonyAdapter implements MailerInterface
         return $this;
     }
 
-    #[Override]
+    #[\Override]
     public function template(TemplateDtoInterface $data): self
     {
         $this->email
@@ -86,7 +85,7 @@ class MailerSymfonyAdapter implements MailerInterface
         return $this;
     }
 
-    #[Override]
+    #[\Override]
     public function cc(string ...$text): self
     {
         $this->email->cc(...$text);
@@ -94,7 +93,7 @@ class MailerSymfonyAdapter implements MailerInterface
         return $this;
     }
 
-    #[Override]
+    #[\Override]
     public function attachFile(string $filePath, string $fileName, string $mimeType): self
     {
         $this->email->attachFromPath($filePath, $fileName, $mimeType);

@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupRemoveAllUserGroups;
 
-use Common\Domain\Model\ValueObject\String\Identifier;
-use Override;
-use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Validation\Group\GROUP_ROLES;
@@ -31,7 +29,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;
     private MockObject|PaginatorInterface $groupsUsersNumPaginator;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -276,7 +274,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
         $this->groupsUsersNumPaginator
             ->expects($this->exactly(2))
             ->method('getIterator')
-            ->willReturn(new ArrayIterator($groupsUsersNumber));
+            ->willReturn(new \ArrayIterator($groupsUsersNumber));
 
         $this->groupRepository
             ->expects($this->once())
@@ -366,7 +364,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
         $this->groupsUsersNumPaginator
             ->expects($this->exactly(2))
             ->method('getIterator')
-            ->willReturn(new ArrayIterator($groupsUsersNumber));
+            ->willReturn(new \ArrayIterator($groupsUsersNumber));
 
         $this->groupRepository
             ->expects($this->once())
@@ -421,7 +419,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
         $this->groupsUsersNumPaginator
             ->expects($this->exactly(2))
             ->method('getIterator')
-            ->willReturn(new ArrayIterator($groupsUsersNumber));
+            ->willReturn(new \ArrayIterator($groupsUsersNumber));
 
         $this->groupRepository
             ->expects($this->once())
@@ -507,7 +505,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
         $this->groupsUsersNumPaginator
             ->expects($this->exactly(2))
             ->method('getIterator')
-            ->willReturn(new ArrayIterator($groupsUsersNumber));
+            ->willReturn(new \ArrayIterator($groupsUsersNumber));
 
         $this->groupRepository
             ->expects($this->once())
@@ -557,7 +555,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
         $this->groupsUsersNumPaginator
             ->expects($this->exactly(2))
             ->method('getIterator')
-            ->willReturn(new ArrayIterator($groupsUsersNumber));
+            ->willReturn(new \ArrayIterator($groupsUsersNumber));
 
         $this->groupRepository
             ->expects($this->once())
@@ -609,7 +607,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
         $this->groupsUsersNumPaginator
             ->expects($this->exactly(2))
             ->method('getIterator')
-            ->willReturn(new ArrayIterator($groupsUsersNumber));
+            ->willReturn(new \ArrayIterator($groupsUsersNumber));
 
         $this->groupRepository
             ->expects($this->once())

@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Domain\Service\GetUsersPublicData;
 
-use Common\Domain\Model\ValueObject\String\NameWithSpaces;
-use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\Email;
-use Common\Domain\Model\ValueObject\Array\Roles;
-use Common\Domain\Model\ValueObject\String\Path;
-use DateTime;
-use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\LogicException;
+use Common\Domain\Model\ValueObject\Array\Roles;
+use Common\Domain\Model\ValueObject\String\Email;
+use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
+use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Struct\SCOPE;
 use Common\Domain\Validation\User\USER_ROLES;
@@ -32,7 +30,7 @@ class GetUsersPublcDataServiceTest extends TestCase
     private GeUsersPublicDataService $object;
     private MockObject|UserRepositoryInterface $userRepository;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -113,7 +111,7 @@ class GetUsersPublcDataServiceTest extends TestCase
         $expectedUsersNames = array_map(fn (User $user): NameWithSpaces => $user->getName(), $expectedUsers);
         $expectedUsersRoles = array_map(fn (User $user): Roles => $user->getRoles(), $expectedUsers);
         $expectedUsersImages = array_map(fn (User $user): Path => $user->getImage(), $expectedUsers);
-        $expectedUsersCreatedOn = array_map(fn (User $user): DateTime => $user->getCreatedOn(), $expectedUsers);
+        $expectedUsersCreatedOn = array_map(fn (User $user): \DateTime => $user->getCreatedOn(), $expectedUsers);
 
         $this->userRepository
             ->expects($this->once())

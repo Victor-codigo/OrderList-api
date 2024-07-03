@@ -39,7 +39,7 @@ interface FileInterface
      *
      * @throws FileException if the target file could not be created
      */
-    public function move(string $directory, string $name = null): FileInterface;
+    public function move(string $directory, ?string $name = null): FileInterface;
 
     public function getContent(): string;
 }

@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Validation\Constraints\AlphanumericWithWhiteSpace;
 
-use Attribute;
 use Symfony\Component\Validator\Constraints\Regex;
 
-#[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_METHOD | Attribute::IS_REPEATABLE)]
+#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class AlphanumericWithWhiteSpace extends Regex
 {
     public const ALPHANUMERIC_WITH_WHITESPACE_FAILED_ERROR = '583e7e73-a761-444d-9250-a0783f339ad1';

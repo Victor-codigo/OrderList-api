@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Product\Application\ProductGetData;
 
-use Throwable;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
@@ -45,7 +44,7 @@ class ProductGetDataUseCase extends ServiceBase
             throw ProductGetDataValidateGroupAndUserException::fromMessage('You have not permissions');
         } catch (DBNotFoundException) {
             throw ProductGetDataProductsNotFoundException::fromMessage('No products found');
-        } catch (Throwable) {
+        } catch (\Throwable) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

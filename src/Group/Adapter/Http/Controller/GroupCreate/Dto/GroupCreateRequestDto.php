@@ -10,10 +10,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GroupCreateRequestDto implements RequestDtoInterface
 {
-    public readonly string|null $name;
-    public readonly string|null $description;
-    public readonly string|null $type;
-    public readonly UploadedFile|null $image;
+    public readonly ?string $name;
+    public readonly ?string $description;
+    public readonly ?string $type;
+    public readonly ?UploadedFile $image;
     public readonly bool $notify;
 
     public function __construct(Request $request)

@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints\Choice;
 
 class ValidationChoice extends ValidationConstraintBase
 {
-    public function choice(array|null $choices, bool|null $multiple, bool|null $strict, int|null $min, int|null $max): ValidationConstraint
+    public function choice(?array $choices, ?bool $multiple, ?bool $strict, ?int $min, ?int $max): ValidationConstraint
     {
         return $this->createConstraint(
             new Choice([], $choices, null, $multiple, $strict, $min, $max),

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ProductCreate;
 
-use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\FileUpload\Exception\FileUploadException;
@@ -34,7 +33,7 @@ class ProductCreateServiceTest extends TestCase
     private MockObject|PaginatorInterface $paginator;
     private MockObject|ImageInterface $image;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -47,7 +46,7 @@ class ProductCreateServiceTest extends TestCase
         $this->object = new ProductCreateService($this->productRepository, $this->fileUpload, $this->image, self::IMAGE_UPLOADED_PATH);
     }
 
-    private function createProductCreateDto(string|null $description, MockObject|UploadedFileInterface|null $productImageFile): ProductCreateDto
+    private function createProductCreateDto(?string $description, MockObject|UploadedFileInterface|null $productImageFile): ProductCreateDto
     {
         return new ProductCreateDto(
             ValueObjectFactory::createIdentifier('276865ee-d120-46e9-a3f7-16f7c923a990'),
@@ -57,7 +56,7 @@ class ProductCreateServiceTest extends TestCase
         );
     }
 
-    private function assertProductIsCreated(Product $product, ProductCreateDto $input, string|null $expectedImageProductName): bool
+    private function assertProductIsCreated(Product $product, ProductCreateDto $input, ?string $expectedImageProductName): bool
     {
         $this->assertEquals(self::GROUP_ID, $product->getId());
         $this->assertEquals($input->groupId, $product->getGroupId());

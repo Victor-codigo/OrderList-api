@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Order\Domain\Model;
 
-use DateTime;
-use ReflectionClass;
 use Common\Domain\Model\ValueObject\Float\Amount;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -25,7 +23,7 @@ class Order
     private Description $description;
     private Amount $amount;
     private bool $bought;
-    private DateTime $createdOn;
+    private \DateTime $createdOn;
 
     private ListOrders $listOrders;
     private Product $product;
@@ -125,12 +123,12 @@ class Order
         return $this;
     }
 
-    public function getCreatedOn(): DateTime
+    public function getCreatedOn(): \DateTime
     {
         return $this->createdOn;
     }
 
-    public function setCreatedOn(DateTime $date): self
+    public function setCreatedOn(\DateTime $date): self
     {
         $this->createdOn = $date;
 
@@ -192,7 +190,7 @@ class Order
         $this->description = $description;
         $this->amount = $amount;
         $this->bought = $bought;
-        $this->createdOn = new DateTime();
+        $this->createdOn = new \DateTime();
 
         $this->listOrders = $listOrders;
         $this->product = $product;
@@ -217,7 +215,7 @@ class Order
     public function cloneWithNewId(Identifier $id): Order
     {
         $orderNew = clone $this;
-        $orderNewReflection = new ReflectionClass($orderNew);
+        $orderNewReflection = new \ReflectionClass($orderNew);
         $idProperty = $orderNewReflection->getProperty('id');
         $idProperty->setValue($orderNew, $id);
 

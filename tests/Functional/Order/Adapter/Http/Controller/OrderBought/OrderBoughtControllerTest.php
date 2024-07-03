@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Functional\Order\Adapter\Http\Controller\OrderBought;
 
-use Override;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +18,7 @@ class OrderBoughtControllerTest extends WebClientTestCase
     private const string ORDER_ID = '5cfe52e5-db78-41b3-9acd-c3c84924cb9b';
     private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

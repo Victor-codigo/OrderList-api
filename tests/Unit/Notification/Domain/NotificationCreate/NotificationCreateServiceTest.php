@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Domain\NotificationCreate;
 
-use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\Array\NotificationData;
@@ -22,7 +21,7 @@ class NotificationCreateServiceTest extends TestCase
     private NotificationCreateService $object;
     private MockObject|NotificationRepositoryInterface $notificationRepository;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

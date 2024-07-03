@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Shop\Application\ShopModify;
 
-use Exception;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
-use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\FileUpload\Exception\File\FileException;
+use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
@@ -53,7 +52,7 @@ class ShopModifyUseCase extends ServiceBase
             throw ShopModifyShopNameIsAlreadyInUseException::fromMessage('Shop name is already in use');
         } catch (FileException|FileUploadReplaceException) {
             throw ShopModifyImageException::fromMessage('Image error');
-        } catch (Exception) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

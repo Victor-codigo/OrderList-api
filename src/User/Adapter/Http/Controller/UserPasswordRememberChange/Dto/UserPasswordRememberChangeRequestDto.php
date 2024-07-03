@@ -9,9 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UserPasswordRememberChangeRequestDto implements RequestDtoInterface
 {
-    public readonly string|null $token;
-    public readonly string|null $passwordNew;
-    public readonly string|null $passwordNewRepeat;
+    public readonly ?string $token;
+    public readonly ?string $passwordNew;
+    public readonly ?string $passwordNewRepeat;
 
     public function __construct(Request $request)
     {

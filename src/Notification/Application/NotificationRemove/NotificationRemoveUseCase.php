@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Notification\Application\NotificationRemove;
 
-use Common\Domain\Model\ValueObject\String\Identifier;
-use Exception;
 use Common\Domain\Config\AppConfig;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceBase;
@@ -50,7 +49,7 @@ class NotificationRemoveUseCase extends ServiceBase
             return $this->createNotificationRemoveOutputDto($notificationsIdRemoved);
         } catch (DBNotFoundException) {
             throw NotificationRemoveNotFoundException::fromMessage('Notifications not found');
-        } catch (Exception) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }
@@ -83,9 +82,6 @@ class NotificationRemoveUseCase extends ServiceBase
         return $validNotifications;
     }
 
-    /**
-     * @param Notification[] $notificationsId
-     */
     private function createNotificationRemoveDto(array $notifications): NotificationRemoveDto
     {
         $notificationsId = array_map(
@@ -96,9 +92,6 @@ class NotificationRemoveUseCase extends ServiceBase
         return new NotificationRemoveDto($notificationsId);
     }
 
-    /**
-     * @param Notification[] $notificationsId
-     */
     private function createNotificationRemoveOutputDto(array $notifications): NotificationRemoveOutputDto
     {
         $notificationsId = array_map(

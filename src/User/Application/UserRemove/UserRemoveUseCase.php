@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace User\Application\UserRemove;
 
-use Exception;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -45,7 +44,7 @@ class UserRemoveUseCase extends ServiceBase
                 'groups_id_user_removed' => [],
                 'groups_id_user_set_as_admin' => [],
             ];
-        } catch (Exception) {
+        } catch (\Exception) {
             throw DomainErrorException::fromMessage('An error has been occurred');
         }
 
@@ -71,7 +70,7 @@ class UserRemoveUseCase extends ServiceBase
             return $this->createUserRemoveOutputDto($userRemovedId);
         } catch (DBNotFoundException) {
             throw UserRemoveUserNotFoundException::fromMessage('User not found');
-        } catch (Exception) {
+        } catch (\Exception) {
             throw DomainErrorException::fromMessage('An error has been occurred');
         }
     }

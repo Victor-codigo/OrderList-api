@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Product\Domain\Model;
 
-use DateTime;
-use Override;
 use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -24,7 +22,7 @@ class Product implements EntityImageModifyInterface
     private NameWithSpaces $name;
     private Description $description;
     private Path $image;
-    private DateTime $createdOn;
+    private \DateTime $createdOn;
 
     /**
      * @var Collection<Order>
@@ -69,13 +67,13 @@ class Product implements EntityImageModifyInterface
         return $this;
     }
 
-    #[Override]
+    #[\Override]
     public function getImage(): Path
     {
         return $this->image;
     }
 
-    #[Override]
+    #[\Override]
     public function setImage(Path $image): self
     {
         $this->image = $image;
@@ -83,7 +81,7 @@ class Product implements EntityImageModifyInterface
         return $this;
     }
 
-    public function getCreatedOn(): DateTime
+    public function getCreatedOn(): \DateTime
     {
         return $this->createdOn;
     }
@@ -139,12 +137,12 @@ class Product implements EntityImageModifyInterface
         $this->name = $name;
         $this->description = $description;
         $this->image = $image;
-        $this->createdOn = new DateTime();
+        $this->createdOn = new \DateTime();
         $this->productShop = new ArrayCollection();
         $this->orders = new ArrayCollection();
     }
 
-    public static function fromPrimitives(string $id, string $groupId, string $name, string $description = null, string $image = null): self
+    public static function fromPrimitives(string $id, string $groupId, string $name, ?string $description = null, ?string $image = null): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),

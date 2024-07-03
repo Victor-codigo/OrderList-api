@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Group\Domain\Model;
 
-use DateTime;
-use Override;
 use Common\Domain\Model\ValueObject\Object\GroupType;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -24,7 +22,7 @@ class Group implements EntityImageModifyInterface
     private NameWithSpaces $name;
     private Description $description;
     private Path $image;
-    private DateTime $createdOn;
+    private \DateTime $createdOn;
     private GroupType $type;
 
     /**
@@ -61,7 +59,7 @@ class Group implements EntityImageModifyInterface
         return $this->description;
     }
 
-    #[Override]
+    #[\Override]
     public function setImage(Path $image): self
     {
         $this->image = $image;
@@ -69,13 +67,13 @@ class Group implements EntityImageModifyInterface
         return $this;
     }
 
-    #[Override]
+    #[\Override]
     public function getImage(): Path
     {
         return $this->image;
     }
 
-    public function getCreatedOn(): DateTime
+    public function getCreatedOn(): \DateTime
     {
         return $this->createdOn;
     }
@@ -125,7 +123,7 @@ class Group implements EntityImageModifyInterface
         $this->description = $description;
         $this->image = $image;
         $this->users = new ArrayCollection();
-        $this->createdOn = new DateTime();
+        $this->createdOn = new \DateTime();
     }
 
     public static function fromPrimitives(string $id, string $name, GROUP_TYPE $type, ?string $description, ?string $image): self

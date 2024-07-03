@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupUserRoleChange\Dto;
 
-use Override;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -23,7 +22,7 @@ class GroupUserRoleChangeInputDto implements ServiceInputDtoInterface
     public readonly array $usersId;
     public readonly Rol $rol;
 
-    public function __construct(UserShared $userSession, string|null $groupId, array|null $usersId, bool|null $admin)
+    public function __construct(UserShared $userSession, ?string $groupId, ?array $usersId, ?bool $admin)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
@@ -34,7 +33,7 @@ class GroupUserRoleChangeInputDto implements ServiceInputDtoInterface
         $this->rol = ValueObjectFactory::createRol($admin ? GROUP_ROLES::ADMIN : GROUP_ROLES::USER);
     }
 
-    #[Override]
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray([

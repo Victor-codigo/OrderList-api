@@ -14,7 +14,7 @@ class GetUsersRequestDto implements RequestDtoInterface
     /**
      * @var string[]
      */
-    public readonly array|null $usersId;
+    public readonly ?array $usersId;
 
     public function __construct(Request $request)
     {
@@ -22,7 +22,7 @@ class GetUsersRequestDto implements RequestDtoInterface
         $this->usersId = $this->removeUsersOverflow($requestUsersId);
     }
 
-    private function removeUsersOverflow(string|null $usersId): array|null
+    private function removeUsersOverflow(?string $usersId): ?array
     {
         if (null === $usersId) {
             return null;

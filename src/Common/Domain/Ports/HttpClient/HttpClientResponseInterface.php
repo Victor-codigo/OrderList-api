@@ -29,7 +29,7 @@ interface HttpClientResponseInterface
      */
     public function getHeaders(bool $throwException = true): array;
 
-    public function getInfo(bool|null $throwException = true): array;
+    public function getInfo(?bool $throwException = true): array;
 
     /**
      * @throws DecodingException

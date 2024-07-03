@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupCreate\Dto;
 
-use Override;
 use Common\Domain\Model\ValueObject\Object\GroupImage;
 use Common\Domain\Model\ValueObject\Object\GroupType;
 use Common\Domain\Model\ValueObject\String\Description;
@@ -35,7 +34,7 @@ class GroupCreateInputDto implements ServiceInputDtoInterface
         $this->notify = $notify ?? true;
     }
 
-    #[Override]
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

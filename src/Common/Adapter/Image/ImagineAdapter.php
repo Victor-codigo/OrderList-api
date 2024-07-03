@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Image;
 
-use Override;
-use RuntimeException;
-use InvalidArgumentException;
 use Common\Domain\Image\Exception\ImageResizeException;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Ports\Image\ImageInterface;
@@ -23,7 +20,7 @@ class ImagineAdapter implements ImageInterface
     /**
      * @throws ImageResizeException
      */
-    #[Override]
+    #[\Override]
     public function resizeToAFrame(Path $filePath, float $widthMax, float $heightMax): void
     {
         if (0 == $widthMax || 0 == $heightMax) {
@@ -39,7 +36,7 @@ class ImagineAdapter implements ImageInterface
                ->open($filePath->getValue())
                ->resize(new Box($imageResizedWidth, $imageResizedHeight))
                ->save($filePath->getValue());
-        } catch (RuntimeException|InvalidArgumentException $e) {
+        } catch (\RuntimeException|\InvalidArgumentException $e) {
             throw ImageResizeException::fromMessage($e->getMessage());
         }
     }

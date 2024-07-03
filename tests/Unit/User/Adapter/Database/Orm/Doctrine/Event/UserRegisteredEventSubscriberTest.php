@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Database\Orm\Doctrine\Event;
 
-use Override;
-use stdClass;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PostPersistEventArgs;
@@ -21,7 +19,7 @@ class UserRegisteredEventSubscriberTest extends TestCase
     private MockObject|EntityManagerInterface $entityManager;
     private MockObject|User $user;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -31,7 +29,7 @@ class UserRegisteredEventSubscriberTest extends TestCase
         $this->object = new UserRegisteredEventSubscriber();
     }
 
-    private function createUserPreRegisteredEvent(string|null $userRegisterEmailConfirmationUrl): UserPreRegisteredEvent
+    private function createUserPreRegisteredEvent(?string $userRegisterEmailConfirmationUrl): UserPreRegisteredEvent
     {
         return new UserPreRegisteredEvent(
             ValueObjectFactory::createIdentifier('userId'),
@@ -43,7 +41,7 @@ class UserRegisteredEventSubscriberTest extends TestCase
     /** @test */
     public function itShouldNotDispatchUserPreRegisteredEvent(): void
     {
-        $event = new PostPersistEventArgs(new stdClass(), $this->entityManager);
+        $event = new PostPersistEventArgs(new \stdClass(), $this->entityManager);
 
         $this->user
             ->expects($this->never())

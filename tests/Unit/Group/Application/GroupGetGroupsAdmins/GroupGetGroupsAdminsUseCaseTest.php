@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupGetGroupsAdmins;
 
-use Override;
-use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -38,7 +36,7 @@ class GroupGetGroupsAdminsUseCaseTest extends TestCase
     private MockObject|UserShared $userSession;
     private MockObject|PaginatorInterface $userGroupPaginator;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -155,7 +153,7 @@ class GroupGetGroupsAdminsUseCaseTest extends TestCase
         $this->userGroupPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new ArrayIterator($userGroups));
+            ->willReturn(new \ArrayIterator($userGroups));
 
         $return = $this->object->__invoke($input);
 

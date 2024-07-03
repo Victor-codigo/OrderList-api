@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Integer;
 
-use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -15,7 +14,7 @@ class PaginatorPageItemsTest extends TestCase
 {
     private ValidationInterface $validation;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Validation\Constraints\Alphanumeric;
 
-use Override;
-use Stringable;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\RegexValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -13,10 +11,7 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 class AlphanumericValidator extends RegexValidator
 {
-    /**
-     * {@inheritdoc}
-     */
-    #[Override]
+    #[\Override]
     public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof Alphanumeric) {
@@ -27,7 +22,7 @@ class AlphanumericValidator extends RegexValidator
             return;
         }
 
-        if (!\is_scalar($value) && !$value instanceof Stringable) {
+        if (!\is_scalar($value) && !$value instanceof \Stringable) {
             throw new UnexpectedValueException($value, 'string');
         }
 

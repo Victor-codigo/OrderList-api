@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Object;
 
-use Override;
-use BackedEnum;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Validation\Common\TYPES;
@@ -14,7 +12,7 @@ use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 
 class UnitMeasure extends ObjectValueObject
 {
-    #[Override]
+    #[\Override]
     public function defineConstraints(): void
     {
         $this
@@ -34,7 +32,7 @@ class UnitMeasure extends ObjectValueObject
     /**
      * @throws InvalidArgumentException
      */
-    private static function getRolFromString(string $unit): BackedEnum
+    private static function getRolFromString(string $unit): \BackedEnum
     {
         $unitFromString = UNIT_MEASURE_TYPE::tryFrom(mb_strtoupper($unit));
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Order\Application\OrderModify\Dto;
 
-use Override;
 use Common\Domain\Model\ValueObject\Float\Amount;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -45,7 +44,7 @@ class OrderModifyInputDto implements ServiceInputDtoInterface
         $this->amount = ValueObjectFactory::createAmount($amount);
     }
 
-    #[Override]
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

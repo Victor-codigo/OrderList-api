@@ -6,8 +6,8 @@ namespace User\Domain\Service\UserRemove;
 
 class BuiltInFunctionsReturn
 {
-    public static bool|null $file_exists = null;
-    public static bool|null $unlink = null;
+    public static ?bool $file_exists = null;
+    public static ?bool $unlink = null;
 }
 
 function file_exists(string $filename): bool

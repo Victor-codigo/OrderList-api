@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Event\Request;
 
-use Override;
 use Common\Adapter\Event\Request\RequestEventSubscriber;
 use Common\Adapter\Validation\ValidationChain;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -19,7 +18,7 @@ class RequestEventSubscriberTest extends TestCase
     private MockObject|RequestEvent $event;
     private MockObject|Request $request;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

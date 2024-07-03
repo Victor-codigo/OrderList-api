@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Adapter\ModuleCommunication;
 
-use Override;
-use JsonException;
-use Generator;
-use ValueError;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationErrorResponseException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationTokenNotFoundInRequestException;
@@ -50,10 +46,10 @@ class ModuleCommunication implements ModuleCommunicationInterface
 
     /**
      * @throws ModuleCommunicationException
-     * @throws ValueError
+     * @throws \ValueError
      * @throws ModuleCommunicationTokenNotFoundInRequestException
      */
-    #[Override]
+    #[\Override]
     public function __invoke(ModuleCommunicationConfigDtoPaginatorInterface $routeConfig): ResponseDto
     {
         try {
@@ -81,20 +77,20 @@ class ModuleCommunication implements ModuleCommunicationInterface
                 json_decode($responseContent, true, 512, JSON_THROW_ON_ERROR),
                 $responseHeaders
             );
-        } catch (JsonException $e) {
+        } catch (\JsonException $e) {
             throw ModuleCommunicationException::fromCommunicationError('Error json decode', $e);
         }
     }
 
     /**
      * @throws ModuleCommunicationException
-     * @throws ValueError
+     * @throws \ValueError
      * @throws ModuleCommunicationTokenNotFoundInRequestException
      * @throws ModuleCommunicationErrorResponseException
      * @throws InvalidArgumentException
      */
-    #[Override]
-    public function getPagesRangeEndpoint(ModuleCommunicationConfigDtoPaginatorInterface $routeConfig, int $pageIni, ?int $pageEnd): Generator
+    #[\Override]
+    public function getPagesRangeEndpoint(ModuleCommunicationConfigDtoPaginatorInterface $routeConfig, int $pageIni, ?int $pageEnd): \Generator
     {
         if ($pageIni < 1) {
             throw new InvalidArgumentException('PageIni cannot be less than 1');
@@ -131,13 +127,13 @@ class ModuleCommunication implements ModuleCommunicationInterface
 
     /**
      * @throws ModuleCommunicationException
-     * @throws ValueError
+     * @throws \ValueError
      * @throws ModuleCommunicationTokenNotFoundInRequestException
      * @throws ModuleCommunicationErrorResponseException
      * @throws InvalidArgumentException
      */
-    #[Override]
-    public function getAllPagesOfEndpoint(ModuleCommunicationConfigDtoPaginatorInterface $routeConfig): Generator
+    #[\Override]
+    public function getAllPagesOfEndpoint(ModuleCommunicationConfigDtoPaginatorInterface $routeConfig): \Generator
     {
         return $this->getPagesRangeEndpoint($routeConfig, 1, null);
     }
@@ -162,7 +158,7 @@ class ModuleCommunication implements ModuleCommunicationInterface
     }
 
     /**
-     * @throws ValueError
+     * @throws \ValueError
      */
     private function createResponseDto(array $responseContent, array $responseHeaders): ResponseDto
     {

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Object\Filter;
 
-use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\Filter\FilterSection;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -16,7 +15,7 @@ class FilterSectionTest extends TestCase
     private FilterSection $object;
     private ValidationChain $validator;
 
-    #[Override]
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

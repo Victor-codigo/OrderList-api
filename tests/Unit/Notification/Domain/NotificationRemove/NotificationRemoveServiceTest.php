@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Domain\NotificationRemove;
 
-use Common\Domain\Model\ValueObject\String\Identifier;
-use Override;
-use Iterator;
-use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Notification\Domain\Model\Notification;
@@ -29,7 +26,7 @@ class NotificationRemoveServiceTest extends TestCase
     private MockObject|NotificationRepositoryInterface $notificationRepository;
     private MockObject|PaginatorInterface $paginator;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -42,9 +39,9 @@ class NotificationRemoveServiceTest extends TestCase
     /**
      * @return Notification[]
      */
-    private function getNotifications(): Iterator
+    private function getNotifications(): \Iterator
     {
-        return new ArrayIterator([
+        return new \ArrayIterator([
             Notification::fromPrimitives(self::NOTIFICATION_ID_1, 'user id 1', NOTIFICATION_TYPE::GROUP_USER_ADDED, []),
             Notification::fromPrimitives(self::NOTIFICATION_ID_2, 'user id 2', NOTIFICATION_TYPE::USER_REGISTERED, []),
             Notification::fromPrimitives(self::NOTIFICATION_ID_3, 'user id 3', NOTIFICATION_TYPE::GROUP_USER_ADDED, []),

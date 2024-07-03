@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Float;
 
-use Override;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Float\MoneyType;
 use Common\Domain\Model\ValueObject\Float\Money;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -14,7 +13,7 @@ class MoneyTypeTest extends TestCase
 {
     private AbstractPlatform $abstractPlatform;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

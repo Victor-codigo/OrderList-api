@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Notification\Application\NotificationGetData\Dto;
 
-use Override;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
 use Common\Domain\Model\ValueObject\String\Language;
@@ -20,7 +19,7 @@ class NotificationGetDataInputDto implements ServiceInputDtoInterface
     public readonly PaginatorPageItems $pageItems;
     public readonly Language $lang;
 
-    public function __construct(UserShared $userSession, int|null $page, int|null $pageItems, string|null $lang)
+    public function __construct(UserShared $userSession, ?int $page, ?int $pageItems, ?string $lang)
     {
         $this->userSession = $userSession;
         $this->page = ValueObjectFactory::createPaginatorPage($page);
@@ -28,7 +27,7 @@ class NotificationGetDataInputDto implements ServiceInputDtoInterface
         $this->lang = ValueObjectFactory::createLanguage($lang);
     }
 
-    #[Override]
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

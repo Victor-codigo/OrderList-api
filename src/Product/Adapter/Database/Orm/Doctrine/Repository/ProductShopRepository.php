@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Product\Adapter\Database\Orm\Doctrine\Repository;
 
-use Override;
-use Throwable;
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
@@ -34,7 +32,7 @@ class ProductShopRepository extends RepositoryBase implements ProductShopReposit
      * @throws DBConnectionException
      * @throws DBUniqueConstraintException
      */
-    #[Override]
+    #[\Override]
     public function save(array $productsShops): void
     {
         try {
@@ -45,7 +43,7 @@ class ProductShopRepository extends RepositoryBase implements ProductShopReposit
             $this->objectManager->flush();
         } catch (UniqueConstraintViolationException $e) {
             throw DBUniqueConstraintException::fromId($productShop->getId(), $e->getCode());
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
     }
@@ -55,7 +53,7 @@ class ProductShopRepository extends RepositoryBase implements ProductShopReposit
      *
      * @throws DBConnectionException
      */
-    #[Override]
+    #[\Override]
     public function remove(array $productsShops): void
     {
         try {
@@ -64,7 +62,7 @@ class ProductShopRepository extends RepositoryBase implements ProductShopReposit
             }
 
             $this->objectManager->flush();
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
     }
@@ -72,7 +70,7 @@ class ProductShopRepository extends RepositoryBase implements ProductShopReposit
     /**
      * @throws DBNotFoundException
      */
-    #[Override]
+    #[\Override]
     public function findProductsAndShopsOrFail(?array $productsId = null, ?array $shopsId = null, ?Identifier $groupId = null): PaginatorInterface
     {
         $query = $this->entityManager->createQueryBuilder()

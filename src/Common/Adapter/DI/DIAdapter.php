@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Adapter\DI;
 
-use Override;
 use Common\Adapter\DI\Exception\RouteInvalidParameterException;
 use Common\Adapter\DI\Exception\RouteNotFoundException;
 use Common\Adapter\DI\Exception\RouteParametersMissingException;
@@ -31,7 +30,7 @@ class DIAdapter implements DIInterface, ServiceSubscriberInterface
     ) {
     }
 
-    #[Override]
+    #[\Override]
     public static function getSubscribedServices(): array
     {
         return [
@@ -45,7 +44,7 @@ class DIAdapter implements DIInterface, ServiceSubscriberInterface
      * @throws RouteParametersMissingException
      * @throws RouteInvalidParameterException
      */
-    #[Override]
+    #[\Override]
     public function getUrlRouteAbsolute(string $route, array $params): string
     {
         return $this->generateUrl($route, $params, UrlGeneratorInterface::ABSOLUTE_URL);
@@ -56,7 +55,7 @@ class DIAdapter implements DIInterface, ServiceSubscriberInterface
      * @throws RouteParametersMissingException
      * @throws RouteInvalidParameterException
      */
-    #[Override]
+    #[\Override]
     public function getUrlRouteRelative(string $route, array $params): string
     {
         return $this->generateUrl($route, $params, UrlGeneratorInterface::RELATIVE_PATH);
@@ -67,7 +66,7 @@ class DIAdapter implements DIInterface, ServiceSubscriberInterface
      * @throws RouteParametersMissingException
      * @throws RouteInvalidParameterException
      */
-    #[Override]
+    #[\Override]
     public function getUrlRouteAbsoluteDomain(string $route, array $params): string
     {
         $url = $this->generateUrl($route, $params, UrlGeneratorInterface::ABSOLUTE_PATH);
@@ -103,7 +102,7 @@ class DIAdapter implements DIInterface, ServiceSubscriberInterface
         return $this->DI->get(RequestStack::class)->getCurrentRequest();
     }
 
-    #[Override]
+    #[\Override]
     public function getLocale(): string
     {
         return $this->getRequest()->getLocale();

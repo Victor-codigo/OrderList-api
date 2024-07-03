@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Adapter\Database\Orm\Doctrine\Repository;
 
-use Common\Domain\Model\ValueObject\String\Identifier;
-use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Object\Rol;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\Group\GROUP_ROLES;
@@ -35,7 +34,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
     private UserGroupRepository $object;
     private GroupRepositoryInterface $groupRepository;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

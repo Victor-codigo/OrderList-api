@@ -46,7 +46,7 @@ class ListOrdersGetDataService
      * @throws DBNotFoundException
      * @throws LogicException
      */
-    private function findListOrder(Identifier $groupId, array $listOrdersId, Filter|null $filterSection, Filter|null $filterText, PaginatorPage $page, PaginatorPageItems $pageItems, bool $orderAsc): PaginatorInterface
+    private function findListOrder(Identifier $groupId, array $listOrdersId, ?Filter $filterSection, ?Filter $filterText, PaginatorPage $page, PaginatorPageItems $pageItems, bool $orderAsc): PaginatorInterface
     {
         if (!empty($listOrdersId)) {
             $listOrdersPaginator = $this->listOrdersRepository->findListOrderByIdOrFail($listOrdersId, $groupId);

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace User\Domain\Service\UserFirstLogin;
 
-use Exception;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
@@ -50,7 +49,7 @@ class UserFirstLoginService
             $this->createNotificationUserRegistered($input->user, $this->appName, $this->systemKey);
         } catch (UserCreateGroupUserException) {
             throw UserFirstLoginCreateGroupException::fromMessage('Could not create the user\'s group');
-        } catch (Exception) {
+        } catch (\Exception) {
             throw DomainErrorException::fromMessage('An error has been occurred');
         }
     }

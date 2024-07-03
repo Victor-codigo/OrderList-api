@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\HtmlTemplate;
 
-use Override;
 use Common\Adapter\Translator\TranslatorSymfonyAdapter;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\HtmlTemplate\TemplateDtoBase;
@@ -12,8 +11,6 @@ use Common\Domain\HtmlTemplate\TemplateId;
 use Common\Domain\Ports\Translator\TranslatorInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
-use ReflectionMethod;
 use Symfony\Component\Translation\LocaleSwitcher;
 use Symfony\Contracts\Translation\TranslatorInterface as SymfonyTranslatorInterface;
 
@@ -24,7 +21,7 @@ class TemplateDtoBaseTest extends TestCase
     private MockObject|SymfonyTranslatorInterface $symfonyTranslator;
     private MockObject|LocaleSwitcher $symfonyLocaleSwitcher;
 
-    #[Override]
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -72,9 +69,9 @@ class TemplateDtoBaseTest extends TestCase
         $this->assertEquals($translatedText, $return);
     }
 
-    private function setTranslatePublic(): ReflectionMethod
+    private function setTranslatePublic(): \ReflectionMethod
     {
-        $templateDtoBaseReflection = new ReflectionClass($this->object);
+        $templateDtoBaseReflection = new \ReflectionClass($this->object);
         $translateMethod = $templateDtoBaseReflection->getMethod('translate');
         $translateMethod->setAccessible(true);
 

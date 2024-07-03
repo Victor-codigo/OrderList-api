@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Security\Jwt\JwtListener;
 
-use Override;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -25,7 +24,7 @@ class JwtCreatedListenerTest extends TestCase
         'param2' => 2,
     ];
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Application\NotificationGetData\Dto;
 
-use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -18,7 +17,7 @@ class NotificationGetDataInputDtoTest extends TestCase
     private ValidationInterface $validator;
     private MockObject|UserShared $userSession;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -129,10 +128,10 @@ class NotificationGetDataInputDtoTest extends TestCase
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
-                'page' => [VALIDATION_ERRORS::GREATER_THAN],
-                'page_items' => [VALIDATION_ERRORS::GREATER_THAN],
-                'lang' => [VALIDATION_ERRORS::CHOICE_NOT_SUCH],
-            ],
+            'page' => [VALIDATION_ERRORS::GREATER_THAN],
+            'page_items' => [VALIDATION_ERRORS::GREATER_THAN],
+            'lang' => [VALIDATION_ERRORS::CHOICE_NOT_SUCH],
+        ],
             $return
         );
     }

@@ -24,5 +24,5 @@ interface FileUploadInterface
      * @throws FileUploadPartialFileException
      * @throws FileUploadReplaceException
      */
-    public function __invoke(UploadedFileInterface $file, string $pathToSaveFile, string $fileNameToReplace = null): FileInterface;
+    public function __invoke(UploadedFileInterface $file, string $pathToSaveFile, ?string $fileNameToReplace = null): FileInterface;
 }

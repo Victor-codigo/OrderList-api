@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupUserRolChangeInputDto\Dto;
 
-use Override;
-use DateTime;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -24,12 +22,12 @@ class GroupUserRolChangeInputDtoTest extends TestCase
         '20354d7a-e4fe-47af-8ff6-187bca92f3f9',
         'caa8b54a-eb5e-4134-8ae2-a3946a428ec7',
         'bd2cbad1-6ccf-48e3-bb92-bc9961bc011e',
-     ];
+    ];
 
     private ValidationInterface $validator;
     private UserShared $userSesion;
 
-    #[Override]
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -41,7 +39,7 @@ class GroupUserRolChangeInputDtoTest extends TestCase
             'name',
             [USER_ROLES::USER],
             null,
-            new DateTime()
+            new \DateTime()
         );
     }
 

@@ -19,8 +19,8 @@ class ListOrdersGetDataDto
         public readonly array $listOrdersId,
         public readonly bool $orderAsc,
 
-        public readonly Filter|null $filterSection,
-        public readonly Filter|null $filterText,
+        public readonly ?Filter $filterSection,
+        public readonly ?Filter $filterText,
 
         public readonly PaginatorPage $page,
         public readonly PaginatorPageItems $pageItems,

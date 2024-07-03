@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Product\Application\ProductRemove\Dto;
 
-use Override;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
@@ -28,7 +27,7 @@ class ProductRemoveInputDto implements ServiceInputDtoInterface
      * @param string[]|null $productsId
      * @param string[]|null $shopsId
      */
-    public function __construct(UserShared $userSession, string|null $groupId, array|null $productsId, array|null $shopsId)
+    public function __construct(UserShared $userSession, ?string $groupId, ?array $productsId, ?array $shopsId)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
@@ -42,7 +41,7 @@ class ProductRemoveInputDto implements ServiceInputDtoInterface
         );
     }
 
-    #[Override]
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray([
