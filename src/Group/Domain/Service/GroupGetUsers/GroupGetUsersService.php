@@ -167,7 +167,7 @@ class GroupGetUsersService
 
     private function sortUsersByName(array $usersData, bool $orderAsc): array
     {
-        usort($usersData, function (array $userData1, array $userData2) use ($orderAsc) {
+        usort($usersData, function (array $userData1, array $userData2) use ($orderAsc): int {
             if ($userData1['name'] === $userData2['name']) {
                 return 0;
             }
