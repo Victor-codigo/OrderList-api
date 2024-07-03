@@ -94,7 +94,7 @@ class ResponseDtoTest extends TestCase
         ];
         $this->object->data = $data;
 
-        $callback = function (array $dataResponse) use ($data) {
+        $callback = function (array $dataResponse) use ($data): array {
             static $callCounter = 0;
 
             $dataExpected = $data[$callCounter++];

@@ -118,7 +118,10 @@ class GetUsersUseCase extends ServiceBase
         return $usersData;
     }
 
-    private function getItemPlain(array $item)
+    /**
+     * @return mixed[]
+     */
+    private function getItemPlain(array $item): array
     {
         $itemPlain = [];
         foreach ($item as $key => $value) {
