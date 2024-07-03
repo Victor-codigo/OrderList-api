@@ -100,7 +100,7 @@ class NotificationGetDataServiceTest extends TestCase
      *
      * @dataProvider providerNotificationLanguage
      */
-    public function itShouldGetNotificationData($providerLang): void
+    public function itShouldGetNotificationData(string $providerLang): void
     {
         $notifications = $this->getNotifications();
         $notificationsIds = array_map(fn (Notification $notification): ?string => $notification->getId()->getValue(), iterator_to_array($notifications));

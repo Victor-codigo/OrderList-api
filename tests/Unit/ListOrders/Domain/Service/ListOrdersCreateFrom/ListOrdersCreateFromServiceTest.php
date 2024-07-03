@@ -158,7 +158,7 @@ class ListOrdersCreateFromServiceTest extends TestCase
      *
      * @dataProvider createListOrdersDataProvider
      * */
-    public function itShouldCreateAListOrdersFromOtherListOrders($hasOrders): void
+    public function itShouldCreateAListOrdersFromOtherListOrders(bool $hasOrders): void
     {
         $listOrdersOld = $this->getListOrders(self::LIST_ORDERS_ID_OLD, $hasOrders);
         $listOrdersOldNumOrders = count($listOrdersOld->getOrders());
