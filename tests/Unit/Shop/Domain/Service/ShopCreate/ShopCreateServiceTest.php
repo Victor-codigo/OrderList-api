@@ -10,7 +10,6 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintE
 use Common\Domain\FileUpload\Exception\FileUploadException;
 use Common\Domain\Image\Exception\ImageResizeException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Common\Domain\Ports\FileUpload\FileInterface;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
 use Common\Domain\Ports\Image\ImageInterface;
@@ -49,7 +48,7 @@ class ShopCreateServiceTest extends TestCase
         $this->object = new ShopCreateService($this->shopRepository, $this->fileUpload, $this->image, self::IMAGE_UPLOADED_PATH);
     }
 
-    private function createShopCreateDto(?string $description, ?string $address, ?FileInterface $shopImageFile): ShopCreateDto
+    private function createShopCreateDto(?string $description, ?string $address, MockObject|UploadedFileInterface|null $shopImageFile): ShopCreateDto
     {
         return new ShopCreateDto(
             ValueObjectFactory::createIdentifier('276865ee-d120-46e9-a3f7-16f7c923a990'),

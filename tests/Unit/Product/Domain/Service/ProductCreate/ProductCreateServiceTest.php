@@ -9,7 +9,6 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\FileUpload\Exception\FileUploadException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Common\Domain\Ports\FileUpload\FileInterface;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
 use Common\Domain\Ports\Image\ImageInterface;
@@ -48,7 +47,7 @@ class ProductCreateServiceTest extends TestCase
         $this->object = new ProductCreateService($this->productRepository, $this->fileUpload, $this->image, self::IMAGE_UPLOADED_PATH);
     }
 
-    private function createProductCreateDto(string|null $description, FileInterface|null $productImageFile): ProductCreateDto
+    private function createProductCreateDto(string|null $description, MockObject|UploadedFileInterface|null $productImageFile): ProductCreateDto
     {
         return new ProductCreateDto(
             ValueObjectFactory::createIdentifier('276865ee-d120-46e9-a3f7-16f7c923a990'),
