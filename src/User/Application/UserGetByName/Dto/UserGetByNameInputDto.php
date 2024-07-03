@@ -23,7 +23,7 @@ class UserGetByNameInputDto implements ServiceInputDtoInterface
     {
         $this->userSession = $userSession;
         $this->usersName = null === $usersName ? null : array_map(
-            fn (string $userName) => ValueObjectFactory::createNameWithSpaces($userName)->slashesToWiteSpaces(),
+            fn (string $userName): NameWithSpaces => ValueObjectFactory::createNameWithSpaces($userName)->slashesToWiteSpaces(),
             $usersName
         );
     }
