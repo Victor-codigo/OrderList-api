@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Validation;
 
-use Symfony\Component\Validator\Constraint;
 use Common\Adapter\Validation\Validations\ValidationConstraint;
 use Common\Domain\Validation\Common\CONSTRAINTS_NAMES;
 use Common\Domain\Validation\ValidationInterface;
 use Common\Domain\Validation\ValueObjectValidationInterface;
+use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -153,7 +153,10 @@ class Validator
         return end($classInArray).'-'.$index;
     }
 
-    private function getValidationsCallBacks()
+    /**
+     * @return array<string, callable>
+     */
+    private function getValidationsCallBacks(): array
     {
         return [
             CONSTRAINTS_NAMES::NOT_BLANK->value => $this->validationChain->notBlank(...),
