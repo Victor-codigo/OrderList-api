@@ -87,7 +87,7 @@ class SetProductShopPriceServiceTest extends TestCase
 
     private function createProducts(Identifier $groupId, array $productsId): array
     {
-        $productsCreateCallBack = function (Identifier $productId) use ($groupId) {
+        $productsCreateCallBack = function (Identifier $productId) use ($groupId): Product {
             $productIdString = $productId->getValue();
 
             return Product::fromPrimitives(
@@ -104,7 +104,7 @@ class SetProductShopPriceServiceTest extends TestCase
 
     private function createShops(Identifier $groupId, array $shopsId): array
     {
-        $shopsCreateCallback = function (Identifier $shopId) use ($groupId) {
+        $shopsCreateCallback = function (Identifier $shopId) use ($groupId): Shop {
             $shopIdString = $shopId->getValue();
 
             return Shop::fromPrimitives(

@@ -30,14 +30,14 @@ class NameWithSpaces extends StringValueObject implements Stringable
         return (string) $this->getValue();
     }
 
-    public function witheSpacesToSlashes()
+    public function witheSpacesToSlashes(): self
     {
         $nameWithSlashes = mb_ereg_replace(' ', '-', (string) $this->getValue());
 
         return ValueObjectFactory::createNameWithSpaces($nameWithSlashes);
     }
 
-    public function slashesToWiteSpaces()
+    public function slashesToWiteSpaces(): self
     {
         $nameWithWhiteSpaces = mb_ereg_replace('-', ' ', (string) $this->getValue());
 
