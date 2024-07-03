@@ -48,7 +48,7 @@ class HexFileStructureCommandTest extends KernelTestCase
         $this->deleteDirectory(self::OUTPUT_PATH_ALTERNATIVE);
     }
 
-    private function deleteDirectory(string $dir)
+    private function deleteDirectory(string $dir): bool
     {
         if (!file_exists($dir)) {
             return true;
