@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ProductModify;
 
+use Override;
+use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\FileUpload\Exception\File\FileException;
@@ -37,7 +39,7 @@ class ProductModifyServiceTest extends TestCase
     private MockObject|ProductImage $productImage;
     private MockObject|Product $productFromDb;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -154,7 +156,7 @@ class ProductModifyServiceTest extends TestCase
         $this->productsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->productFromDb]));
+            ->willReturn(new ArrayIterator([$this->productFromDb]));
 
         $this->productsPaginator
             ->expects($this->once())
@@ -219,7 +221,7 @@ class ProductModifyServiceTest extends TestCase
         $this->productsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->productFromDb]));
+            ->willReturn(new ArrayIterator([$this->productFromDb]));
 
         $this->productFromDb
             ->expects($this->never())
@@ -287,7 +289,7 @@ class ProductModifyServiceTest extends TestCase
         $this->productsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->productFromDb]));
+            ->willReturn(new ArrayIterator([$this->productFromDb]));
 
         $this->productsPaginator
             ->expects($this->once())
@@ -360,7 +362,7 @@ class ProductModifyServiceTest extends TestCase
         $this->productsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->productFromDb]));
+            ->willReturn(new ArrayIterator([$this->productFromDb]));
 
         $this->productsPaginator
             ->expects($this->once())
@@ -432,7 +434,7 @@ class ProductModifyServiceTest extends TestCase
         $this->productsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->productFromDb]));
+            ->willReturn(new ArrayIterator([$this->productFromDb]));
 
         $this->productsPaginator
             ->expects($this->once())
@@ -508,7 +510,7 @@ class ProductModifyServiceTest extends TestCase
         $this->productsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->productFromDb]));
+            ->willReturn(new ArrayIterator([$this->productFromDb]));
 
         $this->productsPaginator
             ->expects($this->once())
@@ -584,7 +586,7 @@ class ProductModifyServiceTest extends TestCase
         $this->productsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->productFromDb]));
+            ->willReturn(new ArrayIterator([$this->productFromDb]));
 
         $this->productsPaginator
             ->expects($this->once())

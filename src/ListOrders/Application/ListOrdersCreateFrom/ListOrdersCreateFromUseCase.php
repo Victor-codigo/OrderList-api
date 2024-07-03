@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ListOrders\Application\ListOrdersCreateFrom;
 
+use Exception;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Service\ServiceBase;
@@ -53,7 +54,7 @@ class ListOrdersCreateFromUseCase extends ServiceBase
             throw ListOrdersCreateFromIdNotFoundException::fromMessage('The list orders id to create from, not found');
         } catch (ListOrdersCreateFromServiceNameAlreadyExistsException) {
             throw ListOrdersCreateFromNameAlreadyExistsException::fromMessage('The name already exists');
-        } catch (\Exception) {
+        } catch (Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

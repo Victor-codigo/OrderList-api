@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation\Validations;
 
+use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use PHPUnit\Framework\TestCase;
@@ -12,7 +13,7 @@ class ValidateIterableTest extends TestCase
 {
     private ValidationChain $validator;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

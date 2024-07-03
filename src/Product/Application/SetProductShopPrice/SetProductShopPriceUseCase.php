@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Product\Application\SetProductShopPrice;
 
+use Exception;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Service\ServiceBase;
@@ -41,7 +42,7 @@ class SetProductShopPriceUseCase extends ServiceBase
             return $this->createSetProductShopPriceOutputDto($input->groupId, $productShopModified);
         } catch (ValidateGroupAndUserException) {
             throw SetProductShopPriceValidateGroupAndUserException::fromMessage('You have no permissions');
-        } catch (\Exception) {
+        } catch (Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

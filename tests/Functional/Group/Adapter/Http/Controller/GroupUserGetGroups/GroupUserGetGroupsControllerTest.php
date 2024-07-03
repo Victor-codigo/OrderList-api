@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupUserGetGroups;
 
+use DateTime;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\Filter\FILTER_SECTION;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
@@ -25,7 +26,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
     /**
      * @return Group[]
      */
-    private function getGroupsData(\DateTime $createdOn): array
+    private function getGroupsData(DateTime $createdOn): array
     {
         return [
             Group::fromPrimitives('fdb242b4-bac8-4463-88d0-0941bb0beee0', 'GroupOne', GROUP_TYPE::GROUP, 'This is a group of users', null),
@@ -73,7 +74,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldGetAllGroupsDataForTheUser(): void
     {
-        $groupCreatedOn = new \DateTime();
+        $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsType = array_map(fn (Group $group) => $group->getType()->getValue(), $groups);
@@ -105,7 +106,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $filterSection = FILTER_SECTION::GROUP;
         $filterText = FILTER_STRING_COMPARISON::EQUALS;
         $filterValue = 'GroupOne';
-        $groupCreatedOn = new \DateTime();
+        $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = [$groups[0]->getId()->getValue()];
         $groupsType = array_map(fn (Group $group) => $group->getType()->getValue(), $groups);
@@ -140,7 +141,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $filterSection = FILTER_SECTION::GROUP;
         $filterText = FILTER_STRING_COMPARISON::STARTS_WITH;
         $filterValue = 'Group';
-        $groupCreatedOn = new \DateTime();
+        $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsType = array_map(fn (Group $group) => $group->getType()->getValue(), $groups);
@@ -175,7 +176,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $filterSection = FILTER_SECTION::GROUP;
         $filterText = FILTER_STRING_COMPARISON::ENDS_WITH;
         $filterValue = 'One';
-        $groupCreatedOn = new \DateTime();
+        $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = [$groups[0]->getId()->getValue()];
         $groupsType = [$groups[0]->getType()->getValue()];
@@ -210,7 +211,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $filterSection = FILTER_SECTION::GROUP;
         $filterText = FILTER_STRING_COMPARISON::CONTAINS;
         $filterValue = 'oup';
-        $groupCreatedOn = new \DateTime();
+        $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsType = array_map(fn (Group $group) => $group->getType()->getValue(), $groups);
@@ -242,7 +243,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldGroupsDataForTheUserGroupTypeUser(): void
     {
-        $groupCreatedOn = new \DateTime();
+        $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = [$groups[2]->getId()->getValue()];
         $groupsType = [$groups[2]->getType()->getValue()];
@@ -275,7 +276,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $filterSection = FILTER_SECTION::LIST_ORDERS;
         $filterText = FILTER_STRING_COMPARISON::STARTS_WITH;
         $filterValue = 'Group';
-        $groupCreatedOn = new \DateTime();
+        $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsType = array_map(fn (Group $group) => $group->getType()->getValue(), $groups);

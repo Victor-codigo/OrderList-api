@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Domain\Validation;
 
+use DateTime;
 use Common\Domain\Validation\Common\CONSTRAINTS_NAMES;
 use Common\Domain\Validation\Common\PROTOCOLS;
 use Common\Domain\Validation\Common\TYPES;
@@ -141,35 +142,35 @@ class ConstraintFactory
         ]);
     }
 
-    public static function lessThan(int|\DateTime $value): ConstraintDto
+    public static function lessThan(int|DateTime $value): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::LESS_THAN, [
             'value' => $value,
         ]);
     }
 
-    public static function lessThanOrEqual(int|\DateTime $value): ConstraintDto
+    public static function lessThanOrEqual(int|DateTime $value): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::LESS_THAN_OR_EQUAL, [
             'value' => $value,
         ]);
     }
 
-    public static function greaterThan(int|\DateTime $value): ConstraintDto
+    public static function greaterThan(int|DateTime $value): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::GREATER_THAN, [
             'value' => $value,
         ]);
     }
 
-    public static function greaterThanOrEqual(int|\DateTime $value): ConstraintDto
+    public static function greaterThanOrEqual(int|DateTime $value): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::GREATER_THAN_OR_EQUAL, [
             'value' => $value,
         ]);
     }
 
-    public static function range(int|\DateTime $min, int|\DateTime $max): ConstraintDto
+    public static function range(int|DateTime $min, int|DateTime $max): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::RANGE, [
             'min' => $min,

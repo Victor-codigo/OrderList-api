@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Array;
 
+use Override;
+use BackedEnum;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\ConstraintFactory;
@@ -11,7 +13,7 @@ use Common\Domain\Validation\User\USER_ROLES;
 
 class Roles extends ArrayValueObject
 {
-    #[\Override]
+    #[Override]
     protected function defineConstraints(): void
     {
         $this
@@ -20,7 +22,7 @@ class Roles extends ArrayValueObject
             ->setConstraint(ConstraintFactory::type(TYPES::ARRAY));
     }
 
-    #[\Override]
+    #[Override]
     public function getValueObjects(): array
     {
         if (null === $this->getValue()) {
@@ -49,7 +51,7 @@ class Roles extends ArrayValueObject
     }
 
     /**
-     * @return \BackedEnum[]
+     * @return BackedEnum[]
      */
     public function getRolesEnums(): array
     {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Order\Application\OrderRemove\Dto;
 
+use Override;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
@@ -34,7 +35,7 @@ class OrderRemoveInputDto implements ServiceInputDtoInterface
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
     }
 
-    #[\Override]
+    #[Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListNoOrdersId = $validator

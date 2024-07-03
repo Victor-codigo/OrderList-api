@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Event\Fixtures;
 
+use Override;
 use Common\Domain\Event\EventDomainSubscriberInterface;
 
 class CustomEventSubscriberWithOneMethodWithPriority implements EventDomainSubscriberInterface
@@ -12,7 +13,7 @@ class CustomEventSubscriberWithOneMethodWithPriority implements EventDomainSubsc
     {
     }
 
-    #[\Override]
+    #[Override]
     public static function getSubscribedEvents(): array
     {
         return [

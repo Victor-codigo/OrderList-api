@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shop\Application\ShopRemove;
 
+use Exception;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -46,7 +47,7 @@ class ShopRemoveUseCase extends ServiceBase
             throw ShopRemoveShopNotFoundException::fromMessage('Shop not found');
         } catch (ValidateGroupAndUserException) {
             throw ShopRemoveGroupOrUserNotValidException::fromMessage('You have not permissions');
-        } catch (\Exception) {
+        } catch (Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

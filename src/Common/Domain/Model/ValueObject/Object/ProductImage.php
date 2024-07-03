@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Object;
 
+use Override;
 use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Validation\ConstraintFactory;
 
 class ProductImage extends ObjectValueObject
 {
-    #[\Override]
+    #[Override]
     public function getValidationValue(): mixed
     {
         if (null === $this->value) {
@@ -19,7 +20,7 @@ class ProductImage extends ObjectValueObject
         return $this->value->getFile();
     }
 
-    #[\Override]
+    #[Override]
     public function defineConstraints(): void
     {
         $this

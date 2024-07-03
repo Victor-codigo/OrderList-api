@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Notification\Adapter\Http\Controller\NotificationRemoveAllUserNotifications;
 
+use Override;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +24,7 @@ class NotificationRemoveAllUserNotificationsControllerTest extends WebClientTest
         'f79ddff5-486b-4b5f-af64-b99fe9154fc1',
     ];
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

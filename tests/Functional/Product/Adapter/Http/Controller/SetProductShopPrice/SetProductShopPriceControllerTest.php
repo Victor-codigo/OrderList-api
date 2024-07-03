@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Product\Adapter\Http\Controller\SetProductShopPrice;
 
+use stdClass;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -67,7 +68,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                     'price' => self::PRICES[$index],
                     'unit' => self::UNITS[$index]->value,
                 ],
-                array_map(fn (\stdClass $productShop) => (array) $productShop, $responseContent->data)
+                array_map(fn (stdClass $productShop) => (array) $productShop, $responseContent->data)
             );
         }
     }
@@ -104,7 +105,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                     'price' => self::PRICES[$index],
                     'unit' => self::UNITS[$index]->value,
                 ],
-                array_map(fn (\stdClass $productShop) => (array) $productShop, $responseContent->data)
+                array_map(fn (stdClass $productShop) => (array) $productShop, $responseContent->data)
             );
         }
     }

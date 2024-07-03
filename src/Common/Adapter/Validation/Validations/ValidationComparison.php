@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Validation\Validations;
 
+use DateTime;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Symfony\Component\Validator\Constraints\EqualTo;
 use Symfony\Component\Validator\Constraints\GreaterThan;
@@ -49,7 +50,7 @@ class ValidationComparison extends ValidationConstraintBase
         );
     }
 
-    public function lessThan(int|\DateTime $value): ValidationConstraint
+    public function lessThan(int|DateTime $value): ValidationConstraint
     {
         return $this->createConstraint(
             new LessThan($value),
@@ -57,7 +58,7 @@ class ValidationComparison extends ValidationConstraintBase
         );
     }
 
-    public function lessThanOrEqual(int|\DateTime $value): ValidationConstraint
+    public function lessThanOrEqual(int|DateTime $value): ValidationConstraint
     {
         return $this->createConstraint(
             new LessThanOrEqual($value),
@@ -65,7 +66,7 @@ class ValidationComparison extends ValidationConstraintBase
         );
     }
 
-    public function greaterThan(int|\DateTime $value): ValidationConstraint
+    public function greaterThan(int|DateTime $value): ValidationConstraint
     {
         return $this->createConstraint(
             new GreaterThan($value),
@@ -75,7 +76,7 @@ class ValidationComparison extends ValidationConstraintBase
         return $this;
     }
 
-    public function greaterThanOrEqual(int|\DateTime $value): ValidationConstraint
+    public function greaterThanOrEqual(int|DateTime $value): ValidationConstraint
     {
         return $this->createConstraint(
             new GreaterThanOrEqual($value),
@@ -83,7 +84,7 @@ class ValidationComparison extends ValidationConstraintBase
         );
     }
 
-    public function range(int|\DateTime $min, int|\DateTime $max): ValidationConstraint
+    public function range(int|DateTime $min, int|DateTime $max): ValidationConstraint
     {
         return $this->createConstraint(
             new Range(null, null, null, null, null, null, $min, null, $max),

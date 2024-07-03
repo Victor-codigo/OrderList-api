@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Event\Exception;
 
+use Override;
+use Throwable;
 use Common\Adapter\Http\Exception\HttpResponseException;
 use Common\Domain\Config\AppConfig;
 use Common\Domain\Exception\DomainExceptionOutput;
@@ -28,7 +30,7 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
     public const ERROR_500_MESSAGE = AppConfig::ERROR_500_MESSAGE;
     public const ERROR_METHOD_NOT_ALLOWED = AppConfig::ERROR_METHOD_NOT_ALLOWED;
 
-    #[\Override]
+    #[Override]
     public static function getSubscribedEvents(): array
     {
         return [KernelEvents::EXCEPTION => ['__invoke']];
@@ -42,7 +44,7 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
           $event->setResponse($response);
       }
 
-      private function handleSymfonyExceptions(\Throwable $exception): Response|null
+      private function handleSymfonyExceptions(Throwable $exception): Response|null
       {
           if ($exception instanceof NotFoundHttpException) {
               $message = static::ERROR_404_MESSAGE;
@@ -93,7 +95,7 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
           return $this->createJsonResponse($responseException->getResponseData(), $responseException->getStatusCode());
       }
 
-      private function getCustomExceptionDto(\Throwable $exception): array
+      private function getCustomExceptionDto(Throwable $exception): array
       {
           if ($exception instanceof DomainExceptionOutput) {
               $response = (new ResponseDto())

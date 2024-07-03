@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupGetAdmins;
 
+use Exception;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\Object\Rol;
@@ -48,7 +49,7 @@ class GroupGetAdminsUseCase extends ServiceBase
             throw $e;
         } catch (DBNotFoundException) {
             throw GroupGetAdminsGroupNotFoundException::fromMessage('Group not Found');
-        } catch (\Exception) {
+        } catch (Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

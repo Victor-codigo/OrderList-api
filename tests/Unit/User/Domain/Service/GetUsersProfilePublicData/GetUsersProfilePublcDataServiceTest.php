@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Domain\Service\GetUsersProfilePublicData;
 
+use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Struct\SCOPE;
@@ -23,7 +24,7 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
     private GetUsersProfilePublicDataService $object;
     private MockObject|ProfileRepositoryInterface $profileRepository;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

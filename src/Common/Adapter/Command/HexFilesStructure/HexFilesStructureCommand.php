@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Command\HexFilesStructure;
 
+use Override;
 use Common\Adapter\Command\HexFilesStructure\Exception\TemplateErrorException;
 use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -52,7 +53,7 @@ class HexFilesStructureCommand extends Command
         parent::__construct();
     }
 
-    #[\Override]
+    #[Override]
     protected function configure(): void
     {
         $this->addArgument(
@@ -80,7 +81,7 @@ class HexFilesStructureCommand extends Command
         );
     }
 
-    #[\Override]
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->getInput($input);

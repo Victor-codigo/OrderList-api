@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupRemoveAllUserGroups;
 
+use Override;
+use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -30,7 +32,7 @@ class GroupRemoveAllUserGroupsServiceTest extends TestCase
     private MockObject|GroupRemoveUserFromGroupsService $groupRemoveUserFromGroupsService;
     private MockObject|PaginatorInterface $userGroupsPaginator;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -178,7 +180,7 @@ class GroupRemoveAllUserGroupsServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with($pageItems->getValue())
-            ->willReturnCallback(fn () => yield new \ArrayIterator($usersGroups));
+            ->willReturnCallback(fn () => yield new ArrayIterator($usersGroups));
 
         $this->groupRepository
             ->expects($this->once())
@@ -226,7 +228,7 @@ class GroupRemoveAllUserGroupsServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with($pageItems->getValue())
-            ->willReturnCallback(fn () => yield new \ArrayIterator([]));
+            ->willReturnCallback(fn () => yield new ArrayIterator([]));
 
         $this->groupRepository
             ->expects($this->never())
@@ -303,7 +305,7 @@ class GroupRemoveAllUserGroupsServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with($pageItems->getValue())
-            ->willReturnCallback(fn () => yield new \ArrayIterator($usersGroups));
+            ->willReturnCallback(fn () => yield new ArrayIterator($usersGroups));
 
         $this->groupRepository
             ->expects($this->once())
@@ -343,7 +345,7 @@ class GroupRemoveAllUserGroupsServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with($pageItems->getValue())
-            ->willReturnCallback(fn () => yield new \ArrayIterator($usersGroups));
+            ->willReturnCallback(fn () => yield new ArrayIterator($usersGroups));
 
         $this->groupRepository
             ->expects($this->once())

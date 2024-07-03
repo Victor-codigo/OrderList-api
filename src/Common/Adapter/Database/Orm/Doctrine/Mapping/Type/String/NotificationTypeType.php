@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String;
 
+use Override;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\TypeBase;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Model\ValueObject\Object\NotificationType;
@@ -13,19 +14,19 @@ use Error;
 
 class NotificationTypeType extends TypeBase
 {
-    #[\Override]
+    #[Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return sprintf('VARCHAR(%d)', $column['length']);
     }
 
-    #[\Override]
+    #[Override]
     public function getClassImplementationName(): string
     {
         return NotificationType::class;
     }
 
-    #[\Override]
+    #[Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         /** @var NOTIFICATION_TYPE $notificationType */
@@ -34,7 +35,7 @@ class NotificationTypeType extends TypeBase
         return null === $notificationType ? null : $notificationType->value;
     }
 
-    #[\Override]
+    #[Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
         try {

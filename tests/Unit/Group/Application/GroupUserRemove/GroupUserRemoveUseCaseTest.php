@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupUserRemove;
 
+use Override;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -37,7 +38,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
     private MockObject|UserShared $userSession;
     private MockObject|Group $group;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupModify\Dto;
 
+use Override;
 use Common\Domain\Model\ValueObject\Object\GroupImage;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -33,7 +34,7 @@ class GroupModifyInputDto implements ServiceInputDtoInterface
         $this->image = ValueObjectFactory::createGroupImage($image);
     }
 
-    #[\Override]
+    #[Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

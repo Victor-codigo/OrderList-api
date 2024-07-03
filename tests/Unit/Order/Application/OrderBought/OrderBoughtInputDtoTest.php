@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Application\OrderBought;
 
+use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -18,7 +19,7 @@ class OrderBoughtInputDtoTest extends TestCase
     private MockObject|UserShared $userSession;
     private ValidationInterface $validator;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

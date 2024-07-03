@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Object;
 
+use Override;
+use stdClass;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Model\ValueObject\Object\Rol;
@@ -18,7 +20,7 @@ class RolTest extends TestCase
     private Rol $object;
     private ValidationChain $validator;
 
-    #[\Override]
+    #[Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -56,7 +58,7 @@ class RolTest extends TestCase
     /** @test */
     public function checkRolNotValid(): void
     {
-        $this->object = $this->createRol(new \stdClass());
+        $this->object = $this->createRol(new stdClass());
         $return = $this->validator->validateValueObject($this->object);
 
         $this->assertEquals([VALIDATION_ERRORS::CHOICE_NOT_SUCH], $return);

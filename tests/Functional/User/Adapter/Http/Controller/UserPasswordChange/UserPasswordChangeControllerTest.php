@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserPasswordChange;
 
+use stdClass;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -114,7 +115,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         );
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Wrong password', $responseContent->message);
-        $errorExpected = new \stdClass();
+        $errorExpected = new stdClass();
         $errorExpected->id = ['not_blank', 'not_null'];
         $errorExpected->password_old = ['not_blank', 'not_null'];
         $errorExpected->password_new = ['not_blank', 'not_null'];
@@ -144,7 +145,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         );
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Wrong password', $responseContent->message);
-        $errorExpected = new \stdClass();
+        $errorExpected = new stdClass();
         $errorExpected->id = ['uuid_invalid_characters'];
         $this->assertEquals($errorExpected, $responseContent->errors);
     }
@@ -171,7 +172,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         );
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Wrong password', $responseContent->message);
-        $errorExpected = new \stdClass();
+        $errorExpected = new stdClass();
         $errorExpected->password_old = ['string_too_short'];
         $this->assertEquals($errorExpected, $responseContent->errors);
     }
@@ -198,7 +199,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         );
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Wrong password', $responseContent->message);
-        $errorExpected = new \stdClass();
+        $errorExpected = new stdClass();
         $errorExpected->password_new = ['string_too_short'];
         $this->assertEquals($errorExpected, $responseContent->errors);
     }
@@ -225,7 +226,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         );
         $this->assertSame(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Wrong password', $responseContent->message);
-        $errorExpected = new \stdClass();
+        $errorExpected = new stdClass();
         $errorExpected->password_new_repeat = ['string_too_short'];
         $this->assertEquals($errorExpected, $responseContent->errors);
     }

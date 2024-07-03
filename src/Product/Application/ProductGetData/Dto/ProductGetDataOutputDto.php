@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Product\Application\ProductGetData\Dto;
 
+use Override;
 use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 
@@ -16,7 +17,7 @@ class ProductGetDataOutputDto implements ApplicationOutputInterface
     ) {
     }
 
-    #[\Override]
+    #[Override]
     public function toArray(): array
     {
         return [

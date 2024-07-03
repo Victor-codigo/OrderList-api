@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Domain\Service\OrderRemove;
 
+use Override;
+use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -28,7 +30,7 @@ class OrderRemoveServiceTest extends TestCase
     private MockObject|OrderRepositoryInterface $orderRepository;
     private MockObject|PaginatorInterface $paginator;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -85,7 +87,7 @@ class OrderRemoveServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($orders));
+            ->willReturn(new ArrayIterator($orders));
 
         $return = $this->object->__invoke($input);
 

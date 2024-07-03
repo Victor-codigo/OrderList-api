@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Date;
 
+use Override;
+use DateTime;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Date\DateNowToFuture;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -14,7 +16,7 @@ class DateNowToFutureTest extends TestCase
 {
     private ValidationInterface $validator;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -25,7 +27,7 @@ class DateNowToFutureTest extends TestCase
     /** @test */
     public function itShouldValidate(): void
     {
-        $dateTimeEarly = new \DateTime();
+        $dateTimeEarly = new DateTime();
         $dateTimeEarly->setTimestamp($dateTimeEarly->getTimestamp() - 3600);
         $object = new DateNowToFuture($dateTimeEarly);
 
@@ -47,7 +49,7 @@ class DateNowToFutureTest extends TestCase
     /** @test */
     public function itShouldFailDateTimeIsEarlierThanAnHour(): void
     {
-        $dateTimeEarly = new \DateTime();
+        $dateTimeEarly = new DateTime();
         $dateTimeEarly->setTimestamp($dateTimeEarly->getTimestamp() - 3601);
         $object = new DateNowToFuture($dateTimeEarly);
 

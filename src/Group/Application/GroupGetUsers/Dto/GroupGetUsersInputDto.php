@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupGetUsers\Dto;
 
+use Override;
 use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
@@ -45,7 +46,7 @@ class GroupGetUsersInputDto implements ServiceInputDtoInterface
         $this->orderAsc = $orderAsc;
     }
 
-    #[\Override]
+    #[Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray([

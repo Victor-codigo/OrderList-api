@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace User\Application\UserPasswordRemember\Dto;
 
+use Override;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Url;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -21,7 +22,7 @@ class UserPasswordRememberInputDto implements ServiceInputDtoInterface
         $this->passwordRememberUrl = ValueObjectFactory::createUrl($passwordRememberUrl);
     }
 
-    #[\Override]
+    #[Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

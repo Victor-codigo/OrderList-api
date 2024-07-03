@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupGetUsers\Dto;
 
+use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -20,7 +21,7 @@ class GroupGetUsersInputDtoTest extends TestCase
 
     private MockObject|ValidationInterface $validator;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

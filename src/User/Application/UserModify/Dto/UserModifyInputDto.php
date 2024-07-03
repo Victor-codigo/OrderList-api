@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace User\Application\UserModify\Dto;
 
+use Override;
 use Common\Domain\Model\ValueObject\Object\UserImage;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
@@ -51,7 +52,7 @@ class UserModifyInputDto implements ServiceInputDtoInterface
         );
     }
 
-    #[\Override]
+    #[Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

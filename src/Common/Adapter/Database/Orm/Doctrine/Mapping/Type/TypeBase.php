@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Database\Orm\Doctrine\Mapping\Type;
 
+use Override;
 use Common\Domain\Exception\InvalidArgumentException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
@@ -12,13 +13,13 @@ abstract class TypeBase extends Type
 {
     abstract public function getClassImplementationName(): string;
 
-    #[\Override]
+    #[Override]
     public function getName(): string
     {
         return static::class;
     }
 
-    #[\Override]
+    #[Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         if (null === $value) {
@@ -32,7 +33,7 @@ abstract class TypeBase extends Type
         return $value->getValue();
     }
 
-    #[\Override]
+    #[Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
         return new ($this->getClassImplementationName())($value);

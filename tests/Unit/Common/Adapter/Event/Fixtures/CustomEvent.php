@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Event\Fixtures;
 
+use Override;
+use DateTimeImmutable;
 use Common\Domain\Event\EventDomainInterface;
 
 class CustomEvent implements EventDomainInterface
 {
-    #[\Override]
-    public function getOccurredOn(): \DateTimeImmutable
+    #[Override]
+    public function getOccurredOn(): DateTimeImmutable
     {
-        return new \DateTimeImmutable();
+        return new DateTimeImmutable();
     }
 }

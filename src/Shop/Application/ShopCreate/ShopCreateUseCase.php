@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shop\Application\ShopCreate;
 
+use Exception;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\FileUpload\Exception\FileUploadException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -57,7 +58,7 @@ class ShopCreateUseCase extends ServiceBase
             throw ShopCreateCanNotUploadFileException::fromMessage('An error occurred while file was uploading');
         } catch (ValidateGroupAndUserException) {
             throw ShopCreateGroupException::fromMessage('Error validating the group');
-        } catch (\Exception) {
+        } catch (Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

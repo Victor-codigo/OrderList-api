@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace User\Application\UserRegisterEmailConfirmation\Dto;
 
+use Override;
 use Common\Domain\Model\ValueObject\String\JwtToken;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\ServiceInputDtoInterface;
@@ -18,7 +19,7 @@ class UserEmailConfirmationInputDto implements ServiceInputDtoInterface
         $this->token = ValueObjectFactory::createJwtToken($token);
     }
 
-    #[\Override]
+    #[Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray(['token' => $this->token]);

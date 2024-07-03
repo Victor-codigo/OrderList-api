@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Group;
 
+use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -16,7 +17,7 @@ class FilterTest extends TestCase
 {
     private ValidationChain $validation;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

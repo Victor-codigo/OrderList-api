@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Database\Orm\Doctrine\Repository;
 
+use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -17,7 +18,7 @@ class ProfileRepositoryTest extends DataBaseTestCase
 
     private ProfileRepository $object;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

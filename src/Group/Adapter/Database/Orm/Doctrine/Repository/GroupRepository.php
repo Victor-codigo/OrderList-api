@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Group\Adapter\Database\Orm\Doctrine\Repository;
 
+use Override;
+use Exception;
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
@@ -25,7 +27,7 @@ class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
      * @throws DBUniqueConstraintException
      * @throws DBConnectionException
      */
-    #[\Override]
+    #[Override]
     public function save(Group $group): void
     {
         try {
@@ -33,7 +35,7 @@ class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
             $this->objectManager->flush();
         } catch (UniqueConstraintViolationException $e) {
             throw DBUniqueConstraintException::fromId($group->getId()->getValue(), $e->getCode());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
     }
@@ -43,7 +45,7 @@ class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
      *
      * @throws DBConnectionException
      */
-    #[\Override]
+    #[Override]
     public function remove(array $groups): void
     {
         try {
@@ -52,7 +54,7 @@ class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
             }
 
             $this->objectManager->flush();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
     }
@@ -62,7 +64,7 @@ class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
      *
      * @throws DBNotFoundException
      */
-    #[\Override]
+    #[Override]
     public function findGroupsByIdOrFail(array $groupsId): array
     {
         /** @var Group[] $groups */
@@ -78,7 +80,7 @@ class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
     /**
      * @throws DBNotFoundException
      */
-    #[\Override]
+    #[Override]
     public function findGroupByNameOrFail(NameWithSpaces $groupName): Group
     {
         $groupData = $this->findBy(['name' => $groupName], null, 1);

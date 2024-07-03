@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ListOrders\Application\ListOrdersModify;
 
+use Exception;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Exception\DomainInternalErrorException;
@@ -53,7 +54,7 @@ class ListOrdersModifyUseCase extends ServiceBase
             throw ListOrdersModifyNameAlreadyExistsException::fromMessage('The name is already registered');
         } catch (ValidateGroupAndUserException) {
             throw ListOrdersModifyValidateGroupAndUserException::fromMessage('You not belong to the group');
-        } catch (\Exception) {
+        } catch (Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

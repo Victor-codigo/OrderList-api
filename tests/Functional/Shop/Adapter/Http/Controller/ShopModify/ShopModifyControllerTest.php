@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Shop\Adapter\Http\Controller\ShopModify;
 
+use Override;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -28,7 +29,7 @@ class ShopModifyControllerTest extends WebClientTestCase
 
     private string $pathImageShop;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -41,7 +42,7 @@ class ShopModifyControllerTest extends WebClientTestCase
         copy(self::PATH_IMAGE_NOT_ALLOWED_BACKUP, self::PATH_IMAGE_NOT_ALLOWED);
     }
 
-    #[\Override]
+    #[Override]
     protected function tearDown(): void
     {
         parent::tearDown();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Security\User;
 
+use Override;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\User\USER_ROLES;
@@ -19,7 +20,7 @@ class UserSymfonyAdapterTest extends TestCase
     private MockObject|User $user;
     private MockObject|UserPasswordHasherInterface $passwordHAsher;
 
-    #[\Override]
+    #[Override]
     public function setup(): void
     {
         $this->loadUserSymfonyAdapter();

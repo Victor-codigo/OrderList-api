@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupCreate;
 
+use Override;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
@@ -32,7 +33,7 @@ class GroupCreateUseCaseTest extends TestCase
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|Group $group;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

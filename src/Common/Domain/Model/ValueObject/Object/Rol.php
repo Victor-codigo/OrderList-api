@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Object;
 
+use Override;
+use BackedEnum;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Validation\Common\TYPES;
@@ -18,7 +20,7 @@ class Rol extends ObjectValueObject
         GROUP_ROLES::class,
     ];
 
-    #[\Override]
+    #[Override]
     public function defineConstraints(): void
     {
         $this
@@ -49,7 +51,7 @@ class Rol extends ObjectValueObject
     /**
      * @throws InvalidArgumentException
      */
-    private static function getRolFromString(string $rol): \BackedEnum
+    private static function getRolFromString(string $rol): BackedEnum
     {
         $rolObject = null;
         foreach (self::ROL_TYPES as $rolType) {

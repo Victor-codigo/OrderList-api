@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array;
 
+use Override;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array\RolesType;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Exception\LogicException;
@@ -18,7 +19,7 @@ class RolesTypeTest extends TestCase
     private RolesType $object;
     private AbstractPlatform $abstractPlatform;
 
-    #[\Override]
+    #[Override]
     public function setUp(): void
     {
         parent::setUp();

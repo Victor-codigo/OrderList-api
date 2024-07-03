@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Integer;
 
+use Override;
 use Common\Domain\Model\ValueObject\ValueObjectBase;
 
 abstract class IntegerValueObject extends ValueObjectBase
@@ -17,19 +18,19 @@ abstract class IntegerValueObject extends ValueObjectBase
         $this->defineConstraints();
     }
 
-    #[\Override]
+    #[Override]
     public function getValue(): int|null
     {
         return $this->value;
     }
 
-    #[\Override]
+    #[Override]
     public function getValidationValue(): mixed
     {
         return $this->value;
     }
 
-    #[\Override]
+    #[Override]
     public function getValueObjects(): array
     {
         return [];

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Domain\Security;
 
+use DateTime;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -22,7 +23,7 @@ class UserShared
         private NameWithSpaces $name,
         private Roles $roles,
         private Path $image,
-        private \DateTime $createdOn,
+        private DateTime $createdOn,
     ) {
     }
 
@@ -46,12 +47,12 @@ class UserShared
         return $this->image;
     }
 
-    public function getCreatedOn(): \DateTime
+    public function getCreatedOn(): DateTime
     {
         return $this->createdOn;
     }
 
-    public static function fromPrimitives(string $id, string $email, string $name, array $roles, ?string $image, \DateTime $createdOn): self
+    public static function fromPrimitives(string $id, string $email, string $name, array $roles, ?string $image, DateTime $createdOn): self
     {
         $roles = array_map(
             fn (USER_ROLES $rol) => ValueObjectFactory::createRol($rol),

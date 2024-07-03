@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupGetAdmins\Dto;
 
+use Override;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
@@ -21,7 +22,7 @@ class GroupGetAdminsInputDto implements ServiceInputDtoInterface
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
     }
 
-    #[\Override]
+    #[Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

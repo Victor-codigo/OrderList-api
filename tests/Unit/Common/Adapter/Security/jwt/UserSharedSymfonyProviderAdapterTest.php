@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Security\jwt;
 
+use Override;
+use DateTime;
+use ValueError;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Adapter\Security\jwt\UserSharedSymfonyProviderAdapter;
@@ -26,7 +29,7 @@ class UserSharedSymfonyProviderAdapterTest extends TestCase
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|RequestStack $request;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -44,7 +47,7 @@ class UserSharedSymfonyProviderAdapterTest extends TestCase
             'name' => 'user name',
             'roles' => ['ROLE_USER'],
             'image' => null,
-            'created_on' => (new \DateTime())->format('Y-m-d H:i:s'),
+            'created_on' => (new DateTime())->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -110,7 +113,7 @@ class UserSharedSymfonyProviderAdapterTest extends TestCase
             ->expects($this->once())
             ->method('__invoke')
             ->with($moduleCommunicationConfig)
-            ->willThrowException(new \ValueError());
+            ->willThrowException(new ValueError());
 
         $this->expectException(UserNotFoundException::class);
         $this->object->loadUserByIdentifier($userId->getValue());

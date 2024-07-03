@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Product\Application\ProductCreate\Dto;
 
+use Override;
 use Common\Domain\Model\ValueObject\Object\ProductImage;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -31,7 +32,7 @@ class ProductCreateInputDto implements ServiceInputDtoInterface
         $this->image = ValueObjectFactory::createProductImage($image);
     }
 
-    #[\Override]
+    #[Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

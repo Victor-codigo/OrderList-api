@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace User\Adapter\Templates\Email\EmailRegistrationConfirmation;
 
+use Override;
 use Common\Domain\HtmlTemplate\TemplateDtoBase;
 use Common\Domain\HtmlTemplate\TemplateId;
 
@@ -32,7 +33,7 @@ final class EmailRegistrationConfirmationDto extends TemplateDtoBase
         return $this;
     }
 
-    #[\Override]
+    #[Override]
     protected function setStaticData(): void
     {
         $this->title = TemplateId::create('title');
@@ -41,7 +42,7 @@ final class EmailRegistrationConfirmationDto extends TemplateDtoBase
         $this->farewell = TemplateId::create('farewell', ['hoursToExpire' => $this->emailUserRegistrationConfirmationExpire / 60 / 60]);
     }
 
-    #[\Override]
+    #[Override]
     public function toArray(): array
     {
         return [

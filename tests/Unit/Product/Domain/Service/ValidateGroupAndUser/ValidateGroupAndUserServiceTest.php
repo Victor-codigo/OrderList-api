@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ValidateGroupAndUser;
 
+use Override;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -19,7 +20,7 @@ class ValidateGroupAndUserServiceTest extends TestCase
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|ResponseDto $response;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

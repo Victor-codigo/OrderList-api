@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersGetData;
 
+use Override;
+use DateTime;
+use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -22,7 +25,7 @@ class ListOrdersGetDataServiceTest extends TestCase
     private MockObject|ListOrdersRepositoryInterface $listOrdersRepository;
     private MockObject|PaginatorInterface $paginator;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -34,7 +37,7 @@ class ListOrdersGetDataServiceTest extends TestCase
 
     private function getListOrders(): array
     {
-        $datetime = \DateTime::createFromFormat('Y-m-d H:i:s', '2023-6-9 18:06:00');
+        $datetime = DateTime::createFromFormat('Y-m-d H:i:s', '2023-6-9 18:06:00');
 
         return [
             'list orders id 1' => ListOrders::fromPrimitives(
@@ -134,7 +137,7 @@ class ListOrdersGetDataServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($listOrders));
+            ->willReturn(new ArrayIterator($listOrders));
 
         $this->paginator
             ->expects($this->once())
@@ -191,7 +194,7 @@ class ListOrdersGetDataServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($listOrders));
+            ->willReturn(new ArrayIterator($listOrders));
 
         $this->paginator
             ->expects($this->once())
@@ -259,7 +262,7 @@ class ListOrdersGetDataServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($listOrders));
+            ->willReturn(new ArrayIterator($listOrders));
 
         $this->paginator
             ->expects($this->once())
@@ -327,7 +330,7 @@ class ListOrdersGetDataServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($listOrders));
+            ->willReturn(new ArrayIterator($listOrders));
 
         $this->paginator
             ->expects($this->once())
@@ -395,7 +398,7 @@ class ListOrdersGetDataServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($listOrders));
+            ->willReturn(new ArrayIterator($listOrders));
 
         $this->paginator
             ->expects($this->once())

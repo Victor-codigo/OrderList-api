@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupGetGroupsAdmins;
 
+use Override;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +22,7 @@ class GroupGetGroupsAdminsControllerTest extends WebClientTestCase
         '78b96ac1-ffcc-458b-8f48-b40c6e65261f',
     ];
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

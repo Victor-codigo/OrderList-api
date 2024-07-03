@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\ListOrders\Adapter\Http\Controller\ListOrdersRemove;
 
+use DateTime;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +27,7 @@ class ListOrdersRemoveControllerTest extends WebClientTestCase
             'group_id' => '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
             'name' => 'list orders name',
             'description' => 'list orders description',
-            'date_to_buy' => (new \DateTime())->format('Y-m-d H:i:s'),
+            'date_to_buy' => (new DateTime())->format('Y-m-d H:i:s'),
         ];
     }
 

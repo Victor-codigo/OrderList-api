@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ProductGetData;
 
+use Override;
+use ArrayIterator;
 use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -25,7 +27,7 @@ class ProductGetDataServiceTest extends TestCase
     private MockObject|ProductRepositoryInterface $productRepository;
     private MockObject|PaginatorInterface $paginator;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -159,7 +161,7 @@ class ProductGetDataServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($products));
+            ->willReturn(new ArrayIterator($products));
 
         $return = $this->object->__invoke($input);
 
@@ -221,7 +223,7 @@ class ProductGetDataServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($products));
+            ->willReturn(new ArrayIterator($products));
 
         $return = $this->object->__invoke($input);
 
@@ -283,7 +285,7 @@ class ProductGetDataServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($products));
+            ->willReturn(new ArrayIterator($products));
 
         $return = $this->object->__invoke($input);
 
@@ -345,7 +347,7 @@ class ProductGetDataServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($products));
+            ->willReturn(new ArrayIterator($products));
 
         $return = $this->object->__invoke($input);
 
@@ -407,7 +409,7 @@ class ProductGetDataServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($products));
+            ->willReturn(new ArrayIterator($products));
 
         $return = $this->object->__invoke($input);
 

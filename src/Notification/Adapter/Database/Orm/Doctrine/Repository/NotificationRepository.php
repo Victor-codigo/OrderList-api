@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Notification\Adapter\Database\Orm\Doctrine\Repository;
 
+use Override;
+use Exception;
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
@@ -30,7 +32,7 @@ class NotificationRepository extends RepositoryBase implements NotificationRepos
      * @throws DBUniqueConstraintException
      * @throws DBConnectionException
      */
-    #[\Override]
+    #[Override]
     public function save(array $notifications): void
     {
         try {
@@ -41,7 +43,7 @@ class NotificationRepository extends RepositoryBase implements NotificationRepos
             $this->objectManager->flush();
         } catch (UniqueConstraintViolationException $e) {
             throw DBUniqueConstraintException::fromId($notification->getId()->getValue(), $e->getCode());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
     }
@@ -51,7 +53,7 @@ class NotificationRepository extends RepositoryBase implements NotificationRepos
      *
      * @throws DBConnectionException
      */
-    #[\Override]
+    #[Override]
     public function remove(array $notifications): void
     {
         try {
@@ -60,7 +62,7 @@ class NotificationRepository extends RepositoryBase implements NotificationRepos
             }
 
             $this->objectManager->flush();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
     }
@@ -70,7 +72,7 @@ class NotificationRepository extends RepositoryBase implements NotificationRepos
      *
      * @throws DBNotFoundException
      */
-    #[\Override]
+    #[Override]
     public function getNotificationsByIdOrFail(array $notificationsId): PaginatorInterface
     {
         if (empty($notificationsId)) {
@@ -108,7 +110,7 @@ class NotificationRepository extends RepositoryBase implements NotificationRepos
      *
      * @throws DBNotFoundException
      */
-    #[\Override]
+    #[Override]
     public function getNotificationByUserIdOrFail(Identifier $userId): PaginatorInterface
     {
         $notificationEntity = Notification::class;

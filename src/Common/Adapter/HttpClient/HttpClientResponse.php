@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\HttpClient;
 
+use Override;
 use Common\Domain\HttpClient\Exception\DecodingException;
 use Common\Domain\HttpClient\Exception\Error300Exception;
 use Common\Domain\HttpClient\Exception\Error400Exception;
@@ -26,7 +27,7 @@ class HttpClientResponse implements HttpClientResponseInterface
         $this->response = $response;
     }
 
-    #[\Override]
+    #[Override]
     public function close(): void
     {
         $this->response->cancel();
@@ -35,7 +36,7 @@ class HttpClientResponse implements HttpClientResponseInterface
     /**
      * @throws NetworkException
      */
-    #[\Override]
+    #[Override]
     public function getStatusCode(): int
     {
         try {
@@ -51,7 +52,7 @@ class HttpClientResponse implements HttpClientResponseInterface
      * @throws Error400Exception
      * @throws Error500Exception
      */
-    #[\Override]
+    #[Override]
     public function getContent(bool $throwException = true): string
     {
         try {
@@ -73,7 +74,7 @@ class HttpClientResponse implements HttpClientResponseInterface
      * @throws Error400Exception
      * @throws Error500Exception
      */
-    #[\Override]
+    #[Override]
     public function getHeaders(bool $throwException = true): array
     {
         try {
@@ -89,7 +90,7 @@ class HttpClientResponse implements HttpClientResponseInterface
         }
     }
 
-    #[\Override]
+    #[Override]
     public function getInfo(bool|null $throwException = true): array
     {
         return $this->response->getInfo($throwException);
@@ -102,7 +103,7 @@ class HttpClientResponse implements HttpClientResponseInterface
      * @throws Error400Exception
      * @throws Error500Exception
      */
-    #[\Override]
+    #[Override]
     public function toArray(bool $throwException = true): array
     {
         try {

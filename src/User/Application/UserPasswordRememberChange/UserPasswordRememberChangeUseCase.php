@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace User\Application\UserPasswordRememberChange;
 
+use InvalidArgumentException;
+use stdClass;
 use Common\Adapter\Jwt\Exception\JwtException;
 use Common\Adapter\Jwt\Exception\JwtTokenExpiredException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
@@ -56,7 +58,7 @@ class UserPasswordRememberChangeUseCase extends ServiceBase
             );
 
             $this->createNotificationPasswordRemember($tokenDecoded->username, $passwordChangeDto->token, $this->systemKey);
-        } catch (\InvalidArgumentException) {
+        } catch (InvalidArgumentException) {
             throw UserPasswordRememberChangeTokenWrongException::fromMessage('Wrong token');
         } catch (JwtTokenExpiredException) {
             throw UserPasswordRememberChangeTokenExpiredException::fromMessage('Token has expired');
@@ -95,7 +97,7 @@ class UserPasswordRememberChangeUseCase extends ServiceBase
     /**
      * @throws JwtTokenExpiredException
      */
-    private function getToken(JwtToken $token): \stdClass
+    private function getToken(JwtToken $token): stdClass
     {
         $tokenDecoded = $this->jwt->decode($token->getValue());
 

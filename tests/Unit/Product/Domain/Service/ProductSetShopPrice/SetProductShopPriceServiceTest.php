@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ProductSetShopPrice;
 
+use Override;
+use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Float\Money;
 use Common\Domain\Model\ValueObject\Object\UnitMeasure;
@@ -32,7 +34,7 @@ class SetProductShopPriceServiceTest extends TestCase
     private MockObject|PaginatorInterface $productsPaginator;
     private MockObject|PaginatorInterface $shopsPaginator;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -224,7 +226,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->productsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator(array_merge($productsDb, $productsNew)));
+            ->willReturn(new ArrayIterator(array_merge($productsDb, $productsNew)));
 
         $this->shopRepository
             ->expects($this->once())
@@ -235,7 +237,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->shopsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator(array_merge($shopsDb, $shopsNew)));
+            ->willReturn(new ArrayIterator(array_merge($shopsDb, $shopsNew)));
 
         $this->productShopRepository
             ->expects($this->once())
@@ -291,7 +293,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->productsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator(array_merge($productsDb, $productsNew)));
+            ->willReturn(new ArrayIterator(array_merge($productsDb, $productsNew)));
 
         $this->shopRepository
             ->expects($this->once())
@@ -302,7 +304,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->shopsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator(array_merge($shopsDb, $shopsNew)));
+            ->willReturn(new ArrayIterator(array_merge($shopsDb, $shopsNew)));
 
         $this->productShopRepository
             ->expects($this->once())
@@ -352,7 +354,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->productsShopsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($productsShopsDb));
+            ->willReturn(new ArrayIterator($productsShopsDb));
 
         $this->productRepository
             ->expects($this->never())
@@ -406,7 +408,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->productsShopsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($productsShopsDb));
+            ->willReturn(new ArrayIterator($productsShopsDb));
 
         $this->productRepository
             ->expects($this->never())
@@ -495,7 +497,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->productsShopsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($productsShopsDb));
+            ->willReturn(new ArrayIterator($productsShopsDb));
 
         $this->productRepository
             ->expects($this->once())
@@ -506,7 +508,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->productsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($productsDb));
+            ->willReturn(new ArrayIterator($productsDb));
 
         $this->shopRepository
             ->expects($this->once())
@@ -517,7 +519,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->shopsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($shopsNew));
+            ->willReturn(new ArrayIterator($shopsNew));
 
         $this->productShopRepository
             ->expects($this->once())
@@ -636,7 +638,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->productsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($productsDb));
+            ->willReturn(new ArrayIterator($productsDb));
 
         $this->shopRepository
             ->expects($this->once())
@@ -647,7 +649,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->shopsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator(array_merge($shopsDb, $shopsNew)));
+            ->willReturn(new ArrayIterator(array_merge($shopsDb, $shopsNew)));
 
         $this->productShopRepository
             ->expects($this->once())
@@ -702,7 +704,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->productsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator(array_merge($productsDb, $productsNew)));
+            ->willReturn(new ArrayIterator(array_merge($productsDb, $productsNew)));
 
         $this->shopRepository
             ->expects($this->once())
@@ -713,7 +715,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->shopsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($shopsDb));
+            ->willReturn(new ArrayIterator($shopsDb));
 
         $this->productShopRepository
             ->expects($this->once())
@@ -757,7 +759,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->productsShopsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($productsShopsDb));
+            ->willReturn(new ArrayIterator($productsShopsDb));
 
         $this->productRepository
             ->expects($this->once())
@@ -768,7 +770,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->productsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($productsDb));
+            ->willReturn(new ArrayIterator($productsDb));
 
         $this->shopRepository
             ->expects($this->once())
@@ -779,7 +781,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->shopsPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($shopsDb));
+            ->willReturn(new ArrayIterator($shopsDb));
 
         $this->productShopRepository
             ->expects($this->once())

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace User\Application\UserGetByName;
 
+use Exception;
+use DateTime;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\Array\Roles;
@@ -44,7 +46,7 @@ class UserGetByNameUseCase extends ServiceBase
             return $this->createUserGetByNameOutputDto($userData);
         } catch (DBNotFoundException) {
             throw GetUsersByNameNotFoundException::fromMessage('Users not found');
-        } catch (\Exception) {
+        } catch (Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }
@@ -87,7 +89,7 @@ class UserGetByNameUseCase extends ServiceBase
                 if ($data instanceof Roles) {
                     $userDataPlain[$userNumber][$property] = array_map(fn (Rol $rol) => $rol->getValue()->value, $data->getValue());
                     continue;
-                } elseif ($data instanceof \DateTime) {
+                } elseif ($data instanceof DateTime) {
                     $userDataPlain[$userNumber][$property] = $data->format('Y-m-d H:i:s');
                     continue;
                 } elseif ($data instanceof ValueObjectBase) {

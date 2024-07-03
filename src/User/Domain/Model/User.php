@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace User\Domain\Model;
 
+use DateTime;
+use Override;
 use Common\Domain\Event\EventRegisterTrait;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\String\Email;
@@ -27,7 +29,7 @@ class User implements EntityImageModifyInterface
     private NameWithSpaces $name;
     private Password $password;
     private Roles $roles;
-    private \DateTime $createdOn;
+    private DateTime $createdOn;
     private Profile $profile;
 
     private ?UserPreRegisteredEvent $userPreRegisteredEventData = null;
@@ -83,13 +85,13 @@ class User implements EntityImageModifyInterface
         return $this;
     }
 
-    #[\Override]
+    #[Override]
     public function getImage(): Path
     {
         return $this->profile->getImage();
     }
 
-    #[\Override]
+    #[Override]
     public function setImage(Path $image): self
     {
         $this->profile->setImage($image);
@@ -97,7 +99,7 @@ class User implements EntityImageModifyInterface
         return $this;
     }
 
-    public function getCreatedOn(): \DateTime
+    public function getCreatedOn(): DateTime
     {
         return $this->createdOn;
     }
@@ -121,7 +123,7 @@ class User implements EntityImageModifyInterface
         $this->name = $name;
         $this->roles = $roles;
         $this->password = $password;
-        $this->createdOn = new \DateTime();
+        $this->createdOn = new DateTime();
         $this->profile = new Profile(
             $this->getId(),
             ValueObjectFactory::createPath(null)

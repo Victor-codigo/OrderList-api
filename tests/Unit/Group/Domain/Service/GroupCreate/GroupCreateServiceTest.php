@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupCreate;
 
+use Override;
+use DateTime;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
@@ -36,7 +38,7 @@ class GroupCreateServiceTest extends DataBaseTestCase
     private MockObject|FileUploadInterface $fileUpload;
     private MockObject|UploadedFileInterface $imageUploaded;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -66,7 +68,7 @@ class GroupCreateServiceTest extends DataBaseTestCase
         $this->assertSame($groupCreateDto->description, $group->getDescription());
         $this->assertEquals($expectedImageUploadedFileName, $group->getImage()->getValue());
         $this->assertEquals(ValueObjectFactory::createGroupType($expectedGroupType), $group->getType());
-        $this->assertInstanceOf(\DateTime::class, $group->getCreatedOn());
+        $this->assertInstanceOf(DateTime::class, $group->getCreatedOn());
 
         $userGroupCollection = $group->getUsers();
         $this->assertCount(1, $userGroupCollection);

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupUserRoleChange;
 
+use Override;
+use Exception;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -33,7 +35,7 @@ class GroupUserRoleChangeTest extends TestCase
     private Group $group;
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -63,7 +65,7 @@ class GroupUserRoleChangeTest extends TestCase
     /**
      * @param string[] $usersIdRoleChanged
      */
-    private function getFindGroupUsersOrFailReturn(array $usersIdRoleChanged, GROUP_ROLES $groupRol, \Exception|null $exception = null): MockObject|PaginatorInterface
+    private function getFindGroupUsersOrFailReturn(array $usersIdRoleChanged, GROUP_ROLES $groupRol, Exception|null $exception = null): MockObject|PaginatorInterface
     {
         $usersGroup = array_map(
             fn (string $userId) => UserGroup::fromPrimitives(self::GROUP_ID, $userId, [$groupRol], $this->group),

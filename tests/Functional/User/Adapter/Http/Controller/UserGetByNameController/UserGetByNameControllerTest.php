@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserGetByNameController;
 
+use Override;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\User\USER_ROLES;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -21,7 +22,7 @@ class UserGetByNameControllerTest extends WebClientTestCase
 
     private UserGetByNameController $object;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

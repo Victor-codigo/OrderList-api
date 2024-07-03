@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Product\Application\ProductCreate;
 
+use Exception;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\FileUpload\Exception\FileUploadException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -57,7 +58,7 @@ class ProductCreateUseCase extends ServiceBase
             throw ProductCreateCanNotUploadFileException::fromMessage('An error occurred while file was uploading');
         } catch (ValidateGroupAndUserException) {
             throw ProductCreateGroupException::fromMessage('Error validating the group');
-        } catch (\Exception) {
+        } catch (Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Domain\Service\ShopGetData;
 
+use Override;
+use ArrayIterator;
+use ArrayObject;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\Group\Filter;
@@ -26,7 +29,7 @@ class ShopGetDataServiceTest extends TestCase
     private MockObject|ShopRepositoryInterface $shopRepository;
     private MockObject|PaginatorInterface $paginator;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -129,7 +132,7 @@ class ShopGetDataServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($shops));
+            ->willReturn(new ArrayIterator($shops));
 
         $return = $this->object->__invoke($input);
 
@@ -182,7 +185,7 @@ class ShopGetDataServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator(array_reverse($shops)));
+            ->willReturn(new ArrayIterator(array_reverse($shops)));
 
         $return = $this->object->__invoke($input);
 
@@ -239,7 +242,7 @@ class ShopGetDataServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($shops));
+            ->willReturn(new ArrayIterator($shops));
 
         $return = $this->object->__invoke($input);
 
@@ -296,7 +299,7 @@ class ShopGetDataServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayObject($shops));
+            ->willReturn(new ArrayObject($shops));
 
         $return = $this->object->__invoke($input);
 

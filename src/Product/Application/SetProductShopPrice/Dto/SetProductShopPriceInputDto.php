@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Product\Application\SetProductShopPrice\Dto;
 
+use Override;
 use Common\Domain\Model\ValueObject\Float\Money;
 use Common\Domain\Model\ValueObject\Object\UnitMeasure;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -58,7 +59,7 @@ class SetProductShopPriceInputDto implements ServiceInputDtoInterface
         );
     }
 
-    #[\Override]
+    #[Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray([

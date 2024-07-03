@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Object;
 
+use Override;
+use stdClass;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\NotificationType;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -14,7 +16,7 @@ class NotificationTypeTest extends TestCase
 {
     private ValidationChain $validation;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -43,7 +45,7 @@ class NotificationTypeTest extends TestCase
     /** @test */
     public function itShouldFailIsNotNotificationType(): void
     {
-        $object = new NotificationType(new \stdClass());
+        $object = new NotificationType(new stdClass());
         $return = $this->validation->validateValueObject($object);
 
         $this->assertEquals([VALIDATION_ERRORS::CHOICE_NOT_SUCH], $return);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Service\Image\UploadImage;
 
+use Override;
 use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\FileUpload\Exception\File\FileException;
 use Common\Domain\Image\Exception\ImageResizeException;
@@ -33,7 +34,7 @@ class UploadImageServiceTest extends TestCase
     private MockObject|UploadedFileInterface $uploadedFile;
     private MockObject|ImageInterface $image;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -46,7 +47,7 @@ class UploadImageServiceTest extends TestCase
         $this->object = new UploadImageService($this->fileUpload, $this->image);
     }
 
-    #[\Override]
+    #[Override]
     protected function tearDown(): void
     {
         parent::tearDown();

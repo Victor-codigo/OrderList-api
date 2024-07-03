@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\HtmlTemplate;
 
+use Override;
 use Common\Adapter\Translator\TranslatorSymfonyAdapter;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\HtmlTemplate\TemplateDtoBase;
@@ -23,7 +24,7 @@ class TemplateDtoBaseTest extends TestCase
     private MockObject|SymfonyTranslatorInterface $symfonyTranslator;
     private MockObject|LocaleSwitcher $symfonyLocaleSwitcher;
 
-    #[\Override]
+    #[Override]
     public function setUp(): void
     {
         parent::setUp();

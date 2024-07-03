@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupGetDataByName;
 
+use stdClass;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Group\Domain\Model\Group;
@@ -29,7 +30,7 @@ class GetGroupDataByNameControllerTest extends WebClientTestCase
         );
     }
 
-    private function assertGroupDataIsOk(Group $groupDataExpected, \stdClass $groupDataActual): void
+    private function assertGroupDataIsOk(Group $groupDataExpected, stdClass $groupDataActual): void
     {
         $pathImageGroup = static::getContainer()->getParameter('group.public.image.path');
         $appProtocolAndDomain = static::getContainer()->getParameter('common.app.protocolAndDomain');

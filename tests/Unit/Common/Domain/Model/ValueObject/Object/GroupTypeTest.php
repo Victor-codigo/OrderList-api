@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Object;
 
+use Override;
+use stdClass;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\GroupType;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -14,7 +16,7 @@ class GroupTypeTest extends TestCase
 {
     private ValidationChain $validation;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -43,7 +45,7 @@ class GroupTypeTest extends TestCase
     /** @test */
     public function itShouldFailIsBank(): void
     {
-        $object = new GroupType(new \stdClass());
+        $object = new GroupType(new stdClass());
         $return = $this->validation->validateValueObject($object);
 
         $this->assertEquals([VALIDATION_ERRORS::CHOICE_NOT_SUCH], $return);

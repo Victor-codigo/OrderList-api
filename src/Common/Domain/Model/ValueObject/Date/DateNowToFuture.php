@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Date;
 
+use Override;
+use DateTime;
 use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\ConstraintFactory;
 
 class DateNowToFuture extends DateValueObject
 {
-    #[\Override]
+    #[Override]
     protected function defineConstraints(): void
     {
-        $dateTimeNow = new \DateTime();
+        $dateTimeNow = new DateTime();
         $dateTimeNow->setTimestamp($dateTimeNow->getTimestamp() - 3600);    // 1 Hour
 
         $this

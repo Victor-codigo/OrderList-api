@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserModify;
 
+use Override;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -33,7 +34,7 @@ class UserModifyControllerTest extends WebClientTestCase
     private readonly string $pathImageUser;
     private KernelBrowser|null $client;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -53,7 +54,7 @@ class UserModifyControllerTest extends WebClientTestCase
         }
     }
 
-    #[\Override]
+    #[Override]
     protected function tearDown(): void
     {
         parent::tearDown();

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace User\Adapter\Command\UsersRemoveActivationExpired;
 
+use Override;
+use Throwable;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -26,12 +28,12 @@ class UsersRemoveActivationExpiredCommand extends Command
         parent::__construct();
     }
 
-    #[\Override]
+    #[Override]
     protected function configure(): void
     {
     }
 
-    #[\Override]
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
@@ -50,7 +52,7 @@ class UsersRemoveActivationExpiredCommand extends Command
             $output->writeln('No users to remove');
 
             return Command::SUCCESS;
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return Command::FAILURE;
         }
     }

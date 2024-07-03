@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Domain\HtmlTemplate;
 
+use Override;
 use Common\Domain\Exception\InvalidArgumentException as InvalidArgumentDomainException;
 use Common\Domain\Ports\HtmlTemplate\TemplateDtoInterface;
 use Common\Domain\Ports\Translator\TranslatorInterface;
@@ -30,7 +31,7 @@ abstract class TemplateDtoBase implements TemplateDtoInterface
         return $this;
     }
 
-    #[\Override]
+    #[Override]
     public function getPath(): string
     {
         return static::TEMPLATE_PATH;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Product\Application\ProductModify\Dto;
 
+use Override;
 use Common\Domain\Model\ValueObject\Object\ProductImage;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -42,7 +43,7 @@ class ProductModifyInputDto implements ServiceInputDtoInterface
         $this->imageRemove = $imageRemove;
     }
 
-    #[\Override]
+    #[Override]
     public function validate(ValidationInterface $validator): array
     {
         $valueObjects = [

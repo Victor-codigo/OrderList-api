@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Adapter\Http\Controller\GroupUserAdd\Dto;
 
+use Override;
 use Group\Adapter\Http\Controller\GroupGetData\Dto\GroupGetDataRequestDto;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -14,7 +15,7 @@ class GroupGetDataRequestDtoTest extends TestCase
     private const string GROUP_ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
     private const int GROUP_NUM_MAX = 50;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

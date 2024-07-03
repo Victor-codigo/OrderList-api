@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\ListOrders\Adapter\Http\Controller\ListOrdersGetData;
 
+use DateTime;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use ListOrders\Domain\Model\ListOrders;
@@ -69,7 +70,7 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
                 '2606508b-4516-45d6-93a6-c7cb416b7f3f',
                 'List order name 1',
                 'List order description 1',
-                \DateTime::createFromFormat('Y-m-d H:i:s', '2023-05-29 10:20:15'),
+                DateTime::createFromFormat('Y-m-d H:i:s', '2023-05-29 10:20:15'),
             ),
             'd446eab9-5199-48d0-91f5-0407a86bcb4f' => ListOrders::fromPrimitives(
                 'd446eab9-5199-48d0-91f5-0407a86bcb4f',
@@ -77,7 +78,7 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
                 '2606508b-4516-45d6-93a6-c7cb416b7f3f',
                 'List order name 2',
                 'List order description 2',
-                \DateTime::createFromFormat('Y-m-d H:i:s', '2023-05-28 10:20:15'),
+                DateTime::createFromFormat('Y-m-d H:i:s', '2023-05-28 10:20:15'),
             ),
             'f1559a23-2f92-4660-a335-b1052d7395da' => ListOrders::fromPrimitives(
                 'f1559a23-2f92-4660-a335-b1052d7395da',
@@ -93,7 +94,7 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
                 '2606508b-4516-45d6-93a6-c7cb416b7f3f',
                 'List order name 3',
                 'List order description 3',
-                \DateTime::createFromFormat('Y-m-d H:i:s', '2023-05-27 10:20:15'),
+                DateTime::createFromFormat('Y-m-d H:i:s', '2023-05-27 10:20:15'),
             ),
         ];
     }

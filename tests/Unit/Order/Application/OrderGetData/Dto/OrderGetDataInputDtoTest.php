@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Application\OrderGetData\Dto;
 
+use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -27,7 +28,7 @@ class OrderGetDataInputDtoTest extends TestCase
     private ValidationInterface $validator;
     private UserShared $userSession;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

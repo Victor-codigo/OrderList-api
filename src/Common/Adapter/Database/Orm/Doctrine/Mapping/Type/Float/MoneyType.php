@@ -4,25 +4,26 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Float;
 
+use Override;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\TypeBase;
 use Common\Domain\Model\ValueObject\Float\Money;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 class MoneyType extends TypeBase
 {
-    #[\Override]
+    #[Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return sprintf('DECIMAL(10,2)');
     }
 
-    #[\Override]
+    #[Override]
     public function getClassImplementationName(): string
     {
         return Money::class;
     }
 
-    #[\Override]
+    #[Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
         if (null !== $value) {

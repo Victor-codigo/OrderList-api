@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Security\Jwt\JwtListener;
 
+use Override;
 use Common\Domain\Validation\User\USER_ROLES;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTEncodedEvent;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -28,7 +29,7 @@ class JwtEncodedListenerTest extends TestCase
     private MockObject|RequestStack $requestStack;
     private MockObject|Request $request;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

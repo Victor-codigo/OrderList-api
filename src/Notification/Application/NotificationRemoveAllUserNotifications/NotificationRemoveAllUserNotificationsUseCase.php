@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Notification\Application\NotificationRemoveAllUserNotifications;
 
+use Exception;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Service\ServiceBase;
@@ -45,7 +46,7 @@ class NotificationRemoveAllUserNotificationsUseCase extends ServiceBase
             return $this->createNotificationRemoveAllUserNotificationsOutputDto($notificationsRemovedId);
         } catch (DBNotFoundException) {
             throw NotificationRemoveAllUserNotificationsNotFoundException::fromMessage('Notifications not found');
-        } catch (\Exception) {
+        } catch (Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation\Constraints;
 
+use Override;
+use stdClass;
+use Error;
 use Common\Adapter\Validation\Constraints\Alphanumeric\Alphanumeric;
 use Common\Adapter\Validation\Constraints\Alphanumeric\AlphanumericValidator;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -19,7 +22,7 @@ class AlphanumericValidatorTest extends TestCase
     private MockObject|Alphanumeric $alphanumeric;
     private MockObject|Constraint $constraint;
 
-    #[\Override]
+    #[Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -58,7 +61,7 @@ class AlphanumericValidatorTest extends TestCase
     {
         $this->expectException(UnexpectedTypeException::class);
 
-        $this->object->validate(new \stdClass(), $this->alphanumeric);
+        $this->object->validate(new stdClass(), $this->alphanumeric);
     }
 
     /** @test */
@@ -84,7 +87,7 @@ class AlphanumericValidatorTest extends TestCase
     {
         $this->alphanumeric->pattern = self::PATTERN;
 
-        $this->expectException(\Error::class);
+        $this->expectException(Error::class);
         $this->object->validate('hello.22', $this->alphanumeric);
     }
 }

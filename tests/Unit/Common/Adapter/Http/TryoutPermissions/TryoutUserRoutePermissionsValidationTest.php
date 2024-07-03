@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Http\TryoutPermissions;
 
+use Override;
 use Common\Adapter\Http\TryoutPermissions\Exception\TryoutUserRoutePermissionsException;
 use Common\Adapter\Http\TryoutPermissions\TryoutUserRoutePermissionsValidation;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -18,7 +19,7 @@ class TryoutUserRoutePermissionsValidationTest extends TestCase
 
     private TryoutUserRoutePermissionsValidation $object;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

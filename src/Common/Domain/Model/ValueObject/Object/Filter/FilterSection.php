@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Object\Filter;
 
+use Override;
 use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Model\ValueObject\Object\ObjectValueObject;
 use Common\Domain\Validation\Common\TYPES;
@@ -11,7 +12,7 @@ use Common\Domain\Validation\ConstraintFactory;
 
 class FilterSection extends ObjectValueObject implements ValueObjectFilterInterface
 {
-    #[\Override]
+    #[Override]
     protected function defineConstraints(): void
     {
         $this
@@ -21,7 +22,7 @@ class FilterSection extends ObjectValueObject implements ValueObjectFilterInterf
             ->setConstraint(ConstraintFactory::choice(VALUE_OBJECTS_CONSTRAINTS::FILTER_SECTIONS, false, true, null, null));
     }
 
-    #[\Override]
+    #[Override]
     public function getValueWithFilter(mixed $filterValue): mixed
     {
         return $this->getValue();

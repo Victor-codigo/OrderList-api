@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace User\Application\UserEmailChange\Dto;
 
+use Override;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Password;
@@ -26,7 +27,7 @@ class UserEmailChangeInputDto implements ServiceInputDtoInterface
         $this->password = ValueObjectFactory::createPassword($password);
     }
 
-    #[\Override]
+    #[Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

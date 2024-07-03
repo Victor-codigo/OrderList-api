@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Adapter\Http\Controller\OrderRemove\Dto;
 
+use Override;
 use Order\Adapter\Http\Controller\OrderRemove\Dto\OrderRemoveRequestDto;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -21,7 +22,7 @@ class OrderRemoveRequestDtoTest extends TestCase
     private OrderRemoveRequestDto $object;
     private MockObject|RequestStack $request;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

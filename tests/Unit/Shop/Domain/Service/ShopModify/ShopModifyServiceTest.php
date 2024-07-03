@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Domain\Service\ShopModify;
 
+use Override;
+use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\FileUpload\Exception\File\FileException;
@@ -37,7 +39,7 @@ class ShopModifyServiceTest extends TestCase
     private MockObject|PaginatorInterface $paginator;
     private MockObject|ImageInterface $image;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -50,7 +52,7 @@ class ShopModifyServiceTest extends TestCase
         $this->object = new ShopModifyService($this->shopRepository, $this->fileUpload, $this->image, self::SHOP_IMAGE_PATH);
     }
 
-    #[\Override]
+    #[Override]
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -110,7 +112,7 @@ class ShopModifyServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$shopFromDb]));
+            ->willReturn(new ArrayIterator([$shopFromDb]));
 
         $this->fileUpload
             ->expects($this->once())
@@ -178,7 +180,7 @@ class ShopModifyServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$shopFromDb]));
+            ->willReturn(new ArrayIterator([$shopFromDb]));
 
         $this->fileUpload
             ->expects($this->never())
@@ -239,7 +241,7 @@ class ShopModifyServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$shopFromDb]));
+            ->willReturn(new ArrayIterator([$shopFromDb]));
 
         $this->fileUpload
             ->expects($this->never())
@@ -303,7 +305,7 @@ class ShopModifyServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$shopFromDb]));
+            ->willReturn(new ArrayIterator([$shopFromDb]));
 
         $this->fileUpload
             ->expects($this->never())
@@ -366,7 +368,7 @@ class ShopModifyServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$shopFromDb]));
+            ->willReturn(new ArrayIterator([$shopFromDb]));
 
         $this->fileUpload
             ->expects($this->never())
@@ -429,7 +431,7 @@ class ShopModifyServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$shopFromDb]));
+            ->willReturn(new ArrayIterator([$shopFromDb]));
 
         $this->fileUpload
             ->expects($this->never())
@@ -600,7 +602,7 @@ class ShopModifyServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$shopFromDb]));
+            ->willReturn(new ArrayIterator([$shopFromDb]));
 
         $this->fileUpload
             ->expects($this->never())
@@ -657,7 +659,7 @@ class ShopModifyServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$shopFromDb]));
+            ->willReturn(new ArrayIterator([$shopFromDb]));
 
         $this->fileUpload
             ->expects($this->once())
@@ -716,7 +718,7 @@ class ShopModifyServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$shopFromDb]));
+            ->willReturn(new ArrayIterator([$shopFromDb]));
 
         $this->fileUpload
             ->expects($this->once())
@@ -788,7 +790,7 @@ class ShopModifyServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$shopExpected]));
+            ->willReturn(new ArrayIterator([$shopExpected]));
 
         $this->fileUpload
             ->expects($this->never())

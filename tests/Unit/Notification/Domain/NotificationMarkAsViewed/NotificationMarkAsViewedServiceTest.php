@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Domain\NotificationMarkAsViewed;
 
+use Override;
+use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -22,7 +24,7 @@ class NotificationMarkAsViewedServiceTest extends TestCase
     private MockObject|NotificationRepositoryInterface $notificationRepository;
     private MockObject|PaginatorInterface $paginator;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -93,7 +95,7 @@ class NotificationMarkAsViewedServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($notifications));
+            ->willReturn(new ArrayIterator($notifications));
 
         $this->notificationRepository
             ->expects($this->once())
@@ -160,7 +162,7 @@ class NotificationMarkAsViewedServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($notifications));
+            ->willReturn(new ArrayIterator($notifications));
 
         $this->notificationRepository
             ->expects($this->once())

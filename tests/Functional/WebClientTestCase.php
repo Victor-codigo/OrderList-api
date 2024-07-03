@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional;
 
+use Override;
 use Common\Adapter\Jwt\JwtLexikAdapter;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -29,7 +30,7 @@ class WebClientTestCase extends WebTestCase
      */
     private array $entityManagerArray = [];
 
-    #[\Override]
+    #[Override]
     protected function tearDown(): void
     {
         parent::tearDown();

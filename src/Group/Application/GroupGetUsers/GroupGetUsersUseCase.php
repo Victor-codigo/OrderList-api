@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupGetUsers;
 
+use Throwable;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -55,7 +56,7 @@ class GroupGetUsersUseCase extends ServiceBase
             throw $e;
         } catch (DBNotFoundException) {
             throw GroupGetUsersGroupNotFoundException::fromMessage('Group not found');
-        } catch (\Throwable) {
+        } catch (Throwable) {
             throw DomainErrorException::fromMessage('An error has been occurred');
         }
     }

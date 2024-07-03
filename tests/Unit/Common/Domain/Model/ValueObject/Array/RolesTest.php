@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Array;
 
+use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Object\Rol;
@@ -16,7 +17,7 @@ class RolesTest extends TestCase
     private Roles $object;
     private ValidationChain $validator;
 
-    #[\Override]
+    #[Override]
     public function setUp(): void
     {
         parent::setUp();

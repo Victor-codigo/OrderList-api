@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Order\Application\OrderRemove;
 
+use Exception;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Service\ServiceBase;
@@ -49,7 +50,7 @@ class OrderRemoveUseCase extends ServiceBase
             throw OrderRemoveOrdersNotFoundException::fromMessage('Orders not found');
         } catch (ValidateGroupAndUserException) {
             throw OrderRemoveGroupAndUserValidationException::fromMessage('You not belong to the group');
-        } catch (\Exception) {
+        } catch (Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Command\HexFileStructure;
 
+use Override;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;
@@ -27,7 +28,7 @@ class HexFileStructureCommandTest extends KernelTestCase
     private Application $application;
     private CommandTester $commandTester;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -38,7 +39,7 @@ class HexFileStructureCommandTest extends KernelTestCase
         $this->commandTester = new CommandTester($this->command);
     }
 
-    #[\Override]
+    #[Override]
     protected function tearDown(): void
     {
         parent::tearDown();

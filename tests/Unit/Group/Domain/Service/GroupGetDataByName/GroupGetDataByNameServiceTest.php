@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupGetDataByName;
 
+use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -23,7 +24,7 @@ class GroupGetDataByNameServiceTest extends TestCase
     private GroupGetDataByNameService $object;
     private MockObject|GroupRepositoryInterface $groupRepository;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

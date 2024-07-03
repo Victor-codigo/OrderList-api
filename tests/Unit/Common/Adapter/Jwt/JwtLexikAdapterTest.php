@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Jwt;
 
+use Override;
+use stdClass;
+use DateTimeImmutable;
 use Common\Adapter\Jwt\Exception\JwtException;
 use Common\Adapter\Jwt\JwtLexikAdapter;
 use PHPUnit\Framework\TestCase;
@@ -14,7 +17,7 @@ class JwtLexikAdapterTest extends TestCase
 
     private JwtLexikAdapter $object;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -97,8 +100,8 @@ class JwtLexikAdapterTest extends TestCase
     /** @test */
     public function itShouldNotBeExpired(): void
     {
-        $tokenDecoded = new \stdClass();
-        $tokenDecoded->iat = (new \DateTimeImmutable())->getTimestamp();
+        $tokenDecoded = new stdClass();
+        $tokenDecoded->iat = (new DateTimeImmutable())->getTimestamp();
         $tokenDecoded->exp = $tokenDecoded->iat + 3600;
 
         $return = $this->object->hasExpired($tokenDecoded);
@@ -109,8 +112,8 @@ class JwtLexikAdapterTest extends TestCase
     /** @test */
     public function itShouldBeExpired(): void
     {
-        $tokenDecoded = new \stdClass();
-        $tokenDecoded->iat = (new \DateTimeImmutable())->getTimestamp();
+        $tokenDecoded = new stdClass();
+        $tokenDecoded->iat = (new DateTimeImmutable())->getTimestamp();
         $tokenDecoded->exp = $tokenDecoded->iat - 1;
 
         $return = $this->object->hasExpired($tokenDecoded);
@@ -121,7 +124,7 @@ class JwtLexikAdapterTest extends TestCase
     /** @test */
     public function itShouldBeExpiredBadFormedNotIatAttribute(): void
     {
-        $tokenDecoded = new \stdClass();
+        $tokenDecoded = new stdClass();
         $tokenDecoded->exp = 33;
         $tokenDecoded->username = 'lolailo';
         $return = $this->object->hasExpired($tokenDecoded);
@@ -132,7 +135,7 @@ class JwtLexikAdapterTest extends TestCase
     /** @test */
     public function itShouldBeExpiredBadFormedNotExpAttribute(): void
     {
-        $tokenDecoded = new \stdClass();
+        $tokenDecoded = new stdClass();
         $tokenDecoded->iat = 33;
         $tokenDecoded->username = 'lolailo';
         $return = $this->object->hasExpired($tokenDecoded);
@@ -143,7 +146,7 @@ class JwtLexikAdapterTest extends TestCase
     /** @test */
     public function itShouldBeExpiredBadFormedNotAitAndExpAttribute(): void
     {
-        $tokenDecoded = new \stdClass();
+        $tokenDecoded = new stdClass();
         $tokenDecoded->username = 'lolailo';
         $return = $this->object->hasExpired($tokenDecoded);
 

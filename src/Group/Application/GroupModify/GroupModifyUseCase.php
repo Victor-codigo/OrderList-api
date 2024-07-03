@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupModify;
 
+use Exception;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Service\Exception\DomainErrorException;
@@ -44,7 +45,7 @@ class GroupModifyUseCase extends ServiceBase
             throw GroupModifyPermissionsException::fromMessage('Not permissions in this group');
         } catch (DBNotFoundException) {
             throw GroupModifyGroupNotFoundException::fromMessage('Group not found');
-        } catch (\Exception) {
+        } catch (Exception) {
             throw DomainErrorException::fromMessage('An error has been occurred');
         }
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\HtmlTemplate;
 
+use Override;
 use Common\Domain\HtmlTemplate\Exception\TemplateCantBeFoundException;
 use Common\Domain\HtmlTemplate\Exception\TemplateRenderingException;
 use Common\Domain\HtmlTemplate\Exception\TemplateSyntaxErrorException;
@@ -28,7 +29,7 @@ class TwigTemplate implements HtmlTemplateInterface
      * @throws TemplateCantBeFoundException
      * @throws TemplateRenderingException
      */
-    #[\Override]
+    #[Override]
     public function render(string $templatePath, ?TemplateDtoInterface $data = null): string
     {
         try {

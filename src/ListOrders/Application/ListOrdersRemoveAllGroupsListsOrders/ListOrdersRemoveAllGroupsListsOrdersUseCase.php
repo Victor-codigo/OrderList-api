@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace ListOrders\Application\ListOrdersRemoveAllGroupsListsOrders;
 
+use Exception;
+use Generator;
+use ValueError;
+use InvalidArgumentException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationErrorResponseException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationTokenNotFoundInRequestException;
@@ -51,7 +55,7 @@ class ListOrdersRemoveAllGroupsListsOrdersUseCase extends ServiceBase
             }
 
             return $this->createListOrdersRemoveAllGroupsListsOrdersOutputDto($listsOrdersIdRemovedAndUserIdChanged);
-        } catch (\Exception) {
+        } catch (Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }
@@ -75,7 +79,7 @@ class ListOrdersRemoveAllGroupsListsOrdersUseCase extends ServiceBase
     /**
      * @param Identifier[] $groupsId
      */
-    private function getGroupsAdmins(array $groupsId): \Generator
+    private function getGroupsAdmins(array $groupsId): Generator
     {
         if (empty($groupsId)) {
             yield [];
@@ -99,7 +103,7 @@ class ListOrdersRemoveAllGroupsListsOrdersUseCase extends ServiceBase
 
                 yield $responseData['groups'];
             }
-        } catch (ModuleCommunicationException|\ValueError|ModuleCommunicationTokenNotFoundInRequestException|ModuleCommunicationErrorResponseException|\InvalidArgumentException) {
+        } catch (ModuleCommunicationException|ValueError|ModuleCommunicationTokenNotFoundInRequestException|ModuleCommunicationErrorResponseException|InvalidArgumentException) {
             throw ListOrdersRemoveAllGroupsListsOrdersGroupsAdminsRequestException::fromMessage('Error getting groups admins');
         }
     }

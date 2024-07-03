@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersCreateFrom;
 
+use Override;
+use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -34,7 +36,7 @@ class ListOrdersCreateFromServiceTest extends TestCase
     private MockObject|OrderRepositoryInterface $ordersRepository;
     private MockObject|PaginatorInterface $paginator;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -205,7 +207,7 @@ class ListOrdersCreateFromServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$listOrdersOld]));
+            ->willReturn(new ArrayIterator([$listOrdersOld]));
 
         $return = $this->object->__invoke($input);
 
@@ -256,7 +258,7 @@ class ListOrdersCreateFromServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$listOrdersOld]));
+            ->willReturn(new ArrayIterator([$listOrdersOld]));
 
         $this->expectException(ListOrdersCreateFromNameAlreadyExistsException::class);
         $this->object->__invoke($input);
@@ -352,7 +354,7 @@ class ListOrdersCreateFromServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$listOrdersOld]));
+            ->willReturn(new ArrayIterator([$listOrdersOld]));
 
         $this->expectException(DBConnectionException::class);
         $this->object->__invoke($input);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupRemoveAllUserGroups;
 
+use Override;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +18,7 @@ class GroupRemoveAllUserGroupsControllerTest extends WebClientTestCase
     private const string METHOD = 'DELETE';
     private const string SYSTEM_KEY = 'systemKeyForDev';
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

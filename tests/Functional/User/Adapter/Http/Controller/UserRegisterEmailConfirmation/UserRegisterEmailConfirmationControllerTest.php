@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserRegisterEmailConfirmation;
 
+use Override;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Validation\User\USER_ROLES;
@@ -25,7 +26,7 @@ class UserRegisterEmailConfirmationControllerTest extends WebClientTestCase
 
     private KernelBrowser $client;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

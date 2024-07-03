@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Domain\Service\ShopRemoveAllGroupsShops;
 
+use Override;
+use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
@@ -28,7 +30,7 @@ class ShopRemoveAllGroupsShopsServiceTest extends TestCase
     private MockObject|EntityImageRemoveService $entityImageRemoveService;
     private MockObject|PaginatorInterface $shopsPaginator;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -109,7 +111,7 @@ class ShopRemoveAllGroupsShopsServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new \ArrayIterator($shops));
+            ->willReturnCallback(fn () => yield new ArrayIterator($shops));
 
         $this->entityImageRemoveService
             ->expects($this->exactly(count($shops)))
@@ -179,7 +181,7 @@ class ShopRemoveAllGroupsShopsServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new \ArrayIterator($shops));
+            ->willReturnCallback(fn () => yield new ArrayIterator($shops));
 
         $this->entityImageRemoveService
             ->expects($this->once())
@@ -218,7 +220,7 @@ class ShopRemoveAllGroupsShopsServiceTest extends TestCase
             ->expects($this->once())
             ->method('getAllPages')
             ->with(100)
-            ->willReturnCallback(fn () => yield new \ArrayIterator($shops));
+            ->willReturnCallback(fn () => yield new ArrayIterator($shops));
 
         $this->entityImageRemoveService
             ->expects($this->exactly(count($shops)))

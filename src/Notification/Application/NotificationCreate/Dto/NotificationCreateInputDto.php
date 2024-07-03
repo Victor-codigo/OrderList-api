@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Notification\Application\NotificationCreate\Dto;
 
+use Override;
 use Common\Domain\Model\ValueObject\Array\NotificationData;
 use Common\Domain\Model\ValueObject\Object\NotificationType;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -43,7 +44,7 @@ class NotificationCreateInputDto implements ServiceInputDtoInterface
         );
     }
 
-    #[\Override]
+    #[Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray([

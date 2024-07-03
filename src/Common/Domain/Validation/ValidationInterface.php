@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Domain\Validation;
 
+use DateTime;
 use Common\Adapter\Validation\Validations\ValidationConstraint;
 use Common\Domain\Validation\Common\PROTOCOLS;
 use Common\Domain\Validation\Common\TYPES;
@@ -72,15 +73,15 @@ interface ValidationInterface
 
     public function notIdenticalTo(mixed $value): self;
 
-    public function lessThan(int|\DateTime $value): self;
+    public function lessThan(int|DateTime $value): self;
 
-    public function lessThanOrEqual(int|\DateTime $value): self;
+    public function lessThanOrEqual(int|DateTime $value): self;
 
-    public function greaterThan(int|\DateTime $value): self;
+    public function greaterThan(int|DateTime $value): self;
 
-    public function greaterThanOrEqual(int|\DateTime $value): self;
+    public function greaterThanOrEqual(int|DateTime $value): self;
 
-    public function range(int|\DateTime $min, int|\DateTime $max): self;
+    public function range(int|DateTime $min, int|DateTime $max): self;
 
     public function count(int $value): self;
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupRemove;
 
+use Override;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +20,7 @@ class GroupRemoveControllerTest extends WebClientTestCase
     private const string GROUP_2_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const string GROUP_ID_USER_NOT_ADMIN = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

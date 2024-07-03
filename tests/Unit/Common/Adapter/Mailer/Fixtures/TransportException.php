@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Mailer\Fixtures;
 
+use Override;
 use Exception;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 class TransportException extends Exception implements TransportExceptionInterface
 {
-    #[\Override]
+    #[Override]
     public function getDebug(): string
     {
         return '';
     }
 
-    #[\Override]
+    #[Override]
     public function appendDebug(string $debug): void
     {
     }

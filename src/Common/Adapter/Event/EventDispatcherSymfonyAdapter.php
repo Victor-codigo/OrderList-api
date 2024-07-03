@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Event;
 
+use Override;
 use Common\Domain\Event\EventDomainInterface;
 use Common\Domain\Event\EventDomainSubscriberInterface;
 use Common\Domain\Ports\Event\EventDispatcherInterface;
@@ -18,7 +19,7 @@ class EventDispatcherSymfonyAdapter implements EventDispatcherInterface
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    #[\Override]
+    #[Override]
     public function dispatch(EventDomainInterface $event): void
     {
         $listeners = $this->eventDispatcher->getListeners($event::class);
@@ -28,7 +29,7 @@ class EventDispatcherSymfonyAdapter implements EventDispatcherInterface
         }
     }
 
-    #[\Override]
+    #[Override]
     public function addSubscriber(EventDomainSubscriberInterface $subscriber): void
     {
         foreach ($subscriber->getSubscribedEvents() as $eventName => $eventParams) {
@@ -45,7 +46,7 @@ class EventDispatcherSymfonyAdapter implements EventDispatcherInterface
         }
     }
 
-    #[\Override]
+    #[Override]
     public function addListener(string $eventName, array|callable $listener, int $priority = 0): void
     {
         $this->eventDispatcher->addListener($eventName, $listener, $priority);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Database\Orm\Doctrine\Repository;
 
+use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
@@ -29,7 +30,7 @@ class UserRepositoryTest extends DataBaseTestCase
 
     private UserRepository $userRepository;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

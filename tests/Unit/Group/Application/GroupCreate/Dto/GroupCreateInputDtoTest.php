@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupCreate\Dto;
 
+use Override;
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -24,7 +25,7 @@ class GroupCreateInputDtoTest extends TestCase
 
     private ValidationInterface $validator;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -32,7 +33,7 @@ class GroupCreateInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    #[\Override]
+    #[Override]
     protected function tearDown(): void
     {
         parent::tearDown();

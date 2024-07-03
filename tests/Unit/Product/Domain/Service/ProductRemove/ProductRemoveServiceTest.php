@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ProductRemove;
 
+use Override;
+use ArrayObject;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -31,7 +33,7 @@ class ProductRemoveServiceTest extends TestCase
     private MockObject|PaginatorInterface $paginator;
     private Path $productImagePath;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -43,7 +45,7 @@ class ProductRemoveServiceTest extends TestCase
         $this->object = new ProductRemoveService($this->productRepository, $this->entityImageRemoveService, $this->productImagePath->getValue());
     }
 
-    #[\Override]
+    #[Override]
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -85,7 +87,7 @@ class ProductRemoveServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayObject($products));
+            ->willReturn(new ArrayObject($products));
 
         $this->entityImageRemoveService
             ->expects($this->once())
@@ -133,7 +135,7 @@ class ProductRemoveServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayObject($products));
+            ->willReturn(new ArrayObject($products));
 
         $productImagePath = $this->productImagePath;
         $entityImageRemoveServiceMatcher = $this->exactly(3);
@@ -176,7 +178,7 @@ class ProductRemoveServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayObject($products));
+            ->willReturn(new ArrayObject($products));
 
         $this->entityImageRemoveService
             ->expects($this->once())
@@ -214,7 +216,7 @@ class ProductRemoveServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayObject($products));
+            ->willReturn(new ArrayObject($products));
 
         $this->entityImageRemoveService
             ->expects($this->once())
@@ -250,7 +252,7 @@ class ProductRemoveServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayObject($products));
+            ->willReturn(new ArrayObject($products));
 
         $this->entityImageRemoveService
             ->expects($this->once())

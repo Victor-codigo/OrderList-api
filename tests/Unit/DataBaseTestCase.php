@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit;
 
+use Override;
+use ReflectionClass;
 use Common\Domain\Exception\LogicException;
 use Common\Kernel;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
@@ -16,7 +18,7 @@ abstract class DataBaseTestCase extends KernelTestCase
 {
     protected EntityManagerInterface|null $entityManager;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -33,7 +35,7 @@ abstract class DataBaseTestCase extends KernelTestCase
             ->getManager();
     }
 
-    #[\Override]
+    #[Override]
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -42,7 +44,7 @@ abstract class DataBaseTestCase extends KernelTestCase
         $this->entityManager = null;
     }
 
-    #[\Override]
+    #[Override]
     protected static function getKernelClass(): string
     {
         return Kernel::class;
@@ -50,7 +52,7 @@ abstract class DataBaseTestCase extends KernelTestCase
 
     protected function mockObjectManager(ServiceEntityRepositoryInterface $repository, MockObject|ObjectManager $objectManagerMock): void
     {
-        $userRepositoryReflection = new \ReflectionClass($repository);
+        $userRepositoryReflection = new ReflectionClass($repository);
         $objectManagerProperty = $userRepositoryReflection->getProperty('objectManager');
         $objectManagerProperty->setValue($repository, $objectManagerMock);
     }

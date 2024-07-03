@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Command\HexFilesStructure;
 
+use Exception;
 use Common\Adapter\Command\HexFilesStructure\Exception\TemplateErrorException;
 
 class Template
@@ -27,7 +28,7 @@ class Template
                 array_values($placeholders),
                 $fileContent
             );
-        } catch (\Exception) {
+        } catch (Exception) {
             throw TemplateErrorException::fromMessage('The template could not be readed');
         }
     }
@@ -41,7 +42,7 @@ class Template
 
         try {
             file_put_contents($this->templateDestinationPath, $templateCompiled);
-        } catch (\Exception) {
+        } catch (Exception) {
             throw TemplateErrorException::fromMessage('The template could not be created');
         }
     }

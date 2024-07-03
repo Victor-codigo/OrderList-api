@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ListOrders\Application\ListOrdersGetData\Dto;
 
+use Override;
 use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
@@ -55,7 +56,7 @@ class ListOrdersGetDataInputDto implements ServiceInputDtoInterface
         $this->pageItems = ValueObjectFactory::createPaginatorPageItems($pageItems);
     }
 
-    #[\Override]
+    #[Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListGroupId = $validator->validateValueObjectArray([

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserPasswordChange;
 
+use Override;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -31,7 +32,7 @@ class UserPasswordChangeUseCaseTest extends TestCase
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|User $userSession;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

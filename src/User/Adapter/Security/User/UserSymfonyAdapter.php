@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace User\Adapter\Security\User;
 
+use Override;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -19,13 +20,13 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
     private User $user;
     private UserPasswordHasherInterface $passwordHasher;
 
-    #[\Override]
+    #[Override]
     public function getUser(): User
     {
         return $this->user;
     }
 
-    #[\Override]
+    #[Override]
     public function setUser(User $user): self
     {
         $this->user = $user;
@@ -43,7 +44,7 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
         $this->user = $user ?? $this->createUserNull();
     }
 
-    #[\Override]
+    #[Override]
     public function getRoles(): array
     {
         $roles = $this->user
@@ -60,12 +61,12 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
         );
     }
 
-    #[\Override]
+    #[Override]
     public function eraseCredentials()
     {
     }
 
-    #[\Override]
+    #[Override]
     public function getUserIdentifier(): string
     {
         $identifier = $this->user
@@ -75,7 +76,7 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
         return $identifier ?? '';
     }
 
-    #[\Override]
+    #[Override]
     public function getPassword(): string
     {
         $password = $this->user
@@ -85,7 +86,7 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
         return $password ?? '';
     }
 
-    #[\Override]
+    #[Override]
     public function passwordHash(string $plainPassword): void
     {
         $this->user->setPassword(ValueObjectFactory::createPassword(
@@ -93,7 +94,7 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
         ));
     }
 
-    #[\Override]
+    #[Override]
     public function passwordIsValid(string $plainPassword): bool
     {
         if (!$this->passwordHasher->isPasswordValid($this, $plainPassword)) {
@@ -107,7 +108,7 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
         return true;
     }
 
-    #[\Override]
+    #[Override]
     public function passwordNeedsRehash(): bool
     {
         return $this->passwordHasher->needsRehash($this);

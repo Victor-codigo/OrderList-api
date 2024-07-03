@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
+use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -16,7 +17,7 @@ class DescriptionTest extends TestCase
 
     private const string VALID_DESCRIPTION = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam consequat nisi vel tempor luctus. Pellentesque sit amet dignissim lorem. Ut vestibulum arcu dui, mattis ullamcorper quam lacinia tincidunt. Suspendisse eu risus eu massa fermentum interdum ut sed magna. Nunc ut tortor nibh. Sed nec bibendum nulla, sit amet fringilla odio. Praesent aliquam euismod faucibus. Nullam eget ipsum ac urna imperdiet molestie. Aliquam maximus, velit suscipit tincidunt condimentum, augue odio consectetur vel.';
 
-    #[\Override]
+    #[Override]
     public function setUp(): void
     {
         parent::setUp();

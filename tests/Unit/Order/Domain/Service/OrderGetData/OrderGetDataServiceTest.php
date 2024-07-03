@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Domain\Service\OrderGetData;
 
+use Override;
+use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -45,7 +47,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
     private MockObject|PaginatorInterface $ordersPaginator;
     private MockObject|PaginatorInterface $productsShopsPaginator;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -383,7 +385,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $this->ordersPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($ordersIndexProduct));
+            ->willReturn(new ArrayIterator($ordersIndexProduct));
 
         $return = $this->object->__invoke($input);
 
@@ -451,7 +453,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $this->ordersPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($ordersIndexProduct));
+            ->willReturn(new ArrayIterator($ordersIndexProduct));
 
         $return = $this->object->__invoke($input);
 
@@ -519,7 +521,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $this->ordersPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($ordersIndexProduct));
+            ->willReturn(new ArrayIterator($ordersIndexProduct));
 
         $return = $this->object->__invoke($input);
 
@@ -587,7 +589,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $this->ordersPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($ordersIndexProduct));
+            ->willReturn(new ArrayIterator($ordersIndexProduct));
 
         $return = $this->object->__invoke($input);
 
@@ -655,7 +657,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $this->ordersPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($ordersIndexProduct));
+            ->willReturn(new ArrayIterator($ordersIndexProduct));
 
         $return = $this->object->__invoke($input);
 
@@ -723,7 +725,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $this->ordersPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($ordersIndexProduct));
+            ->willReturn(new ArrayIterator($ordersIndexProduct));
 
         $return = $this->object->__invoke($input);
 
@@ -790,7 +792,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $this->ordersPaginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($ordersIndexProduct));
+            ->willReturn(new ArrayIterator($ordersIndexProduct));
 
         $return = $this->object->__invoke($input);
 

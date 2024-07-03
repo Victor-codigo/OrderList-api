@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Domain\Service\OrderModify;
 
+use Override;
+use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -41,7 +43,7 @@ class OrderModifyServiceTest extends TestCase
     private MockObject|ShopRepositoryInterface $shopRepository;
     private MockObject|PaginatorInterface $paginator;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -198,10 +200,10 @@ class OrderModifyServiceTest extends TestCase
             ->expects($this->exactly(4))
             ->method('getIterator')
             ->willReturnOnConsecutiveCalls(
-                new \ArrayIterator([$listOrders]),
-                new \ArrayIterator([$product]),
-                new \ArrayIterator([$shop]),
-                new \ArrayIterator([$order])
+                new ArrayIterator([$listOrders]),
+                new ArrayIterator([$product]),
+                new ArrayIterator([$shop]),
+                new ArrayIterator([$order])
             );
 
         $return = $this->object->__invoke($input);
@@ -270,9 +272,9 @@ class OrderModifyServiceTest extends TestCase
             ->expects($this->exactly(3))
             ->method('getIterator')
             ->willReturnOnConsecutiveCalls(
-                new \ArrayIterator([$listOrders]),
-                new \ArrayIterator([$product]),
-                new \ArrayIterator([$order])
+                new ArrayIterator([$listOrders]),
+                new ArrayIterator([$product]),
+                new ArrayIterator([$order])
             );
 
         $return = $this->object->__invoke($input);
@@ -343,11 +345,11 @@ class OrderModifyServiceTest extends TestCase
             ->expects($this->exactly(5))
             ->method('getIterator')
             ->willReturnOnConsecutiveCalls(
-                new \ArrayIterator([$listOrders]),
-                new \ArrayIterator([$product]),
-                new \ArrayIterator([$shop]),
-                new \ArrayIterator([$order]),
-                new \ArrayIterator([$order])
+                new ArrayIterator([$listOrders]),
+                new ArrayIterator([$product]),
+                new ArrayIterator([$shop]),
+                new ArrayIterator([$order]),
+                new ArrayIterator([$order])
             );
 
         $return = $this->object->__invoke($input);
@@ -450,7 +452,7 @@ class OrderModifyServiceTest extends TestCase
             ->expects($this->once())
             ->method('getIterator')
             ->willReturnOnConsecutiveCalls(
-                new \ArrayIterator([$listOrders])
+                new ArrayIterator([$listOrders])
             );
 
         $this->expectException(OrderModifyProductIdNotFoundException::class);
@@ -507,8 +509,8 @@ class OrderModifyServiceTest extends TestCase
             ->expects($this->exactly(2))
             ->method('getIterator')
             ->willReturnOnConsecutiveCalls(
-                new \ArrayIterator([$listOrders]),
-                new \ArrayIterator([$product])
+                new ArrayIterator([$listOrders]),
+                new ArrayIterator([$product])
             );
 
         $this->expectException(OrderModifyShopIdNotFoundException::class);
@@ -569,10 +571,10 @@ class OrderModifyServiceTest extends TestCase
             ->expects($this->exactly(4))
             ->method('getIterator')
             ->willReturnOnConsecutiveCalls(
-                new \ArrayIterator([$listOrders]),
-                new \ArrayIterator([$product]),
-                new \ArrayIterator([$shop]),
-                new \ArrayIterator([$order]),
+                new ArrayIterator([$listOrders]),
+                new ArrayIterator([$product]),
+                new ArrayIterator([$shop]),
+                new ArrayIterator([$order]),
             );
 
         $this->expectException(OrderModifyProductShopRepeatedException::class);
@@ -634,9 +636,9 @@ class OrderModifyServiceTest extends TestCase
             ->expects($this->exactly(3))
             ->method('getIterator')
             ->willReturnOnConsecutiveCalls(
-                new \ArrayIterator([$listOrders]),
-                new \ArrayIterator([$product]),
-                new \ArrayIterator([$shop]),
+                new ArrayIterator([$listOrders]),
+                new ArrayIterator([$product]),
+                new ArrayIterator([$shop]),
             );
 
         $this->expectException(DBNotFoundException::class);
@@ -700,10 +702,10 @@ class OrderModifyServiceTest extends TestCase
             ->expects($this->exactly(4))
             ->method('getIterator')
             ->willReturnOnConsecutiveCalls(
-                new \ArrayIterator([$listOrders]),
-                new \ArrayIterator([$product]),
-                new \ArrayIterator([$shop]),
-                new \ArrayIterator([$order])
+                new ArrayIterator([$listOrders]),
+                new ArrayIterator([$product]),
+                new ArrayIterator([$shop]),
+                new ArrayIterator([$order])
             );
 
         $this->expectException(DBUniqueConstraintException::class);

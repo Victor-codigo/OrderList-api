@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace User\Adapter\Security\Jwt;
 
+use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -35,7 +36,7 @@ class UserSymfonyProviderAdapter implements UserProviderInterface, PasswordUpgra
      * @throws UnsupportedUserException if the user is not supported
      * @throws UserNotFoundException    if the user is not found
      */
-    #[\Override]
+    #[Override]
     public function refreshUser(UserInterface $user): UserInterface
     {
         if (!$user instanceof UserSymfonyAdapter) {
@@ -45,7 +46,7 @@ class UserSymfonyProviderAdapter implements UserProviderInterface, PasswordUpgra
         return $this->loadUserByIdentifier($user->getUserIdentifier());
     }
 
-    #[\Override]
+    #[Override]
     public function supportsClass(string $class): bool
     {
         return UserSymfonyAdapter::class === $class;
@@ -54,7 +55,7 @@ class UserSymfonyProviderAdapter implements UserProviderInterface, PasswordUpgra
     /**
      * @throws UserNotFoundException
      */
-    #[\Override]
+    #[Override]
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
         try {
@@ -106,7 +107,7 @@ class UserSymfonyProviderAdapter implements UserProviderInterface, PasswordUpgra
             || $user->getRoles()->has(new Rol(USER_ROLES::USER_FIRST_LOGIN));
     }
 
-    #[\Override]
+    #[Override]
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         if (!$user instanceof UserUserInterface) {

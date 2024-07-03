@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Notification\Application\NotificationMarkAsViewed;
 
+use Exception;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
@@ -42,7 +43,7 @@ class NotificationMarkAsViewedUseCase extends ServiceBase
             return $this->createNotificationMarkAsViewedOutputDto($notification);
         } catch (DBNotFoundException) {
             throw NotificationNotFoundException::fromMessage('Notifications not found');
-        } catch (\Exception) {
+        } catch (Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

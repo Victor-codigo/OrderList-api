@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Event;
 
+use Override;
+use LogicException;
 use Common\Domain\Ports\Event\EventDispatcherInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +17,7 @@ class EventDispatchTraitTest extends TestCase
     private MockObject|TraitClass $object;
     private MockObject|EventDispatcherInterface $eventDispatcher;
 
-    #[\Override]
+    #[Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -55,7 +57,7 @@ class EventDispatchTraitTest extends TestCase
                     [1, $eventDomain1],
                     [2, $eventDomain2],
                     [3, $eventDomain3] => null,
-                    default => throw new \LogicException('withConsecutive calls error')
+                    default => throw new LogicException('withConsecutive calls error')
                 };
             });
 
@@ -85,7 +87,7 @@ class EventDispatchTraitTest extends TestCase
                     [4, $eventDomain4],
                     [5, $eventDomain5],
                     [6, $eventDomain6] => null,
-                    default => throw new \LogicException('withConsecutive parameters exception')
+                    default => throw new LogicException('withConsecutive parameters exception')
                 };
             });
 

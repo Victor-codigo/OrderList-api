@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Fixtures;
 
+use Override;
 use Common\Domain\Model\ValueObject\ValueObjectBase;
 
 class CustomValueObject extends ValueObjectBase
@@ -20,24 +21,24 @@ class CustomValueObject extends ValueObjectBase
         return self::class;
     }
 
-    #[\Override]
+    #[Override]
     public function getValue(): int|null
     {
         return $this->value;
     }
 
-    #[\Override]
+    #[Override]
     public function getValidationValue(): mixed
     {
         return $this->value;
     }
 
-    #[\Override]
+    #[Override]
     protected function defineConstraints(): void
     {
     }
 
-    #[\Override]
+    #[Override]
     public function getValueObjects(): array
     {
         return [];

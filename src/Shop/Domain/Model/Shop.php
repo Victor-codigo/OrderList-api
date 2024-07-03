@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Shop\Domain\Model;
 
+use DateTime;
+use Override;
 use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\String\Address;
 use Common\Domain\Model\ValueObject\String\Description;
@@ -25,7 +27,7 @@ class Shop implements EntityImageModifyInterface
     private Address $address;
     private Description $description;
     private Path $image;
-    private \DateTime $createdOn;
+    private DateTime $createdOn;
 
     /**
      * @var Collection<ProductShop>
@@ -82,13 +84,13 @@ class Shop implements EntityImageModifyInterface
         return $this;
     }
 
-    #[\Override]
+    #[Override]
     public function getImage(): Path
     {
         return $this->image;
     }
 
-    #[\Override]
+    #[Override]
     public function setImage(Path $image): self
     {
         $this->image = $image;
@@ -96,7 +98,7 @@ class Shop implements EntityImageModifyInterface
         return $this;
     }
 
-    public function getCreatedOn(): \DateTime
+    public function getCreatedOn(): DateTime
     {
         return $this->createdOn;
     }
@@ -156,7 +158,7 @@ class Shop implements EntityImageModifyInterface
         $this->address = $address;
         $this->description = $description;
         $this->image = $image;
-        $this->createdOn = new \DateTime();
+        $this->createdOn = new DateTime();
 
         $this->productShop = new ArrayCollection();
         $this->orders = new ArrayCollection();

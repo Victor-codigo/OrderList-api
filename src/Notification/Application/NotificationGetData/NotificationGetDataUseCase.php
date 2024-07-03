@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Notification\Application\NotificationGetData;
 
+use Exception;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Service\ServiceBase;
@@ -39,7 +40,7 @@ class NotificationGetDataUseCase extends ServiceBase
             return $this->createNotificationGetDataOutputDto($notificationsData);
         } catch (DBNotFoundException) {
             throw NotificationGetDataNotFoundException::fromMessage('Notifications not found');
-        } catch (\Exception) {
+        } catch (Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

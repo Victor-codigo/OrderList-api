@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common;
 
+use Override;
 use Common\Adapter\Compiler\KernelCustom;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -20,7 +21,7 @@ class Kernel extends BaseKernel
         parent::__construct($environment, $debug);
     }
 
-    #[\Override]
+    #[Override]
     protected function build(ContainerBuilder $container): void
     {
         KernelCustom::eventSubscribersAutoWire($container);

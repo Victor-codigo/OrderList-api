@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Adapter\Database\Orm\Doctrine\Repository;
 
+use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
@@ -66,7 +67,7 @@ class OrderRepositoryTest extends DataBaseTestCase
     private ShopRepositoryInterface $shopRepository;
     private ListOrdersRepositoryInterface $listOrdersRepository;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

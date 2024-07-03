@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Application\NotificationCreate\Dto;
 
+use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -21,7 +22,7 @@ class NotificationCreateInputDtoTest extends TestCase
     private ValidationInterface $validator;
     private MockObject|UserShared $user;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

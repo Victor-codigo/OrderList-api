@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserRegister\Dto;
 
+use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -19,7 +20,7 @@ class UserRegisterInputDtoTest extends TestCase
     private UserRegisterInputDto $object;
     private ValidationChain $validator;
 
-    #[\Override]
+    #[Override]
     public function setup(): void
     {
         parent::setUp();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupUserGetGroups;
 
+use Exception;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
@@ -40,7 +41,7 @@ class GroupUserGetGroupsUseCase extends ServiceBase
             return $this->createGroupUserGetGroupsOutputDto($input->page, $userGroups);
         } catch (DBNotFoundException) {
             throw GroupUserGetGroupsNoGroupsFoundException::fromMessage('No groups found');
-        } catch (\Exception) {
+        } catch (Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

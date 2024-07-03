@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array;
 
+use Override;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\TypeBase;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Exception\LogicException;
@@ -15,13 +16,13 @@ use JsonException;
 
 class RolesType extends TypeBase
 {
-    #[\Override]
+    #[Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return 'JSON';
     }
 
-    #[\Override]
+    #[Override]
     public function getClassImplementationName(): string
     {
         return Roles::class;
@@ -30,10 +31,10 @@ class RolesType extends TypeBase
     /**
      * @return string|null
      *
-     * @throws \JsonException
+     * @throws JsonException
      * @throws InvalidArgumentException
      */
-    #[\Override]
+    #[Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         if (!$value instanceof Roles) {
@@ -55,7 +56,7 @@ class RolesType extends TypeBase
      * @throws LogicException
      * @throws InvalidArgumentException
      */
-    #[\Override]
+    #[Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
         if (null === $value) {

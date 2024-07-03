@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Product\Adapter\Http\Controller\ProductGetData;
 
+use Override;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -30,7 +31,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
     ];
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

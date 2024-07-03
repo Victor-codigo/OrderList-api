@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
+use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Name;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -16,7 +17,7 @@ class NameTest extends TestCase
 
     private const string VALID_NAME = 'Juan_6';
 
-    #[\Override]
+    #[Override]
     public function setUp(): void
     {
         parent::setUp();

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array;
 
+use Override;
+use JsonException;
+use Throwable;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\TypeBase;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Exception\LogicException;
@@ -12,13 +15,13 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 class NotificationDataType extends TypeBase
 {
-    #[\Override]
+    #[Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return 'JSON';
     }
 
-    #[\Override]
+    #[Override]
     public function getClassImplementationName(): string
     {
         return NotificationData::class;
@@ -27,10 +30,10 @@ class NotificationDataType extends TypeBase
     /**
      * @return string|null
      *
-     * @throws \JsonException
+     * @throws JsonException
      * @throws InvalidArgumentException
      */
-    #[\Override]
+    #[Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         if (!$value instanceof NotificationData) {
@@ -48,7 +51,7 @@ class NotificationDataType extends TypeBase
      * @throws LogicException
      * @throws InvalidArgumentException
      */
-    #[\Override]
+    #[Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
         if (null === $value) {
@@ -59,9 +62,9 @@ class NotificationDataType extends TypeBase
             $notificationData = json_decode((string) $value, true, 512, JSON_THROW_ON_ERROR);
 
             return parent::convertToPHPValue($notificationData, $platform);
-        } catch (\JsonException) {
+        } catch (JsonException) {
             throw InvalidArgumentException::fromMessage('convertToPHPValue: data base notification data, is not a valid json string');
-        } catch (\Throwable) {
+        } catch (Throwable) {
             throw LogicException::fromMessage('convertToPHPValue: data base notification data, can\'t be converted to a '.NotificationData::class);
         }
     }

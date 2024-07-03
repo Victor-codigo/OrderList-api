@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Shop\Application\ShopGetData\Dto;
 
+use Override;
 use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
@@ -63,7 +64,7 @@ class ShopGetDataInputDto implements ServiceInputDtoInterface
         );
     }
 
-    #[\Override]
+    #[Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray(['group_id' => $this->groupId]);

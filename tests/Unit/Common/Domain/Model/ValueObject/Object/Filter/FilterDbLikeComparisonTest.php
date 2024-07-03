@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Object\Filter;
 
+use Override;
+use stdClass;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\Filter\FilterDbLikeComparison;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -15,7 +17,7 @@ class FilterDbLikeComparisonTest extends TestCase
     private FilterDbLikeComparison $object;
     private ValidationChain $validator;
 
-    #[\Override]
+    #[Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -76,7 +78,7 @@ class FilterDbLikeComparisonTest extends TestCase
     /** @test */
     public function itShouldFailFilterNotValid(): void
     {
-        $this->object = new FilterDbLikeComparison(new \stdClass());
+        $this->object = new FilterDbLikeComparison(new stdClass());
 
         $return = $this->validator->validateValueObject($this->object);
 

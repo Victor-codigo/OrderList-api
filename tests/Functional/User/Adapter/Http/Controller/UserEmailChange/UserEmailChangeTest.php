@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserEmailChange;
 
+use Override;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -19,7 +20,7 @@ class UserEmailChangeTest extends WebClientTestCase
     private const string METHOD = 'PATCH';
     private const string USER_PASSWORD = '123456';
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

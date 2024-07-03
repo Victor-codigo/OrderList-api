@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace User\Application\UserRegister\Dto;
 
+use Override;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Email;
@@ -62,7 +63,7 @@ final class UserRegisterInputDto implements ServiceInputDtoInterface
         );
     }
 
-    #[\Override]
+    #[Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

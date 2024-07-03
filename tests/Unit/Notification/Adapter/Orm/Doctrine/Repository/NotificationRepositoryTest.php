@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Adapter\Orm\Doctrine\Repository;
 
+use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
@@ -35,7 +36,7 @@ class NotificationRepositoryTest extends DataBaseTestCase
 
     private NotificationRepository $object;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

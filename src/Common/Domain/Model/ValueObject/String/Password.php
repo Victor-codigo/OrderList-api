@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\String;
 
+use Override;
 use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\ConstraintFactory;
 
 class Password extends StringValueObject
 {
-    #[\Override]
+    #[Override]
     public function defineConstraints(): void
     {
         $this

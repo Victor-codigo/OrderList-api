@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Event;
 
+use Override;
 use PHPUnit\Framework\TestCase;
 use Test\Unit\Common\Domain\Event\Fixtures\CustomEvent;
 use Test\Unit\Common\Domain\Event\Fixtures\TraitClass;
@@ -13,7 +14,7 @@ class EventRegisterTraitTest extends TestCase
     private TraitClass $object;
     private CustomEvent $event;
 
-    #[\Override]
+    #[Override]
     public function setUp(): void
     {
         parent::setUp();

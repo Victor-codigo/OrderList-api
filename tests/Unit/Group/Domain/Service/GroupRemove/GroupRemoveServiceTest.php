@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupRemove;
 
+use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
@@ -28,7 +29,7 @@ class GroupRemoveServiceTest extends TestCase
     private MockObject|GroupRepositoryInterface $groupRepository;
     private MockObject|EntityImageRemoveService $entityImageRemoveService;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

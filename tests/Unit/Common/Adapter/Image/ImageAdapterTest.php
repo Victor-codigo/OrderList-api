@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Image;
 
+use Override;
+use RuntimeException;
+use InvalidArgumentException;
 use Common\Adapter\Image\BuiltInFunctionsReturn;
 use Common\Adapter\Image\ImagineAdapter;
 use Common\Domain\Image\Exception\ImageResizeException;
@@ -25,7 +28,7 @@ class ImageAdapterTest extends TestCase
     private MockObject|Imagine $imagine;
     private MockObject|ImageInterface $imageInterface;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -391,7 +394,7 @@ class ImageAdapterTest extends TestCase
             ->expects($this->once())
             ->method('open')
             ->with($filePath->getValue())
-            ->willThrowException(new \RuntimeException());
+            ->willThrowException(new RuntimeException());
 
         $this->imageInterface
             ->expects($this->never())
@@ -419,7 +422,7 @@ class ImageAdapterTest extends TestCase
             ->expects($this->once())
             ->method('open')
             ->with($filePath->getValue())
-            ->willThrowException(new \InvalidArgumentException());
+            ->willThrowException(new InvalidArgumentException());
 
         $this->imageInterface
             ->expects($this->never())

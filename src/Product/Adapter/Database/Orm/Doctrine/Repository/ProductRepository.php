@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Product\Adapter\Database\Orm\Doctrine\Repository;
 
+use Override;
+use Exception;
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
@@ -33,7 +35,7 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
      * @throws DBUniqueConstraintException
      * @throws DBConnectionException
      */
-    #[\Override]
+    #[Override]
     public function save(Product $product): void
     {
         try {
@@ -41,7 +43,7 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
             $this->objectManager->flush();
         } catch (UniqueConstraintViolationException $e) {
             throw DBUniqueConstraintException::fromId($product->getId()->getValue(), $e->getCode());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
     }
@@ -51,7 +53,7 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
      *
      * @throws DBConnectionException
      */
-    #[\Override]
+    #[Override]
     public function remove(array $products): void
     {
         try {
@@ -60,7 +62,7 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
             }
 
             $this->objectManager->flush();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
     }
@@ -68,7 +70,7 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
     /**
      * @throws DBNotFoundException
      */
-    #[\Override]
+    #[Override]
     public function findProductsByGroupAndNameOrFail(Identifier $groupId, NameWithSpaces $name): PaginatorInterface
     {
         $queryBuilder = $this->entityManager
@@ -99,7 +101,7 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
      *
      * @throws DBNotFoundException
      */
-    #[\Override]
+    #[Override]
     public function findProductsOrFail(Identifier $groupId, ?array $productsId = null, ?array $shopsId = null, bool $orderAsc = true): PaginatorInterface
     {
         $query = $this->entityManager
@@ -128,7 +130,7 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
         return $this->queryPaginationOrFail($query);
     }
 
-    #[\Override]
+    #[Override]
     public function findProductsByProductNameOrFail(Identifier $groupId, NameWithSpaces $productName, bool $orderAsc = true): PaginatorInterface
     {
         $productEntity = Product::class;
@@ -149,7 +151,7 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
         ]);
     }
 
-    #[\Override]
+    #[Override]
     public function findProductsByProductNameFilterOrFail(Identifier $groupId, Filter $productNameFilter, bool $orderAsc = true): PaginatorInterface
     {
         $productEntity = Product::class;
@@ -170,7 +172,7 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
         ]);
     }
 
-    #[\Override]
+    #[Override]
     public function findProductsByShopNameFilterOrFail(Identifier $groupId, Filter $shopNameFilter, bool $orderAsc = true): PaginatorInterface
     {
         $productEntity = Product::class;
@@ -200,7 +202,7 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
      *
      * @throws DBNotFoundException
      */
-    #[\Override]
+    #[Override]
     public function findGroupsProductsOrFail(array $groupsId): PaginatorInterface
     {
         $productEntity = Product::class;

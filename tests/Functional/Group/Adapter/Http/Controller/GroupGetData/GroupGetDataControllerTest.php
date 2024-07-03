@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupGetData;
 
+use DateTime;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Group\Domain\Model\Group;
@@ -20,7 +21,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
     private const string GROUP_USER_ONLY_GROUP_EMAIL = 'email.other.active@host.com';
     private const string GROUP_USER_ONLY_GROUP_PASSWORD = '123456';
 
-    private function getGroupsData(\DateTime $createdOn): array
+    private function getGroupsData(DateTime $createdOn): array
     {
         return [
             Group::fromPrimitives('fdb242b4-bac8-4463-88d0-0941bb0beee0', 'GroupOne', GROUP_TYPE::GROUP, 'This is a group of users', 'image_of_group_type_group'),
@@ -43,7 +44,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $patImageGroup = static::getContainer()->getParameter('group.public.image.path');
         $appProtocolAndDomain = static::getContainer()->getParameter('common.app.protocolAndDomain');
 
-        $groupCreatedOn = new \DateTime();
+        $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsType = array_map(fn (Group $group) => $group->getType()->getValue(), $groups);
@@ -94,7 +95,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $patImageGroup = static::getContainer()->getParameter('group.public.image.path');
         $appProtocolAndDomain = static::getContainer()->getParameter('common.app.protocolAndDomain');
 
-        $groupCreatedOn = new \DateTime();
+        $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
@@ -138,7 +139,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $patImageGroup = static::getContainer()->getParameter('group.public.image.path');
         $appProtocolAndDomain = static::getContainer()->getParameter('common.app.protocolAndDomain');
 
-        $groupCreatedOn = new \DateTime();
+        $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
@@ -182,7 +183,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $patImageGroup = static::getContainer()->getParameter('group.public.image.path');
         $appProtocolAndDomain = static::getContainer()->getParameter('common.app.protocolAndDomain');
 
-        $groupCreatedOn = new \DateTime();
+        $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
         $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
@@ -238,7 +239,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailGroupsIdNotValid(): void
     {
-        $groupCreatedOn = new \DateTime();
+        $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue().'-', $groups);
 
@@ -261,7 +262,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
     /** @test */
     public function itShouldFailUserSessionDoesNotBelongsToAGroup(): void
     {
-        $groupCreatedOn = new \DateTime();
+        $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
 

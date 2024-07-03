@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Security\jwt;
 
+use Override;
+use ValueError;
+use DateTime;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\HttpClient\Exception\Error400Exception;
@@ -29,7 +32,7 @@ class UserSharedSymfonyProviderAdapter implements UserProviderInterface
     /**
      * @throws UnsupportedUserException if the user is not supported
      */
-    #[\Override]
+    #[Override]
     public function refreshUser(UserInterface $user): UserInterface
     {
         if (!$user instanceof UserSharedSymfonyAdapter) {
@@ -42,7 +45,7 @@ class UserSharedSymfonyProviderAdapter implements UserProviderInterface
     /**
      * Whether this provider supports the given user class.
      */
-    #[\Override]
+    #[Override]
     public function supportsClass(string $class): bool
     {
         return UserSharedSymfonyAdapter::class === $class;
@@ -51,7 +54,7 @@ class UserSharedSymfonyProviderAdapter implements UserProviderInterface
     /**
      * @throws UserNotFoundException
      */
-    #[\Override]
+    #[Override]
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
         try {
@@ -61,7 +64,7 @@ class UserSharedSymfonyProviderAdapter implements UserProviderInterface
             );
 
             return $this->createUserSharedSymfonyAdapter($response->data[0]);
-        } catch (Error400Exception|ModuleCommunicationException|\ValueError) {
+        } catch (Error400Exception|ModuleCommunicationException|ValueError) {
             throw new UserNotFoundException('Identifier not found: ', $identifier);
         }
     }
@@ -79,7 +82,7 @@ class UserSharedSymfonyProviderAdapter implements UserProviderInterface
             $userData['name'],
             $roles,
             $userData['image'],
-            new \DateTime($userData['created_on'])
+            new DateTime($userData['created_on'])
         );
 
         return new UserSharedSymfonyAdapter($userShared);

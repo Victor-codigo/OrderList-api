@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Domain\Service\OrderCreate;
 
+use Override;
+use DateTime;
+use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -40,7 +43,7 @@ class OrderCreateServiceTest extends TestCase
     private MockObject|PaginatorInterface $paginator;
     private Identifier $groupId;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -243,7 +246,7 @@ class OrderCreateServiceTest extends TestCase
         $this->assertEquals($expected->getGroupId(), $actual->getGroupId());
         $this->assertEquals($expected->getDescription(), $actual->getDescription());
         $this->assertEquals($expected->getAmount(), $actual->getAmount());
-        $this->assertInstanceOf(\DateTime::class, $actual->getCreatedOn());
+        $this->assertInstanceOf(DateTime::class, $actual->getCreatedOn());
     }
 
     /** @test */
@@ -504,7 +507,7 @@ class OrderCreateServiceTest extends TestCase
             ->expects($this->once())
             ->method('getIterator')
             ->willReturnOnConsecutiveCalls(
-                new \ArrayIterator($listsOrders)
+                new ArrayIterator($listsOrders)
             );
 
         $this->paginator
@@ -554,7 +557,7 @@ class OrderCreateServiceTest extends TestCase
             ->expects($this->exactly(2))
             ->method('getIterator')
             ->willReturnOnConsecutiveCalls(
-                new \ArrayIterator($listsOrders),
+                new ArrayIterator($listsOrders),
                 new ArrayCollection([$products[0], $products[1]])
             );
 
@@ -620,7 +623,7 @@ class OrderCreateServiceTest extends TestCase
             ->expects($this->exactly(3))
             ->method('getIterator')
             ->willReturnOnConsecutiveCalls(
-                new \ArrayIterator($listsOrders),
+                new ArrayIterator($listsOrders),
                 new ArrayCollection($products),
                 new ArrayCollection([$shops[0]])
             );

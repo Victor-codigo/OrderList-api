@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\FileUpload;
 
+use Override;
 use Common\Domain\Exception\LogicException;
 use Common\Domain\FileUpload\Exception\FileUploadCanNotWriteException;
 use Common\Domain\FileUpload\Exception\FileUploadException;
@@ -39,7 +40,7 @@ class FileUploadSymfonyAdapter implements FileUploadInterface
     /**
      * @throws LogicException
      */
-    #[\Override]
+    #[Override]
     public function getFileName(): string
     {
         if (!isset($this->fileName)) {
@@ -62,7 +63,7 @@ class FileUploadSymfonyAdapter implements FileUploadInterface
      * @throws FileUploadPartialFileException
      * @throws FileUploadReplaceException
      */
-    #[\Override]
+    #[Override]
     public function __invoke(UploadedFileInterface $file, string $pathToSaveFile, string $fileNameToReplace = null): FileInterface
     {
         try {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
+use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Language;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -14,7 +15,7 @@ class LanguageTest extends TestCase
 {
     private ValidationInterface $validator;
 
-    #[\Override]
+    #[Override]
     public function setUp(): void
     {
         parent::setUp();

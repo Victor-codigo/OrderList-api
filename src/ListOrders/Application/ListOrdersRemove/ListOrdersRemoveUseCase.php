@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ListOrders\Application\ListOrdersRemove;
 
+use Exception;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Service\ServiceBase;
@@ -49,7 +50,7 @@ class ListOrdersRemoveUseCase extends ServiceBase
             throw ListOrdersValidationGroupAndUserException::fromMessage('You not belong to the group');
         } catch (DBNotFoundException) {
             throw ListOrdersListOrdersNotFoundException::fromMessage('List orders not found');
-        } catch (\Exception) {
+        } catch (Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

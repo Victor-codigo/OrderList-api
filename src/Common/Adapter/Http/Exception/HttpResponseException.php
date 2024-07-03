@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Http\Exception;
 
+use Override;
 use Common\Domain\Response\ResponseDto;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,7 +55,7 @@ class HttpResponseException extends Exception implements HttpExceptionInterface
     /**
      * {@inheritDoc}
      */
-    #[\Override]
+    #[Override]
     public function getStatusCode(): int
     {
         return $this->statusCode;
@@ -70,7 +71,7 @@ class HttpResponseException extends Exception implements HttpExceptionInterface
     /**
      * {@inheritDoc}
      */
-    #[\Override]
+    #[Override]
     public function getHeaders(): array
     {
         return $this->headers;

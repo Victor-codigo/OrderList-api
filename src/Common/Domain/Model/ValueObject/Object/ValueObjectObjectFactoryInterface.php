@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Object;
 
+use BackedEnum;
 use Common\Domain\Model\ValueObject\Object\Filter\FilterDbLikeComparison;
 use Common\Domain\Model\ValueObject\Object\Filter\FilterSection;
 use Common\Domain\Ports\FileUpload\FileInterface;
@@ -14,7 +15,7 @@ use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 
 interface ValueObjectObjectFactoryInterface
 {
-    public static function createRol(\BackedEnum|null $rol): Rol;
+    public static function createRol(BackedEnum|null $rol): Rol;
 
     public static function createFile(FileInterface|null $file): File;
 
@@ -32,7 +33,7 @@ interface ValueObjectObjectFactoryInterface
 
     public static function createShopImage(FileInterface|null $file): ShopImage;
 
-    public static function createFilterDbLikeComparison(\BackedEnum|null $filter): FilterDbLikeComparison;
+    public static function createFilterDbLikeComparison(BackedEnum|null $filter): FilterDbLikeComparison;
 
     public static function createFilterSection(FILTER_SECTION|null $filter): FilterSection;
 }

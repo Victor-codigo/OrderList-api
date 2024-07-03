@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupGetData;
 
+use Exception;
+use Generator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -46,7 +48,7 @@ class GroupGetDataUseCase extends ServiceBase
             return $this->createGroupGetDataOutputDto($groupsData);
         } catch (ValueObjectValidationException|GroupGetDataUserNotBelongsToTheGroupException $e) {
             throw $e;
-        } catch (\Exception) {
+        } catch (Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }
@@ -93,7 +95,7 @@ class GroupGetDataUseCase extends ServiceBase
         return new GroupGetDataDto($groupsId, GROUP_TYPE::GROUP, $userImage);
     }
 
-    private function createGroupGetDataOutputDto(\Generator $groupsData): GroupGetDataOutputDto
+    private function createGroupGetDataOutputDto(Generator $groupsData): GroupGetDataOutputDto
     {
         return new GroupGetDataOutputDto($groupsData);
     }

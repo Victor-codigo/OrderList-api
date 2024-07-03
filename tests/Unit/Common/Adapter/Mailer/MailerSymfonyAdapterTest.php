@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Mailer;
 
+use Override;
 use Common\Adapter\Mailer\MailerSymfonyAdapter;
 use Common\Domain\Mailer\Exception\MailerSentException;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -17,7 +18,7 @@ class MailerSymfonyAdapterTest extends TestCase
     private MailerSymfonyAdapter $object;
     private MockObject|MailerInterface $mailer;
 
-    #[\Override]
+    #[Override]
     public function setUp(): void
     {
         parent::setUp();

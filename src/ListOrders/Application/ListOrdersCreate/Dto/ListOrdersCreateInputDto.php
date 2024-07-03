@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace ListOrders\Application\ListOrdersCreate\Dto;
 
+use DateTime;
+use Override;
 use Common\Domain\Model\ValueObject\Date\DateNowToFuture;
 use Common\Domain\Model\ValueObject\String\Description;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -32,22 +34,22 @@ class ListOrdersCreateInputDto implements ServiceInputDtoInterface
         );
     }
 
-    private function stringDateToDateTime(string|null $date): \DateTime|null
+    private function stringDateToDateTime(string|null $date): DateTime|null
     {
         if (null === $date) {
             return null;
         }
 
-        $dateTimeToBuy = \DateTime::createFromFormat('Y-m-d H:i:s', $date);
+        $dateTimeToBuy = DateTime::createFromFormat('Y-m-d H:i:s', $date);
 
-        if ($dateTimeToBuy instanceof \DateTime) {
+        if ($dateTimeToBuy instanceof DateTime) {
             return $dateTimeToBuy;
         }
 
         return null;
     }
 
-    #[\Override]
+    #[Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

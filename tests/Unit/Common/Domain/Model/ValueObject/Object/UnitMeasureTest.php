@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Object;
 
+use Override;
+use stdClass;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\UnitMeasure;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -14,7 +16,7 @@ class UnitMeasureTest extends TestCase
 {
     private ValidationChain $validation;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -43,7 +45,7 @@ class UnitMeasureTest extends TestCase
     /** @test */
     public function itShouldFailIsNotUnitMeasureType(): void
     {
-        $object = new UnitMeasure(new \stdClass());
+        $object = new UnitMeasure(new stdClass());
         $return = $this->validation->validateValueObject($object);
 
         $this->assertEquals([VALIDATION_ERRORS::CHOICE_NOT_SUCH], $return);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace User\Adapter\Database\Orm\Doctrine\Repository;
 
+use Override;
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
@@ -33,7 +34,7 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
      * @throws DBUniqueConstraintException
      * @throws DBConnectionException
      */
-    #[\Override]
+    #[Override]
     public function save(User $user): void
     {
         try {
@@ -51,7 +52,7 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
      *
      * @throws DBConnectionException
      */
-    #[\Override]
+    #[Override]
     public function remove(array $users): void
     {
         try {
@@ -68,7 +69,7 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
     /**
      * @throws DBNotFoundException
      */
-    #[\Override]
+    #[Override]
     public function findUserByIdOrFail(Identifier $id): User
     {
         return $this->findUserByIdCacheOrFail($id, true);
@@ -79,7 +80,7 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
      *
      * @throws DBNotFoundException
      */
-    #[\Override]
+    #[Override]
     public function findUserByIdNoCacheOrFail(Identifier $id): User
     {
         return $this->findUserByIdCacheOrFail($id, false);
@@ -109,7 +110,7 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
         return $user;
     }
 
-    #[\Override]
+    #[Override]
     public function findUserByEmailOrFail(Email $email): User
     {
         $user = $this->findOneBy(['email' => $email]);
@@ -128,7 +129,7 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
      *
      * @throws DBNotFoundException
      */
-    #[\Override]
+    #[Override]
     public function findUsersByIdOrFail(array $id): array
     {
         $users = $this->findBy(['id' => $id]);
@@ -147,7 +148,7 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
      *
      * @throws DBNotFoundException
      */
-    #[\Override]
+    #[Override]
     public function findUsersByNameOrFail(array $usersName): array
     {
         $users = $this->findBy(['name' => $usersName]);
@@ -162,7 +163,7 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
     /**
      * @throws DBNotFoundException
      */
-    #[\Override]
+    #[Override]
     public function findUsersTimeActivationExpiredOrFail(int $activationTime): PaginatorInterface
     {
         $userEntity = User::class;

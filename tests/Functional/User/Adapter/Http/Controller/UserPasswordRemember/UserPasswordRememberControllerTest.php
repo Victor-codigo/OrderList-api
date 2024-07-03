@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserPasswordRemember;
 
+use Override;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -21,7 +22,7 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
 
     private KernelBrowser $client;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

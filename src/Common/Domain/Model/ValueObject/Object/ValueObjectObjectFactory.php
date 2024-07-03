@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\Object;
 
+use BackedEnum;
 use Common\Domain\Model\ValueObject\Object\Filter\FilterDbLikeComparison;
 use Common\Domain\Model\ValueObject\Object\Filter\FilterSection;
 use Common\Domain\Ports\FileUpload\FileInterface;
@@ -14,7 +15,7 @@ use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 
 class ValueObjectObjectFactory
 {
-    public static function createRol(\BackedEnum|null $rol): Rol
+    public static function createRol(BackedEnum|null $rol): Rol
     {
         return new Rol($rol);
     }
@@ -59,7 +60,7 @@ class ValueObjectObjectFactory
         return new ShopImage($file);
     }
 
-    public static function createFilterDbLikeComparison(\BackedEnum|null $filter): FilterDbLikeComparison
+    public static function createFilterDbLikeComparison(BackedEnum|null $filter): FilterDbLikeComparison
     {
         return new FilterDbLikeComparison($filter);
     }

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Jwt;
 
+use DateInterval;
+use stdClass;
+use DateTime;
 use Common\Adapter\Jwt\Exception\JwtException;
 use Common\Adapter\Jwt\Exception\JwtTokenExpiredException;
 use Common\Domain\Exception\InvalidArgumentException;
-use Common\Domain\Ports\JwtToken\JwtHS256Interface;
 use DomainException as NativeDomainException;
 use Firebase\JWT\BeforeValidException;
 use Firebase\JWT\ExpiredException;
@@ -33,7 +35,7 @@ class JwtFirebaseHS256Adapter /* implements JwtHS256Interface */
     {
         if (null !== $expireTimeInSeconds) {
             $data[self::KEY_TOKEN_DATA]['expire'] = $this->getDateTime()
-                ->add(new \DateInterval("PT{$expireTimeInSeconds}S"))
+                ->add(new DateInterval("PT{$expireTimeInSeconds}S"))
                 ->getTimestamp();
         }
 
@@ -45,7 +47,7 @@ class JwtFirebaseHS256Adapter /* implements JwtHS256Interface */
      * @throws JwtException
      * @throws JwtTokenExpiredException
      */
-    public function decode(string $token): \stdClass
+    public function decode(string $token): stdClass
     {
         try {
             return JWT::decode($token, $this->secretKey);
@@ -75,13 +77,13 @@ class JwtFirebaseHS256Adapter /* implements JwtHS256Interface */
         return $this->getDateTime($tokenDecoded->{self::KEY_TOKEN_DATA}->expire) < $this->getDateTime();
     }
 
-    protected function getDateTime(int|null $timestamp = null): \DateTime
+    protected function getDateTime(int|null $timestamp = null): DateTime
     {
         if (null === $timestamp) {
-            return new \DateTime();
+            return new DateTime();
         }
 
-        return (new \DateTime())->setTimestamp($timestamp);
+        return (new DateTime())->setTimestamp($timestamp);
     }
 
     protected function getKey(string $secretKey)

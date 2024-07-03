@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\FileUpload;
 
+use Override;
 use Common\Domain\FileUpload\Exception\File\FileException;
 use Common\Domain\Ports\FileUpload\FileInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException as SymfonyFileException;
@@ -13,7 +14,7 @@ class FileSymfonyAdapter implements FileInterface
 {
     protected File $file;
 
-    #[\Override]
+    #[Override]
     public function getFile(): File
     {
         return $this->file;
@@ -35,7 +36,7 @@ class FileSymfonyAdapter implements FileInterface
      * @see MimeTypes
      * @see getMimeType()
      */
-    #[\Override]
+    #[Override]
     public function guessExtension(): ?string
     {
         return $this->file->guessExtension();
@@ -50,7 +51,7 @@ class FileSymfonyAdapter implements FileInterface
      *
      * @see MimeTypes
      */
-    #[\Override]
+    #[Override]
     public function getMimeType(): ?string
     {
         return $this->file->getMimeType();
@@ -61,7 +62,7 @@ class FileSymfonyAdapter implements FileInterface
      *
      * @throws FileException if the target file could not be created
      */
-    #[\Override]
+    #[Override]
     public function move(string $directory, string $name = null): FileInterface
     {
         try {
@@ -71,7 +72,7 @@ class FileSymfonyAdapter implements FileInterface
         }
     }
 
-    #[\Override]
+    #[Override]
     public function getContent(): string
     {
         return $this->file->getContent();

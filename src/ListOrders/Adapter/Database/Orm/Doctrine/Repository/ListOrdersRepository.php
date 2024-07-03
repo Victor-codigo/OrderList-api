@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace ListOrders\Adapter\Database\Orm\Doctrine\Repository;
 
+use Override;
+use Exception;
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
@@ -34,7 +36,7 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
      * @throws DBUniqueConstraintException
      * @throws DBConnectionException
      */
-    #[\Override]
+    #[Override]
     public function save(array $listsOrders): void
     {
         try {
@@ -45,7 +47,7 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
             $this->objectManager->flush();
         } catch (UniqueConstraintViolationException $e) {
             throw DBUniqueConstraintException::fromId($listOrders->getId()->getValue(), $e->getCode());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
     }
@@ -54,7 +56,7 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
      * @throws DBUniqueConstraintException
      * @throws DBConnectionException
      */
-    #[\Override]
+    #[Override]
     public function saveListOrdersAndOrders(ListOrders $listOrders): void
     {
         try {
@@ -67,7 +69,7 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
             $this->objectManager->flush();
         } catch (UniqueConstraintViolationException $e) {
             throw DBUniqueConstraintException::fromId($listOrders->getId()->getValue(), $e->getCode());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
     }
@@ -77,7 +79,7 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
      *
      * @throws DBConnectionException
      */
-    #[\Override]
+    #[Override]
     public function remove(array $listsOrders): void
     {
         try {
@@ -86,7 +88,7 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
             }
 
             $this->objectManager->flush();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
     }
@@ -96,7 +98,7 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
      *
      * @throws DBNotFoundException
      */
-    #[\Override]
+    #[Override]
     public function findListOrderByIdOrFail(array $ListsOrdersId, ?Identifier $groupId = null): PaginatorInterface
     {
         $query = $this->entityManager
@@ -118,7 +120,7 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     /**
      * @throws DBNotFoundException
      */
-    #[\Override]
+    #[Override]
     public function findListOrdersGroup(Identifier $groupId, bool $orderAsc): PaginatorInterface
     {
         $listOrdersEntity = ListOrders::class;
@@ -138,7 +140,7 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     /**
      * @throws DBNotFoundException
      */
-    #[\Override]
+    #[Override]
     public function findListOrderByListOrdersNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface
     {
         $listOrdersEntity = ListOrders::class;
@@ -160,7 +162,7 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     /**
      * @throws DBNotFoundException
      */
-    #[\Override]
+    #[Override]
     public function findListOrderByProductNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface
     {
         $listOrdersEntity = ListOrders::class;
@@ -186,7 +188,7 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     /**
      * @throws DBNotFoundException
      */
-    #[\Override]
+    #[Override]
     public function findListOrderByShopNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface
     {
         $listOrdersEntity = ListOrders::class;
@@ -214,7 +216,7 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
      *
      * @throws DBNotFoundException
      */
-    #[\Override]
+    #[Override]
     public function findGroupsListsOrdersOrFail(array $groupsId): PaginatorInterface
     {
         $listOrdersEntity = ListOrders::class;

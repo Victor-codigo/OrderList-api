@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Security;
 
+use Override;
 use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Security\UserShared;
@@ -16,7 +17,7 @@ class UserSharedSymfonyAdapterTest extends TestCase
     private UserSharedSymfonyAdapter $object;
     private MockObject|UserShared $userShared;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

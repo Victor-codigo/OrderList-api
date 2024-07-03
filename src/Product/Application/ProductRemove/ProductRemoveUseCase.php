@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Product\Application\ProductRemove;
 
+use Exception;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -46,7 +47,7 @@ class ProductRemoveUseCase extends ServiceBase
             throw ProductRemoveProductNotFoundException::fromMessage('Product not found');
         } catch (ValidateGroupAndUserException) {
             throw ProductRemoveGroupOrUserNotValidException::fromMessage('You have not permissions');
-        } catch (\Exception) {
+        } catch (Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

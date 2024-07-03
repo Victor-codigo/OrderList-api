@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupGetGroupsAdmins\Dto;
 
+use Override;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -36,7 +37,7 @@ class GroupGetGroupsAdminsInputDto implements ServiceInputDtoInterface
         $this->pageItems = ValueObjectFactory::createPaginatorPageItems($pageItems);
     }
 
-    #[\Override]
+    #[Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListGroupsIdEmpty = $validator

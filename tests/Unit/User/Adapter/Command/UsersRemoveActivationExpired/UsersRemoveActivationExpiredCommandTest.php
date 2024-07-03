@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Command\UsersRemoveActivationExpired;
 
+use Override;
+use ReflectionClass;
+use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -26,7 +29,7 @@ class UsersRemoveActivationExpiredCommandTest extends TestCase
     private MockObject|InputInterface $input;
     private MockObject|OutputInterface $output;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -40,7 +43,7 @@ class UsersRemoveActivationExpiredCommandTest extends TestCase
 
     private function executeInvoke(Command $command, InputInterface $input, OutputInterface $output): int
     {
-        $commandReflection = new \ReflectionClass($command);
+        $commandReflection = new ReflectionClass($command);
         $method = $commandReflection->getMethod('execute');
         $method->setAccessible(true);
 
@@ -61,7 +64,7 @@ class UsersRemoveActivationExpiredCommandTest extends TestCase
         $this->paginator
             ->expects($this->exactly($pagesNum))
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->userNotActive]));
+            ->willReturn(new ArrayIterator([$this->userNotActive]));
 
         $this->userRepository
             ->expects($this->once())
@@ -121,7 +124,7 @@ class UsersRemoveActivationExpiredCommandTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$this->userNotActive]));
+            ->willReturn(new ArrayIterator([$this->userNotActive]));
 
         $this->userRepository
             ->expects($this->once())

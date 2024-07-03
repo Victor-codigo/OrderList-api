@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation\Validations;
 
+use Override;
+use DateTimeZone;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
@@ -13,7 +15,7 @@ class ValidationDateTimeTest extends TestCase
 {
     private ValidationInterface $object;
 
-    #[\Override]
+    #[Override]
     public function setUp(): void
     {
         $this->object = new ValidationChain();
@@ -144,7 +146,7 @@ class ValidationDateTimeTest extends TestCase
     {
         $return = $this->object
             ->setValue('Europe/Madrid')
-            ->timeZone(\DateTimeZone::AFRICA)
+            ->timeZone(DateTimeZone::AFRICA)
             ->validate();
 
         $this->assertIsArray($return,

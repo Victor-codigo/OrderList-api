@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersRemove;
 
+use Override;
+use DateTime;
+use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -21,7 +24,7 @@ class ListOrdersRemoveServiceTest extends TestCase
     private MockObject|ListOrdersRepositoryInterface $listOrdersRepository;
     private MockObject|PaginatorInterface $paginator;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -43,7 +46,7 @@ class ListOrdersRemoveServiceTest extends TestCase
                 'user id',
                 'list orders name 1',
                 'list orders description 1',
-                new \DateTime(),
+                new DateTime(),
             ),
             ListOrders::fromPrimitives(
                 'list orders id 2',
@@ -51,7 +54,7 @@ class ListOrdersRemoveServiceTest extends TestCase
                 'user id',
                 'list orders name 2',
                 'list orders description 2',
-                new \DateTime(),
+                new DateTime(),
             ),
             ListOrders::fromPrimitives(
                 'list orders id 3',
@@ -59,7 +62,7 @@ class ListOrdersRemoveServiceTest extends TestCase
                 'user id',
                 'list orders name 3',
                 'list orders description 3',
-                new \DateTime(),
+                new DateTime(),
             ),
         ];
     }
@@ -91,7 +94,7 @@ class ListOrdersRemoveServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator($listOrders));
+            ->willReturn(new ArrayIterator($listOrders));
 
         $this->paginator
             ->expects($this->once())
@@ -130,7 +133,7 @@ class ListOrdersRemoveServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$listOrders[0], $listOrders[2]]));
+            ->willReturn(new ArrayIterator([$listOrders[0], $listOrders[2]]));
 
         $this->paginator
             ->expects($this->once())
@@ -203,7 +206,7 @@ class ListOrdersRemoveServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$listOrders]));
+            ->willReturn(new ArrayIterator([$listOrders]));
 
         $this->paginator
             ->expects($this->once())

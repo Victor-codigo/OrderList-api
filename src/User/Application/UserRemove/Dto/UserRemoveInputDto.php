@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace User\Application\UserRemove\Dto;
 
+use Override;
 use Common\Domain\Service\ServiceInputDtoInterface;
 use Common\Domain\Validation\ValidationInterface;
 use User\Domain\Model\User;
@@ -17,7 +18,7 @@ class UserRemoveInputDto implements ServiceInputDtoInterface
         $this->userSession = $userSession;
     }
 
-    #[\Override]
+    #[Override]
     public function validate(ValidationInterface $validator): array
     {
         return [];

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace User\Application\UserPasswordChange\Dto;
 
+use Override;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -28,7 +29,7 @@ class UserPasswordChangeInputDto implements ServiceInputDtoInterface
         $this->passwordNewRepeat = ValueObjectFactory::createPassword($passwordNewRepeat);
     }
 
-    #[\Override]
+    #[Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

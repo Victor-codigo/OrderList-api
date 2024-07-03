@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\HtmlTemplate;
 
+use Override;
 use Common\Adapter\HtmlTemplate\TwigTemplate;
 use Common\Domain\HtmlTemplate\Exception\TemplateCantBeFoundException;
 use Common\Domain\HtmlTemplate\Exception\TemplateRenderingException;
@@ -22,7 +23,7 @@ class TwigTemplateTest extends TestCase
     private MockObject|Environment $twig;
     private string $templatePath = '';
 
-    #[\Override]
+    #[Override]
     public function setUp(): void
     {
         parent::setUp();

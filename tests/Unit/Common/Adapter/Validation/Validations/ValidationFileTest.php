@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation\Validations;
 
+use Override;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
@@ -61,7 +62,7 @@ class ValidationFileTest extends TestCase
 
     private ValidationInterface $object;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -69,7 +70,7 @@ class ValidationFileTest extends TestCase
         $this->object = new ValidationChain();
     }
 
-    #[\Override]
+    #[Override]
     protected function tearDown(): void
     {
         parent::tearDown();

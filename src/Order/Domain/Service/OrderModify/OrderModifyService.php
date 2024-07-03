@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Order\Domain\Service\OrderModify;
 
+use DateTime;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use ListOrders\Domain\Model\ListOrders;
@@ -58,7 +59,7 @@ class OrderModifyService
             ->setListOrders($listOrders)
             ->setProduct($product)
             ->setShop($shop)
-            ->setCreatedOn(new \DateTime());
+            ->setCreatedOn(new DateTime());
 
         $this->orderRepository->save([$order]);
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Application\ProductCreate\Dto;
 
+use Override;
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
@@ -26,7 +27,7 @@ class ProductCreateInputDtoTest extends TestCase
     private ValidationInterface $validator;
     private MockObject|UserShared $userSession;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -35,7 +36,7 @@ class ProductCreateInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    #[\Override]
+    #[Override]
     protected function tearDown(): void
     {
         parent::tearDown();

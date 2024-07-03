@@ -33,7 +33,7 @@ class RequestValidation
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     private function createParams(Request $request): InputBag
     {

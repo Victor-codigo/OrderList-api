@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupUserAdd;
 
+use Override;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +30,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     ];
     private const string USER_ALREADY_IN_THE_GROUP = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

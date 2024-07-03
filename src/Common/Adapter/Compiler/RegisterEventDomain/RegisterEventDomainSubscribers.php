@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Compiler\RegisterEventDomain;
 
+use Override;
 use Common\Adapter\Event\EventDispatcherSymfonyAdapter;
 use Common\Domain\Event\EventDomainSubscriberInterface;
 use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
@@ -19,7 +20,7 @@ class RegisterEventDomainSubscribers implements CompilerPassInterface
     private const string EVENT_DISPATCHER_SERVICE = 'event_dispatcher';
     public const string EVENT_DOMAIN_SUBSCRIBER_TAG = 'common.event_subscriber';
 
-    #[\Override]
+    #[Override]
     public function process(ContainerBuilder $container): void
     {
         $eventDispatcherService = $container->get(static::EVENT_DISPATCHER_SERVICE);

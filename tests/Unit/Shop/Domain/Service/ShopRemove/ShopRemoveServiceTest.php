@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Domain\Service\ShopRemove;
 
+use Override;
+use ArrayObject;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -27,7 +29,7 @@ class ShopRemoveServiceTest extends TestCase
     private MockObject|ShopRepositoryInterface $shopRepository;
     private MockObject|PaginatorInterface $paginator;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -37,7 +39,7 @@ class ShopRemoveServiceTest extends TestCase
         $this->object = new ShopRemoveService($this->shopRepository, self::SHOP_IMAGE_PATH);
     }
 
-    #[\Override]
+    #[Override]
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -79,7 +81,7 @@ class ShopRemoveServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayObject([$shop]));
+            ->willReturn(new ArrayObject([$shop]));
 
         $input = new ShopRemoveDto([$shopId], $groupId);
 
@@ -115,7 +117,7 @@ class ShopRemoveServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayObject($shops));
+            ->willReturn(new ArrayObject($shops));
 
         $input = new ShopRemoveDto($shopsId, $groupId);
 
@@ -145,7 +147,7 @@ class ShopRemoveServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayObject([$shop]));
+            ->willReturn(new ArrayObject([$shop]));
 
         $input = new ShopRemoveDto([$shopId], $groupId);
 
@@ -177,7 +179,7 @@ class ShopRemoveServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayObject([$shop]));
+            ->willReturn(new ArrayObject([$shop]));
 
         $input = new ShopRemoveDto([$shopId], $groupId);
 
@@ -233,7 +235,7 @@ class ShopRemoveServiceTest extends TestCase
         $this->paginator
             ->expects($this->once())
             ->method('getIterator')
-            ->willReturn(new \ArrayObject([$shop]));
+            ->willReturn(new ArrayObject([$shop]));
 
         $input = new ShopRemoveDto([$shopId], $groupId);
 

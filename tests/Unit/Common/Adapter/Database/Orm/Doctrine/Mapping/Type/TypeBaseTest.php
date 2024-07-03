@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type;
 
+use Override;
+use stdClass;
+use ReflectionClass;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\TypeBase;
 use Common\Domain\Exception\InvalidArgumentException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -17,7 +20,7 @@ class TypeBaseTest extends TestCase
     private MockObject|TypeBase $object;
     private MockObject|AbstractPlatform $platform;
 
-    #[\Override]
+    #[Override]
     public function setUp(): void
     {
         $this->platform = $this->createMock(AbstractPlatform::class);
@@ -56,7 +59,7 @@ class TypeBaseTest extends TestCase
         $this->object
             ->expects($this->once())
             ->method('getClassImplementationName')
-            ->willReturn(\stdClass::class);
+            ->willReturn(stdClass::class);
 
         $this->expectException(InvalidArgumentException::class);
 
@@ -99,7 +102,7 @@ class TypeBaseTest extends TestCase
     public function getNameReturnValue(): void
     {
         $return = $this->object->getName();
-        $objectReflection = new \ReflectionClass($this->object);
+        $objectReflection = new ReflectionClass($this->object);
 
         $this->assertEquals($objectReflection->getName(), $return,
             'getName: The name returned is wrong');

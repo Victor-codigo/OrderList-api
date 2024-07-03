@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
+use Override;
 use Common\Adapter\Jwt\JwtLexikAdapter;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\JwtToken;
@@ -16,7 +17,7 @@ class JwtTokenTest extends TestCase
     private ValidationInterface $validator;
     private const string PATH_PRIVATE_KEY = 'src/Common/Adapter/Framework/Config/JwtKeys/Lexik/private.pem';
 
-    #[\Override]
+    #[Override]
     public function setUp(): void
     {
         parent::setUp();

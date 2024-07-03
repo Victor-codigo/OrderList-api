@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Product\Application\GetProductShopPrice\Dto;
 
+use Override;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
@@ -37,7 +38,7 @@ class GetProductShopPriceInputDto implements ServiceInputDtoInterface
         );
     }
 
-    #[\Override]
+    #[Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListGroupId = $validator->validateValueObject($this->groupId);

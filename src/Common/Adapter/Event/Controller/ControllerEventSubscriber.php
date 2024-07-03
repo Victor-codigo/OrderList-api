@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Event\Controller;
 
+use Override;
 use Common\Adapter\Http\TryoutPermissions\Exception\TryoutUserRoutePermissionsException;
 use Common\Adapter\Http\TryoutPermissions\TryoutUserRoutePermissionsValidation;
 use Common\Adapter\Security\UserSharedSymfonyAdapter;
@@ -21,7 +22,7 @@ class ControllerEventSubscriber implements EventSubscriberInterface
     ) {
     }
 
-    #[\Override]
+    #[Override]
     public static function getSubscribedEvents(): array
     {
         return [KernelEvents::CONTROLLER => ['__invoke', 101]];

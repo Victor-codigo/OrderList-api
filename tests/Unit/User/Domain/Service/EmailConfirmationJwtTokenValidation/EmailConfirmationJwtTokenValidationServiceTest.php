@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Domain\Service\EmailConfirmationJwtTokenValidation;
 
+use Override;
 use Common\Adapter\Jwt\Exception\JwtTokenExpiredException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
@@ -26,7 +27,7 @@ class EmailConfirmationJwtTokenValidationServiceTest extends TestCase
     private MockObject|UserRepositoryInterface $userRepository;
     private MockObject|User $user;
 
-    #[\Override]
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();

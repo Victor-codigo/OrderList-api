@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Common\Domain\Ports\Paginator;
 
+use IteratorAggregate;
+use Countable;
+use Generator;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 
-interface PaginatorInterface extends \IteratorAggregate, \Countable
+interface PaginatorInterface extends IteratorAggregate, Countable
 {
     public function createPaginator(Query|QueryBuilder $query): self;
 
@@ -16,18 +19,18 @@ interface PaginatorInterface extends \IteratorAggregate, \Countable
     public function setPagination(int $page = 1, int $pageItems = 100): self;
 
     /**
-     * @return \Generator<Traversable>
+     * @return Generator<Traversable>
      *
      * @throws InvalidArgumentException
      */
-    public function getPagesRange(int $pageIni, int $pageEnd, int $pageItems): \Generator;
+    public function getPagesRange(int $pageIni, int $pageEnd, int $pageItems): Generator;
 
     /**
-     * @return \Generator<Traversable>
+     * @return Generator<Traversable>
      *
      * @throws InvalidArgumentException
      */
-    public function getAllPages(int $pageItems): \Generator;
+    public function getAllPages(int $pageItems): Generator;
 
     public function getPageCurrent(): int;
 

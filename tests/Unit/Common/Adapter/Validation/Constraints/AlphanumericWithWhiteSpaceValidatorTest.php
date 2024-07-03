@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation\Constraints;
 
+use Override;
+use stdClass;
+use Error;
 use Common\Adapter\Validation\Constraints\AlphanumericWithWhiteSpace\AlphanumericWithWhiteSpace;
 use Common\Adapter\Validation\Constraints\AlphanumericWithWhiteSpace\AlphanumericWithWhiteSpaceValidator;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -19,7 +22,7 @@ class AlphanumericWithWhiteSpaceValidatorTest extends TestCase
     private MockObject|AlphanumericWithWhiteSpace $alphanumericWithWhiteSpace;
     private MockObject|Constraint $constraint;
 
-    #[\Override]
+    #[Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -56,7 +59,7 @@ class AlphanumericWithWhiteSpaceValidatorTest extends TestCase
     public function itShouldFailValueCantBeConvertedToString(): void
     {
         $this->expectException(UnexpectedTypeException::class);
-        $this->object->validate(new \stdClass(), $this->alphanumericWithWhiteSpace);
+        $this->object->validate(new stdClass(), $this->alphanumericWithWhiteSpace);
     }
 
     /** @test */
@@ -82,7 +85,7 @@ class AlphanumericWithWhiteSpaceValidatorTest extends TestCase
     {
         $this->alphanumericWithWhiteSpace->pattern = self::PATTERN;
 
-        $this->expectException(\Error::class);
+        $this->expectException(Error::class);
         $this->object->validate('hello.22', $this->alphanumericWithWhiteSpace);
     }
 }

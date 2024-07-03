@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace Common\Domain\Model\ValueObject\String;
 
+use Override;
 use Common\Domain\Model\ValueObject\ValueObjectBase;
 
 abstract class StringValueObject extends ValueObjectBase
 {
     protected readonly string|null $value;
 
-    #[\Override]
+    #[Override]
     public function getValue(): string|null
     {
         return $this->value;
     }
 
-    #[\Override]
+    #[Override]
     public function getValidationValue(): mixed
     {
         return $this->value;
@@ -29,7 +30,7 @@ abstract class StringValueObject extends ValueObjectBase
         $this->defineConstraints();
     }
 
-    #[\Override]
+    #[Override]
     public function getValueObjects(): array
     {
         return [];
