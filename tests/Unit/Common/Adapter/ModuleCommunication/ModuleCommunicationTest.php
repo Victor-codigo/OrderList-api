@@ -179,7 +179,7 @@ class ModuleCommunicationTest extends TestCase
                    ? $this->never() : $this->atLeastOnce()
            )
            ->method('getContent')
-           ->with($this->callback(function (bool $throwException = true) {
+           ->with($this->callback(function (bool $throwException = true): bool {
                ++$this->getContentNumCalls;
 
                match ($this->getContentNumCalls) {
@@ -563,7 +563,7 @@ class ModuleCommunicationTest extends TestCase
         $objectMock
             ->expects($objectMockMatcher)
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher) {
+            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher): bool {
                 $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
 
                 $this->assertEquals($routeConfigExpected, $routeConfigActual);
@@ -610,7 +610,7 @@ class ModuleCommunicationTest extends TestCase
         $objectMock
             ->expects($objectMockMatcher)
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher) {
+            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher): bool {
                 $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
 
                 $this->assertEquals($routeConfigExpected, $routeConfigActual);
@@ -658,7 +658,7 @@ class ModuleCommunicationTest extends TestCase
         $objectMock
             ->expects($objectMockMatcher)
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher) {
+            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher): bool {
                 $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
 
                 $this->assertEquals($routeConfigExpected, $routeConfigActual);
@@ -706,7 +706,7 @@ class ModuleCommunicationTest extends TestCase
         $objectMock
             ->expects($objectMockMatcher)
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher) {
+            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher): bool {
                 $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
 
                 $this->assertEquals($routeConfigExpected, $routeConfigActual);
@@ -759,7 +759,7 @@ class ModuleCommunicationTest extends TestCase
         $objectMock
             ->expects($objectMockMatcher)
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher) {
+            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher): bool {
                 $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
 
                 $this->assertEquals($routeConfigExpected, $routeConfigActual);
@@ -851,7 +851,7 @@ class ModuleCommunicationTest extends TestCase
         $objectMock
             ->expects($objectMockMatcher)
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher) {
+            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher): bool {
                 $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
 
                 $this->assertEquals($routeConfigExpected, $routeConfigActual);
@@ -922,7 +922,7 @@ class ModuleCommunicationTest extends TestCase
         $objectMock
             ->expects($objectMockMatcher)
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher) {
+            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher): bool {
                 $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
 
                 $this->assertEquals($routeConfigExpected, $routeConfigActual);
@@ -984,7 +984,7 @@ class ModuleCommunicationTest extends TestCase
         $objectMock
             ->expects($objectMockMatcher)
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher) {
+            ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher): bool {
                 $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
 
                 $this->assertEquals($routeConfigExpected, $routeConfigActual);

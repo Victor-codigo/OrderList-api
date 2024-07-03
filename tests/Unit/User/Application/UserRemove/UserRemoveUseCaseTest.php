@@ -254,7 +254,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->userRemoveService
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (UserRemoveDto $userRemoveDto) use ($userId) {
+            ->with($this->callback(function (UserRemoveDto $userRemoveDto) use ($userId): bool {
                 $this->assertEquals($userId, $userRemoveDto->userId);
 
                 return true;
@@ -293,7 +293,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->userRemoveService
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (UserRemoveDto $userRemoveDto) use ($userId) {
+            ->with($this->callback(function (UserRemoveDto $userRemoveDto) use ($userId): bool {
                 $this->assertEquals($userId, $userRemoveDto->userId);
 
                 return true;
@@ -723,7 +723,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->userRemoveService
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (UserRemoveDto $userRemoveDto) use ($userId) {
+            ->with($this->callback(function (UserRemoveDto $userRemoveDto) use ($userId): bool {
                 $this->assertEquals($userId, $userRemoveDto->userId);
 
                 return true;
@@ -768,7 +768,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->userRemoveService
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (UserRemoveDto $userRemoveDto) use ($userId) {
+            ->with($this->callback(function (UserRemoveDto $userRemoveDto) use ($userId): bool {
                 $this->assertEquals($userId, $userRemoveDto->userId);
 
                 return true;

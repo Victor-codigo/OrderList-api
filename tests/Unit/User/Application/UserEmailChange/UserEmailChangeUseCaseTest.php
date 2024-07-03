@@ -72,7 +72,7 @@ class UserEmailChangeUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $moduleCommunicationDto) use ($userId) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $moduleCommunicationDto) use ($userId): bool {
                 $this->assertEquals([$userId->getValue()], $moduleCommunicationDto->content['users_id']);
                 $this->assertEquals(self::SYSTEM_KEY, $moduleCommunicationDto->content['system_key']);
                 $this->assertEquals(NOTIFICATION_TYPE::USER_EMAIL_CHANGED->value, $moduleCommunicationDto->content['type']);
@@ -111,7 +111,7 @@ class UserEmailChangeUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $moduleCommunicationDto) use ($userId) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $moduleCommunicationDto) use ($userId): bool {
                 $this->assertEquals([$userId->getValue()], $moduleCommunicationDto->content['users_id']);
                 $this->assertEquals(self::SYSTEM_KEY, $moduleCommunicationDto->content['system_key']);
                 $this->assertEquals(NOTIFICATION_TYPE::USER_EMAIL_CHANGED->value, $moduleCommunicationDto->content['type']);

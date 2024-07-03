@@ -101,7 +101,7 @@ class GroupModifyServiceTest extends TestCase
             ->method('save')
             ->with($groupModified);
 
-        BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage) {
+        BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage): bool {
             $this->assertEquals(
                 self::PATH_UPLOAD_GROUP_IMAGE.'/'.$groupImage,
                 $fileName
@@ -186,7 +186,7 @@ class GroupModifyServiceTest extends TestCase
             ->method('save')
             ->with($groupModified);
 
-        BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage) {
+        BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage): bool {
             $this->assertEquals(
                 self::PATH_UPLOAD_GROUP_IMAGE.'/'.$groupImage,
                 $fileName
@@ -268,7 +268,7 @@ class GroupModifyServiceTest extends TestCase
             ->method('save')
             ->with($groupModified);
 
-        BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage) {
+        BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage): bool {
             $this->assertEquals(
                 self::PATH_UPLOAD_GROUP_IMAGE.'/'.$groupImage,
                 $fileName
@@ -316,7 +316,7 @@ class GroupModifyServiceTest extends TestCase
             ->method('save')
             ->with($groupModified);
 
-        BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage) {
+        BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage): bool {
             $this->assertEquals(
                 self::PATH_UPLOAD_GROUP_IMAGE.'/'.$groupImage,
                 $fileName
@@ -434,7 +434,7 @@ class GroupModifyServiceTest extends TestCase
             ->with($groupModified)
             ->willThrowException(new DBConnectionException());
 
-        BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage) {
+        BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage): bool {
             $this->assertEquals(
                 self::PATH_UPLOAD_GROUP_IMAGE.'/'.$groupImage,
                 $fileName
@@ -518,7 +518,7 @@ class GroupModifyServiceTest extends TestCase
             ->expects($this->never())
             ->method('save');
 
-        BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage) {
+        BuiltInFunctionsReturn::$file_exists = function (string $fileName) use ($groupImage): bool {
             $this->assertEquals(
                 self::PATH_UPLOAD_GROUP_IMAGE.'/'.$groupImage,
                 $fileName
@@ -527,7 +527,7 @@ class GroupModifyServiceTest extends TestCase
             return true;
         };
 
-        BuiltInFunctionsReturn::$unlink = function (string $fileName) use ($groupImage) {
+        BuiltInFunctionsReturn::$unlink = function (string $fileName) use ($groupImage): bool {
             $this->assertEquals(
                 self::PATH_UPLOAD_GROUP_IMAGE.'/'.$groupImage,
                 $fileName

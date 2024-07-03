@@ -318,7 +318,7 @@ class OrderCreateServiceTest extends TestCase
         $this->orderRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(function (array $ordersToSave) use ($orders) {
+            ->with($this->callback(function (array $ordersToSave) use ($orders): bool {
                 /** @var Order[] $ordersToSave */
                 foreach ($ordersToSave as $key => $orderToSave) {
                     $this->assertOrderIsEqual($orders[$key], $orderToSave);
@@ -401,7 +401,7 @@ class OrderCreateServiceTest extends TestCase
         $this->orderRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(function (array $ordersToSave) use ($orders) {
+            ->with($this->callback(function (array $ordersToSave) use ($orders): bool {
                 /** @var Order[] $ordersToSave */
                 foreach ($ordersToSave as $key => $orderToSave) {
                     $this->assertOrderIsEqual($orders[$key], $orderToSave);
@@ -795,7 +795,7 @@ class OrderCreateServiceTest extends TestCase
         $this->orderRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(function (array $ordersToSave) use ($orders) {
+            ->with($this->callback(function (array $ordersToSave) use ($orders): bool {
                 /** @var Order[] $ordersToSave */
                 foreach ($ordersToSave as $key => $orderToSave) {
                     $this->assertOrderIsEqual($orders[$key], $orderToSave);

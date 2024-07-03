@@ -115,7 +115,7 @@ class GroupRemoveUseCaseTest extends TestCase
             ->method('__invoke')
             ->with(
                 $this->userSession,
-                $this->callback(function (Identifier $groupId) use ($groupsId) {
+                $this->callback(function (Identifier $groupId) use ($groupsId): bool {
                     $this->assertContainsEquals($groupId, $groupsId);
 
                     return true;
@@ -131,7 +131,7 @@ class GroupRemoveUseCaseTest extends TestCase
         $this->groupRemoveService
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (GroupRemoveDto $serviceInput) use ($groupsId) {
+            ->with($this->callback(function (GroupRemoveDto $serviceInput) use ($groupsId): bool {
                 $this->assertEquals($groupsId, $serviceInput->groupsId);
 
                 return true;
@@ -140,7 +140,7 @@ class GroupRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($this->exactly(count($groups)))
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($userId, $groupsNames) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($userId, $groupsNames): bool {
                 $this->assertEquals([$userId->getValue()], $notificationDto->content['users_id']);
                 $this->assertContainsEquals($notificationDto->content['notification_data']['group_name'], $groupsNames);
                 $this->assertEquals(self::SYSTEM_KEY, $notificationDto->content['system_key']);
@@ -183,7 +183,7 @@ class GroupRemoveUseCaseTest extends TestCase
             ->method('__invoke')
             ->with(
                 $this->userSession,
-                $this->callback(function (Identifier $groupId) use ($groupsId) {
+                $this->callback(function (Identifier $groupId) use ($groupsId): bool {
                     $this->assertContainsEquals($groupId, $groupsId);
 
                     return true;
@@ -199,7 +199,7 @@ class GroupRemoveUseCaseTest extends TestCase
         $this->groupRemoveService
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (GroupRemoveDto $serviceInput) use ($groupsId) {
+            ->with($this->callback(function (GroupRemoveDto $serviceInput) use ($groupsId): bool {
                 $this->assertEquals($groupsId, $serviceInput->groupsId);
 
                 return true;
@@ -208,7 +208,7 @@ class GroupRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($this->exactly(count($groups)))
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($userId, $groupsNames) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($userId, $groupsNames): bool {
                 $this->assertEquals([$userId->getValue()], $notificationDto->content['users_id']);
                 $this->assertContainsEquals($notificationDto->content['notification_data']['group_name'], $groupsNames);
                 $this->assertEquals(self::SYSTEM_KEY, $notificationDto->content['system_key']);
@@ -246,7 +246,7 @@ class GroupRemoveUseCaseTest extends TestCase
             ->method('__invoke')
             ->with(
                 $this->userSession,
-                $this->callback(function (Identifier $groupId) use ($groupsId) {
+                $this->callback(function (Identifier $groupId) use ($groupsId): bool {
                     $this->assertContainsEquals($groupId, $groupsId);
 
                     return true;
@@ -293,7 +293,7 @@ class GroupRemoveUseCaseTest extends TestCase
             ->method('__invoke')
             ->with(
                 $this->userSession,
-                $this->callback(function (Identifier $groupId) use ($groupsId) {
+                $this->callback(function (Identifier $groupId) use ($groupsId): bool {
                     $this->assertContainsEquals($groupId, $groupsId);
 
                     return true;

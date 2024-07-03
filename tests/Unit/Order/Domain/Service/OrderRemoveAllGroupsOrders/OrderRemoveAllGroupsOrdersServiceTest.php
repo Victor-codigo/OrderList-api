@@ -209,7 +209,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $this->orderRepository
             ->expects($orderRepositoryMatcher)
             ->method('findGroupsOrdersOrFail')
-            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId) {
+            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId): bool {
                 match ($orderRepositoryMatcher->getInvocationCount()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveOrders, $groupsId),
                     2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
@@ -311,7 +311,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $this->orderRepository
             ->expects($orderRepositoryMatcher)
             ->method('findGroupsOrdersOrFail')
-            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId) {
+            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId): bool {
                 match ($orderRepositoryMatcher->getInvocationCount()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveOrders, $groupsId),
                     2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
@@ -447,7 +447,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $this->orderRepository
             ->expects($orderRepositoryMatcher)
             ->method('findGroupsOrdersOrFail')
-            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId) {
+            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId): bool {
                 match ($orderRepositoryMatcher->getInvocationCount()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveOrders, $groupsId),
                     2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
@@ -502,7 +502,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $this->orderRepository
             ->expects($orderRepositoryMatcher)
             ->method('findGroupsOrdersOrFail')
-            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId) {
+            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId): bool {
                 match ($orderRepositoryMatcher->getInvocationCount()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveOrders, $groupsId),
                     2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)

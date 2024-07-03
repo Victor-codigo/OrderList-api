@@ -48,7 +48,7 @@ class ValidateGroupAndUserServiceTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $config) use ($groupId) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $config) use ($groupId): bool {
                 $this->assertEquals(1, $config->query['page']);
                 $this->assertEquals(1, $config->query['page_items']);
                 $this->assertEquals($groupId->getValue(), $config->attributes['group_id']);
@@ -77,7 +77,7 @@ class ValidateGroupAndUserServiceTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $config) use ($groupId) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $config) use ($groupId): bool {
                 $this->assertEquals(1, $config->query['page']);
                 $this->assertEquals(1, $config->query['page_items']);
                 $this->assertEquals($groupId->getValue(), $config->attributes['group_id']);
@@ -108,7 +108,7 @@ class ValidateGroupAndUserServiceTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $config) use ($groupId) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $config) use ($groupId): bool {
                 $this->assertEquals(1, $config->query['page']);
                 $this->assertEquals(1, $config->query['page_items']);
                 $this->assertEquals($groupId->getValue(), $config->attributes['group_id']);

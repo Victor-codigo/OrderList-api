@@ -97,7 +97,7 @@ class SetProductShopPriceService
      */
     private function modifyProductShops(array $productsShops, array $productsId, array $shopsId, array $prices, array $units): array
     {
-        $productsShopsFilter = function (ProductShop $productShop) use ($productsId, $shopsId, $prices, $units) {
+        $productsShopsFilter = function (ProductShop $productShop) use ($productsId, $shopsId, $prices, $units): bool {
             foreach ($productsId as $index => $productId) {
                 if ($productShop->getProductId() != $productId) {
                     continue;
@@ -128,7 +128,7 @@ class SetProductShopPriceService
      */
     private function getProductShopsToRemove(array $productsShops, array $productsId, array $shopsId): array
     {
-        $productsShopsFilter = function (ProductShop $productShop) use ($productsId, $shopsId) {
+        $productsShopsFilter = function (ProductShop $productShop) use ($productsId, $shopsId): bool {
             foreach ($productsId as $index => $productId) {
                 if ($productShop->getProductId() == $productId
                 && $productShop->getShopId() == $shopsId[$index]) {
@@ -158,7 +158,7 @@ class SetProductShopPriceService
             $productsId, $shopsId, $prices, $units
         );
 
-        $productsIdAndShopsIdPricesFilterCallback = function (array $productIdAndShopIdPrice) use ($productsShopsDb) {
+        $productsIdAndShopsIdPricesFilterCallback = function (array $productIdAndShopIdPrice) use ($productsShopsDb): bool {
             foreach ($productsShopsDb as $productShopDb) {
                 if (!$productShopDb->getProductId()->equalTo($productIdAndShopIdPrice['productId'])) {
                     continue;

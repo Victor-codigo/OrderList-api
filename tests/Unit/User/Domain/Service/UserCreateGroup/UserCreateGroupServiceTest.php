@@ -62,7 +62,7 @@ class UserCreateGroupServiceTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $config) use ($requestConfiguration) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $config) use ($requestConfiguration): bool {
                 $this->assertEquals($requestConfiguration->route, $config->route);
                 $this->assertEquals($requestConfiguration->method, $config->method);
                 $this->assertEquals($requestConfiguration->attributes, $config->attributes);
@@ -100,7 +100,7 @@ class UserCreateGroupServiceTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $config) use ($requestConfiguration) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $config) use ($requestConfiguration): bool {
                 $this->assertEquals($requestConfiguration->route, $config->route);
                 $this->assertEquals($requestConfiguration->method, $config->method);
                 $this->assertEquals($requestConfiguration->attributes, $config->attributes);
@@ -138,7 +138,7 @@ class UserCreateGroupServiceTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $config) use ($requestConfiguration) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $config) use ($requestConfiguration): bool {
                 $this->assertEquals($requestConfiguration->route, $config->route);
                 $this->assertEquals($requestConfiguration->method, $config->method);
                 $this->assertEquals($requestConfiguration->attributes, $config->attributes);

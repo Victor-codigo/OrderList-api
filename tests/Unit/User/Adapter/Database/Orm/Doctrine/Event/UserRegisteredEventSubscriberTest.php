@@ -76,7 +76,7 @@ class UserRegisteredEventSubscriberTest extends TestCase
         $this->user
             ->expects($this->once())
             ->method('eventDispatchRegister')
-            ->with($this->callback(function (UserPreRegisteredEvent $event) use ($userPreRegisteredEventData) {
+            ->with($this->callback(function (UserPreRegisteredEvent $event) use ($userPreRegisteredEventData): bool {
                 $this->assertEquals($userPreRegisteredEventData->id, $event->id);
                 $this->assertEquals($userPreRegisteredEventData->emailTo, $event->emailTo);
                 $this->assertEquals($userPreRegisteredEventData->userRegisterEmailConfirmationUrl, $event->userRegisterEmailConfirmationUrl);
@@ -109,7 +109,7 @@ class UserRegisteredEventSubscriberTest extends TestCase
         $this->user
             ->expects($this->once())
             ->method('eventDispatchRegister')
-            ->with($this->callback(function (UserPreRegisteredEvent $event) use ($userPreRegisteredEventData) {
+            ->with($this->callback(function (UserPreRegisteredEvent $event) use ($userPreRegisteredEventData): bool {
                 $this->assertEquals($userPreRegisteredEventData->id, $event->id);
                 $this->assertEquals($userPreRegisteredEventData->emailTo, $event->emailTo);
                 $this->assertEquals($userPreRegisteredEventData->userRegisterEmailConfirmationUrl, $event->userRegisterEmailConfirmationUrl);

@@ -52,7 +52,7 @@ class ImageAdapterTest extends TestCase
         $this->imageInterface
             ->expects($this->once())
             ->method('resize')
-            ->with($this->callback(function (Box $frame) {
+            ->with($this->callback(function (Box $frame): bool {
                 $this->assertEquals(1000, $frame->getWidth());
                 $this->assertEquals(500, $frame->getHeight());
 
@@ -87,7 +87,7 @@ class ImageAdapterTest extends TestCase
         $this->imageInterface
             ->expects($this->once())
             ->method('resize')
-            ->with($this->callback(function (Box $frame) {
+            ->with($this->callback(function (Box $frame): bool {
                 $this->assertEquals(500, $frame->getWidth());
                 $this->assertEquals(1000, $frame->getHeight());
 
@@ -122,7 +122,7 @@ class ImageAdapterTest extends TestCase
         $this->imageInterface
             ->expects($this->once())
             ->method('resize')
-            ->with($this->callback(function (Box $frame) {
+            ->with($this->callback(function (Box $frame): bool {
                 $this->assertEquals(500, $frame->getWidth());
                 $this->assertEquals(1000, $frame->getHeight());
 
@@ -157,7 +157,7 @@ class ImageAdapterTest extends TestCase
         $this->imageInterface
             ->expects($this->once())
             ->method('resize')
-            ->with($this->callback(function (Box $frame) {
+            ->with($this->callback(function (Box $frame): bool {
                 $this->assertEquals(1000, $frame->getWidth());
                 $this->assertEquals(1000, $frame->getHeight());
 
@@ -192,7 +192,7 @@ class ImageAdapterTest extends TestCase
         $this->imageInterface
             ->expects($this->once())
             ->method('resize')
-            ->with($this->callback(function (Box $frame) {
+            ->with($this->callback(function (Box $frame): bool {
                 $this->assertEquals(250, $frame->getWidth());
                 $this->assertEquals(1000, $frame->getHeight());
 
@@ -227,7 +227,7 @@ class ImageAdapterTest extends TestCase
         $this->imageInterface
             ->expects($this->once())
             ->method('resize')
-            ->with($this->callback(function (Box $frame) {
+            ->with($this->callback(function (Box $frame): bool {
                 $this->assertEquals(1000, $frame->getWidth());
                 $this->assertEquals(250, $frame->getHeight());
 
@@ -262,7 +262,7 @@ class ImageAdapterTest extends TestCase
         $this->imageInterface
             ->expects($this->once())
             ->method('resize')
-            ->with($this->callback(function (Box $frame) {
+            ->with($this->callback(function (Box $frame): bool {
                 $this->assertEquals(500, $frame->getWidth());
                 $this->assertEquals(700, $frame->getHeight());
 

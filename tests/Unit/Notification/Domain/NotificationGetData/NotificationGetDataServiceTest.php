@@ -129,7 +129,7 @@ class NotificationGetDataServiceTest extends TestCase
         $this->translator
             ->expects($this->exactly(count($notifications)))
             ->method('translate')
-            ->with($this->callback(function (string $placeholder) use ($notificationsTypes) {
+            ->with($this->callback(function (string $placeholder) use ($notificationsTypes): bool {
                 static $callNumber = 0;
 
                 match ($notificationsTypes[$callNumber++]) {
@@ -146,7 +146,7 @@ class NotificationGetDataServiceTest extends TestCase
 
                 return true;
             }),
-                $this->callback(function (array $data) use ($notificationsData) {
+                $this->callback(function (array $data) use ($notificationsData): bool {
                     static $callNumber = 0;
 
                     $this->assertEquals($notificationsData[$callNumber++], $data);

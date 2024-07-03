@@ -189,7 +189,7 @@ class OrderModifyServiceTest extends TestCase
         $this->orderRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(function (array $orderToSave) use ($orderExpected) {
+            ->with($this->callback(function (array $orderToSave) use ($orderExpected): bool {
                 $this->assertCount(1, $orderToSave);
                 $this->assertOrderIsOk($orderExpected, $orderToSave[0]);
 
@@ -261,7 +261,7 @@ class OrderModifyServiceTest extends TestCase
         $this->orderRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(function (array $orderToSave) use ($orderExpected) {
+            ->with($this->callback(function (array $orderToSave) use ($orderExpected): bool {
                 $this->assertCount(1, $orderToSave);
                 $this->assertOrderIsOk($orderExpected, $orderToSave[0]);
 
@@ -334,7 +334,7 @@ class OrderModifyServiceTest extends TestCase
         $this->orderRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(function (array $orderToSave) use ($orderExpected) {
+            ->with($this->callback(function (array $orderToSave) use ($orderExpected): bool {
                 $this->assertCount(1, $orderToSave);
                 $this->assertOrderIsOk($orderExpected, $orderToSave[0]);
 

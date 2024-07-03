@@ -142,7 +142,7 @@ class ProductRemoveServiceTest extends TestCase
         $this->entityImageRemoveService
             ->expects($entityImageRemoveServiceMatcher)
             ->method('__invoke')
-            ->willReturnCallback(function (Product $productToRemove, Path $productImagePathToRemove) use ($entityImageRemoveServiceMatcher, $products, $productImagePath) {
+            ->willReturnCallback(function (Product $productToRemove, Path $productImagePathToRemove) use ($entityImageRemoveServiceMatcher, $products, $productImagePath): bool {
                 $this->assertEquals($products[$entityImageRemoveServiceMatcher->getInvocationCount() - 1], $productToRemove);
                 $this->assertEquals($productImagePath, $productImagePathToRemove);
 

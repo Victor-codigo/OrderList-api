@@ -57,7 +57,7 @@ class NotificationCreateServiceTest extends TestCase
         $this->notificationRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(function (array $notification) use ($input, $notificationId) {
+            ->with($this->callback(function (array $notification) use ($input, $notificationId): bool {
                 $this->assertContainsOnlyInstancesOf(Notification::class, $notification);
 
                 foreach ($input->usersId as $key => $userId) {
@@ -103,7 +103,7 @@ class NotificationCreateServiceTest extends TestCase
         $this->notificationRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(function (array $notification) use ($input, $notificationId) {
+            ->with($this->callback(function (array $notification) use ($input, $notificationId): bool {
                 $this->assertContainsOnlyInstancesOf(Notification::class, $notification);
 
                 foreach ($input->usersId as $key => $userId) {

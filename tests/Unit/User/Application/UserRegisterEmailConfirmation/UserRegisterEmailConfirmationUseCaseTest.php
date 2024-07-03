@@ -74,7 +74,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
         $this->emailConfirmationJwtTokenValidation
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (EmailConfirmationJwtTokenValidationDto $input) use ($token) {
+            ->with($this->callback(function (EmailConfirmationJwtTokenValidationDto $input) use ($token): bool {
                 $this->assertEquals(ValueObjectFactory::createJwtToken($token), $input->token);
 
                 return true;
@@ -141,7 +141,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
         $this->emailConfirmationJwtTokenValidation
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (EmailConfirmationJwtTokenValidationDto $input) use ($token) {
+            ->with($this->callback(function (EmailConfirmationJwtTokenValidationDto $input) use ($token): bool {
                 $this->assertEquals(ValueObjectFactory::createJwtToken($token), $input->token);
 
                 return true;
@@ -171,7 +171,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
         $this->emailConfirmationJwtTokenValidation
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (EmailConfirmationJwtTokenValidationDto $input) use ($token) {
+            ->with($this->callback(function (EmailConfirmationJwtTokenValidationDto $input) use ($token): bool {
                 $this->assertEquals(ValueObjectFactory::createJwtToken($token), $input->token);
 
                 return true;
@@ -201,7 +201,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
         $this->emailConfirmationJwtTokenValidation
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (EmailConfirmationJwtTokenValidationDto $input) use ($token) {
+            ->with($this->callback(function (EmailConfirmationJwtTokenValidationDto $input) use ($token): bool {
                 $this->assertEquals(ValueObjectFactory::createJwtToken($token), $input->token);
 
                 return true;
@@ -231,7 +231,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
         $this->emailConfirmationJwtTokenValidation
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (EmailConfirmationJwtTokenValidationDto $input) use ($token) {
+            ->with($this->callback(function (EmailConfirmationJwtTokenValidationDto $input) use ($token): bool {
                 $this->assertEquals(ValueObjectFactory::createJwtToken($token), $input->token);
 
                 return true;

@@ -251,7 +251,7 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($this->exactly(2))
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationSetAsAdminConfig) use ($moduleCommunicationConfigDto) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationSetAsAdminConfig) use ($moduleCommunicationConfigDto): bool {
                 $this->assertContainsEquals($notificationSetAsAdminConfig, $moduleCommunicationConfigDto);
 
                 return true;
@@ -326,7 +326,7 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationSetAsAdminConfig) use ($moduleCommunicationConfigDto) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationSetAsAdminConfig) use ($moduleCommunicationConfigDto): bool {
                 $this->assertContainsEquals($notificationSetAsAdminConfig, $moduleCommunicationConfigDto);
 
                 return true;

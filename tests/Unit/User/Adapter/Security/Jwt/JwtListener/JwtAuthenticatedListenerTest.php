@@ -60,7 +60,7 @@ class JwtAuthenticatedListenerTest extends TestCase
         $this->eventDispatcher
             ->expects($this->once())
             ->method('dispatch')
-            ->with($this->callback(function (UserLoginEvent $event) use ($eventUserLoginEvent) {
+            ->with($this->callback(function (UserLoginEvent $event) use ($eventUserLoginEvent): bool {
                 $this->assertEquals($eventUserLoginEvent->user, $event->user);
                 $this->assertInstanceOf(DateTimeImmutable::class, $event->getOccurredOn());
 
