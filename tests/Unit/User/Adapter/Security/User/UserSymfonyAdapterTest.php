@@ -26,7 +26,7 @@ class UserSymfonyAdapterTest extends TestCase
         $this->loadUserSymfonyAdapter();
     }
 
-    private function loadUserSymfonyAdapter(array $userMethodMock = [])
+    private function loadUserSymfonyAdapter(array $userMethodMock = []): void
     {
         $this->user = $this->createPartialMock(User::class, $userMethodMock);
         $this->passwordHAsher = $this->createMock(UserPasswordHasherInterface::class);

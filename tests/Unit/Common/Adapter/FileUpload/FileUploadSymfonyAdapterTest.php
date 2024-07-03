@@ -81,7 +81,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
         $this->assertSame($slugFileName, $return);
     }
 
-    private function mock__invokeStubs(string $originalFileName, string $safeFileName, string $slugFileName, string $pathToSaveFile, string $uniqid, Exception|UploadedFileInterface $moveReturn)
+    private function mock__invokeStubs(string $originalFileName, string $safeFileName, string $slugFileName, string $pathToSaveFile, string $uniqid, Exception|UploadedFileInterface $moveReturn): void
     {
         $this->file
             ->expects($this->once())

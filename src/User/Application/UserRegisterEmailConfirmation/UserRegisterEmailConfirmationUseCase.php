@@ -51,7 +51,7 @@ class UserRegisterEmailConfirmationUseCase extends ServiceBase
         }
     }
 
-    private function validation(UserEmailConfirmationInputDto $emailConfirmation)
+    private function validation(UserEmailConfirmationInputDto $emailConfirmation): void
     {
         $errorList = $emailConfirmation->validate($this->validator);
 

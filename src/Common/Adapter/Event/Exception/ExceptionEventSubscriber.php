@@ -36,7 +36,7 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
         return [KernelEvents::EXCEPTION => ['__invoke']];
     }
 
-      public function __invoke(ExceptionEvent $event)
+      public function __invoke(ExceptionEvent $event): void
       {
           $exception = $event->getThrowable();
           $response = $this->handleSymfonyExceptions($exception);

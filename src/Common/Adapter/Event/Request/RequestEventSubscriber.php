@@ -29,7 +29,7 @@ class RequestEventSubscriber implements EventSubscriberInterface
     /**
      * @throws TryoutUserRoutePermissionsException
      */
-    public function __invoke(RequestEvent $event)
+    public function __invoke(RequestEvent $event): void
     {
         $request = $event->getRequest();
 

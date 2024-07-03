@@ -43,7 +43,7 @@ class UserPasswordRememberUseCase extends ServiceBase
         }
     }
 
-    private function validation(UserPasswordRememberInputDto $passwordDto)
+    private function validation(UserPasswordRememberInputDto $passwordDto): void
     {
         $errorList = $passwordDto->validate($this->validator);
 

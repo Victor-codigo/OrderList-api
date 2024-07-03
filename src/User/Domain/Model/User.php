@@ -35,7 +35,7 @@ class User implements EntityImageModifyInterface
 
     private ?UserPreRegisteredEvent $userPreRegisteredEventData = null;
 
-    public function setUserPreRegisteredEventData(UserPreRegisteredEvent $data)
+    public function setUserPreRegisteredEventData(UserPreRegisteredEvent $data): void
     {
         $this->userPreRegisteredEventData = $data;
     }
