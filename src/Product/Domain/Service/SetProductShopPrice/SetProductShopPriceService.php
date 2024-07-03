@@ -191,7 +191,7 @@ class SetProductShopPriceService
         $productsDb = $this->getProductsFromDb($groupId, array_column($productsIdAndShopsIdPriceUnit, 'productId'));
         $shopsDb = $this->getShopsFromDb($groupId, array_column($productsIdAndShopsIdPriceUnit, 'shopId'));
 
-        $createProductShopCallback = function (array $productIdAndShopIdPriceUnit) use ($productsDb, $shopsDb) {
+        $createProductShopCallback = function (array $productIdAndShopIdPriceUnit) use ($productsDb, $shopsDb): ?ProductShop {
             $productId = $productIdAndShopIdPriceUnit['productId']->getValue();
             $shopId = $productIdAndShopIdPriceUnit['shopId']->getValue();
 

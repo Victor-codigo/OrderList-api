@@ -17,7 +17,7 @@ return RectorConfig::configure()
     ])
     // uncomment to reach your current PHP version
     ->withPhpSets(php83: true)
-    ->withTypeCoverageLevel(28)
+    ->withTypeCoverageLevel(30)
     // ->withPreparedSets(typeDeclarations: true)
     // ->withDeadCodeLevel(1)
     ->withImportNames(removeUnusedImports: true)
