@@ -57,7 +57,7 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
         $usersProfile = $this->getProfiles();
 
         return array_map(
-            function (Profile $userProfile) {
+            function (Profile $userProfile): Profile {
                 if (!$userProfile->getImage()->isNull()) {
                     $userProfile->setImage(
                         ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::USER_PUBLIC_IMAGE_PATH.'/'.$userProfile->getImage()->getValue())

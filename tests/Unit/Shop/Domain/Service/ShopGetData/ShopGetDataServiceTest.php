@@ -53,7 +53,7 @@ class ShopGetDataServiceTest extends TestCase
         $shops = $this->getShops();
 
         return array_map(
-            function (Shop $shop) {
+            function (Shop $shop): Shop {
                 if (!$shop->getImage()->isNull()) {
                     $shop->setImage(
                         ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::SHOP_PUBLIC_IMAGE_PATH.'/'.$shop->getImage()->getValue())

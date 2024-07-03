@@ -113,7 +113,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $products = $this->getProducts();
 
         return array_map(
-            function (Product $product) {
+            function (Product $product): Product {
                 if (!$product->getImage()->isNull()) {
                     $product->setImage(
                         ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::PRODUCT_PUBLIC_PATH.'/'.$product->getImage()->getValue())
@@ -157,7 +157,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $shops = $this->getShops();
 
         return array_map(
-            function (Shop $shop) {
+            function (Shop $shop): Shop {
                 if (!$shop->getImage()->isNull()) {
                     $shop->setImage(
                         ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::PRODUCT_PUBLIC_PATH.'/'.$shop->getImage()->getValue())
@@ -223,7 +223,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $orders = $this->getOrders();
 
         return array_map(
-            function (Order $order) {
+            function (Order $order): Order {
                 if (!$order->getProduct()->getImage()->isNull()) {
                     $order->getProduct()->setImage(
                         ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::PRODUCT_PUBLIC_PATH.'/'.$order->getProduct()->getImage()->getValue())

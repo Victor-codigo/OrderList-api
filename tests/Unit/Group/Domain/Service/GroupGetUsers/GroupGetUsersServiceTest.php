@@ -84,7 +84,7 @@ class GroupGetUsersServiceTest extends TestCase
         $users = $this->getUsers();
 
         return array_map(
-            function (array $user) {
+            function (array $user): array {
                 if (null !== $user['image']) {
                     $user['image'] = self::APP_PROTOCOL_AND_DOMAIN.self::USER_PUBLIC_IMAGE_PATH.'/'.$user['image'];
                 }

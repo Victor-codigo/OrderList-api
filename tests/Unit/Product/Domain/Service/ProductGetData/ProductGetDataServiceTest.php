@@ -51,7 +51,7 @@ class ProductGetDataServiceTest extends TestCase
         $products = $this->getProducts();
 
         return array_map(
-            function (Product $product) {
+            function (Product $product): Product {
                 if (!$product->getImage()->isNull()) {
                     $product->setImage(
                         ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::PRODUCT_PUBLIC_PATH.'/'.$product->getImage()->getValue())
