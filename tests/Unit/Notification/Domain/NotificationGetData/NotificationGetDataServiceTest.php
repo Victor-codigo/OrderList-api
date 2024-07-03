@@ -103,11 +103,11 @@ class NotificationGetDataServiceTest extends TestCase
     public function itShouldGetNotificationData($providerLang): void
     {
         $notifications = $this->getNotifications();
-        $notificationsIds = array_map(fn (Notification $notification) => $notification->getId()->getValue(), iterator_to_array($notifications));
-        $notificationsUserIds = array_map(fn (Notification $notification) => $notification->getUserId()->getValue(), iterator_to_array($notifications));
-        $notificationsTypes = array_map(fn (Notification $notification) => $notification->getType()->getValue(), iterator_to_array($notifications));
-        $notificationsData = array_map(fn (Notification $notification) => $notification->getData()->getValue(), iterator_to_array($notifications));
-        $notificationsViewed = array_map(fn (Notification $notification) => $notification->getViewed(), iterator_to_array($notifications));
+        $notificationsIds = array_map(fn (Notification $notification): ?string => $notification->getId()->getValue(), iterator_to_array($notifications));
+        $notificationsUserIds = array_map(fn (Notification $notification): ?string => $notification->getUserId()->getValue(), iterator_to_array($notifications));
+        $notificationsTypes = array_map(fn (Notification $notification): ?object => $notification->getType()->getValue(), iterator_to_array($notifications));
+        $notificationsData = array_map(fn (Notification $notification): ?array => $notification->getData()->getValue(), iterator_to_array($notifications));
+        $notificationsViewed = array_map(fn (Notification $notification): bool => $notification->getViewed(), iterator_to_array($notifications));
 
         $page = ValueObjectFactory::createPaginatorPage(1);
         $pageItems = ValueObjectFactory::createPaginatorPageItems(10);

@@ -110,7 +110,7 @@ class GroupUserRemoveController extends AbstractController
     private function createResponse(GroupUserRemoveOutputDto $groupUsersRemoveOutput): JsonResponse
     {
         $usersRemovedId = array_map(
-            fn (Identifier $userId) => $userId->getValue(),
+            fn (Identifier $userId): ?string => $userId->getValue(),
             $groupUsersRemoveOutput->usersId
         );
 

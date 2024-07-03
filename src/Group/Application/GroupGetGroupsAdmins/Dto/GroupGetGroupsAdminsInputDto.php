@@ -30,7 +30,7 @@ class GroupGetGroupsAdminsInputDto implements ServiceInputDtoInterface
     {
         $this->userSession = $userSession;
         $this->groupsId = array_map(
-            fn (string $groupId) => ValueObjectFactory::createIdentifier($groupId),
+            fn (string $groupId): Identifier => ValueObjectFactory::createIdentifier($groupId),
             $groupsId ?? []
         );
         $this->page = ValueObjectFactory::createPaginatorPage($page);

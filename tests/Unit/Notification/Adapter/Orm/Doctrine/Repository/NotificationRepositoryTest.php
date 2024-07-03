@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Adapter\Orm\Doctrine\Repository;
 
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
@@ -92,8 +93,8 @@ class NotificationRepositoryTest extends DataBaseTestCase
                 $this->getNotificationData()
             ),
         ];
-        $notificationsId = array_map(fn (Notification $notification) => $notification->getId(), $notifications);
-        $notificationsUsersId = array_map(fn (Notification $notification) => $notification->getUserId(), $notifications);
+        $notificationsId = array_map(fn (Notification $notification): Identifier => $notification->getId(), $notifications);
+        $notificationsUsersId = array_map(fn (Notification $notification): Identifier => $notification->getUserId(), $notifications);
 
         $this->object->save($notifications);
 

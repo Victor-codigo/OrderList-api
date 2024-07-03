@@ -20,7 +20,7 @@ class ProductRemoveOutputDto implements ApplicationOutputInterface
     {
         return [
             'id' => array_map(
-                fn (Identifier $productId) => $productId->getValue(),
+                fn (Identifier $productId): ?string => $productId->getValue(),
                 $this->productsId
             ),
         ];

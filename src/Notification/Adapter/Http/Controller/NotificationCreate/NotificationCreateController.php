@@ -101,7 +101,7 @@ class NotificationCreateController extends AbstractController
     private function createResponse(NotificationCreateOutputDto $notificationOutput): JsonResponse
     {
         $notificationsIds = array_map(
-            fn (Identifier $notificationId) => $notificationId->getValue(),
+            fn (Identifier $notificationId): ?string => $notificationId->getValue(),
             $notificationOutput->notificationIds
         );
 

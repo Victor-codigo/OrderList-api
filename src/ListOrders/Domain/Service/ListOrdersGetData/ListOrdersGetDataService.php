@@ -69,7 +69,7 @@ class ListOrdersGetDataService
     private function getListOrderData(PaginatorInterface $listsOrders): array
     {
         return array_map(
-            fn (ListOrders $listOrders) => [
+            fn (ListOrders $listOrders): array => [
                 'id' => $listOrders->getId()->getValue(),
                 'user_id' => $listOrders->getUserId()->getValue(),
                 'group_id' => $listOrders->getGroupId()->getValue(),

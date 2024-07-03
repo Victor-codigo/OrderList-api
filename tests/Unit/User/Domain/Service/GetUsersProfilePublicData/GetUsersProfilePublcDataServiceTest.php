@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Domain\Service\GetUsersProfilePublicData;
 
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -75,8 +76,8 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
         $profilesId = $this->getProfilesId();
         $profiles = $this->getProfiles();
         $expectedProfiles = $this->getProfilesExpected();
-        $expectedProfileIdentifiers = array_map(fn (Profile $profile) => $profile->getId(), $expectedProfiles);
-        $expectedProfileImages = array_map(fn (Profile $profile) => $profile->getImage()->getValue(), $expectedProfiles);
+        $expectedProfileIdentifiers = array_map(fn (Profile $profile): Identifier => $profile->getId(), $expectedProfiles);
+        $expectedProfileImages = array_map(fn (Profile $profile): ?string => $profile->getImage()->getValue(), $expectedProfiles);
 
         $this->profileRepository
             ->expects($this->once())
@@ -103,8 +104,8 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
         $profilesId = $this->getProfilesId();
         $profiles = $this->getProfiles();
         $expectedProfiles = $this->getProfilesExpected();
-        $expectedProfileIdentifiers = array_map(fn (Profile $profile) => $profile->getId(), $expectedProfiles);
-        $expectedProfileImages = array_map(fn (Profile $profile) => $profile->getImage()->getValue(), $expectedProfiles);
+        $expectedProfileIdentifiers = array_map(fn (Profile $profile): Identifier => $profile->getId(), $expectedProfiles);
+        $expectedProfileImages = array_map(fn (Profile $profile): ?string => $profile->getImage()->getValue(), $expectedProfiles);
 
         $this->profileRepository
             ->expects($this->once())

@@ -29,7 +29,7 @@ class GetProductShopPriceService
     private function getProductsData(PaginatorInterface $productsShopsPaginator): array
     {
         return array_map(
-            fn (ProductShop $productShop) => [
+            fn (ProductShop $productShop): array => [
                 'product_id' => $productShop->getProductId()->getValue(),
                 'shop_id' => $productShop->getShopId()->getValue(),
                 'price' => $productShop->getPrice()->getValue(),

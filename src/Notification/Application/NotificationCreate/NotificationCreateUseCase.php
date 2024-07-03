@@ -105,7 +105,7 @@ class NotificationCreateUseCase extends ServiceBase
     private function createNotificationCreateOutputDto(array $notifications): NotificationCreateOutputDto
     {
         $notificationsId = array_map(
-            fn (Notification $notification) => $notification->getId(),
+            fn (Notification $notification): Identifier => $notification->getId(),
             $notifications
         );
 

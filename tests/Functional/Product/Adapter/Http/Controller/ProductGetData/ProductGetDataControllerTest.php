@@ -219,7 +219,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $productDataExpected = $this->getProductsData();
         usort(
             $productDataExpected,
-            fn (array $productA, array $productB) => strcmp((string) $productA['name'], (string) $productB['name'])
+            fn (array $productA, array $productB): int => strcmp((string) $productA['name'], (string) $productB['name'])
         );
         $client->request(
             method: self::METHOD,
@@ -300,7 +300,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $productDataExpected = $this->getProductsData();
         usort(
             $productDataExpected,
-            fn (array $productA, array $productB) => strcmp((string) $productA['name'], (string) $productB['name'])
+            fn (array $productA, array $productB): int => strcmp((string) $productA['name'], (string) $productB['name'])
         );
         $client->request(
             method: self::METHOD,

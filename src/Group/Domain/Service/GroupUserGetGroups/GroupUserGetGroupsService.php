@@ -45,17 +45,17 @@ class GroupUserGetGroupsService
         $userGroups->setPagination($page->getValue(), $pageItems->getValue());
 
         $groupsId = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getGroupId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getGroupId(),
             iterator_to_array($userGroups)
         );
 
         $groupsIsAdmin = array_filter(
             iterator_to_array($userGroups),
-            fn (UserGroup $userGroup) => $userGroup->getRoles()->has(new Rol(GROUP_ROLES::ADMIN))
+            fn (UserGroup $userGroup): bool => $userGroup->getRoles()->has(new Rol(GROUP_ROLES::ADMIN))
         );
 
         $groupsIsAdminId = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getGroupId()->getValue(),
+            fn (UserGroup $userGroup): ?string => $userGroup->getGroupId()->getValue(),
             $groupsIsAdmin
         );
 
@@ -65,7 +65,7 @@ class GroupUserGetGroupsService
 
         array_walk(
             $groupsData,
-            fn (array &$groupData) => $groupData['admin'] = in_array($groupData['group_id'], $groupsIsAdminId)
+            fn (array &$groupData): bool => $groupData['admin'] = in_array($groupData['group_id'], $groupsIsAdminId)
         );
 
         return new GroupUserGetGroupsOutputDto($page, $userGroups->getPagesTotal(), $groupsData);

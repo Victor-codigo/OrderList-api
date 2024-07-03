@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ProductRemoveAllGroupsProducts;
 
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Override;
 use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
@@ -85,7 +86,7 @@ class ProductRemoveAllGroupsProductsServiceTest extends TestCase
     private function getProductsId(array $products): array
     {
         return array_map(
-            fn (Product $product) => $product->getId(),
+            fn (Product $product): Identifier => $product->getId(),
             $products
         );
     }
@@ -117,7 +118,7 @@ class ProductRemoveAllGroupsProductsServiceTest extends TestCase
             ->expects($this->exactly(count($products)))
             ->method('__invoke')
             ->with(
-                $this->callback(fn (Product $product) => $this->assertContainsEquals($product, $products) || true),
+                $this->callback(fn (Product $product): true => $this->assertContainsEquals($product, $products) || true),
                 $productImagePath
             );
 
@@ -187,7 +188,7 @@ class ProductRemoveAllGroupsProductsServiceTest extends TestCase
             ->expects($this->once())
             ->method('__invoke')
             ->with(
-                $this->callback(fn (Product $product) => $this->assertContainsEquals($product, $products) || true),
+                $this->callback(fn (Product $product): true => $this->assertContainsEquals($product, $products) || true),
                 $productImagePath
             )
             ->willThrowException(new DomainInternalErrorException());
@@ -226,7 +227,7 @@ class ProductRemoveAllGroupsProductsServiceTest extends TestCase
             ->expects($this->exactly(count($products)))
             ->method('__invoke')
             ->with(
-                $this->callback(fn (Product $product) => $this->assertContainsEquals($product, $products) || true),
+                $this->callback(fn (Product $product): true => $this->assertContainsEquals($product, $products) || true),
                 $productImagePath
             );
 

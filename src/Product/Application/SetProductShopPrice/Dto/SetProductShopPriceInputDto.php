@@ -46,15 +46,15 @@ class SetProductShopPriceInputDto implements ServiceInputDtoInterface
         $this->productId = ValueObjectFactory::createIdentifier($productId);
         $this->shopId = ValueObjectFactory::createIdentifier($shopId);
         $this->productsOrShopsId = array_map(
-            fn (string|null $productOrShopId) => ValueObjectFactory::createIdentifier($productOrShopId),
+            fn (string|null $productOrShopId): Identifier => ValueObjectFactory::createIdentifier($productOrShopId),
             $productsOrShopsId ?? []
         );
         $this->prices = array_map(
-            fn (float|null $price) => ValueObjectFactory::createMoney($price),
+            fn (float|null $price): Money => ValueObjectFactory::createMoney($price),
             $prices ?? []
         );
         $this->units = array_map(
-            fn (string|null $unit) => ValueObjectFactory::createUnit(UNIT_MEASURE_TYPE::tryFrom($unit ?? '')),
+            fn (string|null $unit): UnitMeasure => ValueObjectFactory::createUnit(UNIT_MEASURE_TYPE::tryFrom($unit ?? '')),
             $units ?? []
         );
     }
@@ -143,8 +143,8 @@ class SetProductShopPriceInputDto implements ServiceInputDtoInterface
     {
         $errorList = [];
         $errorListUnits = $validator->validateValueObjectArray($this->units);
-        $errorsNullToChoiceNoSuch = fn(array $errors) => array_map(
-            fn (VALIDATION_ERRORS $error) => VALIDATION_ERRORS::NOT_NULL === $error ? VALIDATION_ERRORS::CHOICE_NOT_SUCH : $error,
+        $errorsNullToChoiceNoSuch = fn(array $errors): array => array_map(
+            fn (VALIDATION_ERRORS $error): VALIDATION_ERRORS => VALIDATION_ERRORS::NOT_NULL === $error ? VALIDATION_ERRORS::CHOICE_NOT_SUCH : $error,
             $errors
         );
 

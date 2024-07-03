@@ -23,7 +23,7 @@ class ListOrdersRemoveOutputDto implements ApplicationOutputInterface
     {
         return [
             'id' => array_map(
-                fn (ListOrders $listOrderId) => $listOrderId->getId()->getValue(),
+                fn (ListOrders $listOrderId): ?string => $listOrderId->getId()->getValue(),
                 $this->listsOrders
             ),
         ];

@@ -73,7 +73,7 @@ class ListOrdersCreateServiceTest extends TestCase
             ->expects($this->once())
             ->method('save')
             ->with($this->callback(
-                fn (array $listsOrdersToSave) => $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave) || true)
+                fn (array $listsOrdersToSave): true => $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave) || true)
             );
 
         $return = $this->object->__invoke($input);
@@ -97,7 +97,7 @@ class ListOrdersCreateServiceTest extends TestCase
             ->expects($this->once())
             ->method('save')
             ->with($this->callback(
-                fn (array $listsOrdersToSave) => $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave) || true)
+                fn (array $listsOrdersToSave): true => $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave) || true)
             )
             ->willThrowException(new DBUniqueConstraintException());
 
@@ -121,7 +121,7 @@ class ListOrdersCreateServiceTest extends TestCase
             ->expects($this->once())
             ->method('save')
             ->with($this->callback(
-                fn (array $listsOrdersToSave) => $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave) || true)
+                fn (array $listsOrdersToSave): true => $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave) || true)
             )
             ->willThrowException(new DBConnectionException());
 

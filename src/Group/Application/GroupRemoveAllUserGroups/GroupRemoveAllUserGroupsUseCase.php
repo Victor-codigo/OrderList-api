@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupRemoveAllUserGroups;
 
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -90,7 +91,7 @@ class GroupRemoveAllUserGroupsUseCase extends ServiceBase
     {
         $groupsIndexedById = array_combine(
             array_map(
-                fn (Group $group) => $group->getId()->getValue(),
+                fn (Group $group): ?string => $group->getId()->getValue(),
                 $groups
             ),
             $groups
@@ -119,17 +120,17 @@ class GroupRemoveAllUserGroupsUseCase extends ServiceBase
     private function createGroupRemoveAllGroupsOutputDto(GroupRemoveAllUserGroupsOutputDto $userGroupsRemoved): GroupRemoveAllGroupsOutputDto
     {
         $groupsIdRemoved = array_map(
-            fn (Group $group) => $group->getId(),
+            fn (Group $group): Identifier => $group->getId(),
             $userGroupsRemoved->groupsIdRemoved
         );
 
         $groupsIdUserRemoved = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getGroupId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getGroupId(),
             $userGroupsRemoved->usersIdGroupsRemoved
         );
 
         $groupsIdUserSetAsAdmin = array_map(
-            fn (UserGroup $userGroup) => [
+            fn (UserGroup $userGroup): array => [
                 'group_id' => $userGroup->getGroupId(),
                 'user_id' => $userGroup->getUserId(),
             ],

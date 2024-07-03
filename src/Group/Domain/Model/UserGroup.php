@@ -29,7 +29,7 @@ class UserGroup
     public static function fromPrimitives(string $groupId, string $userId, array $roles, group $group): self
     {
         $roles = array_map(
-            fn (GROUP_ROLES $rol) => ValueObjectFactory::createRol($rol),
+            fn (GROUP_ROLES $rol): Rol => ValueObjectFactory::createRol($rol),
             $roles
         );
 

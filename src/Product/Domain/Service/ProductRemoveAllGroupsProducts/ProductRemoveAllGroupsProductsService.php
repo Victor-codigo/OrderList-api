@@ -37,7 +37,7 @@ class ProductRemoveAllGroupsProductsService
         foreach ($productsPaginator->getAllPages(self::SHOP_PAGINATION_PAGE_ITEMS) as $productsIterator) {
             $products = iterator_to_array($productsIterator);
             $productsId[] = array_map(
-                fn (Product $product) => $product->getId(),
+                fn (Product $product): Identifier => $product->getId(),
                 $products
             );
 

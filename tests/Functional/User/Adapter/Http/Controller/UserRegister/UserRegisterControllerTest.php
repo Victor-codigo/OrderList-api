@@ -587,7 +587,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertEquals((new DateTime())->format('Y-m-d H:m'), $userSaved->getCreatedOn()->format('Y-m-d H:m'));
         $this->assertNotEmpty($password);
 
-        $rolesSaved = array_map(fn (Rol $rol) => $rol->getValue(), $userSaved->getRoles()->getValue());
+        $rolesSaved = array_map(fn (Rol $rol): ?object => $rol->getValue(), $userSaved->getRoles()->getValue());
 
         foreach ($roles as $rol) {
             $this->assertContains($rol, $rolesSaved);

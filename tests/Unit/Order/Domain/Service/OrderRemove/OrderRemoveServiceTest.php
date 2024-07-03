@@ -46,7 +46,7 @@ class OrderRemoveServiceTest extends TestCase
         $product = $this->createMock(Product::class);
 
         return array_map(
-            fn (Identifier $orderId) => Order::fromPrimitives(
+            fn (Identifier $orderId): Order => Order::fromPrimitives(
                 $orderId->getValue(),
                 'group id',
                 'user id',

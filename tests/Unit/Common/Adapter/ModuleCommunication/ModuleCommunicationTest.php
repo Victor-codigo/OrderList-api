@@ -169,7 +169,7 @@ class ModuleCommunicationTest extends TestCase
             ->with(
                 $routeConfig->method,
                 $this->equalTo($expectedUrl),
-                $this->callback(fn (array $options) => $this->assertRequestOptionsIsOk($options, $routeConfig) || true)
+                $this->callback(fn (array $options): true => $this->assertRequestOptionsIsOk($options, $routeConfig) || true)
             )
             ->willReturn($this->httpClientResponse);
 

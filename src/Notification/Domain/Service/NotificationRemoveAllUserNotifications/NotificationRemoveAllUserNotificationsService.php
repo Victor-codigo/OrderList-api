@@ -31,7 +31,7 @@ class NotificationRemoveAllUserNotificationsService
         foreach ($userNotificationsPaginator->getAllPages(self::NOTIFICATION_PAGINATION_ITEMS) as $notificationsIterator) {
             $notifications = iterator_to_array($notificationsIterator);
             $notificationsId[] = array_map(
-                fn (Notification $notification) => $notification->getId(),
+                fn (Notification $notification): Identifier => $notification->getId(),
                 $notifications
             );
 

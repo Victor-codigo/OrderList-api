@@ -36,7 +36,7 @@ class NotificationCreateInputDto implements ServiceInputDtoInterface
         $this->usersId = null === $usersId
             ? []
             : array_map(
-                fn (string $userId) => ValueObjectFactory::createIdentifier($userId),
+                fn (string $userId): Identifier => ValueObjectFactory::createIdentifier($userId),
                 $usersId
             );
         $this->notificationType = ValueObjectFactory::createNotificationType(
@@ -81,7 +81,7 @@ class NotificationCreateInputDto implements ServiceInputDtoInterface
         $errorList = $validator->validateValueObjectArray($this->usersId);
         $errorList = array_reduce(
             $errorList,
-            fn (array $carry, array $errorLIstUserId) => array_merge($carry, $errorLIstUserId),
+            fn (array $carry, array $errorLIstUserId): array => array_merge($carry, $errorLIstUserId),
             []
         );
 

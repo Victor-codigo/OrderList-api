@@ -72,7 +72,7 @@ class GroupUserAddService
     private function getUsersNotInGroup(PaginatorInterface $usersGroup, array $usersId): array
     {
         $usersGroupIds = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(),
             iterator_to_array($usersGroup)
         );
 

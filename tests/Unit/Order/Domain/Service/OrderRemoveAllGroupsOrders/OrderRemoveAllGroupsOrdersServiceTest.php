@@ -136,7 +136,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
     private function getOrdersToChangeUserIdAlreadyChanged(array $orders): array
     {
         $ordersToModify = array_map(
-            fn (Order $order) => clone $order,
+            fn (Order $order): Order => clone $order,
             $orders
         );
 
@@ -153,7 +153,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
     private function getOrdersId(array $orders): array
     {
         return array_map(
-            fn (Order $order) => $order->getId(),
+            fn (Order $order): Identifier => $order->getId(),
             $orders
         );
     }
@@ -319,7 +319,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
 
                 return true;
             }))
-            ->willReturnCallback(fn() => match ($orderRepositoryMatcher->getInvocationCount()) {
+            ->willReturnCallback(fn(): MockObject|PaginatorInterface => match ($orderRepositoryMatcher->getInvocationCount()) {
                 1 => throw new DBNotFoundException(),
                 2 => $this->ordersToChangeUserIdPaginator
             });
@@ -455,7 +455,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
 
                 return true;
             }))
-            ->willReturnCallback(fn() => match ($orderRepositoryMatcher->getInvocationCount()) {
+            ->willReturnCallback(fn(): MockObject|PaginatorInterface => match ($orderRepositoryMatcher->getInvocationCount()) {
                 1 => $this->ordersToRemovePaginator,
                 2 => throw new DBNotFoundException()
             });

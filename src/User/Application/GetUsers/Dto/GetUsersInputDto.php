@@ -30,7 +30,7 @@ class GetUsersInputDto implements ServiceInputDtoInterface
         }
 
         $this->usersId = array_map(
-            fn (string $id) => ValueObjectFactory::createIdentifier($id),
+            fn (string $id): Identifier => ValueObjectFactory::createIdentifier($id),
             $usersId
         );
     }

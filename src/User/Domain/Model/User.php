@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace User\Domain\Model;
 
+use Common\Domain\Model\ValueObject\Object\Rol;
 use DateTime;
 use Override;
 use Common\Domain\Event\EventRegisterTrait;
@@ -136,7 +137,7 @@ class User implements EntityImageModifyInterface
     public static function fromPrimitives(string $id, string $email, string $password, string $name, array $roles): User
     {
         $roles = array_map(
-            fn (USER_ROLES $rol) => ValueObjectFactory::createRol($rol),
+            fn (USER_ROLES $rol): Rol => ValueObjectFactory::createRol($rol),
             $roles
         );
 

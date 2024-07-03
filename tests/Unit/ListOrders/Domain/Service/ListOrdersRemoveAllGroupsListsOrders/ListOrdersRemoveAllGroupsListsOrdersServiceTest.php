@@ -110,7 +110,7 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
     private function getListsOrdersToChangeUserIdAlreadyChanged(array $listsOrders): array
     {
         $listsOrdersToModify = array_map(
-            fn (ListOrders $listOrders) => clone $listOrders,
+            fn (ListOrders $listOrders): ListOrders => clone $listOrders,
             $listsOrders
         );
 
@@ -127,7 +127,7 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
     private function getListsOrdersId(array $listsOrders): array
     {
         return array_map(
-            fn (ListOrders $listOrders) => $listOrders->getId(),
+            fn (ListOrders $listOrders): Identifier => $listOrders->getId(),
             $listsOrders
         );
     }
@@ -293,7 +293,7 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
 
                 return true;
             }))
-            ->willReturnCallback(fn() => match ($listOrdersRepositoryMatcher->getInvocationCount()) {
+            ->willReturnCallback(fn(): MockObject|PaginatorInterface => match ($listOrdersRepositoryMatcher->getInvocationCount()) {
                 1 => throw new DBNotFoundException(),
                 2 => $this->listsOrdersToChangeUserIdPaginator
             });
@@ -429,7 +429,7 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
 
                 return true;
             }))
-            ->willReturnCallback(fn() => match ($listOrdersRepositoryMatcher->getInvocationCount()) {
+            ->willReturnCallback(fn(): MockObject|PaginatorInterface => match ($listOrdersRepositoryMatcher->getInvocationCount()) {
                 1 => $this->listsOrdersToRemovePaginator,
                 2 => throw new DBNotFoundException()
             });

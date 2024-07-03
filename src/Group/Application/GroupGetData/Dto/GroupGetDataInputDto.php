@@ -23,7 +23,7 @@ class GroupGetDataInputDto implements ServiceInputDtoInterface
     {
         $this->userSession = $userSession;
         $this->groupsId = null === $groupsId ? [] : array_map(
-            fn (string $groupId) => ValueObjectFactory::createIdentifier($groupId),
+            fn (string $groupId): Identifier => ValueObjectFactory::createIdentifier($groupId),
             $groupsId
         );
     }

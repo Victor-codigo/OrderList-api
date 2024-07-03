@@ -92,7 +92,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
             ->expects($this->once())
             ->method('move')
             ->with($pathToSaveFile, $slugFileName)
-            ->willReturnCallback(fn () => $moveReturn instanceof Throwable ? throw $moveReturn : $moveReturn);
+            ->willReturnCallback(fn (): UploadedFileInterface => $moveReturn instanceof Throwable ? throw $moveReturn : $moveReturn);
 
         $this->file
             ->expects($this->once())

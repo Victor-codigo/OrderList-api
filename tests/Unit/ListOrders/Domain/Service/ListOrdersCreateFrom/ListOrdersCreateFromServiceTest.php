@@ -197,7 +197,7 @@ class ListOrdersCreateFromServiceTest extends TestCase
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('saveListOrdersAndOrders')
-            ->with($this->callback(fn (ListOrders $listOrdersNew) => $this->assertListOrdersOrdersNewIsOk($listOrdersOld, $listOrdersNew, $input->userId) || true));
+            ->with($this->callback(fn (ListOrders $listOrdersNew): true => $this->assertListOrdersOrdersNewIsOk($listOrdersOld, $listOrdersNew, $input->userId) || true));
 
         $this->paginator
             ->expects($this->once())

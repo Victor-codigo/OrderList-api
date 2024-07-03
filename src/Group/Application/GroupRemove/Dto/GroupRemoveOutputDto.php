@@ -25,7 +25,7 @@ class GroupRemoveOutputDto implements ApplicationOutputInterface
     public function toArray(): array
     {
         return array_map(
-            fn (Identifier $groupId) => $groupId->getValue(),
+            fn (Identifier $groupId): ?string => $groupId->getValue(),
             $this->groupsRemovedId
         );
     }

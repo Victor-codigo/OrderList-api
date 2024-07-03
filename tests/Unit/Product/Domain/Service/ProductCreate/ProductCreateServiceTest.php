@@ -108,7 +108,7 @@ class ProductCreateServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Product $product) => $this->assertProductIsCreated($product, $input, self::IMAGE_UPLOADED_FILE_NAME)));
+            ->with($this->callback(fn (Product $product): bool => $this->assertProductIsCreated($product, $input, self::IMAGE_UPLOADED_FILE_NAME)));
 
         $return = $this->object->__invoke($input);
 
@@ -158,7 +158,7 @@ class ProductCreateServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Product $product) => $this->assertProductIsCreated($product, $input, self::IMAGE_UPLOADED_FILE_NAME)));
+            ->with($this->callback(fn (Product $product): bool => $this->assertProductIsCreated($product, $input, self::IMAGE_UPLOADED_FILE_NAME)));
 
         $return = $this->object->__invoke($input);
 
@@ -201,7 +201,7 @@ class ProductCreateServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Product $product) => $this->assertProductIsCreated($product, $input, null)));
+            ->with($this->callback(fn (Product $product): bool => $this->assertProductIsCreated($product, $input, null)));
 
         $return = $this->object->__invoke($input);
 
@@ -326,7 +326,7 @@ class ProductCreateServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Product $product) => $this->assertProductIsCreated($product, $input, self::IMAGE_UPLOADED_FILE_NAME)))
+            ->with($this->callback(fn (Product $product): bool => $this->assertProductIsCreated($product, $input, self::IMAGE_UPLOADED_FILE_NAME)))
             ->willThrowException(new DBUniqueConstraintException());
 
         $this->expectException(DBUniqueConstraintException::class);

@@ -29,7 +29,7 @@ class ListOrdersRemoveInputDto implements ServiceInputDtoInterface
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
 
         $this->listsOrdersId = array_map(
-            fn (string $listOrderId) => ValueObjectFactory::createIdentifier($listOrderId),
+            fn (string $listOrderId): Identifier => ValueObjectFactory::createIdentifier($listOrderId),
             $listsOrdersId ?? []
         );
     }

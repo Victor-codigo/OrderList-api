@@ -28,7 +28,7 @@ class OrderRemoveInputDto implements ServiceInputDtoInterface
     {
         $this->userSession = $userSession;
         $this->ordersId = array_map(
-            fn (string $orderId) => ValueObjectFactory::createIdentifier($orderId),
+            fn (string $orderId): Identifier => ValueObjectFactory::createIdentifier($orderId),
             $ordersId ?? []
         );
 

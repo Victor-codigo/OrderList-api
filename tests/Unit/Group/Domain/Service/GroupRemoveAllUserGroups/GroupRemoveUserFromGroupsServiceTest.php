@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupRemoveAllUserGroups;
 
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Override;
 use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
@@ -97,7 +98,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
         );
 
         return array_map(
-            fn (UserGroup $userGroup) => $userGroup->setRoles($adminRole),
+            fn (UserGroup $userGroup): UserGroup => $userGroup->setRoles($adminRole),
             $usersGroups
         );
     }
@@ -154,7 +155,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
     private function getGroupsIdFromUsersGroups(array $usersGroups): array
     {
         return array_map(
-            fn (UserGroup $userGroup) => $userGroup->getGroupId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getGroupId(),
             $usersGroups
         );
     }
@@ -190,7 +191,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
         $groupUsersNumbers = $this->getGroupsUsersNumber();
 
         return array_map(
-            fn (array $groupUsersNumber) => [
+            fn (array $groupUsersNumber): array => [
                 'groupId' => $groupUsersNumber['groupId'],
                 'groupUsers' => $numUsers,
             ],

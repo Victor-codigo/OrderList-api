@@ -257,12 +257,12 @@ class OrderCreateServiceTest extends TestCase
         $orders = $this->getOrders();
         $ordersData = $this->getOrdersData();
         $productsId = array_map(
-            fn (Order $order) => $order->getProductId(),
+            fn (Order $order): Identifier => $order->getProductId(),
             $orders
         );
         $products = $this->getProducts();
         $shopsId = array_map(
-            fn (Order $order) => $order->getShopId(),
+            fn (Order $order): Identifier => $order->getShopId(),
             $orders
         );
         $shops = $this->getShops();
@@ -342,12 +342,12 @@ class OrderCreateServiceTest extends TestCase
         $orders = $this->getOrders(true);
         $ordersData = $this->getOrdersData(true);
         $productsId = array_map(
-            fn (Order $order) => $order->getProductId(),
+            fn (Order $order): Identifier => $order->getProductId(),
             $orders
         );
         $products = $this->getProducts();
         $shopsId = array_map(
-            fn (Order $order) => $order->getShopId(),
+            fn (Order $order): Identifier => $order->getShopId(),
             $orders
         );
         $input = new OrderCreateDto($this->groupId, $listOrdersId, $ordersData);
@@ -470,7 +470,7 @@ class OrderCreateServiceTest extends TestCase
         $orders = $this->getOrders();
         $ordersData = $this->getOrdersData();
         $productsId = array_map(
-            fn (Order $order) => $order->getProductId(),
+            fn (Order $order): Identifier => $order->getProductId(),
             $orders
         );
         $input = new OrderCreateDto($this->groupId, $listOrdersId, $ordersData);
@@ -527,7 +527,7 @@ class OrderCreateServiceTest extends TestCase
         $orders = $this->getOrders();
         $ordersData = $this->getOrdersData();
         $productsId = array_map(
-            fn (Order $order) => $order->getProductId(),
+            fn (Order $order): Identifier => $order->getProductId(),
             $orders
         );
         $products = $this->getProducts();
@@ -586,12 +586,12 @@ class OrderCreateServiceTest extends TestCase
         $orders = $this->getOrders();
         $ordersData = $this->getOrdersData();
         $productsId = array_map(
-            fn (Order $order) => $order->getProductId(),
+            fn (Order $order): Identifier => $order->getProductId(),
             $orders
         );
         $products = $this->getProducts();
         $shopsId = array_map(
-            fn (Order $order) => $order->getShopId(),
+            fn (Order $order): Identifier => $order->getShopId(),
             $orders
         );
         $shops = $this->getShops();
@@ -653,12 +653,12 @@ class OrderCreateServiceTest extends TestCase
         $orders = $this->getOrders();
         $ordersData = $this->getOrdersData();
         $productsId = array_map(
-            fn (Order $order) => $order->getProductId(),
+            fn (Order $order): Identifier => $order->getProductId(),
             $orders
         );
         $products = $this->getProducts();
         $shopsId = array_map(
-            fn (Order $order) => $order->getShopId(),
+            fn (Order $order): Identifier => $order->getShopId(),
             $orders
         );
         $shops = $this->getShops();
@@ -728,12 +728,12 @@ class OrderCreateServiceTest extends TestCase
         $orders = $this->getOrders();
         $ordersData = $this->getOrdersData();
         $productsId = array_map(
-            fn (Order $order) => $order->getProductId(),
+            fn (Order $order): Identifier => $order->getProductId(),
             $orders
         );
         $products = $this->getProducts();
         $shopsId = array_map(
-            fn (Order $order) => $order->getShopId(),
+            fn (Order $order): Identifier => $order->getShopId(),
             $orders
         );
         $shops = $this->getShops();

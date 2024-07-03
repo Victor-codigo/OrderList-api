@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupRemove;
 
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -94,9 +95,9 @@ class GroupRemoveUseCaseTest extends TestCase
             ValueObjectFactory::createIdentifier('group id 1'),
             ValueObjectFactory::createIdentifier('group id 2'),
         ];
-        $groupsIdPlain = array_map(fn (Identifier $groupId) => $groupId->getValue(), $groupsId);
+        $groupsIdPlain = array_map(fn (Identifier $groupId): ?string => $groupId->getValue(), $groupsId);
         $groups = $this->getGroupsData();
-        $groupsNames = array_map(fn (Group $groupName) => $groupName->getName(), $groups);
+        $groupsNames = array_map(fn (Group $groupName): NameWithSpaces => $groupName->getName(), $groups);
         $input = new GroupRemoveInputDto($this->userSession, $groupsIdPlain);
 
         $this->validator
@@ -162,9 +163,9 @@ class GroupRemoveUseCaseTest extends TestCase
             ValueObjectFactory::createIdentifier('group id 1'),
             ValueObjectFactory::createIdentifier('group id 2'),
         ];
-        $groupsIdPlain = array_map(fn (Identifier $groupId) => $groupId->getValue(), $groupsId);
+        $groupsIdPlain = array_map(fn (Identifier $groupId): ?string => $groupId->getValue(), $groupsId);
         $groups = $this->getGroupsData();
-        $groupsNames = array_map(fn (Group $groupName) => $groupName->getName(), $groups);
+        $groupsNames = array_map(fn (Group $groupName): NameWithSpaces => $groupName->getName(), $groups);
         $input = new GroupRemoveInputDto($this->userSession, $groupsIdPlain);
 
         $this->validator
@@ -228,7 +229,7 @@ class GroupRemoveUseCaseTest extends TestCase
             ValueObjectFactory::createIdentifier('group id 1'),
             ValueObjectFactory::createIdentifier('group id 2'),
         ];
-        $groupsIdPlain = array_map(fn (Identifier $groupId) => $groupId->getValue(), $groupsId);
+        $groupsIdPlain = array_map(fn (Identifier $groupId): ?string => $groupId->getValue(), $groupsId);
         $input = new GroupRemoveInputDto($this->userSession, $groupsIdPlain);
 
         $this->validator
@@ -275,7 +276,7 @@ class GroupRemoveUseCaseTest extends TestCase
             ValueObjectFactory::createIdentifier('group id 1'),
             ValueObjectFactory::createIdentifier('group id 2'),
         ];
-        $groupsIdPlain = array_map(fn (Identifier $groupId) => $groupId->getValue(), $groupsId);
+        $groupsIdPlain = array_map(fn (Identifier $groupId): ?string => $groupId->getValue(), $groupsId);
         $input = new GroupRemoveInputDto($this->userSession, $groupsIdPlain);
 
         $this->validator

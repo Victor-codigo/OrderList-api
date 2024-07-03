@@ -46,11 +46,11 @@ class ShopGetDataInputDto implements ServiceInputDtoInterface
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
         $this->shopName = ValueObjectFactory::createNameWithSpaces($shopName);
         $this->shopsId = array_map(
-            fn (string $shopId) => ValueObjectFactory::createIdentifier($shopId),
+            fn (string $shopId): Identifier => ValueObjectFactory::createIdentifier($shopId),
             $shopsId ?? []
         );
         $this->productsId = array_map(
-            fn (string $productId) => ValueObjectFactory::createIdentifier($productId),
+            fn (string $productId): Identifier => ValueObjectFactory::createIdentifier($productId),
             $productsId ?? []
         );
 

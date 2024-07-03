@@ -51,7 +51,7 @@ class GroupUserRoleChangeTest extends TestCase
     private function createGroupUserRoleChangeDto(array $usersToChangeRole, GROUP_ROLES $rol): GroupUserRoleChangeDto
     {
         $usersId = array_map(
-            fn (string $userId) => ValueObjectFactory::createIdentifier($userId),
+            fn (string $userId): Identifier => ValueObjectFactory::createIdentifier($userId),
             $usersToChangeRole
         );
 
@@ -68,7 +68,7 @@ class GroupUserRoleChangeTest extends TestCase
     private function getFindGroupUsersOrFailReturn(array $usersIdRoleChanged, GROUP_ROLES $groupRol, Exception|null $exception = null): MockObject|PaginatorInterface
     {
         $usersGroup = array_map(
-            fn (string $userId) => UserGroup::fromPrimitives(self::GROUP_ID, $userId, [$groupRol], $this->group),
+            fn (string $userId): UserGroup => UserGroup::fromPrimitives(self::GROUP_ID, $userId, [$groupRol], $this->group),
             $usersIdRoleChanged
         );
 
@@ -114,13 +114,13 @@ class GroupUserRoleChangeTest extends TestCase
         $this->userGroupRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (array $usersGroup) => $this->assertSavedUserGroupAreValid($usersGroup, iterator_to_array($expectUsersToSave), GROUP_ROLES::ADMIN)));
+            ->with($this->callback(fn (array $usersGroup): bool => $this->assertSavedUserGroupAreValid($usersGroup, iterator_to_array($expectUsersToSave), GROUP_ROLES::ADMIN)));
 
         $input = $this->createGroupUserRoleChangeDto(self::USERS_ID, GROUP_ROLES::ADMIN);
         $return = $this->object->__invoke($input);
 
         $usersId = array_map(
-            fn (Identifier $userId) => $userId->getValue(),
+            fn (Identifier $userId): ?string => $userId->getValue(),
             $return
         );
 
@@ -141,13 +141,13 @@ class GroupUserRoleChangeTest extends TestCase
         $this->userGroupRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (array $usersGroup) => $this->assertSavedUserGroupAreValid($usersGroup, iterator_to_array($expectUsersToSave), GROUP_ROLES::USER)));
+            ->with($this->callback(fn (array $usersGroup): bool => $this->assertSavedUserGroupAreValid($usersGroup, iterator_to_array($expectUsersToSave), GROUP_ROLES::USER)));
 
         $input = $this->createGroupUserRoleChangeDto([self::USERS_ID[1], self::USERS_ID[2]], GROUP_ROLES::USER);
         $return = $this->object->__invoke($input);
 
         $usersId = array_map(
-            fn (Identifier $userId) => $userId->getValue(),
+            fn (Identifier $userId): ?string => $userId->getValue(),
             $return
         );
 
@@ -167,7 +167,7 @@ class GroupUserRoleChangeTest extends TestCase
         $this->userGroupRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (array $usersGroup) => $this->assertSavedUserGroupAreValid($usersGroup, iterator_to_array($expectUsersToSave), GROUP_ROLES::ADMIN)));
+            ->with($this->callback(fn (array $usersGroup): bool => $this->assertSavedUserGroupAreValid($usersGroup, iterator_to_array($expectUsersToSave), GROUP_ROLES::ADMIN)));
 
         $usersIdToChangeRole = self::USERS_ID;
         $usersIdToChangeRole[] = '99b92adb-12f2-4276-b2c0-1f0c48980d45';
@@ -175,7 +175,7 @@ class GroupUserRoleChangeTest extends TestCase
         $return = $this->object->__invoke($input);
 
         $usersId = array_map(
-            fn (Identifier $userId) => $userId->getValue(),
+            fn (Identifier $userId): ?string => $userId->getValue(),
             $return
         );
 
@@ -220,7 +220,7 @@ class GroupUserRoleChangeTest extends TestCase
         $return = $this->object->__invoke($input);
 
         $usersId = array_map(
-            fn (Identifier $userId) => $userId->getValue(),
+            fn (Identifier $userId): ?string => $userId->getValue(),
             $return
         );
 

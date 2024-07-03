@@ -98,7 +98,7 @@ class OrderCreateUseCase extends ServiceBase
     private function createOrderCreateOutputDto(array $orders): OrderCreateOutputDto
     {
         $ordersId = array_map(
-            fn (Order $order) => $order->getId()->getValue(),
+            fn (Order $order): ?string => $order->getId()->getValue(),
             $orders
         );
 

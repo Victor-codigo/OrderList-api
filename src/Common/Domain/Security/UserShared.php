@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Domain\Security;
 
+use Common\Domain\Model\ValueObject\Object\Rol;
 use DateTime;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\String\Email;
@@ -55,7 +56,7 @@ class UserShared
     public static function fromPrimitives(string $id, string $email, string $name, array $roles, ?string $image, DateTime $createdOn): self
     {
         $roles = array_map(
-            fn (USER_ROLES $rol) => ValueObjectFactory::createRol($rol),
+            fn (USER_ROLES $rol): Rol => ValueObjectFactory::createRol($rol),
             $roles
         );
 

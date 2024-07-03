@@ -196,15 +196,15 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
     private function getGroupRemoveAllGroupsOutputDto(GroupRemoveAllUserGroupsOutputDto $groupRemoveAllUserGroupsService): GroupRemoveAllGroupsOutputDto
     {
         $groupsIdRemoved = array_map(
-            fn (Group $group) => $group->getId(),
+            fn (Group $group): Identifier => $group->getId(),
             $groupRemoveAllUserGroupsService->groupsIdRemoved
         );
         $groupsIdUserRemoved = array_map(
-            fn (UserGroup $group) => $group->getGroupId(),
+            fn (UserGroup $group): Identifier => $group->getGroupId(),
             $groupRemoveAllUserGroupsService->usersIdGroupsRemoved
         );
         $groupsIdUserSetAsAdmin = array_map(
-            fn (UserGroup $group) => [
+            fn (UserGroup $group): array => [
                 'group_id' => $group->getGroupId(),
                 'user_id' => $group->getUserId(),
             ],

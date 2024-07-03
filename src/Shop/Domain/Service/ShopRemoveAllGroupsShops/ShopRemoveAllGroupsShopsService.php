@@ -37,7 +37,7 @@ class ShopRemoveAllGroupsShopsService
         foreach ($shopsPaginator->getAllPages(self::SHOP_PAGINATION_PAGE_ITEMS) as $shopsIterator) {
             $shops = iterator_to_array($shopsIterator);
             $shopsId[] = array_map(
-                fn (Shop $shop) => $shop->getId(),
+                fn (Shop $shop): Identifier => $shop->getId(),
                 $shops
             );
 

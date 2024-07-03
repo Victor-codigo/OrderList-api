@@ -134,7 +134,7 @@ class UserRemoveUseCase extends ServiceBase
         }
 
         $groupsIdIdentifier = array_map(
-            fn (string $groupId) => ValueObjectFactory::createIdentifier($groupId),
+            fn (string $groupId): Identifier => ValueObjectFactory::createIdentifier($groupId),
             $groupsId
         );
 
@@ -160,12 +160,12 @@ class UserRemoveUseCase extends ServiceBase
         }
 
         $groupsIdToRemoveIdentifier = array_map(
-            fn (string $groupId) => ValueObjectFactory::createIdentifier($groupId),
+            fn (string $groupId): Identifier => ValueObjectFactory::createIdentifier($groupId),
             $groupsIdToRemove
         );
 
         $groupsIdToChangeUserIdIdentifier = array_map(
-            fn (string $groupId) => ValueObjectFactory::createIdentifier($groupId),
+            fn (string $groupId): Identifier => ValueObjectFactory::createIdentifier($groupId),
             $groupsIdToChangeUserId
         );
 
@@ -195,12 +195,12 @@ class UserRemoveUseCase extends ServiceBase
         }
 
         $groupsIdToRemoveIdentifier = array_map(
-            fn (string $groupId) => ValueObjectFactory::createIdentifier($groupId),
+            fn (string $groupId): Identifier => ValueObjectFactory::createIdentifier($groupId),
             $groupsIdToRemove
         );
 
         $groupsIdToChangeUserIdIdentifier = array_map(
-            fn (string $groupId) => ValueObjectFactory::createIdentifier($groupId),
+            fn (string $groupId): Identifier => ValueObjectFactory::createIdentifier($groupId),
             $groupsIdToChangeUserId
         );
 
@@ -229,7 +229,7 @@ class UserRemoveUseCase extends ServiceBase
         }
 
         $groupsIdIdentifier = array_map(
-            fn (string $groupId) => ValueObjectFactory::createIdentifier($groupId),
+            fn (string $groupId): Identifier => ValueObjectFactory::createIdentifier($groupId),
             $groupsId
         );
 

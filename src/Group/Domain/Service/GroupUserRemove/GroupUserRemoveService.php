@@ -46,7 +46,7 @@ class GroupUserRemoveService
         $this->userGroupRepository->removeUsers($usersGroup);
 
         return array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(),
             $usersGroup
         );
     }
@@ -80,12 +80,12 @@ class GroupUserRemoveService
     {
         $groupAdmins = $this->userGroupRepository->findGroupUsersByRol($groupId, GROUP_ROLES::ADMIN);
         $usersGroupToRemoveIds = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId()->getValue(),
+            fn (UserGroup $userGroup): ?string => $userGroup->getUserId()->getValue(),
             $usersGroupToRemove
         );
         $groupAdminsRest = array_filter(
             $groupAdmins,
-            fn (UserGroup $userGroup) => !in_array($userGroup->getUserId()->getValue(), $usersGroupToRemoveIds)
+            fn (UserGroup $userGroup): bool => !in_array($userGroup->getUserId()->getValue(), $usersGroupToRemoveIds)
         );
 
         if (empty($groupAdminsRest)) {

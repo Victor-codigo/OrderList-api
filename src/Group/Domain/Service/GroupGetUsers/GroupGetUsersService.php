@@ -73,19 +73,19 @@ class GroupGetUsersService
         try {
             /** @var Identifier[] $usersId */
             $usersId = array_map(
-                fn (UserGroup $userGroup) => $userGroup->getUserId(),
+                fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(),
                 $groupUsers
             );
 
             /** @var UserGroup[] $usersAdmin */
             $usersAdmin = array_filter(
                 $groupUsers,
-                fn (UserGroup $userGroup) => $userGroup->getRoles()->has(new Rol(GROUP_ROLES::ADMIN)),
+                fn (UserGroup $userGroup): bool => $userGroup->getRoles()->has(new Rol(GROUP_ROLES::ADMIN)),
             );
 
             /** @var Identifier[] $usersAdminId */
             $usersAdminId = array_map(
-                fn (UserGroup $userGroup) => $userGroup->getUserId()->getValue(),
+                fn (UserGroup $userGroup): ?string => $userGroup->getUserId()->getValue(),
                 $usersAdmin
             );
 
@@ -102,7 +102,7 @@ class GroupGetUsersService
 
             array_walk(
                 $usersFilteredByNameData,
-                fn (array &$userData) => $userData['admin'] = in_array($userData['id'], $usersAdminId)
+                fn (array &$userData): bool => $userData['admin'] = in_array($userData['id'], $usersAdminId)
             );
 
             $usersSortedByName = $this->sortUsersByName($usersFilteredByNameData, $orderAsc);
@@ -118,7 +118,7 @@ class GroupGetUsersService
     private function getUserData(array $usersData): array
     {
         return array_map(
-            fn (array $userData) => [
+            fn (array $userData): array => [
                 'id' => $userData['id'],
                 'name' => $userData['name'],
                 'image' => $userData['image'] ?? null,
@@ -140,19 +140,19 @@ class GroupGetUsersService
         return match ($filterText->getFilter()->getValue()) {
             FILTER_STRING_COMPARISON::EQUALS => array_filter(
                 $usersData,
-                fn (array $userData) => $this->matchStringCiAi("^{$pattern}$", $userData['name'])
+                fn (array $userData): bool => $this->matchStringCiAi("^{$pattern}$", $userData['name'])
             ),
             FILTER_STRING_COMPARISON::STARTS_WITH => array_filter(
                 $usersData,
-                fn (array $userData) => $this->matchStringCiAi("^{$pattern}.*", $userData['name'])
+                fn (array $userData): bool => $this->matchStringCiAi("^{$pattern}.*", $userData['name'])
             ),
             FILTER_STRING_COMPARISON::ENDS_WITH => array_filter(
                 $usersData,
-                fn (array $userData) => $this->matchStringCiAi(".*{$pattern}$", $userData['name'])
+                fn (array $userData): bool => $this->matchStringCiAi(".*{$pattern}$", $userData['name'])
             ),
             FILTER_STRING_COMPARISON::CONTAINS => array_filter(
                 $usersData,
-                fn (array $userData) => $this->matchStringCiAi(".*{$pattern}.*", $userData['name'])
+                fn (array $userData): bool => $this->matchStringCiAi(".*{$pattern}.*", $userData['name'])
             ),
         };
     }

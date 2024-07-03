@@ -30,15 +30,15 @@ class GroupRemoveAllGroupsOutputDto implements ApplicationOutputInterface
     {
         return [
             'groups_id_removed' => array_map(
-                fn (Identifier $groupId) => $groupId->getValue(),
+                fn (Identifier $groupId): ?string => $groupId->getValue(),
                 $this->groupsIdRemoved
             ),
             'groups_id_user_removed' => array_map(
-                fn (Identifier $groupId) => $groupId->getValue(),
+                fn (Identifier $groupId): ?string => $groupId->getValue(),
                 $this->groupsIdUserRemoved
             ),
             'groups_id_user_set_as_admin' => array_map(
-                fn (array $groupUserId) => [
+                fn (array $groupUserId): array => [
                     'group_id' => $groupUserId['group_id']->getValue(),
                     'user_id' => $groupUserId['user_id']->getValue(),
                 ],

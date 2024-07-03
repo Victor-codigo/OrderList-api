@@ -76,34 +76,34 @@ class ProductGetDataServiceTest extends TestCase
         $this->assertContainsEquals(
             $productDataActual['id'],
             array_map(
-                fn (Product $product) => $product->getId()->getValue(),
+                fn (Product $product): ?string => $product->getId()->getValue(),
                 $productsDataExpected
             )
         );
         $this->assertContainsEquals(
             $productDataActual['group_id'],
             array_map(
-                fn (Product $product) => $product->getGroupId()->getValue(),
+                fn (Product $product): ?string => $product->getGroupId()->getValue(),
                 $productsDataExpected
             )
         );
         $this->assertContainsEquals(
             $productDataActual['name'],
             array_map(
-                fn (Product $product) => $product->getName()->getValue(),
+                fn (Product $product): ?string => $product->getName()->getValue(),
                 $productsDataExpected
             )
         );
         $this->assertContainsEquals(
             $productDataActual['description'],
             array_map(
-                fn (Product $product) => $product->getDescription()->getValue(),
+                fn (Product $product): ?string => $product->getDescription()->getValue(),
                 $productsDataExpected
             )
         );
         $this->assertContainsEquals(
             $productDataActual['image'], array_map(
-                fn (Product $product) => $product->getImage()->getValue(),
+                fn (Product $product): ?string => $product->getImage()->getValue(),
                 $productsDataExpected
             )
         );

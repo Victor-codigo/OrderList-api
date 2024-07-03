@@ -136,7 +136,7 @@ class GroupUserAddUseCase extends ServiceBase
         $usersData = $this->getUserByNameOrFail($users);
 
         return array_map(
-            fn (array $userData) => ValueObjectFactory::createIdentifier($userData['id']),
+            fn (array $userData): Identifier => ValueObjectFactory::createIdentifier($userData['id']),
             $usersData
         );
     }
@@ -163,7 +163,7 @@ class GroupUserAddUseCase extends ServiceBase
     private function createNotificationGroupUserAdded(array $usersGroupToNotify, Group $group, UserShared $userSession, string $systemKey): void
     {
         $notificationData = ModuleCommunicationFactory::notificationCreateGroupUserAdded(
-            array_map(fn (UserGroup $userGroup) => $userGroup->getUserId(), $usersGroupToNotify),
+            array_map(fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(), $usersGroupToNotify),
             $group->getName(),
             $userSession->getName(),
             $systemKey
@@ -191,7 +191,7 @@ class GroupUserAddUseCase extends ServiceBase
     private function createGroupUserAddOutputDto(array $usersId): GroupUserAddOutputDto
     {
         $users = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(),
             $usersId
         );
 

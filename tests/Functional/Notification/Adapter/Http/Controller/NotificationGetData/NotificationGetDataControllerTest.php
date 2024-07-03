@@ -30,9 +30,9 @@ class NotificationGetDataControllerTest extends WebClientTestCase
 
     private function assertNotificationIsCorrect(object $notificationData, array $notificationsDataExpected): void
     {
-        $notificationsExpectedIds = array_map(fn (Notification $notification) => $notification->getId()->getValue(), $notificationsDataExpected);
-        $notificationsExpectedUsersIds = array_map(fn (Notification $notification) => $notification->getUserId()->getValue(), $notificationsDataExpected);
-        $notificationsExpectedViewed = array_map(fn (Notification $notification) => $notification->getViewed(), $notificationsDataExpected);
+        $notificationsExpectedIds = array_map(fn (Notification $notification): ?string => $notification->getId()->getValue(), $notificationsDataExpected);
+        $notificationsExpectedUsersIds = array_map(fn (Notification $notification): ?string => $notification->getUserId()->getValue(), $notificationsDataExpected);
+        $notificationsExpectedViewed = array_map(fn (Notification $notification): bool => $notification->getViewed(), $notificationsDataExpected);
 
         $this->assertTrue(property_exists($notificationData, 'id'));
         $this->assertTrue(property_exists($notificationData, 'user_id'));

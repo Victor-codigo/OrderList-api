@@ -24,11 +24,11 @@ class OrderRemoveAllGroupsOrdersOutputDto implements ApplicationOutputInterface
     public function toArray(): array
     {
         $ordersIdRemoved = array_map(
-            fn (Identifier $orderId) => $orderId->getValue(),
+            fn (Identifier $orderId): ?string => $orderId->getValue(),
             $this->ordersIdRemoved
         );
         $ordersIdUserChanged = array_map(
-            fn (Identifier $orderId) => $orderId->getValue(),
+            fn (Identifier $orderId): ?string => $orderId->getValue(),
             $this->ordersIdUserIdChanged
         );
 

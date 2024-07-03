@@ -236,7 +236,7 @@ class ListOrdersGetPriceServiceTest extends TestCase
     private function getOrdersProductsId(array $orders): array
     {
         return array_map(
-            fn (Order $order) => $order->getProductId(),
+            fn (Order $order): Identifier => $order->getProductId(),
             $orders
         );
     }
@@ -249,7 +249,7 @@ class ListOrdersGetPriceServiceTest extends TestCase
     private function getOrdersShopsId(array $orders): array
     {
         return array_map(
-            fn (Order $order) => $order->getShopId(),
+            fn (Order $order): Identifier => $order->getShopId(),
             $orders
         );
     }

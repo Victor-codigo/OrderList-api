@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Notification\Application\NotificationRemove;
 
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Exception;
 use Common\Domain\Config\AppConfig;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
@@ -88,7 +89,7 @@ class NotificationRemoveUseCase extends ServiceBase
     private function createNotificationRemoveDto(array $notifications): NotificationRemoveDto
     {
         $notificationsId = array_map(
-            fn (Notification $notification) => $notification->getId(),
+            fn (Notification $notification): Identifier => $notification->getId(),
             $notifications
         );
 
@@ -101,7 +102,7 @@ class NotificationRemoveUseCase extends ServiceBase
     private function createNotificationRemoveOutputDto(array $notifications): NotificationRemoveOutputDto
     {
         $notificationsId = array_map(
-            fn (Notification $notification) => $notification->getId(),
+            fn (Notification $notification): Identifier => $notification->getId(),
             $notifications
         );
 

@@ -22,7 +22,7 @@ class ProductRemoveAllGroupsProductsOutputDto implements ApplicationOutputInterf
     public function toArray(): array
     {
         $productsIds = array_map(
-            fn (Identifier $productId) => $productId->getValue(),
+            fn (Identifier $productId): ?string => $productId->getValue(),
             $this->productsId
         );
 

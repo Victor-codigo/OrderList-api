@@ -74,7 +74,7 @@ class GeUsersPublicDataService
     {
         $usersValid = array_filter(
             $users,
-            fn ($user) => $user instanceof Identifier || $user instanceof NameWithSpaces
+            fn ($user): bool => $user instanceof Identifier || $user instanceof NameWithSpaces
         );
 
         if (count($usersValid) !== count($users)) {
@@ -89,7 +89,7 @@ class GeUsersPublicDataService
     {
         $usersValid = array_values(array_filter(
             $users,
-            fn (User $user) => !$user->getRoles()->has(new Rol(USER_ROLES::NOT_ACTIVE))
+            fn (User $user): bool => !$user->getRoles()->has(new Rol(USER_ROLES::NOT_ACTIVE))
                             && !$user->getRoles()->has(new Rol(USER_ROLES::DELETED))
         ));
 

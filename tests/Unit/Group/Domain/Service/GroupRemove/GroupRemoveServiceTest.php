@@ -92,7 +92,7 @@ class GroupRemoveServiceTest extends TestCase
             ->expects($this->exactly(count($groupsId)))
             ->method('__invoke')
             ->with(
-                $this->callback(fn (Group $group) => $this->entityImageRemoveServiceConsecutiveCalls($group, $groups)),
+                $this->callback(fn (Group $group): bool => $this->entityImageRemoveServiceConsecutiveCalls($group, $groups)),
                 ValueObjectFactory::createPath(self::PATH_GROUP_IMAGES)
             );
 
@@ -126,7 +126,7 @@ class GroupRemoveServiceTest extends TestCase
             ->expects($this->exactly(count($groups)))
             ->method('__invoke')
             ->with(
-                $this->callback(fn (Group $group) => $this->entityImageRemoveServiceConsecutiveCalls($group, $groups)),
+                $this->callback(fn (Group $group): bool => $this->entityImageRemoveServiceConsecutiveCalls($group, $groups)),
                 ValueObjectFactory::createPath(self::PATH_GROUP_IMAGES)
             )
             ->willThrowException(new DomainInternalErrorException());
@@ -215,7 +215,7 @@ class GroupRemoveServiceTest extends TestCase
             ->expects($this->exactly(count($groups)))
             ->method('__invoke')
             ->with(
-                $this->callback(fn (Group $group) => $this->entityImageRemoveServiceConsecutiveCalls($group, $groups)),
+                $this->callback(fn (Group $group): bool => $this->entityImageRemoveServiceConsecutiveCalls($group, $groups)),
                 ValueObjectFactory::createPath(self::PATH_GROUP_IMAGES)
             );
 

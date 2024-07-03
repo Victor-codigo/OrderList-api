@@ -68,7 +68,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                     'price' => self::PRICES[$index],
                     'unit' => self::UNITS[$index]->value,
                 ],
-                array_map(fn (stdClass $productShop) => (array) $productShop, $responseContent->data)
+                array_map(fn (stdClass $productShop): array => (array) $productShop, $responseContent->data)
             );
         }
     }
@@ -105,7 +105,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
                     'price' => self::PRICES[$index],
                     'unit' => self::UNITS[$index]->value,
                 ],
-                array_map(fn (stdClass $productShop) => (array) $productShop, $responseContent->data)
+                array_map(fn (stdClass $productShop): array => (array) $productShop, $responseContent->data)
             );
         }
     }

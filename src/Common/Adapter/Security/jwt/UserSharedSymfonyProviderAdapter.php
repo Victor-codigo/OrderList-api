@@ -72,7 +72,7 @@ class UserSharedSymfonyProviderAdapter implements UserProviderInterface
     private function createUserSharedSymfonyAdapter(array $userData): UserSharedSymfonyAdapter
     {
         $roles = array_map(
-            fn (string $rolPlain) => USER_ROLES::tryFrom($rolPlain),
+            fn (string $rolPlain): ?USER_ROLES => USER_ROLES::tryFrom($rolPlain),
             $userData['roles']
         );
 

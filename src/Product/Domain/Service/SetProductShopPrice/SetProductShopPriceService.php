@@ -154,7 +154,7 @@ class SetProductShopPriceService
     private function createProductShopsToAdd(Identifier $groupId, array $productsShopsDb, array $productsId, array $shopsId, array $prices, array $units): array
     {
         $productsIdAndShopsIdPrices = array_map(
-            fn (Identifier $productId, Identifier $shopId, Money $price, UnitMeasure $unit) => ['productId' => $productId, 'shopId' => $shopId, 'price' => $price, 'unit' => $unit],
+            fn (Identifier $productId, Identifier $shopId, Money $price, UnitMeasure $unit): array => ['productId' => $productId, 'shopId' => $shopId, 'price' => $price, 'unit' => $unit],
             $productsId, $shopsId, $prices, $units
         );
 
@@ -252,7 +252,7 @@ class SetProductShopPriceService
     {
         return array_combine(
             array_map(
-                fn (Product|Shop $shop) => $shop->getId()->getValue(),
+                fn (Product|Shop $shop): ?string => $shop->getId()->getValue(),
                 $productsOrShops
             ),
             $productsOrShops

@@ -22,7 +22,7 @@ class OrderRemoveOutputDto implements ApplicationOutputInterface
     public function toArray(): array
     {
         $ordersIdPlain = array_map(
-            fn (Order $orderId) => $orderId->getId()->getValue(),
+            fn (Order $orderId): ?string => $orderId->getId()->getValue(),
             $this->ordersId
         );
 

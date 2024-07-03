@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Domain\NotificationRemoveAllUserNotifications;
 
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Override;
 use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
@@ -69,7 +70,7 @@ class NotificationRemoveAllUserNotificationsServiceTest extends TestCase
     private function getNotificationsId(array $notifications): array
     {
         return array_map(
-            fn (Notification $notification) => $notification->getId(),
+            fn (Notification $notification): Identifier => $notification->getId(),
             $notifications
         );
     }

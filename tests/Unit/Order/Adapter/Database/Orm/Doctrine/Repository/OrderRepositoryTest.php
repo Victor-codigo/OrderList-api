@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Adapter\Database\Orm\Doctrine\Repository;
 
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
@@ -503,11 +504,11 @@ class OrderRepositoryTest extends DataBaseTestCase
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
         $listOrdersId = ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID);
         $productsId = array_map(
-            fn (array $productAndShopId) => ValueObjectFactory::createIdentifier($productAndShopId['productId']),
+            fn (array $productAndShopId): Identifier => ValueObjectFactory::createIdentifier($productAndShopId['productId']),
             array_slice(self::PRODUCTS_AND_SHOPS_ID, 0, 3, false)
         );
         $shopId = array_map(
-            fn (array $productAndShopId) => ValueObjectFactory::createIdentifier($productAndShopId['shopId']),
+            fn (array $productAndShopId): Identifier => ValueObjectFactory::createIdentifier($productAndShopId['shopId']),
             array_slice(self::PRODUCTS_AND_SHOPS_ID, 0, 3, false)
         );
 
@@ -523,7 +524,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
         $listOrdersId = ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID);
         $productsId = array_map(
-            fn (array $productAndShopId) => ValueObjectFactory::createIdentifier($productAndShopId['productId']),
+            fn (array $productAndShopId): Identifier => ValueObjectFactory::createIdentifier($productAndShopId['productId']),
             self::PRODUCTS_AND_SHOPS_ID
         );
         $shopId = [];

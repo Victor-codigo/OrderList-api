@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Validation;
 
+use Symfony\Component\Validator\Constraint;
 use Common\Adapter\Validation\Validations\ValidationConstraint;
 use Common\Domain\Validation\Common\CONSTRAINTS_NAMES;
 use Common\Domain\Validation\ValidationInterface;
@@ -55,7 +56,7 @@ class Validator
     {
         $errorList = [];
         $constraints = array_map(
-            fn (ValidationConstraint $v) => $v->constraint,
+            fn (ValidationConstraint $v): Constraint => $v->constraint,
             $this->constraints
         );
 

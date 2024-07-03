@@ -25,7 +25,7 @@ class NotificationRemoveInputDto implements ServiceInputDtoInterface
         $this->notificationIds = null === $notificationsId
             ? []
             : array_map(
-                fn (string $notificationId) => ValueObjectFactory::createIdentifier($notificationId),
+                fn (string $notificationId): Identifier => ValueObjectFactory::createIdentifier($notificationId),
                 $notificationsId
             );
     }

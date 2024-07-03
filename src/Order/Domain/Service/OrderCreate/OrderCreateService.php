@@ -49,7 +49,7 @@ class OrderCreateService
         $this->productAndShopAreNotRepeatedOrFail($input->groupId, $input->listOrdersId, $products, $shops);
 
         $orders = array_map(
-            fn (OrderDataServiceDto $order) => $this->createOrder($input->groupId, $order, $listOrders, $products, $shops),
+            fn (OrderDataServiceDto $order): Order => $this->createOrder($input->groupId, $order, $listOrders, $products, $shops),
             $input->orders
         );
 
@@ -67,11 +67,11 @@ class OrderCreateService
     private function productAndShopAreNotRepeatedOrFail(Identifier $groupId, Identifier $listOrdersId, array $products, array $shops): void
     {
         $productsId = array_values(array_map(
-            fn (Product $product) => $product->getId(),
+            fn (Product $product): Identifier => $product->getId(),
             $products
         ));
         $shopsId = array_values(array_map(
-            fn (Shop $shop) => $shop->getId(),
+            fn (Shop $shop): Identifier => $shop->getId(),
             $shops
         ));
 
@@ -108,7 +108,7 @@ class OrderCreateService
     private function getProducts(Identifier $groupId, array $orders): array
     {
         $productsId = array_map(
-            fn (OrderDataServiceDto $order) => $order->productId,
+            fn (OrderDataServiceDto $order): Identifier => $order->productId,
             $orders
         );
 
@@ -122,7 +122,7 @@ class OrderCreateService
             }
 
             return array_combine(
-                array_map(fn (Product $product) => $product->getId()->getValue(), $products),
+                array_map(fn (Product $product): ?string => $product->getId()->getValue(), $products),
                 $products
             );
         } catch (DBNotFoundException) {
@@ -138,7 +138,7 @@ class OrderCreateService
     private function getShops(Identifier $groupId, array $orders): array
     {
         $shopsId = array_map(
-            fn (OrderDataServiceDto $order) => $order->shopId->toIdentifier(),
+            fn (OrderDataServiceDto $order): Identifier => $order->shopId->toIdentifier(),
             $orders
         );
 
@@ -153,13 +153,13 @@ class OrderCreateService
             }
 
             return array_combine(
-                array_map(fn (Shop $shop) => $shop->getId()->getValue(), $shops),
+                array_map(fn (Shop $shop): ?string => $shop->getId()->getValue(), $shops),
                 $shops
             );
         } catch (DBNotFoundException) {
             $shopsIdNotNull = array_filter(
                 $shopsId,
-                fn (Identifier $shopId) => !$shopId->isNull(),
+                fn (Identifier $shopId): bool => !$shopId->isNull(),
             );
 
             if (empty($shopsIdNotNull)) {

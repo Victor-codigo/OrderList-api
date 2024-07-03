@@ -52,7 +52,7 @@ class OrderRemoveAllGroupsOrdersService
             foreach ($ordersPaginator->getAllPages(self::ORDERS_PAGINATOR_PAGE_ITEMS) as $ordersIterator) {
                 $orders = iterator_to_array($ordersIterator);
                 $ordersIdRemoved[] = array_map(
-                    fn (Order $order) => $order->getId(),
+                    fn (Order $order): Identifier => $order->getId(),
                     $orders
                 );
 
@@ -76,16 +76,16 @@ class OrderRemoveAllGroupsOrdersService
     {
         try {
             $groupsId = array_map(
-                fn (array $groupIdAndAdminId) => $groupIdAndAdminId['group_id'],
+                fn (array $groupIdAndAdminId): Identifier => $groupIdAndAdminId['group_id'],
                 $groupsIdAndAdminId
             );
             $groupsIdAndAdminIdIndexedByGroupId = array_combine(
                 array_map(
-                    fn (Identifier $groupId) => $groupId->getValue(),
+                    fn (Identifier $groupId): ?string => $groupId->getValue(),
                     $groupsId
                 ),
                 array_map(
-                    fn (array $groupIdAndAdminId) => $groupIdAndAdminId['admin'],
+                    fn (array $groupIdAndAdminId): Identifier => $groupIdAndAdminId['admin'],
                     $groupsIdAndAdminId
                 ),
             );
@@ -95,7 +95,7 @@ class OrderRemoveAllGroupsOrdersService
             foreach ($ordersPaginator->getAllPages(self::ORDERS_PAGINATOR_PAGE_ITEMS) as $orderIterator) {
                 $orders = iterator_to_array($orderIterator);
                 $ordersIdChangedUserId[] = array_map(
-                    fn (Order $order) => $order->getId(),
+                    fn (Order $order): Identifier => $order->getId(),
                     $orders
                 );
 

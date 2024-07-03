@@ -38,7 +38,7 @@ class ListOrdersGetDataInputDto implements ServiceInputDtoInterface
         $this->userSession = $userShared;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
         $this->listOrdersId = array_map(
-            fn (string $listOrderId) => ValueObjectFactory::createIdentifier($listOrderId),
+            fn (string $listOrderId): Identifier => ValueObjectFactory::createIdentifier($listOrderId),
             $listOrdersIds ?? []
         );
         $this->orderAsc = $orderAsc;

@@ -58,7 +58,7 @@ class SetProductShopPriceServiceTest extends TestCase
     private function getIdentifier(array $ids): array
     {
         return array_map(
-            fn (string $id) => ValueObjectFactory::createIdentifier($id),
+            fn (string $id): Identifier => ValueObjectFactory::createIdentifier($id),
             $ids
         );
     }
@@ -69,7 +69,7 @@ class SetProductShopPriceServiceTest extends TestCase
     private function getPrices(array $prices): array
     {
         return array_map(
-            fn (float $price) => ValueObjectFactory::createMoney($price),
+            fn (float $price): Money => ValueObjectFactory::createMoney($price),
             $prices
         );
     }
@@ -80,7 +80,7 @@ class SetProductShopPriceServiceTest extends TestCase
     private function getUnits(array $units): array
     {
         return array_map(
-            fn (UNIT_MEASURE_TYPE $unit) => ValueObjectFactory::createUnit($unit),
+            fn (UNIT_MEASURE_TYPE $unit): UnitMeasure => ValueObjectFactory::createUnit($unit),
             $units
         );
     }
@@ -130,7 +130,7 @@ class SetProductShopPriceServiceTest extends TestCase
     private function createProductsShops(array $products, array $shops, array $prices, array $units): array
     {
         return array_map(
-            fn (Product $product, int $index) => new ProductShop($product, $shops[$index], $prices[$index], $units[$index]),
+            fn (Product $product, int $index): ProductShop => new ProductShop($product, $shops[$index], $prices[$index], $units[$index]),
             $products, array_keys($products)
         );
     }
@@ -247,7 +247,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (array $productShopToSave) => $this->compareProductShop($productShopToSave, $productsShopsNew) || true));
+            ->with($this->callback(fn (array $productShopToSave): true => $this->compareProductShop($productShopToSave, $productsShopsNew) || true));
 
         $input = new SetProductShopPriceDto($groupId, $productNewId, $shopIdNew, $productsIdNew, $pricesNew, $unitsNew);
         $return = $this->object->__invoke($input);
@@ -314,7 +314,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (array $productShopToSave) => $this->compareProductShop($productShopToSave, $productsShopsNew) || true));
+            ->with($this->callback(fn (array $productShopToSave): true => $this->compareProductShop($productShopToSave, $productsShopsNew) || true));
 
         $input = new SetProductShopPriceDto($groupId, $productIdNew, $shopIdNew, $shopsIdNew, $pricesNew, $unitsNew);
         $return = $this->object->__invoke($input);
@@ -380,7 +380,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (array $productShopToSave) => $this->compareProductShop($productShopToSave, $productsShopsNew) || true));
+            ->with($this->callback(fn (array $productShopToSave): true => $this->compareProductShop($productShopToSave, $productsShopsNew) || true));
 
         $input = new SetProductShopPriceDto($groupId, $productIdNew, $shopIdNew, $shopsIdNew, $pricesNew, $unitsNew);
         $return = $this->object->__invoke($input);
@@ -429,7 +429,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('remove')
-            ->with($this->callback(fn (array $productShopToSave) => $this->compareProductShop($productShopToSave, $productsShopsDb) || true));
+            ->with($this->callback(fn (array $productShopToSave): true => $this->compareProductShop($productShopToSave, $productsShopsDb) || true));
 
         $this->productShopRepository
             ->expects($this->once())
@@ -524,12 +524,12 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->productShopRepository
             ->expects($this->once())
             ->method('remove')
-            ->with($this->callback(fn (array $productShopToSave) => $this->compareProductShop($productShopToSave, [$productsShopsDb[2]]) || true));
+            ->with($this->callback(fn (array $productShopToSave): true => $this->compareProductShop($productShopToSave, [$productsShopsDb[2]]) || true));
 
         $this->productShopRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (array $productShopToSave) => $this->compareProductShop($productShopToSave, [$productsShopsDb[0], $productsShopsDb[1], $productsShopsNew[1], $productsShopsNew[3]]) || true));
+            ->with($this->callback(fn (array $productShopToSave): true => $this->compareProductShop($productShopToSave, [$productsShopsDb[0], $productsShopsDb[1], $productsShopsNew[1], $productsShopsNew[3]]) || true));
 
         $input = new SetProductShopPriceDto($groupId, $productIdNew, $shopIdNew, $shopsIdNew, $pricesNew, $unitsNew);
         $return = $this->object->__invoke($input);

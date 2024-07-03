@@ -90,7 +90,7 @@ class ListOrdersModifyServiceTest extends TestCase
         $this->listOrdersToRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (array $listsOrdersActual) => $this->assertListOrdersIsOk([$listOrderExpected], $listsOrdersActual) || true));
+            ->with($this->callback(fn (array $listsOrdersActual): true => $this->assertListOrdersIsOk([$listOrderExpected], $listsOrdersActual) || true));
 
         $this->paginator
             ->expects($this->once())

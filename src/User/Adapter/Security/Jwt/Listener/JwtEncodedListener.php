@@ -35,7 +35,7 @@ class JwtEncodedListener
 
     private function isUserFirstLogin(UserInterface $user): bool
     {
-        $userRolFirstLogin = array_filter($user->getRoles(), fn (string $rol) => $rol === USER_ROLES::USER_FIRST_LOGIN->value);
+        $userRolFirstLogin = array_filter($user->getRoles(), fn (string $rol): bool => $rol === USER_ROLES::USER_FIRST_LOGIN->value);
 
         return empty($userRolFirstLogin) ? false : true;
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Database\Orm\Doctrine\Repository;
 
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
@@ -155,7 +156,7 @@ class UserRepositoryTest extends DataBaseTestCase
         ];
         $return = $this->userRepository->findUsersByIdOrFail($usersId);
         $dbUsersIds = array_map(
-            fn (User $user) => $user->getId(),
+            fn (User $user): Identifier => $user->getId(),
             $return
         );
 
@@ -198,7 +199,7 @@ class UserRepositoryTest extends DataBaseTestCase
         ];
         $return = $this->userRepository->findUsersByNameOrFail($usersName);
         $dbUsersName = array_map(
-            fn (User $user) => $user->getName(),
+            fn (User $user): NameWithSpaces => $user->getName(),
             $return
         );
 

@@ -107,7 +107,7 @@ class GroupUserGetGroupsServiceTest extends TestCase
         $expectedGroupsData = $this->getGroupsData();
         $groupGetDataDto = new GroupGetDataDto(
             array_map(
-                fn (UserGroup $userGroup) => $userGroup->getGroupId(),
+                fn (UserGroup $userGroup): Identifier => $userGroup->getGroupId(),
                 iterator_to_array($expectedUserGroups)
             ),
             null,
@@ -175,7 +175,7 @@ class GroupUserGetGroupsServiceTest extends TestCase
         $expectedGroupsData = $this->getGroupsData();
         $groupGetDataDto = new GroupGetDataDto(
             array_map(
-                fn (UserGroup $userGroup) => $userGroup->getGroupId(),
+                fn (UserGroup $userGroup): Identifier => $userGroup->getGroupId(),
                 iterator_to_array($expectedUserGroups)
             ),
             null,

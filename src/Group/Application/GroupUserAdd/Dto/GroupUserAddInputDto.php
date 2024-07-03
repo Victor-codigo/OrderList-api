@@ -34,7 +34,7 @@ class GroupUserAddInputDto implements ServiceInputDtoInterface
         $this->rol = ValueObjectFactory::createRol($admin ? GROUP_ROLES::ADMIN : GROUP_ROLES::USER);
 
         $this->users = null === $users ? [] : array_map(
-            fn (string $user) => 'name' === $identifierType
+            fn (string $user): NameWithSpaces|Identifier => 'name' === $identifierType
                 ? ValueObjectFactory::createNameWithSpaces($user)
                 : ValueObjectFactory::createIdentifier($user),
             $users

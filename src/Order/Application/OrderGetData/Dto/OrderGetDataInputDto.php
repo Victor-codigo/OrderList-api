@@ -43,7 +43,7 @@ class OrderGetDataInputDto implements ServiceInputDtoInterface
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
         $this->listOrdersId = ValueObjectFactory::createIdentifierNullable($listOrdersId);
         $this->ordersId = array_map(
-            fn (string $orderId) => ValueObjectFactory::createIdentifier($orderId),
+            fn (string $orderId): Identifier => ValueObjectFactory::createIdentifier($orderId),
             $ordersId ?? []
         );
         $this->page = ValueObjectFactory::createPaginatorPage($page);

@@ -112,7 +112,7 @@ class ShopGetDataService
         $shopsPaginator->setPagination($page->getValue(), $pageItems->getValue());
 
         return array_map(
-            fn (Shop $shop) => [
+            fn (Shop $shop): array => [
                 'id' => $shop->getId()->getValue(),
                 'group_id' => $shop->getGroupId()->getValue(),
                 'name' => $shop->getName()->getValue(),

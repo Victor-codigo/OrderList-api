@@ -43,7 +43,7 @@ class Roles extends ArrayValueObject
     public static function create(array $roles): static
     {
         $rolesCreated = array_map(
-            fn (USER_ROLES $rol) => new Rol($rol),
+            fn (USER_ROLES $rol): Rol => new Rol($rol),
             $roles
         );
 
@@ -60,7 +60,7 @@ class Roles extends ArrayValueObject
         }
 
         return array_map(
-            fn (Rol $rol) => $rol->getValue(),
+            fn (Rol $rol): ?object => $rol->getValue(),
             $this->value
         );
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserRemove;
 
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
@@ -186,11 +187,11 @@ class UserRemoveUseCaseTest extends TestCase
     private function assertModuleCommunicationConfigDtoIdOk(ModuleCommunicationConfigDto $configActual, ResponseDto $removeGroupsResponse, InvokedCount $moduleCommunicationMatcher): bool
     {
         $groupsIdRemoved = array_map(
-            fn (string $groupId) => ValueObjectFactory::createIdentifier($groupId),
+            fn (string $groupId): Identifier => ValueObjectFactory::createIdentifier($groupId),
             $removeGroupsResponse->data['groups_id_removed']
         );
         $groupsIdUserRemoved = array_map(
-            fn (string $groupId) => ValueObjectFactory::createIdentifier($groupId),
+            fn (string $groupId): Identifier => ValueObjectFactory::createIdentifier($groupId),
             $removeGroupsResponse->data['groups_id_user_removed']
         );
 
@@ -235,7 +236,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($moduleCommunicationMatcher)
             ->method('__invoke')
-            ->with($this->callback(fn (ModuleCommunicationConfigDto $config) => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
+            ->with($this->callback(fn (ModuleCommunicationConfigDto $config): bool => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
             ->willReturnOnConsecutiveCalls(
                 $removeGroupsResponse,
                 $removeNotificationsResponse,
@@ -278,8 +279,8 @@ class UserRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($moduleCommunicationMatcher)
             ->method('__invoke')
-            ->with($this->callback(fn (ModuleCommunicationConfigDto $config) => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
-            ->willReturnCallback(fn() => match ($moduleCommunicationMatcher->getInvocationCount()) {
+            ->with($this->callback(fn (ModuleCommunicationConfigDto $config): bool => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
+            ->willReturnCallback(fn(): ResponseDto => match ($moduleCommunicationMatcher->getInvocationCount()) {
                 1 => $removeGroupsResponse ,
                 2 => $removeNotificationsResponse,
             });
@@ -314,7 +315,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($moduleCommunicationMatcher)
             ->method('__invoke')
-            ->with($this->callback(fn (ModuleCommunicationConfigDto $config) => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
+            ->with($this->callback(fn (ModuleCommunicationConfigDto $config): bool => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
             ->willReturn($removeGroupsResponse);
 
         $this->userSession
@@ -339,7 +340,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($moduleCommunicationMatcher)
             ->method('__invoke')
-            ->with($this->callback(fn (ModuleCommunicationConfigDto $config) => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
+            ->with($this->callback(fn (ModuleCommunicationConfigDto $config): bool => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
             ->willReturn($removeGroupsResponse);
 
         $this->userSession
@@ -366,7 +367,7 @@ class UserRemoveUseCaseTest extends TestCase
             ->expects($moduleCommunicationMatcher)
             ->method('__invoke')
             ->with($this->callback(
-                fn (ModuleCommunicationConfigDto $config) => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher))
+                fn (ModuleCommunicationConfigDto $config): bool => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher))
             )
             ->willReturnOnConsecutiveCalls(
                 $removeGroupsResponse,
@@ -397,7 +398,7 @@ class UserRemoveUseCaseTest extends TestCase
             ->expects($moduleCommunicationMatcher)
             ->method('__invoke')
             ->with($this->callback(
-                fn (ModuleCommunicationConfigDto $config) => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher))
+                fn (ModuleCommunicationConfigDto $config): bool => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher))
             )
             ->willReturnOnConsecutiveCalls(
                 $removeGroupsResponse,
@@ -428,7 +429,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($moduleCommunicationMatcher)
             ->method('__invoke')
-            ->with($this->callback(fn (ModuleCommunicationConfigDto $config) => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
+            ->with($this->callback(fn (ModuleCommunicationConfigDto $config): bool => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
             ->willReturnOnConsecutiveCalls(
                 $removeGroupsResponse,
                 $removeNotificationsResponse,
@@ -459,7 +460,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($moduleCommunicationMatcher)
             ->method('__invoke')
-            ->with($this->callback(fn (ModuleCommunicationConfigDto $config) => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
+            ->with($this->callback(fn (ModuleCommunicationConfigDto $config): bool => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
             ->willReturnOnConsecutiveCalls(
                 $removeGroupsResponse,
                 $removeNotificationsResponse,
@@ -491,7 +492,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($moduleCommunicationMatcher)
             ->method('__invoke')
-            ->with($this->callback(fn (ModuleCommunicationConfigDto $config) => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
+            ->with($this->callback(fn (ModuleCommunicationConfigDto $config): bool => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
             ->willReturnOnConsecutiveCalls(
                 $removeGroupsResponse,
                 $removeNotificationsResponse,
@@ -524,7 +525,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($moduleCommunicationMatcher)
             ->method('__invoke')
-            ->with($this->callback(fn (ModuleCommunicationConfigDto $config) => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
+            ->with($this->callback(fn (ModuleCommunicationConfigDto $config): bool => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
             ->willReturnOnConsecutiveCalls(
                 $removeGroupsResponse,
                 $removeNotificationsResponse,
@@ -558,7 +559,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($moduleCommunicationMatcher)
             ->method('__invoke')
-            ->with($this->callback(fn (ModuleCommunicationConfigDto $config) => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
+            ->with($this->callback(fn (ModuleCommunicationConfigDto $config): bool => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
             ->willReturnOnConsecutiveCalls(
                 $removeGroupsResponse,
                 $removeNotificationsResponse,
@@ -593,7 +594,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($moduleCommunicationMatcher)
             ->method('__invoke')
-            ->with($this->callback(fn (ModuleCommunicationConfigDto $config) => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
+            ->with($this->callback(fn (ModuleCommunicationConfigDto $config): bool => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
             ->willReturnOnConsecutiveCalls(
                 $removeGroupsResponse,
                 $removeNotificationsResponse,
@@ -629,7 +630,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($moduleCommunicationMatcher)
             ->method('__invoke')
-            ->with($this->callback(fn (ModuleCommunicationConfigDto $config) => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
+            ->with($this->callback(fn (ModuleCommunicationConfigDto $config): bool => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
             ->willReturnOnConsecutiveCalls(
                 $removeGroupsResponse,
                 $removeNotificationsResponse,
@@ -666,7 +667,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($moduleCommunicationMatcher)
             ->method('__invoke')
-            ->with($this->callback(fn (ModuleCommunicationConfigDto $config) => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
+            ->with($this->callback(fn (ModuleCommunicationConfigDto $config): bool => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
             ->willReturnOnConsecutiveCalls(
                 $removeGroupsResponse,
                 $removeNotificationsResponse,
@@ -704,7 +705,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($moduleCommunicationMatcher)
             ->method('__invoke')
-            ->with($this->callback(fn (ModuleCommunicationConfigDto $config) => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
+            ->with($this->callback(fn (ModuleCommunicationConfigDto $config): bool => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
             ->willReturnOnConsecutiveCalls(
                 $removeGroupsResponse,
                 $removeNotificationsResponse,
@@ -749,7 +750,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($moduleCommunicationMatcher)
             ->method('__invoke')
-            ->with($this->callback(fn (ModuleCommunicationConfigDto $config) => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
+            ->with($this->callback(fn (ModuleCommunicationConfigDto $config): bool => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
             ->willReturnOnConsecutiveCalls(
                 $removeGroupsResponse,
                 $removeNotificationsResponse,

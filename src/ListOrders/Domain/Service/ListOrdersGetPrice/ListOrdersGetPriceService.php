@@ -49,11 +49,11 @@ class ListOrdersGetPriceService
     private function getProductsShopsPrices(array $orders, Identifier $groupId): iterable
     {
         $productsId = array_map(
-            fn (Order $order) => $order->getProductId(),
+            fn (Order $order): Identifier => $order->getProductId(),
             $orders
         );
         $shopsId = array_map(
-            fn (Order $order) => $order->getShopId(),
+            fn (Order $order): Identifier => $order->getShopId(),
             $orders
         );
 
@@ -68,7 +68,7 @@ class ListOrdersGetPriceService
     {
         $totalPrice = array_reduce(
             $orders,
-            fn (float $total, Order $order) => $total + $this->calculateOrderPrice($order, $productsShops, $bought),
+            fn (float $total, Order $order): float => $total + $this->calculateOrderPrice($order, $productsShops, $bought),
             0
         );
 
@@ -98,7 +98,7 @@ class ListOrdersGetPriceService
     {
         $productShop = array_filter(
             $productsShops,
-            fn (ProductShop $productShop) => $productShop->getProductId()->equalTo($productId)
+            fn (ProductShop $productShop): bool => $productShop->getProductId()->equalTo($productId)
                                          && $productShop->getShopId()->equalTo($shopId)
         );
 

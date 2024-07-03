@@ -153,7 +153,7 @@ class GroupGetUsersServiceTest extends TestCase
     {
         return new ResponseDto(
             array_map(
-                fn (array $user) => [
+                fn (array $user): array => [
                     'id' => $user['id'],
                     'name' => $user['name'],
                     'image' => null === $user['image']

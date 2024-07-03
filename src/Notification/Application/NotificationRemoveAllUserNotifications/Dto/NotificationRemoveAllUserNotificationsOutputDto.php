@@ -22,7 +22,7 @@ class NotificationRemoveAllUserNotificationsOutputDto implements ApplicationOutp
     public function toArray(): array
     {
         return array_map(
-            fn (Identifier $notificationId) => $notificationId->getValue(),
+            fn (Identifier $notificationId): ?string => $notificationId->getValue(),
             $this->notificationsRemovedId
         );
     }

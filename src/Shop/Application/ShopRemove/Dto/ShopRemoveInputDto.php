@@ -25,7 +25,7 @@ class ShopRemoveInputDto implements ServiceInputDtoInterface
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
         $this->shopsId = array_map(
-            fn (string $shopId) => ValueObjectFactory::createIdentifier($shopId),
+            fn (string $shopId): Identifier => ValueObjectFactory::createIdentifier($shopId),
             $shopsId ?? []
         );
     }

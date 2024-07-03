@@ -65,7 +65,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
     private function getOrdersIdentifiers(): array
     {
         return array_map(
-            fn (string $orderId) => ValueObjectFactory::createIdentifier($orderId),
+            fn (string $orderId): Identifier => ValueObjectFactory::createIdentifier($orderId),
             self::ORDERS_ID
         );
     }
@@ -271,7 +271,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
     private function getShopsId(array $orders): array
     {
         return array_map(
-            fn (Order $order) => $order->getShopId(),
+            fn (Order $order): Identifier => $order->getShopId(),
             $orders
         );
     }

@@ -46,11 +46,11 @@ class GroupGetDataControllerTest extends WebClientTestCase
 
         $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
-        $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
-        $groupsType = array_map(fn (Group $group) => $group->getType()->getValue(), $groups);
-        $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
-        $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
-        $groupsImage = array_map(fn (Group $group) => "{$appProtocolAndDomain}{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
+        $groupsId = array_map(fn (Group $group): ?string => $group->getId()->getValue(), $groups);
+        $groupsType = array_map(fn (Group $group): ?object => $group->getType()->getValue(), $groups);
+        $groupsName = array_map(fn (Group $group): ?string => $group->getName()->getValue(), $groups);
+        $groupsDescription = array_map(fn (Group $group): ?string => $group->getDescription()->getValue(), $groups);
+        $groupsImage = array_map(fn (Group $group): string => "{$appProtocolAndDomain}{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
 
         $client->request(
             method: self::METHOD,
@@ -97,10 +97,10 @@ class GroupGetDataControllerTest extends WebClientTestCase
 
         $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
-        $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
-        $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
-        $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
-        $groupsImage = array_map(fn (Group $group) => "{$appProtocolAndDomain}{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
+        $groupsId = array_map(fn (Group $group): ?string => $group->getId()->getValue(), $groups);
+        $groupsName = array_map(fn (Group $group): ?string => $group->getName()->getValue(), $groups);
+        $groupsDescription = array_map(fn (Group $group): ?string => $group->getDescription()->getValue(), $groups);
+        $groupsImage = array_map(fn (Group $group): string => "{$appProtocolAndDomain}{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
         $groups50Id = array_merge(array_fill(0, 47, $groupsId[0]), $groupsId);
 
         $client->request(
@@ -141,10 +141,10 @@ class GroupGetDataControllerTest extends WebClientTestCase
 
         $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
-        $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
-        $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
-        $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
-        $groupsImage = array_map(fn (Group $group) => "{$appProtocolAndDomain}{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
+        $groupsId = array_map(fn (Group $group): ?string => $group->getId()->getValue(), $groups);
+        $groupsName = array_map(fn (Group $group): ?string => $group->getName()->getValue(), $groups);
+        $groupsDescription = array_map(fn (Group $group): ?string => $group->getDescription()->getValue(), $groups);
+        $groupsImage = array_map(fn (Group $group): string => "{$appProtocolAndDomain}{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
         $groups50Id = array_merge(array_fill(0, 48, $groupsId[0]), $groupsId);
 
         $client->request(
@@ -185,10 +185,10 @@ class GroupGetDataControllerTest extends WebClientTestCase
 
         $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
-        $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
-        $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
-        $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
-        $groupsImage = array_map(fn (Group $group) => "{$appProtocolAndDomain}{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
+        $groupsId = array_map(fn (Group $group): ?string => $group->getId()->getValue(), $groups);
+        $groupsName = array_map(fn (Group $group): ?string => $group->getName()->getValue(), $groups);
+        $groupsDescription = array_map(fn (Group $group): ?string => $group->getDescription()->getValue(), $groups);
+        $groupsImage = array_map(fn (Group $group): string => "{$appProtocolAndDomain}{$patImageGroup}/{$group->getImage()->getValue()}", $groups);
 
         $client->request(
             method: self::METHOD,
@@ -241,7 +241,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
     {
         $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
-        $groupsId = array_map(fn (Group $group) => $group->getId()->getValue().'-', $groups);
+        $groupsId = array_map(fn (Group $group): string => $group->getId()->getValue().'-', $groups);
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -264,7 +264,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
     {
         $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
-        $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
+        $groupsId = array_map(fn (Group $group): ?string => $group->getId()->getValue(), $groups);
 
         $client = $this->getNewClientAuthenticated(self::GROUP_USER_ONLY_GROUP_EMAIL, self::GROUP_USER_ONLY_GROUP_PASSWORD);
         $client->request(
@@ -284,7 +284,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
     public function itShouldFailGroupsIdsAreNotRegisteredGroupsId(): void
     {
         $groups = $this->getGroupsDoNotExitsData();
-        $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
+        $groupsId = array_map(fn (Group $group): ?string => $group->getId()->getValue(), $groups);
 
         $client = $this->getNewClientAuthenticatedAdmin();
         $client->request(

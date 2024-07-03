@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Domain\Service\GroupRemoveAllUserGroups;
 
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Generator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Group\Domain\Model\Group;
@@ -52,7 +53,7 @@ class GroupRemoveAllUserGroupsService
         }
 
         $groupsId = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getGroupId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getGroupId(),
             $usersGroups
         );
 

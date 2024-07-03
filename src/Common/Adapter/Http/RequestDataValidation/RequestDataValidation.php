@@ -39,7 +39,7 @@ trait RequestDataValidation
         $valuesValid = $this->validateArrayOverflow($values, $valuesMax);
 
         return array_map(
-            fn ($value) => filter_var($value, FILTER_VALIDATE_FLOAT)
+            fn ($value): mixed => filter_var($value, FILTER_VALIDATE_FLOAT)
                 ? (float) $value
                 : $default,
             $valuesValid ?? []

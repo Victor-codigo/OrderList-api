@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Domain\Service\ShopRemoveAllGroupsShops;
 
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Override;
 use ArrayIterator;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
@@ -85,7 +86,7 @@ class ShopRemoveAllGroupsShopsServiceTest extends TestCase
     private function getShopsId(array $shops): array
     {
         return array_map(
-            fn (Shop $shop) => $shop->getId(),
+            fn (Shop $shop): Identifier => $shop->getId(),
             $shops
         );
     }
@@ -117,7 +118,7 @@ class ShopRemoveAllGroupsShopsServiceTest extends TestCase
             ->expects($this->exactly(count($shops)))
             ->method('__invoke')
             ->with(
-                $this->callback(fn (Shop $shop) => $this->assertContainsEquals($shop, $shops) || true),
+                $this->callback(fn (Shop $shop): true => $this->assertContainsEquals($shop, $shops) || true),
                 $shopImagePath
             );
 
@@ -187,7 +188,7 @@ class ShopRemoveAllGroupsShopsServiceTest extends TestCase
             ->expects($this->once())
             ->method('__invoke')
             ->with(
-                $this->callback(fn (Shop $shop) => $this->assertContainsEquals($shop, $shops) || true),
+                $this->callback(fn (Shop $shop): true => $this->assertContainsEquals($shop, $shops) || true),
                 $shopImagePath
             )
             ->willThrowException(new DomainInternalErrorException());
@@ -226,7 +227,7 @@ class ShopRemoveAllGroupsShopsServiceTest extends TestCase
             ->expects($this->exactly(count($shops)))
             ->method('__invoke')
             ->with(
-                $this->callback(fn (Shop $shop) => $this->assertContainsEquals($shop, $shops) || true),
+                $this->callback(fn (Shop $shop): true => $this->assertContainsEquals($shop, $shops) || true),
                 $shopImagePath
             );
 

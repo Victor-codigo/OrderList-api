@@ -76,10 +76,10 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
     {
         $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
-        $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
-        $groupsType = array_map(fn (Group $group) => $group->getType()->getValue(), $groups);
-        $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
-        $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
+        $groupsId = array_map(fn (Group $group): ?string => $group->getId()->getValue(), $groups);
+        $groupsType = array_map(fn (Group $group): ?object => $group->getType()->getValue(), $groups);
+        $groupsName = array_map(fn (Group $group): ?string => $group->getName()->getValue(), $groups);
+        $groupsDescription = array_map(fn (Group $group): ?string => $group->getDescription()->getValue(), $groups);
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -109,7 +109,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
         $groupsId = [$groups[0]->getId()->getValue()];
-        $groupsType = array_map(fn (Group $group) => $group->getType()->getValue(), $groups);
+        $groupsType = array_map(fn (Group $group): ?object => $group->getType()->getValue(), $groups);
         $groupsName = [$groups[0]->getName()->getValue()];
         $groupsDescription = [$groups[0]->getDescription()->getValue()];
 
@@ -143,10 +143,10 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $filterValue = 'Group';
         $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
-        $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
-        $groupsType = array_map(fn (Group $group) => $group->getType()->getValue(), $groups);
-        $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
-        $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
+        $groupsId = array_map(fn (Group $group): ?string => $group->getId()->getValue(), $groups);
+        $groupsType = array_map(fn (Group $group): ?object => $group->getType()->getValue(), $groups);
+        $groupsName = array_map(fn (Group $group): ?string => $group->getName()->getValue(), $groups);
+        $groupsDescription = array_map(fn (Group $group): ?string => $group->getDescription()->getValue(), $groups);
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -213,10 +213,10 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $filterValue = 'oup';
         $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
-        $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
-        $groupsType = array_map(fn (Group $group) => $group->getType()->getValue(), $groups);
-        $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
-        $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
+        $groupsId = array_map(fn (Group $group): ?string => $group->getId()->getValue(), $groups);
+        $groupsType = array_map(fn (Group $group): ?object => $group->getType()->getValue(), $groups);
+        $groupsName = array_map(fn (Group $group): ?string => $group->getName()->getValue(), $groups);
+        $groupsDescription = array_map(fn (Group $group): ?string => $group->getDescription()->getValue(), $groups);
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
@@ -278,10 +278,10 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $filterValue = 'Group';
         $groupCreatedOn = new DateTime();
         $groups = $this->getGroupsData($groupCreatedOn);
-        $groupsId = array_map(fn (Group $group) => $group->getId()->getValue(), $groups);
-        $groupsType = array_map(fn (Group $group) => $group->getType()->getValue(), $groups);
-        $groupsName = array_map(fn (Group $group) => $group->getName()->getValue(), $groups);
-        $groupsDescription = array_map(fn (Group $group) => $group->getDescription()->getValue(), $groups);
+        $groupsId = array_map(fn (Group $group): ?string => $group->getId()->getValue(), $groups);
+        $groupsType = array_map(fn (Group $group): ?object => $group->getType()->getValue(), $groups);
+        $groupsName = array_map(fn (Group $group): ?string => $group->getName()->getValue(), $groups);
+        $groupsDescription = array_map(fn (Group $group): ?string => $group->getDescription()->getValue(), $groups);
 
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(

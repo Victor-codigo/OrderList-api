@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Domain\NotificationRemove;
 
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Override;
 use Iterator;
 use ArrayIterator;
@@ -54,7 +55,7 @@ class NotificationRemoveServiceTest extends TestCase
     public function itShouldRemoveNotifications(): void
     {
         $notifications = $this->getNotifications();
-        $notificationsIds = array_map(fn (Notification $notification) => $notification->getId(), iterator_to_array($notifications));
+        $notificationsIds = array_map(fn (Notification $notification): Identifier => $notification->getId(), iterator_to_array($notifications));
         $input = new NotificationRemoveDto($notificationsIds);
 
         $this->paginator
@@ -86,7 +87,7 @@ class NotificationRemoveServiceTest extends TestCase
     public function itShouldFailRemovingNotificationsNotFound(): void
     {
         $notifications = $this->getNotifications();
-        $notificationsIds = array_map(fn (Notification $notification) => $notification->getId(), iterator_to_array($notifications));
+        $notificationsIds = array_map(fn (Notification $notification): Identifier => $notification->getId(), iterator_to_array($notifications));
         $input = new NotificationRemoveDto($notificationsIds);
 
         $this->paginator
@@ -111,7 +112,7 @@ class NotificationRemoveServiceTest extends TestCase
     public function itShouldFailRemovingDatabaseErrorConnection(): void
     {
         $notifications = $this->getNotifications();
-        $notificationsIds = array_map(fn (Notification $notification) => $notification->getId(), iterator_to_array($notifications));
+        $notificationsIds = array_map(fn (Notification $notification): Identifier => $notification->getId(), iterator_to_array($notifications));
         $input = new NotificationRemoveDto($notificationsIds);
 
         $this->paginator

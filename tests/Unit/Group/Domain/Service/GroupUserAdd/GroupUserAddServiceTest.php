@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupUserAdd;
 
+use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\Array\Roles;
 use Override;
 use Exception;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
@@ -49,7 +51,7 @@ class GroupUserAddServiceTest extends TestCase
     private function createGroupUserAddDto(array $usersId): GroupUserAddDto
     {
         $usersIdValueObject = array_map(
-            fn (string $userId) => ValueObjectFactory::createIdentifier($userId),
+            fn (string $userId): Identifier => ValueObjectFactory::createIdentifier($userId),
             $usersId
         );
 
@@ -99,7 +101,7 @@ class GroupUserAddServiceTest extends TestCase
     private function createUserGroupForIds(string $groupId, array $userIds, GROUP_ROLES $rol, Group $group): array
     {
         return array_map(
-            fn (string $userId) => UserGroup::fromPrimitives($groupId, $userId, [$rol], $group),
+            fn (string $userId): UserGroup => UserGroup::fromPrimitives($groupId, $userId, [$rol], $group),
             $userIds
         );
     }
@@ -108,44 +110,44 @@ class GroupUserAddServiceTest extends TestCase
     {
         $this->assertEquals(
             array_map(
-                fn (UserGroup $userGroup) => $userGroup->getGroupId(),
+                fn (UserGroup $userGroup): Identifier => $userGroup->getGroupId(),
                 $expectUsersGroup
             ),
             array_map(
-                fn (UserGroup $userGroup) => $userGroup->getGroupId(),
+                fn (UserGroup $userGroup): Identifier => $userGroup->getGroupId(),
                 $actualUserGroup
             )
         );
 
         $this->assertEquals(
             array_map(
-                fn (UserGroup $userGroup) => $userGroup->getUserId(),
+                fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(),
                 $expectUsersGroup
             ),
             array_map(
-                fn (UserGroup $userGroup) => $userGroup->getUserId(),
+                fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(),
                 $actualUserGroup
             )
         );
 
         $this->assertEquals(
             array_map(
-                fn (UserGroup $userGroup) => $userGroup->getGroup()->getId(),
+                fn (UserGroup $userGroup): Identifier => $userGroup->getGroup()->getId(),
                 $expectUsersGroup
             ),
             array_map(
-                fn (UserGroup $userGroup) => $userGroup->getGroup()->getId(),
+                fn (UserGroup $userGroup): Identifier => $userGroup->getGroup()->getId(),
                 $actualUserGroup
             )
         );
 
         $this->assertEquals(
             array_map(
-                fn (UserGroup $userGroup) => $userGroup->getRoles(),
+                fn (UserGroup $userGroup): Roles => $userGroup->getRoles(),
                 $expectUsersGroup
             ),
             array_map(
-                fn (UserGroup $userGroup) => $userGroup->getRoles(),
+                fn (UserGroup $userGroup): Roles => $userGroup->getRoles(),
                 $actualUserGroup
             )
         );
@@ -170,7 +172,7 @@ class GroupUserAddServiceTest extends TestCase
         $saveMethod = $this->userGroupRepository
             ->expects($this->any())
             ->method('save')
-            ->with($this->callback(fn (array $usersGroupSaved) => $this->assertUserGroupIsEqualToUserGroup($expectUsersGroup, $usersGroupSaved)));
+            ->with($this->callback(fn (array $usersGroupSaved): bool => $this->assertUserGroupIsEqualToUserGroup($expectUsersGroup, $usersGroupSaved)));
 
         if (null !== $saveException) {
             $saveMethod->willThrowException($saveException);

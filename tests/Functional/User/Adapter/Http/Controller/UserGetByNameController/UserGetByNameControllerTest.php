@@ -145,8 +145,8 @@ class UserGetByNameControllerTest extends WebClientTestCase
     {
         $client = $this->getNewClientAuthenticatedUser();
         $userData = $this->getUsersData();
-        $usersNames = array_map(fn (User $user) => $user->getName()->getValue(), $userData);
-        $usersIds = array_map(fn (User $user) => $user->getId()->getValue(), $userData);
+        $usersNames = array_map(fn (User $user): ?string => $user->getName()->getValue(), $userData);
+        $usersIds = array_map(fn (User $user): ?string => $user->getId()->getValue(), $userData);
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.'/'.implode(',', $usersNames),

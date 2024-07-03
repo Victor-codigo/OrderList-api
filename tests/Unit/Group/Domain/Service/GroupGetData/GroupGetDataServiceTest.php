@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupGetData;
 
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -70,7 +71,7 @@ class GroupGetDataServiceTest extends TestCase
     {
         $expectedGroupsData = $this->getGroupsTypeGroupData();
         $groupsId = array_map(
-            fn (Group $group) => $group->getId(),
+            fn (Group $group): Identifier => $group->getId(),
             $expectedGroupsData
         );
         $userImage = ValueObjectFactory::createPath('image.file');
@@ -114,7 +115,7 @@ class GroupGetDataServiceTest extends TestCase
     {
         $expectedGroupsData = $this->getGroupsTypeUserData();
         $groupsId = array_map(
-            fn (Group $group) => $group->getId(),
+            fn (Group $group): Identifier => $group->getId(),
             $expectedGroupsData
         );
         $userImage = ValueObjectFactory::createPath('image.file');
@@ -156,7 +157,7 @@ class GroupGetDataServiceTest extends TestCase
     {
         $expectedGroupsData = $this->getGroupsTypeUndefinedData();
         $groupsId = array_map(
-            fn (Group $group) => $group->getId(),
+            fn (Group $group): Identifier => $group->getId(),
             $expectedGroupsData
         );
         $userImage = ValueObjectFactory::createPath('image.file');
@@ -203,7 +204,7 @@ class GroupGetDataServiceTest extends TestCase
     {
         $expectedGroupsData = $this->getGroupsTypeGroupData();
         $groupsId = array_map(
-            fn (Group $group) => $group->getId(),
+            fn (Group $group): Identifier => $group->getId(),
             $expectedGroupsData
         );
         $userImage = ValueObjectFactory::createPath('image.file');
@@ -224,7 +225,7 @@ class GroupGetDataServiceTest extends TestCase
     {
         $expectedGroupsData = $this->getGroupsTypeGroupData();
         $groupsId = array_map(
-            fn (Group $group) => $group->getId(),
+            fn (Group $group): Identifier => $group->getId(),
             $expectedGroupsData
         );
         $userImage = ValueObjectFactory::createPath('image.file');

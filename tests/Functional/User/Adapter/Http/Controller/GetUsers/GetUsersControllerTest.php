@@ -94,16 +94,16 @@ class GetUsersControllerTest extends WebClientTestCase
         $users = $userRepository->findBy(['id' => $usersIds]);
 
         return [
-            'usersEmails' => array_map(fn (User $user) => $user->getEmail()->getValue(), $users),
-            'usersNames' => array_map(fn (User $user) => $user->getName()->getValue(), $users),
+            'usersEmails' => array_map(fn (User $user): ?string => $user->getEmail()->getValue(), $users),
+            'usersNames' => array_map(fn (User $user): ?string => $user->getName()->getValue(), $users),
             'usersRoles' => array_map(
-                fn (User $user) => array_map(
+                fn (User $user): array => array_map(
                     fn (USER_ROLES $rol) => $rol->value,
                     $user->getRoles()->getRolesEnums()),
                 $users
             ),
             'usersCreatedOn' => array_map(fn (User $user) => $user->getCreatedOn()->format('Y-m-d H:i:s'), $users),
-            'usersImages' => array_map(fn (User $user) => $user->getProfile()->getImage()->getValue(), $users),
+            'usersImages' => array_map(fn (User $user): ?string => $user->getProfile()->getImage()->getValue(), $users),
         ];
     }
 

@@ -56,7 +56,7 @@ class OrderGetDataService
         $orders = iterator_to_array($this->ordersPaginator);
 
         return array_map(
-            fn (Order $order) => $this->getOrderData($order),
+            fn (Order $order): array => $this->getOrderData($order),
             $orders
         );
     }

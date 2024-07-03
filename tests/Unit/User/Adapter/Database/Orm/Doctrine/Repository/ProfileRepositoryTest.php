@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Database\Orm\Doctrine\Repository;
 
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Override;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -38,7 +39,7 @@ class ProfileRepositoryTest extends DataBaseTestCase
         $return = $this->object->findProfilesOrFail($usersId);
 
         $dbProfilesIds = array_map(
-            fn (Profile $profile) => $profile->getId(),
+            fn (Profile $profile): Identifier => $profile->getId(),
             $return
         );
 

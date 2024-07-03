@@ -29,11 +29,11 @@ class ListOrdersRemoveAllGroupsListsOrdersInputDto implements ServiceInputDtoInt
     {
         $this->userSession = $userSession;
         $this->groupsIdToRemove = array_map(
-            fn (string $listOrdersId) => ValueObjectFactory::createIdentifier($listOrdersId),
+            fn (string $listOrdersId): Identifier => ValueObjectFactory::createIdentifier($listOrdersId),
             $groupsIdToRemove ?? []
         );
         $this->groupsIdToChangeUserId = array_map(
-            fn (string $listOrdersId) => ValueObjectFactory::createIdentifier($listOrdersId),
+            fn (string $listOrdersId): Identifier => ValueObjectFactory::createIdentifier($listOrdersId),
             $groupsIdToChangeUserId ?? []
         );
 

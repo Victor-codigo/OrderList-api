@@ -111,7 +111,7 @@ class ShopCreateServiceTest extends TestCase
         $this->shopRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Shop $shop) => $this->assertShopIsCreated($shop, $input, self::IMAGE_UPLOADED_FILE_NAME)));
+            ->with($this->callback(fn (Shop $shop): bool => $this->assertShopIsCreated($shop, $input, self::IMAGE_UPLOADED_FILE_NAME)));
 
         $return = $this->object->__invoke($input);
 
@@ -163,7 +163,7 @@ class ShopCreateServiceTest extends TestCase
         $this->shopRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Shop $shop) => $this->assertShopIsCreated($shop, $input, self::IMAGE_UPLOADED_FILE_NAME)));
+            ->with($this->callback(fn (Shop $shop): bool => $this->assertShopIsCreated($shop, $input, self::IMAGE_UPLOADED_FILE_NAME)));
 
         $return = $this->object->__invoke($input);
 
@@ -215,7 +215,7 @@ class ShopCreateServiceTest extends TestCase
         $this->shopRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Shop $shop) => $this->assertShopIsCreated($shop, $input, self::IMAGE_UPLOADED_FILE_NAME)));
+            ->with($this->callback(fn (Shop $shop): bool => $this->assertShopIsCreated($shop, $input, self::IMAGE_UPLOADED_FILE_NAME)));
 
         $return = $this->object->__invoke($input);
 
@@ -260,7 +260,7 @@ class ShopCreateServiceTest extends TestCase
         $this->shopRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Shop $shop) => $this->assertShopIsCreated($shop, $input, null)));
+            ->with($this->callback(fn (Shop $shop): bool => $this->assertShopIsCreated($shop, $input, null)));
 
         $return = $this->object->__invoke($input);
 
@@ -435,7 +435,7 @@ class ShopCreateServiceTest extends TestCase
         $this->shopRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Shop $shop) => $this->assertShopIsCreated($shop, $input, self::IMAGE_UPLOADED_FILE_NAME)))
+            ->with($this->callback(fn (Shop $shop): bool => $this->assertShopIsCreated($shop, $input, self::IMAGE_UPLOADED_FILE_NAME)))
             ->willThrowException(new DBUniqueConstraintException());
 
         $this->expectException(DBUniqueConstraintException::class);
