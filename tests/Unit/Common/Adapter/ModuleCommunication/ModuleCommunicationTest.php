@@ -189,7 +189,7 @@ class ModuleCommunicationTest extends TestCase
 
                return true;
            }))
-           ->willReturnCallback(function () use ($requestException) {
+           ->willReturnCallback(function () use ($requestException): string {
                if (null === $requestException) {
                    return $this->responseContentExpected;
                }
