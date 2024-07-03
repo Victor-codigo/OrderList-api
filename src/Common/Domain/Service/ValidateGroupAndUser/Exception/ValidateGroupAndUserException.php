@@ -8,7 +8,7 @@ use Common\Domain\Exception\DomainException;
 
 class ValidateGroupAndUserException extends DomainException
 {
-    public static function fromMessage(string $message)
+    public static function fromMessage(string $message): static
     {
         return new static($message);
     }

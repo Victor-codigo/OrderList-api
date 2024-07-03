@@ -25,7 +25,7 @@ class PasswordTest extends TestCase
         $this->validation = new ValidationChain();
     }
 
-    private function createPassword(string|null $password)
+    private function createPassword(string|null $password): Password
     {
         return new Password($password);
     }
