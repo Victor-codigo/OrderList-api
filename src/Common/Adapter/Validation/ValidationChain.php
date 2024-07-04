@@ -393,12 +393,13 @@ class ValidationChain implements ValidationInterface
     public function image(
         mixed $maxSize,
         array|string|null $mimeTypes,
+        ?int $filenameMaxLength = null,
         ?int $minWith = null,
         ?int $maxWith = null,
         ?int $minHeigh = null,
         ?int $maxHeigh = null,
-        ?int $minPixels = null,
-        ?int $maxPixels = null,
+        ?float $minPixels = null,
+        ?float $maxPixels = null,
         ?float $minAspectRatio = null,
         ?float $maxAspectRatio = null,
         bool $allowLandscape = true,
@@ -409,6 +410,7 @@ class ValidationChain implements ValidationInterface
         $this->validator->setConstraint($this->file->image(
             $maxSize,
             $mimeTypes,
+            $filenameMaxLength,
             $minWith,
             $maxWith,
             $minHeigh,

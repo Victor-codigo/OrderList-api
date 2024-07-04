@@ -257,6 +257,7 @@ class ConstraintFactory
     public static function image(
         mixed $maxSize,
         array|string|null $mimeTypes,
+        ?int $filenameMaxLength = null,
         ?int $minWith = null,
         ?int $maxWith = null,
         ?int $minHeigh = null,
@@ -273,7 +274,7 @@ class ConstraintFactory
         return new ConstraintDto(CONSTRAINTS_NAMES::FILE_IMAGE, [
             'maxSize' => $maxSize,
             'mimeTypes' => $mimeTypes,
-            'maxSize' => $maxSize,
+            'filenameMaxLength' => $filenameMaxLength,
             'minWith' => $minWith,
             'maxWith' => $maxWith,
             'minHeigh' => $minHeigh,

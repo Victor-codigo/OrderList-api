@@ -109,7 +109,7 @@ interface ValidationInterface
 
     public function file(mixed $maxSize, array|string|null $mimeTypes): self;
 
-    public function image(mixed $maxSize, array|string|null $mimeTypes, ?int $minWith = null, ?int $maxWith = null, ?int $minHeigh = null, ?int $maxHeigh = null, ?int $minPixels = null, ?int $maxPixels = null, ?float $minAspectRatio = null, ?float $maxAspectRatio = null, bool $allowLandscape = true, bool $allowPortrait = true, bool $allowSquareImage = true, bool $detectCorrupted = false): self;
+    public function image(mixed $maxSize, array|string|null $mimeTypes, ?int $filenameMaxLength = null, ?int $minWith = null, ?int $maxWith = null, ?int $minHeigh = null, ?int $maxHeigh = null, ?float $minPixels = null, ?float $maxPixels = null, ?float $minAspectRatio = null, ?float $maxAspectRatio = null, bool $allowLandscape = true, bool $allowPortrait = true, bool $allowSquareImage = true, bool $detectCorrupted = false): self;
 
     public function choice(?array $choices, ?bool $multiple, ?bool $strict, ?int $min, ?int $max): self;
 }

@@ -54,6 +54,7 @@ final class VALUE_OBJECTS_CONSTRAINTS
      * Constraints for user image.
      */
     public const int FILE_USER_IMAGE_MAX_FILE_SIZE = 2 * 1_000_000;
+    public const ?int FILE_USER_IMAGE_NAME_MAX_LENGTH = null;
     public const ?int FILE_USER_IMAGE_MIN_WITH = null;
     public const ?int FILE_USER_IMAGE_MAX_WITH = null;
     public const ?int FILE_USER_IMAGE_MIN_HEIGH = null;
@@ -81,6 +82,7 @@ final class VALUE_OBJECTS_CONSTRAINTS
      * File size in Bytes.
      */
     public const int FILE_GROUP_IMAGE_MAX_FILE_SIZE = 2 * 1_000_000;
+    public const ?int FILE_GROUP_IMAGE_NAME_MAX_LENGTH = null;
     public const ?int FILE_GROUP_IMAGE_MIN_WITH = null;
     public const ?int FILE_GROUP_IMAGE_MAX_WITH = null;
     public const ?int FILE_GROUP_IMAGE_MIN_HEIGH = null;
@@ -147,6 +149,7 @@ final class VALUE_OBJECTS_CONSTRAINTS
      * File size in Bytes.
      */
     public const int FILE_PRODUCT_IMAGE_MAX_FILE_SIZE = 2 * 1_000_000;
+    public const ?int FILE_PRODUCT_IMAGE_NAME_MAX_LENGTH = null;
     public const ?int FILE_PRODUCT_IMAGE_MIN_WITH = null;
     public const ?int FILE_PRODUCT_IMAGE_MAX_WITH = null;
     public const ?int FILE_PRODUCT_IMAGE_MIN_HEIGH = null;
@@ -170,6 +173,7 @@ final class VALUE_OBJECTS_CONSTRAINTS
      * File size in Bytes.
      */
     public const int FILE_SHOP_IMAGE_MAX_FILE_SIZE = 2 * 1_000_000;
+    public const ?int FILE_SHOP_IMAGE_NAME_MAX_LENGTH = null;
     public const ?int FILE_SHOP_IMAGE_MIN_WITH = null;
     public const ?int FILE_SHOP_IMAGE_MAX_WITH = null;
     public const ?int FILE_SHOP_IMAGE_MIN_HEIGH = null;
