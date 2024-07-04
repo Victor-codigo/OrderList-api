@@ -31,7 +31,6 @@ class ProductRepositoryTest extends DataBaseTestCase
     private const string PRODUCT_ID_2 = '8b6d650b-7bb7-4850-bf25-36cda9bce801';
     private const string PRODUCT_ID_3 = 'ca10c90a-c7e6-4594-89e9-71d2f5e74710';
     private const string PRODUCT_ID_4 = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
-    private const string PRODUCT_NAME_EXISTS = 'Perico';
 
     private ProductRepository $object;
 

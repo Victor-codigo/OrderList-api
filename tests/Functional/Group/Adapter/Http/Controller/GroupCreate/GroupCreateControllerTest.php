@@ -21,7 +21,6 @@ class GroupCreateControllerTest extends WebClientTestCase
     private const string PATH_IMAGE_BACKUP = 'tests/Fixtures/Files/Image.png';
     private const string PATH_IMAGE_NOT_ALLOWED = __DIR__.'/Fixtures/MimeTypeNotAllowed.txt';
     private const string PATH_IMAGE_NOT_ALLOWED_BACKUP = 'tests/Fixtures/Files/MimeTypeNotAllowed.txt';
-    private const string PATH_IMAGES_GROUP_PUBLIC = 'public/assets/img/groups';
     private const string USER_HAS_NO_GROUP_EMAIL = 'email.other_2.active@host.com';
     private const string USER_HAS_NO_GROUP_PASSWORD = '123456';
 

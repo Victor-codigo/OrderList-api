@@ -23,7 +23,6 @@ class ShopRemoveControllerTest extends WebClientTestCase
         'cc7f5dd6-02ba-4bd9-b5c1-5b65d81e59a0',
         'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
     ];
-    private const string PRODUCT_EXISTS_ID = 'afc62bc9-c42c-4c4d-8098-09ce51414a92';
 
     /** @test */
     public function itShouldRemoveShops(): void

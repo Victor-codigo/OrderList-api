@@ -13,7 +13,6 @@ use User\Application\UserRegister\Dto\UserRegisterInputDto;
 
 class UserRegisterInputDtoTest extends TestCase
 {
-    private const string REGISTRATION_KEY = '23db9ca1-1568-473e-8c23-c4613205cf36';
     private const string URL_EMAIL_CONFIRMATION = 'http://www.domain.com/confirmation';
 
     private UserRegisterInputDto $object;

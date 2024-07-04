@@ -31,7 +31,6 @@ class ShopRepositoryTest extends DataBaseTestCase
     private const string SHOP_ID_3 = 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e';
     private const string SHOP_ID_2 = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
     private const string SHOP_ID_4 = 'cc7f5dd6-02ba-4bd9-b5c1-5b65d81e59a0';
-    private const string SHOP_NAME_EXISTS = 'Perico';
 
     private ShopRepository $object;
 

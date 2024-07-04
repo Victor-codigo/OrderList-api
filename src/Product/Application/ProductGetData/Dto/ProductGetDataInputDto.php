@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Product\Application\ProductGetData\Dto;
 
-use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
@@ -17,8 +16,6 @@ use Common\Domain\Validation\ValidationInterface;
 
 class ProductGetDataInputDto implements ServiceInputDtoInterface
 {
-    private const int PRODUCT_NAME_STARTS_BY_LENGTH_MAX = VALUE_OBJECTS_CONSTRAINTS::NAME_WITH_SPACES_MAX_LENGTH;
-
     public readonly Identifier $groupId;
     /**
      * @var Identifier[]

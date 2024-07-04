@@ -35,11 +35,6 @@ class OrderGetDataControllerTest extends WebClientTestCase
         'fad53d41-d396-4f5b-91c3-d30fd6b66845',
     ];
 
-    private const string USER_HAS_NO_GROUP_EMAIL = 'email.other_2.active@host.com';
-    private const string USER_HAS_NO_GROUP_PASSWORD = '123456';
-    private const string GROUP_EXISTS_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const string GROUP_ID_EXISTS_USER_NOT_BELONGS = '4d52266f-aa7e-324e-b92d-6152635dd09e';
-
     private function getOrdersDataExpected(): array
     {
         $appProtocolAndDomain = static::getContainer()->getParameter('common.app.protocolAndDomain');

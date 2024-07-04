@@ -16,8 +16,6 @@ class ProductGetDataControllerTest extends WebClientTestCase
 
     private const string ENDPOINT = '/api/v1/products';
     private const string METHOD = 'GET';
-    private const string USER_HAS_NO_GROUP_EMAIL = 'email.other_2.active@host.com';
-    private const string USER_HAS_NO_GROUP_PASSWORD = '123456';
     private const string GROUP_EXISTS_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const string GROUP_ID_NOT_PERMISSIONS = '0dc4ec43-13c4-31cf-a3a3-aca81e96a4c8';
     private const array PRODUCTS_ID = [
