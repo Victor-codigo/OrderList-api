@@ -104,27 +104,6 @@ class OrderGetDataServiceTest extends DataBaseTestCase
     }
 
     /**
-     * @return Product[]
-     */
-    private function getProductsExpected(): array
-    {
-        $products = $this->getProducts();
-
-        return array_map(
-            function (Product $product): Product {
-                if (!$product->getImage()->isNull()) {
-                    $product->setImage(
-                        ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::PRODUCT_PUBLIC_PATH.'/'.$product->getImage()->getValue())
-                    );
-                }
-
-                return $product;
-            },
-            $products
-        );
-    }
-
-    /**
      * @return Shop[]
      */
     private function getShops(): array
@@ -145,27 +124,6 @@ class OrderGetDataServiceTest extends DataBaseTestCase
                 null
             ),
         ];
-    }
-
-    /**
-     * @return Shop[]
-     */
-    private function getShopsExpected(): array
-    {
-        $shops = $this->getShops();
-
-        return array_map(
-            function (Shop $shop): Shop {
-                if (!$shop->getImage()->isNull()) {
-                    $shop->setImage(
-                        ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::PRODUCT_PUBLIC_PATH.'/'.$shop->getImage()->getValue())
-                    );
-                }
-
-                return $shop;
-            },
-            $shops
-        );
     }
 
     /**
@@ -236,40 +194,6 @@ class OrderGetDataServiceTest extends DataBaseTestCase
 
                 return $order;
             },
-            $orders
-        );
-    }
-
-    private function getProductsShops(): array
-    {
-        $products = $this->getProducts();
-        $shops = $this->getShops();
-
-        return [
-            ProductShop::fromPrimitives(
-                $products[0],
-                $shops[0],
-                null,
-                null
-            ),
-            ProductShop::fromPrimitives(
-                $products[1],
-                $shops[1],
-                40,
-                UNIT_MEASURE_TYPE::KG
-            ),
-        ];
-    }
-
-    /**
-     * @param Order[] $orders
-     *
-     * @return Identifier[]
-     */
-    private function getShopsId(array $orders): array
-    {
-        return array_map(
-            fn (Order $order): Identifier => $order->getShopId(),
             $orders
         );
     }

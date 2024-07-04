@@ -19,16 +19,6 @@ class ListOrdersRemoveControllerTest extends WebClientTestCase
     private const string LIST_ORDERS_ID_2 = 'd446eab9-5199-48d0-91f5-0407a86bcb4f';
     private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
 
-    private function getListOrders(): array
-    {
-        return [
-            'group_id' => '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
-            'name' => 'list orders name',
-            'description' => 'list orders description',
-            'date_to_buy' => (new \DateTime())->format('Y-m-d H:i:s'),
-        ];
-    }
-
     /** @test */
     public function itShouldRemoveListOrders(): void
     {

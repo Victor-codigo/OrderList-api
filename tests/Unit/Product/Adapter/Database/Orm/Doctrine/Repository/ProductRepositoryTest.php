@@ -10,7 +10,6 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintE
 use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
-use Common\Domain\Validation\Group\GROUP_TYPE;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\Persistence\ObjectManager;
 use Group\Domain\Model\Group;
@@ -61,17 +60,6 @@ class ProductRepositoryTest extends DataBaseTestCase
             'Sabryna Kuhn',
             'Nam tenetur veniam sapiente eum. Explicabo necessitatibus beatae inventore quibusdam. Odit aut non facere facere quisquam alias repellat. Velit vitae sed ut deserunt impedit ea. Id sed eos hic sint reiciendis similique et labore. Velit est perferendis tenetur possimus nobis aliquid soluta. Molestias alias corrupti sequi. Quis sit autem voluptatibus odit voluptate amet. Quibusdam voluptas in quia magni doloribus vel ut. Voluptas et soluta rem aliquam voluptates pariatur et sed.',
             null,
-        );
-    }
-
-    private function getOtherExistsGroup(): Group
-    {
-        return Group::fromPrimitives(
-            '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
-            'Group Other',
-            GROUP_TYPE::GROUP,
-            'This is a group of other users',
-            'otherImage.png'
         );
     }
 

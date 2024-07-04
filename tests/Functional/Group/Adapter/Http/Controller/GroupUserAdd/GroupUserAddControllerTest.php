@@ -35,26 +35,6 @@ class GroupUserAddControllerTest extends WebClientTestCase
         parent::setUp();
     }
 
-    private function usersIdDataProvider(): array
-    {
-        return [
-            [
-                'identifier',
-                [
-                    '1552b279-5f78-4585-ae1b-31be2faabba8' => '1552b279-5f78-4585-ae1b-31be2faabba8',
-                    'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7' => 'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7',
-                ],
-            ],
-            [
-                'name',
-                [
-                    'a3ca650a-a26a-4198-9317-ff3797dcca25' => 'Alfreda',
-                    'a0f50ee2-363d-4044-9d3e-d2929f46fbb4' => 'Charlota',
-                ],
-            ],
-        ];
-    }
-
     /** @test */
     public function itShouldAddByIdAllUsersToTheGroup(): void
     {
