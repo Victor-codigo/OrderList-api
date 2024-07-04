@@ -11,7 +11,6 @@ services:
       $appProtocolAndDomain: "%common.app.protocolAndDomain%"
       $groupImagePath: "%group.image.path%"
       $groupPublicImagePath: "%group.public.image.path%"
-      $userPublicImagePath: "%group.user.public.image.path%"
       $systemKey: "%common.system.key%"
 
   # Adapter
