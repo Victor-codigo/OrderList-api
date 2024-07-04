@@ -13,8 +13,6 @@ use Notification\Application\NotificationRemoveAllUserNotifications\Dto\Notifica
 use Notification\Application\NotificationRemoveAllUserNotifications\Dto\NotificationRemoveAllUserNotificationsOutputDto;
 use Notification\Application\NotificationRemoveAllUserNotifications\Exception\NotificationRemoveAllUserNotificationsNotFoundException;
 use Notification\Application\NotificationRemoveAllUserNotifications\Exception\NotificationRemoveAllUserNotificationsSystemKeyException;
-use Notification\Domain\Ports\Notification\NotificationRepositoryInterface;
-use Notification\Domain\Service\NotificationRemove\NotificationRemoveService;
 use Notification\Domain\Service\NotificationRemoveAllUserNotifications\Dto\NotificationRemoveAllUserNotificationsDto;
 use Notification\Domain\Service\NotificationRemoveAllUserNotifications\NotificationRemoveAllUserNotificationsService;
 
@@ -22,9 +20,7 @@ class NotificationRemoveAllUserNotificationsUseCase extends ServiceBase
 {
     public function __construct(
         private NotificationRemoveAllUserNotificationsService $notificationRemoveAllUserNotificationsService,
-        private NotificationRemoveService $NotificationRemoveService,
         private ValidationInterface $validator,
-        private NotificationRepositoryInterface $notificationRepository,
         private string $systemKey
     ) {
     }

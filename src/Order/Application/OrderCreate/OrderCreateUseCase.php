@@ -6,7 +6,6 @@ namespace Order\Application\OrderCreate;
 
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
 use Common\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
@@ -34,7 +33,6 @@ class OrderCreateUseCase extends ServiceBase
     public function __construct(
         private OrderCreateService $OrderCreateService,
         private ValidationInterface $validator,
-        private ModuleCommunicationInterface $moduleCommunication,
         private ValidateGroupAndUserService $validateGroupAndUserService,
     ) {
     }

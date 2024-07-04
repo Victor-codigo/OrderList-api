@@ -15,13 +15,11 @@ use ListOrders\Domain\Service\ListOrdersCreateFrom\Dto\ListOrdersCreateFromDto;
 use ListOrders\Domain\Service\ListOrdersCreateFrom\Exception\ListOrdersCreateFromListOrdersIdNotFoundException;
 use ListOrders\Domain\Service\ListOrdersCreateFrom\Exception\ListOrdersCreateFromNameAlreadyExistsException;
 use Order\Domain\Model\Order;
-use Order\Domain\Ports\Repository\OrderRepositoryInterface;
 
 class ListOrdersCreateFromService
 {
     public function __construct(
-        private ListOrdersRepositoryInterface $listOrdersRepository,
-        private OrderRepositoryInterface $ordersRepository
+        private ListOrdersRepositoryInterface $listOrdersRepository
     ) {
     }
 

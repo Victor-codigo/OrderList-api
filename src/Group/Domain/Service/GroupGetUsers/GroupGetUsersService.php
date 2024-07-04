@@ -27,9 +27,7 @@ class GroupGetUsersService
 
     public function __construct(
         private UserGroupRepositoryInterface $userGroupRepository,
-        private ModuleCommunicationInterface $moduleCommunication,
-        private string $userPublicImagePath,
-        private string $appProtocolAndDomain
+        private ModuleCommunicationInterface $moduleCommunication
     ) {
     }
 

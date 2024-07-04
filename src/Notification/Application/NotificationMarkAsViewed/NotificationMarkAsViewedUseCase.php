@@ -8,7 +8,6 @@ use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
@@ -24,9 +23,7 @@ class NotificationMarkAsViewedUseCase extends ServiceBase
 {
     public function __construct(
         private NotificationMarkAsViewedService $notificationMarkAsViewedService,
-        private ValidationInterface $validator,
-        private ModuleCommunicationInterface $moduleCommunication,
-        private string $systemKey
+        private ValidationInterface $validator
     ) {
     }
 

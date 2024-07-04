@@ -30,7 +30,6 @@ use Group\Application\GroupUserRoleChange\Exception\GroupUserRoleChangePermissio
 use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
-use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupUserAdd\Dto\GroupUserAddDto;
 use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersAlreadyInTheGroupException;
 use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersMaxNumberExceededException;
@@ -42,7 +41,6 @@ class GroupUserAddUseCase extends ServiceBase
 {
     public function __construct(
         private ValidationInterface $validator,
-        private UserGroupRepositoryInterface $userGroupRepository,
         private GroupRepositoryInterface $groupRepository,
         private UserHasGroupAdminGrantsService $userHasGroupAdminGrantsService,
         private GroupUserAddService $groupUserAddService,

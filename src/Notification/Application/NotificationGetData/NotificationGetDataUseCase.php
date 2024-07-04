@@ -9,21 +9,17 @@ use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
-use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Notification\Application\NotificationGetData\Dto\NotificationGetDataInputDto;
 use Notification\Application\NotificationGetData\Dto\NotificationGetDataOutputDto;
 use Notification\Application\NotificationGetData\Exception\NotificationGetDataNotFoundException;
 use Notification\Domain\Service\NotificationGetData\Dto\NotificationGetDataDto;
 use Notification\Domain\Service\NotificationGetData\NotificationGetDataService;
-use User\Domain\Port\Repository\UserRepositoryInterface;
 
 class NotificationGetDataUseCase extends ServiceBase
 {
     public function __construct(
         private NotificationGetDataService $NotificationGetDataService,
         private ValidationInterface $validator,
-        private GroupRepositoryInterface $groupRepository,
-        private UserRepositoryInterface $userRepository,
     ) {
     }
 

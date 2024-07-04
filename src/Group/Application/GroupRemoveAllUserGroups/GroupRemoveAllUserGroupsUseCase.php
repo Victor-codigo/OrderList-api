@@ -24,13 +24,11 @@ use Group\Domain\Model\UserGroup;
 use Group\Domain\Service\GroupRemoveAllUserGroups\Dto\GroupRemoveAllUserGroupsDto;
 use Group\Domain\Service\GroupRemoveAllUserGroups\Dto\GroupRemoveAllUserGroupsOutputDto;
 use Group\Domain\Service\GroupRemoveAllUserGroups\GroupRemoveAllUserGroupsService;
-use Group\Domain\Service\UserHasGroupAdminGrants\UserHasGroupAdminGrantsService;
 
 class GroupRemoveAllUserGroupsUseCase extends ServiceBase
 {
     public function __construct(
         private GroupRemoveAllUserGroupsService $groupRemoveAllUserGroupsService,
-        private UserHasGroupAdminGrantsService $userHasGroupAdminGrantsService,
         private ModuleCommunicationInterface $moduleCommunication,
         private ValidationInterface $validation,
         private string $systemKey
