@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Group\Adapter\Http\Controller\GroupUserAdd\Dto;
+namespace Test\Unit\Group\Adapter\Http\Controller\GroupGetData\Dto;
 
 use Group\Adapter\Http\Controller\GroupGetData\Dto\GroupGetDataRequestDto;
 use PHPUnit\Framework\TestCase;

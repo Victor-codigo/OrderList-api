@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Group\Adapter\Http\Controller\GroupUserAdd\Dto;
+namespace Test\Unit\Group\Adapter\Http\Controller\GroupUserAdd\Dto;
 
+use Group\Adapter\Http\Controller\GroupUserAdd\Dto\GroupUserAddRequestDto;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;

@@ -190,7 +190,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
             'groupId' => $groupsId,
             'userId' => [
                 ValueObjectFactory::createIdentifier('1befdbe2-9c14-42f0-850f-63e061e33b8f'),
-                ValueObjectFactory::createIdentifier('0b13e52d-b058-32fb-8507-10dec634a07c'),
+                ValueObjectFactory::createIdentifier('4d59c61e-4f51-3ffe-b4b9-e622436b6fa3'),
             ]]);
 
         $this->assertEqualsCanonicalizing($expected, $return);

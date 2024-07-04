@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Group\Adapter\Http\Controller\GroupUserRoleChange\Dto;
+namespace Test\Unit\Group\Adapter\Http\Controller\GroupUserRoleChange\Dto;
 
+use Group\Adapter\Http\Controller\GroupUserRoleChange\Dto\GroupUserRoleChangeRequestDto;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;

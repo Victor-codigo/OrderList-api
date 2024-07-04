@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace User\Adapter\Http\Controller\GetUsers\Dto;
 
 use Common\Adapter\Http\Dto\RequestDtoInterface;
+use Common\Domain\Config\AppConfig;
 use Symfony\Component\HttpFoundation\Request;
 
 class GetUsersRequestDto implements RequestDtoInterface
 {
-    private const int USERS_NUM_MAX = 50;
+    private const int USERS_NUM_MAX = AppConfig::GROUP_USERS_MAX;
 
     /**
      * @var string[]
