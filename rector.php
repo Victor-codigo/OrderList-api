@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\DeadCode\Rector\For_\RemoveDeadIfForeachForRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php81\Rector\Array_\FirstClassCallableRector;
 use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
@@ -15,7 +16,7 @@ return RectorConfig::configure()
     // uncomment to reach your current PHP version
     ->withPhpSets(php83: true)
     ->withTypeCoverageLevel(45)
-    ->withDeadCodeLevel(20)
+    ->withDeadCodeLevel(30)
     // ->withPreparedSets(typeDeclarations: true)
     ->withImportNames(
         removeUnusedImports: true,
@@ -24,6 +25,7 @@ return RectorConfig::configure()
     ->withSkip([
         ClassPropertyAssignToConstructorPromotionRector::class,
         ReadOnlyPropertyRector::class,
+        RemoveDeadIfForeachForRector::class,
         FirstClassCallableRector::class => [
             __DIR__.'/tests/Unit/Common/Adapter/Event/EventDispatcherSymfonyAdapterTest.php',
         ],

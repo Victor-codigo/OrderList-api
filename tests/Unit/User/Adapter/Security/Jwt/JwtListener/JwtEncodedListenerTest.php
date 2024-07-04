@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
 use User\Adapter\Security\Jwt\Listener\JwtEncodedListener;
-use User\Adapter\Security\User\UserSymfonyAdapter;
 use User\Domain\Model\User;
 
 class JwtEncodedListenerTest extends TestCase
@@ -22,7 +21,6 @@ class JwtEncodedListenerTest extends TestCase
 
     private JwtEncodedListener $object;
     private MockObject|JWTEncodedEvent $jwtEventEncoded;
-    private MockObject|UserSymfonyAdapter $userAdapter;
     private MockObject|User $user;
     private MockObject|Security $security;
     private MockObject|RequestStack $requestStack;
@@ -32,8 +30,6 @@ class JwtEncodedListenerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->userAdapter = $this->createMock(UserSymfonyAdapter::class);
         $this->user = $this->createMock(UserInterface::class);
         $this->security = $this->createMock(Security::class);
         $this->requestStack = $this->createMock(RequestStack::class);

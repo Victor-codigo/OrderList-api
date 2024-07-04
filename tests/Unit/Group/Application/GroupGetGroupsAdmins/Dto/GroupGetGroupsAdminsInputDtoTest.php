@@ -14,7 +14,6 @@ use PHPUnit\Framework\TestCase;
 
 class GroupGetGroupsAdminsInputDtoTest extends TestCase
 {
-    private GroupGetGroupsAdminsInputDto $object;
     private ValidationInterface $validator;
     private MockObject|UserShared $userSession;
 
