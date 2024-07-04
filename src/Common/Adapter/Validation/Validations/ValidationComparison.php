@@ -71,8 +71,6 @@ class ValidationComparison extends ValidationConstraintBase
             new GreaterThan($value),
             [GreaterThan::TOO_LOW_ERROR => VALIDATION_ERRORS::GREATER_THAN],
         );
-
-        return $this;
     }
 
     public function greaterThanOrEqual(int|\DateTime $value): ValidationConstraint
