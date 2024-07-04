@@ -62,9 +62,7 @@ class GeUsersPublicDataService
             return $this->userRepository->findUsersByIdOrFail($users);
         }
 
-        if (reset($users) instanceof NameWithSpaces) {
-            return $this->userRepository->findUsersByNameOrFail($users);
-        }
+        return $this->userRepository->findUsersByNameOrFail($users);
     }
 
     /**

@@ -78,7 +78,7 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
             ->where('product.groupId = :groupId')
             ->setParameter('groupId', $groupId);
 
-        if (null !== $name) {
+        if (!$name->isNull()) {
             $queryBuilder
                 ->andWhere('product.name = :name')
                 ->setParameter('name', $name);
