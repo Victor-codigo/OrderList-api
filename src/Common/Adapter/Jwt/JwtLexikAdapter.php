@@ -26,9 +26,8 @@ class JwtLexikAdapter implements JwtHS256Interface
     {
         $data[self::KEY_ISSUED_AT] = (new \DateTimeImmutable())->getTimestamp();
         $data[self::KEY_EXPIRE] = $data[self::KEY_ISSUED_AT] + $expireTimeInSeconds;
-        $token = JWT::encode($data, $this->secretKey, self::ALGORITHM);
 
-        return $token;
+        return JWT::encode($data, $this->secretKey, self::ALGORITHM);
     }
 
     /**

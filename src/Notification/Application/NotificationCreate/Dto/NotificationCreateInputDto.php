@@ -86,12 +86,10 @@ class NotificationCreateInputDto implements ServiceInputDtoInterface
 
     private function validateSystemKey(ValidationInterface $validator): array
     {
-        $errorListSystemKey = $validator
+        return $validator
             ->setValue($this->systemKey)
             ->notNull()
             ->notBlank()
             ->validate();
-
-        return $errorListSystemKey;
     }
 }

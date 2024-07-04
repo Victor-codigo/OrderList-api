@@ -41,7 +41,7 @@ class NotificationCreateService
      */
     private function createNotifications(array $usersId, NotificationType $notificationType, NotificationData $notificationData): array
     {
-        $notifications = array_map(
+        return array_map(
             function (Identifier $userId) use ($notificationType, $notificationData): Notification {
                 $notificationId = ValueObjectFactory::createIdentifier($this->notificationRepository->generateId());
 
@@ -49,7 +49,5 @@ class NotificationCreateService
             },
             $usersId
         );
-
-        return $notifications;
     }
 }
