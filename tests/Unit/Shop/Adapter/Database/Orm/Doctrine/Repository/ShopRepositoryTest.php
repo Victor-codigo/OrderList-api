@@ -83,8 +83,7 @@ class ShopRepositoryTest extends DataBaseTestCase
     {
         $shopNew = $this->getNewShop();
         $this->object->save($shopNew);
-
-        /** @var Group $groupSaved */
+        /** @var Group $shopSaved */
         $shopSaved = $this->object->findOneBy(['id' => $shopNew->getId()]);
 
         $this->assertSame($shopNew, $shopSaved);

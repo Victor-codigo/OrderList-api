@@ -27,7 +27,6 @@ class UnitMeasureType extends TypeBase
     #[\Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
-        /** @var UNIT_MEASURE_TYPE $notificationType */
         $unitType = parent::convertToDatabaseValue($value, $platform);
 
         return null === $unitType ? null : $unitType->value;

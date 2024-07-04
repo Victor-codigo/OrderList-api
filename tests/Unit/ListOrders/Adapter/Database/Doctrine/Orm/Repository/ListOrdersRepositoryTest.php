@@ -119,7 +119,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
 
         $this->object->save([$listOrders]);
 
-        /** @var Group $groupSaved */
+        /** @var Group $listOrdersSaved */
         $listOrdersSaved = $this->object->findOneBy(['id' => $listOrders->getId()]);
 
         $this->assertSame($listOrders, $listOrdersSaved);
@@ -159,7 +159,6 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
 
         $this->object->saveListOrdersAndOrders($listOrders);
 
-        /** @var Group $groupSaved */
         $listOrdersSaved = $this->object->findOneBy(['id' => $listOrders->getId()]);
 
         $this->assertSame($listOrders, $listOrdersSaved);

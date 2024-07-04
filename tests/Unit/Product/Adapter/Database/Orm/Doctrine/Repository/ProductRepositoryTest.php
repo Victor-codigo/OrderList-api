@@ -81,8 +81,7 @@ class ProductRepositoryTest extends DataBaseTestCase
     {
         $productNew = $this->getNewProduct();
         $this->object->save($productNew);
-
-        /** @var Group $groupSaved */
+        /** @var Group $productSaved */
         $productSaved = $this->object->findOneBy(['id' => $productNew->getId()]);
 
         $this->assertSame($productNew, $productSaved);
