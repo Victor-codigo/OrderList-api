@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector;
 use Rector\DeadCode\Rector\For_\RemoveDeadIfForeachForRector;
 use Rector\DeadCode\Rector\For_\RemoveDeadLoopRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
@@ -17,7 +18,7 @@ return RectorConfig::configure()
     // uncomment to reach your current PHP version
     ->withPhpSets(php83: true)
     ->withTypeCoverageLevel(45)
-    ->withDeadCodeLevel(40)
+    ->withDeadCodeLevel(41)
     // ->withPreparedSets(typeDeclarations: true)
     ->withImportNames(
         removeUnusedImports: true,
@@ -35,4 +36,6 @@ return RectorConfig::configure()
         // Dead Code
         RemoveDeadIfForeachForRector::class,
         RemoveDeadLoopRector::class,
+
+        // RemoveUnusedPrivateMethodRector::class,
     ]);

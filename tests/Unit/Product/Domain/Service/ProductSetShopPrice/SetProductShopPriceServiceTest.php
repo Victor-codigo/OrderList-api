@@ -482,8 +482,6 @@ class SetProductShopPriceServiceTest extends TestCase
         $productsShopsDb = $this->createProductsShops($productsDb, $shopsDb, $pricesDb, $unitsDb);
         $productsShopsNew = $this->createProductsShops($productsNew, $shopsNew, $pricesNew, $unitsNew);
         $productsDb = array_merge($productsDb, [$productsNew[1], $productsNew[3]]);
-        $shopsDb = array_merge($shopsDb, [$shopsNew[1], $shopsNew[3]]);
-        $pricesDb = array_merge($unitsDb, [$unitsNew[1], $unitsNew[3]]);
 
         $this->productShopRepository
             ->expects($this->once())

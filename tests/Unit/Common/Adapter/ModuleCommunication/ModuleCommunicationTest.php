@@ -502,8 +502,6 @@ class ModuleCommunicationTest extends TestCase
     /** @test */
     public function itShouldFailResponseNetworkError(): void
     {
-        /** @var MockObject|HttpExceptionInterface $httpExceptionInterface */
-        $httpExceptionInterface = $this->createMock(HttpExceptionInterface::class);
         $this->expectException(ModuleCommunicationException::class);
 
         $content = [

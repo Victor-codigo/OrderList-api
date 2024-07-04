@@ -91,7 +91,7 @@ class JwtLexikAdapterTest extends TestCase
     {
         $this->expectException(JwtException::class);
 
-        $return = $this->object->decode(self::TOKEN.'-wrong token');
+        $this->object->decode(self::TOKEN.'-wrong token');
     }
 
     /** @test */

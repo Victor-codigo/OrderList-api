@@ -155,7 +155,6 @@ class FileTest extends TestCase
             ->method('getMimeType')
             ->willReturn('image/png');
 
-        $object = new File($file);
         BuiltInFunctionsReturn::$filesize = 2 * 1_000_000 + 1;
 
         $return = $this->validator->validateValueObject($this->object);

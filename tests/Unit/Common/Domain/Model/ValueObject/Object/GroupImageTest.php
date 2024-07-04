@@ -120,8 +120,6 @@ class GroupImageTest extends TestCase
     /** @test */
     public function itShouldFailFileIsNotReadable(): void
     {
-        /** @var MockObject|File $file */
-        $file = $this->fileInterface->getFile();
         BuiltInFunctionsReturn::$is_readable = false;
 
         $return = $this->validator->validateValueObject($this->object);
