@@ -52,7 +52,7 @@ class ProductRemoveServiceTest extends TestCase
         BuiltInFunctionsReturn::$unlink = null;
     }
 
-    private function getProduct(Identifier $groupId, Identifier $productId, Identifier $shopId, ?string $image = null): Product
+    private function getProduct(Identifier $groupId, Identifier $productId, ?string $image = null): Product
     {
         return new Product(
             $productId,
@@ -69,7 +69,7 @@ class ProductRemoveServiceTest extends TestCase
         $groupId = ValueObjectFactory::createIdentifier('group id');
         $productsId = [ValueObjectFactory::createIdentifier('product id')];
         $shopsId = [ValueObjectFactory::createIdentifier('shop id')];
-        $products = [$this->getProduct($groupId, $productsId[0], $shopsId[0])];
+        $products = [$this->getProduct($groupId, $productsId[0])];
 
         $this->productRepository
             ->expects($this->once())
@@ -114,9 +114,9 @@ class ProductRemoveServiceTest extends TestCase
             ValueObjectFactory::createIdentifier('shop3 id'),
         ];
         $products = [
-            $this->getProduct($groupId, $productsId[0], $shopsId[0]),
-            $this->getProduct($groupId, $productsId[1], $shopsId[1]),
-            $this->getProduct($groupId, $productsId[2], $shopsId[2]),
+            $this->getProduct($groupId, $productsId[0]),
+            $this->getProduct($groupId, $productsId[1]),
+            $this->getProduct($groupId, $productsId[2]),
         ];
 
         $this->productRepository
@@ -160,7 +160,7 @@ class ProductRemoveServiceTest extends TestCase
         $groupId = ValueObjectFactory::createIdentifier('group id');
         $productsId = [ValueObjectFactory::createIdentifier('product id')];
         $shopsId = [ValueObjectFactory::createIdentifier('shop id')];
-        $products = [$this->getProduct($groupId, $productsId[0], $shopsId[0], self::PRODUCT_IMAGE_PATH)];
+        $products = [$this->getProduct($groupId, $productsId[0], self::PRODUCT_IMAGE_PATH)];
 
         $this->productRepository
             ->expects($this->once())
@@ -198,7 +198,7 @@ class ProductRemoveServiceTest extends TestCase
         $groupId = ValueObjectFactory::createIdentifier('group id');
         $productsId = [ValueObjectFactory::createIdentifier('product id')];
         $shopsId = [ValueObjectFactory::createIdentifier('shop id')];
-        $products = [$this->getProduct($groupId, $productsId[0], $shopsId[0], self::PRODUCT_IMAGE_PATH)];
+        $products = [$this->getProduct($groupId, $productsId[0], self::PRODUCT_IMAGE_PATH)];
 
         $this->productRepository
             ->expects($this->once())
@@ -235,7 +235,7 @@ class ProductRemoveServiceTest extends TestCase
         $groupId = ValueObjectFactory::createIdentifier('group id');
         $productsId = [ValueObjectFactory::createIdentifier('product id')];
         $shopsId = [ValueObjectFactory::createIdentifier('shop id')];
-        $products = [$this->getProduct($groupId, $productsId[0], $shopsId[0], self::PRODUCT_IMAGE_PATH)];
+        $products = [$this->getProduct($groupId, $productsId[0], self::PRODUCT_IMAGE_PATH)];
 
         $this->productRepository
             ->expects($this->once())

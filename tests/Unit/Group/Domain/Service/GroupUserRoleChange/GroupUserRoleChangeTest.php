@@ -63,7 +63,7 @@ class GroupUserRoleChangeTest extends TestCase
     /**
      * @param string[] $usersIdRoleChanged
      */
-    private function getFindGroupUsersOrFailReturn(array $usersIdRoleChanged, GROUP_ROLES $groupRol, ?\Exception $exception = null): MockObject|PaginatorInterface
+    private function getFindGroupUsersOrFailReturn(array $usersIdRoleChanged, GROUP_ROLES $groupRol): MockObject|PaginatorInterface
     {
         $usersGroup = array_map(
             fn (string $userId): UserGroup => UserGroup::fromPrimitives(self::GROUP_ID, $userId, [$groupRol], $this->group),

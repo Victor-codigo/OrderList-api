@@ -27,7 +27,7 @@ class EndpointUseCase extends ServiceBase
 
         try {
             $this->EndpointService->__invoke(
-                $this->createEndpointDto($input)
+                $this->createEndpointDto()
             );
 
             return $this->createEndpointOutputDto();
@@ -45,7 +45,7 @@ class EndpointUseCase extends ServiceBase
         }
     }
 
-    private function createEndpointDto(EndpointInputDto $input): EndpointDto
+    private function createEndpointDto(): EndpointDto
     {
         return new EndpointDto();
     }

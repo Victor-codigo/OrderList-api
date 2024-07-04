@@ -112,7 +112,7 @@ class ListOrdersCreateFromServiceTest extends TestCase
         ];
     }
 
-    private function assertOrderCopiedIsOk(Order $orderNew, Order $orderOld, ListOrders $listOrdersOld, Identifier $userId): void
+    private function assertOrderCopiedIsOk(Order $orderNew, Order $orderOld, Identifier $userId): void
     {
         $this->assertEquals(self::ORDER_ID_NEW, $orderNew->getId()->getValue());
         $this->assertEquals($orderOld->getGroupId()->getValue(), $orderNew->getGroupId()->getValue());
@@ -141,7 +141,7 @@ class ListOrdersCreateFromServiceTest extends TestCase
 
         /** @var Order $orderNew */
         foreach ($listOrdersNew->getOrders() as $key => $orderNew) {
-            $this->assertOrderCopiedIsOk($orderNew, $ordersOld->get($key), $listOrdersOld, $userId);
+            $this->assertOrderCopiedIsOk($orderNew, $ordersOld->get($key), $userId);
         }
     }
 

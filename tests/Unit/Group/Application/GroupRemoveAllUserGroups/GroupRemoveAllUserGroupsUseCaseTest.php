@@ -6,7 +6,6 @@ namespace Test\Unit\Group\Application\GroupRemoveAllUserGroups;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\JwtToken;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
@@ -142,7 +141,7 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
      *
      * @return ModuleCommunicationConfigDto[]
      */
-    private function getModuleCommunicationConfigDto(array $usersId, array $groupsNames, string $systemKey, ?JwtToken $tokenSession): array
+    private function getModuleCommunicationConfigDto(array $usersId, array $groupsNames, string $systemKey): array
     {
         $notificationSetAsAdminConfig = [];
         foreach ($usersId as $key => $userId) {
@@ -228,7 +227,6 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
             $usersSetAsAdminNotificationData['usersId'],
             $usersSetAsAdminNotificationData['groupNames'],
             self::SYSTEM_KEY,
-            null,
         );
         $moduleCommunicationResponseDto = $this->getModuleCommunicationResponseDto(RESPONSE_STATUS::OK);
         $input = new GroupRemoveAllUserGroupsInputDto(
@@ -303,7 +301,6 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
             $usersSetAsAdminNotificationData['usersId'],
             $usersSetAsAdminNotificationData['groupNames'],
             self::SYSTEM_KEY,
-            null,
         );
         $moduleCommunicationResponseDto = $this->getModuleCommunicationResponseDto(RESPONSE_STATUS::ERROR);
         $input = new GroupRemoveAllUserGroupsInputDto(

@@ -40,7 +40,7 @@ class OrderGetDataService
         $this->ordersPaginator ??= $this->getOrdersByShopName($input->groupId, $input->listOrdersId, $input->filterSection, $input->filterText, $input->orderAsc);
         $this->ordersPaginator ??= $this->getOrdersByListOrdersName($input->groupId, $input->filterSection, $input->filterText, $input->orderAsc);
         $this->ordersPaginator ??= $this->getOrdersByListOrdersId($input->groupId, $input->listOrdersId, $input->orderAsc);
-        $this->ordersPaginator ??= $this->getOrdersByGroupId($input->groupId, $input->filterSection, $input->orderAsc);
+        $this->ordersPaginator ??= $this->getOrdersByGroupId($input->groupId, $input->orderAsc);
 
         return $this->getOrdersData($input->page, $input->pageItems);
     }
@@ -78,7 +78,7 @@ class OrderGetDataService
     /**
      * @throws DBNotFoundException
      */
-    private function getOrdersByGroupId(Identifier $groupId, ?Filter $filterSection, bool $orderAsc): ?PaginatorInterface
+    private function getOrdersByGroupId(Identifier $groupId, bool $orderAsc): ?PaginatorInterface
     {
         return $this->orderRepository->findOrdersByGroupIdOrFail($groupId, $orderAsc);
     }
