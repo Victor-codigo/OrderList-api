@@ -27,7 +27,7 @@ class [ENDPOINT]UseCase extends ServiceBase
 
         try {
             $this->[ENDPOINT]Service->__invoke(
-                $this->create[ENDPOINT]Dto($input)
+                $this->create[ENDPOINT]Dto()
             );
 
             return $this->create[ENDPOINT]OutputDto();
@@ -45,7 +45,7 @@ class [ENDPOINT]UseCase extends ServiceBase
         }
     }
 
-    private function create[ENDPOINT]Dto([ENDPOINT]InputDto $input): [ENDPOINT]Dto
+    private function create[ENDPOINT]Dto(): [ENDPOINT]Dto
     {
         return new [ENDPOINT]Dto();
     }

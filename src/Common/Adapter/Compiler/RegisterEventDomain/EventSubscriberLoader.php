@@ -6,7 +6,6 @@ namespace Common\Adapter\Compiler\RegisterEventDomain;
 
 use Common\Adapter\Event\EventDispatcherSymfonyAdapter;
 use Common\Domain\Event\EventDomainSubscriberInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class EventSubscriberLoader extends EventDispatcherSymfonyAdapter implements EventDomainSubscriberInterface
 {
@@ -21,12 +20,6 @@ class EventSubscriberLoader extends EventDispatcherSymfonyAdapter implements Eve
     public function setSubscriber(string $subscriber): void
     {
         static::$subscriber = $subscriber;
-    }
-
-    public function __construct(
-        EventDispatcherInterface $eventDispatcherSubscriberLoader
-    ) {
-        $this->eventDispatcher = $eventDispatcherSubscriberLoader;
     }
 
     #[\Override]

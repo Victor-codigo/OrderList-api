@@ -36,7 +36,7 @@ class UserAdapter implements PasswordAuthenticatedUserInterface, UserInterface, 
     }
 
     #[\Override]
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
     }
 

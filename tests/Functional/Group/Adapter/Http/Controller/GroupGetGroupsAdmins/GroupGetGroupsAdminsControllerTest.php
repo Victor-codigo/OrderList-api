@@ -236,7 +236,7 @@ class GroupGetGroupsAdminsControllerTest extends WebClientTestCase
             uri: self::ENDPOINT
                 .implode(',', self::GROUP_ID)
                 ."?page={$page}"
-                ."?page_items={$pageItems}",
+                ."&page_items={$pageItems}",
             content: json_encode([])
         );
 

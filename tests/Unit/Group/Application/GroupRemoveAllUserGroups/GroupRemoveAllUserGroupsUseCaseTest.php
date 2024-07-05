@@ -28,7 +28,6 @@ use Group\Domain\Model\UserGroup;
 use Group\Domain\Service\GroupRemoveAllUserGroups\Dto\GroupRemoveAllUserGroupsDto;
 use Group\Domain\Service\GroupRemoveAllUserGroups\Dto\GroupRemoveAllUserGroupsOutputDto;
 use Group\Domain\Service\GroupRemoveAllUserGroups\GroupRemoveAllUserGroupsService;
-use Group\Domain\Service\UserHasGroupAdminGrants\UserHasGroupAdminGrantsService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -39,7 +38,6 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
 
     private GroupRemoveAllUserGroupsUseCase $object;
     private MockObject|GroupRemoveAllUserGroupsService $groupRemoveAllUserGroupsService;
-    private MockObject|UserHasGroupAdminGrantsService $userHasGroupAdminGrantsService;
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|UserShared $userSession;
     private MockObject|ValidationInterface $validation;
@@ -50,13 +48,11 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
         parent::setUp();
 
         $this->groupRemoveAllUserGroupsService = $this->createMock(GroupRemoveAllUserGroupsService::class);
-        $this->userHasGroupAdminGrantsService = $this->createMock(UserHasGroupAdminGrantsService::class);
         $this->moduleCommunication = $this->createMock(ModuleCommunicationInterface::class);
         $this->userSession = $this->createMock(UserShared::class);
         $this->validation = $this->createMock(ValidationInterface::class);
         $this->object = new GroupRemoveAllUserGroupsUseCase(
             $this->groupRemoveAllUserGroupsService,
-            $this->userHasGroupAdminGrantsService,
             $this->moduleCommunication,
             $this->validation,
             self::SYSTEM_KEY
