@@ -11,13 +11,10 @@ use Symfony\Contracts\Translation\TranslatorInterface as SymfonyTranslatorInterf
 
 class TranslatorSymfonyAdapter implements TranslatorInterface
 {
-    private SymfonyTranslatorInterface $translator;
-    private LocaleSwitcher $localeSwitcher;
-
-    public function __construct(SymfonyTranslatorInterface $translator, LocaleSwitcher $localeSwitcher)
-    {
-        $this->translator = $translator;
-        $this->localeSwitcher = $localeSwitcher;
+    public function __construct(
+        private SymfonyTranslatorInterface $translator,
+        private LocaleSwitcher $localeSwitcher
+    ) {
     }
 
     /**
