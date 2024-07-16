@@ -50,4 +50,9 @@ interface ShopRepositoryInterface extends RepositoryInterface
      * @throws DBNotFoundException
      */
     public function findShopByShopNameFilterOrFail(Identifier $groupId, Filter $shopNameFilter, bool $orderAsc = true): PaginatorInterface;
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findGroupShopsFirstLetterOrFail(Identifier $groupId): array;
 }

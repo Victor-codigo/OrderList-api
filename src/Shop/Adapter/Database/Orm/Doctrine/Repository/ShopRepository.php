@@ -169,4 +169,33 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
             'shopNameFilter' => $shopNameFilter->getValueWithFilter(),
         ]);
     }
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findGroupShopsFirstLetterOrFail(Identifier $groupId): array
+    {
+        $shopEntity = Shop::class;
+        $dql = <<<DQL
+            SELECT DISTINCT SUBSTRING(shop.name, 1, 1) AS firstLetter
+            FROM {$shopEntity} shop
+            WHERE shop.groupId = :groupId
+            GROUP BY firstLetter
+            ORDER BY firstLetter ASC
+        DQL;
+
+        $queryResult = $this->entityManager
+            ->createQuery($dql)
+            ->setParameter('groupId', $groupId)
+            ->getArrayResult();
+
+        if (empty($queryResult)) {
+            throw DBNotFoundException::fromMessage('Shops not found');
+        }
+
+        return array_map(
+            fn (array $row): string => mb_strtolower($row['firstLetter']),
+            $queryResult
+        );
+    }
 }

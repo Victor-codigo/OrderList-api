@@ -25,6 +25,7 @@ class ShopRepositoryTest extends DataBaseTestCase
 
     private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const string GROUP_ID_2 = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const string GROUP_ID_NO_SHOPS = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
     private const string PRODUCT_ID = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
     private const string SHOP_ID = 'b9b1c541-d41e-4751-9ecb-4a1d823c0405';
     private const string SHOP_ID_3 = 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e';
@@ -387,5 +388,25 @@ class ShopRepositoryTest extends DataBaseTestCase
 
         $this->expectException(DBNotFoundException::class);
         $this->object->findShopByShopNameFilterOrFail($groupId, $shopNameFilter);
+    }
+
+    /** @test */
+    public function itShouldGetFirstLetterOfAllShopsInAGroup(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $expected = ['s'];
+
+        $return = $this->object->findGroupShopsFirstLetterOrFail($groupId);
+
+        $this->assertEquals($expected, $return);
+    }
+
+    /** @test */
+    public function itShouldFailGetFirstLetterOfAllShopsInAGroupNoShops(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID_NO_SHOPS);
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findGroupShopsFirstLetterOrFail($groupId);
     }
 }

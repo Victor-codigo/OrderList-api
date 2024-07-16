@@ -47,3 +47,13 @@ shop_get_data:
   controller: Shop\Adapter\Http\Controller\ShopGetData\ShopGetDataController
   requirements:
     api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# SHOP GET SHOPS FIRST LETTER
+# -------------------------------------------------------------
+shop_get_shops_first_letter:
+  path: /api/v{api_version}/shops/first-letter
+  methods: GET
+  controller: Shop\Adapter\Http\Controller\ShopGetFirstLetter\ShopGetFirstLetterController
+  requirements:
+    api_version: '\d+[.\d]?'
