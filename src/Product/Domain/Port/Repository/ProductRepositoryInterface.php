@@ -51,4 +51,9 @@ interface ProductRepositoryInterface extends RepositoryInterface
      * @throws DBNotFoundException
      */
     public function findGroupsProductsOrFail(array $groupsId): PaginatorInterface;
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findGroupProductsFirstLetterOrFail(Identifier $groupId): array;
 }

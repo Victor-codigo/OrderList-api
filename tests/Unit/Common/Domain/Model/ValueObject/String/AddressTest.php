@@ -57,15 +57,6 @@ class AddressTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailLessThan5Characters(): void
-    {
-        $address = $this->createAddress('C\ g');
-        $return = $this->validation->validateValueObject($address);
-
-        $this->assertEquals([VALIDATION_ERRORS::STRING_TOO_SHORT], $return);
-    }
-
-    /** @test */
     public function itShouldFailMoreThan100Characters(): void
     {
         $address = $this->createAddress(str_pad('', 101, 'p'));

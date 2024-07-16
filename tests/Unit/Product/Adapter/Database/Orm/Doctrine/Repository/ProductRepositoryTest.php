@@ -443,4 +443,24 @@ class ProductRepositoryTest extends DataBaseTestCase
         $this->expectException(DBNotFoundException::class);
         $this->object->findGroupsProductsOrFail($groupsId);
     }
+
+    /** @test */
+    public function itShouldGetFirstLetterOfAllProductsInAGroup(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $expected = ['j', 'm', 'p'];
+
+        $return = $this->object->findGroupProductsFirstLetterOrFail($groupId);
+
+        $this->assertEquals($expected, $return);
+    }
+
+    /** @test */
+    public function itShouldFailGetFirstLetterOfAllProductsInAGroupNoProducts(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID_2);
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findGroupProductsFirstLetterOrFail($groupId);
+    }
 }

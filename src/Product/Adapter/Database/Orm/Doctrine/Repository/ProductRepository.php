@@ -33,7 +33,6 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
      * @throws DBUniqueConstraintException
      * @throws DBConnectionException
      */
-    #[\Override]
     public function save(Product $product): void
     {
         try {
@@ -51,7 +50,6 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
      *
      * @throws DBConnectionException
      */
-    #[\Override]
     public function remove(array $products): void
     {
         try {
@@ -68,7 +66,6 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
     /**
      * @throws DBNotFoundException
      */
-    #[\Override]
     public function findProductsByGroupAndNameOrFail(Identifier $groupId, NameWithSpaces $name): PaginatorInterface
     {
         $queryBuilder = $this->entityManager
@@ -99,7 +96,6 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
      *
      * @throws DBNotFoundException
      */
-    #[\Override]
     public function findProductsOrFail(Identifier $groupId, ?array $productsId = null, ?array $shopsId = null, bool $orderAsc = true): PaginatorInterface
     {
         $query = $this->entityManager
@@ -128,7 +124,6 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
         return $this->queryPaginationOrFail($query);
     }
 
-    #[\Override]
     public function findProductsByProductNameOrFail(Identifier $groupId, NameWithSpaces $productName, bool $orderAsc = true): PaginatorInterface
     {
         $productEntity = Product::class;
@@ -149,7 +144,6 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
         ]);
     }
 
-    #[\Override]
     public function findProductsByProductNameFilterOrFail(Identifier $groupId, Filter $productNameFilter, bool $orderAsc = true): PaginatorInterface
     {
         $productEntity = Product::class;
@@ -170,7 +164,6 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
         ]);
     }
 
-    #[\Override]
     public function findProductsByShopNameFilterOrFail(Identifier $groupId, Filter $shopNameFilter, bool $orderAsc = true): PaginatorInterface
     {
         $productEntity = Product::class;
@@ -200,7 +193,6 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
      *
      * @throws DBNotFoundException
      */
-    #[\Override]
     public function findGroupsProductsOrFail(array $groupsId): PaginatorInterface
     {
         $productEntity = Product::class;
@@ -213,5 +205,34 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
         return $this->dqlPaginationOrFail($dql, [
             'groupsId' => $groupsId,
         ]);
+    }
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findGroupProductsFirstLetterOrFail(Identifier $groupId): array
+    {
+        $productEntity = Product::class;
+        $dql = <<<DQL
+            SELECT DISTINCT SUBSTRING(product.name, 1, 1) AS firstLetter
+            FROM {$productEntity} product
+            WHERE product.groupId = :groupId
+            GROUP BY firstLetter
+            ORDER BY firstLetter ASC
+        DQL;
+
+        $queryResult = $this->entityManager
+            ->createQuery($dql)
+            ->setParameter('groupId', $groupId)
+            ->getArrayResult();
+
+        if (empty($queryResult)) {
+            throw DBNotFoundException::fromMessage('Products not found');
+        }
+
+        return array_map(
+            fn (array $row): string => mb_strtolower($row['firstLetter']),
+            $queryResult
+        );
     }
 }

@@ -48,6 +48,16 @@ product_get_data:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
+# PRODUCT GET FIRST LETTER
+# -------------------------------------------------------------
+product_get_first_letter:
+  path: /api/v{api_version}/products/first-letter
+  methods: GET
+  controller: Product\Adapter\Http\Controller\ProductGetFirstLetter\ProductGetFirstLetterController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
 # PRODUCT SET PRICE
 # -------------------------------------------------------------
 product_set_price:
