@@ -114,7 +114,7 @@ final class VALUE_OBJECTS_CONSTRAINTS
     public const int DESCRIPTION_MAX_LENGTH = 500;
     public const string DESCRIPTION_TYPE = 'string';
 
-    public const int ADDRESS_MIN_LENGTH = 5;
+    public const int ADDRESS_MIN_LENGTH = 0;
     public const int ADDRESS_MAX_LENGTH = 100;
     public const string ADDRESS_TYPE = 'string';
 
