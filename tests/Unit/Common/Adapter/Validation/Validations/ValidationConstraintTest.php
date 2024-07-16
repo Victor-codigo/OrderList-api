@@ -17,6 +17,7 @@ class ValidationConstraintTest extends TestCase
     private ValidationConstraint $object;
     private MockObject|Constraint $constraint;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -33,12 +34,10 @@ class ValidationConstraintTest extends TestCase
             Range::TOO_LOW_ERROR => VALIDATION_ERRORS::RANGE_TOO_LOW,
         ];
 
-        if ($this->constraint instanceof Constraint) {
-            $this->object = new ValidationConstraint($this->constraint, $idErrors);
-        }
+        $this->object = new ValidationConstraint($this->constraint, $idErrors);
     }
 
-    public function testHasErrorErrorDoesntExists(): void
+    public function testHasErrorErrorDoesNotExists(): void
     {
         $return = $this->object->hasError(Email::INVALID_FORMAT_ERROR);
 

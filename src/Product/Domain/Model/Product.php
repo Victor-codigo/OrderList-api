@@ -67,11 +67,13 @@ class Product implements EntityImageModifyInterface
         return $this;
     }
 
+    #[\Override]
     public function getImage(): Path
     {
         return $this->image;
     }
 
+    #[\Override]
     public function setImage(Path $image): self
     {
         $this->image = $image;
@@ -140,7 +142,7 @@ class Product implements EntityImageModifyInterface
         $this->orders = new ArrayCollection();
     }
 
-    public static function fromPrimitives(string $id, string $groupId, string $name, string $description = null, string $image = null): self
+    public static function fromPrimitives(string $id, string $groupId, string $name, ?string $description = null, ?string $image = null): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),

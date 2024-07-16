@@ -10,12 +10,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GetProductShopPriceRequestDto implements RequestDtoInterface
 {
-    private const PRODUCTS_MAX = AppConfig::ENDPOINT_PRODUCT_GET_PRODUCTS_MAX;
-    private const SHOPS_MAX = AppConfig::ENDPOINT_PRODUCT_GET_SHOPS_MAX;
+    private const int PRODUCTS_MAX = AppConfig::ENDPOINT_PRODUCT_GET_PRODUCTS_MAX;
+    private const int SHOPS_MAX = AppConfig::ENDPOINT_PRODUCT_GET_SHOPS_MAX;
 
-    public readonly array|null $productsId;
-    public readonly array|null $shopsId;
-    public readonly string|null $groupId;
+    public readonly ?array $productsId;
+    public readonly ?array $shopsId;
+    public readonly ?string $groupId;
 
     public function __construct(Request $request)
     {
@@ -24,7 +24,7 @@ class GetProductShopPriceRequestDto implements RequestDtoInterface
         $this->groupId = $request->query->get('group_id');
     }
 
-    private function removeOverflow(string|null $itemsId, int $numMax): array|null
+    private function removeOverflow(?string $itemsId, int $numMax): ?array
     {
         if (null === $itemsId) {
             return null;

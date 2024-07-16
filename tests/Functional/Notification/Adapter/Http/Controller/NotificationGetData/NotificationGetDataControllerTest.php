@@ -15,8 +15,8 @@ class NotificationGetDataControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/notification';
-    private const METHOD = 'GET';
+    private const string ENDPOINT = '/api/v1/notification';
+    private const string METHOD = 'GET';
 
     private function getNotificationsDatabaseData(): array
     {
@@ -30,9 +30,9 @@ class NotificationGetDataControllerTest extends WebClientTestCase
 
     private function assertNotificationIsCorrect(object $notificationData, array $notificationsDataExpected): void
     {
-        $notificationsExpectedIds = array_map(fn (Notification $notification) => $notification->getId()->getValue(), $notificationsDataExpected);
-        $notificationsExpectedUsersIds = array_map(fn (Notification $notification) => $notification->getUserId()->getValue(), $notificationsDataExpected);
-        $notificationsExpectedViewed = array_map(fn (Notification $notification) => $notification->getViewed(), $notificationsDataExpected);
+        $notificationsExpectedIds = array_map(fn (Notification $notification): ?string => $notification->getId()->getValue(), $notificationsDataExpected);
+        $notificationsExpectedUsersIds = array_map(fn (Notification $notification): ?string => $notification->getUserId()->getValue(), $notificationsDataExpected);
+        $notificationsExpectedViewed = array_map(fn (Notification $notification): bool => $notification->getViewed(), $notificationsDataExpected);
 
         $this->assertTrue(property_exists($notificationData, 'id'));
         $this->assertTrue(property_exists($notificationData, 'user_id'));
@@ -145,7 +145,7 @@ class NotificationGetDataControllerTest extends WebClientTestCase
 
         $response = $client->getResponse();
 
-        $this->assertEquals(response::HTTP_NO_CONTENT, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
     /** @test */
@@ -259,6 +259,6 @@ class NotificationGetDataControllerTest extends WebClientTestCase
 
         $response = $client->getResponse();
 
-        $this->assertEquals(response::HTTP_UNAUTHORIZED, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 }

@@ -16,7 +16,7 @@ use Notification\Domain\Service\NotificationGetData\Dto\NotificationGetDataDto;
 
 class NotificationGetDataService
 {
-    private const TRANSLATION_DOMAIN = 'Notifications';
+    private const string TRANSLATION_DOMAIN = 'Notifications';
 
     public function __construct(
         private NotificationRepositoryInterface $notificationRepository,

@@ -19,7 +19,7 @@ class NotificationGetDataInputDto implements ServiceInputDtoInterface
     public readonly PaginatorPageItems $pageItems;
     public readonly Language $lang;
 
-    public function __construct(UserShared $userSession, int|null $page, int|null $pageItems, string|null $lang)
+    public function __construct(UserShared $userSession, ?int $page, ?int $pageItems, ?string $lang)
     {
         $this->userSession = $userSession;
         $this->page = ValueObjectFactory::createPaginatorPage($page);
@@ -27,6 +27,7 @@ class NotificationGetDataInputDto implements ServiceInputDtoInterface
         $this->lang = ValueObjectFactory::createLanguage($lang);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

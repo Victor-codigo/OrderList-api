@@ -13,10 +13,11 @@ class GroupRemoveAllUserGroupsControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/groups/user/remove-groups';
-    private const METHOD = 'DELETE';
-    private const SYSTEM_KEY = 'systemKeyForDev';
+    private const string ENDPOINT = '/api/v1/groups/user/remove-groups';
+    private const string METHOD = 'DELETE';
+    private const string SYSTEM_KEY = 'systemKeyForDev';
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -39,7 +40,7 @@ class GroupRemoveAllUserGroupsControllerTest extends WebClientTestCase
             'user_id' => '1befdbe2-9c14-42f0-850f-63e061e33b8f',
         ], [
             'group_id' => '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
-            'user_id' => '0b13e52d-b058-32fb-8507-10dec634a07c',
+            'user_id' => '4d59c61e-4f51-3ffe-b4b9-e622436b6fa3',
         ]];
 
         $client = $this->getNewClientAuthenticatedUser();
@@ -62,7 +63,8 @@ class GroupRemoveAllUserGroupsControllerTest extends WebClientTestCase
         $this->assertEqualsCanonicalizing($groupsIdUserRemoved, $responseContent->data->groups_id_user_removed);
 
         foreach ($responseContent->data->groups_id_user_set_as_admin as $key => $groupAndUser) {
-            $this->assertEqualsCanonicalizing($groupsIdUserSetAsAdmin[$key], (array) $groupAndUser);
+            $this->assertEqualsCanonicalizing($groupsIdUserSetAsAdmin[$key]['group_id'], $groupAndUser->group_id);
+            $this->assertIsString($groupAndUser->user_id);
         }
     }
 

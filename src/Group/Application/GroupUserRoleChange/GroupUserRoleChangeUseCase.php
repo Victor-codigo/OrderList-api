@@ -18,7 +18,6 @@ use Group\Application\GroupUserRoleChange\Dto\GroupUserRoleChangeOutputDto;
 use Group\Application\GroupUserRoleChange\Exception\GroupUserRoleChangeGroupWithoutAdminsException;
 use Group\Application\GroupUserRoleChange\Exception\GroupUserRoleChangePermissionException;
 use Group\Application\GroupUserRoleChange\Exception\GroupUserRoleChangeUsersNotFoundException;
-use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupUserRoleChange\Dto\GroupUserRoleChangeDto;
 use Group\Domain\Service\GroupUserRoleChange\Exception\GroupWithoutAdminsException;
 use Group\Domain\Service\GroupUserRoleChange\GroupUserRoleChangeService;
@@ -29,7 +28,6 @@ class GroupUserRoleChangeUseCase extends ServiceBase
     public function __construct(
         private GroupUserRoleChangeService $groupUserRoleChangeService,
         private UserHasGroupAdminGrantsService $userHasGroupAdminGrantsService,
-        private UserGroupRepositoryInterface $userGroupRepository,
         private ValidationInterface $validator
     ) {
     }
@@ -71,7 +69,7 @@ class GroupUserRoleChangeUseCase extends ServiceBase
         }
     }
 
-    private function createGroupUserRoleChangeDto(Identifier|null $groupId, array $usersId, Rol $rol): GroupUserRoleChangeDto
+    private function createGroupUserRoleChangeDto(?Identifier $groupId, array $usersId, Rol $rol): GroupUserRoleChangeDto
     {
         return new GroupUserRoleChangeDto($groupId, $usersId, $rol);
     }

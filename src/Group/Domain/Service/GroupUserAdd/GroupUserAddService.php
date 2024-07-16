@@ -21,7 +21,7 @@ use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersPermissionsExceptio
 
 class GroupUserAddService
 {
-    private const GROUP_USERS_MAX = AppConfig::GROUP_USERS_MAX;
+    private const int GROUP_USERS_MAX = AppConfig::GROUP_USERS_MAX;
 
     public function __construct(
         private UserGroupRepositoryInterface $userGroupRepository,
@@ -72,7 +72,7 @@ class GroupUserAddService
     private function getUsersNotInGroup(PaginatorInterface $usersGroup, array $usersId): array
     {
         $usersGroupIds = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(),
             iterator_to_array($usersGroup)
         );
 

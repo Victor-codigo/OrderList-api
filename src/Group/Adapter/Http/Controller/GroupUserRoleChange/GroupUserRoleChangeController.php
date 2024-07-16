@@ -133,7 +133,7 @@ class GroupUserRoleChangeController extends AbstractController
     /**
      * @param string[]|null $usersId
      */
-    private function createGroupUserRoleChangeInputDto(string|null $groupId, array|null $usersId, bool|null $admin): GroupUserRoleChangeInputDto
+    private function createGroupUserRoleChangeInputDto(?string $groupId, ?array $usersId, ?bool $admin): GroupUserRoleChangeInputDto
     {
         /** @var UserSharedInterface $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();
@@ -147,7 +147,7 @@ class GroupUserRoleChangeController extends AbstractController
     private function createResponse(array $usersId): JsonResponse
     {
         $responseData = new ResponseDto(
-            ['id' => array_map(fn (Identifier $id) => $id->getValue(), $usersId)],
+            ['id' => array_map(fn (Identifier $id): ?string => $id->getValue(), $usersId)],
             [],
             'Users roles has been changed',
             RESPONSE_STATUS::OK

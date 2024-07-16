@@ -12,7 +12,6 @@ use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\ValidationInterface;
-use User\Domain\Model\User;
 
 class GroupUserAddInputDto implements ServiceInputDtoInterface
 {
@@ -34,13 +33,14 @@ class GroupUserAddInputDto implements ServiceInputDtoInterface
         $this->rol = ValueObjectFactory::createRol($admin ? GROUP_ROLES::ADMIN : GROUP_ROLES::USER);
 
         $this->users = null === $users ? [] : array_map(
-            fn (string $user) => 'name' === $identifierType
+            fn (string $user): NameWithSpaces|Identifier => 'name' === $identifierType
                 ? ValueObjectFactory::createNameWithSpaces($user)
                 : ValueObjectFactory::createIdentifier($user),
             $users
         );
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray([
@@ -57,7 +57,7 @@ class GroupUserAddInputDto implements ServiceInputDtoInterface
 
         // flat user errors
         $usersIdErrorList = [];
-        array_walk_recursive($usersIdErrorListValueObject, function ($error) use (&$usersIdErrorList) { $usersIdErrorList[] = $error; });
+        array_walk_recursive($usersIdErrorListValueObject, function ($error) use (&$usersIdErrorList): void { $usersIdErrorList[] = $error; });
         $usersIdErrorList = array_merge($usersIdErrorListNotBlank, $usersIdErrorList);
         $usersIdErrorList = array_unique($usersIdErrorList, SORT_REGULAR);
 

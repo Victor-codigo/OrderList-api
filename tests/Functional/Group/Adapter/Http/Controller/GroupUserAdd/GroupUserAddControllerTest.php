@@ -13,45 +13,26 @@ class GroupUserAddControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/groups/user';
-    private const METHOD = 'POST';
-    private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const GROUP_TYPE_USER_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
-    private const GROUP_USERS_100_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const USER_TO_ADD_IDS = [
+    private const string ENDPOINT = '/api/v1/groups/user';
+    private const string METHOD = 'POST';
+    private const string GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const string GROUP_TYPE_USER_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
+    private const string GROUP_USERS_100_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const array USER_TO_ADD_IDS = [
         '1552b279-5f78-4585-ae1b-31be2faabba8',
         'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7',
     ];
 
-    private const USERS_DELETED_OR_NOT_ACTIVE = [
+    private const array USERS_DELETED_OR_NOT_ACTIVE = [
         '68e94495-16f0-4acd-adbe-f2b9575e6544', // deleted
         'bd2cbad1-6ccf-48e3-bb92-bc9961bc011e', // not active
     ];
-    private const USER_ALREADY_IN_THE_GROUP = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
+    private const string USER_ALREADY_IN_THE_GROUP = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
-    }
-
-    private function usersIdDataProvider(): array
-    {
-        return [
-            [
-                'identifier',
-                [
-                    '1552b279-5f78-4585-ae1b-31be2faabba8' => '1552b279-5f78-4585-ae1b-31be2faabba8',
-                    'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7' => 'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7',
-                ],
-            ],
-            [
-                'name',
-                [
-                    'a3ca650a-a26a-4198-9317-ff3797dcca25' => 'Alfreda',
-                    'a0f50ee2-363d-4044-9d3e-d2929f46fbb4' => 'Charlota',
-                ],
-            ],
-        ];
     }
 
     /** @test */

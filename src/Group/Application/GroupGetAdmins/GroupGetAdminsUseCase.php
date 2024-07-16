@@ -69,7 +69,7 @@ class GroupGetAdminsUseCase extends ServiceBase
     {
         $userGroup = array_filter(
             iterator_to_array($usersGroup),
-            fn (UserGroup $userGroup) => $userGroup->getUserId()->equalTo($userSession->getId())
+            fn (UserGroup $userGroup): bool => $userGroup->getUserId()->equalTo($userSession->getId())
         );
 
         if (empty($userGroup)) {
@@ -81,11 +81,11 @@ class GroupGetAdminsUseCase extends ServiceBase
     {
         $groupAdmins = array_filter(
             iterator_to_array($groupUsers),
-            fn (UserGroup $userGroup) => $userGroup->getRoles()->has(new Rol(GROUP_ROLES::ADMIN))
+            fn (UserGroup $userGroup): bool => $userGroup->getRoles()->has(new Rol(GROUP_ROLES::ADMIN))
         );
 
         return array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId()->getValue(),
+            fn (UserGroup $userGroup): ?string => $userGroup->getUserId()->getValue(),
             $groupAdmins
         );
     }

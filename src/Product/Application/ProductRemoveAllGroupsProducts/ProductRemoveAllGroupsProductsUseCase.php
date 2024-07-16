@@ -7,7 +7,6 @@ namespace Product\Application\ProductRemoveAllGroupsProducts;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
@@ -23,7 +22,6 @@ class ProductRemoveAllGroupsProductsUseCase extends ServiceBase
     public function __construct(
         private ValidationInterface $validator,
         private ProductRemoveAllGroupsProductsService $productRemoveAllGroupsProductsService,
-        private ModuleCommunicationInterface $moduleCommunication,
         private string $systemKey
     ) {
     }

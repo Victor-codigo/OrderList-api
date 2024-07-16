@@ -12,6 +12,7 @@ class CustomEventSubscriberWithOneMethodWithPriority implements EventDomainSubsc
     {
     }
 
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [

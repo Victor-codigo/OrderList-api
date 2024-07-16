@@ -2,23 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Group\Adapter\Http\Controller\GroupUserRoleChange\Dto;
+namespace Test\Unit\Group\Adapter\Http\Controller\GroupUserRoleChange\Dto;
 
+use Group\Adapter\Http\Controller\GroupUserRoleChange\Dto\GroupUserRoleChangeRequestDto;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 
 class GroupUserRoleChangeRequestDtoTest extends TestCase
 {
-    private const USER_ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
-    private const USERS_NUM_MAX = 50;
+    private const string USER_ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
+    private const int USERS_NUM_MAX = 50;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
     }
 
-    private function createRequest(array|null $attributes): GroupUserRoleChangeRequestDto
+    private function createRequest(?array $attributes): GroupUserRoleChangeRequestDto
     {
         $requestAttributes = [
             'group_id' => null,

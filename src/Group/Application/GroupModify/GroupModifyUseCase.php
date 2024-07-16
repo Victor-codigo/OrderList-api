@@ -44,7 +44,7 @@ class GroupModifyUseCase extends ServiceBase
             throw GroupModifyPermissionsException::fromMessage('Not permissions in this group');
         } catch (DBNotFoundException) {
             throw GroupModifyGroupNotFoundException::fromMessage('Group not found');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainErrorException::fromMessage('An error has been occurred');
         }
     }

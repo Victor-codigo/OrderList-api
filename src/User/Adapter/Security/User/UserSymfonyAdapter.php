@@ -19,11 +19,13 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
     private User $user;
     private UserPasswordHasherInterface $passwordHasher;
 
+    #[\Override]
     public function getUser(): User
     {
         return $this->user;
     }
 
+    #[\Override]
     public function setUser(User $user): self
     {
         $this->user = $user;
@@ -41,6 +43,7 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
         $this->user = $user ?? $this->createUserNull();
     }
 
+    #[\Override]
     public function getRoles(): array
     {
         $roles = $this->user
@@ -57,10 +60,12 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
         );
     }
 
-    public function eraseCredentials()
+    #[\Override]
+    public function eraseCredentials(): void
     {
     }
 
+    #[\Override]
     public function getUserIdentifier(): string
     {
         $identifier = $this->user
@@ -70,6 +75,7 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
         return $identifier ?? '';
     }
 
+    #[\Override]
     public function getPassword(): string
     {
         $password = $this->user
@@ -79,6 +85,7 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
         return $password ?? '';
     }
 
+    #[\Override]
     public function passwordHash(string $plainPassword): void
     {
         $this->user->setPassword(ValueObjectFactory::createPassword(
@@ -86,6 +93,7 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
         ));
     }
 
+    #[\Override]
     public function passwordIsValid(string $plainPassword): bool
     {
         if (!$this->passwordHasher->isPasswordValid($this, $plainPassword)) {
@@ -99,6 +107,7 @@ class UserSymfonyAdapter implements SymfonyUserInterface, PasswordAuthenticatedU
         return true;
     }
 
+    #[\Override]
     public function passwordNeedsRehash(): bool
     {
         return $this->passwordHasher->needsRehash($this);

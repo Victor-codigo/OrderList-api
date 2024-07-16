@@ -6,7 +6,7 @@ namespace Common\Domain\Model\ValueObject\Date;
 
 class ValueObjectDateFactory
 {
-    public static function createDateNowToFuture(\DateTime|null $date): DateNowToFuture
+    public static function createDateNowToFuture(?\DateTime $date): DateNowToFuture
     {
         return new DateNowToFuture($date);
     }

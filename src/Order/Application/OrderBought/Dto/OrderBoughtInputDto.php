@@ -25,6 +25,7 @@ class OrderBoughtInputDto implements ServiceInputDtoInterface
         $this->bought = $bought;
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

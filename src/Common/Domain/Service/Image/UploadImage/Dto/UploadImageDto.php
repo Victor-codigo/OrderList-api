@@ -18,7 +18,7 @@ class UploadImageDto
     public function __construct(
         public readonly EntityImageModifyInterface $entity,
         public readonly Path $imagesPathToStore,
-        public readonly ObjectValueObject|null $imageUploaded = null,
+        public readonly ?ObjectValueObject $imageUploaded,
         public readonly bool $remove,
         public readonly ?float $resizeWidth,
         public readonly ?float $resizeHeight

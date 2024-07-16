@@ -6,6 +6,7 @@ namespace Test\Unit\Notification\Domain\NotificationRemove;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Notification\Domain\Model\Notification;
@@ -17,14 +18,15 @@ use PHPUnit\Framework\TestCase;
 
 class NotificationRemoveServiceTest extends TestCase
 {
-    private const NOTIFICATION_ID_1 = '2d208936-a7e9-32c1-963f-0df7f57ae463';
-    private const NOTIFICATION_ID_2 = '38dac117-2d4f-4057-8bc6-c972b5f439c6';
-    private const NOTIFICATION_ID_3 = '79a674c7-e109-3094-b8d5-c19cc00f5519';
+    private const string NOTIFICATION_ID_1 = '2d208936-a7e9-32c1-963f-0df7f57ae463';
+    private const string NOTIFICATION_ID_2 = '38dac117-2d4f-4057-8bc6-c972b5f439c6';
+    private const string NOTIFICATION_ID_3 = '79a674c7-e109-3094-b8d5-c19cc00f5519';
 
     private NotificationRemoveService $object;
     private MockObject|NotificationRepositoryInterface $notificationRepository;
     private MockObject|PaginatorInterface $paginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -50,7 +52,7 @@ class NotificationRemoveServiceTest extends TestCase
     public function itShouldRemoveNotifications(): void
     {
         $notifications = $this->getNotifications();
-        $notificationsIds = array_map(fn (Notification $notification) => $notification->getId(), iterator_to_array($notifications));
+        $notificationsIds = array_map(fn (Notification $notification): Identifier => $notification->getId(), iterator_to_array($notifications));
         $input = new NotificationRemoveDto($notificationsIds);
 
         $this->paginator
@@ -82,7 +84,7 @@ class NotificationRemoveServiceTest extends TestCase
     public function itShouldFailRemovingNotificationsNotFound(): void
     {
         $notifications = $this->getNotifications();
-        $notificationsIds = array_map(fn (Notification $notification) => $notification->getId(), iterator_to_array($notifications));
+        $notificationsIds = array_map(fn (Notification $notification): Identifier => $notification->getId(), iterator_to_array($notifications));
         $input = new NotificationRemoveDto($notificationsIds);
 
         $this->paginator
@@ -107,7 +109,7 @@ class NotificationRemoveServiceTest extends TestCase
     public function itShouldFailRemovingDatabaseErrorConnection(): void
     {
         $notifications = $this->getNotifications();
-        $notificationsIds = array_map(fn (Notification $notification) => $notification->getId(), iterator_to_array($notifications));
+        $notificationsIds = array_map(fn (Notification $notification): Identifier => $notification->getId(), iterator_to_array($notifications));
         $input = new NotificationRemoveDto($notificationsIds);
 
         $this->paginator

@@ -14,10 +14,10 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/list-orders';
-    private const METHOD = 'GET';
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const LIST_ORDERS_ID = [
+    private const string ENDPOINT = '/api/v1/list-orders';
+    private const string METHOD = 'GET';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const array LIST_ORDERS_ID = [
         'ba6bed75-4c6e-4ac3-8787-5bded95dac8d',
         'd446eab9-5199-48d0-91f5-0407a86bcb4f',
     ];

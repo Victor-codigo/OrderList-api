@@ -12,10 +12,11 @@ use User\Application\UserRegisterEmailConfirmation\Dto\UserEmailConfirmationInpu
 
 class UserRegisterEmailConfirmationInputDtoTest extends TestCase
 {
-    private const TOKEN_MIN_LENGTH = 36;
+    private const int TOKEN_MIN_LENGTH = 36;
 
     private ValidationInterface $validator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

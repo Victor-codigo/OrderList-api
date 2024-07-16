@@ -9,6 +9,7 @@ use Common\Domain\Validation\ConstraintFactory;
 
 class JwtToken extends StringValueObject
 {
+    #[\Override]
     protected function defineConstraints(): void
     {
         $this

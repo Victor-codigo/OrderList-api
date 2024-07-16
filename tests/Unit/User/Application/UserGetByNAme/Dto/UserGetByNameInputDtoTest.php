@@ -16,6 +16,7 @@ class UserGetByNameInputDtoTest extends TestCase
     private ValidationInterface $validator;
     private User $userSession;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

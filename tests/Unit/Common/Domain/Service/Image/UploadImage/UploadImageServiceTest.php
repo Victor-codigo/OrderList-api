@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Service\Image\UploadImage;
 
-use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\FileUpload\Exception\File\FileException;
+use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\Image\Exception\ImageResizeException;
 use Common\Domain\Model\ValueObject\Object\ObjectValueObject;
 use Common\Domain\Model\ValueObject\String\Path;
@@ -24,7 +24,7 @@ require_once 'tests/BuiltinFunctions/UploadImageService.php';
 
 class UploadImageServiceTest extends TestCase
 {
-    private const IMAGES_PATH = 'path/to/images';
+    private const string IMAGES_PATH = 'path/to/images';
 
     private UploadImageService $object;
     private MockObject|FileUploadInterface $fileUpload;
@@ -33,6 +33,7 @@ class UploadImageServiceTest extends TestCase
     private MockObject|UploadedFileInterface $uploadedFile;
     private MockObject|ImageInterface $image;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -45,6 +46,7 @@ class UploadImageServiceTest extends TestCase
         $this->object = new UploadImageService($this->fileUpload, $this->image);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

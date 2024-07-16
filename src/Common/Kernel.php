@@ -20,6 +20,7 @@ class Kernel extends BaseKernel
         parent::__construct($environment, $debug);
     }
 
+    #[\Override]
     protected function build(ContainerBuilder $container): void
     {
         KernelCustom::eventSubscribersAutoWire($container);

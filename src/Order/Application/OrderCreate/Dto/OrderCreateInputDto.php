@@ -28,7 +28,7 @@ class OrderCreateInputDto implements ServiceInputDtoInterface
         $this->listOrdersId = ValueObjectFactory::createIdentifier($listOrdersId);
 
         $this->ordersData = array_map(
-            fn (array $orderData) => $this->createOrderDto($orderData, $userSession->getId()),
+            fn (array $orderData): OrderDataDto => $this->createOrderDto($orderData, $userSession->getId()),
             $ordersData ?? []
         );
     }
@@ -45,6 +45,7 @@ class OrderCreateInputDto implements ServiceInputDtoInterface
         );
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $ordersDataArrayError = $validator
@@ -57,7 +58,7 @@ class OrderCreateInputDto implements ServiceInputDtoInterface
         }
 
         $errorListOrders = array_filter(array_map(
-            fn (OrderDataDto $order) => $validator->validateValueObjectArray([
+            fn (OrderDataDto $order): array => $validator->validateValueObjectArray([
                 'product_id' => $order->productId,
                 'shop_id' => $order->shopId,
                 'description' => $order->description,

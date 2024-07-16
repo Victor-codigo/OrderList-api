@@ -13,19 +13,19 @@ class ProductRemoveAllGroupsProductsControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/products/group/remove-products';
-    private const METHOD = 'DELETE';
-    private const GROUP_EXISTS_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const GROUP_EXISTS_ID_2 = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const GROUP_EXISTS_ID_NO_PRODUCTS = '0ae87143-9623-318c-8ea1-baaf24253f0f';
-    private const PRODUCT_EXISTS_ID = [
+    private const string ENDPOINT = '/api/v1/products/group/remove-products';
+    private const string METHOD = 'DELETE';
+    private const string GROUP_EXISTS_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string GROUP_EXISTS_ID_2 = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const string GROUP_EXISTS_ID_NO_PRODUCTS = '0ae87143-9623-318c-8ea1-baaf24253f0f';
+    private const array PRODUCT_EXISTS_ID = [
         '7e3021d4-2d02-4386-8bbe-887cfe8697a8',
         '8b6d650b-7bb7-4850-bf25-36cda9bce801',
         'afc62bc9-c42c-4c4d-8098-09ce51414a92',
         'faeb885d-d6c4-466d-ac4a-793d87e03e86',
         'ca10c90a-c7e6-4594-89e9-71d2f5e74710',
     ];
-    private const SYSTEM_KEY = 'systemKeyForDev';
+    private const string SYSTEM_KEY = 'systemKeyForDev';
 
     /** @test */
     public function itShouldRemoveAllGroupsProducts(): void

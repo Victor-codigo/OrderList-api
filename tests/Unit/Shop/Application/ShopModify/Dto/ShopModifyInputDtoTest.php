@@ -19,14 +19,15 @@ require_once 'tests/BuiltinFunctions/SymfonyComponentValidatorConstraints.php';
 
 class ShopModifyInputDtoTest extends TestCase
 {
-    private const SHOP_ID = '9155b773-e59f-4b85-b5ca-f0fab1cdc613';
-    private const GROUP_ID = 'b31deb1b-2d2b-4846-9c2e-cf661ba4a51b';
-    private const PATH_FILE = 'tests/Fixtures/Files/file.txt';
-    private const PATH_IMAGE_UPLOAD = 'tests/Fixtures/Files/Image.png';
+    private const string SHOP_ID = '9155b773-e59f-4b85-b5ca-f0fab1cdc613';
+    private const string GROUP_ID = 'b31deb1b-2d2b-4846-9c2e-cf661ba4a51b';
+    private const string PATH_FILE = 'tests/Fixtures/Files/file.txt';
+    private const string PATH_IMAGE_UPLOAD = 'tests/Fixtures/Files/Image.png';
 
     private ValidationInterface $validator;
     private MockObject|UserShared $userSession;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -35,6 +36,7 @@ class ShopModifyInputDtoTest extends TestCase
         $this->userSession = $this->createMock(UserShared::class);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

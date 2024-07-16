@@ -20,14 +20,15 @@ use PHPUnit\Framework\TestCase;
 
 class GroupRemoveServiceTest extends TestCase
 {
-    private const GROUP_ID = 'id group 1';
-    private const GROUP_2_ID = 'id group 2';
-    private const PATH_GROUP_IMAGES = 'path/to/group/images';
+    private const string GROUP_ID = 'id group 1';
+    private const string GROUP_2_ID = 'id group 2';
+    private const string PATH_GROUP_IMAGES = 'path/to/group/images';
 
     private GroupRemoveService $object;
     private MockObject|GroupRepositoryInterface $groupRepository;
     private MockObject|EntityImageRemoveService $entityImageRemoveService;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -90,7 +91,7 @@ class GroupRemoveServiceTest extends TestCase
             ->expects($this->exactly(count($groupsId)))
             ->method('__invoke')
             ->with(
-                $this->callback(fn (Group $group) => $this->entityImageRemoveServiceConsecutiveCalls($group, $groups)),
+                $this->callback(fn (Group $group): bool => $this->entityImageRemoveServiceConsecutiveCalls($group, $groups)),
                 ValueObjectFactory::createPath(self::PATH_GROUP_IMAGES)
             );
 
@@ -124,7 +125,7 @@ class GroupRemoveServiceTest extends TestCase
             ->expects($this->exactly(count($groups)))
             ->method('__invoke')
             ->with(
-                $this->callback(fn (Group $group) => $this->entityImageRemoveServiceConsecutiveCalls($group, $groups)),
+                $this->callback(fn (Group $group): bool => $this->entityImageRemoveServiceConsecutiveCalls($group, $groups)),
                 ValueObjectFactory::createPath(self::PATH_GROUP_IMAGES)
             )
             ->willThrowException(new DomainInternalErrorException());
@@ -213,7 +214,7 @@ class GroupRemoveServiceTest extends TestCase
             ->expects($this->exactly(count($groups)))
             ->method('__invoke')
             ->with(
-                $this->callback(fn (Group $group) => $this->entityImageRemoveServiceConsecutiveCalls($group, $groups)),
+                $this->callback(fn (Group $group): bool => $this->entityImageRemoveServiceConsecutiveCalls($group, $groups)),
                 ValueObjectFactory::createPath(self::PATH_GROUP_IMAGES)
             );
 

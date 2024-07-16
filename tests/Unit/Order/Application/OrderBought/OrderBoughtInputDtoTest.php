@@ -14,10 +14,10 @@ use PHPUnit\Framework\TestCase;
 
 class OrderBoughtInputDtoTest extends TestCase
 {
-    private OrderBoughtInputDto $object;
     private MockObject|UserShared $userSession;
     private ValidationInterface $validator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

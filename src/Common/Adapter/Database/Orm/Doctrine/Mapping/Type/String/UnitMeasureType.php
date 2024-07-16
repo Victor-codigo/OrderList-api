@@ -12,24 +12,27 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 class UnitMeasureType extends TypeBase
 {
+    #[\Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return sprintf('CHAR(%d)', $column['length']);
     }
 
+    #[\Override]
     public function getClassImplementationName(): string
     {
         return UnitMeasure::class;
     }
 
+    #[\Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
-        /** @var UNIT_MEASURE_TYPE $notificationType */
         $unitType = parent::convertToDatabaseValue($value, $platform);
 
         return null === $unitType ? null : $unitType->value;
     }
 
+    #[\Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
         try {

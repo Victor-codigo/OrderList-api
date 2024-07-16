@@ -12,6 +12,7 @@ use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 
 class FilterDbLikeComparison extends ObjectValueObject implements ValueObjectFilterInterface
 {
+    #[\Override]
     protected function defineConstraints(): void
     {
         $this
@@ -21,6 +22,7 @@ class FilterDbLikeComparison extends ObjectValueObject implements ValueObjectFil
             ->setConstraint(ConstraintFactory::choice(VALUE_OBJECTS_CONSTRAINTS::FILTER_STRING_COMPARISON_TYPES, false, true, null, null));
     }
 
+    #[\Override]
     public function getValueWithFilter(mixed $filterValue): mixed
     {
         return match ($this->getValue()) {

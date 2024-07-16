@@ -11,12 +11,12 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class HexFileStructureCommandTest extends KernelTestCase
 {
-    public const OUTPUT_PATH = 'tests/Unit/Common/Adapter/Command/HexFileStructure/Fixtures/Output/FileStructure/';
-    public const OUTPUT_PATH_ALTERNATIVE = 'tests/Unit/Common/Adapter/Command/HexFileStructure/Fixtures/Output/FileStructure/Alternative/';
-    public const TEMPLATE_EXPECTED_PATH = 'tests/Unit/Common/Adapter/Command/HexFileStructure/Fixtures/Expected/';
+    public const string OUTPUT_PATH = 'tests/Unit/Common/Adapter/Command/HexFileStructure/Fixtures/Output/FileStructure/';
+    public const string OUTPUT_PATH_ALTERNATIVE = 'tests/Unit/Common/Adapter/Command/HexFileStructure/Fixtures/Output/FileStructure/Alternative/';
+    public const string TEMPLATE_EXPECTED_PATH = 'tests/Unit/Common/Adapter/Command/HexFileStructure/Fixtures/Expected/';
 
-    private const COMMAND = 'app:file:structure';
-    private const COMMAND_PARAMS = [
+    private const string COMMAND = 'app:file:structure';
+    private const array COMMAND_PARAMS = [
         'module' => 'Module',
         'endpointName' => 'Endpoint',
         'layer' => 'all',
@@ -27,6 +27,7 @@ class HexFileStructureCommandTest extends KernelTestCase
     private Application $application;
     private CommandTester $commandTester;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -37,6 +38,7 @@ class HexFileStructureCommandTest extends KernelTestCase
         $this->commandTester = new CommandTester($this->command);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -45,7 +47,7 @@ class HexFileStructureCommandTest extends KernelTestCase
         $this->deleteDirectory(self::OUTPUT_PATH_ALTERNATIVE);
     }
 
-    private function deleteDirectory(string $dir)
+    private function deleteDirectory(string $dir): bool
     {
         if (!file_exists($dir)) {
             return true;

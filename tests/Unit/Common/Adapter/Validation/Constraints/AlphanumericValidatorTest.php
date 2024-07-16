@@ -13,12 +13,13 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class AlphanumericValidatorTest extends TestCase
 {
-    private const PATTERN = '/^[A-Za-zÀ-ÿ0-9_]+$/i';
+    private const string PATTERN = '/^[A-Za-zÀ-ÿ0-9_]+$/i';
 
     private AlphanumericValidator $object;
     private MockObject|Alphanumeric $alphanumeric;
     private MockObject|Constraint $constraint;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

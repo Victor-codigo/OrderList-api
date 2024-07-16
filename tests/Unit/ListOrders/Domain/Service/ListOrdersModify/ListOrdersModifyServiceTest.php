@@ -17,12 +17,13 @@ use PHPUnit\Framework\TestCase;
 
 class ListOrdersModifyServiceTest extends TestCase
 {
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
 
     private ListOrdersModifyService $object;
     private MockObject|ListOrdersRepositoryInterface $listOrdersToRepository;
     private MockObject|PaginatorInterface $paginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -86,7 +87,7 @@ class ListOrdersModifyServiceTest extends TestCase
         $this->listOrdersToRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (array $listsOrdersActual) => $this->assertListOrdersIsOk([$listOrderExpected], $listsOrdersActual) || true));
+            ->with($this->callback(fn (array $listsOrdersActual): true => $this->assertListOrdersIsOk([$listOrderExpected], $listsOrdersActual) || true));
 
         $this->paginator
             ->expects($this->once())

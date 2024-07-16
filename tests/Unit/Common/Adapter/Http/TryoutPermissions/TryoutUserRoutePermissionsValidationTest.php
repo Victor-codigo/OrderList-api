@@ -11,13 +11,14 @@ use PHPUnit\Framework\TestCase;
 
 class TryoutUserRoutePermissionsValidationTest extends TestCase
 {
-    private const USER_ID = 'dc59f65f-9ded-4240-ae16-ea28a3e8c607';
-    private const USER_TRY_OUT_ID = '503e5ef3-aa71-4ba3-a944-043cb342b0b5';
-    private const ROUTE_VALID = 'user_get';
-    private const ROUTE_NOT_VALID = 'route_not_valid';
+    private const string USER_ID = 'dc59f65f-9ded-4240-ae16-ea28a3e8c607';
+    private const string USER_TRY_OUT_ID = '503e5ef3-aa71-4ba3-a944-043cb342b0b5';
+    private const string ROUTE_VALID = 'user_get';
+    private const string ROUTE_NOT_VALID = 'route_not_valid';
 
     private TryoutUserRoutePermissionsValidation $object;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -32,6 +32,7 @@ class ProductShopRepository extends RepositoryBase implements ProductShopReposit
      * @throws DBConnectionException
      * @throws DBUniqueConstraintException
      */
+    #[\Override]
     public function save(array $productsShops): void
     {
         try {
@@ -52,6 +53,7 @@ class ProductShopRepository extends RepositoryBase implements ProductShopReposit
      *
      * @throws DBConnectionException
      */
+    #[\Override]
     public function remove(array $productsShops): void
     {
         try {
@@ -68,6 +70,7 @@ class ProductShopRepository extends RepositoryBase implements ProductShopReposit
     /**
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function findProductsAndShopsOrFail(?array $productsId = null, ?array $shopsId = null, ?Identifier $groupId = null): PaginatorInterface
     {
         $query = $this->entityManager->createQueryBuilder()

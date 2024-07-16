@@ -26,10 +26,12 @@ class UsersRemoveActivationExpiredCommand extends Command
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
@@ -48,7 +50,7 @@ class UsersRemoveActivationExpiredCommand extends Command
             $output->writeln('No users to remove');
 
             return Command::SUCCESS;
-        } catch (\Throwable $th) {
+        } catch (\Throwable) {
             return Command::FAILURE;
         }
     }

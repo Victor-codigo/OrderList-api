@@ -17,6 +17,7 @@ class NotificationTypeTypeTest extends TestCase
     private NotificationTypeType $object;
     private MockObject|AbstractPlatform $platform;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

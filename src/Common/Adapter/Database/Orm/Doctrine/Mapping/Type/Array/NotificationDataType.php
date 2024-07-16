@@ -12,11 +12,13 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 class NotificationDataType extends TypeBase
 {
+    #[\Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return 'JSON';
     }
 
+    #[\Override]
     public function getClassImplementationName(): string
     {
         return NotificationData::class;
@@ -28,6 +30,7 @@ class NotificationDataType extends TypeBase
      * @throws \JsonException
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         if (!$value instanceof NotificationData) {
@@ -45,6 +48,7 @@ class NotificationDataType extends TypeBase
      * @throws LogicException
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function convertToPHPValue($value, AbstractPlatform $platform): mixed
     {
         if (null === $value) {
@@ -52,7 +56,7 @@ class NotificationDataType extends TypeBase
         }
 
         try {
-            $notificationData = json_decode($value, true, 512, JSON_THROW_ON_ERROR);
+            $notificationData = json_decode((string) $value, true, 512, JSON_THROW_ON_ERROR);
 
             return parent::convertToPHPValue($notificationData, $platform);
         } catch (\JsonException) {

@@ -16,6 +16,7 @@ class PasswordTest extends TestCase
     private ValidationInterface $validation;
     private string $validPassword = '123456';
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -23,12 +24,12 @@ class PasswordTest extends TestCase
         $this->validation = new ValidationChain();
     }
 
-    private function createPassword(string|null $password)
+    private function createPassword(?string $password): Password
     {
         return new Password($password);
     }
 
-    public function testPasswordOk()
+    public function testPasswordOk(): void
     {
         $password = $this->createPassword($this->validPassword);
         $return = $this->validation->validateValueObject($password);
@@ -37,7 +38,7 @@ class PasswordTest extends TestCase
             'It was expected that doesnt return errors');
     }
 
-    public function testPasswordNotNull()
+    public function testPasswordNotNull(): void
     {
         $password = $this->createPassword(null);
         $return = $this->validation->validateValueObject($password);
@@ -45,7 +46,7 @@ class PasswordTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL], $return);
     }
 
-    public function testPasswordNotBlankAndShort()
+    public function testPasswordNotBlankAndShort(): void
     {
         $password = $this->createPassword('');
         $return = $this->validation->validateValueObject($password);
@@ -54,7 +55,7 @@ class PasswordTest extends TestCase
             'It was expected that returns errors: [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::STRING_TOO_SHORT]');
     }
 
-    public function testPasswordNotTooLong()
+    public function testPasswordNotTooLong(): void
     {
         $password = $this->createPassword(str_repeat('-', VALUE_OBJECTS_CONSTRAINTS::PASSWORD_MAX_LENGTH + 1));
         $return = $this->validation->validateValueObject($password);

@@ -13,19 +13,19 @@ class ListsOrderRemoveAllGroupsListsOrdersControllerTest extends WebClientTestCa
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/list-orders/group/remove-change';
-    private const METHOD = 'DELETE';
-    private const USER_ID = 'a3ca650a-a26a-4198-9317-ff3797dcca25';
-    private const SYSTEM_KEY = 'systemKeyForDev';
-    private const GROUP_ID_1 = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const GROUP_ID_2 = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const LIST_ORDERS_ID_GROUP_1 = [
+    private const string ENDPOINT = '/api/v1/list-orders/group/remove-change';
+    private const string METHOD = 'DELETE';
+    private const string USER_ID = 'a3ca650a-a26a-4198-9317-ff3797dcca25';
+    private const string SYSTEM_KEY = 'systemKeyForDev';
+    private const string GROUP_ID_1 = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string GROUP_ID_2 = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const array LIST_ORDERS_ID_GROUP_1 = [
         'ba6bed75-4c6e-4ac3-8787-5bded95dac8d',
         'd446eab9-5199-48d0-91f5-0407a86bcb4f',
         'f1559a23-2f92-4660-a335-b1052d7395da',
         'f2980f67-4eb9-41ca-b452-ffa2c7da6a37',
     ];
-    private const LIST_ORDERS_ID_GROUP_2 = [
+    private const array LIST_ORDERS_ID_GROUP_2 = [
         '0c87f10f-0a0d-4fcc-adae-5cfe93d28c63',
     ];
 

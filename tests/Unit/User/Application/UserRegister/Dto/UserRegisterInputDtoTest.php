@@ -13,12 +13,12 @@ use User\Application\UserRegister\Dto\UserRegisterInputDto;
 
 class UserRegisterInputDtoTest extends TestCase
 {
-    private const REGISTRATION_KEY = '23db9ca1-1568-473e-8c23-c4613205cf36';
-    private const URL_EMAIL_CONFIRMATION = 'http://www.domain.com/confirmation';
+    private const string URL_EMAIL_CONFIRMATION = 'http://www.domain.com/confirmation';
 
     private UserRegisterInputDto $object;
     private ValidationChain $validator;
 
+    #[\Override]
     public function setup(): void
     {
         parent::setUp();
@@ -27,15 +27,14 @@ class UserRegisterInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function validationWorks()
+    public function validationWorks(): void
     {
         $this->object = UserRegisterInputDto::create(
             'email@host.com',
             'password',
             'John',
-            [new rol(USER_ROLES::USER)],
-            self::URL_EMAIL_CONFIRMATION,
-            self::REGISTRATION_KEY
+            [new Rol(USER_ROLES::USER)],
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
@@ -44,15 +43,14 @@ class UserRegisterInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function validationEmailMissing()
+    public function validationEmailMissing(): void
     {
         $this->object = UserRegisterInputDto::create(
             null,
             'password',
             'John',
-            [new rol(USER_ROLES::USER)],
-            self::URL_EMAIL_CONFIRMATION,
-            self::REGISTRATION_KEY
+            [new Rol(USER_ROLES::USER)],
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
@@ -61,15 +59,14 @@ class UserRegisterInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function validationEmailWrong()
+    public function validationEmailWrong(): void
     {
         $this->object = UserRegisterInputDto::create(
             'email@host',
             'password',
             'John',
-            [new rol(USER_ROLES::USER)],
-            self::URL_EMAIL_CONFIRMATION,
-            self::REGISTRATION_KEY
+            [new Rol(USER_ROLES::USER)],
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
@@ -78,15 +75,14 @@ class UserRegisterInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function validationPasswordMissing()
+    public function validationPasswordMissing(): void
     {
         $this->object = UserRegisterInputDto::create(
             'email@host.com',
             null,
             'John',
-            [new rol(USER_ROLES::USER)],
-            self::URL_EMAIL_CONFIRMATION,
-            self::REGISTRATION_KEY
+            [new Rol(USER_ROLES::USER)],
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
@@ -95,15 +91,14 @@ class UserRegisterInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function validationPasswordWrong()
+    public function validationPasswordWrong(): void
     {
         $this->object = UserRegisterInputDto::create(
             'email@host.com',
             'short',
             'John',
-            [new rol(USER_ROLES::USER)],
-            self::URL_EMAIL_CONFIRMATION,
-            self::REGISTRATION_KEY
+            [new Rol(USER_ROLES::USER)],
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
@@ -112,15 +107,14 @@ class UserRegisterInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function validationNameMissing()
+    public function validationNameMissing(): void
     {
         $this->object = UserRegisterInputDto::create(
             'email@host.com',
             'password',
             null,
-            [new rol(USER_ROLES::USER)],
-            self::URL_EMAIL_CONFIRMATION,
-            self::REGISTRATION_KEY
+            [new Rol(USER_ROLES::USER)],
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
@@ -129,15 +123,14 @@ class UserRegisterInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function validationNameWrong()
+    public function validationNameWrong(): void
     {
         $this->object = UserRegisterInputDto::create(
             'email@host.com',
             'password',
             '',
-            [new rol(USER_ROLES::USER)],
-            self::URL_EMAIL_CONFIRMATION,
-            self::REGISTRATION_KEY
+            [new Rol(USER_ROLES::USER)],
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
@@ -146,15 +139,14 @@ class UserRegisterInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function validationRolesMissing()
+    public function validationRolesMissing(): void
     {
         $this->object = UserRegisterInputDto::create(
             'email@host.com',
             'password',
             'John',
             null,
-            self::URL_EMAIL_CONFIRMATION,
-            self::REGISTRATION_KEY
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);
@@ -163,15 +155,14 @@ class UserRegisterInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function validationRolesWrong()
+    public function validationRolesWrong(): void
     {
         $this->object = UserRegisterInputDto::create(
             'email@host.com',
             'password',
             'John',
             [],
-            self::URL_EMAIL_CONFIRMATION,
-            self::REGISTRATION_KEY
+            self::URL_EMAIL_CONFIRMATION
         );
 
         $return = $this->object->validate($this->validator);

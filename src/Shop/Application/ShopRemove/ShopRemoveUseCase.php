@@ -7,7 +7,6 @@ namespace Shop\Application\ShopRemove;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
 use Common\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
@@ -24,7 +23,6 @@ class ShopRemoveUseCase extends ServiceBase
 {
     public function __construct(
         private ShopRemoveService $shopRemoveService,
-        private ModuleCommunicationInterface $moduleCommunication,
         private ValidationInterface $validator,
         private ValidateGroupAndUserService $validateGroupAndUserService
     ) {

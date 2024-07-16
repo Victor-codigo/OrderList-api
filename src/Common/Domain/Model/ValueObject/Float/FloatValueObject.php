@@ -8,25 +8,28 @@ use Common\Domain\Model\ValueObject\ValueObjectBase;
 
 abstract class FloatValueObject extends ValueObjectBase
 {
-    protected readonly float|null $value;
+    protected readonly ?float $value;
 
-    public function __construct(float|null $value)
+    public function __construct(?float $value)
     {
         $this->value = $value;
 
         $this->defineConstraints();
     }
 
-    public function getValue(): float|null
+    #[\Override]
+    public function getValue(): ?float
     {
         return $this->value;
     }
 
+    #[\Override]
     public function getValidationValue(): mixed
     {
         return $this->value;
     }
 
+    #[\Override]
     public function getValueObjects(): array
     {
         return [];

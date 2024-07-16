@@ -19,13 +19,14 @@ require_once 'tests/BuiltinFunctions/SymfonyComponentValidatorConstraints.php';
 
 class ProductCreateInputDtoTest extends TestCase
 {
-    private const GROUP_ID = '046030fa-cbc9-4751-b277-40622e94eda3';
-    private const PATH_IMAGE_UPLOAD = 'tests/Fixtures/Files/Image.png';
-    private const PATH_FILE = 'tests/Fixtures/Files/file.txt';
+    private const string GROUP_ID = '046030fa-cbc9-4751-b277-40622e94eda3';
+    private const string PATH_IMAGE_UPLOAD = 'tests/Fixtures/Files/Image.png';
+    private const string PATH_FILE = 'tests/Fixtures/Files/file.txt';
 
     private ValidationInterface $validator;
     private MockObject|UserShared $userSession;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -34,6 +35,7 @@ class ProductCreateInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -190,11 +192,11 @@ class ProductCreateInputDtoTest extends TestCase
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
-                'group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
-                'name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
-                'description' => [VALIDATION_ERRORS::STRING_TOO_LONG],
-                'image' => [VALIDATION_ERRORS::FILE_UPLOAD_NO_FILE],
-            ],
+            'group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
+            'name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
+            'description' => [VALIDATION_ERRORS::STRING_TOO_LONG],
+            'image' => [VALIDATION_ERRORS::FILE_UPLOAD_NO_FILE],
+        ],
             $return
         );
     }

@@ -13,6 +13,7 @@ class GetProductShopPriceOutputDto implements ApplicationOutputInterface
     ) {
     }
 
+    #[\Override]
     public function toArray(): array
     {
         return $this->productsShops;

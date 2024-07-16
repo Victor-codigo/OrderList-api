@@ -6,6 +6,7 @@ namespace Common\Domain\FileUpload\Exception;
 
 class FileUploadReplaceException extends FileUploadException
 {
+    #[\Override]
     public static function fromMessage(string $message): static
     {
         return new static($message);

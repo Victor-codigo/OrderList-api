@@ -13,10 +13,11 @@ use User\Application\UserEmailChange\Dto\UserEmailChangeInputDto;
 
 class UserEmailChangeInputDtoTest extends TestCase
 {
-    private const USER_ID = '1dfbe8ff-4627-4907-a5d2-e8d7dbbdb5da';
+    private const string USER_ID = '1dfbe8ff-4627-4907-a5d2-e8d7dbbdb5da';
 
     private ValidationInterface $validator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -32,6 +32,7 @@ class GroupGetAdminUseCaseTest extends TestCase
     private MockObject|PaginatorInterface $paginator;
     private MockObject|UserShared $userSession;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -43,18 +44,16 @@ class GroupGetAdminUseCaseTest extends TestCase
         $this->object = new GroupGetAdminsUseCase($this->validator, $this->userGroupRepository);
     }
 
-    private function getGroupUsers(string|null $setGroupId = null): \Iterator
+    private function getGroupUsers(?string $setGroupId = null): \Iterator
     {
         $group = $this->createMock(Group::class);
 
-        $usersGroup = new \ArrayIterator([
+        return new \ArrayIterator([
             UserGroup::fromPrimitives('group id 1', 'user id 1', [GROUP_ROLES::ADMIN], $group),
             UserGroup::fromPrimitives('group id 2', 'user id 2', [GROUP_ROLES::USER], $group),
             UserGroup::fromPrimitives('group id 3', 'user id 3', [GROUP_ROLES::USER], $group),
-            UserGroup::fromPrimitives(null === $setGroupId ? 'group id 4' : $setGroupId, 'user id 4', [GROUP_ROLES::ADMIN], $group),
+            UserGroup::fromPrimitives($setGroupId ?? 'group id 4', 'user id 4', [GROUP_ROLES::ADMIN], $group),
         ]);
-
-        return $usersGroup;
     }
 
     /** @test */
@@ -126,8 +125,8 @@ class GroupGetAdminUseCaseTest extends TestCase
         $groupId = 'group id';
         $userId = 'user id 1';
         $groupUsers = $this->getGroupUsers($groupId);
-        $groupAdmins = array_filter(iterator_to_array($groupUsers), fn (UserGroup $userGroup) => $userGroup->getRoles()->has(new Rol(GROUP_ROLES::ADMIN)));
-        $groupAdminsIds = array_map(fn (UserGroup $userGroup) => $userGroup->getUserId()->getValue(), $groupAdmins);
+        $groupAdmins = array_filter(iterator_to_array($groupUsers), fn (UserGroup $userGroup): bool => $userGroup->getRoles()->has(new Rol(GROUP_ROLES::ADMIN)));
+        $groupAdminsIds = array_map(fn (UserGroup $userGroup): ?string => $userGroup->getUserId()->getValue(), $groupAdmins);
         $input = new GroupGetAdminsInputDto($this->userSession, $groupId);
 
         $this->validator
@@ -165,8 +164,8 @@ class GroupGetAdminUseCaseTest extends TestCase
         $groupId = 'group id';
         $userId = 'user id 2';
         $groupUsers = $this->getGroupUsers($groupId);
-        $groupAdmins = array_filter(iterator_to_array($groupUsers), fn (UserGroup $userGroup) => $userGroup->getRoles()->has(new Rol(GROUP_ROLES::ADMIN)));
-        $groupAdminsIds = array_map(fn (UserGroup $userGroup) => $userGroup->getUserId()->getValue(), $groupAdmins);
+        $groupAdmins = array_filter(iterator_to_array($groupUsers), fn (UserGroup $userGroup): bool => $userGroup->getRoles()->has(new Rol(GROUP_ROLES::ADMIN)));
+        $groupAdminsIds = array_map(fn (UserGroup $userGroup): ?string => $userGroup->getUserId()->getValue(), $groupAdmins);
         $input = new GroupGetAdminsInputDto($this->userSession, $groupId);
 
         $this->validator

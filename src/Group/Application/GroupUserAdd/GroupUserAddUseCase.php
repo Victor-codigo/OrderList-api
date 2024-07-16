@@ -30,7 +30,6 @@ use Group\Application\GroupUserRoleChange\Exception\GroupUserRoleChangePermissio
 use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
-use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupUserAdd\Dto\GroupUserAddDto;
 use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersAlreadyInTheGroupException;
 use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersMaxNumberExceededException;
@@ -42,7 +41,6 @@ class GroupUserAddUseCase extends ServiceBase
 {
     public function __construct(
         private ValidationInterface $validator,
-        private UserGroupRepositoryInterface $userGroupRepository,
         private GroupRepositoryInterface $groupRepository,
         private UserHasGroupAdminGrantsService $userHasGroupAdminGrantsService,
         private GroupUserAddService $groupUserAddService,
@@ -79,7 +77,7 @@ class GroupUserAddUseCase extends ServiceBase
             throw GroupUserAddPermissionException::fromMessage('Permissions denied');
         } catch (DBNotFoundException) {
             throw GroupUserAddGroupNotFoundException::fromMessage('Group not found');
-        } catch (DBConnectionException|ModuleCommunicationException $e) {
+        } catch (DBConnectionException|ModuleCommunicationException) {
             throw DomainErrorException::fromMessage('An error has been occurred');
         }
     }
@@ -136,7 +134,7 @@ class GroupUserAddUseCase extends ServiceBase
         $usersData = $this->getUserByNameOrFail($users);
 
         return array_map(
-            fn (array $userData) => ValueObjectFactory::createIdentifier($userData['id']),
+            fn (array $userData): Identifier => ValueObjectFactory::createIdentifier($userData['id']),
             $usersData
         );
     }
@@ -163,7 +161,7 @@ class GroupUserAddUseCase extends ServiceBase
     private function createNotificationGroupUserAdded(array $usersGroupToNotify, Group $group, UserShared $userSession, string $systemKey): void
     {
         $notificationData = ModuleCommunicationFactory::notificationCreateGroupUserAdded(
-            array_map(fn (UserGroup $userGroup) => $userGroup->getUserId(), $usersGroupToNotify),
+            array_map(fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(), $usersGroupToNotify),
             $group->getName(),
             $userSession->getName(),
             $systemKey
@@ -191,7 +189,7 @@ class GroupUserAddUseCase extends ServiceBase
     private function createGroupUserAddOutputDto(array $usersId): GroupUserAddOutputDto
     {
         $users = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(),
             $usersId
         );
 

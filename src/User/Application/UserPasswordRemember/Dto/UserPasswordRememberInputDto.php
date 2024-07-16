@@ -12,15 +12,16 @@ use Common\Domain\Validation\ValidationInterface;
 
 class UserPasswordRememberInputDto implements ServiceInputDtoInterface
 {
-    public readonly Email|null $email;
-    public readonly Url|null $passwordRememberUrl;
+    public readonly ?Email $email;
+    public readonly ?Url $passwordRememberUrl;
 
-    public function __construct(string|null $email, string|null $passwordRememberUrl)
+    public function __construct(?string $email, ?string $passwordRememberUrl)
     {
         $this->email = ValueObjectFactory::createEmail($email);
         $this->passwordRememberUrl = ValueObjectFactory::createUrl($passwordRememberUrl);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

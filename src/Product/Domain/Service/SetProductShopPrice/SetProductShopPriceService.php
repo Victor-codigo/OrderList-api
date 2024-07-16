@@ -81,7 +81,7 @@ class SetProductShopPriceService
             );
 
             return iterator_to_array($productsShopsPaginator);
-        } catch (DBNotFoundException $e) {
+        } catch (DBNotFoundException) {
             return [];
         }
     }
@@ -97,7 +97,7 @@ class SetProductShopPriceService
      */
     private function modifyProductShops(array $productsShops, array $productsId, array $shopsId, array $prices, array $units): array
     {
-        $productsShopsFilter = function (ProductShop $productShop) use ($productsId, $shopsId, $prices, $units) {
+        $productsShopsFilter = function (ProductShop $productShop) use ($productsId, $shopsId, $prices, $units): bool {
             foreach ($productsId as $index => $productId) {
                 if ($productShop->getProductId() != $productId) {
                     continue;
@@ -128,7 +128,7 @@ class SetProductShopPriceService
      */
     private function getProductShopsToRemove(array $productsShops, array $productsId, array $shopsId): array
     {
-        $productsShopsFilter = function (ProductShop $productShop) use ($productsId, $shopsId) {
+        $productsShopsFilter = function (ProductShop $productShop) use ($productsId, $shopsId): bool {
             foreach ($productsId as $index => $productId) {
                 if ($productShop->getProductId() == $productId
                 && $productShop->getShopId() == $shopsId[$index]) {
@@ -154,11 +154,11 @@ class SetProductShopPriceService
     private function createProductShopsToAdd(Identifier $groupId, array $productsShopsDb, array $productsId, array $shopsId, array $prices, array $units): array
     {
         $productsIdAndShopsIdPrices = array_map(
-            fn (Identifier $productId, Identifier $shopId, Money $price, UnitMeasure $unit) => ['productId' => $productId, 'shopId' => $shopId, 'price' => $price, 'unit' => $unit],
+            fn (Identifier $productId, Identifier $shopId, Money $price, UnitMeasure $unit): array => ['productId' => $productId, 'shopId' => $shopId, 'price' => $price, 'unit' => $unit],
             $productsId, $shopsId, $prices, $units
         );
 
-        $productsIdAndShopsIdPricesFilterCallback = function (array $productIdAndShopIdPrice) use ($productsShopsDb) {
+        $productsIdAndShopsIdPricesFilterCallback = function (array $productIdAndShopIdPrice) use ($productsShopsDb): bool {
             foreach ($productsShopsDb as $productShopDb) {
                 if (!$productShopDb->getProductId()->equalTo($productIdAndShopIdPrice['productId'])) {
                     continue;
@@ -191,7 +191,7 @@ class SetProductShopPriceService
         $productsDb = $this->getProductsFromDb($groupId, array_column($productsIdAndShopsIdPriceUnit, 'productId'));
         $shopsDb = $this->getShopsFromDb($groupId, array_column($productsIdAndShopsIdPriceUnit, 'shopId'));
 
-        $createProductShopCallback = function (array $productIdAndShopIdPriceUnit) use ($productsDb, $shopsDb) {
+        $createProductShopCallback = function (array $productIdAndShopIdPriceUnit) use ($productsDb, $shopsDb): ?ProductShop {
             $productId = $productIdAndShopIdPriceUnit['productId']->getValue();
             $shopId = $productIdAndShopIdPriceUnit['shopId']->getValue();
 
@@ -252,7 +252,7 @@ class SetProductShopPriceService
     {
         return array_combine(
             array_map(
-                fn (Product|Shop $shop) => $shop->getId()->getValue(),
+                fn (Product|Shop $shop): ?string => $shop->getId()->getValue(),
                 $productsOrShops
             ),
             $productsOrShops

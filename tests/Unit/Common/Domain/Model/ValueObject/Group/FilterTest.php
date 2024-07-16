@@ -16,6 +16,7 @@ class FilterTest extends TestCase
 {
     private ValidationChain $validation;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -121,7 +122,7 @@ class FilterTest extends TestCase
         $this->assertEquals([
             'type' => [VALIDATION_ERRORS::CHOICE_NOT_SUCH],
             'value' => [VALIDATION_ERRORS::ALPHANUMERIC],
-            ],
+        ],
             $return
         );
     }

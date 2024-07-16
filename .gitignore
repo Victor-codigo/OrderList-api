@@ -27,3 +27,7 @@ public/assets/img
 ###> lexik/jwt-authentication-bundle ###
 /src/Common/Adapter/Framework/Config/JwtKeys/Lexik/*.pem
 ###< lexik/jwt-authentication-bundle ###
+
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###

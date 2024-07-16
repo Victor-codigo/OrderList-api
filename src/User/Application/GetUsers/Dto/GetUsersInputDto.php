@@ -15,10 +15,10 @@ class GetUsersInputDto implements ServiceInputDtoInterface
     /**
      * @var Identifier[]
      */
-    public readonly array|null $usersId;
+    public readonly ?array $usersId;
     public readonly User $userSession;
 
-    public function __construct(User $userSession, array|null $usersId)
+    public function __construct(User $userSession, ?array $usersId)
     {
         $this->userSession = $userSession;
 
@@ -29,11 +29,12 @@ class GetUsersInputDto implements ServiceInputDtoInterface
         }
 
         $this->usersId = array_map(
-            fn (string $id) => ValueObjectFactory::createIdentifier($id),
+            fn (string $id): Identifier => ValueObjectFactory::createIdentifier($id),
             $usersId
         );
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator

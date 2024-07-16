@@ -6,6 +6,11 @@ namespace Test\Unit\User\Domain\Service\GetUsersPublicData;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\LogicException;
+use Common\Domain\Model\ValueObject\Array\Roles;
+use Common\Domain\Model\ValueObject\String\Email;
+use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
+use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Struct\SCOPE;
 use Common\Domain\Validation\User\USER_ROLES;
@@ -19,12 +24,13 @@ use User\Domain\Service\GetUsersPublicData\GeUsersPublicDataService;
 
 class GetUsersPublcDataServiceTest extends TestCase
 {
-    private const USER_PUBLIC_IMAGE_PATH = 'userPublicImagePath';
-    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const string USER_PUBLIC_IMAGE_PATH = 'userPublicImagePath';
+    private const string APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
 
     private GeUsersPublicDataService $object;
     private MockObject|UserRepositoryInterface $userRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -72,8 +78,8 @@ class GetUsersPublcDataServiceTest extends TestCase
     {
         $usersId = $this->getUsersId();
         $expectedUsers = $this->getUsers();
-        $expectedUsersNames = array_map(fn (User $user) => $user->getName(), $expectedUsers);
-        $expectedUsersIdentifiers = array_map(fn (User $user) => $user->getId(), $expectedUsers);
+        $expectedUsersNames = array_map(fn (User $user): NameWithSpaces => $user->getName(), $expectedUsers);
+        $expectedUsersIdentifiers = array_map(fn (User $user): Identifier => $user->getId(), $expectedUsers);
 
         $this->userRepository
             ->expects($this->once())
@@ -100,12 +106,12 @@ class GetUsersPublcDataServiceTest extends TestCase
     {
         $usersId = $this->getUsersId();
         $expectedUsers = $this->getUsers();
-        $expectedUsersIdentifiers = array_map(fn (User $user) => $user->getId(), $expectedUsers);
-        $expectedUsersEmail = array_map(fn (User $user) => $user->getEmail(), $expectedUsers);
-        $expectedUsersNames = array_map(fn (User $user) => $user->getName(), $expectedUsers);
-        $expectedUsersRoles = array_map(fn (User $user) => $user->getRoles(), $expectedUsers);
-        $expectedUsersImages = array_map(fn (User $user) => $user->getImage(), $expectedUsers);
-        $expectedUsersCreatedOn = array_map(fn (User $user) => $user->getCreatedOn(), $expectedUsers);
+        $expectedUsersIdentifiers = array_map(fn (User $user): Identifier => $user->getId(), $expectedUsers);
+        $expectedUsersEmail = array_map(fn (User $user): Email => $user->getEmail(), $expectedUsers);
+        $expectedUsersNames = array_map(fn (User $user): NameWithSpaces => $user->getName(), $expectedUsers);
+        $expectedUsersRoles = array_map(fn (User $user): Roles => $user->getRoles(), $expectedUsers);
+        $expectedUsersImages = array_map(fn (User $user): Path => $user->getImage(), $expectedUsers);
+        $expectedUsersCreatedOn = array_map(fn (User $user): \DateTime => $user->getCreatedOn(), $expectedUsers);
 
         $this->userRepository
             ->expects($this->once())
@@ -158,7 +164,7 @@ class GetUsersPublcDataServiceTest extends TestCase
     /** @test */
     public function itShouldGetUsersByName(): void
     {
-        $usersName = array_map(fn (User $user) => $user->getName(), $this->getUsers());
+        $usersName = array_map(fn (User $user): NameWithSpaces => $user->getName(), $this->getUsers());
         $expectedUsers = $this->getUsers();
 
         $this->userRepository
@@ -201,7 +207,7 @@ class GetUsersPublcDataServiceTest extends TestCase
     /** @test */
     public function itShouldFailNoUsersFound(): void
     {
-        $usersId = array_map(fn (User $user) => $user->getId(), $this->getUsersDeletedOrNotActive());
+        $usersId = array_map(fn (User $user): Identifier => $user->getId(), $this->getUsersDeletedOrNotActive());
 
         $this->userRepository
         ->expects($this->once())

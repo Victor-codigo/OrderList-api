@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Test\Unit\Shop\Domain\Service\ShopModify;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
-use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\FileUpload\Exception\File\FileException;
+use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\Image\Exception\ImageResizeException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
@@ -26,9 +26,9 @@ require_once 'tests/BuiltinFunctions/ShopModifyService.php';
 
 class ShopModifyServiceTest extends TestCase
 {
-    private const SHOP_ID = 'shop id';
-    private const GROUP_ID = 'group id';
-    private const SHOP_IMAGE_PATH = 'path\to\shops\images';
+    private const string SHOP_ID = 'shop id';
+    private const string GROUP_ID = 'group id';
+    private const string SHOP_IMAGE_PATH = 'path\to\shops\images';
 
     private ShopModifyService $object;
     private MockObject|ShopRepositoryInterface $shopRepository;
@@ -37,6 +37,7 @@ class ShopModifyServiceTest extends TestCase
     private MockObject|PaginatorInterface $paginator;
     private MockObject|ImageInterface $image;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -49,6 +50,7 @@ class ShopModifyServiceTest extends TestCase
         $this->object = new ShopModifyService($this->shopRepository, $this->fileUpload, $this->image, self::SHOP_IMAGE_PATH);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

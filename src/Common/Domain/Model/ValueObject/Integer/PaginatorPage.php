@@ -9,6 +9,7 @@ use Common\Domain\Validation\ConstraintFactory;
 
 class PaginatorPage extends IntegerValueObject
 {
+    #[\Override]
     protected function defineConstraints(): void
     {
         $this

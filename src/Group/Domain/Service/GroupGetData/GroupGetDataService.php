@@ -49,7 +49,7 @@ class GroupGetDataService
 
         return array_filter(
             $groups,
-            fn (Group $group) => $group->getType()->equalTo(new GroupType($groupType))
+            fn (Group $group): bool => $group->getType()->equalTo(new GroupType($groupType))
         );
     }
 

@@ -14,11 +14,12 @@ use PHPUnit\Framework\TestCase;
 
 class NotificationRemoveAllUserNotificationsInputDtoTest extends TestCase
 {
-    private const SYSTEM_KEY = 'systemKeyForDev';
+    private const string SYSTEM_KEY = 'systemKeyForDev';
 
     private ValidationInterface $validator;
     private MockObject|UserShared $userSession;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

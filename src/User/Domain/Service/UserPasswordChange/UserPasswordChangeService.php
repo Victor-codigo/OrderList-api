@@ -40,7 +40,7 @@ class UserPasswordChangeService
     /**
      * @throws PasswordNewAndRepeatAreNotTheSameException
      */
-    private function validateNewPassword(UserPasswordChangeDto $passwordDto)
+    private function validateNewPassword(UserPasswordChangeDto $passwordDto): void
     {
         if (!$passwordDto->passwordNew->equalTo($passwordDto->passwordNewRepeat)) {
             throw PasswordNewAndRepeatAreNotTheSameException::fromMessage('Password new and new repeat are not equal');

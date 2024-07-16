@@ -9,6 +9,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 
 abstract class DateType extends TypeBase
 {
+    #[\Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return sprintf('DATETIME');

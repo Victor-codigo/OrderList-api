@@ -6,14 +6,14 @@ namespace User\Application\UserRegister\Dto;
 
 final class ProfileCreateInputDto
 {
-    public readonly string|null $image;
+    public readonly ?string $image;
 
-    private function __construct(string|null $image = null)
+    private function __construct(?string $image = null)
     {
         $this->image = $image;
     }
 
-    public static function create(string|null $image = null): self
+    public static function create(?string $image = null): self
     {
         return new self($image);
     }

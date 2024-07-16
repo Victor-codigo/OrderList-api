@@ -25,6 +25,7 @@ class JwtAuthenticatedListenerTest extends TestCase
     private MockObject|UserInterface $userAuthenticationEvent;
     private MockObject|User $user;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -57,7 +58,7 @@ class JwtAuthenticatedListenerTest extends TestCase
         $this->eventDispatcher
             ->expects($this->once())
             ->method('dispatch')
-            ->with($this->callback(function (UserLoginEvent $event) use ($eventUserLoginEvent) {
+            ->with($this->callback(function (UserLoginEvent $event) use ($eventUserLoginEvent): bool {
                 $this->assertEquals($eventUserLoginEvent->user, $event->user);
                 $this->assertInstanceOf(\DateTimeImmutable::class, $event->getOccurredOn());
 

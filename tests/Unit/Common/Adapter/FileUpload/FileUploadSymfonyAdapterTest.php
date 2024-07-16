@@ -34,6 +34,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
     private MockObject|FileUploadSymfonyAdapter $object;
     private MockObject|UploadedFileInterface $file;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -42,6 +43,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
         $this->object = $this->createPartialMock(FileUploadSymfonyAdapter::class, ['uniqid', 'slug']);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -76,7 +78,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
         $this->assertSame($slugFileName, $return);
     }
 
-    private function mock__invokeStubs(string $originalFileName, string $safeFileName, string $slugFileName, string $pathToSaveFile, string $uniqid, \Exception|UploadedFileInterface $moveReturn)
+    private function mock__invokeStubs(string $originalFileName, string $safeFileName, string $slugFileName, string $pathToSaveFile, string $uniqid, \Exception|UploadedFileInterface $moveReturn): void
     {
         $this->file
             ->expects($this->once())
@@ -87,7 +89,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
             ->expects($this->once())
             ->method('move')
             ->with($pathToSaveFile, $slugFileName)
-            ->willReturnCallback(fn () => $moveReturn instanceof \Throwable ? throw $moveReturn : $moveReturn);
+            ->willReturnCallback(fn (): UploadedFileInterface => $moveReturn instanceof \Throwable ? throw $moveReturn : $moveReturn);
 
         $this->file
             ->expects($this->once())

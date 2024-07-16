@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GroupGetDataByNameRequestDto implements RequestDtoInterface
 {
-    public readonly string|null $groupName;
+    public readonly ?string $groupName;
 
     public function __construct(Request $request)
     {

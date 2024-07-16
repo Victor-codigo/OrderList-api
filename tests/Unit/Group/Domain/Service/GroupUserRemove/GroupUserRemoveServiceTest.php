@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\Group\Domain\Service\GroupUserRemove;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\Group\GROUP_TYPE;
@@ -22,12 +23,13 @@ use PHPUnit\Framework\TestCase;
 
 class GroupUserRemoveServiceTest extends TestCase
 {
-    private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const string GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
 
     private GroupUserRemoveService $object;
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;
     private MockObject|GroupRepositoryInterface $groupRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -80,7 +82,7 @@ class GroupUserRemoveServiceTest extends TestCase
         $usersGroup = $this->getUsersGroup();
         $group = $this->getGroup(GROUP_TYPE::GROUP);
         $usersId = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(),
             $usersGroup
         );
         $input = new GroupUserRemoveDto(
@@ -128,7 +130,7 @@ class GroupUserRemoveServiceTest extends TestCase
         $usersGroup = $this->getUsersGroup();
         $group = $this->getGroup(GROUP_TYPE::GROUP);
         $usersId = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(),
             $usersGroup
         );
         $input = new GroupUserRemoveDto(ValueObjectFactory::createIdentifier(self::GROUP_ID), $usersId);
@@ -158,7 +160,7 @@ class GroupUserRemoveServiceTest extends TestCase
     {
         $usersGroup = $this->getUsersGroup();
         $usersId = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(),
             $usersGroup
         );
         $input = new GroupUserRemoveDto(ValueObjectFactory::createIdentifier(self::GROUP_ID), $usersId);
@@ -187,7 +189,7 @@ class GroupUserRemoveServiceTest extends TestCase
         $usersGroup = $this->getUsersGroup();
         $group = $this->getGroup(GROUP_TYPE::USER);
         $usersId = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(),
             $usersGroup
         );
         $input = new GroupUserRemoveDto(ValueObjectFactory::createIdentifier(self::GROUP_ID), $usersId);
@@ -216,7 +218,7 @@ class GroupUserRemoveServiceTest extends TestCase
         $usersGroup = $this->getUsersGroup();
         $group = $this->getGroup(GROUP_TYPE::GROUP);
         $usersId = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(),
             $usersGroup
         );
         $input = new GroupUserRemoveDto(ValueObjectFactory::createIdentifier(self::GROUP_ID), $usersId);
@@ -261,7 +263,7 @@ class GroupUserRemoveServiceTest extends TestCase
         $usersGroup = $this->getUsersGroup();
         $group = $this->getGroup(GROUP_TYPE::GROUP);
         $usersId = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(),
             $usersGroup
         );
         $input = new GroupUserRemoveDto(ValueObjectFactory::createIdentifier(self::GROUP_ID), $usersId);
@@ -303,7 +305,7 @@ class GroupUserRemoveServiceTest extends TestCase
         $group = $this->getGroup(GROUP_TYPE::GROUP);
         $usersGroup = array_merge($usersGroup, $this->getUsersGroupAdmin());
         $usersId = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(),
             $usersGroup
         );
         $input = new GroupUserRemoveDto(ValueObjectFactory::createIdentifier(self::GROUP_ID), $usersId);

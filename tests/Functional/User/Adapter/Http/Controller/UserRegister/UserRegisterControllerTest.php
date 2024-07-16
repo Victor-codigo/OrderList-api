@@ -20,9 +20,10 @@ class UserRegisterControllerTest extends WebClientTestCase
 {
     use RefreshDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/users';
-    private const METHOD = 'POST';
+    private const string ENDPOINT = '/api/v1/users';
+    private const string METHOD = 'POST';
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -584,7 +585,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertEquals((new \DateTime())->format('Y-m-d H:m'), $userSaved->getCreatedOn()->format('Y-m-d H:m'));
         $this->assertNotEmpty($password);
 
-        $rolesSaved = array_map(fn (Rol $rol) => $rol->getValue(), $userSaved->getRoles()->getValue());
+        $rolesSaved = array_map(fn (Rol $rol): ?object => $rol->getValue(), $userSaved->getRoles()->getValue());
 
         foreach ($roles as $rol) {
             $this->assertContains($rol, $rolesSaved);

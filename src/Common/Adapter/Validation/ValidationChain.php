@@ -45,21 +45,25 @@ class ValidationChain implements ValidationInterface
         $this->choice = ValidationFactory::createValidationChoice();
     }
 
+    #[\Override]
     public function getValue(): mixed
     {
         return $this->validator->getValue();
     }
 
+    #[\Override]
     public function setValue(mixed $value): ValidationInterface
     {
         return $this->validator->setValue($value);
     }
 
+    #[\Override]
     public function setConstraint(ValidationConstraint $constraint): void
     {
         $this->validator->setConstraint($constraint);
     }
 
+    #[\Override]
     public function validate(bool $removeConstraints = true): array
     {
         return $this->validator->validate($removeConstraints);
@@ -68,21 +72,22 @@ class ValidationChain implements ValidationInterface
     /**
      * @return VALIDATION_ERRORS[]
      */
+    #[\Override]
     public function validateValueObject(ValueObjectValidationInterface $valueObject): array
     {
         return $this->validator->validateValueObject($valueObject);
     }
 
     /**
-     * @param array<string, ValueObjectValidationInterface> $valueObject
-     *
      * @return array<string, VALIDATION_ERRORS[]>
      */
+    #[\Override]
     public function validateValueObjectArray(array $valueObjects): array
     {
         return $this->validator->validateValueObjectArray($valueObjects);
     }
 
+    #[\Override]
     public function notBlank(): self
     {
         $this->validator->setConstraint($this->general->notBlank());
@@ -90,6 +95,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function notNull(): self
     {
         $this->validator->setConstraint($this->general->notNull());
@@ -97,6 +103,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function type(TYPES $type): self
     {
         $this->validator->setConstraint($this->general->type($type));
@@ -104,6 +111,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function email(EMAIL_TYPES $mode): self
     {
         $this->validator->setConstraint($this->general->email($mode));
@@ -111,6 +119,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function stringLength(int $length): self
     {
         $this->validator->setConstraint($this->string->stringLength($length));
@@ -118,6 +127,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function stringMin(int $min): self
     {
         $this->validator->setConstraint($this->string->stringMin($min));
@@ -125,6 +135,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function stringMax(int $max): self
     {
         $this->validator->setConstraint($this->string->stringMax($max));
@@ -132,6 +143,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function stringRange(int $min, int $max): self
     {
         $this->validator->setConstraint($this->string->stringRange($min, $max));
@@ -139,13 +151,15 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
-    public function uuId(array $versions = null, bool $strict = true): self
+    #[\Override]
+    public function uuId(?array $versions = null, bool $strict = true): self
     {
         $this->validator->setConstraint($this->string->uuId($versions, $strict));
 
         return $this;
     }
 
+    #[\Override]
     public function regEx(string $pattern, bool $patternMatch = true): self
     {
         $this->validator->setConstraint($this->string->regEx($pattern, $patternMatch));
@@ -153,6 +167,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function alphanumeric(): self
     {
         $this->validator->setConstraint($this->string->alphanumeric());
@@ -160,6 +175,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function alphanumericWithWhiteSpace(): self
     {
         $this->validator->setConstraint($this->string->alphanumericWithWhiteSpace());
@@ -170,6 +186,7 @@ class ValidationChain implements ValidationInterface
     /**
      * @param PROTOCOLS[] $protocols
      */
+    #[\Override]
     public function url(array $protocols = []): self
     {
         $this->validator->setConstraint($this->string->url($protocols));
@@ -177,6 +194,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function language(): self
     {
         $this->validator->setConstraint($this->string->language());
@@ -184,6 +202,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function json(): self
     {
         $this->validator->setConstraint($this->string->json());
@@ -191,6 +210,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function equalTo(mixed $value): self
     {
         $this->validator->setConstraint($this->comparison->equalTo($value));
@@ -198,6 +218,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function notEqualTo(mixed $value): self
     {
         $this->validator->setConstraint($this->comparison->notEqualTo($value));
@@ -205,6 +226,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function identicalTo(mixed $value): self
     {
         $this->validator->setConstraint($this->comparison->identicalTo($value));
@@ -212,6 +234,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function notIdenticalTo(mixed $value): self
     {
         $this->validator->setConstraint($this->comparison->notIdenticalTo($value));
@@ -219,6 +242,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function lessThan(int|\DateTime $value): self
     {
         $this->validator->setConstraint($this->comparison->lessThan($value));
@@ -226,6 +250,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function lessThanOrEqual(int|\DateTime $value): self
     {
         $this->validator->setConstraint($this->comparison->lessThanOrEqual($value));
@@ -233,6 +258,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function greaterThan(int|\DateTime $value): self
     {
         $this->validator->setConstraint($this->comparison->greaterThan($value));
@@ -240,6 +266,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function greaterThanOrEqual(int|\DateTime $value): self
     {
         $this->validator->setConstraint($this->comparison->greaterThanOrEqual($value));
@@ -247,6 +274,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function range(int|\DateTime $min, int|\DateTime $max): self
     {
         $this->validator->setConstraint($this->comparison->range($min, $max));
@@ -254,6 +282,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function count(int $value): self
     {
         $this->validator->setConstraint($this->iterable->count($value));
@@ -261,6 +290,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function countRange(int $min, int $max): self
     {
         $this->validator->setConstraint($this->iterable->countRange($min, $max));
@@ -268,6 +298,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function countDivisibleBy(int $divisibleBy): self
     {
         $this->validator->setConstraint($this->iterable->countDivisibleBy($divisibleBy));
@@ -275,6 +306,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function unique(): self
     {
         $this->validator->setConstraint($this->general->unique());
@@ -282,6 +314,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function positive(): self
     {
         $this->validator->setConstraint($this->positiveNegative->positive());
@@ -289,6 +322,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function positiveOrZero(): self
     {
         $this->validator->setConstraint($this->positiveNegative->positiveOrZero());
@@ -296,6 +330,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function negative(): self
     {
         $this->validator->setConstraint($this->positiveNegative->negative());
@@ -303,6 +338,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function negativeOrZero(): self
     {
         $this->validator->setConstraint($this->positiveNegative->negativeOrZero());
@@ -310,6 +346,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function date(): self
     {
         $this->validator->setConstraint($this->datetime->date());
@@ -317,6 +354,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function dateTime(): self
     {
         $this->validator->setConstraint($this->datetime->dateTime());
@@ -324,6 +362,7 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function time(): self
     {
         $this->validator->setConstraint($this->datetime->time());
@@ -334,13 +373,15 @@ class ValidationChain implements ValidationInterface
     /**
      * @param DateTimeZone|null $timeZone
      */
-    public function timeZone(int|null $timeZone): self
+    #[\Override]
+    public function timeZone(?int $timeZone): self
     {
         $this->validator->setConstraint($this->datetime->timeZone($timeZone));
 
         return $this;
     }
 
+    #[\Override]
     public function file(mixed $maxSize, array|string|null $mimeTypes): self
     {
         $this->validator->setConstraint($this->file->file($maxSize, $mimeTypes));
@@ -348,17 +389,19 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    #[\Override]
     public function image(
         mixed $maxSize,
         array|string|null $mimeTypes,
-        int|null $minWith = null,
-        int|null $maxWith = null,
-        int|null $minHeigh = null,
-        int|null $maxHeigh = null,
-        int|null $minPixels = null,
-        int|null $maxPixels = null,
-        float|null $minAspectRatio = null,
-        float|null $maxAspectRatio = null,
+        ?int $filenameMaxLength = null,
+        ?int $minWith = null,
+        ?int $maxWith = null,
+        ?int $minHeigh = null,
+        ?int $maxHeigh = null,
+        ?float $minPixels = null,
+        ?float $maxPixels = null,
+        ?float $minAspectRatio = null,
+        ?float $maxAspectRatio = null,
         bool $allowLandscape = true,
         bool $allowPortrait = true,
         bool $allowSquareImage = true,
@@ -367,6 +410,7 @@ class ValidationChain implements ValidationInterface
         $this->validator->setConstraint($this->file->image(
             $maxSize,
             $mimeTypes,
+            $filenameMaxLength,
             $minWith,
             $maxWith,
             $minHeigh,
@@ -384,7 +428,8 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
-    public function choice(array|null $choices, bool|null $multiple, bool|null $strict, int|null $min, int|null $max): self
+    #[\Override]
+    public function choice(?array $choices, ?bool $multiple, ?bool $strict, ?int $min, ?int $max): self
     {
         $this->validator->setConstraint($this->choice->choice($choices, $multiple, $strict, $min, $max));
 

@@ -6,7 +6,6 @@ namespace Order\Application\OrderCreate;
 
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
 use Common\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
@@ -34,7 +33,6 @@ class OrderCreateUseCase extends ServiceBase
     public function __construct(
         private OrderCreateService $OrderCreateService,
         private ValidationInterface $validator,
-        private ModuleCommunicationInterface $moduleCommunication,
         private ValidateGroupAndUserService $validateGroupAndUserService,
     ) {
     }
@@ -61,7 +59,7 @@ class OrderCreateUseCase extends ServiceBase
             throw OrderCreateProductShopRepeatedException::fromMessage('Product and shop are already in the order list');
         } catch (OrderCreateServiceShopNotFoundException) {
             throw OrderCreateShopNotFoundException::fromMessage('Shop or shops not found');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }
@@ -97,7 +95,7 @@ class OrderCreateUseCase extends ServiceBase
     private function createOrderCreateOutputDto(array $orders): OrderCreateOutputDto
     {
         $ordersId = array_map(
-            fn (Order $order) => $order->getId()->getValue(),
+            fn (Order $order): ?string => $order->getId()->getValue(),
             $orders
         );
 

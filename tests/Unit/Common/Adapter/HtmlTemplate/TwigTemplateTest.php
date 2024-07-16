@@ -22,6 +22,7 @@ class TwigTemplateTest extends TestCase
     private MockObject|Environment $twig;
     private string $templatePath = '';
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

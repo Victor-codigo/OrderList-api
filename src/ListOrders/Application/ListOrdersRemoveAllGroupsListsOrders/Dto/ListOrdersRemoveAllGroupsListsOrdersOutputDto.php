@@ -19,14 +19,15 @@ class ListOrdersRemoveAllGroupsListsOrdersOutputDto implements ApplicationOutput
     ) {
     }
 
+    #[\Override]
     public function toArray(): array
     {
         $listsOrdersIdRemoved = array_map(
-            fn (Identifier $listOrdersId) => $listOrdersId->getValue(),
+            fn (Identifier $listOrdersId): ?string => $listOrdersId->getValue(),
             $this->listsOrdersIdRemoved
         );
         $listsOrdersIdUserChanged = array_map(
-            fn (Identifier $listOrdersId) => $listOrdersId->getValue(),
+            fn (Identifier $listOrdersId): ?string => $listOrdersId->getValue(),
             $this->listsOrdersIdUserIdChanged
         );
 

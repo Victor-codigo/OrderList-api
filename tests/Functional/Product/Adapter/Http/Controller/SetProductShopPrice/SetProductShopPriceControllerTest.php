@@ -14,23 +14,23 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/products/price';
-    private const METHOD = 'PUT';
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const GROUP_OTHER_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const SHOPS_ID = [
+    private const string ENDPOINT = '/api/v1/products/price';
+    private const string METHOD = 'PUT';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string GROUP_OTHER_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const array SHOPS_ID = [
         'e6c1d350-f010-403c-a2d4-3865c14630ec',
         'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
     ];
-    private const PRODUCTS_ID = [
+    private const array PRODUCTS_ID = [
         '7e3021d4-2d02-4386-8bbe-887cfe8697a8',
         '8b6d650b-7bb7-4850-bf25-36cda9bce801',
     ];
-    private const PRICES = [
+    private const array PRICES = [
         10,
         20,
     ];
-    private const UNITS = [
+    private const array UNITS = [
         UNIT_MEASURE_TYPE::UNITS,
         UNIT_MEASURE_TYPE::KG,
     ];
@@ -61,13 +61,13 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
 
         foreach (self::PRODUCTS_ID as $index => $productId) {
             $this->assertContainsEquals([
-                    'group_id' => self::GROUP_ID,
-                    'product_id' => self::PRODUCTS_ID[0],
-                    'shop_id' => self::SHOPS_ID[$index],
-                    'price' => self::PRICES[$index],
-                    'unit' => self::UNITS[$index]->value,
-                ],
-                array_map(fn (\stdClass $productShop) => (array) $productShop, $responseContent->data)
+                'group_id' => self::GROUP_ID,
+                'product_id' => self::PRODUCTS_ID[0],
+                'shop_id' => self::SHOPS_ID[$index],
+                'price' => self::PRICES[$index],
+                'unit' => self::UNITS[$index]->value,
+            ],
+                array_map(fn (\stdClass $productShop): array => (array) $productShop, $responseContent->data)
             );
         }
     }
@@ -98,13 +98,13 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
 
         foreach (self::PRODUCTS_ID as $index => $productId) {
             $this->assertContainsEquals([
-                    'group_id' => self::GROUP_ID,
-                    'product_id' => self::PRODUCTS_ID[$index],
-                    'shop_id' => self::SHOPS_ID[0],
-                    'price' => self::PRICES[$index],
-                    'unit' => self::UNITS[$index]->value,
-                ],
-                array_map(fn (\stdClass $productShop) => (array) $productShop, $responseContent->data)
+                'group_id' => self::GROUP_ID,
+                'product_id' => self::PRODUCTS_ID[$index],
+                'shop_id' => self::SHOPS_ID[0],
+                'price' => self::PRICES[$index],
+                'unit' => self::UNITS[$index]->value,
+            ],
+                array_map(fn (\stdClass $productShop): array => (array) $productShop, $responseContent->data)
             );
         }
     }

@@ -22,14 +22,15 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 class DIAdapter implements DIInterface, ServiceSubscriberInterface
 {
-    private const API_DOMAIN = AppConfig::API_DOMAIN;
-    private const API_PROTOCOL = AppConfig::API_PROTOCOL;
+    private const string API_DOMAIN = AppConfig::API_DOMAIN;
+    private const string API_PROTOCOL = AppConfig::API_PROTOCOL;
 
     public function __construct(
         private ContainerInterface $DI
     ) {
     }
 
+    #[\Override]
     public static function getSubscribedServices(): array
     {
         return [
@@ -43,6 +44,7 @@ class DIAdapter implements DIInterface, ServiceSubscriberInterface
      * @throws RouteParametersMissingException
      * @throws RouteInvalidParameterException
      */
+    #[\Override]
     public function getUrlRouteAbsolute(string $route, array $params): string
     {
         return $this->generateUrl($route, $params, UrlGeneratorInterface::ABSOLUTE_URL);
@@ -53,6 +55,7 @@ class DIAdapter implements DIInterface, ServiceSubscriberInterface
      * @throws RouteParametersMissingException
      * @throws RouteInvalidParameterException
      */
+    #[\Override]
     public function getUrlRouteRelative(string $route, array $params): string
     {
         return $this->generateUrl($route, $params, UrlGeneratorInterface::RELATIVE_PATH);
@@ -63,6 +66,7 @@ class DIAdapter implements DIInterface, ServiceSubscriberInterface
      * @throws RouteParametersMissingException
      * @throws RouteInvalidParameterException
      */
+    #[\Override]
     public function getUrlRouteAbsoluteDomain(string $route, array $params): string
     {
         $url = $this->generateUrl($route, $params, UrlGeneratorInterface::ABSOLUTE_PATH);
@@ -98,6 +102,7 @@ class DIAdapter implements DIInterface, ServiceSubscriberInterface
         return $this->DI->get(RequestStack::class)->getCurrentRequest();
     }
 
+    #[\Override]
     public function getLocale(): string
     {
         return $this->getRequest()->getLocale();

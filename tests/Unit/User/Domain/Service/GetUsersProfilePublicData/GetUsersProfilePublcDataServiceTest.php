@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\User\Domain\Service\GetUsersProfilePublicData;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Struct\SCOPE;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -17,12 +18,13 @@ use User\Domain\Service\GetUsersProfilePublicData\GetUsersProfilePublicDataServi
 
 class GetUsersProfilePublcDataServiceTest extends TestCase
 {
-    private const USER_PUBLIC_IMAGE_PATH = '/userPublicImagePath';
-    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const string USER_PUBLIC_IMAGE_PATH = '/userPublicImagePath';
+    private const string APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
 
     private GetUsersProfilePublicDataService $object;
     private MockObject|ProfileRepositoryInterface $profileRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -54,7 +56,7 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
         $usersProfile = $this->getProfiles();
 
         return array_map(
-            function (Profile $userProfile) {
+            function (Profile $userProfile): Profile {
                 if (!$userProfile->getImage()->isNull()) {
                     $userProfile->setImage(
                         ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::USER_PUBLIC_IMAGE_PATH.'/'.$userProfile->getImage()->getValue())
@@ -73,8 +75,8 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
         $profilesId = $this->getProfilesId();
         $profiles = $this->getProfiles();
         $expectedProfiles = $this->getProfilesExpected();
-        $expectedProfileIdentifiers = array_map(fn (Profile $profile) => $profile->getId(), $expectedProfiles);
-        $expectedProfileImages = array_map(fn (Profile $profile) => $profile->getImage()->getValue(), $expectedProfiles);
+        $expectedProfileIdentifiers = array_map(fn (Profile $profile): Identifier => $profile->getId(), $expectedProfiles);
+        $expectedProfileImages = array_map(fn (Profile $profile): ?string => $profile->getImage()->getValue(), $expectedProfiles);
 
         $this->profileRepository
             ->expects($this->once())
@@ -101,8 +103,8 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
         $profilesId = $this->getProfilesId();
         $profiles = $this->getProfiles();
         $expectedProfiles = $this->getProfilesExpected();
-        $expectedProfileIdentifiers = array_map(fn (Profile $profile) => $profile->getId(), $expectedProfiles);
-        $expectedProfileImages = array_map(fn (Profile $profile) => $profile->getImage()->getValue(), $expectedProfiles);
+        $expectedProfileIdentifiers = array_map(fn (Profile $profile): Identifier => $profile->getId(), $expectedProfiles);
+        $expectedProfileImages = array_map(fn (Profile $profile): ?string => $profile->getImage()->getValue(), $expectedProfiles);
 
         $this->profileRepository
             ->expects($this->once())

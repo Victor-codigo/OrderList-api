@@ -25,11 +25,12 @@ class GroupRemoveInputDto implements ServiceInputDtoInterface
     {
         $this->userSession = $userSession;
         $this->groupsId = array_map(
-            fn (string $groupsId) => ValueObjectFactory::createIdentifier($groupsId),
+            fn (string $groupsId): Identifier => ValueObjectFactory::createIdentifier($groupsId),
             $groupsId ?? []
         );
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListGroupsIdEmpty = $validator

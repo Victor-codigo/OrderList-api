@@ -15,12 +15,13 @@ class ValidatorTest extends TestCase
 {
     private ValidationInterface $object;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->object = new ValidationChain();
     }
 
-    public function testGetValue()
+    public function testGetValue(): void
     {
         $return = $this->object->getValue();
 
@@ -29,7 +30,7 @@ class ValidatorTest extends TestCase
     }
 
     /** @test */
-    public function setValue()
+    public function setValue(): void
     {
         $value = 33;
         $return = $this->object->setValue($value);
@@ -42,7 +43,7 @@ class ValidatorTest extends TestCase
     }
 
     /** @test */
-    public function validateOk()
+    public function validateOk(): void
     {
         $return = $this->object
             ->setValue(5)
@@ -54,7 +55,7 @@ class ValidatorTest extends TestCase
     }
 
     /** @test */
-    public function validateOkAndNotRemoveConstraints()
+    public function validateOkAndNotRemoveConstraints(): void
     {
         $return = $this->object
             ->setValue(5)
@@ -71,7 +72,7 @@ class ValidatorTest extends TestCase
     }
 
     /** @test */
-    public function validateOkAndRemoveConstraints()
+    public function validateOkAndRemoveConstraints(): void
     {
         $return = $this->object
             ->setValue(5)
@@ -88,7 +89,7 @@ class ValidatorTest extends TestCase
     }
 
     /** @test */
-    public function validateError()
+    public function validateError(): void
     {
         $return = $this->object
             ->setValue(5)
@@ -100,7 +101,7 @@ class ValidatorTest extends TestCase
     }
 
     /** @test */
-    public function validateErrorAndNotRemoveConstraints()
+    public function validateErrorAndNotRemoveConstraints(): void
     {
         $return = $this->object
             ->setValue(5)
@@ -117,7 +118,7 @@ class ValidatorTest extends TestCase
     }
 
     /** @test */
-    public function validateErrorAndRemoveConstraints()
+    public function validateErrorAndRemoveConstraints(): void
     {
         $return = $this->object
             ->setValue(5)
@@ -134,7 +135,7 @@ class ValidatorTest extends TestCase
     }
 
     /** @test */
-    public function validateValueObjectOk()
+    public function validateValueObjectOk(): void
     {
         $valueObject = new ValueObjectForTesting(18);
         $return = $this->object->validateValueObject($valueObject);
@@ -144,7 +145,7 @@ class ValidatorTest extends TestCase
     }
 
     /** @test */
-    public function validateValueObjectError()
+    public function validateValueObjectError(): void
     {
         $valueObject = new ValueObjectForTesting(17);
         $return = $this->object->validateValueObject($valueObject);
@@ -154,7 +155,7 @@ class ValidatorTest extends TestCase
     }
 
     /** @test */
-    public function validateValueObjectChildValueObjectsOk()
+    public function validateValueObjectChildValueObjectsOk(): void
     {
         $valueObject = new ValueObjectChildValueObjects([
             new ValueObjectForTesting(18),
@@ -168,7 +169,7 @@ class ValidatorTest extends TestCase
     }
 
     /** @test */
-    public function validateValueObjectChildValueObjectsError()
+    public function validateValueObjectChildValueObjectsError(): void
     {
         $valueObject = new ValueObjectChildValueObjects([
             new ValueObjectForTesting(10),
@@ -187,7 +188,7 @@ class ValidatorTest extends TestCase
     }
 
     /** @test */
-    public function validateValueObjectChildValueObjectsNestedError()
+    public function validateValueObjectChildValueObjectsNestedError(): void
     {
         $valueObject = new ValueObjectChildValueObjects([
             new ValueObjectForTesting(10),
@@ -220,7 +221,7 @@ class ValidatorTest extends TestCase
     }
 
     /** @test */
-    public function validateValueObjectArrayOk()
+    public function validateValueObjectArrayOk(): void
     {
         $valueObjects = [
             new ValueObjectForTesting(18),
@@ -234,7 +235,7 @@ class ValidatorTest extends TestCase
     }
 
     /** @test */
-    public function validateValueObjectArrayError()
+    public function validateValueObjectArrayError(): void
     {
         $valueObjects = [
             new ValueObjectForTesting(18),
@@ -248,7 +249,7 @@ class ValidatorTest extends TestCase
     }
 
     /** @test */
-    public function validateValueObjectArrayAssociativeError()
+    public function validateValueObjectArrayAssociativeError(): void
     {
         $valueObjects = [
             'valueObject-1' => new ValueObjectForTesting(18),

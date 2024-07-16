@@ -46,7 +46,7 @@ class NotificationCreateUseCase extends ServiceBase
             throw $e;
         } catch (SystemKeyWrongException) {
             throw NotificationCreateSystemKeyWrongException::fromMessage('The system key is wrong');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }
@@ -104,7 +104,7 @@ class NotificationCreateUseCase extends ServiceBase
     private function createNotificationCreateOutputDto(array $notifications): NotificationCreateOutputDto
     {
         $notificationsId = array_map(
-            fn (Notification $notification) => $notification->getId(),
+            fn (Notification $notification): Identifier => $notification->getId(),
             $notifications
         );
 

@@ -14,10 +14,10 @@ use PHPUnit\Framework\TestCase;
 
 class GroupGetGroupsAdminsInputDtoTest extends TestCase
 {
-    private GroupGetGroupsAdminsInputDto $object;
     private ValidationInterface $validator;
     private MockObject|UserShared $userSession;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

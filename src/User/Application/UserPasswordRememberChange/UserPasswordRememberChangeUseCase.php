@@ -61,7 +61,7 @@ class UserPasswordRememberChangeUseCase extends ServiceBase
         } catch (JwtTokenExpiredException) {
             throw UserPasswordRememberChangeTokenExpiredException::fromMessage('Token has expired');
         } catch (JwtException) {
-            throw UserPasswordRememberChangeTokenWrongException::fromMessage('Wrong token');
+            throw UserPasswordRememberChangeTokenWrongException::fromMessage('Wrong token jwt');
         } catch (DBNotFoundException) {
             throw UserPasswordRememberChangeUserNotFoundException::fromMessage('It could not change password');
         } catch (PasswordNewAndRepeatAreNotTheSameException) {

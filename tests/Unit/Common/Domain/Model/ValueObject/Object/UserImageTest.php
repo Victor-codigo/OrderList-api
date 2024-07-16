@@ -17,14 +17,15 @@ require_once 'tests/BuiltinFunctions/SymfonyComponentValidatorConstraints.php';
 
 class UserImageTest extends TestCase
 {
-    private const PATH_FILE = 'tests/Fixtures/Files/file.txt';
-    private const PATH_FILE_NOT_FOUND = 'tests/Fixtures/Files/fileNotFound.txt';
-    private const PATH_FILE_EMPTY = 'tests/Fixtures/Files/FileEmpty.txt';
+    private const string PATH_FILE = 'tests/Fixtures/Files/file.txt';
+    private const string PATH_FILE_NOT_FOUND = 'tests/Fixtures/Files/fileNotFound.txt';
+    private const string PATH_FILE_EMPTY = 'tests/Fixtures/Files/FileEmpty.txt';
 
     private UserImage $object;
     private ValidationChain $validator;
     private MockObject|FileInterface $fileInterface;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -34,6 +35,7 @@ class UserImageTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -118,8 +120,6 @@ class UserImageTest extends TestCase
     /** @test */
     public function itShouldFailFileIsNotReadable(): void
     {
-        /** @var MockObject|File $file */
-        $file = $this->fileInterface->getFile();
         BuiltInFunctionsReturn::$is_readable = false;
 
         $return = $this->validator->validateValueObject($this->object);

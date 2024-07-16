@@ -27,9 +27,7 @@ class GroupGetUsersService
 
     public function __construct(
         private UserGroupRepositoryInterface $userGroupRepository,
-        private ModuleCommunicationInterface $moduleCommunication,
-        private string $userPublicImagePath,
-        private string $appProtocolAndDomain
+        private ModuleCommunicationInterface $moduleCommunication
     ) {
     }
 
@@ -72,19 +70,19 @@ class GroupGetUsersService
         try {
             /** @var Identifier[] $usersId */
             $usersId = array_map(
-                fn (UserGroup $userGroup) => $userGroup->getUserId(),
+                fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(),
                 $groupUsers
             );
 
             /** @var UserGroup[] $usersAdmin */
             $usersAdmin = array_filter(
                 $groupUsers,
-                fn (UserGroup $userGroup) => $userGroup->getRoles()->has(new Rol(GROUP_ROLES::ADMIN)),
+                fn (UserGroup $userGroup): bool => $userGroup->getRoles()->has(new Rol(GROUP_ROLES::ADMIN)),
             );
 
             /** @var Identifier[] $usersAdminId */
             $usersAdminId = array_map(
-                fn (UserGroup $userGroup) => $userGroup->getUserId()->getValue(),
+                fn (UserGroup $userGroup): ?string => $userGroup->getUserId()->getValue(),
                 $usersAdmin
             );
 
@@ -101,7 +99,7 @@ class GroupGetUsersService
 
             array_walk(
                 $usersFilteredByNameData,
-                fn (array &$userData) => $userData['admin'] = in_array($userData['id'], $usersAdminId)
+                fn (array &$userData): bool => $userData['admin'] = in_array($userData['id'], $usersAdminId)
             );
 
             $usersSortedByName = $this->sortUsersByName($usersFilteredByNameData, $orderAsc);
@@ -109,7 +107,7 @@ class GroupGetUsersService
             return $this->getUserData($usersSortedByName);
         } catch (DBNotFoundException $th) {
             throw $th;
-        } catch (\Throwable $th) {
+        } catch (\Throwable) {
             throw new DomainInternalErrorException();
         }
     }
@@ -117,12 +115,10 @@ class GroupGetUsersService
     private function getUserData(array $usersData): array
     {
         return array_map(
-            fn (array $userData) => [
+            fn (array $userData): array => [
                 'id' => $userData['id'],
                 'name' => $userData['name'],
-                'image' => null === $userData['image']
-                    ? null
-                    : $userData['image'],
+                'image' => $userData['image'] ?? null,
                 'created_on' => $userData['created_on'] ?? null,
                 'admin' => $userData['admin'],
             ],
@@ -136,24 +132,24 @@ class GroupGetUsersService
             return $usersData;
         }
 
-        $pattern = preg_quote($filterText->getValue());
+        $pattern = preg_quote((string) $filterText->getValue());
 
         return match ($filterText->getFilter()->getValue()) {
             FILTER_STRING_COMPARISON::EQUALS => array_filter(
                 $usersData,
-                fn (array $userData) => $this->matchStringCiAi("^{$pattern}$", $userData['name'])
+                fn (array $userData): bool => $this->matchStringCiAi("^{$pattern}$", $userData['name'])
             ),
             FILTER_STRING_COMPARISON::STARTS_WITH => array_filter(
                 $usersData,
-                fn (array $userData) => $this->matchStringCiAi("^{$pattern}.*", $userData['name'])
+                fn (array $userData): bool => $this->matchStringCiAi("^{$pattern}.*", $userData['name'])
             ),
             FILTER_STRING_COMPARISON::ENDS_WITH => array_filter(
                 $usersData,
-                fn (array $userData) => $this->matchStringCiAi(".*{$pattern}$", $userData['name'])
+                fn (array $userData): bool => $this->matchStringCiAi(".*{$pattern}$", $userData['name'])
             ),
             FILTER_STRING_COMPARISON::CONTAINS => array_filter(
                 $usersData,
-                fn (array $userData) => $this->matchStringCiAi(".*{$pattern}.*", $userData['name'])
+                fn (array $userData): bool => $this->matchStringCiAi(".*{$pattern}.*", $userData['name'])
             ),
         };
     }
@@ -168,7 +164,7 @@ class GroupGetUsersService
 
     private function sortUsersByName(array $usersData, bool $orderAsc): array
     {
-        usort($usersData, function (array $userData1, array $userData2) use ($orderAsc) {
+        usort($usersData, function (array $userData1, array $userData2) use ($orderAsc): int {
             if ($userData1['name'] === $userData2['name']) {
                 return 0;
             }

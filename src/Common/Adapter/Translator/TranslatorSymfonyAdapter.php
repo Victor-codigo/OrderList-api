@@ -11,19 +11,17 @@ use Symfony\Contracts\Translation\TranslatorInterface as SymfonyTranslatorInterf
 
 class TranslatorSymfonyAdapter implements TranslatorInterface
 {
-    private SymfonyTranslatorInterface $translator;
-    private LocaleSwitcher $localeSwitcher;
-
-    public function __construct(SymfonyTranslatorInterface $translator, LocaleSwitcher $localeSwitcher)
-    {
-        $this->translator = $translator;
-        $this->localeSwitcher = $localeSwitcher;
+    public function __construct(
+        private SymfonyTranslatorInterface $translator,
+        private LocaleSwitcher $localeSwitcher
+    ) {
     }
 
     /**
      * @throws InvalidArgumentException
      */
-    public function translate(string $id, array $params = [], string|null $domain = null, string|null $locale = null): string
+    #[\Override]
+    public function translate(string $id, array $params = [], ?string $domain = null, ?string $locale = null): string
     {
         try {
             return $this->translator->trans($id, $params, $domain, $locale);
@@ -32,21 +30,25 @@ class TranslatorSymfonyAdapter implements TranslatorInterface
         }
     }
 
+    #[\Override]
     public function setLocale(string $locale): void
     {
         $this->localeSwitcher->setLocale($locale);
     }
 
+    #[\Override]
     public function getLocale(): string
     {
         return $this->translator->getLocale();
     }
 
+    #[\Override]
     public function resetLocale(): void
     {
         $this->localeSwitcher->reset();
     }
 
+    #[\Override]
     public function runWithLocale(string $locale, callable $callback): void
     {
         $this->localeSwitcher->runWithLocale($locale, $callback);

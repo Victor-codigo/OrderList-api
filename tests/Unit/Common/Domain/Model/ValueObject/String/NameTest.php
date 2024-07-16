@@ -14,8 +14,9 @@ class NameTest extends TestCase
 {
     private ValidationInterface $validation;
 
-    private const VALID_NAME = 'Juan_6';
+    private const string VALID_NAME = 'Juan_6';
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -23,7 +24,7 @@ class NameTest extends TestCase
         $this->validation = new ValidationChain();
     }
 
-    private function createName(string|null $name): Name
+    private function createName(?string $name): Name
     {
         return new Name($name);
     }

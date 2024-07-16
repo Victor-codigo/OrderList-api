@@ -26,6 +26,7 @@ class UserSymfonyProviderAdapterTest extends TestCase
     private MockObject|UserPasswordHasherInterface $passwordHasher;
     private MockObject|UserAdapter $user;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

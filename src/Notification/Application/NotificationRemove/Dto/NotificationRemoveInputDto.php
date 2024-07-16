@@ -18,17 +18,18 @@ class NotificationRemoveInputDto implements ServiceInputDtoInterface
      */
     public readonly array $notificationIds;
 
-    public function __construct(UserShared $userSession, array|null $notificationsId)
+    public function __construct(UserShared $userSession, ?array $notificationsId)
     {
         $this->userSession = $userSession;
         $this->notificationIds = null === $notificationsId
             ? []
             : array_map(
-                fn (string $notificationId) => ValueObjectFactory::createIdentifier($notificationId),
+                fn (string $notificationId): Identifier => ValueObjectFactory::createIdentifier($notificationId),
                 $notificationsId
             );
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorsList = $validator

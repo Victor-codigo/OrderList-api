@@ -18,6 +18,7 @@ class RolesTypeTest extends TestCase
     private RolesType $object;
     private AbstractPlatform $abstractPlatform;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -29,7 +30,7 @@ class RolesTypeTest extends TestCase
     /** @test */
     public function convertToDatabaseValueReturnACorrectJson(): void
     {
-        $roles = new Roles([new rol(USER_ROLES::ADMIN), new Rol(USER_ROLES::USER)]);
+        $roles = new Roles([new Rol(USER_ROLES::ADMIN), new Rol(USER_ROLES::USER)]);
 
         $return = $this->object->convertToDatabaseValue($roles, $this->abstractPlatform);
 

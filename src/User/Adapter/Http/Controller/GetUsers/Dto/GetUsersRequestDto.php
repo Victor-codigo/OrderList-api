@@ -5,16 +5,17 @@ declare(strict_types=1);
 namespace User\Adapter\Http\Controller\GetUsers\Dto;
 
 use Common\Adapter\Http\Dto\RequestDtoInterface;
+use Common\Domain\Config\AppConfig;
 use Symfony\Component\HttpFoundation\Request;
 
 class GetUsersRequestDto implements RequestDtoInterface
 {
-    private const USERS_NUM_MAX = 50;
+    private const int USERS_NUM_MAX = AppConfig::GROUP_USERS_MAX;
 
     /**
      * @var string[]
      */
-    public readonly array|null $usersId;
+    public readonly ?array $usersId;
 
     public function __construct(Request $request)
     {
@@ -22,7 +23,7 @@ class GetUsersRequestDto implements RequestDtoInterface
         $this->usersId = $this->removeUsersOverflow($requestUsersId);
     }
 
-    private function removeUsersOverflow(string|null $usersId): array|null
+    private function removeUsersOverflow(?string $usersId): ?array
     {
         if (null === $usersId) {
             return null;

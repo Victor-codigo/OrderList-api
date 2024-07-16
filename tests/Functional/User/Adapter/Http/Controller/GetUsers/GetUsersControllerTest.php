@@ -15,10 +15,11 @@ class GetUsersControllerTest extends WebClientTestCase
 {
     use RefreshDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/users';
-    private const METHOD = 'GET';
-    private const USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
+    private const string ENDPOINT = '/api/v1/users';
+    private const string METHOD = 'GET';
+    private const string USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -33,7 +34,10 @@ class GetUsersControllerTest extends WebClientTestCase
         ];
     }
 
-    private function getUsersIdsWrong()
+    /**
+     * @return string[]
+     */
+    private function getUsersIdsWrong(): array
     {
         return [
             '5483539d-52f7-4aa9-a91c-1aae11c3d17f',
@@ -42,7 +46,10 @@ class GetUsersControllerTest extends WebClientTestCase
         ];
     }
 
-    private function getUsersIdsDeletedOrNotActive()
+    /**
+     * @return string[]
+     */
+    private function getUsersIdsDeletedOrNotActive(): array
     {
         return [
             '68e94495-16f0-4acd-adbe-f2b9575e6544', // deleted
@@ -92,16 +99,16 @@ class GetUsersControllerTest extends WebClientTestCase
         $users = $userRepository->findBy(['id' => $usersIds]);
 
         return [
-            'usersEmails' => array_map(fn (User $user) => $user->getEmail()->getValue(), $users),
-            'usersNames' => array_map(fn (User $user) => $user->getName()->getValue(), $users),
+            'usersEmails' => array_map(fn (User $user): ?string => $user->getEmail()->getValue(), $users),
+            'usersNames' => array_map(fn (User $user): ?string => $user->getName()->getValue(), $users),
             'usersRoles' => array_map(
-                fn (User $user) => array_map(
+                fn (User $user): array => array_map(
                     fn (USER_ROLES $rol) => $rol->value,
                     $user->getRoles()->getRolesEnums()),
                 $users
             ),
             'usersCreatedOn' => array_map(fn (User $user) => $user->getCreatedOn()->format('Y-m-d H:i:s'), $users),
-            'usersImages' => array_map(fn (User $user) => $user->getProfile()->getImage()->getValue(), $users),
+            'usersImages' => array_map(fn (User $user): ?string => $user->getProfile()->getImage()->getValue(), $users),
         ];
     }
 

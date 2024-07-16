@@ -73,7 +73,7 @@ class GroupUserRemoveUseCase extends ServiceBase
             throw GroupUserRemovePermissionsException::fromMessage('Not permissions in this group');
         } catch (GroupUserRemoveGroupNotificationException $e) {
             throw $e;
-        } catch (\Throwable $e) {
+        } catch (\Throwable) {
             throw DomainErrorException::fromMessage('An error has been occurred');
         }
     }

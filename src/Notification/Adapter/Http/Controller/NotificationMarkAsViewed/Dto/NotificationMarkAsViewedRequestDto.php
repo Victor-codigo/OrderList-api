@@ -13,7 +13,7 @@ class NotificationMarkAsViewedRequestDto implements RequestDtoInterface
 {
     use RequestDataValidation;
 
-    private const NOTIFICATIONS_NUM_MAX = AppConfig::ENDPOINT_NOTIFICATION_MARK_AS_VIEWED_MAX;
+    private const int NOTIFICATIONS_NUM_MAX = AppConfig::ENDPOINT_NOTIFICATION_MARK_AS_VIEWED_MAX;
 
     /**
      * @var string[]|null

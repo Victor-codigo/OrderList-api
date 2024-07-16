@@ -13,11 +13,12 @@ class OrderBoughtControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/orders/bought';
-    private const METHOD = 'PATCH';
-    private const ORDER_ID = '5cfe52e5-db78-41b3-9acd-c3c84924cb9b';
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string ENDPOINT = '/api/v1/orders/bought';
+    private const string METHOD = 'PATCH';
+    private const string ORDER_ID = '5cfe52e5-db78-41b3-9acd-c3c84924cb9b';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -115,17 +115,17 @@ class GroupRemoveUserFromGroupsService
     private function getGroupsToRemoveUser(array $groups, array $groupsIdToRemove): array
     {
         $groupsIdToRemoveString = array_map(
-            fn (Identifier $groupIdToRemove) => $groupIdToRemove->getValue(),
+            fn (Identifier $groupIdToRemove): ?string => $groupIdToRemove->getValue(),
             $groupsIdToRemove
         );
 
         $groupsNotToRemove = array_filter(
             $groups,
-            fn (Group $group) => !in_array($group->getId()->getValue(), $groupsIdToRemoveString)
+            fn (Group $group): bool => !in_array($group->getId()->getValue(), $groupsIdToRemoveString)
         );
 
         return array_map(
-            fn (Group $group) => $group->getId(),
+            fn (Group $group): Identifier => $group->getId(),
             $groupsNotToRemove
         );
     }
@@ -141,13 +141,13 @@ class GroupRemoveUserFromGroupsService
     private function removeGroups(array $groups, array $groupsIdToRemove): array
     {
         $groupsIdToRemoveString = array_map(
-            fn (Identifier $groupIdToRemove) => $groupIdToRemove->getValue(),
+            fn (Identifier $groupIdToRemove): ?string => $groupIdToRemove->getValue(),
             $groupsIdToRemove
         );
 
         $groupsToRemove = array_filter(
             $groups,
-            fn (Group $group) => in_array($group->getId()->getValue(), $groupsIdToRemoveString)
+            fn (Group $group): bool => in_array($group->getId()->getValue(), $groupsIdToRemoveString)
         );
 
         $this->groupRepository->remove($groupsToRemove);
@@ -167,13 +167,13 @@ class GroupRemoveUserFromGroupsService
     private function removeGroupsUsers(array $groupsIdToRemove, array $usersGroupsIndexedByGroupId): array
     {
         $groupsIdToRemoveString = array_map(
-            fn (Identifier $groupId) => $groupId->getValue(),
+            fn (Identifier $groupId): ?string => $groupId->getValue(),
             $groupsIdToRemove
         );
 
         $userGroupsToRemoveUser = array_filter(
             $usersGroupsIndexedByGroupId,
-            fn (UserGroup $userGroup) => in_array($userGroup->getGroupId()->getValue(), $groupsIdToRemoveString)
+            fn (UserGroup $userGroup): bool => in_array($userGroup->getGroupId()->getValue(), $groupsIdToRemoveString)
         );
 
         $this->userGroupRepository->removeUsers($userGroupsToRemoveUser);
@@ -198,12 +198,12 @@ class GroupRemoveUserFromGroupsService
     {
         $adminRole = ValueObjectFactory::createRol(GROUP_ROLES::ADMIN);
         $groupsIdToRemoveString = array_map(
-            fn (Identifier $groupId) => $groupId->getValue(),
+            fn (Identifier $groupId): ?string => $groupId->getValue(),
             $groupsIdToRemove
         );
         $userGroupToChangeAdmin = array_filter(
             $usersGroupsIndexedByGroupId,
-            fn (UserGroup $userGroup) => $userGroup->getRoles()->has($adminRole)
+            fn (UserGroup $userGroup): bool => $userGroup->getRoles()->has($adminRole)
                                       && in_array($userGroup->getGroupId()->getValue(), $groupsIdToRemoveString)
         );
         $groupsId = $this->getGroupsId($userGroupToChangeAdmin);
@@ -232,7 +232,7 @@ class GroupRemoveUserFromGroupsService
     private function getGroupsId(array $usersGroups): array
     {
         return array_map(
-            fn (UserGroup $userGroup) => $userGroup->getGroupId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getGroupId(),
             $usersGroups
         );
     }

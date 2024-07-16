@@ -16,6 +16,7 @@ class RolesTest extends TestCase
     private Roles $object;
     private ValidationChain $validator;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -54,7 +55,7 @@ class RolesTest extends TestCase
     public function checkIfRolesHasRol(): void
     {
         $this->object = $this->createRoles([USER_ROLES::ADMIN, USER_ROLES::USER]);
-        $return = $this->object->has(new rol(USER_ROLES::USER));
+        $return = $this->object->has(new Rol(USER_ROLES::USER));
 
         $this->assertTrue($return);
     }
@@ -63,7 +64,7 @@ class RolesTest extends TestCase
     public function checkIfRolesHasNotRol(): void
     {
         $this->object = $this->createRoles([USER_ROLES::ADMIN, USER_ROLES::USER]);
-        $return = $this->object->has(new rol(USER_ROLES::NOT_ACTIVE));
+        $return = $this->object->has(new Rol(USER_ROLES::NOT_ACTIVE));
 
         $this->assertFalse($return);
     }
@@ -87,7 +88,7 @@ class RolesTest extends TestCase
         $this->assertSame($roles, $return);
     }
 
-    private function createRoles(array|null $roles): Roles
+    private function createRoles(?array $roles): Roles
     {
         $rolesValueObject = [];
 

@@ -14,8 +14,9 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 abstract class DataBaseTestCase extends KernelTestCase
 {
-    protected EntityManagerInterface|null $entityManager;
+    protected ?EntityManagerInterface $entityManager;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -32,6 +33,7 @@ abstract class DataBaseTestCase extends KernelTestCase
             ->getManager();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -40,6 +42,7 @@ abstract class DataBaseTestCase extends KernelTestCase
         $this->entityManager = null;
     }
 
+    #[\Override]
     protected static function getKernelClass(): string
     {
         return Kernel::class;

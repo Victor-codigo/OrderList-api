@@ -5,18 +5,16 @@ declare(strict_types=1);
 namespace Common\Adapter\Http\Exception;
 
 use Common\Domain\Response\ResponseDto;
-use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Throwable;
 
-class HttpResponseException extends Exception implements HttpExceptionInterface
+class HttpResponseException extends \Exception implements HttpExceptionInterface
 {
     private ResponseDto $responseData;
     private int $statusCode;
     private array $headers = [];
 
-    public function __construct(string $message = '', int $code = 0, Throwable $previous = null)
+    public function __construct(string $message = '', int $code = 0, ?\Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
 
@@ -51,9 +49,7 @@ class HttpResponseException extends Exception implements HttpExceptionInterface
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getStatusCode(): int
     {
         return $this->statusCode;
@@ -66,9 +62,7 @@ class HttpResponseException extends Exception implements HttpExceptionInterface
         return $this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    #[\Override]
     public function getHeaders(): array
     {
         return $this->headers;

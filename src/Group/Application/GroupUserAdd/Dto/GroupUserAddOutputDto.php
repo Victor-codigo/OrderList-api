@@ -17,10 +17,11 @@ class GroupUserAddOutputDto implements ApplicationOutputInterface
     ) {
     }
 
+    #[\Override]
     public function toArray(): array
     {
         return array_map(
-            fn (Identifier $userId) => $userId->getValue(),
+            fn (Identifier $userId): ?string => $userId->getValue(),
             $this->usersId
         );
     }

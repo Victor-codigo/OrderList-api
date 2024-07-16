@@ -9,9 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ProductRemoveRequestDto implements RequestDtoInterface
 {
-    public readonly string|null $groupId;
-    public readonly array|null $productsId;
-    public readonly array|null $shopsId;
+    public readonly ?string $groupId;
+    public readonly ?array $productsId;
+    public readonly ?array $shopsId;
 
     public function __construct(Request $request)
     {

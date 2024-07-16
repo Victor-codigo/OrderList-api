@@ -32,6 +32,7 @@ class UserFirstLoginServiceTest extends TestCase
     private string $appName;
     private string $systemKey;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -147,7 +148,7 @@ class UserFirstLoginServiceTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationData) use ($userId, $userName, $appName, $systemKey) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationData) use ($userId, $userName, $appName, $systemKey): bool {
                 $this->assertEquals([$userId], $notificationData->content['users_id']);
                 $this->assertEquals('NOTIFICATION_USER_REGISTERED', $notificationData->content['type']);
                 $this->assertEquals($systemKey, $notificationData->content['system_key']);
@@ -204,7 +205,7 @@ class UserFirstLoginServiceTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationData) use ($userId, $userName, $appName, $systemKey) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationData) use ($userId, $userName, $appName, $systemKey): bool {
                 $this->assertEquals([$userId], $notificationData->content['users_id']);
                 $this->assertEquals('NOTIFICATION_USER_REGISTERED', $notificationData->content['type']);
                 $this->assertEquals($systemKey, $notificationData->content['system_key']);

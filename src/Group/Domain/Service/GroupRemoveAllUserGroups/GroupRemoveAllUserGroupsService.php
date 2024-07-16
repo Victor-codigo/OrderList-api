@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Group\Domain\Service\GroupRemoveAllUserGroups;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
@@ -13,7 +14,7 @@ use Group\Domain\Service\GroupRemoveAllUserGroups\Dto\GroupRemoveAllUserGroupsDt
 
 class GroupRemoveAllUserGroupsService
 {
-    private const PAGINATION_PAGE_ITEMS = 100;
+    private const int PAGINATION_PAGE_ITEMS = 100;
 
     public function __construct(
         private GroupRepositoryInterface $groupRepository,
@@ -51,7 +52,7 @@ class GroupRemoveAllUserGroupsService
         }
 
         $groupsId = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getGroupId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getGroupId(),
             $usersGroups
         );
 

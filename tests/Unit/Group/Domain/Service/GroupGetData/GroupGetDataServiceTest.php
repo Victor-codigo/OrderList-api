@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\Group\Domain\Service\GroupGetData;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Group\Domain\Model\Group;
@@ -16,12 +17,13 @@ use PHPUnit\Framework\TestCase;
 
 class GroupGetDataServiceTest extends TestCase
 {
-    private const PATH_APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
-    private const PATH_GROUP_IMAGES_PUBLIC = '/assets/img/groups';
+    private const string PATH_APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const string PATH_GROUP_IMAGES_PUBLIC = '/assets/img/groups';
 
     private GroupGetDataService $object;
     private MockObject|GroupRepositoryInterface $groupRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -68,7 +70,7 @@ class GroupGetDataServiceTest extends TestCase
     {
         $expectedGroupsData = $this->getGroupsTypeGroupData();
         $groupsId = array_map(
-            fn (Group $group) => $group->getId(),
+            fn (Group $group): Identifier => $group->getId(),
             $expectedGroupsData
         );
         $userImage = ValueObjectFactory::createPath('image.file');
@@ -112,7 +114,7 @@ class GroupGetDataServiceTest extends TestCase
     {
         $expectedGroupsData = $this->getGroupsTypeUserData();
         $groupsId = array_map(
-            fn (Group $group) => $group->getId(),
+            fn (Group $group): Identifier => $group->getId(),
             $expectedGroupsData
         );
         $userImage = ValueObjectFactory::createPath('image.file');
@@ -154,7 +156,7 @@ class GroupGetDataServiceTest extends TestCase
     {
         $expectedGroupsData = $this->getGroupsTypeUndefinedData();
         $groupsId = array_map(
-            fn (Group $group) => $group->getId(),
+            fn (Group $group): Identifier => $group->getId(),
             $expectedGroupsData
         );
         $userImage = ValueObjectFactory::createPath('image.file');
@@ -201,7 +203,7 @@ class GroupGetDataServiceTest extends TestCase
     {
         $expectedGroupsData = $this->getGroupsTypeGroupData();
         $groupsId = array_map(
-            fn (Group $group) => $group->getId(),
+            fn (Group $group): Identifier => $group->getId(),
             $expectedGroupsData
         );
         $userImage = ValueObjectFactory::createPath('image.file');
@@ -222,7 +224,7 @@ class GroupGetDataServiceTest extends TestCase
     {
         $expectedGroupsData = $this->getGroupsTypeGroupData();
         $groupsId = array_map(
-            fn (Group $group) => $group->getId(),
+            fn (Group $group): Identifier => $group->getId(),
             $expectedGroupsData
         );
         $userImage = ValueObjectFactory::createPath('image.file');

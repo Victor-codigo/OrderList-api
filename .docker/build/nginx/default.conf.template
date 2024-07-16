@@ -8,6 +8,11 @@ server {
     access_log /var/log/nginx/php-access.log;
     error_log /var/log/nginx/php-error.log;
 
+    # Avoid code execution under this path
+    location ^~ /assets/img/ {
+
+    }
+
     location / {
         try_files $uri $uri/ /index.php?$query_string;
     }

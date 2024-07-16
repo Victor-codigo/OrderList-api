@@ -52,7 +52,7 @@ class ListOrdersGetPriceUseCase extends ServiceBase
             throw ListOrdersGetPriceNotFoundException::fromMessage('List of orders not found');
         } catch (ValidateGroupAndUserException) {
             throw ListOrdersGetPriceValidateGroupAndUserException::fromMessage('You not belong to the group');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

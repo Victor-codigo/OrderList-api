@@ -119,7 +119,7 @@ class GetUsersController extends AbstractController
         return $this->createResponse($response->users);
     }
 
-    private function createGetUsersInputDto(array|null $usersId): GetUsersInputDto
+    private function createGetUsersInputDto(?array $usersId): GetUsersInputDto
     {
         /** @var UserSymfonyAdapter $user */
         $user = $this->security->getUser();

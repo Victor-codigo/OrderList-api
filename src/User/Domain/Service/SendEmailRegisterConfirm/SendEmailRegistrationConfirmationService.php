@@ -16,30 +16,15 @@ use User\Domain\Service\SendEmailRegisterConfirm\Dto\SendEmailRegistrationConfir
 
 class SendEmailRegistrationConfirmationService
 {
-    private MailerInterface $mailer;
-    private TranslatorInterface $translator;
-    private JwtHS256Interface $jwt;
-    private EmailRegistrationConfirmationDto $emailRegistrationConfirmationDto;
-    private string $adminEmail;
-    private string $appName;
-    private int $emailUserRegistrationConfirmationExpire;
-
     public function __construct(
-        MailerInterface $mailer,
-        TranslatorInterface $translator,
-        JwtHS256Interface $jwt,
-        EmailRegistrationConfirmationDto $emailRegistrationConfirmationDto,
-        string $adminEmail,
-        string $appName,
-        int $emailUserRegistrationConfirmationExpire
-        ) {
-        $this->mailer = $mailer;
-        $this->translator = $translator;
-        $this->jwt = $jwt;
-        $this->emailRegistrationConfirmationDto = $emailRegistrationConfirmationDto;
-        $this->adminEmail = $adminEmail;
-        $this->appName = $appName;
-        $this->emailUserRegistrationConfirmationExpire = $emailUserRegistrationConfirmationExpire;
+        private MailerInterface $mailer,
+        private TranslatorInterface $translator,
+        private JwtHS256Interface $jwt,
+        private EmailRegistrationConfirmationDto $emailRegistrationConfirmationDto,
+        private string $adminEmail,
+        private string $appName,
+        private int $emailUserRegistrationConfirmationExpire
+    ) {
     }
 
     public function __invoke(SendEmailRegistrationConfirmInputDto $emailInfo): void

@@ -84,7 +84,7 @@ class UserPasswordRememberChangeController extends AbstractController
         );
     }
 
-    private function createUserPasswordRememberChangeInputDto(string|null $token, string|null $passwordNew, string|null $passwordNewRepeat): UserPasswordRememberChangeInputDto
+    private function createUserPasswordRememberChangeInputDto(?string $token, ?string $passwordNew, ?string $passwordNewRepeat): UserPasswordRememberChangeInputDto
     {
         return new UserPasswordRememberChangeInputDto(
             $token,

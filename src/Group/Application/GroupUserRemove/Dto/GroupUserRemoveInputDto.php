@@ -9,7 +9,6 @@ use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
 use Common\Domain\Validation\ValidationInterface;
-use User\Domain\Model\User;
 
 class GroupUserRemoveInputDto implements ServiceInputDtoInterface
 {
@@ -25,11 +24,12 @@ class GroupUserRemoveInputDto implements ServiceInputDtoInterface
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
         $this->usersId = null === $usersId ? [] : array_map(
-            fn (string $userId) => ValueObjectFactory::createIdentifier($userId),
+            fn (string $userId): Identifier => ValueObjectFactory::createIdentifier($userId),
             $usersId
         );
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray([
@@ -45,7 +45,7 @@ class GroupUserRemoveInputDto implements ServiceInputDtoInterface
 
         // flat user errors
         $usersIdErrorList = [];
-        array_walk_recursive($usersIdErrorListValueObject, function ($error) use (&$usersIdErrorList) { $usersIdErrorList[] = $error; });
+        array_walk_recursive($usersIdErrorListValueObject, function ($error) use (&$usersIdErrorList): void { $usersIdErrorList[] = $error; });
         $usersIdErrorList = array_merge($usersIdErrorListNotBlank, $usersIdErrorList);
         $usersIdErrorList = array_unique($usersIdErrorList, SORT_REGULAR);
 

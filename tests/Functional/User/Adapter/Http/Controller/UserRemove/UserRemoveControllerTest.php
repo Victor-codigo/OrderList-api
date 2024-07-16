@@ -14,10 +14,10 @@ class UserRemoveControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const METHOD = 'DELETE';
-    private const ENDPOINT = '/api/v1/users/remove';
-    private const USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
-    private const USER_ID_HAS_NO_GROUP = '1552b279-5f78-4585-ae1b-31be2faabba8';
+    private const string METHOD = 'DELETE';
+    private const string ENDPOINT = '/api/v1/users/remove';
+    private const string USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
+    private const string USER_ID_HAS_NO_GROUP = '1552b279-5f78-4585-ae1b-31be2faabba8';
 
     private UserRemoveController $object;
 

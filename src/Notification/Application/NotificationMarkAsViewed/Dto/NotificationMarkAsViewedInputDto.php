@@ -25,11 +25,12 @@ class NotificationMarkAsViewedInputDto implements ServiceInputDtoInterface
     {
         $this->userSession = $userSession;
         $this->notificationsId = array_map(
-            fn (string $notificationId) => ValueObjectFactory::createIdentifier($notificationId),
+            fn (string $notificationId): Identifier => ValueObjectFactory::createIdentifier($notificationId),
             $notificationsId ?? []
         );
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = [];

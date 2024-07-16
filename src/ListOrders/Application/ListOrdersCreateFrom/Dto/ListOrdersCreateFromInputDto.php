@@ -26,6 +26,7 @@ class ListOrdersCreateFromInputDto implements ServiceInputDtoInterface
         $this->name = ValueObjectFactory::createNameWithSpaces($name);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

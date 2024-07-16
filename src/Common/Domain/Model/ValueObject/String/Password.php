@@ -10,6 +10,7 @@ use Common\Domain\Validation\ConstraintFactory;
 
 class Password extends StringValueObject
 {
+    #[\Override]
     public function defineConstraints(): void
     {
         $this

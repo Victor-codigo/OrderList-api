@@ -17,10 +17,11 @@ class ShopRemoveAllGroupsShopsOutputDto implements ApplicationOutputInterface
     ) {
     }
 
+    #[\Override]
     public function toArray(): array
     {
         $shopsIds = array_map(
-            fn (Identifier $shopId) => $shopId->getValue(),
+            fn (Identifier $shopId): ?string => $shopId->getValue(),
             $this->shopsId
         );
 

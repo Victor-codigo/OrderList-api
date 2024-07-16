@@ -18,6 +18,7 @@ class ListOrdersGetDataInputDtoTest extends TestCase
     private ValidationInterface $validator;
     private UserShared $userSession;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -238,9 +239,9 @@ class ListOrdersGetDataInputDtoTest extends TestCase
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
-                'section_filter_value' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
-                'text_filter_value' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
-            ],
+            'section_filter_value' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
+            'text_filter_value' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
+        ],
             $return
         );
     }

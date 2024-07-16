@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GroupGetAdminsRequestDto implements RequestDtoInterface
 {
-    public readonly string|null $groupId;
+    public readonly ?string $groupId;
 
     public function __construct(Request $request)
     {

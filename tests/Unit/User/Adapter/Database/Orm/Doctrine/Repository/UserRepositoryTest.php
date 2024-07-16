@@ -9,6 +9,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\User\USER_ROLES;
 use Doctrine\DBAL\Exception\ConnectionException;
@@ -23,12 +24,13 @@ class UserRepositoryTest extends DataBaseTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const USER_ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
-    private const USER_EMAIL = 'email.already.exists@host.com';
-    private const USER_NOT_ACTIVE_ID = 'bd2cbad1-6ccf-48e3-bb92-bc9961bc011e';
+    private const string USER_ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
+    private const string USER_EMAIL = 'email.already.exists@host.com';
+    private const string USER_NOT_ACTIVE_ID = 'bd2cbad1-6ccf-48e3-bb92-bc9961bc011e';
 
     private UserRepository $userRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -47,7 +49,7 @@ class UserRepositoryTest extends DataBaseTestCase
     }
 
     /** @test */
-    public function itShouldFailEmailAlreadyExists()
+    public function itShouldFailEmailAlreadyExists(): void
     {
         $this->expectException(DBUniqueConstraintException::class);
 
@@ -153,7 +155,7 @@ class UserRepositoryTest extends DataBaseTestCase
         ];
         $return = $this->userRepository->findUsersByIdOrFail($usersId);
         $dbUsersIds = array_map(
-            fn (User $user) => $user->getId(),
+            fn (User $user): Identifier => $user->getId(),
             $return
         );
 
@@ -196,7 +198,7 @@ class UserRepositoryTest extends DataBaseTestCase
         ];
         $return = $this->userRepository->findUsersByNameOrFail($usersName);
         $dbUsersName = array_map(
-            fn (User $user) => $user->getName(),
+            fn (User $user): NameWithSpaces => $user->getName(),
             $return
         );
 

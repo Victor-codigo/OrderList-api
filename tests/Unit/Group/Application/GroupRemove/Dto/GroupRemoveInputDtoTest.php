@@ -13,12 +13,13 @@ use PHPUnit\Framework\TestCase;
 
 class GroupRemoveInputDtoTest extends TestCase
 {
-    private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const GROUP_2_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
+    private const string GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const string GROUP_2_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
 
     private UserShared $userSession;
     private ValidationInterface $validator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

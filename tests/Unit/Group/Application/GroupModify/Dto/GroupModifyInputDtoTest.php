@@ -18,13 +18,14 @@ use Symfony\Component\Validator\Constraints\BuiltInFunctionsReturn;
 require_once 'tests/BuiltinFunctions/SymfonyComponentValidatorConstraints.php';
 class GroupModifyInputDtoTest extends TestCase
 {
-    private const GROUP_USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
-    private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const PATH_FILE = 'tests/Fixtures/Files/file.txt';
-    private const PATH_IMAGE_UPLOAD = 'tests/Fixtures/Files/Image.png';
+    private const string GROUP_USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
+    private const string GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const string PATH_FILE = 'tests/Fixtures/Files/file.txt';
+    private const string PATH_IMAGE_UPLOAD = 'tests/Fixtures/Files/Image.png';
 
     private ValidationInterface $validator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -32,6 +33,7 @@ class GroupModifyInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

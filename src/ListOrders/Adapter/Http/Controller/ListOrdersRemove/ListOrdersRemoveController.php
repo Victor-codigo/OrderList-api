@@ -85,7 +85,7 @@ class ListOrdersRemoveController extends AbstractController
         return $this->createResponse($listOrdersRemovedId);
     }
 
-    private function createListOrdersRemoveInputDto(string|null $groupId, array|null $listsOrdersId): ListOrdersRemoveInputDto
+    private function createListOrdersRemoveInputDto(?string $groupId, ?array $listsOrdersId): ListOrdersRemoveInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();

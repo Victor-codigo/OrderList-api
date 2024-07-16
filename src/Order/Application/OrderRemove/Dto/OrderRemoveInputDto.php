@@ -23,17 +23,18 @@ class OrderRemoveInputDto implements ServiceInputDtoInterface
     /**
      * @param string[]|null $ordersId
      */
-    public function __construct(UserShared $userSession, array|null $ordersId, string|null $groupId)
+    public function __construct(UserShared $userSession, ?array $ordersId, ?string $groupId)
     {
         $this->userSession = $userSession;
         $this->ordersId = array_map(
-            fn (string $orderId) => ValueObjectFactory::createIdentifier($orderId),
+            fn (string $orderId): Identifier => ValueObjectFactory::createIdentifier($orderId),
             $ordersId ?? []
         );
 
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListNoOrdersId = $validator

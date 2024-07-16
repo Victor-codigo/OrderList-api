@@ -6,7 +6,7 @@ namespace Common\Adapter\Http\RequestDataValidation;
 
 trait RequestDataValidation
 {
-    private function validateArrayOverflow(array|null $values, int $valuesMax): array|null
+    private function validateArrayOverflow(?array $values, int $valuesMax): ?array
     {
         if (null === $values) {
             return null;
@@ -19,7 +19,7 @@ trait RequestDataValidation
         return $values;
     }
 
-    private function validateCsvOverflow(string|null $values, int $valuesMax): array|null
+    private function validateCsvOverflow(?string $values, int $valuesMax): ?array
     {
         if (null === $values) {
             return null;
@@ -34,12 +34,12 @@ trait RequestDataValidation
     /**
      * @param mixed $default value to be set, to those values that are not float
      */
-    private function arrayFilterFloat(array|null $values, int $valuesMax, mixed $default = null): array
+    private function arrayFilterFloat(?array $values, int $valuesMax, mixed $default = null): array
     {
         $valuesValid = $this->validateArrayOverflow($values, $valuesMax);
 
         return array_map(
-            fn ($value) => filter_var($value, FILTER_VALIDATE_FLOAT)
+            fn ($value): mixed => filter_var($value, FILTER_VALIDATE_FLOAT)
                 ? (float) $value
                 : $default,
             $valuesValid ?? []

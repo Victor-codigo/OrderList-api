@@ -13,6 +13,7 @@ class RequestDataValidationTest extends TestCase
     private \ReflectionMethod $objectMethodValidateArrayOverflow;
     private \ReflectionMethod $objectMethodValidateCsvOverflow;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

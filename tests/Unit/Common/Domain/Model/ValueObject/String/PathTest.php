@@ -15,6 +15,7 @@ class PathTest extends TestCase
 {
     private ValidationInterface $validation;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -22,7 +23,7 @@ class PathTest extends TestCase
         $this->validation = new ValidationChain();
     }
 
-    private function createPath(string|null $path): Path
+    private function createPath(?string $path): Path
     {
         return new Path($path);
     }

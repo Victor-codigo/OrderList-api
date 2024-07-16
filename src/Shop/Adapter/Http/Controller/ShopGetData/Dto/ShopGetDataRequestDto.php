@@ -13,18 +13,18 @@ class ShopGetDataRequestDto implements RequestDtoInterface
 {
     use RequestDataValidation;
 
-    private const SHOPS_NUM_MAX = AppConfig::ENDPOINT_SHOP_GET_SHOPS_MAX;
-    private const PRODUCTS_NUM_MAX = AppConfig::ENDPOINT_SHOP_GET_PRODUCTS_MAX;
+    private const int SHOPS_NUM_MAX = AppConfig::ENDPOINT_SHOP_GET_SHOPS_MAX;
+    private const int PRODUCTS_NUM_MAX = AppConfig::ENDPOINT_SHOP_GET_PRODUCTS_MAX;
 
-    public readonly string|null $groupId;
-    public readonly array|null $shopsId;
-    public readonly array|null $productsId;
-    public readonly string|null $shopNameFilterType;
+    public readonly ?string $groupId;
+    public readonly ?array $shopsId;
+    public readonly ?array $productsId;
+    public readonly ?string $shopNameFilterType;
     public readonly string|float|int|null $shopNameFilterValue;
-    public readonly string|null $shopName;
-    public readonly bool|null $orderArc;
-    public readonly int|null $page;
-    public readonly int|null $pageItems;
+    public readonly ?string $shopName;
+    public readonly ?bool $orderArc;
+    public readonly ?int $page;
+    public readonly ?int $pageItems;
 
     public function __construct(Request $request)
     {

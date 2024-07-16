@@ -14,16 +14,11 @@ class ShopGetDataControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/shops';
-    private const METHOD = 'GET';
-    private const USER_HAS_NO_GROUP_EMAIL = 'email.other_2.active@host.com';
-    private const USER_HAS_NO_GROUP_PASSWORD = '123456';
-    private const GROUP_EXISTS_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const SHOP_EXISTS_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
-    private const SHOP_EXISTS_ID_2 = 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e';
-    private const SHOP_EXISTS_ID_3 = 'b9b1c541-d41e-4751-9ecb-4a1d823c0405';
-    private const SHOP_EXISTS_ID_4 = 'cc7f5dd6-02ba-4bd9-b5c1-5b65d81e59a0';
-    private const PRODUCT_EXISTS_ID = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
+    private const string ENDPOINT = '/api/v1/shops';
+    private const string METHOD = 'GET';
+    private const string GROUP_EXISTS_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string SHOP_EXISTS_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
+    private const string PRODUCT_EXISTS_ID = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
 
     private function assertResponseIsOk(array $responsesExpected, object $responseActual): void
     {

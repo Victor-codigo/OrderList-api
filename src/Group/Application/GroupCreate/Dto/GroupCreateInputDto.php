@@ -34,6 +34,7 @@ class GroupCreateInputDto implements ServiceInputDtoInterface
         $this->notify = $notify ?? true;
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

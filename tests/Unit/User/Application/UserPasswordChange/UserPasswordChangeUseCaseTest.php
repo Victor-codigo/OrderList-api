@@ -23,7 +23,7 @@ use User\Domain\Service\UserPasswordChange\UserPasswordChangeService;
 
 class UserPasswordChangeUseCaseTest extends TestCase
 {
-    private const SYSTEM_KEY = 'systemKeForDev';
+    private const string SYSTEM_KEY = 'systemKeForDev';
 
     private UserPasswordChangeUseCase $object;
     private MockObject|UserPasswordChangeService $userPasswordChangeService;
@@ -31,6 +31,7 @@ class UserPasswordChangeUseCaseTest extends TestCase
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|User $userSession;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -69,7 +70,7 @@ class UserPasswordChangeUseCaseTest extends TestCase
         $this->userPasswordChangeService
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (UserPasswordChangeDto $serviceInput) use ($userId, $passwordOld, $passwordNew, $passwordRepeatNew) {
+            ->with($this->callback(function (UserPasswordChangeDto $serviceInput) use ($userId, $passwordOld, $passwordNew, $passwordRepeatNew): bool {
                 $this->assertEquals($userId, $serviceInput->id->getValue());
                 $this->assertEquals($passwordOld, $serviceInput->passwordOld->getValue());
                 $this->assertEquals($passwordNew, $serviceInput->passwordNew->getValue());
@@ -81,7 +82,7 @@ class UserPasswordChangeUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($userId) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($userId): bool {
                 $this->assertEquals([$userId], $notificationDto->content['users_id']);
                 $this->assertEquals(self::SYSTEM_KEY, $notificationDto->content['system_key']);
                 $this->assertEquals(NOTIFICATION_TYPE::USER_PASSWORD_CHANGED->value, $notificationDto->content['type']);
@@ -117,7 +118,7 @@ class UserPasswordChangeUseCaseTest extends TestCase
         $this->userPasswordChangeService
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (UserPasswordChangeDto $serviceInput) use ($userId, $passwordOld, $passwordNew, $passwordRepeatNew) {
+            ->with($this->callback(function (UserPasswordChangeDto $serviceInput) use ($userId, $passwordOld, $passwordNew, $passwordRepeatNew): bool {
                 $this->assertEquals($userId, $serviceInput->id->getValue());
                 $this->assertEquals($passwordOld, $serviceInput->passwordOld->getValue());
                 $this->assertEquals($passwordNew, $serviceInput->passwordNew->getValue());
@@ -129,7 +130,7 @@ class UserPasswordChangeUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($userId) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($userId): bool {
                 $this->assertEquals([$userId], $notificationDto->content['users_id']);
                 $this->assertEquals(self::SYSTEM_KEY, $notificationDto->content['system_key']);
                 $this->assertEquals(NOTIFICATION_TYPE::USER_PASSWORD_CHANGED->value, $notificationDto->content['type']);

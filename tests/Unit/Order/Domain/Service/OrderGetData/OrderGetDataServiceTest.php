@@ -28,16 +28,16 @@ class OrderGetDataServiceTest extends DataBaseTestCase
 {
     use RefreshDatabaseTrait;
 
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const ORDERS_ID = [
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const array ORDERS_ID = [
         '9a48ac5b-4571-43fd-ac80-28b08124ffb8',
         'a0b4760a-9037-477a-8b84-d059ae5ee7e9',
         'c3734d1c-8b18-4bfd-95aa-06a261476d9d',
         'd351adba-c566-4fa5-bb5b-1a6f73b1d72f',
     ];
-    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
-    private const PRODUCT_PUBLIC_PATH = '/productPublicPath';
-    private const SHOP_PUBLIC_PATH = '/shopPublicPath';
+    private const string APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const string PRODUCT_PUBLIC_PATH = '/productPublicPath';
+    private const string SHOP_PUBLIC_PATH = '/shopPublicPath';
 
     private OrderGetDataService $object;
     private MockObject|OrderRepositoryInterface $orderRepository;
@@ -45,6 +45,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
     private MockObject|PaginatorInterface $ordersPaginator;
     private MockObject|PaginatorInterface $productsShopsPaginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -62,7 +63,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
     private function getOrdersIdentifiers(): array
     {
         return array_map(
-            fn (string $orderId) => ValueObjectFactory::createIdentifier($orderId),
+            fn (string $orderId): Identifier => ValueObjectFactory::createIdentifier($orderId),
             self::ORDERS_ID
         );
     }
@@ -103,27 +104,6 @@ class OrderGetDataServiceTest extends DataBaseTestCase
     }
 
     /**
-     * @return Product[]
-     */
-    private function getProductsExpected(): array
-    {
-        $products = $this->getProducts();
-
-        return array_map(
-            function (Product $product) {
-                if (!$product->getImage()->isNull()) {
-                    $product->setImage(
-                        ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::PRODUCT_PUBLIC_PATH.'/'.$product->getImage()->getValue())
-                    );
-                }
-
-                return $product;
-            },
-            $products
-        );
-    }
-
-    /**
      * @return Shop[]
      */
     private function getShops(): array
@@ -144,27 +124,6 @@ class OrderGetDataServiceTest extends DataBaseTestCase
                 null
             ),
         ];
-    }
-
-    /**
-     * @return Shop[]
-     */
-    private function getShopsExpected(): array
-    {
-        $shops = $this->getShops();
-
-        return array_map(
-            function (Shop $shop) {
-                if (!$shop->getImage()->isNull()) {
-                    $shop->setImage(
-                        ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::PRODUCT_PUBLIC_PATH.'/'.$shop->getImage()->getValue())
-                    );
-                }
-
-                return $shop;
-            },
-            $shops
-        );
     }
 
     /**
@@ -220,7 +179,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         $orders = $this->getOrders();
 
         return array_map(
-            function (Order $order) {
+            function (Order $order): Order {
                 if (!$order->getProduct()->getImage()->isNull()) {
                     $order->getProduct()->setImage(
                         ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::PRODUCT_PUBLIC_PATH.'/'.$order->getProduct()->getImage()->getValue())
@@ -235,40 +194,6 @@ class OrderGetDataServiceTest extends DataBaseTestCase
 
                 return $order;
             },
-            $orders
-        );
-    }
-
-    private function getProductsShops(): array
-    {
-        $products = $this->getProducts();
-        $shops = $this->getShops();
-
-        return [
-            ProductShop::fromPrimitives(
-                $products[0],
-                $shops[0],
-                null,
-                null
-            ),
-            ProductShop::fromPrimitives(
-                $products[1],
-                $shops[1],
-                40,
-                UNIT_MEASURE_TYPE::KG
-            ),
-        ];
-    }
-
-    /**
-     * @param Order[] $orders
-     *
-     * @return Identifier[]
-     */
-    private function getShopsId(array $orders): array
-    {
-        return array_map(
-            fn (Order $order) => $order->getShopId(),
             $orders
         );
     }

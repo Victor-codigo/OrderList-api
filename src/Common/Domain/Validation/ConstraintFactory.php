@@ -67,7 +67,7 @@ class ConstraintFactory
     /**
      * @param array $versions Uuid::V...
      */
-    public static function uuId(array $versions = null, bool $strict = true): ConstraintDto
+    public static function uuId(?array $versions = null, bool $strict = true): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::UUID, [
             'versions' => $versions,
@@ -239,7 +239,7 @@ class ConstraintFactory
         return new ConstraintDto(CONSTRAINTS_NAMES::TIME, null);
     }
 
-    public static function timeZone(int|null $timeZone): ConstraintDto
+    public static function timeZone(?int $timeZone): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::TIMEZONE, [
             'timeZone' => $timeZone,
@@ -257,14 +257,15 @@ class ConstraintFactory
     public static function image(
         mixed $maxSize,
         array|string|null $mimeTypes,
-        int|null $minWith = null,
-        int|null $maxWith = null,
-        int|null $minHeigh = null,
-        int|null $maxHeigh = null,
-        int|null $minPixels = null,
-        int|null $maxPixels = null,
-        float|null $minAspectRatio = null,
-        float|null $maxAspectRatio = null,
+        ?int $filenameMaxLength = null,
+        ?int $minWith = null,
+        ?int $maxWith = null,
+        ?int $minHeigh = null,
+        ?int $maxHeigh = null,
+        ?int $minPixels = null,
+        ?int $maxPixels = null,
+        ?float $minAspectRatio = null,
+        ?float $maxAspectRatio = null,
         bool $allowLandscape = true,
         bool $allowPortrait = true,
         bool $allowSquareImage = true,
@@ -273,7 +274,7 @@ class ConstraintFactory
         return new ConstraintDto(CONSTRAINTS_NAMES::FILE_IMAGE, [
             'maxSize' => $maxSize,
             'mimeTypes' => $mimeTypes,
-            'maxSize' => $maxSize,
+            'filenameMaxLength' => $filenameMaxLength,
             'minWith' => $minWith,
             'maxWith' => $maxWith,
             'minHeigh' => $minHeigh,
@@ -289,7 +290,7 @@ class ConstraintFactory
         ]);
     }
 
-    public static function choice(array|null $choices, bool|null $multiple, bool|null $strict, int|null $min, int|null $max): ConstraintDto
+    public static function choice(?array $choices, ?bool $multiple, ?bool $strict, ?int $min, ?int $max): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::CHOICE, [
             'choices' => $choices,

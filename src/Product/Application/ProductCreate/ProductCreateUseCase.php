@@ -7,7 +7,6 @@ namespace Product\Application\ProductCreate;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\FileUpload\Exception\FileUploadException;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
 use Common\Domain\Service\ValidateGroupAndUser\ValidateGroupAndUserService;
@@ -27,7 +26,6 @@ class ProductCreateUseCase extends ServiceBase
     public function __construct(
         private ProductCreateService $ProductCreateService,
         private ValidationInterface $validator,
-        private ModuleCommunicationInterface $moduleCommunication,
         private ValidateGroupAndUserService $validateGroupAndUserService,
     ) {
     }
@@ -57,7 +55,7 @@ class ProductCreateUseCase extends ServiceBase
             throw ProductCreateCanNotUploadFileException::fromMessage('An error occurred while file was uploading');
         } catch (ValidateGroupAndUserException) {
             throw ProductCreateGroupException::fromMessage('Error validating the group');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

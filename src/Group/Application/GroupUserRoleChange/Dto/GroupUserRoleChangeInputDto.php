@@ -11,7 +11,6 @@ use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\ValidationInterface;
-use User\Domain\Model\User;
 
 class GroupUserRoleChangeInputDto implements ServiceInputDtoInterface
 {
@@ -23,17 +22,18 @@ class GroupUserRoleChangeInputDto implements ServiceInputDtoInterface
     public readonly array $usersId;
     public readonly Rol $rol;
 
-    public function __construct(UserShared $userSession, string|null $groupId, array|null $usersId, bool|null $admin)
+    public function __construct(UserShared $userSession, ?string $groupId, ?array $usersId, ?bool $admin)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
         $this->usersId = null === $usersId ? [] : array_map(
-            fn (string $userId) => ValueObjectFactory::createIdentifier($userId),
+            fn (string $userId): Identifier => ValueObjectFactory::createIdentifier($userId),
             $usersId
         );
         $this->rol = ValueObjectFactory::createRol($admin ? GROUP_ROLES::ADMIN : GROUP_ROLES::USER);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray([
@@ -50,7 +50,7 @@ class GroupUserRoleChangeInputDto implements ServiceInputDtoInterface
 
         // flat user errors
         $usersIdErrorList = [];
-        array_walk_recursive($usersIdErrorListValueObject, function ($error) use (&$usersIdErrorList) { $usersIdErrorList[] = $error; });
+        array_walk_recursive($usersIdErrorListValueObject, function ($error) use (&$usersIdErrorList): void { $usersIdErrorList[] = $error; });
         $usersIdErrorList = array_merge($usersIdErrorListNotBlank, $usersIdErrorList);
         $usersIdErrorList = array_unique($usersIdErrorList, SORT_REGULAR);
 

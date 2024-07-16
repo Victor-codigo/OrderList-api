@@ -10,7 +10,7 @@ class EndpointNameDto
     ) {
     }
 
-    public function __invoke(EndpointNameDto $args)
+    public function __invoke(EndpointNameDto $args): void
     {
         // NamespaceInnerLayerName
     }

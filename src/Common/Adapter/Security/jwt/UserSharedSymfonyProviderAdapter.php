@@ -13,7 +13,6 @@ use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\User\USER_ROLES;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\UserNotFoundException;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -21,14 +20,14 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 class UserSharedSymfonyProviderAdapter implements UserProviderInterface
 {
     public function __construct(
-        private ModuleCommunicationInterface $moduleCommunication,
-        private RequestStack $request
+        private ModuleCommunicationInterface $moduleCommunication
     ) {
     }
 
     /**
      * @throws UnsupportedUserException if the user is not supported
      */
+    #[\Override]
     public function refreshUser(UserInterface $user): UserInterface
     {
         if (!$user instanceof UserSharedSymfonyAdapter) {
@@ -41,6 +40,7 @@ class UserSharedSymfonyProviderAdapter implements UserProviderInterface
     /**
      * Whether this provider supports the given user class.
      */
+    #[\Override]
     public function supportsClass(string $class): bool
     {
         return UserSharedSymfonyAdapter::class === $class;
@@ -49,6 +49,7 @@ class UserSharedSymfonyProviderAdapter implements UserProviderInterface
     /**
      * @throws UserNotFoundException
      */
+    #[\Override]
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
         try {
@@ -66,7 +67,7 @@ class UserSharedSymfonyProviderAdapter implements UserProviderInterface
     private function createUserSharedSymfonyAdapter(array $userData): UserSharedSymfonyAdapter
     {
         $roles = array_map(
-            fn (string $rolPlain) => USER_ROLES::tryFrom($rolPlain),
+            fn (string $rolPlain): ?USER_ROLES => USER_ROLES::tryFrom($rolPlain),
             $userData['roles']
         );
 

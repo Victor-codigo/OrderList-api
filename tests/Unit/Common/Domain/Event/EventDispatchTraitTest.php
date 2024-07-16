@@ -15,6 +15,7 @@ class EventDispatchTraitTest extends TestCase
     private MockObject|TraitClass $object;
     private MockObject|EventDispatcherInterface $eventDispatcher;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -48,7 +49,7 @@ class EventDispatchTraitTest extends TestCase
         $this->eventDispatcher
             ->expects($matcher)
             ->method('dispatch')
-            ->willReturnCallback(function (CustomEvent $event) use ($matcher, $eventDomain1, $eventDomain2, $eventDomain3) {
+            ->willReturnCallback(function (CustomEvent $event) use ($matcher, $eventDomain1, $eventDomain2, $eventDomain3): void {
                 $expectedNumCall = $matcher->getInvocationCount();
                 match ([$expectedNumCall, $event]) {
                     [1, $eventDomain1],
@@ -76,7 +77,7 @@ class EventDispatchTraitTest extends TestCase
         $this->eventDispatcher
             ->expects($matcher)
             ->method('dispatch')
-            ->willReturnCallback(function (CustomEvent $event) use ($matcher, $eventDomain1, $eventDomain2, $eventDomain3, $eventDomain4, $eventDomain5, $eventDomain6) {
+            ->willReturnCallback(function (CustomEvent $event) use ($matcher, $eventDomain1, $eventDomain2, $eventDomain3, $eventDomain4, $eventDomain5, $eventDomain6): void {
                 match ([$matcher->getInvocationCount(), $event]) {
                     [1, $eventDomain1],
                     [2, $eventDomain2],

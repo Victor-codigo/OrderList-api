@@ -11,7 +11,7 @@ use Notification\Domain\Service\NotificationRemoveAllUserNotifications\Dto\Notif
 
 class NotificationRemoveAllUserNotificationsService
 {
-    private const NOTIFICATION_PAGINATION_ITEMS = 100;
+    private const int NOTIFICATION_PAGINATION_ITEMS = 100;
 
     public function __construct(
         private NotificationRepositoryInterface $notificationRepository,
@@ -31,7 +31,7 @@ class NotificationRemoveAllUserNotificationsService
         foreach ($userNotificationsPaginator->getAllPages(self::NOTIFICATION_PAGINATION_ITEMS) as $notificationsIterator) {
             $notifications = iterator_to_array($notificationsIterator);
             $notificationsId[] = array_map(
-                fn (Notification $notification) => $notification->getId(),
+                fn (Notification $notification): Identifier => $notification->getId(),
                 $notifications
             );
 

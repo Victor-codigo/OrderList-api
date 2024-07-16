@@ -26,18 +26,18 @@ class ListOrdersGetDataInputDto implements ServiceInputDtoInterface
     public readonly array $listOrdersId;
     public readonly bool $orderAsc;
 
-    public readonly Filter|null $filterSection;
-    public readonly Filter|null $filterText;
+    public readonly ?Filter $filterSection;
+    public readonly ?Filter $filterText;
 
     public readonly PaginatorPage $page;
     public readonly PaginatorPageItems $pageItems;
 
-    public function __construct(UserShared $userShared, string|null $groupId, array|null $listOrdersIds, string|null $filterValue, bool $orderAsc, string|null $filterSection, string|null $filterText, int|null $page, int|null $pageItems)
+    public function __construct(UserShared $userShared, ?string $groupId, ?array $listOrdersIds, ?string $filterValue, bool $orderAsc, ?string $filterSection, ?string $filterText, ?int $page, ?int $pageItems)
     {
         $this->userSession = $userShared;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
         $this->listOrdersId = array_map(
-            fn (string $listOrderId) => ValueObjectFactory::createIdentifier($listOrderId),
+            fn (string $listOrderId): Identifier => ValueObjectFactory::createIdentifier($listOrderId),
             $listOrdersIds ?? []
         );
         $this->orderAsc = $orderAsc;
@@ -55,6 +55,7 @@ class ListOrdersGetDataInputDto implements ServiceInputDtoInterface
         $this->pageItems = ValueObjectFactory::createPaginatorPageItems($pageItems);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListGroupId = $validator->validateValueObjectArray([

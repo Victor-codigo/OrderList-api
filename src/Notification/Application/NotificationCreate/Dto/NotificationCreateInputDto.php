@@ -24,18 +24,15 @@ class NotificationCreateInputDto implements ServiceInputDtoInterface
     public readonly NotificationData $notificationData;
     public readonly string $systemKey;
 
-    /**
-     * @param string[]|null $userId
-     */
-    public function __construct(UserShared $userSession, array|null $usersId, string|null $notificationType, array|null $notificationData, string|null $systemKey)
+    public function __construct(UserShared $userSession, ?array $usersId, ?string $notificationType, ?array $notificationData, ?string $systemKey)
     {
-        $this->systemKey = null === $systemKey ? '' : $systemKey;
+        $this->systemKey = $systemKey ?? '';
         $this->notificationData = ValueObjectFactory::createNotificationData($notificationData);
         $this->userSession = $userSession;
         $this->usersId = null === $usersId
             ? []
             : array_map(
-                fn (string $userId) => ValueObjectFactory::createIdentifier($userId),
+                fn (string $userId): Identifier => ValueObjectFactory::createIdentifier($userId),
                 $usersId
             );
         $this->notificationType = ValueObjectFactory::createNotificationType(
@@ -43,6 +40,7 @@ class NotificationCreateInputDto implements ServiceInputDtoInterface
         );
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray([
@@ -79,7 +77,7 @@ class NotificationCreateInputDto implements ServiceInputDtoInterface
         $errorList = $validator->validateValueObjectArray($this->usersId);
         $errorList = array_reduce(
             $errorList,
-            fn (array $carry, array $errorLIstUserId) => array_merge($carry, $errorLIstUserId),
+            fn (array $carry, array $errorLIstUserId): array => array_merge($carry, $errorLIstUserId),
             []
         );
 
@@ -88,12 +86,10 @@ class NotificationCreateInputDto implements ServiceInputDtoInterface
 
     private function validateSystemKey(ValidationInterface $validator): array
     {
-        $errorListSystemKey = $validator
+        return $validator
             ->setValue($this->systemKey)
             ->notNull()
             ->notBlank()
             ->validate();
-
-        return $errorListSystemKey;
     }
 }

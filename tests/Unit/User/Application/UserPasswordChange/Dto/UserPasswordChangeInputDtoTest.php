@@ -17,6 +17,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
     private ValidationInterface $validator;
     private MockObject|User $userSession;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

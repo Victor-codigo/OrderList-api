@@ -19,6 +19,7 @@ class UserRegisteredEventSubscriberTest extends TestCase
     private MockObject|EntityManagerInterface $entityManager;
     private MockObject|User $user;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -28,7 +29,7 @@ class UserRegisteredEventSubscriberTest extends TestCase
         $this->object = new UserRegisteredEventSubscriber();
     }
 
-    private function createUserPreRegisteredEvent(string|null $userRegisterEmailConfirmationUrl): UserPreRegisteredEvent
+    private function createUserPreRegisteredEvent(?string $userRegisterEmailConfirmationUrl): UserPreRegisteredEvent
     {
         return new UserPreRegisteredEvent(
             ValueObjectFactory::createIdentifier('userId'),
@@ -73,7 +74,7 @@ class UserRegisteredEventSubscriberTest extends TestCase
         $this->user
             ->expects($this->once())
             ->method('eventDispatchRegister')
-            ->with($this->callback(function (UserPreRegisteredEvent $event) use ($userPreRegisteredEventData) {
+            ->with($this->callback(function (UserPreRegisteredEvent $event) use ($userPreRegisteredEventData): bool {
                 $this->assertEquals($userPreRegisteredEventData->id, $event->id);
                 $this->assertEquals($userPreRegisteredEventData->emailTo, $event->emailTo);
                 $this->assertEquals($userPreRegisteredEventData->userRegisterEmailConfirmationUrl, $event->userRegisterEmailConfirmationUrl);
@@ -106,7 +107,7 @@ class UserRegisteredEventSubscriberTest extends TestCase
         $this->user
             ->expects($this->once())
             ->method('eventDispatchRegister')
-            ->with($this->callback(function (UserPreRegisteredEvent $event) use ($userPreRegisteredEventData) {
+            ->with($this->callback(function (UserPreRegisteredEvent $event) use ($userPreRegisteredEventData): bool {
                 $this->assertEquals($userPreRegisteredEventData->id, $event->id);
                 $this->assertEquals($userPreRegisteredEventData->emailTo, $event->emailTo);
                 $this->assertEquals($userPreRegisteredEventData->userRegisterEmailConfirmationUrl, $event->userRegisterEmailConfirmationUrl);

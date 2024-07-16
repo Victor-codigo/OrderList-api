@@ -28,17 +28,18 @@ class OrderRemoveAllGroupsOrdersInputDto implements ServiceInputDtoInterface
     {
         $this->userSession = $userSession;
         $this->groupsIdToRemove = array_map(
-            fn (string $orderId) => ValueObjectFactory::createIdentifier($orderId),
+            fn (string $orderId): Identifier => ValueObjectFactory::createIdentifier($orderId),
             $groupsIdToRemove ?? []
         );
         $this->groupsIdToChangeUserId = array_map(
-            fn (string $orderId) => ValueObjectFactory::createIdentifier($orderId),
+            fn (string $orderId): Identifier => ValueObjectFactory::createIdentifier($orderId),
             $groupsIdToChangeUserId ?? []
         );
 
         $this->systemKey = $systemKey ?? '';
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListGroupsIdToRemove = $validator->validateValueObjectArray($this->groupsIdToRemove);

@@ -8,6 +8,7 @@ use Common\Domain\Event\EventDomainInterface;
 
 class CustomEvent implements EventDomainInterface
 {
+    #[\Override]
     public function getOccurredOn(): \DateTimeImmutable
     {
         return new \DateTimeImmutable();

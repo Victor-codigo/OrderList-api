@@ -11,9 +11,7 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 class AlphanumericWithWhiteSpaceValidator extends RegexValidator
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[\Override]
     public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof AlphanumericWithWhiteSpace) {

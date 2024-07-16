@@ -25,6 +25,7 @@ class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
      * @throws DBUniqueConstraintException
      * @throws DBConnectionException
      */
+    #[\Override]
     public function save(Group $group): void
     {
         try {
@@ -42,6 +43,7 @@ class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
      *
      * @throws DBConnectionException
      */
+    #[\Override]
     public function remove(array $groups): void
     {
         try {
@@ -60,6 +62,7 @@ class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
      *
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function findGroupsByIdOrFail(array $groupsId): array
     {
         /** @var Group[] $groups */
@@ -75,6 +78,7 @@ class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
     /**
      * @throws DBNotFoundException
      */
+    #[\Override]
     public function findGroupByNameOrFail(NameWithSpaces $groupName): Group
     {
         $groupData = $this->findBy(['name' => $groupName], null, 1);

@@ -13,13 +13,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class WebClientTestCase extends WebTestCase
 {
-    protected const CONTENT_TYPE_ALLOWED = 'application/json';
-    protected const LOGIN_URL = '/api/v1/users/login';
-    private const PATH_PRIVATE_KEY = 'src/Common/Adapter/Framework/Config/JwtKeys/Lexik/private.pem';
-    private const USER_ADMIN_EMAIL = 'email.admin.active@host.com';
-    private const USER_ADMIN_PASSWORD = '123456';
-    private const USER_USER_EMAIL = 'email.already.active@host.com';
-    private const USER_USER_PASSWORD = '123456';
+    protected const string CONTENT_TYPE_ALLOWED = 'application/json';
+    protected const string LOGIN_URL = '/api/v1/users/login';
+    private const string PATH_PRIVATE_KEY = 'src/Common/Adapter/Framework/Config/JwtKeys/Lexik/private.pem';
+    private const string USER_ADMIN_EMAIL = 'email.admin.active@host.com';
+    private const string USER_ADMIN_PASSWORD = '123456';
+    private const string USER_USER_EMAIL = 'email.already.active@host.com';
+    private const string USER_USER_PASSWORD = '123456';
 
     private static ?KernelBrowser $clientAuthenticatedUser = null;
     private static ?KernelBrowser $clientAuthenticatedAdmin = null;
@@ -29,6 +29,7 @@ class WebClientTestCase extends WebTestCase
      */
     private array $entityManagerArray = [];
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

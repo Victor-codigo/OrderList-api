@@ -17,6 +17,7 @@ class UserPreRegisteredSubscriber implements EventDomainSubscriberInterface
         $this->sendEmailRegistrationConfirmationService = $sendEmailRegistrationConfirmationService;
     }
 
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [UserPreRegisteredEvent::class];

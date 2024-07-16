@@ -13,18 +13,19 @@ use Product\Application\ProductGetData\Dto\ProductGetDataInputDto;
 
 class ProductGetDataInputDtoTest extends TestCase
 {
-    private const GROUP_ID = 'd511f745-22ef-4de8-933f-81e1ffcda810';
-    private const PRODUCTS_ID = [
+    private const string GROUP_ID = 'd511f745-22ef-4de8-933f-81e1ffcda810';
+    private const array PRODUCTS_ID = [
         'd511f745-22ef-4de8-933f-81e1ffcda810',
         'eb221850-c5d1-4cb2-939d-d89d2f732db1',
     ];
-    private const SHOPS_ID = [
+    private const array SHOPS_ID = [
         'd511f745-22ef-4de8-933f-81e1ffcda810',
         'f0872de3-bc35-4572-b69f-2c9bfd28f220',
     ];
 
     private ValidationInterface $validator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

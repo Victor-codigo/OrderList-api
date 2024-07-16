@@ -7,6 +7,7 @@ namespace Test\Unit\Order\Adapter\Database\Orm\Doctrine\Repository;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Doctrine\DBAL\Exception\ConnectionException;
@@ -27,10 +28,10 @@ class OrderRepositoryTest extends DataBaseTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const GROUP_ID_2 = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const LIST_ORDERS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
-    private const ORDERS_ID = [
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string GROUP_ID_2 = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string LIST_ORDERS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
+    private const array ORDERS_ID = [
         '5cfe52e5-db78-41b3-9acd-c3c84924cb9b',
         '9a48ac5b-4571-43fd-ac80-28b08124ffb8',
         'a0b4760a-9037-477a-8b84-d059ae5ee7e9',
@@ -38,7 +39,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         'd351adba-c566-4fa5-bb5b-1a6f73b1d72f',
         '72f2f46d-3f3f-48d0-b4eb-5cbed7896cab',
     ];
-    private const PRODUCTS_AND_SHOPS_ID = [
+    private const array PRODUCTS_AND_SHOPS_ID = [
         self::ORDERS_ID[0] => [
             'productId' => '8b6d650b-7bb7-4850-bf25-36cda9bce801',
             'shopId' => 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
@@ -66,6 +67,7 @@ class OrderRepositoryTest extends DataBaseTestCase
     private ShopRepositoryInterface $shopRepository;
     private ListOrdersRepositoryInterface $listOrdersRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -151,15 +153,14 @@ class OrderRepositoryTest extends DataBaseTestCase
         $orderNew->setShop($shop);
 
         $this->object->save([$orderNew]);
-
-        /** @var Group $groupSaved */
+        /** @var Group $orderSaved */
         $orderSaved = $this->object->findOneBy(['id' => $orderNew->getId()]);
 
         $this->assertSame($orderNew, $orderSaved);
     }
 
     /** @test */
-    public function itShouldFailOrderIdAlreadyExists()
+    public function itShouldFailOrderIdAlreadyExists(): void
     {
         $orderExists = $this->getExistsOrder();
         $listOrders = $this->listOrdersRepository->findOneby(['id' => ValueObjectFactory::createIdentifier('ba6bed75-4c6e-4ac3-8787-5bded95dac8d')]);
@@ -501,11 +502,11 @@ class OrderRepositoryTest extends DataBaseTestCase
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
         $listOrdersId = ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID);
         $productsId = array_map(
-            fn (array $productAndShopId) => ValueObjectFactory::createIdentifier($productAndShopId['productId']),
+            fn (array $productAndShopId): Identifier => ValueObjectFactory::createIdentifier($productAndShopId['productId']),
             array_slice(self::PRODUCTS_AND_SHOPS_ID, 0, 3, false)
         );
         $shopId = array_map(
-            fn (array $productAndShopId) => ValueObjectFactory::createIdentifier($productAndShopId['shopId']),
+            fn (array $productAndShopId): Identifier => ValueObjectFactory::createIdentifier($productAndShopId['shopId']),
             array_slice(self::PRODUCTS_AND_SHOPS_ID, 0, 3, false)
         );
 
@@ -521,7 +522,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
         $listOrdersId = ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID);
         $productsId = array_map(
-            fn (array $productAndShopId) => ValueObjectFactory::createIdentifier($productAndShopId['productId']),
+            fn (array $productAndShopId): Identifier => ValueObjectFactory::createIdentifier($productAndShopId['productId']),
             self::PRODUCTS_AND_SHOPS_ID
         );
         $shopId = [];

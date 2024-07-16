@@ -8,25 +8,28 @@ use Common\Domain\Model\ValueObject\ValueObjectBase;
 
 abstract class DateValueObject extends ValueObjectBase
 {
-    protected readonly \DateTime|null $value;
+    protected readonly ?\DateTime $value;
 
-    public function __construct(\DateTime|null $value)
+    public function __construct(?\DateTime $value)
     {
         $this->value = $value;
 
         $this->defineConstraints();
     }
 
-    public function getValue(): \DateTime|null
+    #[\Override]
+    public function getValue(): ?\DateTime
     {
         return $this->value;
     }
 
+    #[\Override]
     public function getValidationValue(): mixed
     {
         return $this->value;
     }
 
+    #[\Override]
     public function getValueObjects(): array
     {
         return [];

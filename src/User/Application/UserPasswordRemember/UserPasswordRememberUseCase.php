@@ -20,13 +20,10 @@ use User\Domain\Service\UserPasswordRemember\UserPasswordRememberService as Doma
 
 class UserPasswordRememberUseCase extends ServiceBase
 {
-    private DomainUserPasswordRememberService $userPasswordRememberService;
-    private ValidationInterface $validator;
-
-    public function __construct(DomainUserPasswordRememberService $userPasswordRememberService, ValidationInterface $validator)
-    {
-        $this->userPasswordRememberService = $userPasswordRememberService;
-        $this->validator = $validator;
+    public function __construct(
+        private DomainUserPasswordRememberService $userPasswordRememberService,
+        private ValidationInterface $validator
+    ) {
     }
 
     public function __invoke(UserPasswordRememberInputDto $passwordDto): UserPasswordRememberOutputDto
@@ -46,7 +43,7 @@ class UserPasswordRememberUseCase extends ServiceBase
         }
     }
 
-    private function validation(UserPasswordRememberInputDto $passwordDto)
+    private function validation(UserPasswordRememberInputDto $passwordDto): void
     {
         $errorList = $passwordDto->validate($this->validator);
 

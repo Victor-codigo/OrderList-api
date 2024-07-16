@@ -15,14 +15,15 @@ require_once 'tests/BuiltinFunctions/SymfonyComponentValidatorConstraints.php';
 
 class ValidationFileTest extends TestCase
 {
-    private const PATH_IMAGE = 'tests/Fixtures/Files/Image.png';
-    private const PATH_IMAGE_LANDSCAPE = 'tests/Fixtures/Files/Landscape.png';
-    private const PATH_IMAGE_PORTRAIT = 'tests/Fixtures/Files/Portrait.png';
-    private const PATH_IMAGE_EMPTY = 'tests/Fixtures/Files/FileEmpty.txt';
+    private const string PATH_IMAGE = 'tests/Fixtures/Files/Image.png';
+    private const string PATH_IMAGE_LANDSCAPE = 'tests/Fixtures/Files/Landscape.png';
+    private const string PATH_IMAGE_PORTRAIT = 'tests/Fixtures/Files/Portrait.png';
+    private const string PATH_IMAGE_EMPTY = 'tests/Fixtures/Files/FileEmpty.txt';
 
-    private const IMAGE_DATA = [
+    private const array IMAGE_DATA = [
         'size' => 48_864,
         'mimeType' => 'image/png',
+        'filenameMaxLength' => null,
         'widthMin' => 1024,
         'widthMax' => 1024,
         'heighMin' => 1024,
@@ -33,9 +34,10 @@ class ValidationFileTest extends TestCase
         'aspectRatioMax' => 1,
     ];
 
-    private const LANDSCAPE_DATA = [
+    private const array LANDSCAPE_DATA = [
         'size' => 602_468,
         'mimeType' => 'image/png',
+        'filenameMaxLength' => 50,
         'widthMin' => 776,
         'widthMax' => 776,
         'heighMin' => 436,
@@ -46,9 +48,10 @@ class ValidationFileTest extends TestCase
         'aspectRatioMax' => 1.779,
     ];
 
-    private const PORTRAIT_DATA = [
+    private const array PORTRAIT_DATA = [
         'size' => 623_595,
         'mimeType' => 'image/png',
+        'filenameMaxLength' => null,
         'widthMin' => 436,
         'widthMax' => 436,
         'heighMin' => 776,
@@ -61,6 +64,7 @@ class ValidationFileTest extends TestCase
 
     private ValidationInterface $object;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -68,6 +72,7 @@ class ValidationFileTest extends TestCase
         $this->object = new ValidationChain();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -87,6 +92,7 @@ class ValidationFileTest extends TestCase
             ->image(
                 self::IMAGE_DATA['size'],
                 [self::IMAGE_DATA['mimeType']],
+                self::IMAGE_DATA['filenameMaxLength'],
                 self::IMAGE_DATA['widthMin'],
                 self::IMAGE_DATA['widthMax'],
                 self::IMAGE_DATA['heighMin'],
@@ -113,6 +119,7 @@ class ValidationFileTest extends TestCase
             ->image(
                 self::IMAGE_DATA['size'],
                 ['image/bmp'],
+                self::IMAGE_DATA['filenameMaxLength'],
                 self::IMAGE_DATA['widthMin'],
                 self::IMAGE_DATA['widthMax'],
                 self::IMAGE_DATA['heighMin'],
@@ -132,6 +139,33 @@ class ValidationFileTest extends TestCase
     }
 
     /** @test */
+    public function validationUserImageFailFilenameMaxLengthWrong(): void
+    {
+        $return = $this->object
+            ->setValue(new File(self::PATH_IMAGE))
+            ->image(
+                self::IMAGE_DATA['size'],
+                [self::IMAGE_DATA['mimeType']],
+                1,
+                self::IMAGE_DATA['widthMin'],
+                self::IMAGE_DATA['widthMax'],
+                self::IMAGE_DATA['heighMin'],
+                self::IMAGE_DATA['heighMax'],
+                self::IMAGE_DATA['pixelsMin'],
+                self::IMAGE_DATA['pixelsMax'],
+                self::IMAGE_DATA['aspectRatioMin'],
+                self::IMAGE_DATA['aspectRatioMax'],
+                false,
+                true,
+                true,
+                false
+            )
+            ->validate();
+
+        $this->assertEquals([VALIDATION_ERRORS::FILE_NAME_TOO_LONG], $return);
+    }
+
+    /** @test */
     public function validationUserImageFailFileNotFound(): void
     {
         $return = $this->object
@@ -139,6 +173,7 @@ class ValidationFileTest extends TestCase
             ->image(
                 self::IMAGE_DATA['size'],
                 [self::IMAGE_DATA['mimeType']],
+                self::IMAGE_DATA['filenameMaxLength'],
                 self::IMAGE_DATA['widthMin'],
                 self::IMAGE_DATA['widthMax'],
                 self::IMAGE_DATA['heighMin'],
@@ -166,6 +201,7 @@ class ValidationFileTest extends TestCase
             ->image(
                 self::IMAGE_DATA['size'],
                 [self::IMAGE_DATA['mimeType']],
+                self::IMAGE_DATA['filenameMaxLength'],
                 self::IMAGE_DATA['widthMin'],
                 self::IMAGE_DATA['widthMax'],
                 self::IMAGE_DATA['heighMin'],
@@ -192,6 +228,7 @@ class ValidationFileTest extends TestCase
             ->image(
                 46_864,
                 ['image/png'],
+                self::IMAGE_DATA['filenameMaxLength'],
                 1024,
                 1024,
                 1024,
@@ -218,6 +255,7 @@ class ValidationFileTest extends TestCase
             ->image(
                 self::IMAGE_DATA['size'] - 1,
                 [self::IMAGE_DATA['mimeType']],
+                self::IMAGE_DATA['filenameMaxLength'],
                 self::IMAGE_DATA['widthMin'],
                 self::IMAGE_DATA['widthMax'],
                 self::IMAGE_DATA['heighMin'],
@@ -244,6 +282,7 @@ class ValidationFileTest extends TestCase
             ->image(
                 self::IMAGE_DATA['size'],
                 [self::IMAGE_DATA['mimeType']],
+                self::IMAGE_DATA['filenameMaxLength'],
                 self::IMAGE_DATA['widthMin'] + 1,
                 self::IMAGE_DATA['widthMax'],
                 self::IMAGE_DATA['heighMin'],
@@ -270,6 +309,7 @@ class ValidationFileTest extends TestCase
             ->image(
                 self::IMAGE_DATA['size'],
                 [self::IMAGE_DATA['mimeType']],
+                self::IMAGE_DATA['filenameMaxLength'],
                 self::IMAGE_DATA['widthMin'],
                 self::IMAGE_DATA['widthMax'] - 1,
                 self::IMAGE_DATA['heighMin'],
@@ -296,6 +336,7 @@ class ValidationFileTest extends TestCase
             ->image(
                 self::IMAGE_DATA['size'],
                 [self::IMAGE_DATA['mimeType']],
+                self::IMAGE_DATA['filenameMaxLength'],
                 self::IMAGE_DATA['widthMin'],
                 self::IMAGE_DATA['widthMax'],
                 self::IMAGE_DATA['heighMin'] + 1,
@@ -322,6 +363,7 @@ class ValidationFileTest extends TestCase
             ->image(
                 self::IMAGE_DATA['size'],
                 [self::IMAGE_DATA['mimeType']],
+                self::IMAGE_DATA['filenameMaxLength'],
                 self::IMAGE_DATA['widthMin'],
                 self::IMAGE_DATA['widthMax'],
                 self::IMAGE_DATA['heighMin'],
@@ -348,6 +390,7 @@ class ValidationFileTest extends TestCase
             ->image(
                 self::IMAGE_DATA['size'],
                 [self::IMAGE_DATA['mimeType']],
+                self::IMAGE_DATA['filenameMaxLength'],
                 self::IMAGE_DATA['widthMin'],
                 self::IMAGE_DATA['widthMax'],
                 self::IMAGE_DATA['heighMin'],
@@ -374,6 +417,7 @@ class ValidationFileTest extends TestCase
             ->image(
                 self::IMAGE_DATA['size'],
                 [self::IMAGE_DATA['mimeType']],
+                self::IMAGE_DATA['filenameMaxLength'],
                 self::IMAGE_DATA['widthMin'],
                 self::IMAGE_DATA['widthMax'],
                 self::IMAGE_DATA['heighMin'],
@@ -400,6 +444,7 @@ class ValidationFileTest extends TestCase
             ->image(
                 self::IMAGE_DATA['size'],
                 [self::IMAGE_DATA['mimeType']],
+                self::IMAGE_DATA['filenameMaxLength'],
                 self::IMAGE_DATA['widthMin'],
                 self::IMAGE_DATA['widthMax'],
                 self::IMAGE_DATA['heighMin'],
@@ -426,6 +471,7 @@ class ValidationFileTest extends TestCase
             ->image(
                 self::IMAGE_DATA['size'],
                 [self::IMAGE_DATA['mimeType']],
+                self::IMAGE_DATA['filenameMaxLength'],
                 self::IMAGE_DATA['widthMin'],
                 self::IMAGE_DATA['widthMax'],
                 self::IMAGE_DATA['heighMin'],
@@ -452,6 +498,7 @@ class ValidationFileTest extends TestCase
             ->image(
                 self::LANDSCAPE_DATA['size'],
                 [self::LANDSCAPE_DATA['mimeType']],
+                self::IMAGE_DATA['filenameMaxLength'],
                 self::LANDSCAPE_DATA['widthMin'],
                 self::LANDSCAPE_DATA['widthMax'],
                 self::LANDSCAPE_DATA['heighMin'],
@@ -478,6 +525,7 @@ class ValidationFileTest extends TestCase
             ->image(
                 self::IMAGE_DATA['size'],
                 [self::IMAGE_DATA['mimeType']],
+                self::IMAGE_DATA['filenameMaxLength'],
                 self::IMAGE_DATA['widthMin'],
                 self::IMAGE_DATA['widthMax'],
                 self::IMAGE_DATA['heighMin'],
@@ -504,6 +552,7 @@ class ValidationFileTest extends TestCase
             ->image(
                 self::PORTRAIT_DATA['size'],
                 [self::PORTRAIT_DATA['mimeType']],
+                self::IMAGE_DATA['filenameMaxLength'],
                 self::PORTRAIT_DATA['widthMin'],
                 self::PORTRAIT_DATA['widthMax'],
                 self::PORTRAIT_DATA['heighMin'],

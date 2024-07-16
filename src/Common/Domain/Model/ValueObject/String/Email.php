@@ -10,6 +10,7 @@ use Common\Domain\Validation\User\EMAIL_TYPES;
 
 class Email extends StringValueObject
 {
+    #[\Override]
     protected function defineConstraints(): void
     {
         $this

@@ -44,7 +44,7 @@ class ProductGetDataUseCase extends ServiceBase
             throw ProductGetDataValidateGroupAndUserException::fromMessage('You have not permissions');
         } catch (DBNotFoundException) {
             throw ProductGetDataProductsNotFoundException::fromMessage('No products found');
-        } catch (\Throwable $e) {
+        } catch (\Throwable) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

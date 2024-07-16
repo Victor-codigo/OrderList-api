@@ -42,7 +42,7 @@ class GroupUserRoleChangeService
         $this->userGroupRepository->save($groupUsersValid);
 
         return array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(),
             $groupUsersValid
         );
     }
@@ -57,7 +57,7 @@ class GroupUserRoleChangeService
     {
         return array_values(array_filter(
             $groupUsers,
-            fn (UserGroup $userGroup) => in_array($userGroup->getUserId(), $usersId)
+            fn (UserGroup $userGroup): bool => in_array($userGroup->getUserId(), $usersId)
         ));
     }
 
@@ -74,7 +74,7 @@ class GroupUserRoleChangeService
 
         $groupAdmins = array_filter(
             $usersGroup,
-            fn (UserGroup $userGroup) => $userGroup->getRoles()->has(ValueObjectFactory::createRol(GROUP_ROLES::ADMIN))
+            fn (UserGroup $userGroup): bool => $userGroup->getRoles()->has(ValueObjectFactory::createRol(GROUP_ROLES::ADMIN))
         );
 
         if (empty($groupAdmins)) {

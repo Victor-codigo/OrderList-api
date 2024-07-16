@@ -25,8 +25,6 @@ interface ValidationInterface
     public function validateValueObject(ValueObjectValidationInterface $valueObject): array;
 
     /**
-     * @param array<string, ValueObjectValidationInterface> $valueObject
-     *
      * @return array<string, VALIDATION_ERRORS[]>
      */
     public function validateValueObjectArray(array $valueObjects): array;
@@ -47,7 +45,7 @@ interface ValidationInterface
 
     public function stringRange(int $min, int $max): self;
 
-    public function uuId(array $versions = null, bool $strict = true): self;
+    public function uuId(?array $versions = null, bool $strict = true): self;
 
     public function regEx(string $pattern, bool $patternMatch = true): self;
 
@@ -107,11 +105,11 @@ interface ValidationInterface
     /**
      * @param DateTimeZone|null $timeZone
      */
-    public function timeZone(int|null $timeZone): self;
+    public function timeZone(?int $timeZone): self;
 
     public function file(mixed $maxSize, array|string|null $mimeTypes): self;
 
-    public function image(mixed $maxSize, array|string|null $mimeTypes, int|null $minWith = null, int|null $maxWith = null, int|null $minHeigh = null, int|null $maxHeigh = null, int|null $minPixels = null, int|null $maxPixels = null, float|null $minAspectRatio = null, float|null $maxAspectRatio = null, bool $allowLandscape = true, bool $allowPortrait = true, bool $allowSquareImage = true, bool $detectCorrupted = false): self;
+    public function image(mixed $maxSize, array|string|null $mimeTypes, ?int $filenameMaxLength = null, ?int $minWith = null, ?int $maxWith = null, ?int $minHeigh = null, ?int $maxHeigh = null, ?float $minPixels = null, ?float $maxPixels = null, ?float $minAspectRatio = null, ?float $maxAspectRatio = null, bool $allowLandscape = true, bool $allowPortrait = true, bool $allowSquareImage = true, bool $detectCorrupted = false): self;
 
-    public function choice(array|null $choices, bool|null $multiple, bool|null $strict, int|null $min, int|null $max): self;
+    public function choice(?array $choices, ?bool $multiple, ?bool $strict, ?int $min, ?int $max): self;
 }

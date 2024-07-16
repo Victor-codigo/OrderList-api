@@ -16,6 +16,7 @@ class NotificationDataTypeTest extends TestCase
     private NotificationDataType $object;
     private AbstractPlatform $abstractPlatform;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();

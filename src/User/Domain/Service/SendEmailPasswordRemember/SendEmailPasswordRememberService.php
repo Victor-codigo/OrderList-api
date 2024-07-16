@@ -17,30 +17,15 @@ use User\Domain\Service\SendEmailPasswordRemember\Dto\SendEmailPasswordRememberD
 
 class SendEmailPasswordRememberService
 {
-    private MailerInterface $mailer;
-    private TranslatorInterface $translator;
-    private JwtHS256Interface $jwt;
-    private EmailPasswordRememberDto $emailPasswordRememberDto;
-    private string $adminEmail;
-    private string $appName;
-    private int $emailUserPasswordRememberExpire;
-
     public function __construct(
-        MailerInterface $mailer,
-        TranslatorInterface $translator,
-        JwtHS256Interface $jwt,
-        EmailPasswordRememberDto $emailPasswordRememberDto,
-        string $adminEmail,
-        string $appName,
-        int $emailUserPasswordRememberExpire
+        private MailerInterface $mailer,
+        private TranslatorInterface $translator,
+        private JwtHS256Interface $jwt,
+        private EmailPasswordRememberDto $emailPasswordRememberDto,
+        private string $adminEmail,
+        private string $appName,
+        private int $emailUserPasswordRememberExpire
     ) {
-        $this->mailer = $mailer;
-        $this->translator = $translator;
-        $this->jwt = $jwt;
-        $this->emailPasswordRememberDto = $emailPasswordRememberDto;
-        $this->adminEmail = $adminEmail;
-        $this->appName = $appName;
-        $this->emailUserPasswordRememberExpire = $emailUserPasswordRememberExpire;
     }
 
     public function __invoke(SendEmailPasswordRememberDto $emailInfo): void

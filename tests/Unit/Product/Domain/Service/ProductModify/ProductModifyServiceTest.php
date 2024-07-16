@@ -26,9 +26,9 @@ require_once 'tests/BuiltinFunctions/ProductModifyService.php';
 
 class ProductModifyServiceTest extends TestCase
 {
-    private const PRODUCT_ID = 'product id';
-    private const GROUP_ID = 'group id';
-    private const PRODUCT_IMAGE_PATH = 'path\to\products\images';
+    private const string PRODUCT_ID = 'product id';
+    private const string GROUP_ID = 'group id';
+    private const string PRODUCT_IMAGE_PATH = 'path\to\products\images';
 
     private ProductModifyService $object;
     private MockObject|ProductRepositoryInterface $productRepository;
@@ -37,6 +37,7 @@ class ProductModifyServiceTest extends TestCase
     private MockObject|ProductImage $productImage;
     private MockObject|Product $productFromDb;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -14,12 +14,12 @@ use User\Domain\Model\User;
 class UserPasswordChangeInputDto implements ServiceInputDtoInterface
 {
     public readonly User $userSession;
-    public readonly Identifier|null $id;
-    public readonly Password|null $passwordOld;
-    public readonly Password|null $passwordNew;
-    public readonly Password|null $passwordNewRepeat;
+    public readonly ?Identifier $id;
+    public readonly ?Password $passwordOld;
+    public readonly ?Password $passwordNew;
+    public readonly ?Password $passwordNewRepeat;
 
-    public function __construct(User $userSession, string|null $id, string|null $passwordOld, string|null $passwordNew, string|null $passwordNewRepeat)
+    public function __construct(User $userSession, ?string $id, ?string $passwordOld, ?string $passwordNew, ?string $passwordNewRepeat)
     {
         $this->userSession = $userSession;
         $this->id = ValueObjectFactory::createIdentifier($id);
@@ -28,6 +28,7 @@ class UserPasswordChangeInputDto implements ServiceInputDtoInterface
         $this->passwordNewRepeat = ValueObjectFactory::createPassword($passwordNewRepeat);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

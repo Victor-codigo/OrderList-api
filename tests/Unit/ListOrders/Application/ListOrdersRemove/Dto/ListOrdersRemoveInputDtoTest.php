@@ -16,6 +16,7 @@ class ListOrdersRemoveInputDtoTest extends TestCase
     private UserShared $userSession;
     private ValidationInterface $validator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -109,9 +110,9 @@ class ListOrdersRemoveInputDtoTest extends TestCase
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
-                'group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
-                'lists_orders_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]],
-            ],
+            'group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
+            'lists_orders_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]],
+        ],
             $return
         );
     }

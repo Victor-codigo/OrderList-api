@@ -17,12 +17,13 @@ use PHPUnit\Framework\TestCase;
 
 class GroupGetDataByNameServiceTest extends TestCase
 {
-    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
-    private const GROUP_PUBLIC_PATH = 'group/public/path';
+    private const string APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const string GROUP_PUBLIC_PATH = 'group/public/path';
 
     private GroupGetDataByNameService $object;
     private MockObject|GroupRepositoryInterface $groupRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -6,8 +6,8 @@ namespace Shop\Domain\Service\ShopRemove;
 
 class BuiltInFunctionsReturn
 {
-    public static bool|null $file_exists;
-    public static bool|null $unlink;
+    public static ?bool $file_exists = null;
+    public static ?bool $unlink = null;
 }
 
 function file_exists(string $filename): bool

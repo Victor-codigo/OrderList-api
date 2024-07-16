@@ -14,11 +14,12 @@ use User\Domain\Model\User;
 
 class GetUsersInputDtoTest extends TestCase
 {
-    private const NUM_MAX_USERS = 50;
+    private const int NUM_MAX_USERS = 50;
 
     private GetUsersInputDto $object;
     private ValidationInterface $validator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -26,7 +27,7 @@ class GetUsersInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    private function createGetUsersInputDto(array|null $usersId): GetUsersInputDto
+    private function createGetUsersInputDto(?array $usersId): GetUsersInputDto
     {
         $user = $this->createMock(User::class);
 
@@ -117,7 +118,7 @@ class GetUsersInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldValidateUsersId()
+    public function itShouldValidateUsersId(): void
     {
         $usersId = $this->getIds(self::NUM_MAX_USERS - 1);
         $this->object = $this->createGetUsersInputDto($usersId);
@@ -129,7 +130,7 @@ class GetUsersInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailIdsMissing()
+    public function itShouldFailIdsMissing(): void
     {
         $this->object = $this->createGetUsersInputDto(null);
         $return = $this->object->validate($this->validator);
@@ -138,7 +139,7 @@ class GetUsersInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailIdsEmpty()
+    public function itShouldFailIdsEmpty(): void
     {
         $this->object = $this->createGetUsersInputDto([]);
         $return = $this->object->validate($this->validator);
@@ -147,7 +148,7 @@ class GetUsersInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailIdsIsWrong()
+    public function itShouldFailIdsIsWrong(): void
     {
         $usersId = $this->getIds(5);
         $usersId[] = 'wrong id';

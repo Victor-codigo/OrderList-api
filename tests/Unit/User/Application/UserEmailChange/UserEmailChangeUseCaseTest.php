@@ -21,13 +21,14 @@ use User\Domain\Service\UserEmailChange\UserEmailChangeService;
 
 class UserEmailChangeUseCaseTest extends TestCase
 {
-    private const SYSTEM_KEY = 'systemKeyForDev';
+    private const string SYSTEM_KEY = 'systemKeyForDev';
 
     private UserEmailChangeUseCase $object;
     private MockObject|ValidationInterface $validator;
     private MockObject|UserEmailChangeService $userEmailChangeService;
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -44,7 +45,7 @@ class UserEmailChangeUseCaseTest extends TestCase
     }
 
     /** @test */
-    public function itShouldChangeUserEmail()
+    public function itShouldChangeUserEmail(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
         $userEmail = 'user@email.com';
@@ -70,7 +71,7 @@ class UserEmailChangeUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $moduleCommunicationDto) use ($userId) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $moduleCommunicationDto) use ($userId): bool {
                 $this->assertEquals([$userId->getValue()], $moduleCommunicationDto->content['users_id']);
                 $this->assertEquals(self::SYSTEM_KEY, $moduleCommunicationDto->content['system_key']);
                 $this->assertEquals(NOTIFICATION_TYPE::USER_EMAIL_CHANGED->value, $moduleCommunicationDto->content['type']);
@@ -83,7 +84,7 @@ class UserEmailChangeUseCaseTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailChangeUserEmailNotificationError()
+    public function itShouldFailChangeUserEmailNotificationError(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
         $userEmail = 'user@email.com';
@@ -109,7 +110,7 @@ class UserEmailChangeUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $moduleCommunicationDto) use ($userId) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $moduleCommunicationDto) use ($userId): bool {
                 $this->assertEquals([$userId->getValue()], $moduleCommunicationDto->content['users_id']);
                 $this->assertEquals(self::SYSTEM_KEY, $moduleCommunicationDto->content['system_key']);
                 $this->assertEquals(NOTIFICATION_TYPE::USER_EMAIL_CHANGED->value, $moduleCommunicationDto->content['type']);

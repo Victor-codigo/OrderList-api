@@ -6,5 +6,5 @@ namespace Common\Domain\Model\ValueObject\Date;
 
 interface ValueObjectDateFactoryInterface
 {
-    public static function createDateNowToFuture(\DateTime|null $date): DateNowToFuture;
+    public static function createDateNowToFuture(?\DateTime $date): DateNowToFuture;
 }

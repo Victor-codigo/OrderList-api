@@ -22,7 +22,7 @@ class ProductCreateInputDto implements ServiceInputDtoInterface
     public readonly Description $description;
     public readonly ProductImage $image;
 
-    public function __construct(UserShared $userSession, string|null $groupId, string|null $name, string|null $description, UploadedFileInterface|null $image)
+    public function __construct(UserShared $userSession, ?string $groupId, ?string $name, ?string $description, ?UploadedFileInterface $image)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
@@ -31,6 +31,7 @@ class ProductCreateInputDto implements ServiceInputDtoInterface
         $this->image = ValueObjectFactory::createProductImage($image);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

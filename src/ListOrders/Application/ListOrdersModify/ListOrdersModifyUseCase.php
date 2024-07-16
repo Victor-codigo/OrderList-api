@@ -53,7 +53,7 @@ class ListOrdersModifyUseCase extends ServiceBase
             throw ListOrdersModifyNameAlreadyExistsException::fromMessage('The name is already registered');
         } catch (ValidateGroupAndUserException) {
             throw ListOrdersModifyValidateGroupAndUserException::fromMessage('You not belong to the group');
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }

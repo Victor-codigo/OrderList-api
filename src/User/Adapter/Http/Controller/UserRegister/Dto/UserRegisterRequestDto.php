@@ -9,11 +9,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UserRegisterRequestDto implements RequestDtoInterface
 {
-    public readonly string|null $email;
-    public readonly string|null $password;
-    public readonly string|null $name;
-    public readonly string|null $registrationKey;
-    public readonly string|null $userRegisterEmailConfirmationUrl;
+    public readonly ?string $email;
+    public readonly ?string $password;
+    public readonly ?string $name;
+    public readonly ?string $registrationKey;
+    public readonly ?string $userRegisterEmailConfirmationUrl;
 
     public function __construct(Request $request)
     {

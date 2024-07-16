@@ -17,6 +17,7 @@ class NotificationGetDataInputDtoTest extends TestCase
     private ValidationInterface $validator;
     private MockObject|UserShared $userSession;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -127,10 +128,10 @@ class NotificationGetDataInputDtoTest extends TestCase
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
-                'page' => [VALIDATION_ERRORS::GREATER_THAN],
-                'page_items' => [VALIDATION_ERRORS::GREATER_THAN],
-                'lang' => [VALIDATION_ERRORS::CHOICE_NOT_SUCH],
-            ],
+            'page' => [VALIDATION_ERRORS::GREATER_THAN],
+            'page_items' => [VALIDATION_ERRORS::GREATER_THAN],
+            'lang' => [VALIDATION_ERRORS::CHOICE_NOT_SUCH],
+        ],
             $return
         );
     }

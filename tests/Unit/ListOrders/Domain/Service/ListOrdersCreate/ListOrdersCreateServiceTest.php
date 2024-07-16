@@ -16,12 +16,13 @@ use PHPUnit\Framework\TestCase;
 
 class ListOrdersCreateServiceTest extends TestCase
 {
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
     private ListOrdersCreateService $object;
     private MockObject|ListOrdersRepositoryInterface $listOrdersRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -70,7 +71,7 @@ class ListOrdersCreateServiceTest extends TestCase
             ->expects($this->once())
             ->method('save')
             ->with($this->callback(
-                fn (array $listsOrdersToSave) => $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave) || true)
+                fn (array $listsOrdersToSave): true => $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave) || true)
             );
 
         $return = $this->object->__invoke($input);
@@ -94,7 +95,7 @@ class ListOrdersCreateServiceTest extends TestCase
             ->expects($this->once())
             ->method('save')
             ->with($this->callback(
-                fn (array $listsOrdersToSave) => $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave) || true)
+                fn (array $listsOrdersToSave): true => $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave) || true)
             )
             ->willThrowException(new DBUniqueConstraintException());
 
@@ -118,7 +119,7 @@ class ListOrdersCreateServiceTest extends TestCase
             ->expects($this->once())
             ->method('save')
             ->with($this->callback(
-                fn (array $listsOrdersToSave) => $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave) || true)
+                fn (array $listsOrdersToSave): true => $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave) || true)
             )
             ->willThrowException(new DBConnectionException());
 

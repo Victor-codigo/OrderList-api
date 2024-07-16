@@ -21,6 +21,7 @@ class ControllerEventSubscriber implements EventSubscriberInterface
     ) {
     }
 
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [KernelEvents::CONTROLLER => ['__invoke', 101]];
@@ -29,7 +30,7 @@ class ControllerEventSubscriber implements EventSubscriberInterface
     /**
      * @throws TryoutUserRoutePermissionsException
      */
-    public function __invoke(ControllerEvent $event)
+    public function __invoke(ControllerEvent $event): void
     {
         $request = $event->getRequest();
 

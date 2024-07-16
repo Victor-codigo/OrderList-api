@@ -13,7 +13,7 @@ class GroupGetGroupsAdminsRequestDto implements RequestDtoInterface
 {
     use RequestDataValidation;
 
-    private const GROUPS_ID_MAX = AppConfig::ENDPOINT_GROUP_GET_GROUPS_ADMINS_MAX;
+    private const int GROUPS_ID_MAX = AppConfig::ENDPOINT_GROUP_GET_GROUPS_ADMINS_MAX;
 
     public readonly ?array $groupsId;
     public readonly ?int $page;

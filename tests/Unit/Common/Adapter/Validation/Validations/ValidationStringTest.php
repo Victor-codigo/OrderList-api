@@ -14,6 +14,7 @@ class ValidationStringTest extends TestCase
 {
     private ValidationInterface $object;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->object = new ValidationChain();

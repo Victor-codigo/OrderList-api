@@ -25,15 +25,16 @@ use Shop\Domain\Model\Shop;
 
 class ListOrdersCreateFromServiceTest extends TestCase
 {
-    private const LIST_ORDERS_ID_OLD = 'list orders old';
-    private const LIST_ORDERS_ID_NEW = 'list orders new';
-    private const ORDER_ID_NEW = 'order id new';
+    private const string LIST_ORDERS_ID_OLD = 'list orders old';
+    private const string LIST_ORDERS_ID_NEW = 'list orders new';
+    private const string ORDER_ID_NEW = 'order id new';
 
     private ListOrdersCreateFromService $object;
     private MockObject|ListOrdersRepositoryInterface $listOrdersRepository;
     private MockObject|OrderRepositoryInterface $ordersRepository;
     private MockObject|PaginatorInterface $paginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -111,7 +112,7 @@ class ListOrdersCreateFromServiceTest extends TestCase
         ];
     }
 
-    private function assertOrderCopiedIsOk(Order $orderNew, Order $orderOld, ListOrders $listOrdersOld, Identifier $userId): void
+    private function assertOrderCopiedIsOk(Order $orderNew, Order $orderOld, Identifier $userId): void
     {
         $this->assertEquals(self::ORDER_ID_NEW, $orderNew->getId()->getValue());
         $this->assertEquals($orderOld->getGroupId()->getValue(), $orderNew->getGroupId()->getValue());
@@ -140,7 +141,7 @@ class ListOrdersCreateFromServiceTest extends TestCase
 
         /** @var Order $orderNew */
         foreach ($listOrdersNew->getOrders() as $key => $orderNew) {
-            $this->assertOrderCopiedIsOk($orderNew, $ordersOld->get($key), $listOrdersOld, $userId);
+            $this->assertOrderCopiedIsOk($orderNew, $ordersOld->get($key), $userId);
         }
     }
 
@@ -155,7 +156,7 @@ class ListOrdersCreateFromServiceTest extends TestCase
      *
      * @dataProvider createListOrdersDataProvider
      * */
-    public function itShouldCreateAListOrdersFromOtherListOrders($hasOrders): void
+    public function itShouldCreateAListOrdersFromOtherListOrders(bool $hasOrders): void
     {
         $listOrdersOld = $this->getListOrders(self::LIST_ORDERS_ID_OLD, $hasOrders);
         $listOrdersOldNumOrders = count($listOrdersOld->getOrders());
@@ -194,7 +195,7 @@ class ListOrdersCreateFromServiceTest extends TestCase
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('saveListOrdersAndOrders')
-            ->with($this->callback(fn (ListOrders $listOrdersNew) => $this->assertListOrdersOrdersNewIsOk($listOrdersOld, $listOrdersNew, $input->userId) || true));
+            ->with($this->callback(fn (ListOrders $listOrdersNew): true => $this->assertListOrdersOrdersNewIsOk($listOrdersOld, $listOrdersNew, $input->userId) || true));
 
         $this->paginator
             ->expects($this->once())

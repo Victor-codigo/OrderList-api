@@ -13,11 +13,12 @@ use PHPUnit\Framework\TestCase;
 
 class OrderRemoveAllGroupsOrdersInputDtoTest extends TestCase
 {
-    private const SYSTEM_KEY = 'systemKeyDev';
+    private const string SYSTEM_KEY = 'systemKeyDev';
 
     private ValidationInterface $validator;
     private UserShared $userSession;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

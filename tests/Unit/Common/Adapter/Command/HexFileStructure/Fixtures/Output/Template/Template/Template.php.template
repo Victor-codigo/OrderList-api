@@ -10,7 +10,7 @@ class [ENDPOINT]Dto
     ) {
     }
 
-    public function __invoke([ENDPOINT]Dto $args)
+    public function __invoke([ENDPOINT]Dto $args): void
     {
         // [NAMESPACE_INNER_LAYER]
     }

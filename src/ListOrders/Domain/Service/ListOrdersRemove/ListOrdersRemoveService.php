@@ -11,7 +11,7 @@ use ListOrders\Domain\Service\ListOrdersRemove\Dto\ListOrdersRemoveDto;
 
 class ListOrdersRemoveService
 {
-    private const LIST_ORDERS_REMOVE_MAX = AppConfig::ENDPOINT_LIST_ORDERS_REMOVE_MAX;
+    private const int LIST_ORDERS_REMOVE_MAX = AppConfig::ENDPOINT_LIST_ORDERS_REMOVE_MAX;
 
     public function __construct(
         private ListOrdersRepositoryInterface $listOrdersRepository

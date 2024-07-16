@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 
 class GroupGetGroupsAdminsUseCaseTest extends TestCase
 {
-    private const GROUPS_ID = [
+    private const array GROUPS_ID = [
         'd517807e-3494-4d8d-b0c7-ee80dfd1c01c',
         '0036f2df-53cf-44fb-ac4f-5948ecc0f351',
         '68ac6040-ec8f-4777-b17c-e0f6b030be2a',
@@ -36,6 +36,7 @@ class GroupGetGroupsAdminsUseCaseTest extends TestCase
     private MockObject|UserShared $userSession;
     private MockObject|PaginatorInterface $userGroupPaginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

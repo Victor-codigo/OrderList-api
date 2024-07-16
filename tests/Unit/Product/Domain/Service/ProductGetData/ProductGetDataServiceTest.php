@@ -18,13 +18,14 @@ use Product\Domain\Service\ProductGetData\ProductGetDataService;
 
 class ProductGetDataServiceTest extends TestCase
 {
-    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
-    private const PRODUCT_PUBLIC_PATH = '/group/public/path';
+    private const string APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const string PRODUCT_PUBLIC_PATH = '/group/public/path';
 
     private ProductGetDataService $object;
     private MockObject|ProductRepositoryInterface $productRepository;
     private MockObject|PaginatorInterface $paginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -48,7 +49,7 @@ class ProductGetDataServiceTest extends TestCase
         $products = $this->getProducts();
 
         return array_map(
-            function (Product $product) {
+            function (Product $product): Product {
                 if (!$product->getImage()->isNull()) {
                     $product->setImage(
                         ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::PRODUCT_PUBLIC_PATH.'/'.$product->getImage()->getValue())
@@ -73,34 +74,34 @@ class ProductGetDataServiceTest extends TestCase
         $this->assertContainsEquals(
             $productDataActual['id'],
             array_map(
-                fn (Product $product) => $product->getId()->getValue(),
+                fn (Product $product): ?string => $product->getId()->getValue(),
                 $productsDataExpected
             )
         );
         $this->assertContainsEquals(
             $productDataActual['group_id'],
             array_map(
-                fn (Product $product) => $product->getGroupId()->getValue(),
+                fn (Product $product): ?string => $product->getGroupId()->getValue(),
                 $productsDataExpected
             )
         );
         $this->assertContainsEquals(
             $productDataActual['name'],
             array_map(
-                fn (Product $product) => $product->getName()->getValue(),
+                fn (Product $product): ?string => $product->getName()->getValue(),
                 $productsDataExpected
             )
         );
         $this->assertContainsEquals(
             $productDataActual['description'],
             array_map(
-                fn (Product $product) => $product->getDescription()->getValue(),
+                fn (Product $product): ?string => $product->getDescription()->getValue(),
                 $productsDataExpected
             )
         );
         $this->assertContainsEquals(
             $productDataActual['image'], array_map(
-                fn (Product $product) => $product->getImage()->getValue(),
+                fn (Product $product): ?string => $product->getImage()->getValue(),
                 $productsDataExpected
             )
         );

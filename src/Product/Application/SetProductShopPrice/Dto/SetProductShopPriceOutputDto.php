@@ -19,10 +19,11 @@ class SetProductShopPriceOutputDto implements ApplicationOutputInterface
     ) {
     }
 
+    #[\Override]
     public function toArray(): array
     {
         return array_map(
-            fn (ProductShop $productShop) => [
+            fn (ProductShop $productShop): array => [
                 'group_id' => $this->groupId->getValue(),
                 'product_id' => $productShop->getProductId()->getValue(),
                 'shop_id' => $productShop->getShopId()->getValue(),

@@ -18,7 +18,7 @@ use Product\Domain\Service\ProductGetData\Dto\ProductGetDataDto;
 
 class ProductGetDataService
 {
-    private ?PaginatorInterface $productsPaginator;
+    private ?PaginatorInterface $productsPaginator = null;
 
     public function __construct(
         private ProductRepositoryInterface $productRepository,
@@ -128,7 +128,7 @@ class ProductGetDataService
         $productsPaginator->setPagination($page->getValue(), $pageItems->getValue());
 
         return array_map(
-            fn (Product $product) => [
+            fn (Product $product): array => [
                 'id' => $product->getId()->getValue(),
                 'group_id' => $product->getGroupId()->getValue(),
                 'name' => $product->getName()->getValue(),

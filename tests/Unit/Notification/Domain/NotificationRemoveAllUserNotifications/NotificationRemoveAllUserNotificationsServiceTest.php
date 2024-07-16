@@ -6,6 +6,7 @@ namespace Test\Unit\Notification\Domain\NotificationRemoveAllUserNotifications;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
@@ -22,6 +23,7 @@ class NotificationRemoveAllUserNotificationsServiceTest extends TestCase
     private MockObject|NotificationRepositoryInterface $notificationRepository;
     private MockObject|PaginatorInterface $notificationPaginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -66,7 +68,7 @@ class NotificationRemoveAllUserNotificationsServiceTest extends TestCase
     private function getNotificationsId(array $notifications): array
     {
         return array_map(
-            fn (Notification $notification) => $notification->getId(),
+            fn (Notification $notification): Identifier => $notification->getId(),
             $notifications
         );
     }

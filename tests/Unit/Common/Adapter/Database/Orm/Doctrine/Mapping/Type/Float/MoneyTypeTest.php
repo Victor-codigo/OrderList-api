@@ -13,6 +13,7 @@ class MoneyTypeTest extends TestCase
 {
     private AbstractPlatform $abstractPlatform;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

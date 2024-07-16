@@ -6,6 +6,7 @@ namespace User\Domain\Model;
 
 use Common\Domain\Event\EventRegisterTrait;
 use Common\Domain\Model\ValueObject\Array\Roles;
+use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
@@ -32,7 +33,7 @@ class User implements EntityImageModifyInterface
 
     private ?UserPreRegisteredEvent $userPreRegisteredEventData = null;
 
-    public function setUserPreRegisteredEventData(UserPreRegisteredEvent $data)
+    public function setUserPreRegisteredEventData(UserPreRegisteredEvent $data): void
     {
         $this->userPreRegisteredEventData = $data;
     }
@@ -83,11 +84,13 @@ class User implements EntityImageModifyInterface
         return $this;
     }
 
+    #[\Override]
     public function getImage(): Path
     {
         return $this->profile->getImage();
     }
 
+    #[\Override]
     public function setImage(Path $image): self
     {
         $this->profile->setImage($image);
@@ -132,7 +135,7 @@ class User implements EntityImageModifyInterface
     public static function fromPrimitives(string $id, string $email, string $password, string $name, array $roles): User
     {
         $roles = array_map(
-            fn (USER_ROLES $rol) => ValueObjectFactory::createRol($rol),
+            fn (USER_ROLES $rol): Rol => ValueObjectFactory::createRol($rol),
             $roles
         );
 

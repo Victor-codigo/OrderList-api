@@ -60,7 +60,7 @@ class GroupRemoveService
         foreach ($groups as $group) {
             try {
                 $this->entityImageRemoveService->__invoke($group, $imagesGroupPath);
-            } catch (DomainInternalErrorException $e) {
+            } catch (DomainInternalErrorException) {
             }
         }
     }

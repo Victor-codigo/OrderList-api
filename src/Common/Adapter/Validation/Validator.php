@@ -8,6 +8,7 @@ use Common\Adapter\Validation\Validations\ValidationConstraint;
 use Common\Domain\Validation\Common\CONSTRAINTS_NAMES;
 use Common\Domain\Validation\ValidationInterface;
 use Common\Domain\Validation\ValueObjectValidationInterface;
+use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -55,7 +56,7 @@ class Validator
     {
         $errorList = [];
         $constraints = array_map(
-            fn (ValidationConstraint $v) => $v->constraint,
+            fn (ValidationConstraint $v): Constraint => $v->constraint,
             $this->constraints
         );
 
@@ -152,7 +153,10 @@ class Validator
         return end($classInArray).'-'.$index;
     }
 
-    private function getValidationsCallBacks()
+    /**
+     * @return array<string, callable>
+     */
+    private function getValidationsCallBacks(): array
     {
         return [
             CONSTRAINTS_NAMES::NOT_BLANK->value => $this->validationChain->notBlank(...),

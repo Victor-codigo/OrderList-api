@@ -22,8 +22,8 @@ use PHPUnit\Framework\TestCase;
 
 class GroupUserRoleChangeTest extends TestCase
 {
-    private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const USERS_ID = [
+    private const string GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const array USERS_ID = [
         'f425bf79-5a19-31d4-ab56-ed4ca30a7b1a',
         '0b13e52d-b058-32fb-8507-10dec634a07c',
         '896c6153-794e-3e94-b62d-95997c8b60ad',
@@ -33,6 +33,7 @@ class GroupUserRoleChangeTest extends TestCase
     private Group $group;
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -48,7 +49,7 @@ class GroupUserRoleChangeTest extends TestCase
     private function createGroupUserRoleChangeDto(array $usersToChangeRole, GROUP_ROLES $rol): GroupUserRoleChangeDto
     {
         $usersId = array_map(
-            fn (string $userId) => ValueObjectFactory::createIdentifier($userId),
+            fn (string $userId): Identifier => ValueObjectFactory::createIdentifier($userId),
             $usersToChangeRole
         );
 
@@ -62,10 +63,10 @@ class GroupUserRoleChangeTest extends TestCase
     /**
      * @param string[] $usersIdRoleChanged
      */
-    private function getFindGroupUsersOrFailReturn(array $usersIdRoleChanged, GROUP_ROLES $groupRol, \Exception|null $exception = null): MockObject|PaginatorInterface
+    private function getFindGroupUsersOrFailReturn(array $usersIdRoleChanged, GROUP_ROLES $groupRol): MockObject|PaginatorInterface
     {
         $usersGroup = array_map(
-            fn (string $userId) => UserGroup::fromPrimitives(self::GROUP_ID, $userId, [$groupRol], $this->group),
+            fn (string $userId): UserGroup => UserGroup::fromPrimitives(self::GROUP_ID, $userId, [$groupRol], $this->group),
             $usersIdRoleChanged
         );
 
@@ -99,7 +100,7 @@ class GroupUserRoleChangeTest extends TestCase
     }
 
     /** @test */
-    public function itShouldChangeUsersRoleToGroupAdmin()
+    public function itShouldChangeUsersRoleToGroupAdmin(): void
     {
         $expectUsersToSave = $this->getFindGroupUsersOrFailReturn(self::USERS_ID, GROUP_ROLES::USER);
         $this->userGroupRepository
@@ -111,13 +112,13 @@ class GroupUserRoleChangeTest extends TestCase
         $this->userGroupRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (array $usersGroup) => $this->assertSavedUserGroupAreValid($usersGroup, iterator_to_array($expectUsersToSave), GROUP_ROLES::ADMIN)));
+            ->with($this->callback(fn (array $usersGroup): bool => $this->assertSavedUserGroupAreValid($usersGroup, iterator_to_array($expectUsersToSave), GROUP_ROLES::ADMIN)));
 
         $input = $this->createGroupUserRoleChangeDto(self::USERS_ID, GROUP_ROLES::ADMIN);
         $return = $this->object->__invoke($input);
 
         $usersId = array_map(
-            fn (Identifier $userId) => $userId->getValue(),
+            fn (Identifier $userId): ?string => $userId->getValue(),
             $return
         );
 
@@ -125,7 +126,7 @@ class GroupUserRoleChangeTest extends TestCase
     }
 
     /** @test */
-    public function itShouldChangeUsersRoleToGroupUser()
+    public function itShouldChangeUsersRoleToGroupUser(): void
     {
         $users = $this->getFindGroupUsersOrFailReturn(self::USERS_ID, GROUP_ROLES::ADMIN);
         $expectUsersToSave = $this->getFindGroupUsersOrFailReturn([self::USERS_ID[1], self::USERS_ID[2]], GROUP_ROLES::USER);
@@ -138,13 +139,13 @@ class GroupUserRoleChangeTest extends TestCase
         $this->userGroupRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (array $usersGroup) => $this->assertSavedUserGroupAreValid($usersGroup, iterator_to_array($expectUsersToSave), GROUP_ROLES::USER)));
+            ->with($this->callback(fn (array $usersGroup): bool => $this->assertSavedUserGroupAreValid($usersGroup, iterator_to_array($expectUsersToSave), GROUP_ROLES::USER)));
 
         $input = $this->createGroupUserRoleChangeDto([self::USERS_ID[1], self::USERS_ID[2]], GROUP_ROLES::USER);
         $return = $this->object->__invoke($input);
 
         $usersId = array_map(
-            fn (Identifier $userId) => $userId->getValue(),
+            fn (Identifier $userId): ?string => $userId->getValue(),
             $return
         );
 
@@ -152,7 +153,7 @@ class GroupUserRoleChangeTest extends TestCase
     }
 
     /** @test */
-    public function itShouldChangeThreeUsersOneOfThenIsNotFromTheGroup()
+    public function itShouldChangeThreeUsersOneOfThenIsNotFromTheGroup(): void
     {
         $expectUsersToSave = $this->getFindGroupUsersOrFailReturn(self::USERS_ID, GROUP_ROLES::ADMIN);
         $this->userGroupRepository
@@ -164,7 +165,7 @@ class GroupUserRoleChangeTest extends TestCase
         $this->userGroupRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (array $usersGroup) => $this->assertSavedUserGroupAreValid($usersGroup, iterator_to_array($expectUsersToSave), GROUP_ROLES::ADMIN)));
+            ->with($this->callback(fn (array $usersGroup): bool => $this->assertSavedUserGroupAreValid($usersGroup, iterator_to_array($expectUsersToSave), GROUP_ROLES::ADMIN)));
 
         $usersIdToChangeRole = self::USERS_ID;
         $usersIdToChangeRole[] = '99b92adb-12f2-4276-b2c0-1f0c48980d45';
@@ -172,7 +173,7 @@ class GroupUserRoleChangeTest extends TestCase
         $return = $this->object->__invoke($input);
 
         $usersId = array_map(
-            fn (Identifier $userId) => $userId->getValue(),
+            fn (Identifier $userId): ?string => $userId->getValue(),
             $return
         );
 
@@ -180,7 +181,7 @@ class GroupUserRoleChangeTest extends TestCase
     }
 
     /** @test */
-    public function itShouldNotChangeUsersRolNoneOfTheUsersBelongsToTheGroup()
+    public function itShouldNotChangeUsersRolNoneOfTheUsersBelongsToTheGroup(): void
     {
         $this->userGroupRepository
             ->expects($this->once())
@@ -200,7 +201,7 @@ class GroupUserRoleChangeTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailNoAdminsInTheGroup()
+    public function itShouldFailNoAdminsInTheGroup(): void
     {
         $this->expectException(GroupWithoutAdminsException::class);
         $this->userGroupRepository
@@ -217,7 +218,7 @@ class GroupUserRoleChangeTest extends TestCase
         $return = $this->object->__invoke($input);
 
         $usersId = array_map(
-            fn (Identifier $userId) => $userId->getValue(),
+            fn (Identifier $userId): ?string => $userId->getValue(),
             $return
         );
 
@@ -225,7 +226,7 @@ class GroupUserRoleChangeTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailGroupNotFound()
+    public function itShouldFailGroupNotFound(): void
     {
         $this->expectException(DBNotFoundException::class);
         $this->userGroupRepository

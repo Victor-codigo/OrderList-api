@@ -11,10 +11,8 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 class AlphanumericValidator extends RegexValidator
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function validate(mixed $value, Constraint $constraint)
+    #[\Override]
+    public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof Alphanumeric) {
             throw new UnexpectedTypeException($constraint, Alphanumeric::class);

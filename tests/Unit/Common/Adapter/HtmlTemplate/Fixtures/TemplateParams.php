@@ -17,6 +17,7 @@ class TemplateParams implements TemplateDtoInterface
         $this->param2 = $param2;
     }
 
+    #[\Override]
     public function toArray(): array
     {
         return [
@@ -25,6 +26,7 @@ class TemplateParams implements TemplateDtoInterface
         ];
     }
 
+    #[\Override]
     public function getPath(): string
     {
         return '';

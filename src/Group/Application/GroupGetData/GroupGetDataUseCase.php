@@ -35,7 +35,7 @@ class GroupGetDataUseCase extends ServiceBase
             $userGroupsValid = $this->getUserGroupsThatBelongsTo($input->userSession->getId(), $input->groupsId);
             $this->validation($input, $userGroupsValid);
             $userGroupsValidIds = array_map(
-                fn (UserGroup $userGroup) => $userGroup->getGroupId(),
+                fn (UserGroup $userGroup): Identifier => $userGroup->getGroupId(),
                 $userGroupsValid
             );
 
@@ -46,7 +46,7 @@ class GroupGetDataUseCase extends ServiceBase
             return $this->createGroupGetDataOutputDto($groupsData);
         } catch (ValueObjectValidationException|GroupGetDataUserNotBelongsToTheGroupException $e) {
             throw $e;
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
         }
     }
@@ -81,7 +81,7 @@ class GroupGetDataUseCase extends ServiceBase
 
         return array_filter(
             iterator_to_array($userGroups),
-            fn (UserGroup $userGroup) => in_array($userGroup->getGroupId(), $groupsId)
+            fn (UserGroup $userGroup): bool => in_array($userGroup->getGroupId(), $groupsId)
         );
     }
 

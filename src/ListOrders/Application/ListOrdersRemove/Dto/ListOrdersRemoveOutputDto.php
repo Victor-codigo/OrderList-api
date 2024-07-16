@@ -17,11 +17,12 @@ class ListOrdersRemoveOutputDto implements ApplicationOutputInterface
     ) {
     }
 
+    #[\Override]
     public function toArray(): array
     {
         return [
             'id' => array_map(
-                fn (ListOrders $listOrderId) => $listOrderId->getId()->getValue(),
+                fn (ListOrders $listOrderId): ?string => $listOrderId->getId()->getValue(),
                 $this->listsOrders
             ),
         ];

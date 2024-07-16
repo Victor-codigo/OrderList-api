@@ -8,9 +8,9 @@ use Common\Domain\Model\ValueObject\String\JwtToken;
 
 class EmailConfirmationJwtTokenValidationDto
 {
-    public readonly JwtToken|null $token;
+    public readonly ?JwtToken $token;
 
-    public function __construct(JwtToken|null $token)
+    public function __construct(?JwtToken $token)
     {
         $this->token = $token;
     }

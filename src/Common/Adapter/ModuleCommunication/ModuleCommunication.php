@@ -26,14 +26,14 @@ use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 
 class ModuleCommunication implements ModuleCommunicationInterface
 {
-    private const COMMUNICATION_CONFIG = [
+    private const array COMMUNICATION_CONFIG = [
         'proxy' => AppConfig::MODULE_COMMUNICATION_REQUEST_PROXY,
         'verify_peer' => AppConfig::MODULE_COMMUNICATION_REQUEST_HTTPS['verify_peer'],
         'verify_host' => AppConfig::MODULE_COMMUNICATION_REQUEST_HTTPS['verify_host'],
     ];
 
-    private const DEV_QUERY_STRING = 'XDEBUG_SESSION=VSCODE';
-    private const TEST_QUERY_STRING = 'env=test';
+    private const string DEV_QUERY_STRING = 'XDEBUG_SESSION=VSCODE';
+    private const string TEST_QUERY_STRING = 'env=test';
 
     public function __construct(
         private HttpClientInterface $httpClient,
@@ -46,9 +46,10 @@ class ModuleCommunication implements ModuleCommunicationInterface
 
     /**
      * @throws ModuleCommunicationException
-     * @throws ValueError
+     * @throws \ValueError
      * @throws ModuleCommunicationTokenNotFoundInRequestException
      */
+    #[\Override]
     public function __invoke(ModuleCommunicationConfigDtoPaginatorInterface $routeConfig): ResponseDto
     {
         try {
@@ -83,11 +84,12 @@ class ModuleCommunication implements ModuleCommunicationInterface
 
     /**
      * @throws ModuleCommunicationException
-     * @throws ValueError
+     * @throws \ValueError
      * @throws ModuleCommunicationTokenNotFoundInRequestException
      * @throws ModuleCommunicationErrorResponseException
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function getPagesRangeEndpoint(ModuleCommunicationConfigDtoPaginatorInterface $routeConfig, int $pageIni, ?int $pageEnd): \Generator
     {
         if ($pageIni < 1) {
@@ -125,11 +127,12 @@ class ModuleCommunication implements ModuleCommunicationInterface
 
     /**
      * @throws ModuleCommunicationException
-     * @throws ValueError
+     * @throws \ValueError
      * @throws ModuleCommunicationTokenNotFoundInRequestException
      * @throws ModuleCommunicationErrorResponseException
      * @throws InvalidArgumentException
      */
+    #[\Override]
     public function getAllPagesOfEndpoint(ModuleCommunicationConfigDtoPaginatorInterface $routeConfig): \Generator
     {
         return $this->getPagesRangeEndpoint($routeConfig, 1, null);
@@ -160,9 +163,9 @@ class ModuleCommunication implements ModuleCommunicationInterface
     private function createResponseDto(array $responseContent, array $responseHeaders): ResponseDto
     {
         return new ResponseDto(
-            isset($responseContent['data']) ? $responseContent['data'] : [],
-            isset($responseContent['errors']) ? $responseContent['errors'] : [],
-            isset($responseContent['message']) ? $responseContent['message'] : '',
+            $responseContent['data'] ?? [],
+            $responseContent['errors'] ?? [],
+            $responseContent['message'] ?? '',
             isset($responseContent['status']) ? RESPONSE_STATUS::from($responseContent['status']) : RESPONSE_STATUS::OK,
             empty($responseContent) ? false : true,
             $responseHeaders

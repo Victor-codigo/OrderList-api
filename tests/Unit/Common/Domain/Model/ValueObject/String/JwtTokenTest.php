@@ -14,8 +14,9 @@ use PHPUnit\Framework\TestCase;
 class JwtTokenTest extends TestCase
 {
     private ValidationInterface $validator;
-    private const PATH_PRIVATE_KEY = 'src/Common/Adapter/Framework/Config/JwtKeys/Lexik/private.pem';
+    private const string PATH_PRIVATE_KEY = 'src/Common/Adapter/Framework/Config/JwtKeys/Lexik/private.pem';
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -32,7 +33,7 @@ class JwtTokenTest extends TestCase
     }
 
     /** @test */
-    public function tokenOk()
+    public function tokenOk(): void
     {
         $token = $this->createToken();
         $return = $this->validator->validateValueObject($token);
@@ -41,7 +42,7 @@ class JwtTokenTest extends TestCase
     }
 
     /** @test */
-    public function tokenNotBlank()
+    public function tokenNotBlank(): void
     {
         $return = $this->validator->validateValueObject(new JwtToken(''));
 
@@ -49,7 +50,7 @@ class JwtTokenTest extends TestCase
     }
 
     /** @test */
-    public function tokenNotNull()
+    public function tokenNotNull(): void
     {
         $return = $this->validator->validateValueObject(new JwtToken(null));
 
@@ -57,7 +58,7 @@ class JwtTokenTest extends TestCase
     }
 
     /** @test */
-    public function tokenTooShort()
+    public function tokenTooShort(): void
     {
         $return = $this->validator->validateValueObject(new JwtToken(str_pad('', 35, '-')));
 

@@ -20,14 +20,15 @@ use Product\Domain\Model\Product;
 
 class OrderRemoveServiceTest extends TestCase
 {
-    private const ORDER_1_ID = '9a48ac5b-4571-43fd-ac80-28b08124ffb8';
-    private const ORDER_2_ID = 'a0b4760a-9037-477a-8b84-d059ae5ee7e9';
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string ORDER_1_ID = '9a48ac5b-4571-43fd-ac80-28b08124ffb8';
+    private const string ORDER_2_ID = 'a0b4760a-9037-477a-8b84-d059ae5ee7e9';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
 
     private OrderRemoveService $object;
     private MockObject|OrderRepositoryInterface $orderRepository;
     private MockObject|PaginatorInterface $paginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -43,7 +44,7 @@ class OrderRemoveServiceTest extends TestCase
         $product = $this->createMock(Product::class);
 
         return array_map(
-            fn (Identifier $orderId) => Order::fromPrimitives(
+            fn (Identifier $orderId): Order => Order::fromPrimitives(
                 $orderId->getValue(),
                 'group id',
                 'user id',

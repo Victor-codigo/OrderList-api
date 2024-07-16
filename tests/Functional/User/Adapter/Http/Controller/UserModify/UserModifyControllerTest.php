@@ -20,19 +20,20 @@ class UserModifyControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const METHOD_FORM = 'POST';
-    private const METHOD = 'PUT';
-    private const ENDPOINT = '/api/v1/users/modify';
-    private const USER_NAME = 'email.already.active@host.com';
-    private const PATH_FIXTURES = __DIR__.'/Fixtures';
-    private const PATH_IMAGE_UPLOAD = __DIR__.'/Fixtures/Image.png';
-    private const PATH_IMAGE_BACKUP = 'tests/Fixtures/Files/Image.png';
-    private const PATH_IMAGE_NOT_ALLOWED = __DIR__.'/Fixtures/MimeTypeNotAllowed.txt';
-    private const PATH_IMAGE_NOT_ALLOWED_BACKUP = 'tests/Fixtures/Files/MimeTypeNotAllowed.txt';
+    private const string METHOD_FORM = 'POST';
+    private const string METHOD = 'PUT';
+    private const string ENDPOINT = '/api/v1/users/modify';
+    private const string USER_NAME = 'email.already.active@host.com';
+    private const string PATH_FIXTURES = __DIR__.'/Fixtures';
+    private const string PATH_IMAGE_UPLOAD = __DIR__.'/Fixtures/Image.png';
+    private const string PATH_IMAGE_BACKUP = 'tests/Fixtures/Files/Image.png';
+    private const string PATH_IMAGE_NOT_ALLOWED = __DIR__.'/Fixtures/MimeTypeNotAllowed.txt';
+    private const string PATH_IMAGE_NOT_ALLOWED_BACKUP = 'tests/Fixtures/Files/MimeTypeNotAllowed.txt';
 
     private readonly string $pathImageUser;
-    private KernelBrowser|null $client;
+    private ?KernelBrowser $client;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -52,6 +53,7 @@ class UserModifyControllerTest extends WebClientTestCase
         }
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

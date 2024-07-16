@@ -16,6 +16,7 @@ class IdentifierNullableTest extends TestCase
     private string $validId = '77020b89-fb7b-416c-9987-bffbeb3af6f8';
     private string $notValidId = 'not valid id';
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -23,7 +24,7 @@ class IdentifierNullableTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    private function createIdentifierNullable(string|null $id): IdentifierNullable
+    private function createIdentifierNullable(?string $id): IdentifierNullable
     {
         return new IdentifierNullable($id);
     }

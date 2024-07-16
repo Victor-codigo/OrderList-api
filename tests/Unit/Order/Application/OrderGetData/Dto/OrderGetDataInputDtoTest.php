@@ -15,9 +15,9 @@ use PHPUnit\Framework\TestCase;
 
 class OrderGetDataInputDtoTest extends TestCase
 {
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const LIST_ORDERS_ID = 'cd82abda-3bd6-44b8-8ff6-4ecd80ea6840';
-    private const ORDERS_ID = [
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string LIST_ORDERS_ID = 'cd82abda-3bd6-44b8-8ff6-4ecd80ea6840';
+    private const array ORDERS_ID = [
         '9a48ac5b-4571-43fd-ac80-28b08124ffb8',
         'a0b4760a-9037-477a-8b84-d059ae5ee7e9',
         'c3734d1c-8b18-4bfd-95aa-06a261476d9d',
@@ -27,6 +27,7 @@ class OrderGetDataInputDtoTest extends TestCase
     private ValidationInterface $validator;
     private UserShared $userSession;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -162,7 +163,7 @@ class OrderGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailPageIsNull()
+    public function itShouldFailPageIsNull(): void
     {
         $object = new OrderGetDataInputDto(
             $this->userSession,
@@ -183,7 +184,7 @@ class OrderGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailPageIsWrong()
+    public function itShouldFailPageIsWrong(): void
     {
         $object = new OrderGetDataInputDto(
             $this->userSession,
@@ -204,7 +205,7 @@ class OrderGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailPageItemsIsNull()
+    public function itShouldFailPageItemsIsNull(): void
     {
         $object = new OrderGetDataInputDto(
             $this->userSession,
@@ -225,7 +226,7 @@ class OrderGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailPageItemsIsWrong()
+    public function itShouldFailPageItemsIsWrong(): void
     {
         $object = new OrderGetDataInputDto(
             $this->userSession,
@@ -246,7 +247,7 @@ class OrderGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailFilterSectionIsWrong()
+    public function itShouldFailFilterSectionIsWrong(): void
     {
         $object = new OrderGetDataInputDto(
             $this->userSession,
@@ -267,7 +268,7 @@ class OrderGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailFilterTextIsWrong()
+    public function itShouldFailFilterTextIsWrong(): void
     {
         $object = new OrderGetDataInputDto(
             $this->userSession,
@@ -288,7 +289,7 @@ class OrderGetDataInputDtoTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailFilterValueIsNull()
+    public function itShouldFailFilterValueIsNull(): void
     {
         $object = new OrderGetDataInputDto(
             $this->userSession,
@@ -306,15 +307,15 @@ class OrderGetDataInputDtoTest extends TestCase
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
-                'section_filter_value' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
-                'text_filter_value' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
-            ],
+            'section_filter_value' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
+            'text_filter_value' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
+        ],
             $return
         );
     }
 
     /** @test */
-    public function itShouldFailFilterSectionOrFilterTextIsNull()
+    public function itShouldFailFilterSectionOrFilterTextIsNull(): void
     {
         $object = new OrderGetDataInputDto(
             $this->userSession,

@@ -14,11 +14,12 @@ class ProductRemoveOutputDto implements ApplicationOutputInterface
     ) {
     }
 
+    #[\Override]
     public function toArray(): array
     {
         return [
             'id' => array_map(
-                fn (Identifier $productId) => $productId->getValue(),
+                fn (Identifier $productId): ?string => $productId->getValue(),
                 $this->productsId
             ),
         ];

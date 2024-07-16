@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit\User\Application\UserPasswordChange\Dto;
+namespace Test\Unit\User\Application\UserModify\Dto;
 
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
@@ -18,11 +18,12 @@ require_once 'tests/BuiltinFunctions/SymfonyComponentValidatorConstraints.php';
 
 class UserModifyInputDtoTest extends TestCase
 {
-    private const PATH_IMAGE_UPLOAD = 'tests/Fixtures/Files/Image.png';
-    private const PATH_FILE = 'tests/Fixtures/Files/file.txt';
+    private const string PATH_IMAGE_UPLOAD = 'tests/Fixtures/Files/Image.png';
+    private const string PATH_FILE = 'tests/Fixtures/Files/file.txt';
 
     private ValidationChain $validator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -30,6 +31,7 @@ class UserModifyInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         parent::tearDown();

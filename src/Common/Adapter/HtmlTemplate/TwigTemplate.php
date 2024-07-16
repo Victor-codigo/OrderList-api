@@ -28,6 +28,7 @@ class TwigTemplate implements HtmlTemplateInterface
      * @throws TemplateCantBeFoundException
      * @throws TemplateRenderingException
      */
+    #[\Override]
     public function render(string $templatePath, ?TemplateDtoInterface $data = null): string
     {
         try {

@@ -10,6 +10,7 @@ use Common\Domain\Validation\ConstraintFactory;
 
 class GroupType extends ObjectValueObject
 {
+    #[\Override]
     protected function defineConstraints(): void
     {
         $this

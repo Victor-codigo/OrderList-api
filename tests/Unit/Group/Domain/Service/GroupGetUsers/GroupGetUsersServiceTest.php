@@ -26,14 +26,15 @@ use User\Domain\Model\User;
 
 class GroupGetUsersServiceTest extends TestCase
 {
-    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
-    private const USER_PUBLIC_IMAGE_PATH = '/userPublicImagePath';
+    private const string APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const string USER_PUBLIC_IMAGE_PATH = '/userPublicImagePath';
 
     private GroupGetUsersService $object;
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|PaginatorInterface $pagination;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -81,7 +82,7 @@ class GroupGetUsersServiceTest extends TestCase
         $users = $this->getUsers();
 
         return array_map(
-            function (array $user) {
+            function (array $user): array {
                 if (null !== $user['image']) {
                     $user['image'] = self::APP_PROTOCOL_AND_DOMAIN.self::USER_PUBLIC_IMAGE_PATH.'/'.$user['image'];
                 }
@@ -150,7 +151,7 @@ class GroupGetUsersServiceTest extends TestCase
     {
         return new ResponseDto(
             array_map(
-                fn (array $user) => [
+                fn (array $user): array => [
                     'id' => $user['id'],
                     'name' => $user['name'],
                     'image' => null === $user['image']

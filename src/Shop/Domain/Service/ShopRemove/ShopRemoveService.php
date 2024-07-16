@@ -40,7 +40,7 @@ class ShopRemoveService
         $this->shopRepository->remove($shopsToRemove);
 
         return array_map(
-            fn (Shop $shop) => $shop->getId(),
+            fn (Shop $shop): Identifier => $shop->getId(),
             $shopsToRemove
         );
     }

@@ -15,12 +15,13 @@ class GroupGetAdminsInputDto implements ServiceInputDtoInterface
     public readonly UserShared $userSession;
     public readonly Identifier $groupId;
 
-    public function __construct(UserShared $userSession, string|null $groupId)
+    public function __construct(UserShared $userSession, ?string $groupId)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

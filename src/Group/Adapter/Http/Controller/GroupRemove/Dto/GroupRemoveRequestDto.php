@@ -13,7 +13,7 @@ class GroupRemoveRequestDto implements RequestDtoInterface
 {
     use RequestDataValidation;
 
-    private const GROUPS_REMOVE_MAX = AppConfig::ENDPOINT_GROUP_DELETE_MAX;
+    private const int GROUPS_REMOVE_MAX = AppConfig::ENDPOINT_GROUP_DELETE_MAX;
 
     /**
      * @var string[]|null

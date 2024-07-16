@@ -13,7 +13,7 @@ use Product\Domain\Service\ProductRemoveAllGroupsProducts\Dto\ProductRemoveAllGr
 
 class ProductRemoveAllGroupsProductsService
 {
-    private const SHOP_PAGINATION_PAGE_ITEMS = 100;
+    private const int SHOP_PAGINATION_PAGE_ITEMS = 100;
 
     public function __construct(
         private ProductRepositoryInterface $productRepository,
@@ -37,7 +37,7 @@ class ProductRemoveAllGroupsProductsService
         foreach ($productsPaginator->getAllPages(self::SHOP_PAGINATION_PAGE_ITEMS) as $productsIterator) {
             $products = iterator_to_array($productsIterator);
             $productsId[] = array_map(
-                fn (Product $product) => $product->getId(),
+                fn (Product $product): Identifier => $product->getId(),
                 $products
             );
 

@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
 
 class GroupCreateUseCaseTest extends TestCase
 {
-    private const SYSTEM_KEY = 'systemKeyForDev';
+    private const string SYSTEM_KEY = 'systemKeyForDev';
 
     private GroupCreateUseCase $object;
     private MockObject|GroupCreateService $groupCreateService;
@@ -32,6 +32,7 @@ class GroupCreateUseCaseTest extends TestCase
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|Group $group;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -67,7 +68,7 @@ class GroupCreateUseCaseTest extends TestCase
         $this->groupCreateService
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (GroupCreateDto $input) use ($userId, $groupName, $description, $groupType, $image) {
+            ->with($this->callback(function (GroupCreateDto $input) use ($userId, $groupName, $description, $groupType, $image): bool {
                 $this->assertEquals($userId, $input->userCreatorId);
                 $this->assertEquals($groupName, $input->name);
                 $this->assertEquals($description, $input->description);
@@ -81,7 +82,7 @@ class GroupCreateUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($userId, $groupName) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($userId, $groupName): bool {
                 $this->assertEquals([$userId->getValue()], $notificationDto->content['users_id']);
                 $this->assertEquals($groupName->getValue(), $notificationDto->content['notification_data']['group_name']);
                 $this->assertEquals(self::SYSTEM_KEY, $notificationDto->content['system_key']);
@@ -125,7 +126,7 @@ class GroupCreateUseCaseTest extends TestCase
         $this->groupCreateService
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (GroupCreateDto $input) use ($userId, $groupName, $description, $groupType, $image) {
+            ->with($this->callback(function (GroupCreateDto $input) use ($userId, $groupName, $description, $groupType, $image): bool {
                 $this->assertEquals($userId, $input->userCreatorId);
                 $this->assertEquals($groupName, $input->name);
                 $this->assertEquals($description, $input->description);
@@ -172,7 +173,7 @@ class GroupCreateUseCaseTest extends TestCase
         $this->groupCreateService
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (GroupCreateDto $input) use ($userId, $groupName, $description, $groupType, $image) {
+            ->with($this->callback(function (GroupCreateDto $input) use ($userId, $groupName, $description, $groupType, $image): bool {
                 $this->assertEquals($userId, $input->userCreatorId);
                 $this->assertEquals($groupName, $input->name);
                 $this->assertEquals($description, $input->description);
@@ -186,7 +187,7 @@ class GroupCreateUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($userId, $groupName) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($userId, $groupName): bool {
                 $this->assertEquals([$userId->getValue()], $notificationDto->content['users_id']);
                 $this->assertEquals($groupName->getValue(), $notificationDto->content['notification_data']['group_name']);
                 $this->assertEquals(self::SYSTEM_KEY, $notificationDto->content['system_key']);

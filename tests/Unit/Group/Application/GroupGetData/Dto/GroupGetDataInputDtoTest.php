@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 class GroupGetDataInputDtoTest extends TestCase
 {
-    private const GROUPS_ID = [
+    private const array GROUPS_ID = [
         'fdb242b4-bac8-4463-88d0-0941bb0beee0',
         'a5002966-dbf7-4f76-a862-23a04b5ca465',
         '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
@@ -23,6 +23,7 @@ class GroupGetDataInputDtoTest extends TestCase
     private ValidationInterface $validator;
     private MockObject|UserShared $user;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

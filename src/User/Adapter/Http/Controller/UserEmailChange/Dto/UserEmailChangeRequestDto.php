@@ -9,8 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UserEmailChangeRequestDto implements RequestDtoInterface
 {
-    public readonly string|null $email;
-    public readonly string|null $password;
+    public readonly ?string $email;
+    public readonly ?string $password;
 
     public function __construct(Request $request)
     {

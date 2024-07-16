@@ -114,7 +114,7 @@ class NotificationGetDataController extends AbstractController
         return $this->createResponse($notifications->notificationsData);
     }
 
-    private function createNotificationGetDataInputDto(int|null $page, int|null $pageItems, string|null $lang): NotificationGetDataInputDto
+    private function createNotificationGetDataInputDto(?int $page, ?int $pageItems, ?string $lang): NotificationGetDataInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();

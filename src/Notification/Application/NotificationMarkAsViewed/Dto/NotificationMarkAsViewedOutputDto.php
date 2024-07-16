@@ -17,10 +17,11 @@ class NotificationMarkAsViewedOutputDto implements ApplicationOutputInterface
     ) {
     }
 
+    #[\Override]
     public function toArray(): array
     {
         return array_map(
-            fn (Identifier $notificationId) => $notificationId->getValue(),
+            fn (Identifier $notificationId): ?string => $notificationId->getValue(),
             $this->notificationIds
         );
     }

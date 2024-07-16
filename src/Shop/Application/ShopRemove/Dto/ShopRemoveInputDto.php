@@ -19,16 +19,17 @@ class ShopRemoveInputDto implements ServiceInputDtoInterface
     public readonly array $shopsId;
     public readonly Identifier $groupId;
 
-    public function __construct(UserShared $userSession, string|null $groupId, array|null $shopsId)
+    public function __construct(UserShared $userSession, ?string $groupId, ?array $shopsId)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
         $this->shopsId = array_map(
-            fn (string $shopId) => ValueObjectFactory::createIdentifier($shopId),
+            fn (string $shopId): Identifier => ValueObjectFactory::createIdentifier($shopId),
             $shopsId ?? []
         );
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListNoShopsId = $validator

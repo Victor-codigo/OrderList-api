@@ -45,6 +45,7 @@ class GroupGetUsersInputDto implements ServiceInputDtoInterface
         $this->orderAsc = $orderAsc;
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray([

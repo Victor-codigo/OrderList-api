@@ -24,15 +24,16 @@ class ProductShopRepositoryTest extends DataBaseTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const GROUP_OTHER_ID = '30c6dada-4f30-4fdc-9547-2682e4eb82ca';
-    private const SHOP_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
-    private const PRODUCT_ID = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string GROUP_OTHER_ID = '30c6dada-4f30-4fdc-9547-2682e4eb82ca';
+    private const string SHOP_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
+    private const string PRODUCT_ID = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
 
     private ProductShopRepository $object;
     private ProductRepositoryInterface $productRepository;
     private ShopRepositoryInterface $shopRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

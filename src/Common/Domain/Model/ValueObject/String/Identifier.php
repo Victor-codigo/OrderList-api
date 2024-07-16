@@ -7,8 +7,9 @@ namespace Common\Domain\Model\ValueObject\String;
 use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\ConstraintFactory;
 
-class Identifier extends StringValueObject
+class Identifier extends StringValueObject implements \Stringable
 {
+    #[\Override]
     protected function defineConstraints(): void
     {
         $this
@@ -18,12 +19,13 @@ class Identifier extends StringValueObject
             ->setConstraint(ConstraintFactory::uuId());
     }
 
+    #[\Override]
     public function __toString(): string
     {
         if ($this->isNull()) {
             return '';
         }
 
-        return $this->getValue();
+        return (string) $this->getValue();
     }
 }

@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Common\Domain\Ports\Paginator;
 
+use Countable;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 
-interface PaginatorInterface extends \IteratorAggregate, \Countable
+interface PaginatorInterface extends \IteratorAggregate, Countable
 {
     public function createPaginator(Query|QueryBuilder $query): self;
 

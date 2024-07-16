@@ -7,8 +7,8 @@ namespace Common\Adapter\Http\ArgumentResolver;
 use Common\Adapter\Http\ArgumentResolver\Exception\ParametersException;
 use Common\Adapter\Http\Dto\RequestDtoInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
+use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 
 class ArgumentResolver implements ValueResolverInterface
 {
@@ -17,6 +17,7 @@ class ArgumentResolver implements ValueResolverInterface
     ) {
     }
 
+    #[\Override]
     public function resolve(Request $request, ArgumentMetadata $argument): \Generator
     {
         if (!$this->supports($argument)) {

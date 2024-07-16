@@ -13,11 +13,12 @@ use Common\Domain\Validation\User\USER_ROLES;
 
 class Rol extends ObjectValueObject
 {
-    private const ROL_TYPES = [
+    private const array ROL_TYPES = [
         USER_ROLES::class,
         GROUP_ROLES::class,
     ];
 
+    #[\Override]
     public function defineConstraints(): void
     {
         $this
@@ -29,7 +30,7 @@ class Rol extends ObjectValueObject
             return;
         }
 
-        $rolValues = match (get_class($this->getValue())) {
+        $rolValues = match ($this->getValue()::class) {
             GROUP_ROLES::class => VALUE_OBJECTS_CONSTRAINTS::GROUP_ROLES,
             default => VALUE_OBJECTS_CONSTRAINTS::ROLES_VALUES
         };

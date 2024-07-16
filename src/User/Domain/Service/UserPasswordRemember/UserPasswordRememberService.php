@@ -13,13 +13,10 @@ use User\Domain\Service\UserPasswordRemember\Dto\UserPasswordRememberDto;
 
 class UserPasswordRememberService
 {
-    private UserRepositoryInterface $userRepository;
-    private SendEmailPasswordRememberService $sendEmailPasswordRememberService;
-
-    public function __construct(UserRepositoryInterface $userRepository, SendEmailPasswordRememberService $sendEmailPasswordRememberService)
-    {
-        $this->userRepository = $userRepository;
-        $this->sendEmailPasswordRememberService = $sendEmailPasswordRememberService;
+    public function __construct(
+        private UserRepositoryInterface $userRepository,
+        private SendEmailPasswordRememberService $sendEmailPasswordRememberService
+    ) {
     }
 
     public function __invoke(UserPasswordRememberDto $passwordRememberDto): void

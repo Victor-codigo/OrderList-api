@@ -14,11 +14,12 @@ use PHPUnit\Framework\TestCase;
 
 class ListOrdersCreateFromInputDtoTest extends TestCase
 {
-    private const LIST_ORDERS_ID_CREATE_FROM = '466acd12-e6f9-4d5f-9c36-dda35ea45b05';
-    private const GROUP_ID = 'c593d795-72a1-4d29-8b1a-3ae6cdb6dcf8';
+    private const string LIST_ORDERS_ID_CREATE_FROM = '466acd12-e6f9-4d5f-9c36-dda35ea45b05';
+    private const string GROUP_ID = 'c593d795-72a1-4d29-8b1a-3ae6cdb6dcf8';
     private ValidationInterface $validator;
     private MockObject|UserShared $userSession;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

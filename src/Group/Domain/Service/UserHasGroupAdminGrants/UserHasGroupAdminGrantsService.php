@@ -24,7 +24,7 @@ class UserHasGroupAdminGrantsService
     {
         $groupAdmins = $this->userGroupRepository->findGroupUsersByRol($groupId, GROUP_ROLES::ADMIN);
         $groupAdminsIds = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getUserId()->getValue(),
+            fn (UserGroup $userGroup): ?string => $userGroup->getUserId()->getValue(),
             $groupAdmins
         );
 

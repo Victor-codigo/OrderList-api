@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\User\Adapter\Database\Orm\Doctrine\Repository;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Test\Unit\DataBaseTestCase;
@@ -17,6 +18,7 @@ class ProfileRepositoryTest extends DataBaseTestCase
 
     private ProfileRepository $object;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -36,7 +38,7 @@ class ProfileRepositoryTest extends DataBaseTestCase
         $return = $this->object->findProfilesOrFail($usersId);
 
         $dbProfilesIds = array_map(
-            fn (Profile $profile) => $profile->getId(),
+            fn (Profile $profile): Identifier => $profile->getId(),
             $return
         );
 

@@ -18,6 +18,7 @@ class RolTest extends TestCase
     private Rol $object;
     private ValidationChain $validator;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -26,7 +27,7 @@ class RolTest extends TestCase
     }
 
     /** @test */
-    public function validationForUserRolesOk()
+    public function validationForUserRolesOk(): void
     {
         $this->object = $this->createRol(USER_ROLES::ADMIN);
         $return = $this->validator->validateValueObject($this->object);
@@ -35,7 +36,7 @@ class RolTest extends TestCase
     }
 
     /** @test */
-    public function validationForGroupRolesOk()
+    public function validationForGroupRolesOk(): void
     {
         $this->object = $this->createRol(GROUP_ROLES::ADMIN);
         $return = $this->validator->validateValueObject($this->object);
@@ -44,7 +45,7 @@ class RolTest extends TestCase
     }
 
     /** @test */
-    public function checkNotBlankNotNull()
+    public function checkNotBlankNotNull(): void
     {
         $this->object = $this->createRol(null);
         $return = $this->validator->validateValueObject($this->object);
@@ -53,7 +54,7 @@ class RolTest extends TestCase
     }
 
     /** @test */
-    public function checkRolNotValid()
+    public function checkRolNotValid(): void
     {
         $this->object = $this->createRol(new \stdClass());
         $return = $this->validator->validateValueObject($this->object);
@@ -85,7 +86,7 @@ class RolTest extends TestCase
         Rol::fromString('value');
     }
 
-    private function createRol(object|null $rol): Rol
+    private function createRol(?object $rol): Rol
     {
         return new Rol($rol);
     }

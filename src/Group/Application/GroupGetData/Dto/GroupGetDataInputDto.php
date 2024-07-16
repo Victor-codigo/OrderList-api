@@ -18,15 +18,16 @@ class GroupGetDataInputDto implements ServiceInputDtoInterface
      */
     public readonly array $groupsId;
 
-    public function __construct(UserShared $userSession, array|null $groupsId)
+    public function __construct(UserShared $userSession, ?array $groupsId)
     {
         $this->userSession = $userSession;
         $this->groupsId = null === $groupsId ? [] : array_map(
-            fn (string $groupId) => ValueObjectFactory::createIdentifier($groupId),
+            fn (string $groupId): Identifier => ValueObjectFactory::createIdentifier($groupId),
             $groupsId
         );
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorListNotEmpty = $validator

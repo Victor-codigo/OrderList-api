@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Group\Application\GroupGetGroupsAdmins;
 
-use Common\Domain\Config\AppConfig;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
@@ -21,8 +20,6 @@ use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 
 class GroupGetGroupsAdminsUseCase extends ServiceBase
 {
-    private const USERS_GROUP_PAGE_ITEMS = AppConfig::ENDPOINT_GROUP_GET_GROUPS_ADMINS_MAX;
-
     public function __construct(
         private ValidationInterface $validator,
         private UserGroupRepositoryInterface $userGroupRepository

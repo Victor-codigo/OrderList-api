@@ -13,10 +13,10 @@ class OrderRemoveControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/orders';
-    private const METHOD = 'DELETE';
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const ORDERS_ID = [
+    private const string ENDPOINT = '/api/v1/orders';
+    private const string METHOD = 'DELETE';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const array ORDERS_ID = [
         '9a48ac5b-4571-43fd-ac80-28b08124ffb8',
         'a0b4760a-9037-477a-8b84-d059ae5ee7e9',
     ];
@@ -134,9 +134,9 @@ class OrderRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
         $this->assertEquals([
-                ['uuid_invalid_characters'],
-                ['uuid_invalid_characters'],
-            ],
+            ['uuid_invalid_characters'],
+            ['uuid_invalid_characters'],
+        ],
             $responseContent->errors->orders_id
         );
     }

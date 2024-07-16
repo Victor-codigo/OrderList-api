@@ -11,13 +11,14 @@ use Common\Domain\Validation\ValidationInterface;
 
 class UserEmailConfirmationInputDto implements ServiceInputDtoInterface
 {
-    public readonly JwtToken|null $token;
+    public readonly ?JwtToken $token;
 
-    public function __construct(string|null $token)
+    public function __construct(?string $token)
     {
         $this->token = ValueObjectFactory::createJwtToken($token);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray(['token' => $this->token]);

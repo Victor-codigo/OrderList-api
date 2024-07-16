@@ -21,27 +21,29 @@ class JwtLexikAdapter implements JwtHS256Interface
         $this->secretKey = $secretKey;
     }
 
+    #[\Override]
     public function encode(array $data, float $expireTimeInSeconds = 3600): string
     {
         $data[self::KEY_ISSUED_AT] = (new \DateTimeImmutable())->getTimestamp();
         $data[self::KEY_EXPIRE] = $data[self::KEY_ISSUED_AT] + $expireTimeInSeconds;
-        $token = JWT::encode($data, $this->secretKey, self::ALGORITHM);
 
-        return $token;
+        return JWT::encode($data, $this->secretKey, self::ALGORITHM);
     }
 
     /**
      * @throws JwtException
      */
+    #[\Override]
     public function decode(string $token): \stdClass
     {
         try {
             return JWT::decode($token, $this->secretKey, true);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             throw JwtException::fromMessage('Provided JWT was invalid');
         }
     }
 
+    #[\Override]
     public function hasExpired(object $tokenDecoded): bool
     {
         if (!isset($tokenDecoded->{self::KEY_ISSUED_AT}) || !isset($tokenDecoded->{self::KEY_EXPIRE})) {
@@ -51,7 +53,7 @@ class JwtLexikAdapter implements JwtHS256Interface
         return $this->getDateTime($tokenDecoded->{self::KEY_EXPIRE}) < $this->getDateTime();
     }
 
-    protected function getDateTime(int|null $timestamp = null): \DateTime
+    protected function getDateTime(?int $timestamp = null): \DateTime
     {
         if (null === $timestamp) {
             return new \DateTime();

@@ -10,10 +10,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ProductCreateRequestDto implements RequestDtoInterface
 {
-    public readonly string|null $groupId;
-    public readonly string|null $name;
-    public readonly string|null $description;
-    public readonly UploadedFile|null $image;
+    public readonly ?string $groupId;
+    public readonly ?string $name;
+    public readonly ?string $description;
+    public readonly ?UploadedFile $image;
 
     public function __construct(Request $request)
     {

@@ -13,18 +13,18 @@ class ProductGetDataRequestDto implements RequestDtoInterface
 {
     use RequestDataValidation;
 
-    private const PRODUCTS_NUM_MAX = AppConfig::ENDPOINT_PRODUCT_GET_PRODUCTS_MAX;
-    private const SHOPS_NUM_MAX = AppConfig::ENDPOINT_PRODUCT_GET_SHOPS_MAX;
+    private const int PRODUCTS_NUM_MAX = AppConfig::ENDPOINT_PRODUCT_GET_PRODUCTS_MAX;
+    private const int SHOPS_NUM_MAX = AppConfig::ENDPOINT_PRODUCT_GET_SHOPS_MAX;
 
-    public readonly string|null $groupId;
-    public readonly array|null $productsId;
-    public readonly array|null $shopsId;
-    public readonly string|null $productName;
+    public readonly ?string $groupId;
+    public readonly ?array $productsId;
+    public readonly ?array $shopsId;
+    public readonly ?string $productName;
 
-    public readonly string|null $productNameFilterType;
-    public readonly string|null $productNameFilterValue;
-    public readonly string|null $shopNameFilterType;
-    public readonly string|null $shopNameFilterValue;
+    public readonly ?string $productNameFilterType;
+    public readonly ?string $productNameFilterValue;
+    public readonly ?string $shopNameFilterType;
+    public readonly ?string $shopNameFilterValue;
 
     public readonly bool $orderAsc;
 

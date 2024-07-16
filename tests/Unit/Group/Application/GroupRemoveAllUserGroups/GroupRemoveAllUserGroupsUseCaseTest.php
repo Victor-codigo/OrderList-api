@@ -6,7 +6,6 @@ namespace Test\Unit\Group\Application\GroupRemoveAllUserGroups;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Model\ValueObject\String\JwtToken;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
@@ -29,34 +28,31 @@ use Group\Domain\Model\UserGroup;
 use Group\Domain\Service\GroupRemoveAllUserGroups\Dto\GroupRemoveAllUserGroupsDto;
 use Group\Domain\Service\GroupRemoveAllUserGroups\Dto\GroupRemoveAllUserGroupsOutputDto;
 use Group\Domain\Service\GroupRemoveAllUserGroups\GroupRemoveAllUserGroupsService;
-use Group\Domain\Service\UserHasGroupAdminGrants\UserHasGroupAdminGrantsService;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
 {
-    private const CONTENT_TYPE_APPLICATION_JSON = 'application/json';
-    private const SYSTEM_KEY = 'systemKey';
+    private const string CONTENT_TYPE_APPLICATION_JSON = 'application/json';
+    private const string SYSTEM_KEY = 'systemKey';
 
     private GroupRemoveAllUserGroupsUseCase $object;
     private MockObject|GroupRemoveAllUserGroupsService $groupRemoveAllUserGroupsService;
-    private MockObject|UserHasGroupAdminGrantsService $userHasGroupAdminGrantsService;
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
     private MockObject|UserShared $userSession;
     private MockObject|ValidationInterface $validation;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->groupRemoveAllUserGroupsService = $this->createMock(GroupRemoveAllUserGroupsService::class);
-        $this->userHasGroupAdminGrantsService = $this->createMock(UserHasGroupAdminGrantsService::class);
         $this->moduleCommunication = $this->createMock(ModuleCommunicationInterface::class);
         $this->userSession = $this->createMock(UserShared::class);
         $this->validation = $this->createMock(ValidationInterface::class);
         $this->object = new GroupRemoveAllUserGroupsUseCase(
             $this->groupRemoveAllUserGroupsService,
-            $this->userHasGroupAdminGrantsService,
             $this->moduleCommunication,
             $this->validation,
             self::SYSTEM_KEY
@@ -141,7 +137,7 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
      *
      * @return ModuleCommunicationConfigDto[]
      */
-    private function getModuleCommunicationConfigDto(array $usersId, array $groupsNames, string $systemKey, ?JwtToken $tokenSession): array
+    private function getModuleCommunicationConfigDto(array $usersId, array $groupsNames, string $systemKey): array
     {
         $notificationSetAsAdminConfig = [];
         foreach ($usersId as $key => $userId) {
@@ -194,15 +190,15 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
     private function getGroupRemoveAllGroupsOutputDto(GroupRemoveAllUserGroupsOutputDto $groupRemoveAllUserGroupsService): GroupRemoveAllGroupsOutputDto
     {
         $groupsIdRemoved = array_map(
-            fn (Group $group) => $group->getId(),
+            fn (Group $group): Identifier => $group->getId(),
             $groupRemoveAllUserGroupsService->groupsIdRemoved
         );
         $groupsIdUserRemoved = array_map(
-            fn (UserGroup $group) => $group->getGroupId(),
+            fn (UserGroup $group): Identifier => $group->getGroupId(),
             $groupRemoveAllUserGroupsService->usersIdGroupsRemoved
         );
         $groupsIdUserSetAsAdmin = array_map(
-            fn (UserGroup $group) => [
+            fn (UserGroup $group): array => [
                 'group_id' => $group->getGroupId(),
                 'user_id' => $group->getUserId(),
             ],
@@ -227,7 +223,6 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
             $usersSetAsAdminNotificationData['usersId'],
             $usersSetAsAdminNotificationData['groupNames'],
             self::SYSTEM_KEY,
-            null,
         );
         $moduleCommunicationResponseDto = $this->getModuleCommunicationResponseDto(RESPONSE_STATUS::OK);
         $input = new GroupRemoveAllUserGroupsInputDto(
@@ -249,7 +244,7 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($this->exactly(2))
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationSetAsAdminConfig) use ($moduleCommunicationConfigDto) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationSetAsAdminConfig) use ($moduleCommunicationConfigDto): bool {
                 $this->assertContainsEquals($notificationSetAsAdminConfig, $moduleCommunicationConfigDto);
 
                 return true;
@@ -302,7 +297,6 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
             $usersSetAsAdminNotificationData['usersId'],
             $usersSetAsAdminNotificationData['groupNames'],
             self::SYSTEM_KEY,
-            null,
         );
         $moduleCommunicationResponseDto = $this->getModuleCommunicationResponseDto(RESPONSE_STATUS::ERROR);
         $input = new GroupRemoveAllUserGroupsInputDto(
@@ -324,7 +318,7 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationSetAsAdminConfig) use ($moduleCommunicationConfigDto) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationSetAsAdminConfig) use ($moduleCommunicationConfigDto): bool {
                 $this->assertContainsEquals($notificationSetAsAdminConfig, $moduleCommunicationConfigDto);
 
                 return true;

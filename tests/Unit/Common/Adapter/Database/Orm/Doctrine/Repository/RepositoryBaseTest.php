@@ -25,6 +25,7 @@ class RepositoryBaseTest extends DataBaseTestCase
     private MockObject|ClassMetadata $classMetadata;
     private MockObject|PaginatorInterface $paginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -95,7 +96,7 @@ class RepositoryBaseTest extends DataBaseTestCase
         $this->paginator
             ->expects($this->once())
             ->method('createPaginator')
-            ->with($this->callback(fn (Query $queryActual) => $this->assertQueryIsOk($queryExpected, $queryActual) || true))
+            ->with($this->callback(fn (Query $queryActual): true => $this->assertQueryIsOk($queryExpected, $queryActual) || true))
             ->willReturn($this->paginator);
 
         $this->paginator
@@ -130,7 +131,7 @@ class RepositoryBaseTest extends DataBaseTestCase
         $this->paginator
             ->expects($this->once())
             ->method('createPaginator')
-            ->with($this->callback(fn (Query $queryActual) => $this->assertQueryIsOk($queryExpected, $queryActual) || true))
+            ->with($this->callback(fn (Query $queryActual): true => $this->assertQueryIsOk($queryExpected, $queryActual) || true))
             ->willReturn($this->paginator);
 
         $this->paginator
@@ -169,7 +170,7 @@ class RepositoryBaseTest extends DataBaseTestCase
         $this->paginator
             ->expects($this->once())
             ->method('createPaginator')
-            ->with($this->callback(fn (Query $queryActual) => $this->assertQueryIsOk($queryExpected, $queryActual) || true))
+            ->with($this->callback(fn (Query $queryActual): true => $this->assertQueryIsOk($queryExpected, $queryActual) || true))
             ->willReturn($this->paginator);
 
         $this->paginator

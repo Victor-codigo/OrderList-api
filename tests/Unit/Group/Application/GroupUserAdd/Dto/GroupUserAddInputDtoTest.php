@@ -16,8 +16,8 @@ use PHPUnit\Framework\TestCase;
 
 class GroupUserAddInputDtoTest extends TestCase
 {
-    private const GROUP_ID = 'acfbced0-26aa-4575-94ba-aca21aa0ef7d';
-    private const USERS_TO_ADD_ID = [
+    private const string GROUP_ID = 'acfbced0-26aa-4575-94ba-aca21aa0ef7d';
+    private const array USERS_TO_ADD_ID = [
         'e01b2650-1fc9-4c18-87f5-747856c03174',
         'e9097370-6640-4ce3-b884-3356503a3abb',
         'aa4db475-c6d5-4184-b675-f97c3a4e6435',
@@ -26,6 +26,7 @@ class GroupUserAddInputDtoTest extends TestCase
     private ValidationInterface $validator;
     private UserShared $userSession;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

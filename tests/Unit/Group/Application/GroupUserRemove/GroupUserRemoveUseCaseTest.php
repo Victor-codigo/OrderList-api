@@ -26,7 +26,7 @@ use PHPUnit\Framework\TestCase;
 
 class GroupUserRemoveUseCaseTest extends TestCase
 {
-    private const SYSTEM_KEY = 'systemKeyForDev';
+    private const string SYSTEM_KEY = 'systemKeyForDev';
 
     private GroupUserRemoveUseCase $object;
     private MockObject|ValidationInterface $validator;
@@ -37,6 +37,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
     private MockObject|UserShared $userSession;
     private MockObject|Group $group;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -93,7 +94,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $this->groupUserRemoveService
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (GroupUserRemoveDto $serviceInput) use ($groupId, $usersId) {
+            ->with($this->callback(function (GroupUserRemoveDto $serviceInput) use ($groupId, $usersId): bool {
                 $this->assertEquals($groupId, $serviceInput->groupId);
                 $this->assertEquals($usersId, $serviceInput->usersId);
 
@@ -109,7 +110,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($usersId, $groupName) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($usersId, $groupName): bool {
                 $this->assertEquals($usersId, $notificationDto->content['users_id']);
                 $this->assertEquals($groupName, $notificationDto->content['notification_data']['group_name']);
                 $this->assertEquals(self::SYSTEM_KEY, $notificationDto->content['system_key']);
@@ -159,7 +160,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $this->groupUserRemoveService
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (GroupUserRemoveDto $serviceInput) use ($groupId, $usersId) {
+            ->with($this->callback(function (GroupUserRemoveDto $serviceInput) use ($groupId, $usersId): bool {
                 $this->assertEquals($groupId, $serviceInput->groupId);
                 $this->assertEquals($usersId, $serviceInput->usersId);
 
@@ -175,7 +176,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($usersId, $groupName) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($usersId, $groupName): bool {
                 $this->assertEquals($usersId, $notificationDto->content['users_id']);
                 $this->assertEquals($groupName, $notificationDto->content['notification_data']['group_name']);
                 $this->assertEquals(self::SYSTEM_KEY, $notificationDto->content['system_key']);
@@ -312,7 +313,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $this->groupUserRemoveService
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (GroupUserRemoveDto $serviceInput) use ($groupId, $usersId) {
+            ->with($this->callback(function (GroupUserRemoveDto $serviceInput) use ($groupId, $usersId): bool {
                 $this->assertEquals($groupId, $serviceInput->groupId);
                 $this->assertEquals($usersId, $serviceInput->usersId);
 
@@ -328,7 +329,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($usersId, $groupName) {
+            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($usersId, $groupName): bool {
                 $this->assertEquals($usersId, $notificationDto->content['users_id']);
                 $this->assertEquals($groupName, $notificationDto->content['notification_data']['group_name']);
                 $this->assertEquals(self::SYSTEM_KEY, $notificationDto->content['system_key']);

@@ -8,25 +8,28 @@ use Common\Domain\Model\ValueObject\ValueObjectBase;
 
 abstract class ArrayValueObject extends ValueObjectBase
 {
-    protected readonly array|null $value;
+    protected readonly ?array $value;
 
-    public function getValue(): array|null
+    #[\Override]
+    public function getValue(): ?array
     {
         return $this->value;
     }
 
+    #[\Override]
     public function getValidationValue(): mixed
     {
         return $this->value;
     }
 
-    public function __construct(array|null $value)
+    public function __construct(?array $value)
     {
         $this->value = $value;
 
         $this->defineConstraints();
     }
 
+    #[\Override]
     public function getValueObjects(): array
     {
         return $this->getValue();

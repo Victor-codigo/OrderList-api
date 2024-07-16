@@ -15,6 +15,7 @@ class FilterSectionTest extends TestCase
     private FilterSection $object;
     private ValidationChain $validator;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -63,7 +64,7 @@ class FilterSectionTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailValidatingValueIsNull()
+    public function itShouldFailValidatingValueIsNull(): void
     {
         $this->object = new FilterSection(null);
 
@@ -73,7 +74,7 @@ class FilterSectionTest extends TestCase
     }
 
     /** @test */
-    public function itShouldFailValidatingValueIsWrong()
+    public function itShouldFailValidatingValueIsWrong(): void
     {
         $this->object = new FilterSection(VALIDATION_ERRORS::ALPHANUMERIC);
 

@@ -12,6 +12,7 @@ class ValidateIterableTest extends TestCase
 {
     private ValidationChain $validator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

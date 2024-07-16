@@ -5,31 +5,30 @@ declare(strict_types=1);
 namespace Group\Application\GroupRemoveAllUserGroups;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
+use Group\Application\GroupRemove\Exception\GroupRemoveGroupNotFoundException;
+use Group\Application\GroupRemove\Exception\GroupRemoveGroupNotificationException;
 use Group\Application\GroupRemoveAllUserGroups\Dto\GroupRemoveAllGroupsOutputDto;
 use Group\Application\GroupRemoveAllUserGroups\Dto\GroupRemoveAllUserGroupsInputDto;
 use Group\Application\GroupRemoveAllUserGroups\Exception\GroupRemoveAllUserGroupsNotFoundException;
 use Group\Application\GroupRemoveAllUserGroups\Exception\GroupRemoveAllUserGroupsNotificationException;
 use Group\Application\GroupRemoveAllUserGroups\Exception\GroupRemoveAllUserSystemKeyException;
-use Group\Application\GroupRemove\Exception\GroupRemoveGroupNotFoundException;
-use Group\Application\GroupRemove\Exception\GroupRemoveGroupNotificationException;
 use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Service\GroupRemoveAllUserGroups\Dto\GroupRemoveAllUserGroupsDto;
 use Group\Domain\Service\GroupRemoveAllUserGroups\Dto\GroupRemoveAllUserGroupsOutputDto;
 use Group\Domain\Service\GroupRemoveAllUserGroups\GroupRemoveAllUserGroupsService;
-use Group\Domain\Service\UserHasGroupAdminGrants\UserHasGroupAdminGrantsService;
 
 class GroupRemoveAllUserGroupsUseCase extends ServiceBase
 {
     public function __construct(
         private GroupRemoveAllUserGroupsService $groupRemoveAllUserGroupsService,
-        private UserHasGroupAdminGrantsService $userHasGroupAdminGrantsService,
         private ModuleCommunicationInterface $moduleCommunication,
         private ValidationInterface $validation,
         private string $systemKey
@@ -90,7 +89,7 @@ class GroupRemoveAllUserGroupsUseCase extends ServiceBase
     {
         $groupsIndexedById = array_combine(
             array_map(
-                fn (Group $group) => $group->getId()->getValue(),
+                fn (Group $group): ?string => $group->getId()->getValue(),
                 $groups
             ),
             $groups
@@ -119,17 +118,17 @@ class GroupRemoveAllUserGroupsUseCase extends ServiceBase
     private function createGroupRemoveAllGroupsOutputDto(GroupRemoveAllUserGroupsOutputDto $userGroupsRemoved): GroupRemoveAllGroupsOutputDto
     {
         $groupsIdRemoved = array_map(
-            fn (Group $group) => $group->getId(),
+            fn (Group $group): Identifier => $group->getId(),
             $userGroupsRemoved->groupsIdRemoved
         );
 
         $groupsIdUserRemoved = array_map(
-            fn (UserGroup $userGroup) => $userGroup->getGroupId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getGroupId(),
             $userGroupsRemoved->usersIdGroupsRemoved
         );
 
         $groupsIdUserSetAsAdmin = array_map(
-            fn (UserGroup $userGroup) => [
+            fn (UserGroup $userGroup): array => [
                 'group_id' => $userGroup->getGroupId(),
                 'user_id' => $userGroup->getUserId(),
             ],

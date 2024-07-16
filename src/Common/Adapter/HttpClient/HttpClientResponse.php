@@ -26,6 +26,7 @@ class HttpClientResponse implements HttpClientResponseInterface
         $this->response = $response;
     }
 
+    #[\Override]
     public function close(): void
     {
         $this->response->cancel();
@@ -34,6 +35,7 @@ class HttpClientResponse implements HttpClientResponseInterface
     /**
      * @throws NetworkException
      */
+    #[\Override]
     public function getStatusCode(): int
     {
         try {
@@ -49,6 +51,7 @@ class HttpClientResponse implements HttpClientResponseInterface
      * @throws Error400Exception
      * @throws Error500Exception
      */
+    #[\Override]
     public function getContent(bool $throwException = true): string
     {
         try {
@@ -70,6 +73,7 @@ class HttpClientResponse implements HttpClientResponseInterface
      * @throws Error400Exception
      * @throws Error500Exception
      */
+    #[\Override]
     public function getHeaders(bool $throwException = true): array
     {
         try {
@@ -85,7 +89,8 @@ class HttpClientResponse implements HttpClientResponseInterface
         }
     }
 
-    public function getInfo(bool|null $throwException = true): array
+    #[\Override]
+    public function getInfo(?bool $throwException = true): array
     {
         return $this->response->getInfo($throwException);
     }
@@ -97,6 +102,7 @@ class HttpClientResponse implements HttpClientResponseInterface
      * @throws Error400Exception
      * @throws Error500Exception
      */
+    #[\Override]
     public function toArray(bool $throwException = true): array
     {
         try {

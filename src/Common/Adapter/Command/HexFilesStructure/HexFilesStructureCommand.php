@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Common\Adapter\Command\HexFilesStructure;
 
 use Common\Adapter\Command\HexFilesStructure\Exception\TemplateErrorException;
-use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -21,22 +20,22 @@ use Symfony\Component\HttpKernel\KernelInterface;
 )]
 class HexFilesStructureCommand extends Command
 {
-    private const TEMPLATES_PATH = __DIR__.'/Template';
-    private const OUTPUT_DEFAULT_PATH = 'src/';
+    private const string TEMPLATES_PATH = __DIR__.'/Template';
+    private const string OUTPUT_DEFAULT_PATH = 'src/';
 
-    private const PERMISSIONS = 0o755;
+    private const int PERMISSIONS = 0o755;
 
-    private const LAYER_ADAPTER_NAME = 'adapter';
-    private const LAYER_APPLICATION_NAME = 'application';
-    private const LAYER_DOMAIN_NAME = 'domain';
-    private const LAYER_ALL_NAME = 'all';
+    private const string LAYER_ADAPTER_NAME = 'adapter';
+    private const string LAYER_APPLICATION_NAME = 'application';
+    private const string LAYER_DOMAIN_NAME = 'domain';
+    private const string LAYER_ALL_NAME = 'all';
 
     private KernelInterface $kernel;
 
     private string $endpointName;
     private string $module;
-    private string|null $layer;
-    private string|null $outputPath;
+    private ?string $layer;
+    private ?string $outputPath;
 
     private readonly string $templatesPath;
     private array $filesCreated = [];
@@ -52,6 +51,7 @@ class HexFilesStructureCommand extends Command
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this->addArgument(
@@ -79,6 +79,7 @@ class HexFilesStructureCommand extends Command
         );
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->getInput($input);
@@ -98,7 +99,7 @@ class HexFilesStructureCommand extends Command
             $this->writeOutput($output);
 
             return Command::SUCCESS;
-        } catch (Exception) {
+        } catch (\Exception) {
             return Command::FAILURE;
         }
     }
@@ -110,7 +111,7 @@ class HexFilesStructureCommand extends Command
         $layer = $input->getArgument('layer');
         $outputPath = $input->getArgument('outputPath');
 
-        $this->layer = mb_strtolower($layer ?? $this->layer);
+        $this->layer = mb_strtolower((string) ($layer ?? $this->layer));
         $this->outputPath = $outputPath ?? $this->outputPath;
     }
 

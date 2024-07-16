@@ -8,7 +8,7 @@ use Common\Domain\Exception\DomainException;
 
 class ImageResizeException extends DomainException
 {
-    public static function fromMessage(string $message)
+    public static function fromMessage(string $message): self
     {
         return new self($message);
     }

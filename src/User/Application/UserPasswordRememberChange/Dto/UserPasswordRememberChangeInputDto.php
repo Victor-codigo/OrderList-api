@@ -16,13 +16,14 @@ class UserPasswordRememberChangeInputDto implements ServiceInputDtoInterface
     public readonly Password $passwordNew;
     public readonly Password $passwordNewRepeat;
 
-    public function __construct(string|null $token, string|null $passwordNew, string|null $passwordNewRepeat)
+    public function __construct(?string $token, ?string $passwordNew, ?string $passwordNewRepeat)
     {
         $this->token = ValueObjectFactory::createJwtToken($token);
         $this->passwordNew = ValueObjectFactory::createPassword($passwordNew);
         $this->passwordNewRepeat = ValueObjectFactory::createPassword($passwordNewRepeat);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

@@ -59,6 +59,7 @@ class Group implements EntityImageModifyInterface
         return $this->description;
     }
 
+    #[\Override]
     public function setImage(Path $image): self
     {
         $this->image = $image;
@@ -66,6 +67,7 @@ class Group implements EntityImageModifyInterface
         return $this;
     }
 
+    #[\Override]
     public function getImage(): Path
     {
         return $this->image;

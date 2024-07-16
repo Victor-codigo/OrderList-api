@@ -15,11 +15,11 @@ class GroupGetUsersControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/groups/user';
-    private const METHOD = 'GET';
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const USER_EMAIL = 'email.already.active@host.com';
-    private const USER_PASSWORD = '123456';
+    private const string ENDPOINT = '/api/v1/groups/user';
+    private const string METHOD = 'GET';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string USER_EMAIL = 'email.already.active@host.com';
+    private const string USER_PASSWORD = '123456';
 
     private function assertUsersAreOk(object $responseContent, int $expectedUsersCount, int $expectedPage, int $expectedPagesTotal): void
     {
@@ -156,10 +156,10 @@ class GroupGetUsersControllerTest extends WebClientTestCase
     public function itShouldGetUserByNameFilterEquals(): void
     {
         $page = 1;
-        $pageItems = 5;
+        $pageItems = 100;
         $filterSection = FILTER_SECTION::GROUP_USERS->value;
         $filterText = FILTER_STRING_COMPARISON::EQUALS->value;
-        $filterValue = 'Ona Kilback';
+        $filterValue = 'Maria';
         $orderAsc = true;
         $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $client->request(
@@ -181,17 +181,17 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Users of the group', $responseContent->message);
 
-        $this->assertUsersAreOk($responseContent, 1, $page, 20);
+        $this->assertUsersAreOk($responseContent, 1, $page, 1);
     }
 
     /** @test */
     public function itShouldGetUserByNameFilterStartsWith(): void
     {
         $page = 1;
-        $pageItems = 5;
+        $pageItems = 100;
         $filterSection = FILTER_SECTION::GROUP_USERS->value;
         $filterText = FILTER_STRING_COMPARISON::STARTS_WITH->value;
-        $filterValue = 'Ona';
+        $filterValue = 'Mari';
         $orderAsc = true;
         $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $client->request(
@@ -213,17 +213,17 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Users of the group', $responseContent->message);
 
-        $this->assertUsersAreOk($responseContent, 1, $page, 20);
+        $this->assertUsersAreOk($responseContent, 1, $page, 1);
     }
 
     /** @test */
     public function itShouldGetUserByNameFilterEndsWith(): void
     {
         $page = 1;
-        $pageItems = 5;
+        $pageItems = 100;
         $filterSection = FILTER_SECTION::GROUP_USERS->value;
         $filterText = FILTER_STRING_COMPARISON::ENDS_WITH->value;
-        $filterValue = 'Kilback';
+        $filterValue = 'aria';
         $orderAsc = true;
         $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $client->request(
@@ -245,17 +245,17 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Users of the group', $responseContent->message);
 
-        $this->assertUsersAreOk($responseContent, 1, $page, 20);
+        $this->assertUsersAreOk($responseContent, 1, $page, 1);
     }
 
     /** @test */
     public function itShouldGetUserByNameFilterContains(): void
     {
         $page = 1;
-        $pageItems = 5;
+        $pageItems = 100;
         $filterSection = FILTER_SECTION::GROUP_USERS->value;
         $filterText = FILTER_STRING_COMPARISON::CONTAINS->value;
-        $filterValue = 'Kil';
+        $filterValue = 'aria';
         $orderAsc = true;
         $client = $this->getNewClientAuthenticated(self::USER_EMAIL, self::USER_PASSWORD);
         $client->request(
@@ -277,7 +277,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Users of the group', $responseContent->message);
 
-        $this->assertUsersAreOk($responseContent, 1, $page, 20);
+        $this->assertUsersAreOk($responseContent, 1, $page, 1);
     }
 
     /** @test */

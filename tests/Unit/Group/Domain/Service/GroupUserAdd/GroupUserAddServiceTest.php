@@ -6,6 +6,8 @@ namespace Test\Unit\Group\Domain\Service\GroupUserAdd;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\Array\Roles;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Validation\Group\GROUP_ROLES;
@@ -24,13 +26,14 @@ use PHPUnit\Framework\TestCase;
 
 class GroupUserAddServiceTest extends TestCase
 {
-    private const GROUP_ID = '76033a53-371e-46df-ac6f-19e67b3263ad';
-    private const GROUP_TYPE_USER_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
+    private const string GROUP_ID = '76033a53-371e-46df-ac6f-19e67b3263ad';
+    private const string GROUP_TYPE_USER_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
 
     private GroupUserAddService $object;
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;
     private MockObject|GroupRepositoryInterface $groupRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -46,7 +49,7 @@ class GroupUserAddServiceTest extends TestCase
     private function createGroupUserAddDto(array $usersId): GroupUserAddDto
     {
         $usersIdValueObject = array_map(
-            fn (string $userId) => ValueObjectFactory::createIdentifier($userId),
+            fn (string $userId): Identifier => ValueObjectFactory::createIdentifier($userId),
             $usersId
         );
 
@@ -96,7 +99,7 @@ class GroupUserAddServiceTest extends TestCase
     private function createUserGroupForIds(string $groupId, array $userIds, GROUP_ROLES $rol, Group $group): array
     {
         return array_map(
-            fn (string $userId) => UserGroup::fromPrimitives($groupId, $userId, [$rol], $group),
+            fn (string $userId): UserGroup => UserGroup::fromPrimitives($groupId, $userId, [$rol], $group),
             $userIds
         );
     }
@@ -105,44 +108,44 @@ class GroupUserAddServiceTest extends TestCase
     {
         $this->assertEquals(
             array_map(
-                fn (UserGroup $userGroup) => $userGroup->getGroupId(),
+                fn (UserGroup $userGroup): Identifier => $userGroup->getGroupId(),
                 $expectUsersGroup
             ),
             array_map(
-                fn (UserGroup $userGroup) => $userGroup->getGroupId(),
+                fn (UserGroup $userGroup): Identifier => $userGroup->getGroupId(),
                 $actualUserGroup
             )
         );
 
         $this->assertEquals(
             array_map(
-                fn (UserGroup $userGroup) => $userGroup->getUserId(),
+                fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(),
                 $expectUsersGroup
             ),
             array_map(
-                fn (UserGroup $userGroup) => $userGroup->getUserId(),
+                fn (UserGroup $userGroup): Identifier => $userGroup->getUserId(),
                 $actualUserGroup
             )
         );
 
         $this->assertEquals(
             array_map(
-                fn (UserGroup $userGroup) => $userGroup->getGroup()->getId(),
+                fn (UserGroup $userGroup): Identifier => $userGroup->getGroup()->getId(),
                 $expectUsersGroup
             ),
             array_map(
-                fn (UserGroup $userGroup) => $userGroup->getGroup()->getId(),
+                fn (UserGroup $userGroup): Identifier => $userGroup->getGroup()->getId(),
                 $actualUserGroup
             )
         );
 
         $this->assertEquals(
             array_map(
-                fn (UserGroup $userGroup) => $userGroup->getRoles(),
+                fn (UserGroup $userGroup): Roles => $userGroup->getRoles(),
                 $expectUsersGroup
             ),
             array_map(
-                fn (UserGroup $userGroup) => $userGroup->getRoles(),
+                fn (UserGroup $userGroup): Roles => $userGroup->getRoles(),
                 $actualUserGroup
             )
         );
@@ -167,7 +170,7 @@ class GroupUserAddServiceTest extends TestCase
         $saveMethod = $this->userGroupRepository
             ->expects($this->any())
             ->method('save')
-            ->with($this->callback(fn (array $usersGroupSaved) => $this->assertUserGroupIsEqualToUserGroup($expectUsersGroup, $usersGroupSaved)));
+            ->with($this->callback(fn (array $usersGroupSaved): bool => $this->assertUserGroupIsEqualToUserGroup($expectUsersGroup, $usersGroupSaved)));
 
         if (null !== $saveException) {
             $saveMethod->willThrowException($saveException);

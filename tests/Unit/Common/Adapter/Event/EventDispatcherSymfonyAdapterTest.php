@@ -19,6 +19,7 @@ class EventDispatcherSymfonyAdapterTest extends TestCase
     private EventDispatcherSymfonyAdapter $object;
     private MockObject|EventDispatcher $eventDispatcher;
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -32,7 +33,7 @@ class EventDispatcherSymfonyAdapterTest extends TestCase
     {
         $eventName = 'MyEvent';
         $priority = 0;
-        $listener = function () {};
+        $listener = function (): void {};
 
         $this->eventDispatcher
             ->expects($this->once())
@@ -90,7 +91,7 @@ class EventDispatcherSymfonyAdapterTest extends TestCase
         $this->eventDispatcher
             ->expects($matcher)
             ->method('addListener')
-            ->willReturnCallback(function (string $event, callable $callback, int $priority) use ($subscriber, $matcher) {
+            ->willReturnCallback(function (string $event, callable $callback, int $priority) use ($subscriber, $matcher): void {
                 $expectedCallNumber = $matcher->getInvocationCount();
                 match ([$expectedCallNumber, $event, $callback, $priority]) {
                     [1, CustomEvent::class, [$subscriber, '__invoke'], 0],

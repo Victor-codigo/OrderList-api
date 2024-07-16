@@ -20,8 +20,6 @@ class NotificationCreateService
     }
 
     /**
-     * @param Identifier[] $usersId
-     *
      * @return Notification[]
      *
      * @throws DBUniqueConstraintException
@@ -43,15 +41,13 @@ class NotificationCreateService
      */
     private function createNotifications(array $usersId, NotificationType $notificationType, NotificationData $notificationData): array
     {
-        $notifications = array_map(
-            function (Identifier $userId) use ($notificationType, $notificationData) {
+        return array_map(
+            function (Identifier $userId) use ($notificationType, $notificationData): Notification {
                 $notificationId = ValueObjectFactory::createIdentifier($this->notificationRepository->generateId());
 
                 return new Notification($notificationId, $userId, $notificationType, $notificationData);
             },
             $usersId
         );
-
-        return $notifications;
     }
 }

@@ -6,6 +6,7 @@ namespace Test\Unit\Group\Domain\Service\GroupRemoveAllUserGroups;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Validation\Group\GROUP_ROLES;
@@ -21,13 +22,14 @@ use PHPUnit\Framework\TestCase;
 
 class GroupRemoveUserFromGroupsServiceTest extends TestCase
 {
-    private const USER_ID = 'b23f12cf-75cb-402e-b771-77fba3b0875a';
+    private const string USER_ID = 'b23f12cf-75cb-402e-b771-77fba3b0875a';
 
     private GroupRemoveUserFromGroupsService $object;
     private MockObject|GroupRepositoryInterface $groupRepository;
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;
     private MockObject|PaginatorInterface $groupsUsersNumPaginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -94,7 +96,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
         );
 
         return array_map(
-            fn (UserGroup $userGroup) => $userGroup->setRoles($adminRole),
+            fn (UserGroup $userGroup): UserGroup => $userGroup->setRoles($adminRole),
             $usersGroups
         );
     }
@@ -151,7 +153,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
     private function getGroupsIdFromUsersGroups(array $usersGroups): array
     {
         return array_map(
-            fn (UserGroup $userGroup) => $userGroup->getGroupId(),
+            fn (UserGroup $userGroup): Identifier => $userGroup->getGroupId(),
             $usersGroups
         );
     }
@@ -187,7 +189,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
         $groupUsersNumbers = $this->getGroupsUsersNumber();
 
         return array_map(
-            fn (array $groupUsersNumber) => [
+            fn (array $groupUsersNumber): array => [
                 'groupId' => $groupUsersNumber['groupId'],
                 'groupUsers' => $numUsers,
             ],

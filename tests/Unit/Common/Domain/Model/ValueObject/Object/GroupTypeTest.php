@@ -14,6 +14,7 @@ class GroupTypeTest extends TestCase
 {
     private ValidationChain $validation;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

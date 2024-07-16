@@ -27,8 +27,8 @@ use Test\Unit\DataBaseTestCase;
 
 class GroupCreateServiceTest extends DataBaseTestCase
 {
-    private const IMAGE_UPLOADED_FILE_NAME = 'Image.png';
-    private const PATH_IMAGE_UPLOAD = __DIR__.'/Fixtures/Image.png';
+    private const string IMAGE_UPLOADED_FILE_NAME = 'Image.png';
+    private const string PATH_IMAGE_UPLOAD = __DIR__.'/Fixtures/Image.png';
 
     private GroupCreateService $object;
     private MockObject|GroupRepositoryInterface $groupRepository;
@@ -36,6 +36,7 @@ class GroupCreateServiceTest extends DataBaseTestCase
     private MockObject|FileUploadInterface $fileUpload;
     private MockObject|UploadedFileInterface $imageUploaded;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -94,7 +95,7 @@ class GroupCreateServiceTest extends DataBaseTestCase
         $this->groupRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Group $group) => $this->assertGroupIsCreated($group, $groupCreateDto, GROUP_TYPE::USER, self::IMAGE_UPLOADED_FILE_NAME) || true));
+            ->with($this->callback(fn (Group $group): true => $this->assertGroupIsCreated($group, $groupCreateDto, GROUP_TYPE::USER, self::IMAGE_UPLOADED_FILE_NAME) || true));
 
         $this->fileUpload
             ->expects($this->once())
@@ -127,7 +128,7 @@ class GroupCreateServiceTest extends DataBaseTestCase
         $this->groupRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Group $group) => $this->assertGroupIsCreated($group, $groupCreateDto, GROUP_TYPE::GROUP, self::IMAGE_UPLOADED_FILE_NAME) || true));
+            ->with($this->callback(fn (Group $group): true => $this->assertGroupIsCreated($group, $groupCreateDto, GROUP_TYPE::GROUP, self::IMAGE_UPLOADED_FILE_NAME) || true));
 
         $this->fileUpload
             ->expects($this->once())
@@ -160,7 +161,7 @@ class GroupCreateServiceTest extends DataBaseTestCase
         $this->groupRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Group $group) => $this->assertGroupIsCreated($group, $groupCreateDto, GROUP_TYPE::GROUP, null) || true));
+            ->with($this->callback(fn (Group $group): true => $this->assertGroupIsCreated($group, $groupCreateDto, GROUP_TYPE::GROUP, null) || true));
 
         $this->fileUpload
             ->expects($this->never())
@@ -203,7 +204,7 @@ class GroupCreateServiceTest extends DataBaseTestCase
         $this->groupRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Group $group) => $this->assertGroupIsCreated($group, $groupCreateDto, GROUP_TYPE::GROUP, self::IMAGE_UPLOADED_FILE_NAME) || true))
+            ->with($this->callback(fn (Group $group): true => $this->assertGroupIsCreated($group, $groupCreateDto, GROUP_TYPE::GROUP, self::IMAGE_UPLOADED_FILE_NAME) || true))
             ->willThrowException(new DBUniqueConstraintException());
 
         $this->object->__invoke($groupCreateDto);
@@ -233,7 +234,7 @@ class GroupCreateServiceTest extends DataBaseTestCase
         $this->groupRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Group $group) => $this->assertGroupIsCreated($group, $groupCreateDto, GROUP_TYPE::GROUP, self::IMAGE_UPLOADED_FILE_NAME) || true))
+            ->with($this->callback(fn (Group $group): true => $this->assertGroupIsCreated($group, $groupCreateDto, GROUP_TYPE::GROUP, self::IMAGE_UPLOADED_FILE_NAME) || true))
             ->willThrowException(new DBConnectionException());
 
         $this->object->__invoke($groupCreateDto);

@@ -16,6 +16,7 @@ class EmailTest extends TestCase
     private string $validEmail = 'a.valid.email@host.com';
     private string $invalidEmail = 'this is an invalid email';
 
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -23,12 +24,12 @@ class EmailTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    private function createEmail(string|null $email): Email
+    private function createEmail(?string $email): Email
     {
         return new Email($email);
     }
 
-    public function testEmailOk()
+    public function testEmailOk(): void
     {
         $email = $this->createEmail($this->validEmail);
         $return = $this->validator->validateValueObject($email);
@@ -37,7 +38,7 @@ class EmailTest extends TestCase
             'It was expected that not errors returning');
     }
 
-    public function testEmailNotBlank()
+    public function testEmailNotBlank(): void
     {
         $email = $this->createEmail('');
         $return = $this->validator->validateValueObject($email);
@@ -46,7 +47,7 @@ class EmailTest extends TestCase
             'It was expected that validation fail on notBlank');
     }
 
-    public function testEmailNotNull()
+    public function testEmailNotNull(): void
     {
         $email = $this->createEmail(null);
         $return = $this->validator->validateValueObject($email);
@@ -54,7 +55,7 @@ class EmailTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL], $return);
     }
 
-    public function testEmailNotValidEmail()
+    public function testEmailNotValidEmail(): void
     {
         $email = $this->createEmail($this->invalidEmail);
         $return = $this->validator->validateValueObject($email);

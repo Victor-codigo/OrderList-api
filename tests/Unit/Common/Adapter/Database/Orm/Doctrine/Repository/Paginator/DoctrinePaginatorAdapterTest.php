@@ -29,6 +29,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
      */
     private array $queryResult;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -411,7 +412,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         foreach ($return as $item) {
             $this->assertInstanceOf(\Traversable::class, $item);
             $this->assertContainsEquals(iterator_to_array($item), $queryPageItemsExpected);
-            $this->count($pageItems, $item);
+            $this->assertCount($pageItems, $item);
         }
     }
 
@@ -495,7 +496,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         foreach ($return as $item) {
             $this->assertInstanceOf(\Traversable::class, $item);
             $this->assertContainsEquals(iterator_to_array($item), $queryPageItemsExpected);
-            $this->count($pageItems, $item);
+            $this->assertCount($pageItems, $item);
         }
     }
 
@@ -527,7 +528,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         foreach ($return as $item) {
             $this->assertInstanceOf(\Traversable::class, $item);
             $this->assertEquals($item, new \ArrayIterator($queryPageItemsExpected));
-            $this->count($pageItems, $item);
+            $this->assertCount($pageItems, $item);
         }
     }
 

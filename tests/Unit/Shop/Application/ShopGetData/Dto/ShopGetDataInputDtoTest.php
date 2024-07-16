@@ -13,18 +13,19 @@ use Shop\Application\ShopGetData\Dto\ShopGetDataInputDto;
 
 class ShopGetDataInputDtoTest extends TestCase
 {
-    private const GROUP_ID = 'd511f745-22ef-4de8-933f-81e1ffcda810';
-    private const PRODUCTS_ID = [
+    private const string GROUP_ID = 'd511f745-22ef-4de8-933f-81e1ffcda810';
+    private const array PRODUCTS_ID = [
         'd511f745-22ef-4de8-933f-81e1ffcda810',
         'eb221850-c5d1-4cb2-939d-d89d2f732db1',
     ];
-    private const SHOPS_ID = [
+    private const array SHOPS_ID = [
         'd511f745-22ef-4de8-933f-81e1ffcda810',
         'f0872de3-bc35-4572-b69f-2c9bfd28f220',
     ];
 
     private ValidationInterface $validator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -402,15 +403,15 @@ class ShopGetDataInputDtoTest extends TestCase
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
-                'group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
-                'shops_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS], [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]],
-                'products_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS], [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]],
-                'shop_filter_type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
-                'shop_filter_value' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
-                'shop_name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
-                'page' => [VALIDATION_ERRORS::GREATER_THAN],
-                'page_items' => [VALIDATION_ERRORS::LESS_THAN_OR_EQUAL],
-            ],
+            'group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS],
+            'shops_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS], [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]],
+            'products_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS], [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]],
+            'shop_filter_type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
+            'shop_filter_value' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
+            'shop_name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE],
+            'page' => [VALIDATION_ERRORS::GREATER_THAN],
+            'page_items' => [VALIDATION_ERRORS::LESS_THAN_OR_EQUAL],
+        ],
             $return
         );
     }

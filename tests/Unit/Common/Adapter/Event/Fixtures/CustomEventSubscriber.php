@@ -12,6 +12,7 @@ class CustomEventSubscriber implements EventDomainSubscriberInterface
     {
     }
 
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [

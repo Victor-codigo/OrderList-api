@@ -7,7 +7,6 @@ namespace Group\Application\GroupGetUsers;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Model\ValueObject\String\Identifier;
-use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Service\Exception\DomainErrorException;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
@@ -25,7 +24,6 @@ class GroupGetUsersUseCase extends ServiceBase
     public function __construct(
         private GroupGetUsersService $groupGetUsersService,
         private UserGroupRepositoryInterface $userGroupRepository,
-        private ModuleCommunicationInterface $moduleCommunication,
         private ValidationInterface $validator
     ) {
     }
@@ -55,7 +53,7 @@ class GroupGetUsersUseCase extends ServiceBase
             throw $e;
         } catch (DBNotFoundException) {
             throw GroupGetUsersGroupNotFoundException::fromMessage('Group not found');
-        } catch (\Throwable $e) {
+        } catch (\Throwable) {
             throw DomainErrorException::fromMessage('An error has been occurred');
         }
     }

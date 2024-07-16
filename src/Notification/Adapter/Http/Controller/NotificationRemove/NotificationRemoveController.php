@@ -92,7 +92,7 @@ class NotificationRemoveController extends AbstractController
     /**
      * @param string[]|null $notificationsId
      */
-    private function createNotificationRemoveInputDto(array|null $notificationsId): NotificationRemoveInputDto
+    private function createNotificationRemoveInputDto(?array $notificationsId): NotificationRemoveInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */
         $userSharedAdapter = $this->security->getUser();
@@ -103,7 +103,7 @@ class NotificationRemoveController extends AbstractController
     private function createResponse(NotificationRemoveOutputDto $notifications): JsonResponse
     {
         $notificationsId = array_map(
-            fn (Identifier $notificationId) => $notificationId->getValue(),
+            fn (Identifier $notificationId): ?string => $notificationId->getValue(),
             $notifications->notificationsId
         );
 

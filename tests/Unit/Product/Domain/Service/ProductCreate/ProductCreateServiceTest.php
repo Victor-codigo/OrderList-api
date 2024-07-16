@@ -8,7 +8,6 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\FileUpload\Exception\FileUploadException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Common\Domain\Ports\FileUpload\FileInterface;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
 use Common\Domain\Ports\Image\ImageInterface;
@@ -23,9 +22,9 @@ use Product\Domain\Service\ProductCreate\ProductCreateService;
 
 class ProductCreateServiceTest extends TestCase
 {
-    private const IMAGE_UPLOADED_FILE_NAME = 'Image.png';
-    private const IMAGE_UPLOADED_PATH = '/uploaded/image/path';
-    private const GROUP_ID = '82633054-84ad-4748-8ea2-8be0201c7b3a';
+    private const string IMAGE_UPLOADED_FILE_NAME = 'Image.png';
+    private const string IMAGE_UPLOADED_PATH = '/uploaded/image/path';
+    private const string GROUP_ID = '82633054-84ad-4748-8ea2-8be0201c7b3a';
 
     private ProductCreateService $object;
     private MockObject|ProductRepositoryInterface $productRepository;
@@ -34,6 +33,7 @@ class ProductCreateServiceTest extends TestCase
     private MockObject|PaginatorInterface $paginator;
     private MockObject|ImageInterface $image;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -46,7 +46,7 @@ class ProductCreateServiceTest extends TestCase
         $this->object = new ProductCreateService($this->productRepository, $this->fileUpload, $this->image, self::IMAGE_UPLOADED_PATH);
     }
 
-    private function createProductCreateDto(string|null $description, FileInterface|null $productImageFile): ProductCreateDto
+    private function createProductCreateDto(?string $description, MockObject|UploadedFileInterface|null $productImageFile): ProductCreateDto
     {
         return new ProductCreateDto(
             ValueObjectFactory::createIdentifier('276865ee-d120-46e9-a3f7-16f7c923a990'),
@@ -56,7 +56,7 @@ class ProductCreateServiceTest extends TestCase
         );
     }
 
-    private function assertProductIsCreated(Product $product, ProductCreateDto $input, string|null $expectedImageProductName): bool
+    private function assertProductIsCreated(Product $product, ProductCreateDto $input, ?string $expectedImageProductName): bool
     {
         $this->assertEquals(self::GROUP_ID, $product->getId());
         $this->assertEquals($input->groupId, $product->getGroupId());
@@ -106,7 +106,7 @@ class ProductCreateServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Product $product) => $this->assertProductIsCreated($product, $input, self::IMAGE_UPLOADED_FILE_NAME)));
+            ->with($this->callback(fn (Product $product): bool => $this->assertProductIsCreated($product, $input, self::IMAGE_UPLOADED_FILE_NAME)));
 
         $return = $this->object->__invoke($input);
 
@@ -156,7 +156,7 @@ class ProductCreateServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Product $product) => $this->assertProductIsCreated($product, $input, self::IMAGE_UPLOADED_FILE_NAME)));
+            ->with($this->callback(fn (Product $product): bool => $this->assertProductIsCreated($product, $input, self::IMAGE_UPLOADED_FILE_NAME)));
 
         $return = $this->object->__invoke($input);
 
@@ -199,7 +199,7 @@ class ProductCreateServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Product $product) => $this->assertProductIsCreated($product, $input, null)));
+            ->with($this->callback(fn (Product $product): bool => $this->assertProductIsCreated($product, $input, null)));
 
         $return = $this->object->__invoke($input);
 
@@ -324,7 +324,7 @@ class ProductCreateServiceTest extends TestCase
         $this->productRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Product $product) => $this->assertProductIsCreated($product, $input, self::IMAGE_UPLOADED_FILE_NAME)))
+            ->with($this->callback(fn (Product $product): bool => $this->assertProductIsCreated($product, $input, self::IMAGE_UPLOADED_FILE_NAME)))
             ->willThrowException(new DBUniqueConstraintException());
 
         $this->expectException(DBUniqueConstraintException::class);

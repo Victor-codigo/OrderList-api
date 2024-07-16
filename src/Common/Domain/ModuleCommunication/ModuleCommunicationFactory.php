@@ -20,10 +20,10 @@ use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 
 class ModuleCommunicationFactory
 {
-    private const API_VERSION = AppConfig::API_VERSION;
-    private const COOKIE_SESSION_NAME = AppConfig::COOKIE_SESSION_NAME;
-    private const CONTENT_TYPE_APPLICATION_JSON = 'application/json';
-    private const CONTENT_TYPE_APPLICATION_FORM = 'multipart/form-data';
+    private const string API_VERSION = AppConfig::API_VERSION;
+    private const string COOKIE_SESSION_NAME = AppConfig::COOKIE_SESSION_NAME;
+    private const string CONTENT_TYPE_APPLICATION_JSON = 'application/json';
+    private const string CONTENT_TYPE_APPLICATION_FORM = 'multipart/form-data';
 
     public static function userLogin(Email $email, Password $password): ModuleCommunicationConfigDto
     {
@@ -56,7 +56,7 @@ class ModuleCommunicationFactory
     public static function userGet(array $usersId): ModuleCommunicationConfigDto
     {
         $usersIdPlain = array_map(
-            fn (Identifier $userId) => $userId->getValue(),
+            fn (Identifier $userId): ?string => $userId->getValue(),
             $usersId
         );
 
@@ -85,7 +85,7 @@ class ModuleCommunicationFactory
     public static function userGetWithToken(array $usersId, JwtToken $sessionToken): ModuleCommunicationConfigDto
     {
         $usersIdPlain = array_map(
-            fn (Identifier $userId) => $userId->getValue(),
+            fn (Identifier $userId): ?string => $userId->getValue(),
             $usersId
         );
 
@@ -115,7 +115,7 @@ class ModuleCommunicationFactory
     public static function userGetByName(array $usersNames): ModuleCommunicationConfigDto
     {
         $usersNamePlain = array_map(
-            fn (NameWithSpaces $userName) => $userName->getValue(),
+            fn (NameWithSpaces $userName): ?string => $userName->getValue(),
             $usersNames
         );
 
@@ -177,7 +177,7 @@ class ModuleCommunicationFactory
     public static function groupsRemove(array $groupsId): ModuleCommunicationConfigDto
     {
         $groupsIdString = array_map(
-            fn (Identifier $groupId) => $groupId->getValue(),
+            fn (Identifier $groupId): ?string => $groupId->getValue(),
             $groupsId
         );
 
@@ -209,7 +209,7 @@ class ModuleCommunicationFactory
     public static function groupGetData(array $groupsId): ModuleCommunicationConfigDto
     {
         $groupsIdPlain = array_map(
-            fn (Identifier $groupId) => $groupId->getValue(),
+            fn (Identifier $groupId): ?string => $groupId->getValue(),
             $groupsId
         );
 
@@ -282,7 +282,7 @@ class ModuleCommunicationFactory
     public static function groupGetGroupsAdmins(array $groupsId, PaginatorPage $page, PaginatorPageItems $pageItems): ModuleCommunicationConfigDto
     {
         $groupsIdString = array_map(
-            fn (Identifier $groupId) => $groupId->getValue(),
+            fn (Identifier $groupId): ?string => $groupId->getValue(),
             $groupsId
         );
 
@@ -363,7 +363,7 @@ class ModuleCommunicationFactory
         $content = [
             'group_id' => $groupId->getValue(),
             'users_id' => array_map(
-                fn (Identifier $userId) => $userId->getValue(),
+                fn (Identifier $userId): ?string => $userId->getValue(),
                 $usersId
             ),
         ];
@@ -449,7 +449,7 @@ class ModuleCommunicationFactory
 
         $content = [
             'groups_id' => array_map(
-                fn (Identifier $groupId) => $groupId->getValue(),
+                fn (Identifier $groupId): ?string => $groupId->getValue(),
                 $groupsId
             ),
             'system_key' => $systemKey,
@@ -513,7 +513,7 @@ class ModuleCommunicationFactory
 
         $content = [
             'groups_id' => array_map(
-                fn (Identifier $groupId) => $groupId->getValue(),
+                fn (Identifier $groupId): ?string => $groupId->getValue(),
                 $groupsId
             ),
             'system_key' => $systemKey,
@@ -540,7 +540,7 @@ class ModuleCommunicationFactory
     {
         $content = [
             'users_id' => array_map(
-                fn (Identifier $userId) => $userId->getValue(),
+                fn (Identifier $userId): ?string => $userId->getValue(),
                 $recipientUsersId
             ),
             'type' => NOTIFICATION_TYPE::USER_REGISTERED->value,
@@ -560,7 +560,7 @@ class ModuleCommunicationFactory
     public static function notificationCreateGroupUserAdded(array $recipientUsersId, NameWithSpaces $groupName, NameWithSpaces $userWhoAddsYouName, string $systemKey): ModuleCommunicationConfigDto
     {
         $recipientUsersIdPlain = array_map(
-            fn (Identifier $recipientUserId) => $recipientUserId->getValue(),
+            fn (Identifier $recipientUserId): ?string => $recipientUserId->getValue(),
             $recipientUsersId
         );
 
@@ -584,7 +584,7 @@ class ModuleCommunicationFactory
     {
         $content = [
             'users_id' => array_map(
-                fn (Identifier $userId) => $userId->getValue(),
+                fn (Identifier $userId): ?string => $userId->getValue(),
                 $recipientUsersId
             ),
             'type' => NOTIFICATION_TYPE::GROUP_CREATED->value,
@@ -604,7 +604,7 @@ class ModuleCommunicationFactory
     {
         $content = [
             'users_id' => array_map(
-                fn (Identifier $userId) => $userId->getValue(),
+                fn (Identifier $userId): ?string => $userId->getValue(),
                 $recipientUsersId
             ),
             'type' => NOTIFICATION_TYPE::GROUP_REMOVED->value,
@@ -624,7 +624,7 @@ class ModuleCommunicationFactory
     {
         $content = [
             'users_id' => array_map(
-                fn (Identifier $userId) => $userId->getValue(),
+                fn (Identifier $userId): ?string => $userId->getValue(),
                 $recipientUsersId
             ),
             'type' => NOTIFICATION_TYPE::GROUP_USER_SET_AS_ADMIN->value,
@@ -643,7 +643,7 @@ class ModuleCommunicationFactory
     public static function notificationCreateGroupUsersRemoved(array $usersId, NameWithSpaces $groupName, string $systemKey): ModuleCommunicationConfigDto
     {
         $usersIdPlain = array_map(
-            fn (Identifier $userId) => $userId->getValue(),
+            fn (Identifier $userId): ?string => $userId->getValue(),
             $usersId
         );
 
@@ -666,7 +666,7 @@ class ModuleCommunicationFactory
     {
         $content = [
             'users_id' => array_map(
-                fn (Identifier $userId) => $userId->getValue(),
+                fn (Identifier $userId): ?string => $userId->getValue(),
                 $recipientUsersId
             ),
             'type' => NOTIFICATION_TYPE::USER_EMAIL_CHANGED->value,
@@ -684,7 +684,7 @@ class ModuleCommunicationFactory
     {
         $content = [
             'users_id' => array_map(
-                fn (Identifier $userId) => $userId->getValue(),
+                fn (Identifier $userId): ?string => $userId->getValue(),
                 $recipientUsersId
             ),
             'type' => NOTIFICATION_TYPE::USER_PASSWORD_CHANGED->value,
@@ -702,7 +702,7 @@ class ModuleCommunicationFactory
     {
         $content = [
             'users_id' => array_map(
-                fn (Identifier $userId) => $userId->getValue(),
+                fn (Identifier $userId): ?string => $userId->getValue(),
                 $recipientUsersId
             ),
             'type' => NOTIFICATION_TYPE::USER_PASSWORD_REMEMBER->value,
@@ -771,7 +771,7 @@ class ModuleCommunicationFactory
     public static function notificationsRemove(array $notificationsId): ModuleCommunicationConfigDto
     {
         $notificationsIdString = array_map(
-            fn (Identifier $notificationId) => $notificationId->getValue(),
+            fn (Identifier $notificationId): ?string => $notificationId->getValue(),
             $notificationsId
         );
 
@@ -829,11 +829,11 @@ class ModuleCommunicationFactory
 
         $content = [
             'groups_id_remove' => array_map(
-                fn (Identifier $groupId) => $groupId->getValue(),
+                fn (Identifier $groupId): ?string => $groupId->getValue(),
                 $groupsIdToRemove
             ),
             'groups_id_change_user_id' => array_map(
-                fn (Identifier $groupId) => $groupId->getValue(),
+                fn (Identifier $groupId): ?string => $groupId->getValue(),
                 $groupsIdToChangeUserId
             ),
             'system_key' => $systemKey,
@@ -865,11 +865,11 @@ class ModuleCommunicationFactory
 
         $content = [
             'groups_id_remove' => array_map(
-                fn (Identifier $groupId) => $groupId->getValue(),
+                fn (Identifier $groupId): ?string => $groupId->getValue(),
                 $groupsIdToRemove
             ),
             'groups_id_change_user_id' => array_map(
-                fn (Identifier $groupId) => $groupId->getValue(),
+                fn (Identifier $groupId): ?string => $groupId->getValue(),
                 $groupsIdToChangeUserId
             ),
             'system_key' => $systemKey,

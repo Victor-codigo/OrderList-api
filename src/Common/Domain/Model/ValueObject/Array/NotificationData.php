@@ -9,6 +9,7 @@ use Common\Domain\Validation\ConstraintFactory;
 
 class NotificationData extends ArrayValueObject
 {
+    #[\Override]
     public function defineConstraints(): void
     {
         $this
@@ -16,6 +17,7 @@ class NotificationData extends ArrayValueObject
             ->setConstraint(ConstraintFactory::type(TYPES::ARRAY));
     }
 
+    #[\Override]
     public function getValueObjects(): array
     {
         return [];

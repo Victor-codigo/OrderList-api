@@ -13,7 +13,7 @@ class GroupUserRemoveRequestDto implements RequestDtoInterface
 {
     use RequestDataValidation;
 
-    private const USERS_NUM_MAX = AppConfig::ENDPOINT_GROUP_USER_REMOVE_MAX_USERS;
+    private const int USERS_NUM_MAX = AppConfig::ENDPOINT_GROUP_USER_REMOVE_MAX_USERS;
 
     public ?string $groupId;
     /**

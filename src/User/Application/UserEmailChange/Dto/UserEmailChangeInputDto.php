@@ -18,7 +18,7 @@ class UserEmailChangeInputDto implements ServiceInputDtoInterface
     public readonly Email $email;
     public readonly Password $password;
 
-    public function __construct(Identifier $userId, string $userEmail, string|null $email, string|null $password)
+    public function __construct(Identifier $userId, string $userEmail, ?string $email, ?string $password)
     {
         $this->userId = $userId;
         $this->userEmail = ValueObjectFactory::createEmail($userEmail);
@@ -26,6 +26,7 @@ class UserEmailChangeInputDto implements ServiceInputDtoInterface
         $this->password = ValueObjectFactory::createPassword($password);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

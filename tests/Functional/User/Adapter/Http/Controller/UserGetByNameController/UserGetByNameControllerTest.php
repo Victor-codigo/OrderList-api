@@ -16,11 +16,12 @@ class UserGetByNameControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/users/name';
-    private const METHOD = 'GET';
+    private const string ENDPOINT = '/api/v1/users/name';
+    private const string METHOD = 'GET';
 
     private UserGetByNameController $object;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -143,8 +144,8 @@ class UserGetByNameControllerTest extends WebClientTestCase
     {
         $client = $this->getNewClientAuthenticatedUser();
         $userData = $this->getUsersData();
-        $usersNames = array_map(fn (User $user) => $user->getName()->getValue(), $userData);
-        $usersIds = array_map(fn (User $user) => $user->getId()->getValue(), $userData);
+        $usersNames = array_map(fn (User $user): ?string => $user->getName()->getValue(), $userData);
+        $usersIds = array_map(fn (User $user): ?string => $user->getId()->getValue(), $userData);
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT.'/'.implode(',', $usersNames),

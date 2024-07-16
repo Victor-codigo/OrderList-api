@@ -10,14 +10,14 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GroupUserRoleChangeRequestDto implements RequestDtoInterface
 {
-    private const USERS_NUM_MAX = AppConfig::ENDPOINT_GROUP_USER_ROLE_CHANGE_MAX_USERS;
+    private const int USERS_NUM_MAX = AppConfig::ENDPOINT_GROUP_USER_ROLE_CHANGE_MAX_USERS;
 
-    public readonly string|null $groupId;
+    public readonly ?string $groupId;
     /**
      * @var string[]|null
      */
-    public readonly array|null $usersId;
-    public readonly bool|null $admin;
+    public readonly ?array $usersId;
+    public readonly ?bool $admin;
 
     public function __construct(Request $request)
     {
@@ -29,7 +29,7 @@ class GroupUserRoleChangeRequestDto implements RequestDtoInterface
     /**
      * @param string[]|null $usersId
      */
-    private function removeUsersOverflow(array|null $usersId): array|null
+    private function removeUsersOverflow(?array $usersId): ?array
     {
         if (null === $usersId) {
             return null;

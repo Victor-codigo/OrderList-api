@@ -14,6 +14,7 @@ class PaginatorPageItemsTest extends TestCase
 {
     private ValidationInterface $validation;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

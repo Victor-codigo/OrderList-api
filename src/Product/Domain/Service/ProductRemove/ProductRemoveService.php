@@ -38,7 +38,7 @@ class ProductRemoveService
         $this->productRepository->remove($productsToRemove);
 
         return array_map(
-            fn (Product $product) => $product->getId(),
+            fn (Product $product): Identifier => $product->getId(),
             $productsToRemove
         );
     }

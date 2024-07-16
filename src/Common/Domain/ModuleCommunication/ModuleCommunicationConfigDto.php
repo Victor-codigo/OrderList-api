@@ -21,6 +21,7 @@ class ModuleCommunicationConfigDto implements ModuleCommunicationConfigDtoPagina
     ) {
     }
 
+    #[\Override]
     public function cloneWithPage(int $page): self
     {
         $query = $this->query;
@@ -40,6 +41,7 @@ class ModuleCommunicationConfigDto implements ModuleCommunicationConfigDtoPagina
         );
     }
 
+    #[\Override]
     public function getPage(): int
     {
         return $this->query['page'];
@@ -48,6 +50,7 @@ class ModuleCommunicationConfigDto implements ModuleCommunicationConfigDtoPagina
     /**
      * Gets the path (separated by ".") where pages total is set in array response.
      */
+    #[\Override]
     public function getResponsePagesTotalPath(): string
     {
         return 'pages_total';

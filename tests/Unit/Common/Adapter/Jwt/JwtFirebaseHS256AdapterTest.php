@@ -12,8 +12,8 @@ use PHPUnit\Framework\TestCase;
 
 class JwtFirebaseHS256AdapterTest extends TestCase
 {
-    private const SECRET_KEY = 'this is a secret key';
-    private const PAYLOAD = [
+    private const string SECRET_KEY = 'this is a secret key';
+    private const array PAYLOAD = [
         'param1' => 1,
         'param2' => 'two',
         'param3' => true,
@@ -22,6 +22,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
     private MockObject|JwtFirebaseHS256Adapter $object;
     private Key $secretKey;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->markTestSkipped('Install library [composer require firebase/php-jwt]');
@@ -91,7 +92,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
     }
 
     /** @test */
-    public function itShouldNotBeExpiredNotAttributeExpired()
+    public function itShouldNotBeExpiredNotAttributeExpired(): void
     {
         $token = $this->object->encode(self::PAYLOAD);
         $tokenDecoded = $this->object->decode($token);
@@ -109,7 +110,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
     }
 
     /** @test */
-    public function itShouldNotBeExpiredTimeToExpireIsTheSameAsTimeNow()
+    public function itShouldNotBeExpiredTimeToExpireIsTheSameAsTimeNow(): void
     {
         $expirationInSeconds = 60 * 60 * 24;
         $dateTimeNow = new \DateTime();
@@ -119,7 +120,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
         $this->object
             ->expects($matcher)
             ->method('getDateTime')
-            ->willReturnCallback(function (float|null $timestamp) use ($matcher, $dateTimeTokenExpiration, $dateTimeNow) {
+            ->willReturnCallback(function (?float $timestamp) use ($matcher, $dateTimeTokenExpiration, $dateTimeNow) {
                 $expectedNumCall = $matcher->getInvocationCount();
 
                 return match ([$expectedNumCall, $timestamp]) {
@@ -140,7 +141,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
     }
 
     /** @test */
-    public function itShouldNotBeExpiredTimeToExpireIsHigherThanTimeNow()
+    public function itShouldNotBeExpiredTimeToExpireIsHigherThanTimeNow(): void
     {
         $expirationInSeconds = 60 * 60 * 24;
         $dateTimeNow = new \DateTime();
@@ -174,7 +175,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
     }
 
     /** @test */
-    public function itShouldBeExpiredTimeToExpireIsLowerThanTimeNow()
+    public function itShouldBeExpiredTimeToExpireIsLowerThanTimeNow(): void
     {
         $expirationInSeconds = 60 * 60 * 24;
         $dateTimeNow = new \DateTime();

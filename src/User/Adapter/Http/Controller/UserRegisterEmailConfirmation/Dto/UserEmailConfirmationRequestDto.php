@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class UserEmailConfirmationRequestDto implements RequestDtoInterface
 {
-    public readonly string|null $token;
+    public readonly ?string $token;
 
     public function __construct(Request $request)
     {

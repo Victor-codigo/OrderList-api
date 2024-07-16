@@ -14,6 +14,7 @@ class RequestValidationTest extends TestCase
 {
     private RequestValidation $requestValidation;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->requestValidation = new RequestValidation();

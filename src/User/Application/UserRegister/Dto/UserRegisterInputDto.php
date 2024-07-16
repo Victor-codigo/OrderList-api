@@ -62,6 +62,7 @@ final class UserRegisterInputDto implements ServiceInputDtoInterface
         );
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

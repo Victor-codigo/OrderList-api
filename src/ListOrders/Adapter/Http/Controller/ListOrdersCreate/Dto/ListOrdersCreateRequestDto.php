@@ -9,10 +9,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ListOrdersCreateRequestDto implements RequestDtoInterface
 {
-    public readonly string|null $groupId;
-    public readonly string|null $name;
-    public readonly string|null $description;
-    public readonly string|null $dateToBuy;
+    public readonly ?string $groupId;
+    public readonly ?string $name;
+    public readonly ?string $description;
+    public readonly ?string $dateToBuy;
 
     public function __construct(Request $request)
     {

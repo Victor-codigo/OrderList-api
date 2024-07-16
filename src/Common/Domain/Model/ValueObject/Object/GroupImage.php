@@ -9,6 +9,7 @@ use Common\Domain\Validation\ConstraintFactory;
 
 class GroupImage extends ObjectValueObject
 {
+    #[\Override]
     public function getValidationValue(): mixed
     {
         if (null === $this->value) {
@@ -18,12 +19,14 @@ class GroupImage extends ObjectValueObject
         return $this->value->getFile();
     }
 
+    #[\Override]
     public function defineConstraints(): void
     {
         $this
             ->setConstraint(ConstraintFactory::image(
                 VALUE_OBJECTS_CONSTRAINTS::FILE_GROUP_IMAGE_MAX_FILE_SIZE,
                 VALUE_OBJECTS_CONSTRAINTS::FILE_GROUP_IMAGE_MIME_TYPES,
+                VALUE_OBJECTS_CONSTRAINTS::FILE_GROUP_IMAGE_NAME_MAX_LENGTH,
                 VALUE_OBJECTS_CONSTRAINTS::FILE_GROUP_IMAGE_MIN_WITH,
                 VALUE_OBJECTS_CONSTRAINTS::FILE_GROUP_IMAGE_MAX_WITH,
                 VALUE_OBJECTS_CONSTRAINTS::FILE_GROUP_IMAGE_MIN_HEIGH,

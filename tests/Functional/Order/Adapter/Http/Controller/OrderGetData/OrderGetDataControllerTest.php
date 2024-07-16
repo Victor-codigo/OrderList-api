@@ -21,11 +21,11 @@ class OrderGetDataControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/orders';
-    private const METHOD = 'GET';
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const LIST_ORDERS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
-    private const ORDERS_ID = [
+    private const string ENDPOINT = '/api/v1/orders';
+    private const string METHOD = 'GET';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string LIST_ORDERS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
+    private const array ORDERS_ID = [
         '9a48ac5b-4571-43fd-ac80-28b08124ffb8',
         'a0b4760a-9037-477a-8b84-d059ae5ee7e9',
         '5cfe52e5-db78-41b3-9acd-c3c84924cb9b',
@@ -34,11 +34,6 @@ class OrderGetDataControllerTest extends WebClientTestCase
         '72f2f46d-3f3f-48d0-b4eb-5cbed7896cab',
         'fad53d41-d396-4f5b-91c3-d30fd6b66845',
     ];
-
-    private const USER_HAS_NO_GROUP_EMAIL = 'email.other_2.active@host.com';
-    private const USER_HAS_NO_GROUP_PASSWORD = '123456';
-    private const GROUP_EXISTS_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const GROUP_ID_EXISTS_USER_NOT_BELONGS = '4d52266f-aa7e-324e-b92d-6152635dd09e';
 
     private function getOrdersDataExpected(): array
     {

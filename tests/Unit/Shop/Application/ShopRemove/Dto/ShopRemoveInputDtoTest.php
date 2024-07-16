@@ -14,12 +14,13 @@ use Shop\Application\ShopRemove\Dto\ShopRemoveInputDto;
 
 class ShopRemoveInputDtoTest extends TestCase
 {
-    private const GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const SHOP_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
+    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string SHOP_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
 
     private ValidationInterface $validator;
     private MockObject|UserShared $userShared;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -130,9 +131,9 @@ class ShopRemoveInputDtoTest extends TestCase
         $return = $object->validate($this->validator);
 
         $this->assertEquals([
-                'group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
-                'shops_id_empty' => [VALIDATION_ERRORS::NOT_BLANK],
-            ],
+            'group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL],
+            'shops_id_empty' => [VALIDATION_ERRORS::NOT_BLANK],
+        ],
             $return
         );
     }

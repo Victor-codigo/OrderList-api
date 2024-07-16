@@ -9,6 +9,7 @@ use Common\Domain\Validation\ConstraintFactory;
 
 class Language extends StringValueObject
 {
+    #[\Override]
     protected function defineConstraints(): void
     {
         $this

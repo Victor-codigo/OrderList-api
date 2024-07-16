@@ -12,6 +12,7 @@ class CustomEvent implements EventDomainInterface
     {
     }
 
+    #[\Override]
     public function getOccurredOn(): \DateTimeImmutable
     {
         return new \DateTimeImmutable();

@@ -25,6 +25,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
     private MockObject|PaginatorInterface $ordersToRemovePaginator;
     private MockObject|PaginatorInterface $ordersToChangeUserIdPaginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -133,7 +134,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
     private function getOrdersToChangeUserIdAlreadyChanged(array $orders): array
     {
         $ordersToModify = array_map(
-            fn (Order $order) => clone $order,
+            fn (Order $order): Order => clone $order,
             $orders
         );
 
@@ -150,7 +151,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
     private function getOrdersId(array $orders): array
     {
         return array_map(
-            fn (Order $order) => $order->getId(),
+            fn (Order $order): Identifier => $order->getId(),
             $orders
         );
     }
@@ -206,7 +207,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $this->orderRepository
             ->expects($orderRepositoryMatcher)
             ->method('findGroupsOrdersOrFail')
-            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId) {
+            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId): bool {
                 match ($orderRepositoryMatcher->getInvocationCount()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveOrders, $groupsId),
                     2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
@@ -308,7 +309,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $this->orderRepository
             ->expects($orderRepositoryMatcher)
             ->method('findGroupsOrdersOrFail')
-            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId) {
+            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId): bool {
                 match ($orderRepositoryMatcher->getInvocationCount()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveOrders, $groupsId),
                     2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
@@ -316,11 +317,9 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
 
                 return true;
             }))
-            ->willReturnCallback(function () use ($orderRepositoryMatcher) {
-                return match ($orderRepositoryMatcher->getInvocationCount()) {
-                    1 => throw new DBNotFoundException(),
-                    2 => $this->ordersToChangeUserIdPaginator
-                };
+            ->willReturnCallback(fn (): MockObject|PaginatorInterface => match ($orderRepositoryMatcher->getInvocationCount()) {
+                1 => throw new DBNotFoundException(),
+                2 => $this->ordersToChangeUserIdPaginator
             });
 
         $this->ordersToRemovePaginator
@@ -446,7 +445,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $this->orderRepository
             ->expects($orderRepositoryMatcher)
             ->method('findGroupsOrdersOrFail')
-            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId) {
+            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId): bool {
                 match ($orderRepositoryMatcher->getInvocationCount()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveOrders, $groupsId),
                     2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
@@ -454,11 +453,9 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
 
                 return true;
             }))
-            ->willReturnCallback(function () use ($orderRepositoryMatcher) {
-                return match ($orderRepositoryMatcher->getInvocationCount()) {
-                    1 => $this->ordersToRemovePaginator,
-                    2 => throw new DBNotFoundException()
-                };
+            ->willReturnCallback(fn (): MockObject|PaginatorInterface => match ($orderRepositoryMatcher->getInvocationCount()) {
+                1 => $this->ordersToRemovePaginator,
+                2 => throw new DBNotFoundException()
             });
 
         $this->ordersToRemovePaginator
@@ -503,7 +500,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $this->orderRepository
             ->expects($orderRepositoryMatcher)
             ->method('findGroupsOrdersOrFail')
-            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId) {
+            ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId): bool {
                 match ($orderRepositoryMatcher->getInvocationCount()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveOrders, $groupsId),
                     2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)

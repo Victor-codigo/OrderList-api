@@ -27,20 +27,21 @@ class ProductRemoveInputDto implements ServiceInputDtoInterface
      * @param string[]|null $productsId
      * @param string[]|null $shopsId
      */
-    public function __construct(UserShared $userSession, string|null $groupId, array|null $productsId, array|null $shopsId)
+    public function __construct(UserShared $userSession, ?string $groupId, ?array $productsId, ?array $shopsId)
     {
         $this->userSession = $userSession;
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
         $this->productsId = array_map(
-            fn (string $productId) => ValueObjectFactory::createIdentifier($productId),
+            fn (string $productId): Identifier => ValueObjectFactory::createIdentifier($productId),
             $productsId ?? []
         );
         $this->shopsId = array_map(
-            fn (string $shopId) => ValueObjectFactory::createIdentifier($shopId),
+            fn (string $shopId): Identifier => ValueObjectFactory::createIdentifier($shopId),
             $shopsId ?? []
         );
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray([

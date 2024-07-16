@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Product\Application\ProductGetData\Dto;
 
-use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
@@ -17,8 +16,6 @@ use Common\Domain\Validation\ValidationInterface;
 
 class ProductGetDataInputDto implements ServiceInputDtoInterface
 {
-    private const PRODUCT_NAME_STARTS_BY_LENGTH_MAX = VALUE_OBJECTS_CONSTRAINTS::NAME_WITH_SPACES_MAX_LENGTH;
-
     public readonly Identifier $groupId;
     /**
      * @var Identifier[]
@@ -39,15 +36,15 @@ class ProductGetDataInputDto implements ServiceInputDtoInterface
     public readonly PaginatorPageItems $pageItems;
 
     public function __construct(
-        string|null $groupId,
-        array|null $productsId,
-        array|null $shopsId,
-        string|null $productName,
+        ?string $groupId,
+        ?array $productsId,
+        ?array $shopsId,
+        ?string $productName,
 
-        string|null $productNameFilterType,
-        string|null $productNameFilterValue,
-        string|null $shopNameFilterType,
-        string|null $shopNameFilterValue,
+        ?string $productNameFilterType,
+        ?string $productNameFilterValue,
+        ?string $shopNameFilterType,
+        ?string $shopNameFilterValue,
 
         bool $orderAsc,
 
@@ -57,11 +54,11 @@ class ProductGetDataInputDto implements ServiceInputDtoInterface
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
         $this->productName = ValueObjectFactory::createNameWithSpaces($productName);
         $this->productsId = array_map(
-            fn (string $productId) => ValueObjectFactory::createIdentifier($productId),
+            fn (string $productId): Identifier => ValueObjectFactory::createIdentifier($productId),
             $productsId ?? []
         );
         $this->shopsId = array_map(
-            fn (string $shopId) => ValueObjectFactory::createIdentifier($shopId),
+            fn (string $shopId): Identifier => ValueObjectFactory::createIdentifier($shopId),
             $shopsId ?? []
         );
 
@@ -80,6 +77,7 @@ class ProductGetDataInputDto implements ServiceInputDtoInterface
         $this->pageItems = ValueObjectFactory::createPaginatorPageItems($pageItems);
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray(['group_id' => $this->groupId]);

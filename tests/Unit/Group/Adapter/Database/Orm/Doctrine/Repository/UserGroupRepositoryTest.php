@@ -7,6 +7,7 @@ namespace Test\Unit\Group\Adapter\Database\Orm\Doctrine\Repository;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Object\Rol;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\Group\GROUP_ROLES;
@@ -23,16 +24,17 @@ class UserGroupRepositoryTest extends DataBaseTestCase
 {
     use RefreshDatabaseTrait;
 
-    private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const GROUP_2_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const GROUP_3_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
-    private const GROUP_4_ID = 'e05b2466-9528-4815-ac7f-663c1d89ab55';
-    private const GROUP_5_ID = '78b96ac1-ffcc-458b-8f48-b40c6e65261f';
-    private const GROUP_USER_ADMIN_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
+    private const string GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const string GROUP_2_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
+    private const string GROUP_3_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
+    private const string GROUP_4_ID = 'e05b2466-9528-4815-ac7f-663c1d89ab55';
+    private const string GROUP_5_ID = '78b96ac1-ffcc-458b-8f48-b40c6e65261f';
+    private const string GROUP_USER_ADMIN_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
     private UserGroupRepository $object;
     private GroupRepositoryInterface $groupRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -188,7 +190,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
             'groupId' => $groupsId,
             'userId' => [
                 ValueObjectFactory::createIdentifier('1befdbe2-9c14-42f0-850f-63e061e33b8f'),
-                ValueObjectFactory::createIdentifier('0b13e52d-b058-32fb-8507-10dec634a07c'),
+                ValueObjectFactory::createIdentifier('4d59c61e-4f51-3ffe-b4b9-e622436b6fa3'),
             ]]);
 
         $this->assertEqualsCanonicalizing($expected, $return);
@@ -210,7 +212,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
     {
         $groupUsersId = $this->getGroupUserIds();
         $groupUsersIdentifiers = array_map(
-            fn (string $userId) => ValueObjectFactory::createIdentifier($userId),
+            fn (string $userId): Identifier => ValueObjectFactory::createIdentifier($userId),
             $groupUsersId
         );
 
@@ -235,7 +237,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $groupUsersId[] = 'ac2622c7-a38a-4581-980e-a63bec3cc5f0';
         $groupUsersId[] = '9212bf15-915c-4903-824b-6b177e338cde';
         $groupUsersIdentifiers = array_map(
-            fn (string $userId) => ValueObjectFactory::createIdentifier($userId),
+            fn (string $userId): Identifier => ValueObjectFactory::createIdentifier($userId),
             $groupUsersId
         );
 
@@ -261,7 +263,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
             '9212bf15-915c-4903-824b-6b177e338cde',
         ];
         $groupUsersIdentifiers = array_map(
-            fn (string $userId) => ValueObjectFactory::createIdentifier($userId),
+            fn (string $userId): Identifier => ValueObjectFactory::createIdentifier($userId),
             $groupUsersId
         );
 
@@ -329,7 +331,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $userId = ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID);
         $groups = array_filter(
             $this->object->findBy(['userId' => $userId]),
-            fn (UserGroup $userGroup) => $userGroup->getRoles()->has(Rol::fromString(GROUP_ROLES::ADMIN->value))
+            fn (UserGroup $userGroup): bool => $userGroup->getRoles()->has(Rol::fromString(GROUP_ROLES::ADMIN->value))
         );
 
         $return = $this->object->findUserGroupsById($userId, GROUP_ROLES::ADMIN);
@@ -347,7 +349,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $userId = ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID);
         $groups = array_filter(
             $this->object->findBy(['userId' => $userId]),
-            fn (UserGroup $userGroup) => $userGroup->getRoles()->has(Rol::fromString(GROUP_ROLES::USER->value))
+            fn (UserGroup $userGroup): bool => $userGroup->getRoles()->has(Rol::fromString(GROUP_ROLES::USER->value))
         );
 
         $return = $this->object->findUserGroupsById($userId, GROUP_ROLES::USER);
@@ -682,7 +684,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
     public function itShouldRemoveUsersGroup(): void
     {
         $usersId = array_map(
-            fn (string $userId) => ValueObjectFactory::createIdentifier($userId),
+            fn (string $userId): Identifier => ValueObjectFactory::createIdentifier($userId),
             array_slice($this->getGroupUserIds(), 0, 3)
         );
         $usersGroup = $this->object->findBy([

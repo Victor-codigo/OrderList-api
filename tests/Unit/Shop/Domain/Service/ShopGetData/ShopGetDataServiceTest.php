@@ -19,13 +19,14 @@ use Shop\Domain\Service\ShopGetData\ShopGetDataService;
 
 class ShopGetDataServiceTest extends TestCase
 {
-    private const APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
-    private const SHOP_PUBLIC_IMAGE_PATH = '/shopPublicImagePath';
+    private const string APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
+    private const string SHOP_PUBLIC_IMAGE_PATH = '/shopPublicImagePath';
 
     private ShopGetDataService $object;
     private MockObject|ShopRepositoryInterface $shopRepository;
     private MockObject|PaginatorInterface $paginator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -49,7 +50,7 @@ class ShopGetDataServiceTest extends TestCase
         $shops = $this->getShops();
 
         return array_map(
-            function (Shop $shop) {
+            function (Shop $shop): Shop {
                 if (!$shop->getImage()->isNull()) {
                     $shop->setImage(
                         ValueObjectFactory::createPath(self::APP_PROTOCOL_AND_DOMAIN.self::SHOP_PUBLIC_IMAGE_PATH.'/'.$shop->getImage()->getValue())

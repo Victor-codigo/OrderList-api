@@ -22,7 +22,7 @@ class ListOrdersModifyInputDto implements ServiceInputDtoInterface
     public readonly Description $description;
     public readonly DateNowToFuture $dateToBuy;
 
-    public function __construct(UserShared $userSession, string|null $listOrdersId, string|null $groupId, string|null $name, string|null $description, string|null $dateToBuy)
+    public function __construct(UserShared $userSession, ?string $listOrdersId, ?string $groupId, ?string $name, ?string $description, ?string $dateToBuy)
     {
         $this->userSession = $userSession;
         $this->listOrdersId = ValueObjectFactory::createIdentifier($listOrdersId);
@@ -32,7 +32,7 @@ class ListOrdersModifyInputDto implements ServiceInputDtoInterface
         $this->dateToBuy = ValueObjectFactory::createDateNowToFuture($this->stringDateToDateTime($dateToBuy));
     }
 
-    private function stringDateToDateTime(string|null $date): \DateTime|null
+    private function stringDateToDateTime(?string $date): ?\DateTime
     {
         if (null === $date) {
             return null;
@@ -47,6 +47,7 @@ class ListOrdersModifyInputDto implements ServiceInputDtoInterface
         return null;
     }
 
+    #[\Override]
     public function validate(ValidationInterface $validator): array
     {
         return $validator->validateValueObjectArray([

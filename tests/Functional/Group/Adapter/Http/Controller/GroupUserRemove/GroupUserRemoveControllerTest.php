@@ -13,12 +13,12 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const ENDPOINT = '/api/v1/groups/user';
-    private const METHOD = 'DELETE';
-    private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const GROUP_TYPE_USER_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
-    private const GROUP_USER_ADMIN_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
-    private const GROUP_USERS_TO_REMOVE_ID = [
+    private const string ENDPOINT = '/api/v1/groups/user';
+    private const string METHOD = 'DELETE';
+    private const string GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const string GROUP_TYPE_USER_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
+    private const string GROUP_USER_ADMIN_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
+    private const array GROUP_USERS_TO_REMOVE_ID = [
         '1befdbe2-9c14-42f0-850f-63e061e33b8f',
         '08eda546-739f-4ab7-917a-8a9dbee426ef',
         '6df60afd-f7c3-4c2c-b920-e265f266c560',

@@ -17,12 +17,13 @@ use PHPUnit\Framework\TestCase;
 
 class UserHasGroupAdminGrantsServiceTest extends TestCase
 {
-    private const GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
-    private const GROUP_USER_ADMIN_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
+    private const string GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const string GROUP_USER_ADMIN_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
     private UserHasGroupAdminGrantsService $object;
     private MockObject|UserGroupRepositoryInterface $userGroupRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

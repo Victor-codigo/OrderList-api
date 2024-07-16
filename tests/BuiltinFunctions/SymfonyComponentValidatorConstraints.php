@@ -6,10 +6,10 @@ namespace Symfony\Component\Validator\Constraints;
 
 class BuiltInFunctionsReturn
 {
-    public static bool|null $is_readable = null;
-    public static int|null $filesize = null;
-    public static array|null $getimagesize = null;
-    public static bool|null $unlink = null;
+    public static ?bool $is_readable = null;
+    public static ?int $filesize = null;
+    public static ?array $getimagesize = null;
+    public static ?bool $unlink = null;
     public static \GdImage|false|null $imagecreatefromstring = null;
 }
 
@@ -23,7 +23,7 @@ function filesize(string $fileName): int
     return BuiltInFunctionsReturn::$filesize ?? \filesize($fileName);
 }
 
-function getimagesize(string $filename, array|null &$imageInfo = null): array
+function getimagesize(string $filename, ?array &$imageInfo = null): array
 {
     return BuiltInFunctionsReturn::$getimagesize ?? \getimagesize($filename, $imageInfo);
 }
