@@ -38,6 +38,16 @@ list_orders_get_data:
     api_version: '\d+[.\d]?'
 
 # -------------------------------------------------------------
+# LIST ORDERS GET FIRST LETTER
+# -------------------------------------------------------------
+list_orders_get_first_letter:
+  path: /api/v{api_version}/list-orders/first-letter
+  methods: GET
+  controller: ListOrders\Adapter\Http\Controller\ListOrdersGetFirstLetter\ListOrdersGetFirstLetterController
+  requirements:
+    api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
 # LIST ORDERS REMOVE
 # -------------------------------------------------------------
 list_orders_remove:

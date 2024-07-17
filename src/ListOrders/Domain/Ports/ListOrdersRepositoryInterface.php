@@ -66,4 +66,9 @@ interface ListOrdersRepositoryInterface extends RepositoryInterface
      * @throws DBNotFoundException
      */
     public function findGroupsListsOrdersOrFail(array $groupsId): PaginatorInterface;
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findGroupListOrdersFirstLetterOrFail(Identifier $groupId): array;
 }

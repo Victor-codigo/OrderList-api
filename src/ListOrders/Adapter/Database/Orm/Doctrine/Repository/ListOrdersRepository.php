@@ -34,7 +34,6 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
      * @throws DBUniqueConstraintException
      * @throws DBConnectionException
      */
-    #[\Override]
     public function save(array $listsOrders): void
     {
         try {
@@ -54,7 +53,6 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
      * @throws DBUniqueConstraintException
      * @throws DBConnectionException
      */
-    #[\Override]
     public function saveListOrdersAndOrders(ListOrders $listOrders): void
     {
         try {
@@ -77,7 +75,6 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
      *
      * @throws DBConnectionException
      */
-    #[\Override]
     public function remove(array $listsOrders): void
     {
         try {
@@ -96,7 +93,6 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
      *
      * @throws DBNotFoundException
      */
-    #[\Override]
     public function findListOrderByIdOrFail(array $ListsOrdersId, ?Identifier $groupId = null): PaginatorInterface
     {
         $query = $this->entityManager
@@ -118,7 +114,6 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     /**
      * @throws DBNotFoundException
      */
-    #[\Override]
     public function findListOrdersGroup(Identifier $groupId, bool $orderAsc): PaginatorInterface
     {
         $listOrdersEntity = ListOrders::class;
@@ -138,7 +133,6 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     /**
      * @throws DBNotFoundException
      */
-    #[\Override]
     public function findListOrderByListOrdersNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface
     {
         $listOrdersEntity = ListOrders::class;
@@ -160,7 +154,6 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     /**
      * @throws DBNotFoundException
      */
-    #[\Override]
     public function findListOrderByProductNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface
     {
         $listOrdersEntity = ListOrders::class;
@@ -186,7 +179,6 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     /**
      * @throws DBNotFoundException
      */
-    #[\Override]
     public function findListOrderByShopNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface
     {
         $listOrdersEntity = ListOrders::class;
@@ -214,7 +206,6 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
      *
      * @throws DBNotFoundException
      */
-    #[\Override]
     public function findGroupsListsOrdersOrFail(array $groupsId): PaginatorInterface
     {
         $listOrdersEntity = ListOrders::class;
@@ -227,5 +218,34 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
         return $this->dqlPaginationOrFail($dql, [
             'groupsId' => $groupsId,
         ]);
+    }
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findGroupListOrdersFirstLetterOrFail(Identifier $groupId): array
+    {
+        $listOrdersEntity = ListOrders::class;
+        $dql = <<<DQL
+            SELECT DISTINCT SUBSTRING(listOrders.name, 1, 1) AS firstLetter
+            FROM {$listOrdersEntity} listOrders
+            WHERE listOrders.groupId = :groupId
+            GROUP BY firstLetter
+            ORDER BY firstLetter ASC
+        DQL;
+
+        $queryResult = $this->entityManager
+            ->createQuery($dql)
+            ->setParameter('groupId', $groupId)
+            ->getArrayResult();
+
+        if (empty($queryResult)) {
+            throw DBNotFoundException::fromMessage('listOrders not found');
+        }
+
+        return array_map(
+            fn (array $row): string => mb_strtolower($row['firstLetter']),
+            $queryResult
+        );
     }
 }

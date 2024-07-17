@@ -35,6 +35,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     ];
     private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const string GROUP_ID_2 = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
+    private const string GROUP_ID_3 = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
     private const string USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
     private ListOrdersRepository $object;
@@ -623,5 +624,25 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
 
         $this->expectException(DBNotFoundException::class);
         $this->object->findGroupsListsOrdersOrFail($groupsId);
+    }
+
+    /** @test */
+    public function itShouldGetFirstLetterOfAllListOrdersInAGroup(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $expected = ['l'];
+
+        $return = $this->object->findGroupListOrdersFirstLetterOrFail($groupId);
+
+        $this->assertEquals($expected, $return);
+    }
+
+    /** @test */
+    public function itShouldFailGetFirstLetterOfAllListOrdersInAGroupNoListOrders(): void
+    {
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID_3);
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findGroupListOrdersFirstLetterOrFail($groupId);
     }
 }

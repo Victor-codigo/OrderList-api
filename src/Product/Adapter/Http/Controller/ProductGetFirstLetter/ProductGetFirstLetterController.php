@@ -63,7 +63,7 @@ use Symfony\Component\HttpFoundation\Response;
 
         new OA\Response(
             response: Response::HTTP_BAD_REQUEST,
-            description: 'Some error message',
+            description: 'An error occurred',
             content: new OA\MediaType(
                 mediaType: 'application/json',
                 schema: new OA\Schema(
