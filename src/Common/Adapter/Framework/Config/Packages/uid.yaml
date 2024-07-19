@@ -1,0 +1,4 @@
+imports:
+    - {
+          resource: "../../../../../User/Adapter/Framework/Config/packages/uid.yaml",
+      }
