@@ -1,5 +1,6 @@
 twig:
-    default_path: '%kernel.project_dir%/src/User/Adapter/Templates'
+    paths:
+        src/User/Adapter/Templates: ~
 
 when@test:
     twig:

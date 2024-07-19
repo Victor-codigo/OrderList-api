@@ -19,9 +19,9 @@ use User\Application\UserModify\UserModifyUseCase;
 use User\Domain\Port\User\UserInterface;
 
 #[OA\Tag('User')]
-#[OA\Put(description: 'This is the one to be use instead of POST version. The structure is the same as POST, but for documentation purposes POST version exists ')]
-#[OA\Post(
-    description: 'Modify current user. (Use PUT version)',
+#[OA\Post(description: '<strong>Use PUT version</strong>')]
+#[OA\Put(
+    description: 'Modify current user.',
     requestBody: new OA\RequestBody(
         required: true,
         content: [new OA\MediaType(

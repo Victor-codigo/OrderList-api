@@ -17,7 +17,7 @@ use User\Application\GetUsers\GetUsersUseCase;
 
 #[OA\Tag('User')]
 #[OA\Get(
-    description: 'Get users information',
+    description: 'Get a list with users data',
     parameters: [
         new OA\Parameter(
             name: 'users_id',

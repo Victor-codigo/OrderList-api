@@ -28,6 +28,7 @@ parameters:
     common.app.protocolAndDomain: "%env(string:PROTOCOL)%://%env(string:DOMAIN_NAME)%"
     common.app.userTryoutId: "%env(string:USER_TRY_OUT_ID)%"
     common.system.key: "%env(string:SYSTEM_KEY)%"
+    common.system.debug: "%env(bool:APP_DEBUG)%"
     user.jwt_key: "%env(file:resolve:JWT_SECRET_KEY)%"
 
 services:
@@ -41,6 +42,7 @@ services:
             $appDomain: "%common.app.domain%"
             $appProtocolAndDomain: "%common.app.protocolAndDomain%"
             $userTryoutId: "%common.app.userTryoutId%"
+            $appDebug: "%common.system.debug%"
 
     # Adapter
     Common\Adapter\:

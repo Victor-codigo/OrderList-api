@@ -16,7 +16,7 @@ use User\Application\UserPasswordRememberChange\UserPasswordRememberChangeUseCas
 
 #[OA\Tag('User')]
 #[OA\Patch(
-    description: 'Changes the user\'s password',
+    description: 'Changes the user\'s password, after request password remember',
     requestBody: new OA\RequestBody(
         required: true,
         content: [new OA\MediaType(

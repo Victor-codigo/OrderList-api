@@ -19,7 +19,7 @@ use User\Application\UserRemove\UserRemoveUseCase;
 
 #[OA\Tag('User')]
 #[OA\Delete(
-    description: 'Deletes an user from database',
+    description: 'Deletes an user from the application',
     responses: [
         new OA\Response(
             response: Response::HTTP_OK,

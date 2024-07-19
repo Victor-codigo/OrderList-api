@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 #[OA\Tag('Shop')]
 #[OA\Get(
-    description: 'Get for a group, shop\'s first letter saved in data base',
+    description: 'Get a list with the first letter of all shops in a group',
     parameters: [
         new OA\Parameter(
             name: 'group_id',

@@ -18,7 +18,7 @@ use User\Application\UserRegister\UserRegisterUseCase;
 
 #[OA\Tag('User')]
 #[OA\Post(
-    description: 'Registers an user',
+    description: 'Registers an user in the application',
     requestBody: new OA\RequestBody(
         required: true,
         content: [

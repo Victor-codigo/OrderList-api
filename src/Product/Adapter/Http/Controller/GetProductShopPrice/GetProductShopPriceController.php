@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 #[OA\Tag('Product')]
 #[OA\Get(
-    description: 'Get product\'s price ina a shop',
+    description: 'Get product\'s price in a a shop',
     parameters: [
         new OA\Parameter(
             name: 'group_id',

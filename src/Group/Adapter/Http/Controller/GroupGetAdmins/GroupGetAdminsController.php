@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 #[OA\Tag('Group')]
 #[OA\Get(
-    description: 'Get admins of groups',
+    description: 'Gets for a group users id that are administrators',
     parameters: [
         new OA\Parameter(
             name: 'group_id',

@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 #[OA\Tag('Group')]
 #[OA\Get(
-    description: 'Get groups users information',
+    description: 'Get users data, of a group',
     parameters: [
         new OA\Parameter(
             name: 'group_id',

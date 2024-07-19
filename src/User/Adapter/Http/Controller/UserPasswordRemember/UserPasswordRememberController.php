@@ -16,7 +16,7 @@ use User\Application\UserPasswordRemember\UserPasswordRememberUseCase;
 
 #[OA\Tag('User')]
 #[OA\Post(
-    description: 'Remember the user\'s password',
+    description: 'Remember the user\'s password. Send an email of validation',
     requestBody: new OA\RequestBody(
         required: true,
         content: [new OA\MediaType(

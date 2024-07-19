@@ -15,7 +15,7 @@ use User\Application\UserRegisterEmailConfirmation\UserRegisterEmailConfirmation
 
 #[OA\Tag('User')]
 #[OA\Patch(
-    description: 'Confirms or validate the users email',
+    description: 'Confirms or validate the users email after signing up',
     requestBody: new OA\RequestBody(
         required: true,
         content: [new OA\MediaType(

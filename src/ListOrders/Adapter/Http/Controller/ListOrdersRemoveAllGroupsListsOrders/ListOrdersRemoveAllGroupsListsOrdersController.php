@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 #[OA\Tag('ListOrders')]
 #[OA\Delete(
-    description: 'Removes all lists of orders from passed groups or changes the user id',
+    description: 'Removes all lists of orders, from passed groups or changes the user id',
     requestBody: new OA\RequestBody(
         required: true,
         content: [

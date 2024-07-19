@@ -1,0 +1,54 @@
+{% extends '@!NelmioApiDoc/SwaggerUi/index.html.twig' %}
+
+{% block meta %}
+    {{ parent() }}
+
+    <link rel="icon" type="image/x-icon" href="/assets/img/common/favicon.png">
+
+{% endblock meta %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <style>
+
+        .header::before{
+            background-color: #0c57ed;
+        }
+
+        .main-logo{
+            height: 60px;
+            position: absolute;
+            left: 50%;
+            margin-left: -78px;
+        }
+
+        .information-container {
+            background-color: #0c57ed !important;
+        }
+
+        .title{
+            color: #fff !important;
+        }
+
+        .description > .renderedMarkdown > p{
+            color: #fff !important;
+
+        }
+
+    </style>
+
+{% endblock stylesheets %}
+
+
+{% block header_block %}
+    <header class="header">
+        {% block header %}
+
+            <img id="logo"
+                 class="main-logo"
+                 src="/assets/img/common/logo-white.png"
+                 alt="NelmioApiDocBundle">
+        {% endblock header %}
+    </header>
+{% endblock header_block %}
