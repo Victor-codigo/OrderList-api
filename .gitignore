@@ -2,7 +2,7 @@
 /.env.local
 /.env.local.php
 /.env.*.local
-/config/secrets/prod/prod.decrypt.private.php
+/config/secrets/prod/
 /public/bundles/
 /var/
 /vendor/
@@ -17,7 +17,6 @@
 .vscode/
 coverage.xml
 public/code-coverage
-src/User/Adapter/Framework/Config/JwtKeys/JwtFirebaseHS256/key.pem
 public/assets/img
 ###> friendsofphp/php-cs-fixer ###
 /.php-cs-fixer.php
