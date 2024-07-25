@@ -22,7 +22,7 @@ setup-dev: ## Sets the application up for development
 
 	@echo "$(TITLE)Generating public and private keys$(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	bin/console lexik:jwt:generate-keypair
+	bin/console lexik:jwt:generate-keypair --overwrite
 
 	@echo "$(TITLE)Migrating database, dev and test environments$(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
@@ -38,7 +38,7 @@ setup-prod: ## Sets the application up for production
 
 	@echo "$(TITLE)Generating public and private keys$(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	APP_RUNTIME_ENV=prod bin/console lexik:jwt:generate-keypair
+	APP_RUNTIME_ENV=prod bin/console lexik:jwt:generate-keypair --overwrite
 
 	@echo "$(TITLE)Security: DB_USER $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
@@ -71,7 +71,8 @@ setup-prod: ## Sets the application up for production
 
 	@echo "$(TITLE)Removing Composer development dependecies$(END)"
 	@echo "$(SEPARATOR)------------------------------$(END)"
-	APP_ENV=prod composer update --no-dev --optimize-autoloader
+	export APP_ENV=prod
+	composer update --no-dev --optimize-autoloader
 
 	@echo "$(TITLE)Optimizing environment variables$(END)"
 	@echo "$(SEPARATOR)------------------------------$(END)"
@@ -87,7 +88,6 @@ setup-prod: ## Sets the application up for production
 	rm .php-cs-fixer.dist.php
 	rm phpstan.dist.neon
 	rm phpunit.xml.dist
-	rm phpunit.result.cache
 	rm README.md
 	rm rector.php
 	rm -rf test
