@@ -38,36 +38,36 @@ setup-prod: ## Sets the application up for production
 
 	@echo "$(TITLE)Generating public and private keys$(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	bin/console lexik:jwt:generate-keypair
+	APP_RUNTIME_ENV=prod bin/console lexik:jwt:generate-keypair
 
 	@echo "$(TITLE)Security: DB_USER $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	bin/console secrets:set DB_USER --env=prod
+	APP_RUNTIME_ENV=prod bin/console secrets:set DB_USER
 
 	@echo "$(TITLE)Security: DB_PASSWORD $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	bin/console secrets:set DB_PASSWORD --env=prod
+	APP_RUNTIME_ENV=prod bin/console secrets:set DB_PASSWORD
 
 	@echo "$(TITLE)Security: DB_HOST $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	bin/console secrets:set DB_HOST --env=prod
+	APP_RUNTIME_ENV=prod bin/console secrets:set DB_HOST
 
 	@echo "$(TITLE)Security: DB_PORT $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	bin/console secrets:set DB_PORT --env=prod
+	APP_RUNTIME_ENV=prod  bin/console secrets:set DB_PORT
 
 	@echo "$(TITLE)Security: DB_VERSION $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	bin/console secrets:set DB_VERSION --env=prod
+	APP_RUNTIME_ENV=prod bin/console secrets:set DB_VERSION
 
 	@echo "$(TITLE)Security: APP_SECRET $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	bin/console secrets:set APP_SECRET --random=32 --env=prod
+	APP_RUNTIME_ENV=prod bin/console secrets:set APP_SECRET --random=32
 
 	@echo "$(TITLE)Migrating database, dev and test environments$(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	bin/console doctrine:database:create --env=prod
-	bin/console doctrine:migrations:migrate --no-interaction --env=prod
+	APP_RUNTIME_ENV=prod bin/console doctrine:database:create
+	APP_RUNTIME_ENV=prod bin/console doctrine:migrations:migrate --no-interaction
 
 	@echo "$(TITLE)Removing Composer development dependecies$(END)"
 	@echo "$(SEPARATOR)------------------------------$(END)"
