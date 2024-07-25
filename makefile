@@ -38,31 +38,34 @@ setup-prod: ## Sets the application up for production
 
 	@echo "$(TITLE)Generating public and private keys$(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	APP_RUNTIME_ENV=prod bin/console lexik:jwt:generate-keypair --overwrite
+	bin/console lexik:jwt:generate-keypair --overwrite --env=prod
 
 	@echo "$(TITLE)Security: DB_USER $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	APP_RUNTIME_ENV=prod bin/console secrets:set DB_USER
+	bin/console secrets:set DB_USER --env=prod
 
 	@echo "$(TITLE)Security: DB_PASSWORD $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	APP_RUNTIME_ENV=prod bin/console secrets:set DB_PASSWORD
+	bin/console secrets:set DB_PASSWORD --env=prod
 
 	@echo "$(TITLE)Security: DB_HOST $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	APP_RUNTIME_ENV=prod bin/console secrets:set DB_HOST
+	bin/console secrets:set DB_HOST --env=prod
 
 	@echo "$(TITLE)Security: DB_PORT $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	APP_RUNTIME_ENV=prod  bin/console secrets:set DB_PORT
+	bin/console secrets:set DB_PORT --env=prod
 
 	@echo "$(TITLE)Security: DB_VERSION $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	APP_RUNTIME_ENV=prod bin/console secrets:set DB_VERSION
+	bin/console secrets:set DB_VERSION --env=prod
 
 	@echo "$(TITLE)Security: APP_SECRET $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	APP_RUNTIME_ENV=prod bin/console secrets:set APP_SECRET --random=32
+	bin/console secrets:set APP_SECRET --random=32 --env=prod
+
+	# Replaces in file .env.prod the variable DATABASE_URL
+	sed -i 's/# DATABASE_URL=/DATABASE_URL=/' .env.prod
 
 	@echo "$(TITLE)Migrating database, dev and test environments$(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
@@ -71,8 +74,7 @@ setup-prod: ## Sets the application up for production
 
 	@echo "$(TITLE)Removing Composer development dependecies$(END)"
 	@echo "$(SEPARATOR)------------------------------$(END)"
-	export APP_ENV=prod
-	composer update --no-dev --optimize-autoloader
+	APP_ENV=prod composer update --no-dev --optimize-autoloader
 
 	@echo "$(TITLE)Optimizing environment variables$(END)"
 	@echo "$(SEPARATOR)------------------------------$(END)"
