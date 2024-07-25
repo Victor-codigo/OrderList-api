@@ -40,9 +40,9 @@ setup-prod: ## Sets the application up for production
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
 	bin/console lexik:jwt:generate-keypair
 
-	@echo "$(TITLE)Security: DB_USER2 $(END)"
+	@echo "$(TITLE)Security: DB_USER $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	bin/console secrets:set DB_USER2 --env=prod
+	bin/console secrets:set DB_USER --env=prod
 
 	@echo "$(TITLE)Security: DB_PASSWORD $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
