@@ -40,10 +40,6 @@ setup-prod: ## Sets the application up for production
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
 	bin/console lexik:jwt:generate-keypair
 
-	@echo "$(TITLE)Security: generating keys$(END)"
-	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	bin/console secrets:generate-keys --env=prod
-
 	@echo "$(TITLE)Security: APP_SECRET $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
 	bin/console secrets:set APP_SECRET --random=32 --env=prod

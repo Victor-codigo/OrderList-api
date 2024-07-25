@@ -76,7 +76,11 @@
             "User\\": "src/User/",
             "Notification\\": "src/Notification/",
             "Common\\": "src/Common/"
-        }
+        },
+        "exclude-from-classmap": [
+            "/tests/Unit/Common/Adapter/Command/HexFileStructure/Fixtures/",
+            "/tests/BuiltinFunctions/"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
