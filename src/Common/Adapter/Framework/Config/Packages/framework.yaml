@@ -5,6 +5,9 @@ framework:
     http_method_override: true
     handle_all_throwables: true
 
+    secrets:
+        vault_directory: "%kernel.project_dir%/src/Common/Adapter/Framework/Config/secrets/%kernel.environment%"
+
     # Enables session support. Note that the session will ONLY be started if you read or write from it.
     # Remove or comment this section to explicitly disable session support.
     session:
