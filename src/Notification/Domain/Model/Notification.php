@@ -10,7 +10,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 
-final class Notification
+class Notification
 {
     private Identifier $id;
     private Identifier $userId;
