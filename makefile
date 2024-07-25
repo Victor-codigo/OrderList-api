@@ -40,13 +40,9 @@ setup-prod: ## Sets the application up for production
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
 	bin/console lexik:jwt:generate-keypair
 
-	@echo "$(TITLE)Security: APP_SECRET $(END)"
+	@echo "$(TITLE)Security: DB_USER2 $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	bin/console secrets:set APP_SECRET --random=32 --env=prod
-
-	@echo "$(TITLE)Security: DB_USER $(END)"
-	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	bin/console secrets:set DB_USER --env=prod
+	bin/console secrets:set DB_USER2 --env=prod
 
 	@echo "$(TITLE)Security: DB_PASSWORD $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
@@ -64,6 +60,10 @@ setup-prod: ## Sets the application up for production
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
 	bin/console secrets:set DB_VERSION --env=prod
 
+	@echo "$(TITLE)Security: APP_SECRET $(END)"
+	@echo "$(SEPARATOR)--------------------------------------------$(END)"
+	bin/console secrets:set APP_SECRET --random=32 --env=prod
+
 	@echo "$(TITLE)Migrating database, dev and test environments$(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
 	bin/console doctrine:database:create --env=prod
@@ -71,7 +71,7 @@ setup-prod: ## Sets the application up for production
 
 	@echo "$(TITLE)Removing Composer development dependecies$(END)"
 	@echo "$(SEPARATOR)------------------------------$(END)"
-	composer update --no-dev --optimize-autoloader
+	APP_ENV=prod composer update --no-dev --optimize-autoloader
 
 	@echo "$(TITLE)Optimizing environment variables$(END)"
 	@echo "$(SEPARATOR)------------------------------$(END)"
@@ -85,8 +85,10 @@ setup-prod: ## Sets the application up for production
 	rm .env.prod
 	rm .gitignore
 	rm .php-cs-fixer.dist.php
-	rm phpstan.neon
+	rm phpstan.dist.neon
 	rm phpunit.xml.dist
 	rm phpunit.result.cache
 	rm README.md
 	rm rector.php
+	rm -rf test
+	rm -rf tools
