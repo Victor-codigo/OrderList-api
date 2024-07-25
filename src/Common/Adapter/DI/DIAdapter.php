@@ -7,7 +7,6 @@ namespace Common\Adapter\DI;
 use Common\Adapter\DI\Exception\RouteInvalidParameterException;
 use Common\Adapter\DI\Exception\RouteNotFoundException;
 use Common\Adapter\DI\Exception\RouteParametersMissingException;
-use Common\Domain\Config\AppConfig;
 use Common\Domain\Ports\DI\DIInterface;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,11 +21,9 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 class DIAdapter implements DIInterface, ServiceSubscriberInterface
 {
-    private const string API_DOMAIN = AppConfig::API_DOMAIN;
-    private const string API_PROTOCOL = AppConfig::API_PROTOCOL;
-
     public function __construct(
-        private ContainerInterface $DI
+        private ContainerInterface $DI,
+        private string $appProtocolAndDomain
     ) {
     }
 
@@ -71,7 +68,7 @@ class DIAdapter implements DIInterface, ServiceSubscriberInterface
     {
         $url = $this->generateUrl($route, $params, UrlGeneratorInterface::ABSOLUTE_PATH);
 
-        return static::API_PROTOCOL.'://'.static::API_DOMAIN.$url;
+        return $this->appProtocolAndDomain.$url;
     }
 
     /**

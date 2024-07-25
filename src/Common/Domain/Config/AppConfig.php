@@ -142,16 +142,6 @@ class AppConfig
     ];
 
     /**
-     * Api domain.
-     */
-    public const string API_DOMAIN = 'orderlist.api';
-
-    /**
-     * Api protocol.
-     */
-    public const string API_PROTOCOL = 'http';
-
-    /**
      * Message Error for error 404.
      */
     public const string ERROR_404_MESSAGE = 'Not found: error 404';
