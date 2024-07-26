@@ -94,15 +94,16 @@ setup-prod: ## Sets the application up for production
 	@echo "$(SEPARATOR)------------------------------$(END)"
 	rm .env
 	rm .env.dev
-	# rm .env.test
+	rm .env.test
 	rm .env.prod
 	rm .gitignore
 	rm .php-cs-fixer.dist.php
 	rm phpstan.dist.neon
-	# rm phpunit.xml.dist
+	rm phpunit.xml.dist
 	rm README.md
 	rm rector.php
 	rm -rf tools
+	rm -rf tests
 	rm -rf .docker
 	rm -rf migrations
 
