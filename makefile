@@ -102,10 +102,12 @@ setup-prod: ## Sets the application up for production
 	rm README.md
 	rm rector.php
 	rm -rf tools
+	rm -rf .docker
+	rm -rf migrations
 
 	@echo "$(TITLE)Application ready for production$(END)"
 	@echo "$(SEPARATOR)--------------------------------$(END)"
-	@echo "$(TITLE)Remove test folder if you are not going to execute tests.(END)"
+	@echo "$(TITLE)Remove test folder if you are not going to execute tests.$(END)"
 	@echo "$(TITLE)Do no forget to review files:$(END)"
 	@echo "$(TEXT).env.local.php: to environment configuration$(END)"
 	@echo "$(TEXT)Common\Domain\Config\AppConfig: for more specific configuration$(END)"
