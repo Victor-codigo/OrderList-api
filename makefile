@@ -34,6 +34,8 @@ setup-dev: ## Sets the application up for development
 
 	@echo "$(TITLE)Application ready for development.$(END)"
 
+
+
 setup-prod: ## Sets the application up for production
 	@echo "$(TITLE)Installing symfony dependecies$(END)"
 	@echo "$(SEPARATOR)------------------------------$(END)"
@@ -68,7 +70,11 @@ setup-prod: ## Sets the application up for production
 	bin/console secrets:set APP_SECRET --random=32 --env=prod
 
 	# Replaces in file .env.prod the variable DATABASE_URL
-	sed -i 's/# DATABASE_URL=/DATABASE_URL=/' .env.prod
+	sed -i 's/{# DB_USER #}/%env(DB_USER)%/' .env.prod
+	sed -i 's/{# DB_PASSWORD #}/%env(DB_PASSWORD)%/' .env.prod
+	sed -i 's/{# DB_HOST #}/%env(DB_HOST)%/' .env.prod
+	sed -i 's/{# DB_PORT #}/%env(DB_PORT)%/' .env.prod
+	sed -i 's/{# DB_VERSION #}/%env(DB_VERSION)%/' .env.prod
 
 	@echo "$(TITLE)Migrating database, dev and test environments$(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
