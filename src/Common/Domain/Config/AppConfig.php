@@ -223,10 +223,12 @@ class AppConfig
         'product_get_data',
         'product_set_price',
         'product_get_price',
+        'product_get_first_letter',
         'shop_create',
         'shop_modify',
         'shop_remove',
         'shop_get_data',
+        'shop_get_shops_first_letter',
         'order_create',
         'order_modify',
         'order_remove',
@@ -238,6 +240,7 @@ class AppConfig
         'list_orders_get_data',
         'list_orders_remove',
         'list_orders_get_price',
+        'list_orders_get_first_letter',
     ];
 
     protected static ?AppConfig $instance = null;
