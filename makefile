@@ -13,6 +13,7 @@ help: ## Show help
 
 TITLE=\n\033[1;32m
 SEPARATOR=\033[1;32m
+TEXT=\033[0;32m
 END=\033[0m
 
 setup-dev: ## Sets the application up for development
@@ -30,6 +31,8 @@ setup-dev: ## Sets the application up for development
 	bin/console doctrine:database:create --env=test
 	bin/console doctrine:migrations:migrate --no-interaction --env=dev
 	bin/console doctrine:migrations:migrate --no-interaction --env=test
+
+	@echo "$(TITLE)Application ready for development.$(END)"
 
 setup-prod: ## Sets the application up for production
 	@echo "$(TITLE)Installing symfony dependecies$(END)"
@@ -92,5 +95,12 @@ setup-prod: ## Sets the application up for production
 	rm phpunit.xml.dist
 	rm README.md
 	rm rector.php
-	rm -rf test
 	rm -rf tools
+
+	@echo "$(TITLE)Application ready for production$(END)"
+	@echo "$(SEPARATOR)--------------------------------$(END)"
+	@echo "$(TITLE)Remove test folder if you are not going to execute tests.(END)"
+	@echo "$(TITLE)Do no forget to review files:$(END)"
+	@echo "$(TEXT).env.php: to environment configuration$(END)"
+	@echo "$(TEXT)Common\Domain\Config\AppConfig: for more especific configuration$(END)"
+	@echo "$(TEXT)Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS: to modify the value objects restrictions$(END)"
