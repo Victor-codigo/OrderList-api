@@ -101,6 +101,6 @@ setup-prod: ## Sets the application up for production
 	@echo "$(SEPARATOR)--------------------------------$(END)"
 	@echo "$(TITLE)Remove test folder if you are not going to execute tests.(END)"
 	@echo "$(TITLE)Do no forget to review files:$(END)"
-	@echo "$(TEXT).env.php: to environment configuration$(END)"
-	@echo "$(TEXT)Common\Domain\Config\AppConfig: for more especific configuration$(END)"
+	@echo "$(TEXT).env.local.php: to environment configuration$(END)"
+	@echo "$(TEXT)Common\Domain\Config\AppConfig: for more specific configuration$(END)"
 	@echo "$(TEXT)Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS: to modify the value objects restrictions$(END)"
