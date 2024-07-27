@@ -39,10 +39,12 @@ setup-prod: ## Sets the application up for production
 	@echo "$(SEPARATOR)------------------------------$(END)"
 	composer install
 
+	-bin/console --env=prod
+	@echo "$(TITLE)Ignore this error message$(END)"
+
 	@echo "$(TITLE)Generating public and private keys$(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	-bin/console lexik:jwt:generate-keypair --overwrite --env=prod
-	@echo "$(TITLE)Ignore this error message$(END)"
+	bin/console lexik:jwt:generate-keypair --overwrite --env=prod
 
 	@echo "$(TITLE)Security: DB_USER $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
