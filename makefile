@@ -106,6 +106,7 @@ setup-prod: ## Sets the application up for production
 	rm -rf tests
 	rm -rf .docker
 	rm -rf migrations
+	rm makefile
 
 	@echo "$(TITLE)Application ready for production$(END)"
 	@echo "$(SEPARATOR)--------------------------------$(END)"
