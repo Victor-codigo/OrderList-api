@@ -34,8 +34,6 @@ setup-dev: ## Sets the application up for development
 
 	@echo "$(TITLE)Application ready for development.$(END)"
 
-
-
 setup-prod: ## Sets the application up for production
 	@echo "$(TITLE)Installing symfony dependecies$(END)"
 	@echo "$(SEPARATOR)------------------------------$(END)"
