@@ -2,7 +2,7 @@
 OrderList api is an API REST to manage your shop lists. Created with PHP,  in Symfony framework
 <br>It supports following features:
 - **User:** create an account, and manage your own shop lists.
-- **Groups:** You can create, modify, delete your own groups, add users to your groups or join others groups.
+- **Groups:** You can create, modify, delete your own groups, add users to your groups or join others groups. 
 	- **Users:** Add and remove users from your groups.
 	- **Grants:** There are two types of users, administrators and users.
 	- **Share:** If you want to share your shop lists with others, friends, parents, etc., add them to your groups. All members of the group, can add, remove, edit, and manage shops list, products and shops.
@@ -11,7 +11,7 @@ OrderList api is an API REST to manage your shop lists. Created with PHP,  in Sy
 
 # Prerequisites
 - Install docker.
-- Or if you prefer to create your own configuration,  is needed a HTTP server, PHP 8.3, MySQL 8.0.37
+- Or if you prefer to create your own configuration,  is needed a HTTP server, PHP 8.3, MySQL 8.0.37 and SMTP server
 
 # Installation
 ## Docker
@@ -20,8 +20,8 @@ There is a make file with the following commands:
 
 	1. `make up`               Rise up the containers
 	2. `make build-no-cache`   Builds containers without cache
-	3. `make build-cache`      Builds containers with cache
-	4. `make down`             Set down containers
+	3. `make build-cache`      Builds containers with cache  
+	4. `make down`             Set down containers  
 	5. `make start`            Starts containers
 	6. `make stop`             Stops containers
 	7. `make restart`          Restart containers
@@ -55,9 +55,11 @@ git clone git@github.com:Victor-codigo/OrderList-api.git
 4. There is a make file with following commands:
 	- `make setup-dev`               Sets the application up for development
 	- `make setup-prod`  Sets the application up for production
+	
 <br>Execute to build application for development:
 ````
 make setup-dev
 ````
-5. Follow the instructions.
-6. Congratulations! You have inst
+5. Follow make instructions.
+6. Congratulations! You have installed the API correctly
+7. You can access api though http://127.0.0.1:8081
