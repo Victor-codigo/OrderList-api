@@ -62,4 +62,4 @@ make setup-dev
 ````
 5. Follow make instructions.
 6. Congratulations! You have installed the API correctly
-7. You can access api though http://127.0.0.1:8081
+7. You can access api though http://127.0.0.1:8082
