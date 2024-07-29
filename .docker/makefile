@@ -91,8 +91,8 @@ build-up: ## Builds and rise up containers
 	$(call dockerCompose, up -d)
 	$(call dockerCompose, ps)
 
-bash: ## Executa bash in php container
+bash: ## Execute bash in php container
 	$(call executeInPhpContainer, php bash)
 
-root: ## Executa bash in php container as root
+root: ## Execute bash in php container as root
 	$(call executeInPhpContainerAsRoot, php bash)
