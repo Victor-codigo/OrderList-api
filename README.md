@@ -1,5 +1,5 @@
 # OrderList api
-OrderList api is an API REST to manage your shop lists. Created with PHP,  in Symfony framework.
+OrderList api is an API REST to manage your shop lists.
 <br>It supports following features:
 - **User:** create an account, and manage your own shop lists.
 - **Groups:** You can create, modify, delete your own groups, add users to your groups or join others groups. 
