@@ -1,5 +1,5 @@
 # OrderList api
-OrderList api is an API REST to manage your shop lists. Created with PHP,  in Symfony framework
+OrderList api is an API REST to manage your shop lists. Created with PHP,  in Symfony framework.
 <br>It supports following features:
 - **User:** create an account, and manage your own shop lists.
 - **Groups:** You can create, modify, delete your own groups, add users to your groups or join others groups. 
@@ -11,7 +11,7 @@ OrderList api is an API REST to manage your shop lists. Created with PHP,  in Sy
 
 # Prerequisites
 - Docker.
-- Or if you prefer to create your own configuration: HTTP server, PHP 8.3, MySQL 8.0.37 and SMTP server
+- Or if you prefer to create your own configuration: 
 
 # Stack
 - [Docker](https://www.docker.com/)
@@ -69,6 +69,7 @@ make bash
 3. There is a make file with following commands:
 	- `make setup-dev`               Sets the application up for development
 	- `make setup-prod`  Sets the application up for production
+	
 <br>Execute the following command to build API for development:
 ````
 make setup-dev
@@ -83,3 +84,12 @@ make setup-prod
 - http://127.0.0.1:8082 to API.
 - http://127.0.0.1 to proxy server
  
+# Without Docker 
+1. Install:
+- HTTP server, 
+- PHP 8.3, 
+- MySQL 8.0.37 
+- SMTP server
+
+2. Remove folder .docker
+3. Follow docker instructions up to point 3
