@@ -59,12 +59,12 @@ Build and start containers
  make up
 ```
 The following containers will be built up:
-	- Nginx
-	- Proxy-server
-	- PHP
-	- MySQL
-	- Composer
-	- Mail catcher
+- Nginx
+- Proxy-server
+- PHP
+- MySQL
+- Composer
+- Mail catcher
 
 2. Enter inside php container as developer user:
  ````
