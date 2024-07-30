@@ -12,6 +12,10 @@ OrderList api is an API REST to manage your shopping lists.
 # Prerequisites
 - Docker.
 - Or if you prefer to create your own configuration: 
+	- HTTP server, 
+	- PHP 8.3, 
+	- MySQL 8.0.37 
+	- SMTP server
 
 # Stack
 - [Docker](https://www.docker.com/)
