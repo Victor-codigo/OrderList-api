@@ -92,4 +92,4 @@ make setup-prod
 - SMTP server
 
 2. Remove folder .docker
-3. Follow docker instructions up to point 3
+3. Follow docker instructions as of point 3
