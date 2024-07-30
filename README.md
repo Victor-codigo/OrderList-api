@@ -1,12 +1,12 @@
 # OrderList api
-OrderList api is an API REST to manage your shop lists.
+OrderList api is an API REST to manage your shopping lists.
 <br>It supports following features:
-- **User:** create an account, and manage your own shop lists.
+- **User:** create an account, and manage your own shopping lists.
 - **Groups:** You can create, modify, delete your own groups, add users to your groups or join others groups. 
 	- **Users:** Add and remove users from your groups.
 	- **Grants:** There are two types of users, administrators and users.
-	- **Share:** If you want to share your shop lists with others, friends, parents, etc., add them to your groups. All members of the group, can add, remove, edit, and manage shops list, products and shops.
-- **Products:** Add products you buy, and then, match with shops and shop lists or share them in your groups.
+	- **Share:** If you want to share your shopping lists with others, friends, parents, etc., add them to your groups. All members of the group, can add, remove, edit, and manage shops list, products and shops.
+- **Products:** Add products you buy, and then, match with shops and shopping lists or share them in your groups.
 - **Shops:** Add shops where you buy those products. Match products with shops, and set its prices.
 
 # Prerequisites
