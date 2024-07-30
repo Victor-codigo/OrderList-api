@@ -13,9 +13,27 @@ OrderList api is an API REST to manage your shop lists. Created with PHP,  in Sy
 - Docker.
 - Or if you prefer to create your own configuration: HTTP server, PHP 8.3, MySQL 8.0.37 and SMTP server
 
+# Stack
+- [Docker](https://www.docker.com/)
+- [PHP 8.3](https://www.php.net/)
+- [PHPUnit 9.6](https://phpunit.de/index.html)
+- [Symfony 6.4](https://symfony.com/)
+- [Twig 3](https://twig.symfony.com/)
+- [MySQL](https://www.mysql.com/)
+- SQL
+
+# Tools
+- [MySQLWorkbench](https://www.mysql.com/products/workbench/)
+- [VSCode](https://code.visualstudio.com/)
+
 # Installation
 ## Docker
-Under folder .docker is all docker configuration.
+
+1. [Fork](https://github.com/Victor-codigo/OrderList-api/fork) or clone the repository.
+ ```
+git clone git@github.com:Victor-codigo/OrderList-api.git
+ ```
+2. Under folder .docker is all docker configuration.
 There is a make file with the following commands:
 
 	1. `make up`               Rise up the containers
@@ -27,17 +45,18 @@ There is a make file with the following commands:
 	7. `make restart`          Restart containers
 	8. `make ps`               List containers
 	9. `make logs`             Show logs
-	10.`make down-build-up`    Set down, builds and rise up containers
-	11.`make build-up`         Builds and rise up containers
-	12.`make bash`             Execute bash in php container
-	13.`make root`             Execute bash in php container as root
+	10. `make down-build-up`    Set down, builds and rise up containers
+	11. `make build-up`         Builds and rise up containers
+	12. `make bash`             Execute bash in php container
+	13. `make root`             Execute bash in php container as root
 
-1. Build and start containers 
+Build and start containers 
 ```
  make up
 ```
-The following containers will be built up:`
+The following containers will be built up:
 	- Nginx
+	- Proxy-server
 	- PHP
 	- MySQL
 	- Composer
@@ -47,22 +66,20 @@ The following containers will be built up:`
  ````
 make bash
 ````
-
-3. Clone the repository
-````
-git clone git@github.com:Victor-codigo/OrderList-api.git
-````
-4. There is a make file with following commands:
+3. There is a make file with following commands:
 	- `make setup-dev`               Sets the application up for development
 	- `make setup-prod`  Sets the application up for production
 <br>Execute the following command to build API for development:
 ````
 make setup-dev
 ````
-<br>Or next command to build API for production:
+<br>Or build API for production:
 ````
 make setup-prod
 ````
-5. Follow make instructions.
-6. Congratulations! You have installed the API correctly
-7. You can access api though http://127.0.0.1:8082
+4. Follow make instructions.
+5. Congratulations! You have installed the API correctly
+6. You can access api though:
+- http://127.0.0.1:8082 to API.
+- http://127.0.0.1 to proxy server
+ 
