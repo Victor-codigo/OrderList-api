@@ -87,6 +87,7 @@ make setup-prod
 6. You can access api though:
 - http://127.0.0.1:8082 to API.
 - http://127.0.0.1 to proxy server
+- http://127.0.0.1:8082/api/doc API documentation
  
 # Without Docker 
 1. Install:
