@@ -17,7 +17,7 @@
 .vscode/
 coverage.xml
 public/code-coverage
-public/assets/img
+
 ###> friendsofphp/php-cs-fixer ###
 /.php-cs-fixer.php
 /.php-cs-fixer.cache
