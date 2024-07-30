@@ -10,8 +10,8 @@ OrderList api is an API REST to manage your shop lists. Created with PHP,  in Sy
 - **Shops:** Add shops where you buy those products. Match products with shops, and set its prices.
 
 # Prerequisites
-- Install docker.
-- Or if you prefer to create your own configuration,  is needed a HTTP server, PHP 8.3, MySQL 8.0.37 and SMTP server
+- Docker.
+- Or if you prefer to create your own configuration: HTTP server, PHP 8.3, MySQL 8.0.37 and SMTP server
 
 # Installation
 ## Docker
@@ -32,33 +32,36 @@ There is a make file with the following commands:
 	12.`make bash`             Execute bash in php container
 	13.`make root`             Execute bash in php container as root
 
-1. Build and start containers
+1. Build and start containers 
+```
+ make up
+```
+The following containers will be built up:`
 	- Nginx
 	- PHP
 	- MySQL
 	- Composer
 	- Mail catcher
 
-
-```
- make up
-````
 2. Enter inside php container as developer user:
  ````
 make bash
 ````
 
-3. Clone the repository with ssh
+3. Clone the repository
 ````
 git clone git@github.com:Victor-codigo/OrderList-api.git
 ````
 4. There is a make file with following commands:
 	- `make setup-dev`               Sets the application up for development
 	- `make setup-prod`  Sets the application up for production
-	
-<br>Execute to build application for development:
+<br>Execute the following command to build API for development:
 ````
 make setup-dev
+````
+<br>Or next command to build API for production:
+````
+make setup-prod
 ````
 5. Follow make instructions.
 6. Congratulations! You have installed the API correctly
