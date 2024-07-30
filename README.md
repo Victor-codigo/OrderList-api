@@ -23,6 +23,7 @@ OrderList api is an API REST to manage your shopping lists.
 - [PHPUnit 9.6](https://phpunit.de/index.html)
 - [Symfony 6.4](https://symfony.com/)
 - [Twig 3](https://twig.symfony.com/)
+- [Composer](https://getcomposer.org/)
 - [MySQL](https://www.mysql.com/)
 - SQL
 
@@ -66,11 +67,11 @@ The following containers will be built up:
 - Composer
 - Mail catcher
 
-2. Enter inside php container as developer user:
+3. Enter inside php container as developer user:
  ````
 make bash
 ````
-3. There is a make file with following commands:
+4. There is a make file with following commands:
 	- `make setup-dev`               Sets the application up for development
 	- `make setup-prod`  Sets the application up for production
 	
@@ -82,9 +83,9 @@ make setup-dev
 ````
 make setup-prod
 ````
-4. Follow make instructions.
-5. Congratulations! You have installed the API correctly
-6. You can access api though:
+5. Follow make instructions.
+6. Congratulations! You have installed the API correctly
+7. You can access api though:
 - http://127.0.0.1:8082 to API.
 - http://127.0.0.1 to proxy server
 - http://127.0.0.1:8082/api/doc API documentation
