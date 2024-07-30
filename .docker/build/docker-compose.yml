@@ -1,5 +1,20 @@
 services:
 
+  # SERVIDOR PROXY
+  proxy:
+    container_name: ${APP_NAME}-proxy
+    build:
+      context: ./proxy-server
+      dockerfile: Dockerfile
+    networks:
+      - orderlist-network-api
+      - orderlist-network-client
+    ports:
+      - 80:80
+      # - 443:443
+    depends_on:
+      - nginx-api
+
   # SERVIDOR WEB
   nginx-api:
     container_name: ${APP_NAME}-nginx
@@ -97,3 +112,6 @@ volumes:
 networks:
   orderlist-network-api:
     name: orderlist-network-api
+
+  orderlist-network-client:
+    name: orderlist-network-client
