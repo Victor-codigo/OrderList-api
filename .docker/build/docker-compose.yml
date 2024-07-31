@@ -48,6 +48,8 @@ services:
     restart: always
     env_file:
       - ./env/php.env
+    secrets:
+      - ssh-keys
     volumes:
       - $PWD/${VOLUME_HOST_PATH_PHP_SOURCE}:${VOLUME_CONTAINER_PATH_PHP_SOURCE}
     networks:
@@ -107,6 +109,11 @@ volumes:
   # VOLUMEN BASE DE DATOS
   mysql-data:
     name: ${APP_NAME}-mysql-data
+
+# SECRETS
+secrets:
+  ssh-keys:
+    file: ~/.ssh/id_ed25519
 
 # REDES
 networks:

@@ -107,8 +107,12 @@ ARG GROUP_ID
 RUN addgroup --gid $GROUP_ID developers
 RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID developer
 
-
 USER $USER_ID
+
+# Share ssh keys with container
+RUN mkdir -p ~/.ssh && ln -s /run/secrets/ssh-keys ~/.ssh/id_ed25519
+RUN chown -R $USER_ID:$GROUP_ID ~/.ssh
+
 
 COPY ./.bashrc /home/developer/.bashrc_temp
 RUN cat /home/developer/.bashrc_temp >> /home/developer/.bashrc
