@@ -141,7 +141,7 @@ class WebClientTestCase extends WebTestCase
         $content = json_decode($response->getContent());
 
         $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals($responseCode, $response->getStatusCode());
+        $this->assertEquals($responseCode, $response->getStatusCode(), ' - '.json_encode($content));
         $this->assertSame($contentType, $response->headers->get('Content-Type'));
 
         $this->assertTrue(property_exists($content, 'status'));
