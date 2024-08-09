@@ -59,8 +59,8 @@ class UserSharedSymfonyProviderAdapter implements UserProviderInterface
             );
 
             return $this->createUserSharedSymfonyAdapter($response->data[0]);
-        } catch (Error400Exception|ModuleCommunicationException|\ValueError) {
-            throw new UserNotFoundException('Identifier not found: ', $identifier);
+        } catch (Error400Exception|ModuleCommunicationException|\ValueError $e) {
+            throw new UserNotFoundException('Identifier not found: ', $identifier.' - :'.$e->getTraceAsString());
         }
     }
 
