@@ -73,14 +73,12 @@ class ModuleCommunication implements ModuleCommunicationInterface
         }
 
         try {
-            echo '- Decode:'.$responseContent.' - ';
-
             return $this->createResponseDto(
                 json_decode($responseContent, true, 512, JSON_THROW_ON_ERROR),
                 $responseHeaders
             );
         } catch (\JsonException $e) {
-            throw ModuleCommunicationException::fromCommunicationError('Error json decode', $e);
+            throw ModuleCommunicationException::fromCommunicationError('Error json decode - Encoded:'.$responseContent, $e);
         }
     }
 
