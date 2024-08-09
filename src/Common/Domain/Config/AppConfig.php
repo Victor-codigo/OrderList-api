@@ -131,7 +131,7 @@ class AppConfig
     /**
      * Module communication proxy URL.
      */
-    public const string MODULE_COMMUNICATION_REQUEST_PROXY = 'http://nginx-api:8082';
+    public const string MODULE_COMMUNICATION_REQUEST_PROXY = 'http://nginx-api:80';
 
     /**
      * Module communication HTTPS.

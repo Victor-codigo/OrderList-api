@@ -30,7 +30,7 @@ setup-dev: ## Sets the application up for development
 	bin/console doctrine:database:create --if-not-exists --env=dev
 	bin/console doctrine:database:create --if-not-exists --env=test
 	bin/console doctrine:migrations:migrate --no-interaction --env=dev
-	bin/console doctrine:migrations:migrate --no-interaction --env=test
+	bin/console doctrine:migrations:migrate --vv --env=test
 
 	@echo "$(TITLE)Application ready for development.$(END)"
 
