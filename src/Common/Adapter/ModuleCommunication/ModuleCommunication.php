@@ -78,7 +78,7 @@ class ModuleCommunication implements ModuleCommunicationInterface
                 $responseHeaders
             );
         } catch (\JsonException $e) {
-            throw ModuleCommunicationException::fromCommunicationError('Error json decode - Encoded:'.$responseContent, $e);
+            throw ModuleCommunicationException::fromCommunicationError('Error json decode', $e);
         }
     }
 
