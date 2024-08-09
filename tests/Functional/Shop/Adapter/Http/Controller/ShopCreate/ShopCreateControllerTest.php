@@ -63,7 +63,7 @@ class ShopCreateControllerTest extends WebClientTestCase
     }
 
     /** @test */
-    public function itShouldCreateAShop(): void
+    public function itShouldCreateAShop22(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $this->createImageTestPath();
