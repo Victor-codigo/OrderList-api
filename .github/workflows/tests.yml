@@ -43,7 +43,9 @@ jobs:
         run: docker-compose --file ./.docker/build/docker-compose.yml --env-file ./.docker/build/env/.env exec -u 0 php bash -c "cd ./home/runner/work/OrderList-api/OrderList-api && make setup-dev"
 
       - name: Containers up
-        run: docker-compose --file .docker/build/docker-compose.yml --env-file .docker/build/env/.env ps
+        run: |
+          docker-compose --file .docker/build/docker-compose.yml --env-file .docker/build/env/.env ps
+          docker-compose --file .docker/build/docker-compose.yml --env-file .docker/build/env/.env exec -u 0 php bash -c "bin/console hautelook:fixtures:load -vvv"
 
       - name: Execute tests
         run: |
