@@ -79,7 +79,7 @@ setup-prod: ## Sets the application up for production
 
 	@echo "$(TITLE)Migrating database, dev and test environments$(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	APP_RUNTIME_ENV=prod bin/console doctrine:database:create
+	APP_RUNTIME_ENV=prod bin/console doctrine:database:create --if-not-exists
 	APP_RUNTIME_ENV=prod bin/console doctrine:migrations:migrate --no-interaction
 
 	@echo "$(TITLE)Removing Composer development dependecies$(END)"
@@ -115,3 +115,75 @@ setup-prod: ## Sets the application up for production
 	@echo "$(TEXT).env.local.php: to environment configuration$(END)"
 	@echo "$(TEXT)Common\Domain\Config\AppConfig: for more specific configuration$(END)"
 	@echo "$(TEXT)Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS: to modify the value objects restrictions$(END)"
+
+setup-deploy: ## Sets the application up for production deploy
+	@echo "$(TITLE)Installing symfony dependecies$(END)"
+	@echo "$(SEPARATOR)------------------------------$(END)"
+	composer install
+
+	-bin/console --env=prod
+	@echo "$(TITLE)Ignore this error message$(END)"
+
+	@echo "$(TITLE)Generating public and private keys$(END)"
+	@echo "$(SEPARATOR)--------------------------------------------$(END)"
+	bin/console lexik:jwt:generate-keypair --overwrite --env=prod
+
+	@echo "$(TITLE)Security: DB_USER $(END)"
+	@echo "$(SEPARATOR)--------------------------------------------$(END)"
+	echo -n ${DB_USER} | bin/console secrets:set DB_USER - --env=prod
+
+	@echo "$(TITLE)Security: DB_PASSWORD $(END)"
+	@echo "$(SEPARATOR)--------------------------------------------$(END)"
+	echo -n ${DB_PASSWORD} | bin/console secrets:set DB_PASSWORD - --env=prod
+
+	@echo "$(TITLE)Security: DB_HOST $(END)"
+	@echo "$(SEPARATOR)--------------------------------------------$(END)"
+	echo -n ${DB_HOST} | bin/console secrets:set DB_HOST - --env=prod
+
+	@echo "$(TITLE)Security: DB_PORT $(END)"
+	@echo "$(SEPARATOR)--------------------------------------------$(END)"
+	echo -n ${DB_PORT} | bin/console secrets:set DB_PORT - --env=prod
+
+	@echo "$(TITLE)Security: DB_VERSION $(END)"
+	@echo "$(SEPARATOR)--------------------------------------------$(END)"
+	echo -n ${DB_VERSION} | bin/console secrets:set DB_VERSION - --env=prod
+
+	@echo "$(TITLE)Security: APP_SECRET $(END)"
+	@echo "$(SEPARATOR)--------------------------------------------$(END)"
+	bin/console secrets:set APP_SECRET --random=32 --env=prod
+
+	# Replaces in file .env.prod the variable DATABASE_URL
+	sed -i 's/{# DB_USER #}/%env(DB_USER)%/' .env.prod
+	sed -i 's/{# DB_PASSWORD #}/%env(DB_PASSWORD)%/' .env.prod
+	sed -i 's/{# DB_HOST #}/%env(DB_HOST)%/' .env.prod
+	sed -i 's/{# DB_PORT #}/%env(DB_PORT)%/' .env.prod
+	sed -i 's/{# DB_VERSION #}/%env(DB_VERSION)%/' .env.prod
+
+	@echo "$(TITLE)Removing Composer development dependecies$(END)"
+	@echo "$(SEPARATOR)------------------------------$(END)"
+	APP_ENV=prod composer update --no-dev --optimize-autoloader
+
+	@echo "$(TITLE)Optimizing environment variables$(END)"
+	@echo "$(SEPARATOR)------------------------------$(END)"
+	composer dump-env prod
+
+	@echo "$(TITLE)Removing development files$(END)"
+	@echo "$(SEPARATOR)------------------------------$(END)"
+	rm .env
+	rm .env.dev
+	rm .env.test
+	rm .env.prod
+	rm .gitignore
+	rm .php-cs-fixer.dist.php
+	rm phpstan.dist.neon
+	rm phpunit.xml.dist
+	rm README.md
+	rm rector.php
+	rm -rf tools
+	rm -rf tests
+	rm -rf .docker
+	rm -rf migrations
+	rm -rf .git
+	rm -rf .github
+	rm makefile
+	rm -rf var
