@@ -26,6 +26,20 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v4.1.7
 
+      # Composer cache
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
       - name: Setting up project for deploy
         run: |
           cd $GITHUB_WORKSPACE
@@ -60,7 +74,7 @@ jobs:
           path: .
 
       - name: Deploy to server
-        uses: easingthemes/ssh-deploy@main
+        uses: easingthemes/ssh-deploy@v5.1.0
         with:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
