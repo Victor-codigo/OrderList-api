@@ -126,31 +126,31 @@ setup-deploy: ## Sets the application up for production deploy
 
 	@echo "$(TITLE)Generating public and private keys$(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	bin/console lexik:jwt:generate-keypair --overwrite --env=prod
+	bin/console lexik:jwt:generate-keypair --overwrite --quiet --env=prod
 
 	@echo "$(TITLE)Security: DB_USER $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	echo -n ${DB_USER} | bin/console secrets:set DB_USER - --env=prod
+	echo -n ${DB_USER} | bin/console secrets:set DB_USER - --quiet --env=prod
 
 	@echo "$(TITLE)Security: DB_PASSWORD $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	echo -n ${DB_PASSWORD} | bin/console secrets:set DB_PASSWORD - --env=prod
+	echo -n ${DB_PASSWORD} | bin/console secrets:set DB_PASSWORD - --quiet --env=prod
 
 	@echo "$(TITLE)Security: DB_HOST $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	echo -n ${DB_HOST} | bin/console secrets:set DB_HOST - --env=prod
+	echo -n ${DB_HOST} | bin/console secrets:set DB_HOST - --quiet --env=prod
 
 	@echo "$(TITLE)Security: DB_PORT $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	echo -n ${DB_PORT} | bin/console secrets:set DB_PORT - --env=prod
+	echo -n ${DB_PORT} | bin/console secrets:set DB_PORT - --quiet --env=prod
 
 	@echo "$(TITLE)Security: DB_VERSION $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	echo -n ${DB_VERSION} | bin/console secrets:set DB_VERSION - --env=prod
+	echo -n ${DB_VERSION} | bin/console secrets:set DB_VERSION - --quiet --env=prod
 
 	@echo "$(TITLE)Security: APP_SECRET $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	bin/console secrets:set APP_SECRET --random=32 --env=prod
+	bin/console secrets:set APP_SECRET --random=32 --quiet --env=prod
 
 	# Replaces in file .env.prod the variable DATABASE_URL
 	sed -i 's/{# DB_USER #}/%env(DB_USER)%/' .env.prod
