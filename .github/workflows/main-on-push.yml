@@ -83,3 +83,14 @@ jobs:
           SOURCE: ""
           TARGET: ${{ secrets.DEPLOY_PATH }}
           ARGS: "-rlgoDzvc --delete"
+
+      - name: Create entrypoint symbol
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.REMOTE_PORT }}
+          script: |
+            ln -s ${{ secrets.DEPLOY_PATH }}/public ${{ secrets.DEPLOY_PUBLIC_PATH }}
