@@ -124,6 +124,10 @@ setup-deploy: ## Sets the application up for production deploy
 	-bin/console --env=prod
 	@echo "$(TITLE)Ignore this error message$(END)"
 
+	@echo "$(TITLE)Security: JWT_PASSPHRASE $(END)"
+	@echo "$(SEPARATOR)--------------------------------------------$(END)"
+	bin/console secrets:set JWT_PASSPHRASE --random=32 --quiet --env=prod
+
 	@echo "$(TITLE)Generating public and private keys$(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
 	bin/console lexik:jwt:generate-keypair --overwrite --quiet --env=prod
@@ -151,6 +155,10 @@ setup-deploy: ## Sets the application up for production deploy
 	@echo "$(TITLE)Security: APP_SECRET $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
 	bin/console secrets:set APP_SECRET --random=32 --quiet --env=prod
+
+	@echo "$(TITLE)Security: SYSTEM_KEY $(END)"
+	@echo "$(SEPARATOR)--------------------------------------------$(END)"
+	bin/console secrets:set SYSTEM_KEY --random=32 --quiet --env=prod
 
 	# Replaces in file .env.prod the variable DATABASE_URL
 	sed -i 's/{# DB_USER #}/%env(DB_USER)%/' .env.prod
