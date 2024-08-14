@@ -94,4 +94,4 @@ jobs:
           port: ${{ secrets.REMOTE_PORT }}
           script: |
             mkdir -p ${{ secrets.DEPLOY_PUBLIC_PATH }}
-            ln -s ${{ secrets.DEPLOY_PATH }}/public ${{ secrets.DEPLOY_PUBLIC_PATH }}
+            ln -s ${{ secrets.DEPLOY_PATH }}/public ${{ secrets.DEPLOY_PUBLIC_PATH }}/api
