@@ -63,9 +63,7 @@ setup-deploy: ## Sets the application up for production deploy
 	echo -n "mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?serverVersion=${DB_VERSION}&charset=utf8mb4" \
 	| bin/console secrets:set DATABASE_URL - --quiet --env=prod
 
-	@echo "$(TITLE)Security: MAILER_DSN $(END)"
-	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	echo -n ${MAILER_DSN} | bin/console secrets:set MAILER_DSN - --quiet --env=prod
+	echo -n "${MAILER_DSN}" | bin/console secrets:set MAILER_DSN - --quiet --env=prod
 
 	@echo "$(TITLE)Removing Composer development dependecies$(END)"
 	@echo "$(SEPARATOR)------------------------------$(END)"
