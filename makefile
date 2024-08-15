@@ -64,7 +64,7 @@ setup-deploy: ## Sets the application up for production deploy
 
 	@echo "$(TITLE)Security: MAILER_DSN $(END)"
 	@echo "$(SEPARATOR)--------------------------------------------$(END)"
-	bin/console secrets:set MAILER_DSN ${MAILER_DSN} --quiet --env=prod
+	bin/console secrets:set MAILER_DSN "${MAILER_DSN}" --quiet --env=prod
 
 	@echo "$(TITLE)Removing Composer development dependecies$(END)"
 	@echo "$(SEPARATOR)------------------------------$(END)"
