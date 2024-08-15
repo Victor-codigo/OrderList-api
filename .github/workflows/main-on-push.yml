@@ -10,7 +10,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-
   # ---------------------------------------
   # Sets the application up for production
   # --------------------------------------
@@ -21,7 +20,7 @@ jobs:
       - name: Setup PHP with PECL extension
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: "8.3"
 
       - name: Clone repository
         uses: actions/checkout@v4.1.7
@@ -47,9 +46,11 @@ jobs:
         env:
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: ${{ secrets.DB_NAME }}
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_PORT: ${{ secrets.DB_PORT }}
           DB_VERSION: ${{ secrets.DB_VERSION }}
+          MAILER_DSN: ${{ SECRETS.MAILER_DSN }}
 
       - name: Create application artifact
         uses: actions/upload-artifact@v4
@@ -57,7 +58,6 @@ jobs:
           name: app-production-artifact
           path: .
           overwrite: true
-
 
   # --------------------------------------
   # Deploy application on server
