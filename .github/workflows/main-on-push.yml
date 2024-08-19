@@ -95,6 +95,6 @@ jobs:
           script: |
             mkdir -p ${{ secrets.DEPLOY_PUBLIC_PATH }}
             ln -s ${{ secrets.DEPLOY_PATH }}/public ${{ secrets.DEPLOY_PUBLIC_PATH }}/api
-            ln -s ${{ secrets.DEPLOY_PATH }}/public/index.php ${{ secrets.DEPLOY_PUBLIC_PATH }}/api/index_api.php
+            ln -s ${{ secrets.DEPLOY_PATH }}/public/index.php ${{ secrets.DEPLOY_PUBLIC_PATH }}/index_api.php
             cp ${{ secrets.DEPLOY_PATH }}/../config/OrderList-api/AppConfig.php ${{ secrets.DEPLOY_PATH }}/src/Common/Domain/Config/AppConfig.php
             cp ${{ secrets.DEPLOY_PATH }}/../config/OrderList-api/VALUE_OBJECTS_CONSTRAINTS.php ${{ secrets.DEPLOY_PATH }}src/Common/Domain/Model/ValueObject/Constraints/VALUE_OBJECTS_CONSTRAINTS.php
