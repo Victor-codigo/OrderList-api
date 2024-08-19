@@ -26,11 +26,7 @@ use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 
 class ModuleCommunication implements ModuleCommunicationInterface
 {
-    private const array COMMUNICATION_CONFIG = [
-        'proxy' => AppConfig::MODULE_COMMUNICATION_REQUEST_PROXY,
-        'verify_peer' => AppConfig::MODULE_COMMUNICATION_REQUEST_HTTPS['verify_peer'],
-        'verify_host' => AppConfig::MODULE_COMMUNICATION_REQUEST_HTTPS['verify_host'],
-    ];
+    private const array COMMUNICATION_CONFIG = AppConfig::MODULE_COMMUNICATION_PROXY_CONFIG;
 
     private const string DEV_QUERY_STRING = 'XDEBUG_SESSION=VSCODE';
     private const string TEST_QUERY_STRING = 'env=test';

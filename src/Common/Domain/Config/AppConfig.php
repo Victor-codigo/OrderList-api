@@ -129,14 +129,10 @@ class AppConfig
     public const string COOKIE_SESSION_NAME = 'TOKENSESSION';
 
     /**
-     * Module communication proxy URL.
+     * Module communication proxy configuration.
      */
-    public const string MODULE_COMMUNICATION_REQUEST_PROXY = 'http://proxy:80';
-
-    /**
-     * Module communication HTTPS.
-     */
-    public const array MODULE_COMMUNICATION_REQUEST_HTTPS = [
+    public const array MODULE_COMMUNICATION_PROXY_CONFIG = [
+        'proxy' => 'http://proxy:80',
         'verify_peer' => false,
         'verify_host' => false,
     ];
