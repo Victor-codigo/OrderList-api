@@ -82,7 +82,7 @@ jobs:
           REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
           SOURCE: ""
           TARGET: ${{ secrets.DEPLOY_PATH }}
-          ARGS: "-rlgoDzvc --delete --exclude 'public/assets/img/users/' --exclude 'public/assets/img/groups/' --exclude 'public/assets/img/products/' --exclude 'public/assets/img/shops/' "
+          ARGS: "-rlgoDzvc --delete --exclude='public/assets/img/users/' --exclude='public/assets/img/groups/' --exclude='public/assets/img/products/' --exclude='public/assets/img/shops/'"
 
       - name: Create entrypoint symbol
         uses: appleboy/ssh-action@v1.0.3
