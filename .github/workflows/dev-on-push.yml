@@ -14,6 +14,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: "Clone repository"
+        uses: actions/checkout@v4
+
       - name: Install docker compose
         uses: ndeloof/install-compose-action@v0.0.1
         with:
