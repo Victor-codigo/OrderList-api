@@ -53,3 +53,9 @@ jobs:
           # docker-compose --file .docker/build/docker-compose.yml --env-file .docker/build/env/.env exec -u 0 php bash -c "cd ./home/runner/work/OrderList-api/OrderList-api && bin/console lexik:jwt:check-config"
           # docker-compose --file .docker/build/docker-compose.yml --env-file .docker/build/env/.env exec -u 0 php bash -c "cd ./home/runner/work/OrderList-api/OrderList-api && bin/console lexik:jwt:generate-keypair --overwrite --env=test --no-interaction -vvv"
           # docker-compose --file .docker/build/docker-compose.yml --env-file .docker/build/env/.env exec -u 0 php bash -c "cd ./home/runner/work/OrderList-api/OrderList-api && bin/console doctrine:query:sql 'SELECT * FROM OrderList_db_test.Users'"
+
+      - name: Execute tests
+        run: |
+          # docker-compose --file .docker/build/docker-compose.yml --env-file .docker/build/env/.env exec -u 0 php bash -c "cd ./home/runner/work/OrderList-api/OrderList-api && bin/phpunit"
+          docker-compose --file .docker/build/docker-compose.yml --env-file .docker/build/env/.env exec -u 0 php bash -c "cd ./home/runner/work/OrderList-api/OrderList-api && bin/phpunit --configuration phpunit.xml.dist tests/Functional/Shop/Adapter/Http/Controller/ShopCreate/ShopCreateControllerTest.php"
+          # docker-compose --file .docker/build/docker-compose.yml --env-file .docker/build/env/.env exec -u 0 php bash -c "cd ./home/runner/work/OrderList-api/OrderList-api && bin/phpunit --configuration phpunit.xml.dist --testsuite functional"
