@@ -1,0 +1,52 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - dev
+
+concurrency:
+  group: dev-on-push
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install docker compose
+        uses: ndeloof/install-compose-action@v0.0.1
+        with:
+          version: latest
+          legacy: true
+
+      - name: "Create ssh fake key"
+        run: |
+          mkdir ~/.ssh
+          echo "" > ~/.ssh/id_ed25519
+
+      - name: "Build containers"
+        uses: hoverkraft-tech/compose-action@v2.0.1
+        with:
+          compose-file: "./.docker/build/docker-compose.yml"
+          services: |
+            nginx-api
+            php
+            mysql
+            composer
+          compose-flags: |
+            --env-file ./.docker/build/env/.env
+        env:
+          USER_ID: 1001
+          GROUP_ID: 1002
+
+      - name: Setting up project for development
+        run: docker-compose --file ./.docker/build/docker-compose.yml --env-file ./.docker/build/env/.env exec -u 0 php bash -c "cd ./home/runner/work/OrderList-api/OrderList-api && make setup-dev"
+
+      - name: Containers up
+        run: |
+          # docker-compose --file .docker/build/docker-compose.yml --env-file .docker/build/env/.env ps
+          # docker-compose --file .docker/build/docker-compose.yml --env-file .docker/build/env/.env exec -u 0 php bash -c "cd ./home/runner/work/OrderList-api/OrderList-api && bin/console hautelook:fixtures:load -vvv --no-interaction --profile --env=test"
+          # docker-compose --file .docker/build/docker-compose.yml --env-file .docker/build/env/.env exec -u 0 php bash -c "cd ./home/runner/work/OrderList-api/OrderList-api && bin/console lexik:jwt:check-config"
+          # docker-compose --file .docker/build/docker-compose.yml --env-file .docker/build/env/.env exec -u 0 php bash -c "cd ./home/runner/work/OrderList-api/OrderList-api && bin/console lexik:jwt:generate-keypair --overwrite --env=test --no-interaction -vvv"
+          # docker-compose --file .docker/build/docker-compose.yml --env-file .docker/build/env/.env exec -u 0 php bash -c "cd ./home/runner/work/OrderList-api/OrderList-api && bin/console doctrine:query:sql 'SELECT * FROM OrderList_db_test.Users'"

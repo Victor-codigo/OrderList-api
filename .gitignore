@@ -6,6 +6,10 @@
 /public/bundles/
 /var/
 /vendor/
+/public/assets/img/groups/
+/public/assets/img/products/
+/public/assets/img/shops/
+/public/assets/img/users/
 ###< symfony/framework-bundle ###
 ###> symfony/phpunit-bridge ###
 .phpunit.result.cache
