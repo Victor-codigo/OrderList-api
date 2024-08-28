@@ -45,11 +45,20 @@ jobs:
 
       - name: Setting up project for development
         run: docker-compose --file ./.docker/build/docker-compose.yml --env-file ./.docker/build/env/.env exec -u 0 php bash -c "cd ./home/runner/work/OrderList-api/OrderList-api && make setup-dev"
+        env:
+          USER_ID: 1001
+          GROUP_ID: 1002
 
       - name: Containers up
         run: |
           docker-compose --file .docker/build/docker-compose.yml --env-file .docker/build/env/.env ps
+        env:
+          USER_ID: 1001
+          GROUP_ID: 1002
 
       - name: Execute tests
         run: |
           docker-compose --file .docker/build/docker-compose.yml --env-file .docker/build/env/.env exec -u 0 php bash -c "cd ./home/runner/work/OrderList-api/OrderList-api && bin/phpunit --configuration phpunit.xml.dist tests/Functional/Shop/Adapter/Http/Controller/ShopCreate/ShopCreateControllerTest.php"
+        env:
+          USER_ID: 1001
+          GROUP_ID: 1002
