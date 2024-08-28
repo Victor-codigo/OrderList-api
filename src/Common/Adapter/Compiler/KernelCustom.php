@@ -7,10 +7,16 @@ namespace Common\Adapter\Compiler;
 use Common\Adapter\Compiler\RegisterEventDomain\RegisterEventDomainSubscribers;
 use Common\Domain\Event\EventDomainSubscriberInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Dotenv\Dotenv;
 
 class KernelCustom
 {
-    public static function eventSubscribersAutoWire(ContainerBuilder $container): void
+    public function __construct(
+        private Dotenv $dotEnv
+    ) {
+    }
+
+    public function eventSubscribersAutoWire(ContainerBuilder $container): void
     {
         $container
             ->registerForAutoConfiguration(EventDomainSubscriberInterface::class)
@@ -19,7 +25,11 @@ class KernelCustom
         $container->addCompilerPass(new RegisterEventDomainSubscribers());
     }
 
-    public static function changeEnvironmentByRequestQuery($environment): string
+    /**
+     * @throws PathException
+     * @throws FormatException
+     */
+    public function changeEnvironmentByRequestQuery(mixed $environment, string $projectDir): string
     {
         if ('dev' !== $environment) {
             return $environment;
@@ -29,10 +39,13 @@ class KernelCustom
             return $environment;
         }
 
-        $_ENV['APP_ENV'] = match ($_REQUEST['env']) {
-            'test' => 'test',
-            default => $environment
-        };
+        $this->dotEnv->loadEnv(
+            "{$projectDir}/.env.{$_REQUEST['env']}",
+            $environment,
+            'dev',
+            ['test'],
+            false
+        );
 
         return $_ENV['APP_ENV'];
     }
