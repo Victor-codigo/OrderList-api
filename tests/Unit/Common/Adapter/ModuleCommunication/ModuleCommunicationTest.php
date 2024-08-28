@@ -127,13 +127,7 @@ class ModuleCommunicationTest extends TestCase
             $this->assertContains($cookie, $options['headers']);
         }
 
-        $this->assertArrayHasKey('proxy', $options);
-        $this->assertArrayHasKey('verify_peer', $options);
-        $this->assertArrayHasKey('verify_host', $options);
         $this->assertArrayHasKey('auth_bearer', $options);
-        $this->assertEquals('http://proxy:80', $options['proxy']);
-        $this->assertFalse($options['verify_peer']);
-        $this->assertFalse($options['verify_host']);
         $this->assertEquals(self::JWT_TOKEN, $options['auth_bearer']);
     }
 

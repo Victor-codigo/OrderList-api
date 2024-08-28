@@ -132,9 +132,9 @@ class AppConfig
      * Module communication proxy configuration.
      */
     public const array MODULE_COMMUNICATION_PROXY_CONFIG = [
-        'proxy' => 'http://proxy:80',
-        'verify_peer' => false,
-        'verify_host' => false,
+        // 'proxy' => 'http://proxy:80',
+        // 'verify_peer' => false,
+        // 'verify_host' => false,
     ];
 
     /**
