@@ -98,5 +98,6 @@ jobs:
             ln -sfn ${{ secrets.DEPLOY_PATH }}/public/index.php ${{ secrets.DEPLOY_PUBLIC_PATH }}/index_api.php
             cp ${{ secrets.DEPLOY_PATH }}/../config/OrderList-api/AppConfig.php ${{ secrets.DEPLOY_PATH }}/src/Common/Domain/Config/AppConfig.php
             cp ${{ secrets.DEPLOY_PATH }}/../config/OrderList-api/VALUE_OBJECTS_CONSTRAINTS.php ${{ secrets.DEPLOY_PATH }}src/Common/Domain/Model/ValueObject/Constraints/VALUE_OBJECTS_CONSTRAINTS.php
+            chmod -R 744 ${{ secrets.DEPLOY_PATH }}
             chmod -R 766 ${{ secrets.DEPLOY_PATH }}/public/assets
             chmod 644 ${{ secrets.DEPLOY_PATH }}/public/assets/.htaccess
