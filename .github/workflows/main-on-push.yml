@@ -99,4 +99,4 @@ jobs:
             cp ${{ secrets.DEPLOY_PATH }}/../config/OrderList-api/AppConfig.php ${{ secrets.DEPLOY_PATH }}/src/Common/Domain/Config/AppConfig.php
             cp ${{ secrets.DEPLOY_PATH }}/../config/OrderList-api/VALUE_OBJECTS_CONSTRAINTS.php ${{ secrets.DEPLOY_PATH }}src/Common/Domain/Model/ValueObject/Constraints/VALUE_OBJECTS_CONSTRAINTS.php
             chmod -R u=rwx,g=rx,o=rx ${{ secrets.DEPLOY_PATH }}/public/assets
-            chmod u=rw,g=r,o=r 644 ${{ secrets.DEPLOY_PATH }}/public/assets/.htaccess
+            chmod u=rw,g=r,o=r ${{ secrets.DEPLOY_PATH }}/public/assets/.htaccess
