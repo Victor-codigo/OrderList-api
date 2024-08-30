@@ -32,6 +32,7 @@ class ProductShopRepositoryTest extends DataBaseTestCase
     private ProductShopRepository $object;
     private ProductRepositoryInterface $productRepository;
     private ShopRepositoryInterface $shopRepository;
+    private MockObject|ConnectionException $connectionException;
 
     #[\Override]
     protected function setUp(): void
@@ -41,6 +42,7 @@ class ProductShopRepositoryTest extends DataBaseTestCase
         $this->object = $this->entityManager->getRepository(ProductShop::class);
         $this->productRepository = $this->entityManager->getRepository(Product::class);
         $this->shopRepository = $this->entityManager->getRepository(Shop::class);
+        $this->connectionException = $this->createMock(ConnectionException::class);
     }
 
     private function getNewProductShop(float $price, UNIT_MEASURE_TYPE $unit): ProductShop
@@ -64,7 +66,7 @@ class ProductShopRepositoryTest extends DataBaseTestCase
         $objectManagerMock
             ->expects($this->once())
             ->method('flush')
-            ->willThrowException(ConnectionException::driverRequired(''));
+            ->willThrowException($this->connectionException);
 
         $this->mockObjectManager($this->object, $objectManagerMock);
 
