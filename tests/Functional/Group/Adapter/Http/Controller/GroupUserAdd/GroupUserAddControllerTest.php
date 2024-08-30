@@ -6,6 +6,7 @@ namespace Test\Functional\Group\Adapter\Http\Controller\GroupUserAdd;
 
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
@@ -59,7 +60,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertEquals(self::USER_TO_ADD_IDS, $responseContent->data->id);
     }
 
-    private function providerUsersToAddByName(): array
+    private static function providerUsersToAddByName(): array
     {
         return [
             [
@@ -73,9 +74,8 @@ class GroupUserAddControllerTest extends WebClientTestCase
 
     /**
      * @test
-     *
-     * @dataProvider providerUsersToAddByName
      */
+    #[DataProvider('providerUsersToAddByName')]
     public function itShouldAddByNameAllUsersToTheGroup(array $users): void
     {
         $client = $this->getNewClientAuthenticatedUser();

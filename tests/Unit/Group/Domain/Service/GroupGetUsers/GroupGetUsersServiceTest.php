@@ -20,6 +20,7 @@ use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupGetUsers\Dto\GroupGetUsersDto;
 use Group\Domain\Service\GroupGetUsers\GroupGetUsersService;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use User\Domain\Model\User;
@@ -50,7 +51,7 @@ class GroupGetUsersServiceTest extends TestCase
         );
     }
 
-    private function getUsers(): array
+    private static function getUsers(): array
     {
         return [
             [
@@ -77,9 +78,9 @@ class GroupGetUsersServiceTest extends TestCase
         ];
     }
 
-    private function getUsersExpected(): array
+    private static function getUsersExpected(): array
     {
-        $users = $this->getUsers();
+        $users = self::getUsers();
 
         return array_map(
             function (array $user): array {
@@ -168,9 +169,9 @@ class GroupGetUsersServiceTest extends TestCase
         );
     }
 
-    private function getGroupUsersDataProvider(): iterable
+    private static function getGroupUsersDataProvider(): iterable
     {
-        $usersExpectedData = $this->getUsersExpected();
+        $usersExpectedData = self::getUsersExpected();
 
         yield [
             new GroupGetUsersDto(
@@ -267,13 +268,12 @@ class GroupGetUsersServiceTest extends TestCase
 
     /**
      * @test
-     *
-     * @dataProvider getGroupUsersDataProvider
      */
+    #[DataProvider('getGroupUsersDataProvider')]
     public function itShouldGetGroupUsers(GroupGetUsersDto $input, array $usersDataExpected): void
     {
         $groupUsersData = $this->getGroupUsersData();
-        $usersData = $this->getUsers();
+        $usersData = self::getUsers();
         $usersResponseDto = $this->getUsersResponseDto($usersData, [], RESPONSE_STATUS::OK);
 
         $this->userGroupRepository
@@ -323,7 +323,7 @@ class GroupGetUsersServiceTest extends TestCase
             true
         );
         $groupUsersData = $this->getGroupUsersData();
-        $usersData = $this->getUsers();
+        $usersData = self::getUsers();
         $usersResponseDto = $this->getUsersResponseDto($usersData, [], RESPONSE_STATUS::OK);
 
         $this->userGroupRepository

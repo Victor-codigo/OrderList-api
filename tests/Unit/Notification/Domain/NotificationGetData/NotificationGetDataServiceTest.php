@@ -13,6 +13,7 @@ use Notification\Domain\Model\Notification;
 use Notification\Domain\Ports\Notification\NotificationRepositoryInterface;
 use Notification\Domain\Service\NotificationGetData\Dto\NotificationGetDataDto;
 use Notification\Domain\Service\NotificationGetData\NotificationGetDataService;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -84,7 +85,7 @@ class NotificationGetDataServiceTest extends TestCase
         ]);
     }
 
-    private function providerNotificationLanguage(): array
+    private static function providerNotificationLanguage(): array
     {
         return [
             ['en'],
@@ -94,9 +95,8 @@ class NotificationGetDataServiceTest extends TestCase
 
     /**
      * @test
-     *
-     * @dataProvider providerNotificationLanguage
      */
+    #[DataProvider('providerNotificationLanguage')]
     public function itShouldGetNotificationData(string $providerLang): void
     {
         $notifications = $this->getNotifications();

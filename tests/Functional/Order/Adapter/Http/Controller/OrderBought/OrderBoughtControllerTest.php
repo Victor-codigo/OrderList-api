@@ -6,6 +6,7 @@ namespace Test\Functional\Order\Adapter\Http\Controller\OrderBought;
 
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
@@ -24,7 +25,7 @@ class OrderBoughtControllerTest extends WebClientTestCase
         parent::setUp();
     }
 
-    private function boughtDataProvider(): iterable
+    private static function boughtDataProvider(): iterable
     {
         yield [
             '5cfe52e5-db78-41b3-9acd-c3c84924cb9b',
@@ -45,9 +46,8 @@ class OrderBoughtControllerTest extends WebClientTestCase
 
     /**
      * @test
-     *
-     * @dataProvider boughtDataProvider
      */
+    #[DataProvider('boughtDataProvider')]
     public function itShouldSetBought(?string $orderId, ?string $groupId, ?bool $bought): void
     {
         $client = $this->getNewClientAuthenticatedUser();

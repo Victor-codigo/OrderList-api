@@ -11,6 +11,7 @@ use Common\Domain\Validation\Filter\FILTER_SECTION;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupGetUsers\Dto\GroupGetUsersInputDto;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,9 +29,9 @@ class GroupGetUsersInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    private function inputDataProvider(): iterable
+    private static function inputDataProvider(): iterable
     {
-        $userSession = $this->createMock(UserShared::class);
+        $userSession = self::createStub(UserShared::class);
 
         yield [
             new GroupGetUsersInputDto(
@@ -240,9 +241,8 @@ class GroupGetUsersInputDtoTest extends TestCase
 
     /**
      * @test
-     *
-     * @dataProvider inputDataProvider
      */
+    #[DataProvider('inputDataProvider')]
     public function itShouldValidateInput22(GroupGetUsersInputDto $object, array $errors): void
     {
         $return = $object->validate($this->validator);

@@ -12,6 +12,7 @@ use Order\Domain\Model\Order;
 use Order\Domain\Ports\Repository\OrderRepositoryInterface;
 use Order\Domain\Service\OrderBought\Dto\OrderBoughtDto;
 use Order\Domain\Service\OrderBought\OrderBoughtService;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Product\Domain\Model\Product;
@@ -50,7 +51,7 @@ class OrderBoughtServiceTest extends TestCase
         );
     }
 
-    private function boughtDataProvider(): iterable
+    private static function boughtDataProvider(): iterable
     {
         yield [true];
         yield [false];
@@ -58,9 +59,8 @@ class OrderBoughtServiceTest extends TestCase
 
     /**
      * @test
-     *
-     * @dataProvider boughtDataProvider
      */
+    #[DataProvider('boughtDataProvider')]
     public function itShouldSetBought(bool $bought): void
     {
         $input = new OrderBoughtDto(

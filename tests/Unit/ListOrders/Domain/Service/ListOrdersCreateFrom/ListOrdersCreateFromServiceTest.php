@@ -18,6 +18,7 @@ use ListOrders\Domain\Service\ListOrdersCreateFrom\Exception\ListOrdersCreateFro
 use ListOrders\Domain\Service\ListOrdersCreateFrom\ListOrdersCreateFromService;
 use Order\Domain\Model\Order;
 use Order\Domain\Ports\Repository\OrderRepositoryInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Product\Domain\Model\Product;
@@ -145,7 +146,7 @@ class ListOrdersCreateFromServiceTest extends TestCase
         }
     }
 
-    public function createListOrdersDataProvider(): iterable
+    public static function createListOrdersDataProvider(): iterable
     {
         yield [true];
         yield [false];
@@ -154,8 +155,8 @@ class ListOrdersCreateFromServiceTest extends TestCase
     /**
      * @test
      *
-     * @dataProvider createListOrdersDataProvider
      * */
+    #[DataProvider('createListOrdersDataProvider')]
     public function itShouldCreateAListOrdersFromOtherListOrders(bool $hasOrders): void
     {
         $listOrdersOld = $this->getListOrders(self::LIST_ORDERS_ID_OLD, $hasOrders);
