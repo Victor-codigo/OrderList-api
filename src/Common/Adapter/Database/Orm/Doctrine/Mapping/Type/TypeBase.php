@@ -13,12 +13,6 @@ abstract class TypeBase extends Type
     abstract public function getClassImplementationName(): string;
 
     #[\Override]
-    public function getName(): string
-    {
-        return static::class;
-    }
-
-    #[\Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
         if (null === $value) {

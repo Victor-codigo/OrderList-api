@@ -94,14 +94,4 @@ class TypeBaseTest extends TestCase
             'convertToPHPValue: ValueObject class is wrong');
         $this->assertEquals($value, $return->getValue());
     }
-
-    /** @test */
-    public function getNameReturnValue(): void
-    {
-        $return = $this->object->getName();
-        $objectReflection = new \ReflectionClass($this->object);
-
-        $this->assertEquals($objectReflection->getName(), $return,
-            'getName: The name returned is wrong');
-    }
 }
