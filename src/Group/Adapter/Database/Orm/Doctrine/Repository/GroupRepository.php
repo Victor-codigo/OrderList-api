@@ -10,6 +10,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\ORM\Exception\EntityIdentityCollisionException;
 use Doctrine\Persistence\ManagerRegistry;
 use Group\Domain\Model\Group;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
@@ -31,7 +32,7 @@ class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
         try {
             $this->objectManager->persist($group);
             $this->objectManager->flush();
-        } catch (UniqueConstraintViolationException $e) {
+        } catch (UniqueConstraintViolationException|EntityIdentityCollisionException $e) {
             throw DBUniqueConstraintException::fromId($group->getId()->getValue(), $e->getCode());
         } catch (\Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
