@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupCreate\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -51,7 +52,7 @@ class GroupCreateInputDtoTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateGroupTypeUser(): void
     {
         $object = new GroupCreateInputDto(
@@ -67,7 +68,7 @@ class GroupCreateInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateGroupTypeGroup(): void
     {
         $object = new GroupCreateInputDto(
@@ -83,7 +84,7 @@ class GroupCreateInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateDescriptionIsNull(): void
     {
         $object = new GroupCreateInputDto(
@@ -99,7 +100,7 @@ class GroupCreateInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsNull(): void
     {
         $object = new GroupCreateInputDto(
@@ -115,7 +116,7 @@ class GroupCreateInputDtoTest extends TestCase
         $this->assertSame(['name' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsWrong(): void
     {
         $object = new GroupCreateInputDto(
@@ -131,7 +132,7 @@ class GroupCreateInputDtoTest extends TestCase
         $this->assertSame(['name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDescriptionIsTooLong(): void
     {
         $object = new GroupCreateInputDto(
@@ -147,7 +148,7 @@ class GroupCreateInputDtoTest extends TestCase
         $this->assertSame(['description' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupTypeIsWrong(): void
     {
         $object = new GroupCreateInputDto(
@@ -163,7 +164,7 @@ class GroupCreateInputDtoTest extends TestCase
         $this->assertSame(['type' => [VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupImageMimeTypeNotAllowed(): void
     {
         $object = new GroupCreateInputDto(
@@ -180,7 +181,7 @@ class GroupCreateInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_INVALID_MIME_TYPE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupImageSizeFormTooLarge(): void
     {
         $object = new GroupCreateInputDto(
@@ -198,7 +199,7 @@ class GroupCreateInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_IMAGE_TOO_LARGE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupImageSizeIniTooLarge(): void
     {
         $object = new GroupCreateInputDto(
@@ -216,7 +217,7 @@ class GroupCreateInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_INIT_SIZE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupImageNoUploaded(): void
     {
         $object = new GroupCreateInputDto(
@@ -233,7 +234,7 @@ class GroupCreateInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_NO_FILE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupImagePartiallyUploaded(): void
     {
         $object = new GroupCreateInputDto(
@@ -250,7 +251,7 @@ class GroupCreateInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_PARTIAL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupImageCantWrite(): void
     {
         $object = new GroupCreateInputDto(
@@ -267,7 +268,7 @@ class GroupCreateInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_CANT_WRITE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupImageErrorExtension(): void
     {
         $object = new GroupCreateInputDto(
@@ -284,7 +285,7 @@ class GroupCreateInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_EXTENSION]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupImageErrorTmpDir(): void
     {
         $object = new GroupCreateInputDto(

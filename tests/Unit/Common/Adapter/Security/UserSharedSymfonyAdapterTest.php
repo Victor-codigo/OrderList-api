@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Security;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Security\UserShared;
@@ -25,7 +26,7 @@ class UserSharedSymfonyAdapterTest extends TestCase
         $this->object = new UserSharedSymfonyAdapter($this->userShared);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetTheRoles(): void
     {
         $roles = Roles::create([USER_ROLES::USER]);
@@ -40,7 +41,7 @@ class UserSharedSymfonyAdapterTest extends TestCase
         $this->assertEquals([USER_ROLES::USER->value], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetTheRolesNoRoles(): void
     {
         $roles = new Roles(null);

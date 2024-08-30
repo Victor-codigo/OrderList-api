@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Adapter\Database\Orm\Doctrine\Repository;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Object\Rol;
@@ -58,7 +59,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindUsersOfTheGroup(): void
     {
         $groupUsersId = $this->getGroupUserIds();
@@ -72,14 +73,14 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFindingUsersGroupNotFound(): void
     {
         $this->expectException(DBNotFoundException::class);
         $this->object->findGroupUsersOrFail(ValueObjectFactory::createIdentifier('not a valid id'));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetGroupsAdmins(): void
     {
         $groupsUsersIdExpected = [
@@ -119,7 +120,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetGroupsUsers(): void
     {
         $groupsUsersIdExpected = [
@@ -153,14 +154,14 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoUsersGroupsFound(): void
     {
         $this->expectException(DBNotFoundException::class);
         $this->object->findGroupsUsersOrFail(['2eca818d-281f-4c7d-908e-b9b57017e1d0'], GROUP_ROLES::ADMIN);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindFirstUserOfAGroupByGroupRoleAdmin(): void
     {
         $groupsId = [
@@ -178,7 +179,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $this->assertEqualsCanonicalizing($expected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindFirstUserOfAGroupByGroupRoleUser(): void
     {
         $groupsId = [
@@ -198,7 +199,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $this->assertEqualsCanonicalizing($expected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFindFirstUserOfAGroupByGroupRoleNotFound(): void
     {
         $groupsId = [
@@ -209,7 +210,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $this->object->findGroupsFirstUserByRolOrFail($groupsId, GROUP_ROLES::USER);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindUsersOfTheGroupByGroupAndUserId(): void
     {
         $groupUsersId = $this->getGroupUserIds();
@@ -231,7 +232,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindOnlyEightUsersOfTheGroupByGroupAndUserId(): void
     {
         $groupUsersId = $this->getGroupUserIds();
@@ -256,7 +257,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindNotFindUsersOfTheGroupByGroupAndUserId(): void
     {
         // Users that do not exists in data base
@@ -276,7 +277,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindUsersWithRolAdminOfTheGroup(): void
     {
         $return = $this->object->findGroupUsersByRol(
@@ -287,7 +288,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $this->assertEquals(self::GROUP_USER_ADMIN_ID, $return[0]->getUserId()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindingUsersWithRolUserOfTheGroup(): void
     {
         $expectUsersGroupIds = $this->getGroupUserIds();
@@ -303,7 +304,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFindingGroupUsersWithRolAdmins(): void
     {
         $this->expectException(DBNotFoundException::class);
@@ -313,7 +314,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindThreeGroups(): void
     {
         $userId = ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID);
@@ -327,7 +328,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldOnlyGroupsIsAdmin(): void
     {
         $userId = ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID);
@@ -345,7 +346,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldOnlyGroupsIsUser(): void
     {
         $userId = ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID);
@@ -363,7 +364,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldOnlyGroupsTypeGroup(): void
     {
         $userId = ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID);
@@ -388,7 +389,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldOnlyGroupsTypeGroupAndIsUser(): void
     {
         $userId = ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID);
@@ -415,7 +416,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNotGroupsFound(): void
     {
         $userId = ValueObjectFactory::createIdentifier(self::GROUP_USER_ADMIN_ID.'-');
@@ -424,7 +425,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $this->object->findUserGroupsById($userId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetUserGroupsByFilterEqualsAndGroupTypeGroup(): void
     {
         $groupName = 'GroupOne';
@@ -444,7 +445,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $this->assertEquals($expectedGroups, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetUserGroupsByFilterStartsWithAndGroupTypeGroup(): void
     {
         $groupName = 'Group';
@@ -469,7 +470,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $this->assertEqualsCanonicalizing($expectedGroups, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetUserGroupsByFilterEndsWithAndGroupTypeGroup(): void
     {
         $groupName = 'One';
@@ -489,7 +490,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $this->assertEquals($expectedGroups, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetUserGroupsByFilterContainsAndGroupTypeGroup(): void
     {
         $groupName = 'oup';
@@ -514,7 +515,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $this->assertEqualsCanonicalizing($expectedGroups, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetUserGroupsByFilterStartsWithAndGroupTypeUser(): void
     {
         $groupName = 'oup';
@@ -534,7 +535,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $this->assertEquals($expectedGroups, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetUserGroupsByFilterStartsWithAndGroupTypeNotSet(): void
     {
         $groupName = 'Group';
@@ -560,7 +561,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $this->assertEqualsCanonicalizing($expectedGroups, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSaveTheUsersGroup(): void
     {
         $group = $this->groupRepository->findBy(['id' => ValueObjectFactory::createIdentifier(self::GROUP_ID)]);
@@ -598,7 +599,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $this->assertEquals(3, $countNumUsersSaved);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDatabaseError(): void
     {
         $group = Group::fromPrimitives(self::GROUP_ID, 'GroupName', GROUP_TYPE::GROUP, 'description', null);
@@ -618,7 +619,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $this->object->save($usersGroup);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindTheNumberOfUsersInTheGroup(): void
     {
         $groupUsers = $this->object->findBy(['groupId' => ValueObjectFactory::createIdentifier(self::GROUP_ID)]);
@@ -627,14 +628,14 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $this->assertEquals(count($groupUsers), $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupDoesNotExists(): void
     {
         $this->expectException(DBNotFoundException::class);
         $this->object->findGroupUsersNumberOrFail(ValueObjectFactory::createIdentifier('invalid group'));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindGroupsNumberOfUsers(): void
     {
         $groupsId = [
@@ -672,7 +673,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $this->assertEquals($expected, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindGroupsNumberOfUsersNotFoundException(): void
     {
         $groupsId = [
@@ -682,7 +683,7 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         $this->object->findGroupsUsersNumberOrFail($groupsId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveUsersGroup(): void
     {
         $usersId = array_map(

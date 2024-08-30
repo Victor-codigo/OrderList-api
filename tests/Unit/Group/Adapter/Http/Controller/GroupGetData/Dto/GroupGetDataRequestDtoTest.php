@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Adapter\Http\Controller\GroupGetData\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Group\Adapter\Http\Controller\GroupGetData\Dto\GroupGetDataRequestDto;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -37,7 +38,7 @@ class GroupGetDataRequestDtoTest extends TestCase
         return new GroupGetDataRequestDto($request);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldProcessAllIds(): void
     {
         $requestDto = $this->createRequest(array_fill(0, self::GROUP_NUM_MAX, self::GROUP_ID));
@@ -45,7 +46,7 @@ class GroupGetDataRequestDtoTest extends TestCase
         $this->assertCount(self::GROUP_NUM_MAX, $requestDto->groupsId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldProcessOnlyTheMaximum(): void
     {
         $requestDto = $this->createRequest(array_fill(0, self::GROUP_NUM_MAX + 1, self::GROUP_ID));
@@ -53,7 +54,7 @@ class GroupGetDataRequestDtoTest extends TestCase
         $this->assertCount(self::GROUP_NUM_MAX, $requestDto->groupsId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldProcessNotUsersSent(): void
     {
         $requestDto = $this->createRequest(null);

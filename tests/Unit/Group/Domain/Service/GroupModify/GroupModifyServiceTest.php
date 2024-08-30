@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupModify;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\FileSystem\DomainFileNotDeletedException;
@@ -65,7 +66,7 @@ class GroupModifyServiceTest extends TestCase
             ->setImage(ValueObjectFactory::createPath(self::FILE_NAME_FILE_UPLOADED_MODIFIED));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheGroup(): void
     {
         $group = $this->getGroup();
@@ -112,7 +113,7 @@ class GroupModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheGroupFormerImageIsNull(): void
     {
         $group = $this->getGroup();
@@ -150,7 +151,7 @@ class GroupModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheGroupImageDoesNotExists(): void
     {
         $group = $this->getGroup();
@@ -197,7 +198,7 @@ class GroupModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheGroupImageIsNullAndRemoveImageIsFalse(): void
     {
         $group = $this->getGroup();
@@ -233,7 +234,7 @@ class GroupModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheGroupImageIsNullAndRemoveImageIsTrue(): void
     {
         $group = $this->getGroup();
@@ -280,7 +281,7 @@ class GroupModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheGroupImageIsNotNullAndRemoveImageIsTrue(): void
     {
         $group = $this->getGroup();
@@ -327,7 +328,7 @@ class GroupModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupNotFound(): void
     {
         $group = $this->getGroup();
@@ -362,7 +363,7 @@ class GroupModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupNoPermissions(): void
     {
         $group = $this->getGroup();
@@ -397,7 +398,7 @@ class GroupModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailConnectionOnSave(): void
     {
         $group = $this->getGroup();
@@ -447,7 +448,7 @@ class GroupModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFileUploadException(): void
     {
         $group = $this->getGroup();
@@ -484,7 +485,7 @@ class GroupModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFormerGroupImageCanNotBeDeleted(): void
     {
         $group = $this->getGroup();

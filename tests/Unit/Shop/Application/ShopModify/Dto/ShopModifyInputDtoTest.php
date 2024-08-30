@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Application\ShopModify\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
@@ -55,7 +56,7 @@ class ShopModifyInputDtoTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $object = new ShopModifyInputDto(
@@ -74,7 +75,7 @@ class ShopModifyInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateNameIsNull(): void
     {
         $object = new ShopModifyInputDto(
@@ -93,7 +94,7 @@ class ShopModifyInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateAddressIsNull(): void
     {
         $object = new ShopModifyInputDto(
@@ -112,7 +113,7 @@ class ShopModifyInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateDescriptionImageAreNull(): void
     {
         $object = new ShopModifyInputDto(
@@ -131,7 +132,7 @@ class ShopModifyInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopIdIsNull(): void
     {
         $object = new ShopModifyInputDto(
@@ -150,7 +151,7 @@ class ShopModifyInputDtoTest extends TestCase
         $this->assertEquals(['shop_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopIdIsWrong(): void
     {
         $object = new ShopModifyInputDto(
@@ -169,7 +170,7 @@ class ShopModifyInputDtoTest extends TestCase
         $this->assertEquals(['shop_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $object = new ShopModifyInputDto(
@@ -188,7 +189,7 @@ class ShopModifyInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsWrong(): void
     {
         $object = new ShopModifyInputDto(
@@ -207,7 +208,7 @@ class ShopModifyInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsWrong(): void
     {
         $object = new ShopModifyInputDto(
@@ -226,7 +227,7 @@ class ShopModifyInputDtoTest extends TestCase
         $this->assertEquals(['name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailAddressIsWrong(): void
     {
         $object = new ShopModifyInputDto(
@@ -245,7 +246,7 @@ class ShopModifyInputDtoTest extends TestCase
         $this->assertEquals(['address' => [VALIDATION_ERRORS::REGEX_FAIL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDescriptionIsNull(): void
     {
         $object = new ShopModifyInputDto(
@@ -264,7 +265,7 @@ class ShopModifyInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDescriptionIsWrong(): void
     {
         $object = new ShopModifyInputDto(
@@ -283,7 +284,7 @@ class ShopModifyInputDtoTest extends TestCase
         $this->assertEquals(['description' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageMimeTypeNotAllowed(): void
     {
         $object = new ShopModifyInputDto(
@@ -302,7 +303,7 @@ class ShopModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_INVALID_MIME_TYPE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageSizeFormTooLarge(): void
     {
         $object = new ShopModifyInputDto(
@@ -322,7 +323,7 @@ class ShopModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_IMAGE_TOO_LARGE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageSizeIniTooLarge(): void
     {
         $object = new ShopModifyInputDto(
@@ -342,7 +343,7 @@ class ShopModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_INIT_SIZE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageNoUploaded(): void
     {
         $object = new ShopModifyInputDto(
@@ -362,7 +363,7 @@ class ShopModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_NO_FILE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImagePartiallyUploaded(): void
     {
         $object = new ShopModifyInputDto(
@@ -382,7 +383,7 @@ class ShopModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_PARTIAL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageCantWrite(): void
     {
         $object = new ShopModifyInputDto(

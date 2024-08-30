@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
@@ -29,7 +30,7 @@ class ValidatorTest extends TestCase
             'geValue: It was expected to return NULL');
     }
 
-    /** @test */
+    #[Test]
     public function setValue(): void
     {
         $value = 33;
@@ -42,7 +43,7 @@ class ValidatorTest extends TestCase
             'setValue: The value passed is not the value set');
     }
 
-    /** @test */
+    #[Test]
     public function validateOk(): void
     {
         $return = $this->object
@@ -54,7 +55,7 @@ class ValidatorTest extends TestCase
             'validate: It wasn\'t expected to return an error');
     }
 
-    /** @test */
+    #[Test]
     public function validateOkAndNotRemoveConstraints(): void
     {
         $return = $this->object
@@ -71,7 +72,7 @@ class ValidatorTest extends TestCase
             'validate: It was expected to return an error: '.VALIDATION_ERRORS::EQUAL_TO->name);
     }
 
-    /** @test */
+    #[Test]
     public function validateOkAndRemoveConstraints(): void
     {
         $return = $this->object
@@ -88,7 +89,7 @@ class ValidatorTest extends TestCase
             'validate: It wasn\'t expected to return an error');
     }
 
-    /** @test */
+    #[Test]
     public function validateError(): void
     {
         $return = $this->object
@@ -100,7 +101,7 @@ class ValidatorTest extends TestCase
             'validate: It was expected to return an error: '.VALIDATION_ERRORS::EQUAL_TO->name);
     }
 
-    /** @test */
+    #[Test]
     public function validateErrorAndNotRemoveConstraints(): void
     {
         $return = $this->object
@@ -117,7 +118,7 @@ class ValidatorTest extends TestCase
             'validate: It was expected to return an error: '.VALIDATION_ERRORS::EQUAL_TO->name);
     }
 
-    /** @test */
+    #[Test]
     public function validateErrorAndRemoveConstraints(): void
     {
         $return = $this->object
@@ -134,7 +135,7 @@ class ValidatorTest extends TestCase
             'validate: It wasn\'t expected to return an error');
     }
 
-    /** @test */
+    #[Test]
     public function validateValueObjectOk(): void
     {
         $valueObject = new ValueObjectForTesting(18);
@@ -144,7 +145,7 @@ class ValidatorTest extends TestCase
             'validateValueObject: It was expected that return value is array empty');
     }
 
-    /** @test */
+    #[Test]
     public function validateValueObjectError(): void
     {
         $valueObject = new ValueObjectForTesting(17);
@@ -154,7 +155,7 @@ class ValidatorTest extends TestCase
             'validateValueObject: It was expected that return value is '.VALIDATION_ERRORS::EQUAL_TO->name);
     }
 
-    /** @test */
+    #[Test]
     public function validateValueObjectChildValueObjectsOk(): void
     {
         $valueObject = new ValueObjectChildValueObjects([
@@ -168,7 +169,7 @@ class ValidatorTest extends TestCase
             'validateValueObject: It was expected that return value is array empty');
     }
 
-    /** @test */
+    #[Test]
     public function validateValueObjectChildValueObjectsError(): void
     {
         $valueObject = new ValueObjectChildValueObjects([
@@ -187,7 +188,7 @@ class ValidatorTest extends TestCase
         $this->assertSame($expected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function validateValueObjectChildValueObjectsNestedError(): void
     {
         $valueObject = new ValueObjectChildValueObjects([
@@ -220,7 +221,7 @@ class ValidatorTest extends TestCase
         $this->assertSame($expected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function validateValueObjectArrayOk(): void
     {
         $valueObjects = [
@@ -234,7 +235,7 @@ class ValidatorTest extends TestCase
             'validateValueObjectArray: It wasn\'t expected errors');
     }
 
-    /** @test */
+    #[Test]
     public function validateValueObjectArrayError(): void
     {
         $valueObjects = [
@@ -248,7 +249,7 @@ class ValidatorTest extends TestCase
         $this->assertEquals([[VALIDATION_ERRORS::EQUAL_TO]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validateValueObjectArrayAssociativeError(): void
     {
         $valueObjects = [

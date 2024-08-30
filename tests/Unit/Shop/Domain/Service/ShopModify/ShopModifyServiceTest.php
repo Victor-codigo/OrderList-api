@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Domain\Service\ShopModify;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\FileUpload\Exception\File\FileException;
 use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
@@ -70,7 +71,7 @@ class ShopModifyServiceTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheShopImageDescriptionAndAddress(): void
     {
         $shopFromDb = $this->getShop();
@@ -134,7 +135,7 @@ class ShopModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheShopNameDescriptionAndAddress(): void
     {
         $shopFromDb = $this->getShop();
@@ -195,7 +196,7 @@ class ShopModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheShopNameDescriptionAddressImageRemoved(): void
     {
         $shopFromDb = $this->getShop();
@@ -258,7 +259,7 @@ class ShopModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheShopNameDescriptionAddressImageRemovedNoImageSetToTheShop(): void
     {
         $shopFromDb = $this->getShop();
@@ -322,7 +323,7 @@ class ShopModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheShopNameDescriptionAddressImageNotExists(): void
     {
         $shopFromDb = $this->getShop();
@@ -384,7 +385,7 @@ class ShopModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyShopName(): void
     {
         $shopFromDb = $this->getShop();
@@ -446,7 +447,7 @@ class ShopModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingTheShopShopNotBelongToTheGroup(): void
     {
         $shopFromDb = $this->getShop();
@@ -501,7 +502,7 @@ class ShopModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingTheShopShopNameNotFound(): void
     {
         $shopFromDb = $this->getShop();
@@ -556,7 +557,7 @@ class ShopModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsAlreadyInUse(): void
     {
         $shopFromDb = $this->getShop();
@@ -618,7 +619,7 @@ class ShopModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFileUploadException(): void
     {
         $shopFromDb = $this->getShop();
@@ -677,7 +678,7 @@ class ShopModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageResizeException(): void
     {
         $shopFromDb = $this->getShop();
@@ -742,7 +743,7 @@ class ShopModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailErrorRemovingImage(): void
     {
         $shopFromDb = $this->getShop();

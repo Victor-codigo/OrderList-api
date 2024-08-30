@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupUserRemove;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +25,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
         '6df60afd-f7c3-4c2c-b920-e265f266c560',
     ];
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveUsersFromTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -46,7 +47,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(self::GROUP_USERS_TO_REMOVE_ID, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldAllowOnly50UsersToRemove(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -71,7 +72,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
         $this->assertEquals([self::GROUP_USERS_TO_REMOVE_ID[0]], $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldAllowRemoveHimselfFromTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();
@@ -93,7 +94,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
         $this->assertEquals([self::GROUP_USERS_TO_REMOVE_ID[2]], $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -115,7 +116,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNotValid(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -137,7 +138,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -159,7 +160,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank'], $responseContent->errors->users_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersIdIsNotValid(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -181,7 +182,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->users_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersIsNotAnArray(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();
@@ -201,7 +202,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCannotRemoveAllAdminUsersFromTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -223,7 +224,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
         $this->assertEquals('Cannot remove all admins form a group', $responseContent->errors->group_without_admin);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCannotRemoveAllUsersFromTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -245,7 +246,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
         $this->assertEquals('Cannot remove all users form a group', $responseContent->errors->group_empty);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupOrUsersNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -267,7 +268,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
         $this->assertEquals('Group or users not found', $responseContent->errors->group_users_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupTypeUser(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -289,7 +290,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
         $this->assertEquals('Not permissions in this group', $responseContent->errors->permissions);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingHimselfFromTheGroupManyUsersPassed(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();
@@ -314,7 +315,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
         $this->assertEquals('Not permissions in this group', $responseContent->errors->permissions);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingHimselfFromTheGroupUserPassedIsNotUserSession(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();
@@ -338,7 +339,7 @@ class GroupUserRemoveControllerTest extends WebClientTestCase
         $this->assertEquals('Not permissions in this group', $responseContent->errors->permissions);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserSessionIsNotAdminOfTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Response;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\ResponseDto;
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +20,7 @@ class ResponseDtoTest extends TestCase
         $this->object = new ResponseDto();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateTheResponse(): void
     {
         $this->object->setErrors([]);
@@ -30,7 +31,7 @@ class ResponseDtoTest extends TestCase
         $this->assertTrue($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateTheResponseNoContent(): void
     {
         $this->object->setErrors([]);
@@ -41,7 +42,7 @@ class ResponseDtoTest extends TestCase
         $this->assertTrue($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingTheResponseHasErrors(): void
     {
         $this->object->setErrors(['error']);
@@ -52,7 +53,7 @@ class ResponseDtoTest extends TestCase
         $this->assertFalse($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingTheResponseIsEmpty(): void
     {
         $this->object->setErrors([]);
@@ -63,13 +64,13 @@ class ResponseDtoTest extends TestCase
         $this->assertFalse($return);
     }
 
-    /** @test */
+    #[Test]
     public function idtShouldCallCallbackOnNoneMultidimensional(): void
     {
         $data = ['id' => 15];
         $this->object->data = $data;
 
-        $callback = function (array $dataResponse) use ($data) {
+        $callback = function (array $dataResponse) use ($data): array {
             static $callCounter = 0;
 
             $this->assertEquals($data, $dataResponse);
@@ -83,7 +84,7 @@ class ResponseDtoTest extends TestCase
         $this->assertEquals($data, $return);
     }
 
-    /** @test */
+    #[Test]
     public function idtShouldCallCallbackOnMultidimensional(): void
     {
         $data = [

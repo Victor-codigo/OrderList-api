@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersModify;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -57,7 +58,7 @@ class ListOrdersModifyServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheListOrder(): void
     {
         $listOrder = $this->getListOrders();
@@ -99,7 +100,7 @@ class ListOrdersModifyServiceTest extends TestCase
         $this->assertListOrdersIsOk([$listOrderExpected], [$return]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingTheListOrderListOrderNotFound(): void
     {
         $listOrder = $this->getListOrders();
@@ -130,7 +131,7 @@ class ListOrdersModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingTheListOrderSaveError(): void
     {
         $listOrder = $this->getListOrders();

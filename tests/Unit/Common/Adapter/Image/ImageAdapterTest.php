@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Image;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Image\BuiltInFunctionsReturn;
 use Common\Adapter\Image\ImagineAdapter;
 use Common\Domain\Image\Exception\ImageResizeException;
@@ -35,7 +36,7 @@ class ImageAdapterTest extends TestCase
         $this->object = new ImagineAdapter($this->imagine);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldResizeImageWidthBiggerThanFrame(): void
     {
         $filePath = ValueObjectFactory::createPath('file/path');
@@ -70,7 +71,7 @@ class ImageAdapterTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldResizeImageHeightBiggerThanFrame(): void
     {
         $filePath = ValueObjectFactory::createPath('file/path');
@@ -105,7 +106,7 @@ class ImageAdapterTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldResizeImageWidthAndHeightBiggerThanFrame(): void
     {
         $filePath = ValueObjectFactory::createPath('file/path');
@@ -140,7 +141,7 @@ class ImageAdapterTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldResizeImageWidthAndHeightAreTheSameThanFrame(): void
     {
         $filePath = ValueObjectFactory::createPath('file/path');
@@ -175,7 +176,7 @@ class ImageAdapterTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldResizeImageWidthIsSmallerThanFrame(): void
     {
         $filePath = ValueObjectFactory::createPath('file/path');
@@ -210,7 +211,7 @@ class ImageAdapterTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldResizeImageHeightIsSmallerThanFrame(): void
     {
         $filePath = ValueObjectFactory::createPath('file/path');
@@ -245,7 +246,7 @@ class ImageAdapterTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldResizeImageWidthAndHeightSmallerThanFrame(): void
     {
         $filePath = ValueObjectFactory::createPath('file/path');
@@ -280,7 +281,7 @@ class ImageAdapterTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailWidthMaxIsZero(): void
     {
         $filePath = ValueObjectFactory::createPath('file/path');
@@ -305,7 +306,7 @@ class ImageAdapterTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailHeightMaxIsZero(): void
     {
         $filePath = ValueObjectFactory::createPath('file/path');
@@ -330,7 +331,7 @@ class ImageAdapterTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGetImageSizeFails(): void
     {
         $filePath = ValueObjectFactory::createPath('file/path');
@@ -356,7 +357,7 @@ class ImageAdapterTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGetImageSizeReturnsWidthAndHeightAsZero(): void
     {
         $filePath = ValueObjectFactory::createPath('file/path');
@@ -382,7 +383,7 @@ class ImageAdapterTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailOpenException(): void
     {
         $filePath = ValueObjectFactory::createPath('file/path');
@@ -410,7 +411,7 @@ class ImageAdapterTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailResizeException(): void
     {
         $filePath = ValueObjectFactory::createPath('file/path');

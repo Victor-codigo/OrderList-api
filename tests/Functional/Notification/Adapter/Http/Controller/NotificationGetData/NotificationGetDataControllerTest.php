@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Notification\Adapter\Http\Controller\NotificationGetData;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -45,7 +46,7 @@ class NotificationGetDataControllerTest extends WebClientTestCase
         $this->assertContainsEquals($notificationData->viewed, $notificationsExpectedViewed);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetTheDataOfTheUserNotifications(): void
     {
         $page = 1;
@@ -73,7 +74,7 @@ class NotificationGetDataControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetTheDataOfTheUserNotificationsPaginationPageItemsTwo(): void
     {
         $page = 1;
@@ -100,7 +101,7 @@ class NotificationGetDataControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetTheDataOfTheUserNotificationsPaginationPageTwoPageItemsTwo(): void
     {
         $page = 2;
@@ -129,7 +130,7 @@ class NotificationGetDataControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetNoNotificationsUserHasNotNotifications(): void
     {
         $page = 1;
@@ -148,7 +149,7 @@ class NotificationGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingNotificationDataPageIsZero(): void
     {
         $page = 0;
@@ -172,7 +173,7 @@ class NotificationGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['greater_than'], $responseContent->errors->page);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingNotificationDataPageItemsIsZero(): void
     {
         $page = 1;
@@ -196,7 +197,7 @@ class NotificationGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['greater_than'], $responseContent->errors->page_items);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingNotificationDataPageItemsIsGreaterThan100(): void
     {
         $page = 1;
@@ -220,7 +221,7 @@ class NotificationGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['less_than_or_equal'], $responseContent->errors->page_items);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingNotificationLangIsWrong(): void
     {
         $page = 1;
@@ -244,7 +245,7 @@ class NotificationGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['choice_not_such'], $responseContent->errors->lang);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserNotAuthorized(): void
     {
         $page = 1;

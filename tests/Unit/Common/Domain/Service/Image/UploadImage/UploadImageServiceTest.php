@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Service\Image\UploadImage;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\FileUpload\Exception\File\FileException;
 use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\Image\Exception\ImageResizeException;
@@ -55,7 +56,7 @@ class UploadImageServiceTest extends TestCase
         BuiltInFunctionsReturn::$unlink = null;
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheEntityImage(): void
     {
         $entityImageFileName = ValueObjectFactory::createPath('entity image file name');
@@ -113,7 +114,7 @@ class UploadImageServiceTest extends TestCase
         $this->assertEquals($entityImageFileNameNew, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheEntityImageNoResizeWidthIsNull(): void
     {
         $entityImageFileName = ValueObjectFactory::createPath('entity image file name');
@@ -166,7 +167,7 @@ class UploadImageServiceTest extends TestCase
         $this->assertEquals($entityImageFileNameNew, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheEntityImageNoResizeHeightIsNull(): void
     {
         $entityImageFileName = ValueObjectFactory::createPath('entity image file name');
@@ -219,7 +220,7 @@ class UploadImageServiceTest extends TestCase
         $this->assertEquals($entityImageFileNameNew, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldNotModifyTheEntityImageSetToNull(): void
     {
         $entityImageFileName = ValueObjectFactory::createPath('entity image file name');
@@ -267,7 +268,7 @@ class UploadImageServiceTest extends TestCase
         $this->assertEquals($entityImageFileName, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheEntityImageRemove(): void
     {
         $entityImageFileName = ValueObjectFactory::createPath('entity image file name');
@@ -318,7 +319,7 @@ class UploadImageServiceTest extends TestCase
         $this->assertNull($return->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheEntityImageRemoveImageEntityIsNull(): void
     {
         $entityImageFileName = ValueObjectFactory::createPath(null);
@@ -367,7 +368,7 @@ class UploadImageServiceTest extends TestCase
         $this->assertNull($return->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheEntityImageRemoveImageEntityNotExists(): void
     {
         $entityImageFileName = ValueObjectFactory::createPath('Entity image file name');
@@ -416,7 +417,7 @@ class UploadImageServiceTest extends TestCase
         $this->assertNull($return->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingTheEntityImageRemoveImageCanNotBeRemoved(): void
     {
         $entityImageFileName = ValueObjectFactory::createPath('Entity image file name');
@@ -465,7 +466,7 @@ class UploadImageServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingTheEntityImageUploadFileError(): void
     {
         $entityImageFileName = ValueObjectFactory::createPath('entity image file name');
@@ -515,7 +516,7 @@ class UploadImageServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldResizingTheImage(): void
     {
         $entityImageFileName = ValueObjectFactory::createPath('entity image file name');

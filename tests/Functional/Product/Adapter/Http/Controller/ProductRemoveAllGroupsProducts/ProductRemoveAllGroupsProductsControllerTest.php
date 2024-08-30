@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Product\Adapter\Http\Controller\ProductRemoveAllGroupsProducts;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +28,7 @@ class ProductRemoveAllGroupsProductsControllerTest extends WebClientTestCase
     ];
     private const string SYSTEM_KEY = 'systemKeyForDev';
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveAllGroupsProducts(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -53,7 +54,7 @@ class ProductRemoveAllGroupsProductsControllerTest extends WebClientTestCase
         $this->assertEqualsCanonicalizing(self::PRODUCT_EXISTS_ID, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveOneGroupProducts(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -78,7 +79,7 @@ class ProductRemoveAllGroupsProductsControllerTest extends WebClientTestCase
         $this->assertEqualsCanonicalizing([self::PRODUCT_EXISTS_ID[3]], $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoProductsNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -98,7 +99,7 @@ class ProductRemoveAllGroupsProductsControllerTest extends WebClientTestCase
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -120,7 +121,7 @@ class ProductRemoveAllGroupsProductsControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank'], $responseContent->errors->groups_id_empty);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdIsEmpty(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -143,7 +144,7 @@ class ProductRemoveAllGroupsProductsControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank'], $responseContent->errors->groups_id_empty);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -170,7 +171,7 @@ class ProductRemoveAllGroupsProductsControllerTest extends WebClientTestCase
         $this->assertEquals([['uuid_invalid_characters']], $responseContent->errors->groups_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSystemKeyNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -195,7 +196,7 @@ class ProductRemoveAllGroupsProductsControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank'], $responseContent->errors->system_key);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSystemKeyWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();

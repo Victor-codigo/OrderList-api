@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Application\OrderRemove\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -32,7 +33,7 @@ class OrderRemoveInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $object = new OrderRemoveInputDto($this->userSession, self::ORDERS_ID, self::GROUP_ID);
@@ -42,7 +43,7 @@ class OrderRemoveInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $object = new OrderRemoveInputDto($this->userSession, self::ORDERS_ID, null);
@@ -52,7 +53,7 @@ class OrderRemoveInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsWrong(): void
     {
         $object = new OrderRemoveInputDto($this->userSession, self::ORDERS_ID, 'wrong id');
@@ -62,7 +63,7 @@ class OrderRemoveInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailOrdersIsNull(): void
     {
         $object = new OrderRemoveInputDto($this->userSession, null, self::GROUP_ID);
@@ -72,7 +73,7 @@ class OrderRemoveInputDtoTest extends TestCase
         $this->assertEquals(['orders_empty' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailOrdersIsEmpty(): void
     {
         $object = new OrderRemoveInputDto($this->userSession, [], self::GROUP_ID);
@@ -82,7 +83,7 @@ class OrderRemoveInputDtoTest extends TestCase
         $this->assertEquals(['orders_empty' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailOrdersIsWrong(): void
     {
         $object = new OrderRemoveInputDto($this->userSession, ['wrong id 1', 'wrong id 2'], self::GROUP_ID);

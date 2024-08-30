@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Adapter\Orm\Doctrine\Repository;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
@@ -51,7 +52,7 @@ class NotificationRepositoryTest extends DataBaseTestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSaveTheNotification(): void
     {
         $notification = Notification::fromPrimitives(
@@ -74,7 +75,7 @@ class NotificationRepositoryTest extends DataBaseTestCase
         $this->assertFalse($notificationSaved->getViewed());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSaveManyNotifications(): void
     {
         $notifications = [
@@ -110,7 +111,7 @@ class NotificationRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailIdUniqueConstraint(): void
     {
         $notification = Notification::fromPrimitives(
@@ -124,7 +125,7 @@ class NotificationRepositoryTest extends DataBaseTestCase
         $this->object->save([$notification]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDataBaseError(): void
     {
         $notification = Notification::fromPrimitives(
@@ -147,7 +148,7 @@ class NotificationRepositoryTest extends DataBaseTestCase
         $this->object->save([$notification]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetNotificationsById(): void
     {
         $notificationsId = [
@@ -166,7 +167,7 @@ class NotificationRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingNotificationsByIdNotNotificationsFound(): void
     {
         $notificationsId = [
@@ -177,7 +178,7 @@ class NotificationRepositoryTest extends DataBaseTestCase
         $this->object->getNotificationsByIdOrFail($notificationsId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetNotificationsByUserIdOrderedAsc(): void
     {
         $userId = ValueObjectFactory::createIdentifier(self::NOTIFICATION_USER_ID_ACTIVE);
@@ -192,7 +193,7 @@ class NotificationRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingNotificationsByUserIdNotFound(): void
     {
         $userId = ValueObjectFactory::createIdentifier('7499d138-b2a2-4b73-b9ac-0bdba054373b');

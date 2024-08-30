@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Domain\Service\UserRemove;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -57,7 +58,7 @@ class UserRemoveServiceTest extends TestCase
         return $user;
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveTheUserUser(): void
     {
         $user = $this->getUser();
@@ -87,7 +88,7 @@ class UserRemoveServiceTest extends TestCase
         $this->assertEquals(self::USER_ID, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserIdDoesNotExist(): void
     {
         $input = new UserRemoveDto(
@@ -104,7 +105,7 @@ class UserRemoveServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingTheUser(): void
     {
         $user = $this->getUser();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Domain\Service\OrderCreate;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -246,7 +247,7 @@ class OrderCreateServiceTest extends TestCase
         $this->assertInstanceOf(\DateTime::class, $actual->getCreatedOn());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateOrders(): void
     {
         $listsOrders = $this->getListsOrders();
@@ -331,7 +332,7 @@ class OrderCreateServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateOrdersShopsIdAreNull(): void
     {
         $listsOrders = $this->getListsOrders();
@@ -414,7 +415,7 @@ class OrderCreateServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingOrdersListsOrdersNotFound(): void
     {
         $listOrdersId = ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID);
@@ -459,7 +460,7 @@ class OrderCreateServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingOrdersProductsNotFound(): void
     {
         $listsOrders = $this->getListsOrders();
@@ -516,7 +517,7 @@ class OrderCreateServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingOrdersNotFoundAllProducts(): void
     {
         $listsOrders = $this->getListsOrders();
@@ -575,7 +576,7 @@ class OrderCreateServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingOrdersNotFoundAllShops(): void
     {
         $listsOrders = $this->getListsOrders();
@@ -642,7 +643,7 @@ class OrderCreateServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingOrdersProductOrShopAlreadyInListOrders(): void
     {
         $listsOrders = $this->getListsOrders();
@@ -717,7 +718,7 @@ class OrderCreateServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingOrdersDatabaseException(): void
     {
         $listsOrders = $this->getListsOrders();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserRegisterEmailConfirmation;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Jwt\Exception\JwtException;
 use Common\Adapter\Jwt\Exception\JwtTokenExpiredException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
@@ -49,7 +50,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldConfirmUserRegistration(): void
     {
         $token = 'token valid';
@@ -101,7 +102,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
         $this->assertEquals($userId, $return->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailInputValidationError(): void
     {
         $token = 'token valid';
@@ -121,7 +122,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailTokenExpired(): void
     {
         $token = 'token expired';
@@ -151,7 +152,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailErrorOnToken(): void
     {
         $token = 'token expired';
@@ -181,7 +182,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserNotFound(): void
     {
         $token = 'token expired';
@@ -211,7 +212,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserIsAlreadyActive(): void
     {
         $token = 'token expired';

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Http\ArgumentResolver;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Http\ArgumentResolver\ArgumentResolver;
 use Common\Adapter\Http\ArgumentResolver\Exception\InvalidJsonException;
 use Common\Adapter\Http\ArgumentResolver\Exception\InvalidMimeTypeException;
@@ -19,7 +20,6 @@ use Test\Unit\Common\Adapter\Http\ArgumentResolver\Fixtures\CustomRequestNoInter
 
 class ArgumentResolverTest extends TestCase
 {
-    private ArgumentResolver $object;
     private RequestValidation $requestValidation;
     private Request $request;
     private MockObject|ArgumentMetadata $argumentMetaData;
@@ -32,7 +32,7 @@ class ArgumentResolverTest extends TestCase
         $this->requestValidation = new RequestValidation();
     }
 
-    /** @test */
+    #[Test]
     public function resolveRequestSupportError(): void
     {
         $object = new ArgumentResolver($this->requestValidation, true);
@@ -51,7 +51,7 @@ class ArgumentResolverTest extends TestCase
         $this->assertEmpty(iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function resolveRequestSupportGetTypeNullError(): void
     {
         $object = new ArgumentResolver($this->requestValidation, true);
@@ -65,7 +65,7 @@ class ArgumentResolverTest extends TestCase
         $this->assertEmpty(iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function resolveRequestSupportErrorNelmioApiBundleHackInDebugMode(): void
     {
         $object = new ArgumentResolver($this->requestValidation, true);
@@ -84,7 +84,7 @@ class ArgumentResolverTest extends TestCase
         $this->assertEmpty(iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function resolveRequestSupportErrorNelmioApiBundleHackNotInDebugMode(): void
     {
         $object = new ArgumentResolver($this->requestValidation, false);
@@ -104,7 +104,7 @@ class ArgumentResolverTest extends TestCase
         $this->assertEmpty(iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function resolveRequestSupportInterfaceError(): void
     {
         $object = new ArgumentResolver($this->requestValidation, true);
@@ -118,7 +118,7 @@ class ArgumentResolverTest extends TestCase
         $this->assertEmpty(iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function resolveValidationOk(): void
     {
         $object = new ArgumentResolver($this->requestValidation, true);
@@ -134,7 +134,7 @@ class ArgumentResolverTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function resolveValidationError(): void
     {
         $object = new ArgumentResolver($this->requestValidation, true);
@@ -150,7 +150,7 @@ class ArgumentResolverTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function resolveValidationAllowedContentNull(): void
     {
         $object = new ArgumentResolver($this->requestValidation, true);
@@ -166,7 +166,7 @@ class ArgumentResolverTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function resolveValidationContentJsonInvalid(): void
     {
         $object = new ArgumentResolver($this->requestValidation, true);
@@ -183,7 +183,7 @@ class ArgumentResolverTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function resolveValidationGetRequestHasNotContentType(): void
     {
         $object = new ArgumentResolver($this->requestValidation, true);
@@ -199,7 +199,7 @@ class ArgumentResolverTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function resolveDtoThrowsAnException(): void
     {
         $object = new ArgumentResolver($this->requestValidation, true);

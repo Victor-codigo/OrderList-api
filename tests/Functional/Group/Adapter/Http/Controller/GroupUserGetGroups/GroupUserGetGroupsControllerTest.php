@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupUserGetGroups;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\Filter\FILTER_SECTION;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
@@ -70,7 +71,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $this->assertIsBool($groupData->admin);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAllGroupsDataForTheUser(): void
     {
         $groups = $this->getGroupsData();
@@ -98,7 +99,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $this->assertResponseDataIsOk($responseContent, $groupsId, $groupsType, $groupsName, $groupsDescription);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGroupsDataForTheUserAndGroupNameEquals(): void
     {
         $filterSection = FILTER_SECTION::GROUP;
@@ -132,7 +133,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $this->assertResponseDataIsOk($responseContent, $groupsId, $groupsType, $groupsName, $groupsDescription);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGroupsDataForTheUserAndGroupNameStartsWith(): void
     {
         $filterSection = FILTER_SECTION::GROUP;
@@ -166,7 +167,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $this->assertResponseDataIsOk($responseContent, $groupsId, $groupsType, $groupsName, $groupsDescription);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGroupsDataForTheUserAndGroupNameEndsWith(): void
     {
         $filterSection = FILTER_SECTION::GROUP;
@@ -200,7 +201,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $this->assertResponseDataIsOk($responseContent, $groupsId, $groupsType, $groupsName, $groupsDescription);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGroupsDataForTheUserAndGroupNameContains(): void
     {
         $filterSection = FILTER_SECTION::GROUP;
@@ -234,7 +235,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $this->assertResponseDataIsOk($responseContent, $groupsId, $groupsType, $groupsName, $groupsDescription);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGroupsDataForTheUserGroupTypeUser(): void
     {
         $groups = $this->getGroupsData();
@@ -263,7 +264,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $this->assertResponseDataIsOk($responseContent, $groupsId, $groupsType, $groupsName, $groupsDescription);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGroupsDataForTheUserAndSectionFilterNotGroup(): void
     {
         $filterSection = FILTER_SECTION::LIST_ORDERS;
@@ -297,7 +298,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $this->assertResponseDataIsOk($responseContent, $groupsId, $groupsType, $groupsName, $groupsDescription);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserHasNoGroups(): void
     {
         $client = $this->getNewClientAuthenticated(self::GROUP_USER_ONLY_GROUP_EMAIL, self::GROUP_USER_ONLY_GROUP_PASSWORD);
@@ -313,7 +314,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsDataForTheUserAndFilterSectionIsNull(): void
     {
         $filterText = FILTER_STRING_COMPARISON::STARTS_WITH;
@@ -340,7 +341,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $this->assertEquals(['not_null'], $responseContent->errors->filter_section_and_text_not_empty);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsDataForTheUserAndFilterTextIsNull(): void
     {
         $filterSection = FILTER_SECTION::GROUP;
@@ -367,7 +368,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $this->assertEquals(['not_null'], $responseContent->errors->filter_section_and_text_not_empty);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsDataForTheUserAndFilterValueIsNull(): void
     {
         $filterSection = FILTER_SECTION::GROUP;
@@ -395,7 +396,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->text_filter_value);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGroupsDataForTheUserAndFilterPageIsWrong(): void
     {
         $filterSection = FILTER_SECTION::LIST_ORDERS;
@@ -424,7 +425,7 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         $this->assertEquals(['greater_than'], $responseContent->errors->page);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGroupsDataForTheUserAndFilterPageItemsIsWrong(): void
     {
         $filterSection = FILTER_SECTION::LIST_ORDERS;

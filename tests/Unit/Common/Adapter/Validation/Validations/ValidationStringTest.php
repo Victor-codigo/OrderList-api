@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation\Validations;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\PROTOCOLS;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -20,7 +21,7 @@ class ValidationStringTest extends TestCase
         $this->object = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function validateStringLengthOk(): void
     {
         $return = $this->object
@@ -35,7 +36,7 @@ class ValidationStringTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateStringLengthError(): void
     {
         $return = $this->object
@@ -50,7 +51,7 @@ class ValidationStringTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateStringMinOk(): void
     {
         $return = $this->object
@@ -65,7 +66,7 @@ class ValidationStringTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateStringMinError(): void
     {
         $return = $this->object
@@ -80,7 +81,7 @@ class ValidationStringTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateStringMaxOk(): void
     {
         $return = $this->object
@@ -95,7 +96,7 @@ class ValidationStringTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateStringMaxError(): void
     {
         $return = $this->object
@@ -110,7 +111,7 @@ class ValidationStringTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateStringRangeOk(): void
     {
         $return = $this->object
@@ -125,7 +126,7 @@ class ValidationStringTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateStringRangeError(): void
     {
         $return = $this->object
@@ -140,7 +141,7 @@ class ValidationStringTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateUuIdOk(): void
     {
         $return = $this->object
@@ -155,7 +156,7 @@ class ValidationStringTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateUuIdError(): void
     {
         $return = $this->object
@@ -170,7 +171,7 @@ class ValidationStringTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateRegExOk(): void
     {
         $return = $this->object
@@ -182,7 +183,7 @@ class ValidationStringTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function validateRegExFail(): void
     {
         $return = $this->object
@@ -194,7 +195,7 @@ class ValidationStringTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::REGEX_FAIL], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validateRegExOkWhenFailPattern(): void
     {
         $return = $this->object
@@ -206,7 +207,7 @@ class ValidationStringTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function validateAlphanumericOk(): void
     {
         $return = $this->object
@@ -218,7 +219,7 @@ class ValidationStringTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function validateAlphanumericFail(): void
     {
         $return = $this->object
@@ -230,7 +231,7 @@ class ValidationStringTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::ALPHANUMERIC], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validateAlphanumericAndRegex(): void
     {
         $return = $this->object
@@ -243,7 +244,7 @@ class ValidationStringTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::REGEX_FAIL, VALIDATION_ERRORS::ALPHANUMERIC], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validateUrlProtocolHttpOk(): void
     {
         $return = $this->object
@@ -255,7 +256,7 @@ class ValidationStringTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function validateUrlProtocolHttpsOk(): void
     {
         $return = $this->object
@@ -267,7 +268,7 @@ class ValidationStringTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function validateUrlNoProtocolOk(): void
     {
         $return = $this->object
@@ -279,7 +280,7 @@ class ValidationStringTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function validateUrlProtocolFtoNotValidByDefault(): void
     {
         $return = $this->object
@@ -291,7 +292,7 @@ class ValidationStringTest extends TestCase
         $this->assertSame([VALIDATION_ERRORS::URL], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validateUrlProtocolWrong(): void
     {
         $return = $this->object
@@ -303,7 +304,7 @@ class ValidationStringTest extends TestCase
         $this->assertSame([VALIDATION_ERRORS::URL], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validateUrlNoProtocol(): void
     {
         $return = $this->object
@@ -315,7 +316,7 @@ class ValidationStringTest extends TestCase
         $this->assertSame([VALIDATION_ERRORS::URL], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validateLanguageOk(): void
     {
         $return = $this->object
@@ -327,7 +328,7 @@ class ValidationStringTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function validateLanguageFail(): void
     {
         $return = $this->object
@@ -339,7 +340,7 @@ class ValidationStringTest extends TestCase
         $this->assertSame([VALIDATION_ERRORS::LANGUAGE], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validateJsonOk(): void
     {
         $return = $this->object
@@ -351,7 +352,7 @@ class ValidationStringTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function validateJsonFail(): void
     {
         $return = $this->object

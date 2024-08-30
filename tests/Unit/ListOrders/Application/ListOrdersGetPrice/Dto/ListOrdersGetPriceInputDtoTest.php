@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Application\ListOrdersGetPrice\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -26,7 +27,7 @@ class ListOrdersGetPriceInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $object = new ListOrdersGetPriceInputDto(
@@ -41,7 +42,7 @@ class ListOrdersGetPriceInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailListOrdersIdIsNull(): void
     {
         $object = new ListOrdersGetPriceInputDto(
@@ -56,7 +57,7 @@ class ListOrdersGetPriceInputDtoTest extends TestCase
         $this->assertEquals(['list_orders_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailListOrdersIdIsWrong(): void
     {
         $object = new ListOrdersGetPriceInputDto(
@@ -71,7 +72,7 @@ class ListOrdersGetPriceInputDtoTest extends TestCase
         $this->assertEquals(['list_orders_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $object = new ListOrdersGetPriceInputDto(
@@ -86,7 +87,7 @@ class ListOrdersGetPriceInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsWrong(): void
     {
         $object = new ListOrdersGetPriceInputDto(

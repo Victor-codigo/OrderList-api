@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Domain\NotificationMarkAsViewed;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -69,7 +70,7 @@ class NotificationMarkAsViewedServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldMarkNotificationsAsViewed(): void
     {
         $notifications = $this->getNotifications();
@@ -105,7 +106,7 @@ class NotificationMarkAsViewedServiceTest extends TestCase
         $this->assertNotificationsAreOk($notifications, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailMarkingNotificationsAsViewedNotificationsNotFound(): void
     {
         $input = new NotificationMarkAsViewedDto([
@@ -136,7 +137,7 @@ class NotificationMarkAsViewedServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailMarkingNotificationsAsViewedSaveException(): void
     {
         $notifications = $this->getNotifications();

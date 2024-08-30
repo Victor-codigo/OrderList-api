@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ProductSetShopPrice;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Float\Money;
 use Common\Domain\Model\ValueObject\Object\UnitMeasure;
@@ -186,7 +187,7 @@ class SetProductShopPriceServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetProductsShopsAndPricesAllNewByShopId(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -253,7 +254,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->compareProductShop($productsShopsNew, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetProductsShopsAndPricesAllNew(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -320,7 +321,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->compareProductShop($productsShopsNew, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyAllProductsShopsAndPrices(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -386,7 +387,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->compareProductShop($productsShopsNew, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveAllProductsShopsAndPrices(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -440,7 +441,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetModifyAndRemoveProductsShopsAndPrices(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -532,7 +533,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->compareProductShop([$productsShopsDb[0], $productsShopsDb[1], $productsShopsNew[1], $productsShopsNew[3]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingProductsShopsAndPricesProductsAndShopsNotFound(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -596,7 +597,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingProductsShopsAndPricesProductsIdNotFound(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -662,7 +663,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingProductsShopsAndPricesShopsIdNotFound(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -728,7 +729,7 @@ class SetProductShopPriceServiceTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingProductsShopsAndPricesShopsNotFound(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');

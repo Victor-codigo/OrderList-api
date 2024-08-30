@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Command\HexFileStructure;
 
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;
@@ -141,7 +142,7 @@ class HexFileStructureCommandTest extends KernelTestCase
         $this->assertStringContainsString('CREATED '.$outputControllerDtoFile, $outputDisplay);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateTheDomainService(): void
     {
         $params = self::COMMAND_PARAMS;
@@ -152,7 +153,7 @@ class HexFileStructureCommandTest extends KernelTestCase
         $this->assertDomainOutputIsCreated($params, self::OUTPUT_PATH);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateTheApplicationUseCase(): void
     {
         $params = self::COMMAND_PARAMS;
@@ -163,7 +164,7 @@ class HexFileStructureCommandTest extends KernelTestCase
         $this->assertApplicationOutputIsCreated($params, self::OUTPUT_PATH);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateTheAdapterController(): void
     {
         $params = self::COMMAND_PARAMS;
@@ -174,7 +175,7 @@ class HexFileStructureCommandTest extends KernelTestCase
         $this->assertAdapterOutputIsCreated($params, self::OUTPUT_PATH);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateDomainApplicationAdapter(): void
     {
         $params = self::COMMAND_PARAMS;
@@ -186,7 +187,7 @@ class HexFileStructureCommandTest extends KernelTestCase
         $this->assertAdapterOutputIsCreated($params, self::OUTPUT_PATH);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateDomainInADifferentOutputPath(): void
     {
         $params = self::COMMAND_PARAMS;
@@ -199,7 +200,7 @@ class HexFileStructureCommandTest extends KernelTestCase
         $this->assertAdapterOutputIsCreated($params, self::OUTPUT_PATH_ALTERNATIVE);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFail(): void
     {
         $params = self::COMMAND_PARAMS;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserPasswordChange\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
@@ -26,7 +27,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldPassValidation(): void
     {
         $object = new UserPasswordChangeInputDto(
@@ -42,7 +43,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailIdIsTooShort(): void
     {
         $object = new UserPasswordChangeInputDto(
@@ -58,7 +59,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
         $this->assertEquals(['id' => [VALIDATION_ERRORS::UUID_TOO_SHORT]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailIdIsTooLong(): void
     {
         $object = new UserPasswordChangeInputDto(
@@ -74,7 +75,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
         $this->assertEquals(['id' => [VALIDATION_ERRORS::UUID_TOO_LONG]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailIdIsNull(): void
     {
         $object = new UserPasswordChangeInputDto(
@@ -90,7 +91,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
         $this->assertEquals(['id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordOldTooShort(): void
     {
         $object = new UserPasswordChangeInputDto(
@@ -106,7 +107,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
         $this->assertEquals(['password_old' => [VALIDATION_ERRORS::STRING_TOO_SHORT]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordOldTooLong(): void
     {
         $object = new UserPasswordChangeInputDto(
@@ -122,7 +123,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
         $this->assertEquals(['password_old' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordOldIsNull(): void
     {
         $object = new UserPasswordChangeInputDto(
@@ -138,7 +139,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
         $this->assertEquals(['password_old' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordNewTooShort(): void
     {
         $object = new UserPasswordChangeInputDto(
@@ -154,7 +155,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
         $this->assertEquals(['password_new' => [VALIDATION_ERRORS::STRING_TOO_SHORT]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordNewTooLong(): void
     {
         $object = new UserPasswordChangeInputDto(
@@ -170,7 +171,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
         $this->assertEquals(['password_new' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordNewIsNull(): void
     {
         $object = new UserPasswordChangeInputDto(
@@ -186,7 +187,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
         $this->assertEquals(['password_new' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordNewRepeatTooShort(): void
     {
         $object = new UserPasswordChangeInputDto(
@@ -202,7 +203,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
         $this->assertEquals(['password_new_repeat' => [VALIDATION_ERRORS::STRING_TOO_SHORT]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordNewRepeatTooLong(): void
     {
         $object = new UserPasswordChangeInputDto(
@@ -218,7 +219,7 @@ class UserPasswordChangeInputDtoTest extends TestCase
         $this->assertEquals(['password_new_repeat' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordNewRepeatIsNull(): void
     {
         $object = new UserPasswordChangeInputDto(

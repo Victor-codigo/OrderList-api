@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Security\Jwt\JwtListener;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Ports\Event\EventDispatcherInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -38,7 +39,7 @@ class JwtAuthenticatedListenerTest extends TestCase
         $this->object = new JwtAuthenticatedListener($this->eventDispatcher, $this->security);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldNotDispatchUserLoginEventDispatcherIsNotAnUser(): void
     {
         $response = new Response();

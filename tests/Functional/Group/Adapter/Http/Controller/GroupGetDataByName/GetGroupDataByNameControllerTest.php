@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupGetDataByName;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Group\Domain\Model\Group;
@@ -48,7 +49,7 @@ class GetGroupDataByNameControllerTest extends WebClientTestCase
         $this->assertEquals($appProtocolAndDomain.$pathImageGroup.'/'.$groupDataExpected->getImage()->getValue(), $groupDataActual->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetGroupsDataByName(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -75,7 +76,7 @@ class GetGroupDataByNameControllerTest extends WebClientTestCase
         $this->assertGroupDataIsOk($groupData, $responseContent->data);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingGroupsDataByNameNotValid(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -95,7 +96,7 @@ class GetGroupDataByNameControllerTest extends WebClientTestCase
         $this->assertEquals(['alphanumeric_with_whitespace'], $responseContent->errors->group_name);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingGroupsDataByNameNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -113,7 +114,7 @@ class GetGroupDataByNameControllerTest extends WebClientTestCase
         $this->assertSame('Group not found', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingGroupsDataByNameUserNotBelongsToTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();

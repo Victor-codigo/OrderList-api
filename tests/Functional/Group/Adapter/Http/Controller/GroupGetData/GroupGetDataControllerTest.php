@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupGetData;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Group\Domain\Model\Group;
@@ -36,7 +37,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetGroupsData(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -86,7 +87,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetGroupsDataFor50Groups(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -129,7 +130,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldStripGroupsIdThatExceedTheMaximum(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -172,7 +173,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnOnlyTheGroupThatTheUserSessionBelongTo(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();
@@ -214,7 +215,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNotGroupsIdProvided(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -231,7 +232,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $this->assertSame('Not found: error 404', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdNotValid(): void
     {
         $groups = $this->getGroupsData();
@@ -253,7 +254,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_too_long'], $responseContent->errors->groups_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserSessionDoesNotBelongsToAGroup(): void
     {
         $groups = $this->getGroupsData();
@@ -273,7 +274,7 @@ class GroupGetDataControllerTest extends WebClientTestCase
         $this->assertSame('You not belong to the group', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdsAreNotRegisteredGroupsId(): void
     {
         $groups = $this->getGroupsDoNotExitsData();

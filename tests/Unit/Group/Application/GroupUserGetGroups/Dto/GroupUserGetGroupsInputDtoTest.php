@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupUserGetGroups\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -29,7 +30,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $object = new GroupUserGetGroupsInputDto(
@@ -47,7 +48,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateWithoutFilter(): void
     {
         $object = new GroupUserGetGroupsInputDto(
@@ -65,7 +66,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageIsNull(): void
     {
         $object = new GroupUserGetGroupsInputDto(
@@ -83,7 +84,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
         $this->assertEquals(['page' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageIsLowerThanOne(): void
     {
         $object = new GroupUserGetGroupsInputDto(
@@ -101,7 +102,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
         $this->assertEquals(['page' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageItemsIsNull(): void
     {
         $object = new GroupUserGetGroupsInputDto(
@@ -119,7 +120,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
         $this->assertEquals(['page_items' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageItemsIsLowerThanOne(): void
     {
         $object = new GroupUserGetGroupsInputDto(
@@ -137,7 +138,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
         $this->assertEquals(['page_items' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFilterSectionIsNull(): void
     {
         $object = new GroupUserGetGroupsInputDto(
@@ -155,7 +156,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
         $this->assertEquals(['filter_section_and_text_not_empty' => [VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFilterSectionIsWrong(): void
     {
         $object = new GroupUserGetGroupsInputDto(
@@ -173,7 +174,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
         $this->assertEquals(['section_filter_type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFilterTextIsNull(): void
     {
         $object = new GroupUserGetGroupsInputDto(
@@ -191,7 +192,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
         $this->assertEquals(['filter_section_and_text_not_empty' => [VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFilterTextIsWrong(): void
     {
         $object = new GroupUserGetGroupsInputDto(
@@ -209,7 +210,7 @@ class GroupUserGetGroupsInputDtoTest extends TestCase
         $this->assertEquals(['text_filter_type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFilterValueIsNull(): void
     {
         $object = new GroupUserGetGroupsInputDto(

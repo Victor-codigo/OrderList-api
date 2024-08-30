@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupGetUsers\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -29,7 +30,7 @@ class GroupGetUsersInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    private static function inputDataProvider(): iterable
+    public static function inputDataProvider(): iterable
     {
         $userSession = self::createStub(UserShared::class);
 
@@ -239,10 +240,8 @@ class GroupGetUsersInputDtoTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
     #[DataProvider('inputDataProvider')]
+    #[Test]
     public function itShouldValidateInput22(GroupGetUsersInputDto $object, array $errors): void
     {
         $return = $object->validate($this->validator);

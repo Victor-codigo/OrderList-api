@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Date;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Date\DateNowToFuture;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -22,7 +23,7 @@ class DateNowToFutureTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $dateTimeEarly = new \DateTime();
@@ -34,7 +35,7 @@ class DateNowToFutureTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateDateIsNull(): void
     {
         $object = new DateNowToFuture(null);
@@ -44,7 +45,7 @@ class DateNowToFutureTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDateTimeIsEarlierThanAnHour(): void
     {
         $dateTimeEarly = new \DateTime();

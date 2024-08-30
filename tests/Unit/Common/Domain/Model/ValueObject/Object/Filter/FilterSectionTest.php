@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Object\Filter;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\Filter\FilterSection;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -23,7 +24,7 @@ class FilterSectionTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateSectionListOrders(): void
     {
         $this->object = new FilterSection(FILTER_SECTION::LIST_ORDERS);
@@ -33,7 +34,7 @@ class FilterSectionTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateSectionProduct(): void
     {
         $this->object = new FilterSection(FILTER_SECTION::PRODUCT);
@@ -43,7 +44,7 @@ class FilterSectionTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateSectionShop(): void
     {
         $this->object = new FilterSection(FILTER_SECTION::SHOP);
@@ -53,7 +54,7 @@ class FilterSectionTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateSectionOrder(): void
     {
         $this->object = new FilterSection(FILTER_SECTION::ORDER);
@@ -63,7 +64,7 @@ class FilterSectionTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingValueIsNull(): void
     {
         $this->object = new FilterSection(null);
@@ -73,7 +74,7 @@ class FilterSectionTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingValueIsWrong(): void
     {
         $this->object = new FilterSection(VALIDATION_ERRORS::ALPHANUMERIC);

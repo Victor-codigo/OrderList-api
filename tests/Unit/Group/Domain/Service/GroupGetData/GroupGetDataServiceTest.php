@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupGetData;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -65,7 +66,7 @@ class GroupGetDataServiceTest extends TestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetTheDataFromTheGroupsTypeGroup(): void
     {
         $expectedGroupsData = $this->getGroupsTypeGroupData();
@@ -109,7 +110,7 @@ class GroupGetDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetTheDataFromTheGroupsTypeUser(): void
     {
         $expectedGroupsData = $this->getGroupsTypeUserData();
@@ -151,7 +152,7 @@ class GroupGetDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetTheDataFromTheGroupsTypeUndefined(): void
     {
         $expectedGroupsData = $this->getGroupsTypeUndefinedData();
@@ -198,7 +199,7 @@ class GroupGetDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoGroupsFound(): void
     {
         $expectedGroupsData = $this->getGroupsTypeGroupData();
@@ -219,7 +220,7 @@ class GroupGetDataServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoGroupsOfTypeUserFound(): void
     {
         $expectedGroupsData = $this->getGroupsTypeGroupData();

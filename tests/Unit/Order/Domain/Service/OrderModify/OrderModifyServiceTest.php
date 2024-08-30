@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Domain\Service\OrderModify;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -135,7 +136,7 @@ class OrderModifyServiceTest extends TestCase
         $this->assertEquals($orderExpected->getAmount(), $order->getAmount());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheOrder(): void
     {
         $listOrders = $this->getListsOrders();
@@ -209,7 +210,7 @@ class OrderModifyServiceTest extends TestCase
         $this->assertOrderIsOk($orderExpected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheOrderShopIsNull(): void
     {
         $listOrders = $this->getListsOrders();
@@ -280,7 +281,7 @@ class OrderModifyServiceTest extends TestCase
         $this->assertOrderIsOk($orderExpected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheOrderDescriptionAndAmount(): void
     {
         $listOrders = $this->getListsOrders();
@@ -355,7 +356,7 @@ class OrderModifyServiceTest extends TestCase
         $this->assertOrderIsOk($orderExpected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingTheOrderListOrderNotFound(): void
     {
         $input = new OrderModifyDto(
@@ -403,7 +404,7 @@ class OrderModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingTheOrderProductNotFound(): void
     {
         $listOrders = $this->getListsOrders();
@@ -457,7 +458,7 @@ class OrderModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingTheOrderShopNotFound(): void
     {
         $listOrders = $this->getListsOrders();
@@ -515,7 +516,7 @@ class OrderModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingTheOrderProductAndShopAreRepeatedInListOrders(): void
     {
         $listOrders = $this->getListsOrders();
@@ -579,7 +580,7 @@ class OrderModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingTheOrderOrderNotFound(): void
     {
         $listOrders = $this->getListsOrders();
@@ -643,7 +644,7 @@ class OrderModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingTheOrderSavingError(): void
     {
         $listOrders = $this->getListsOrders();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ProductGetData;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -108,7 +109,7 @@ class ProductGetDataServiceTest extends TestCase
         $this->assertIsString($productDataActual['created_on']);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductOfAGroupOrderAsc(): void
     {
         $products = $this->getProducts();
@@ -170,7 +171,7 @@ class ProductGetDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductOfAGroupWithProductsIdAndShopsId(): void
     {
         $products = $this->getProducts();
@@ -232,7 +233,7 @@ class ProductGetDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductOfAGroupWithProductName(): void
     {
         $products = $this->getProducts();
@@ -294,7 +295,7 @@ class ProductGetDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductOfAGroupWithProductNameFilter(): void
     {
         $products = $this->getProducts();
@@ -356,7 +357,7 @@ class ProductGetDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductOfAGroupWithShopNameFilter(): void
     {
         $products = $this->getProducts();
@@ -418,7 +419,7 @@ class ProductGetDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductOfAGroupNotEnoughParameters(): void
     {
         $input = new ProductGetDataDto(

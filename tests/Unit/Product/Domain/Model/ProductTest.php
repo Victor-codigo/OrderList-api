@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Model;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Exception\LogicException;
 use PHPUnit\Framework\TestCase;
 use Product\Domain\Model\Product;
 
 class ProductTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function itShouldCreateAProductFromArray(): void
     {
         $productData = [
@@ -30,7 +31,7 @@ class ProductTest extends TestCase
         $this->assertEquals($productData['image'], $return->getImage()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAProductFromArrayDescriptionNotExists(): void
     {
         $productData = [
@@ -49,7 +50,7 @@ class ProductTest extends TestCase
         $this->assertEquals($productData['image'], $return->getImage()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAProductFromArrayImageNotExists(): void
     {
         $productData = [
@@ -68,7 +69,7 @@ class ProductTest extends TestCase
         $this->assertEquals(null, $return->getImage()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAProductFromArrayIdNotExists(): void
     {
         $productData = [
@@ -82,7 +83,7 @@ class ProductTest extends TestCase
         Product::fromPrimitiveArrayOfData($productData);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAProductFromArrayGroupIdNotExists(): void
     {
         $productData = [
@@ -96,7 +97,7 @@ class ProductTest extends TestCase
         Product::fromPrimitiveArrayOfData($productData);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAProductFromArrayNameNotExists(): void
     {
         $productData = [

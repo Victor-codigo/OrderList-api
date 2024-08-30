@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Object;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\File;
 use Common\Domain\Ports\FileUpload\FileInterface;
@@ -72,7 +73,7 @@ class FileTest extends TestCase
         return $fileInterface;
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         /** @var MockObject|SymfonyFile $file */
@@ -88,7 +89,7 @@ class FileTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFileCanNotBeNull(): void
     {
         $this->object = new File(null);
@@ -97,7 +98,7 @@ class FileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::NOT_NULL, VALIDATION_ERRORS::NOT_BLANK], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFileNotFound(): void
     {
         $object = new File($this->getFileInterface(self::PATH_FILE_NOT_FOUND));
@@ -107,7 +108,7 @@ class FileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_NOT_FOUND], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFileIsNotReadable(): void
     {
         /** @var MockObject|SymfonyFile $file */
@@ -125,7 +126,7 @@ class FileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_NOT_READABLE], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFileIsEmpty(): void
     {
         $fileInterface = $this->getFileInterface(self::PATH_FILE_EMPTY);
@@ -144,7 +145,7 @@ class FileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_EMPTY], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFileSizeIsLargeThan2MB(): void
     {
         /** @var MockObject|SymfonyFile $file */
@@ -162,7 +163,7 @@ class FileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_TOO_LARGE], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnNullAsAValidationValue(): void
     {
         $object = new File(null);
@@ -171,7 +172,7 @@ class FileTest extends TestCase
         $this->assertNull($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnTheValidationValue(): void
     {
         $return = $this->object->getValidationValue();

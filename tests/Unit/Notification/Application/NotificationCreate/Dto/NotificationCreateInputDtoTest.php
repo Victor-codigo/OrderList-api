@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Application\NotificationCreate\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -39,7 +40,7 @@ class NotificationCreateInputDtoTest extends TestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $object = new NotificationCreateInputDto(
@@ -55,7 +56,7 @@ class NotificationCreateInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateManyUsersId(): void
     {
         $object = new NotificationCreateInputDto(
@@ -75,7 +76,7 @@ class NotificationCreateInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserIdIsNull(): void
     {
         $object = new NotificationCreateInputDto(
@@ -91,7 +92,7 @@ class NotificationCreateInputDtoTest extends TestCase
         $this->assertEquals(['users_id' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSystemKeyIsNull(): void
     {
         $object = new NotificationCreateInputDto(
@@ -107,7 +108,7 @@ class NotificationCreateInputDtoTest extends TestCase
         $this->assertEquals(['system_key' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserIdINotValidIdAndTypeNotValid(): void
     {
         $object = new NotificationCreateInputDto(
@@ -129,7 +130,7 @@ class NotificationCreateInputDtoTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserIdINotValidId(): void
     {
         $object = new NotificationCreateInputDto(
@@ -145,7 +146,7 @@ class NotificationCreateInputDtoTest extends TestCase
         $this->assertEquals(['users_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailManyUserIdINotValidId(): void
     {
         $object = new NotificationCreateInputDto(
@@ -165,7 +166,7 @@ class NotificationCreateInputDtoTest extends TestCase
         $this->assertEquals(['users_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNotificationTypeIsNull(): void
     {
         $object = new NotificationCreateInputDto(
@@ -181,7 +182,7 @@ class NotificationCreateInputDtoTest extends TestCase
         $this->assertEquals(['type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNotificationTypeIsNotValid(): void
     {
         $object = new NotificationCreateInputDto(
@@ -197,7 +198,7 @@ class NotificationCreateInputDtoTest extends TestCase
         $this->assertEquals(['type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNotificationDataIsNull(): void
     {
         $object = new NotificationCreateInputDto(

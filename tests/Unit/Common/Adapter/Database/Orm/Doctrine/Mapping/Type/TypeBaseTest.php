@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\TypeBase;
 use Common\Domain\Exception\InvalidArgumentException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -25,7 +26,7 @@ class TypeBaseTest extends TestCase
         $this->object = $this->createPartialMock(CustomType::class, ['getClassImplementationName']);
     }
 
-    /** @test */
+    #[Test]
     public function convertToDatabaseValueValueIsNull(): void
     {
         $value = null;
@@ -35,7 +36,7 @@ class TypeBaseTest extends TestCase
             'convertToDatabaseValue: It was expected to return null');
     }
 
-    /** @test */
+    #[Test]
     public function convertToDatabaseValueValueIsAType(): void
     {
         $this->object
@@ -50,7 +51,7 @@ class TypeBaseTest extends TestCase
             'convertToDatabaseValue: The return is not expected');
     }
 
-    /** @test */
+    #[Test]
     public function convertToDatabaseValueValueIsNotCorrectType(): void
     {
         $this->object
@@ -64,7 +65,7 @@ class TypeBaseTest extends TestCase
         $this->object->convertToDatabaseValue($value, $this->platform);
     }
 
-    /** @test */
+    #[Test]
     public function convertToPHPValueValueIsNull(): void
     {
         $this->object
@@ -79,7 +80,7 @@ class TypeBaseTest extends TestCase
         $this->assertNull($return->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function convertToPHPValueValueIsValueObject(): void
     {
         $this->object

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Application\ProductModify\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
@@ -55,7 +56,7 @@ class ProductModifyInputDtoTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateAllValues(): void
     {
         $object = new ProductModifyInputDto(
@@ -73,7 +74,7 @@ class ProductModifyInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateNoNameImageDescription(): void
     {
         $object = new ProductModifyInputDto(
@@ -91,7 +92,7 @@ class ProductModifyInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailProductIdIsNull(): void
     {
         $object = new ProductModifyInputDto(
@@ -109,7 +110,7 @@ class ProductModifyInputDtoTest extends TestCase
         $this->assertEquals(['product_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailProductIdIsWrong(): void
     {
         $object = new ProductModifyInputDto(
@@ -127,7 +128,7 @@ class ProductModifyInputDtoTest extends TestCase
         $this->assertEquals(['product_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $object = new ProductModifyInputDto(
@@ -145,7 +146,7 @@ class ProductModifyInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsWrong(): void
     {
         $object = new ProductModifyInputDto(
@@ -163,7 +164,7 @@ class ProductModifyInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsWrong(): void
     {
         $object = new ProductModifyInputDto(
@@ -181,7 +182,7 @@ class ProductModifyInputDtoTest extends TestCase
         $this->assertEquals(['name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDescriptionIsWrong(): void
     {
         $object = new ProductModifyInputDto(
@@ -199,7 +200,7 @@ class ProductModifyInputDtoTest extends TestCase
         $this->assertEquals(['description' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageMimeTypeNotAllowed(): void
     {
         $object = new ProductModifyInputDto(
@@ -217,7 +218,7 @@ class ProductModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_INVALID_MIME_TYPE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageSizeFormTooLarge(): void
     {
         $object = new ProductModifyInputDto(
@@ -236,7 +237,7 @@ class ProductModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_IMAGE_TOO_LARGE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageSizeIniTooLarge(): void
     {
         $object = new ProductModifyInputDto(
@@ -255,7 +256,7 @@ class ProductModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_INIT_SIZE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageNoUploaded(): void
     {
         $object = new ProductModifyInputDto(
@@ -274,7 +275,7 @@ class ProductModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_NO_FILE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImagePartiallyUploaded(): void
     {
         $object = new ProductModifyInputDto(
@@ -293,7 +294,7 @@ class ProductModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_PARTIAL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageCantWrite(): void
     {
         $object = new ProductModifyInputDto(

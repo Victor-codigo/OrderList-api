@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Domain\Service\UserCreateGroup;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -51,7 +52,7 @@ class UserCreateGroupServiceTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCouldNotCreateTheGroupStatusError(): void
     {
         $name = ValueObjectFactory::createNameWithSpaces('userName');
@@ -89,7 +90,7 @@ class UserCreateGroupServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCouldNotCreateTheGroupErrors(): void
     {
         $name = ValueObjectFactory::createNameWithSpaces('userName');
@@ -127,7 +128,7 @@ class UserCreateGroupServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateTheUserGroup(): void
     {
         $name = ValueObjectFactory::createNameWithSpaces('userName');

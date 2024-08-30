@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\IdentifierNullable;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -29,7 +30,7 @@ class IdentifierNullableTest extends TestCase
         return new IdentifierNullable($id);
     }
 
-    /** @test */
+    #[Test]
     public function validUuId(): void
     {
         $object = $this->createIdentifierNullable($this->validId);
@@ -39,7 +40,7 @@ class IdentifierNullableTest extends TestCase
             'It was expected that validation has no errors');
     }
 
-    /** @test */
+    #[Test]
     public function uuIdValidBlank(): void
     {
         $object = $this->createIdentifierNullable('');
@@ -48,7 +49,7 @@ class IdentifierNullableTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function uuIdValidNotNull(): void
     {
         $id = $this->createIdentifierNullable(null);
@@ -57,7 +58,7 @@ class IdentifierNullableTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function uuIdError(): void
     {
         $object = $this->createIdentifierNullable($this->notValidId);

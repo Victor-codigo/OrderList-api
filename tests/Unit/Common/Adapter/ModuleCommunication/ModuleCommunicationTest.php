@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\ModuleCommunication;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationErrorResponseException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationTokenNotFoundInRequestException;
@@ -192,7 +193,7 @@ class ModuleCommunicationTest extends TestCase
            });
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnAValidResponseDtoRequestApplicationJson(): void
     {
         $content = [
@@ -219,7 +220,7 @@ class ModuleCommunicationTest extends TestCase
         $this->assertEquals($this->getResponseDtoFromString($this->responseContentExpected), $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnAValidResponseDtoRequestMultiPartFormData(): void
     {
         $content = [
@@ -245,7 +246,7 @@ class ModuleCommunicationTest extends TestCase
         $this->assertEquals($this->getResponseDtoFromString($this->responseContentExpected), $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnAValidResponseDtoResponseContentEmpty(): void
     {
         $this->responseContentExpected = '';
@@ -272,7 +273,7 @@ class ModuleCommunicationTest extends TestCase
         $this->assertEquals($this->getResponseDtoFromString(''), $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAValidRequestNoDevOrTestUrlWithoutQueryString(): void
     {
         $routeConfig = ModuleCommunicationFactoryTest::json(true);
@@ -281,7 +282,7 @@ class ModuleCommunicationTest extends TestCase
         $this->object->__invoke($routeConfig);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAValidRequestDevUrlWithoutQueryString(): void
     {
         $url = self::URL;
@@ -301,7 +302,7 @@ class ModuleCommunicationTest extends TestCase
         $this->object->__invoke($routeConfig);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAValidRequestTestUrlWithoutQueryString(): void
     {
         $url = self::URL;
@@ -321,7 +322,7 @@ class ModuleCommunicationTest extends TestCase
         $this->object->__invoke($routeConfig);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAValidRequestTestUrlWithQueryString(): void
     {
         $url = self::URL.'?param1=value1&param2=value2';
@@ -341,7 +342,7 @@ class ModuleCommunicationTest extends TestCase
         $this->object->__invoke($routeConfig);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAValidRequestAuthenticationPassedOnHeaders(): void
     {
         $url = self::URL.'?param1=value1&param2=value2';
@@ -363,7 +364,7 @@ class ModuleCommunicationTest extends TestCase
         $this->object->__invoke($routeConfig);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAValidRequestAuthenticationPassedOnHeadersHeaderBadFormed(): void
     {
         $url = self::URL.'?param1=value1&param2=value2';
@@ -386,7 +387,7 @@ class ModuleCommunicationTest extends TestCase
         $this->object->__invoke($routeConfig);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAValidRequestTokenNotFoundInRequest(): void
     {
         $url = self::URL.'?param1=value1&param2=value2';
@@ -407,7 +408,7 @@ class ModuleCommunicationTest extends TestCase
         $this->object->__invoke($routeConfig);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailWrongJsonInResponseContent(): void
     {
         $this->responseContentExpected = 'Wrong json';
@@ -435,7 +436,7 @@ class ModuleCommunicationTest extends TestCase
         $this->assertEquals($this->getResponseDtoFromString(''), $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailResponseError400(): void
     {
         /** @var MockObject|HttpExceptionInterface $httpExceptionInterface */
@@ -464,7 +465,7 @@ class ModuleCommunicationTest extends TestCase
         $this->assertEquals($this->getResponseDtoFromString($this->responseContentExpected), $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailResponseError500(): void
     {
         /** @var MockObject|HttpExceptionInterface $httpExceptionInterface */
@@ -493,7 +494,7 @@ class ModuleCommunicationTest extends TestCase
         $this->assertEquals($this->getResponseDtoFromString($this->responseContentExpected), $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailResponseNetworkError(): void
     {
         $this->expectException(ModuleCommunicationException::class);
@@ -519,7 +520,7 @@ class ModuleCommunicationTest extends TestCase
         $this->object->__invoke($routeConfig);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetARangeOfPages(): void
     {
         $routeConfig = ModuleCommunicationFactoryTest::json(
@@ -552,7 +553,7 @@ class ModuleCommunicationTest extends TestCase
             ->expects($objectMockMatcher)
             ->method('__invoke')
             ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher): bool {
-                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
+                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->numberOfInvocations() - 1);
 
                 $this->assertEquals($routeConfigExpected, $routeConfigActual);
 
@@ -567,7 +568,7 @@ class ModuleCommunicationTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetARangeOfPagesNoContent(): void
     {
         $routeConfig = ModuleCommunicationFactoryTest::json(
@@ -599,7 +600,7 @@ class ModuleCommunicationTest extends TestCase
             ->expects($objectMockMatcher)
             ->method('__invoke')
             ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher): bool {
-                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
+                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->numberOfInvocations() - 1);
 
                 $this->assertEquals($routeConfigExpected, $routeConfigActual);
 
@@ -614,7 +615,7 @@ class ModuleCommunicationTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetARangeOfPagesNoPageEndSet(): void
     {
         $routeConfig = ModuleCommunicationFactoryTest::json(
@@ -647,7 +648,7 @@ class ModuleCommunicationTest extends TestCase
             ->expects($objectMockMatcher)
             ->method('__invoke')
             ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher): bool {
-                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
+                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->numberOfInvocations() - 1);
 
                 $this->assertEquals($routeConfigExpected, $routeConfigActual);
 
@@ -662,7 +663,7 @@ class ModuleCommunicationTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetARangeOfPagesPageEndIsBiggerThanPagesTotal(): void
     {
         $routeConfig = ModuleCommunicationFactoryTest::json(
@@ -695,7 +696,7 @@ class ModuleCommunicationTest extends TestCase
             ->expects($objectMockMatcher)
             ->method('__invoke')
             ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher): bool {
-                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
+                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->numberOfInvocations() - 1);
 
                 $this->assertEquals($routeConfigExpected, $routeConfigActual);
 
@@ -710,7 +711,7 @@ class ModuleCommunicationTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetARangeOfPagesPagesTotalPathIsDeeperThanOne(): void
     {
         $routeConfig = ModuleCommunicationConfigTestDto::json(
@@ -748,7 +749,7 @@ class ModuleCommunicationTest extends TestCase
             ->expects($objectMockMatcher)
             ->method('__invoke')
             ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher): bool {
-                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
+                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->numberOfInvocations() - 1);
 
                 $this->assertEquals($routeConfigExpected, $routeConfigActual);
 
@@ -763,7 +764,7 @@ class ModuleCommunicationTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageIniIsLessThanZero(): void
     {
         $routeConfig = ModuleCommunicationFactoryTest::json(
@@ -793,7 +794,7 @@ class ModuleCommunicationTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailResponseStatusIsNotOk(): void
     {
         $routeConfig = ModuleCommunicationFactoryTest::json(
@@ -840,7 +841,7 @@ class ModuleCommunicationTest extends TestCase
             ->expects($objectMockMatcher)
             ->method('__invoke')
             ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher): bool {
-                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
+                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->numberOfInvocations() - 1);
 
                 $this->assertEquals($routeConfigExpected, $routeConfigActual);
 
@@ -864,7 +865,7 @@ class ModuleCommunicationTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailResponseHasErrors(): void
     {
         $routeConfig = ModuleCommunicationFactoryTest::json(
@@ -911,7 +912,7 @@ class ModuleCommunicationTest extends TestCase
             ->expects($objectMockMatcher)
             ->method('__invoke')
             ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher): bool {
-                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
+                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->numberOfInvocations() - 1);
 
                 $this->assertEquals($routeConfigExpected, $routeConfigActual);
 
@@ -935,7 +936,7 @@ class ModuleCommunicationTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailResponsePagesTotalPathIsWrong(): void
     {
         $routeConfig = ModuleCommunicationConfigTestDto::json(
@@ -973,7 +974,7 @@ class ModuleCommunicationTest extends TestCase
             ->expects($objectMockMatcher)
             ->method('__invoke')
             ->with($this->callback(function (ModuleCommunicationConfigDtoPaginatorInterface $routeConfigActual) use ($routeConfig, $objectMockMatcher): bool {
-                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->getInvocationCount() - 1);
+                $routeConfigExpected = $routeConfig->cloneWithPage($routeConfig->query['page'] + $objectMockMatcher->numberOfInvocations() - 1);
 
                 $this->assertEquals($routeConfigExpected, $routeConfigActual);
 

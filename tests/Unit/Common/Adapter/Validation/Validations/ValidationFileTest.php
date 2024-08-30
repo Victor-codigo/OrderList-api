@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation\Validations;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
@@ -84,7 +85,7 @@ class ValidationFileTest extends TestCase
         BuiltInFunctionsReturn::$unlink = null;
     }
 
-    /** @test */
+    #[Test]
     public function validationUserImageOk(): void
     {
         $return = $this->object
@@ -111,7 +112,7 @@ class ValidationFileTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function validationUserImageFailMimeTypeWrong(): void
     {
         $return = $this->object
@@ -138,7 +139,7 @@ class ValidationFileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_INVALID_MIME_TYPE], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationUserImageFailFilenameMaxLengthWrong(): void
     {
         $return = $this->object
@@ -165,7 +166,7 @@ class ValidationFileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_NAME_TOO_LONG], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationUserImageFailFileNotFound(): void
     {
         $return = $this->object
@@ -192,7 +193,7 @@ class ValidationFileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_NOT_FOUND], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationUserImageFailFileNotReadable(): void
     {
         BuiltInFunctionsReturn::$is_readable = false;
@@ -220,7 +221,7 @@ class ValidationFileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_NOT_READABLE], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationUserImageFailFileTooLarge(): void
     {
         $return = $this->object
@@ -247,7 +248,7 @@ class ValidationFileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_TOO_LARGE], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationUserImageFailFileEmpty(): void
     {
         $return = $this->object
@@ -274,7 +275,7 @@ class ValidationFileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_EMPTY], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationUserImageFailFileTooNarrow(): void
     {
         $return = $this->object
@@ -301,7 +302,7 @@ class ValidationFileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_TOO_NARROW], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationUserImageFailFileTooWide(): void
     {
         $return = $this->object
@@ -328,7 +329,7 @@ class ValidationFileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_TOO_WIDE], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationUserImageFailFileTooLow(): void
     {
         $return = $this->object
@@ -355,7 +356,7 @@ class ValidationFileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_TOO_LOW], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationUserImageFailFileTooHigh(): void
     {
         $return = $this->object
@@ -382,7 +383,7 @@ class ValidationFileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_TOO_HIGH], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationUserImageFailFileTooFewPixels(): void
     {
         $return = $this->object
@@ -409,7 +410,7 @@ class ValidationFileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_TOO_FEW_PIXEL], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationUserImageFailFileTooManyPixels(): void
     {
         $return = $this->object
@@ -436,7 +437,7 @@ class ValidationFileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_TOO_MANY_PIXEL], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationUserImageFailFileRatioTooSmall(): void
     {
         $return = $this->object
@@ -463,7 +464,7 @@ class ValidationFileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_RATIO_TOO_SMALL], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationUserImageFailFileRatioTooBig(): void
     {
         $return = $this->object
@@ -490,7 +491,7 @@ class ValidationFileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_RATIO_TOO_BIG], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationUserImageFailLandscapeNotAllowed(): void
     {
         $return = $this->object
@@ -517,7 +518,7 @@ class ValidationFileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_LANDSCAPE_NOT_ALLOWED], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationUserImageFailSquareNotAllowed(): void
     {
         $return = $this->object
@@ -544,7 +545,7 @@ class ValidationFileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_SQUARE_NOT_ALLOWED], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationUserImageFailPortraitNotAllowed(): void
     {
         $return = $this->object
@@ -571,7 +572,7 @@ class ValidationFileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_PORTRAIT_NOT_ALLOWED], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationFileOk(): void
     {
         $return = $this->object
@@ -585,7 +586,7 @@ class ValidationFileTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function validationFileFailFileNotFound(): void
     {
         $return = $this->object
@@ -599,7 +600,7 @@ class ValidationFileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_NOT_FOUND], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationFileFailFileNotReadable(): void
     {
         BuiltInFunctionsReturn::$is_readable = false;
@@ -614,7 +615,7 @@ class ValidationFileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_NOT_READABLE], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationFileFailFileTooLarge(): void
     {
         $return = $this->object
@@ -628,7 +629,7 @@ class ValidationFileTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_TOO_LARGE], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationFileFailFileEmpty(): void
     {
         $return = $this->object

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Validation\Exception;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS_HTTP;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
@@ -11,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class ValueObjectValidationExceptionTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function isShouldCreateTheExceptionFromAMessageAndAListOfErrors(): void
     {
         $message = 'message';
@@ -32,7 +33,7 @@ class ValueObjectValidationExceptionTest extends TestCase
         $this->assertEquals($errorsExpected, $return->getErrors());
     }
 
-    /** @test */
+    #[Test]
     public function isShouldCreateTheExceptionFromAMessageAndAListOfGroupsOfErrors(): void
     {
         $message = 'message';

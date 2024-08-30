@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Order\Adapter\Http\Controller\OrderGetData;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\Filter\FILTER_SECTION;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
@@ -277,7 +278,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetOrdersDataByGroupId22(): void
     {
         $groupId = self::GROUP_ID;
@@ -313,7 +314,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetOrdersDataByGroupIdAndOrdersId(): void
     {
         $ordersId = implode(',', self::ORDERS_ID);
@@ -351,7 +352,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetOrdersDataByGroupIdAndListOrderName(): void
     {
         $groupId = self::GROUP_ID;
@@ -393,7 +394,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetOrdersDataByGroupIdAndListOrderId(): void
     {
         $groupId = self::GROUP_ID;
@@ -431,7 +432,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetOrdersDataByGroupIdAndProductName(): void
     {
         $groupId = self::GROUP_ID;
@@ -475,7 +476,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetOrdersDataByGroupIdAndShopName(): void
     {
         $groupId = self::GROUP_ID;
@@ -519,7 +520,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingOrdersDataOrdersNotFound(): void
     {
         $groupId = self::GROUP_ID;
@@ -543,7 +544,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingOrdersDataGroupIdIsNull(): void
     {
         $groupId = null;
@@ -570,7 +571,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingOrdersDataGroupIdIsWrong(): void
     {
         $groupId = 'wrong id';
@@ -597,7 +598,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingOrdersDataListOrdersIdIsWrong(): void
     {
         $groupId = self::GROUP_ID;
@@ -631,7 +632,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->list_orders_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingOrdersDataOrdersIdIsWrong(): void
     {
         $groupId = self::GROUP_ID;
@@ -659,7 +660,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $this->assertEquals([['uuid_invalid_characters']], $responseContent->errors->orders_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingOrdersDataPageIsNull(): void
     {
         $groupId = self::GROUP_ID;
@@ -692,7 +693,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['greater_than'], $responseContent->errors->page);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingOrdersDataPageIsWrong(): void
     {
         $groupId = self::GROUP_ID;
@@ -727,7 +728,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['greater_than'], $responseContent->errors->page);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingOrdersDataPageItemsIsNull(): void
     {
         $groupId = self::GROUP_ID;
@@ -760,7 +761,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['greater_than'], $responseContent->errors->page_items);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingOrdersDataPageItemsIsWrong(): void
     {
         $groupId = self::GROUP_ID;
@@ -795,7 +796,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['greater_than'], $responseContent->errors->page_items);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingOrdersDataFiltersSectionIsWrong(): void
     {
         $groupId = self::GROUP_ID;
@@ -830,7 +831,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->section_filter_type);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingOrdersDataFiltersTextIsWrong(): void
     {
         $groupId = self::GROUP_ID;
@@ -865,7 +866,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->text_filter_type);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingOrdersDataFilterTextMissing(): void
     {
         $groupId = self::GROUP_ID;
@@ -898,7 +899,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['not_null'], $responseContent->errors->filter_section_and_text_not_empty);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGetOrdersDataUserNotBelongsToTheGroup(): void
     {
         $ordersId = implode(',', self::ORDERS_ID);

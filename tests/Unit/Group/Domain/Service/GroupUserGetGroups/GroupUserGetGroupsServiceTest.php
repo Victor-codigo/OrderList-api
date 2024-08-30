@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupUserGetGroups;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -99,7 +100,7 @@ class GroupUserGetGroupsServiceTest extends TestCase
             ->willReturn($expectedGroupsData);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetUserGroupsAllData(): void
     {
         $expectedUserGroups = $this->getUserGroups();
@@ -164,7 +165,7 @@ class GroupUserGetGroupsServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoGroupsFound(): void
     {
         $userId = $this->getUserId();

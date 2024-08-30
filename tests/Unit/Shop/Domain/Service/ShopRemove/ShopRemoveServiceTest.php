@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Domain\Service\ShopRemove;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -58,7 +59,7 @@ class ShopRemoveServiceTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveAShop(): void
     {
         $shopId = ValueObjectFactory::createIdentifier('shop id');
@@ -88,7 +89,7 @@ class ShopRemoveServiceTest extends TestCase
         $this->assertEqualsCanonicalizing([$shopId], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveManyShops(): void
     {
         $shopsId = [
@@ -124,7 +125,7 @@ class ShopRemoveServiceTest extends TestCase
         $this->assertEqualsCanonicalizing($shopsId, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveAShopImageFileExists(): void
     {
         $shopId = ValueObjectFactory::createIdentifier('shop id');
@@ -156,7 +157,7 @@ class ShopRemoveServiceTest extends TestCase
         $this->assertEquals([$shopId], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveAShopImageFileNotExists(): void
     {
         $shopId = ValueObjectFactory::createIdentifier('shop id');
@@ -187,7 +188,7 @@ class ShopRemoveServiceTest extends TestCase
         $this->assertEquals([$shopId], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingAShopProductNotFound(): void
     {
         $shopId = ValueObjectFactory::createIdentifier('shop id');
@@ -213,7 +214,7 @@ class ShopRemoveServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingAShopImageCanNotBeRemoved(): void
     {
         $shopId = ValueObjectFactory::createIdentifier('shop id');

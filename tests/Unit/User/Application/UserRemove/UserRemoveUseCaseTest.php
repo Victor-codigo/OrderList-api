@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserRemove;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -194,7 +195,7 @@ class UserRemoveUseCaseTest extends TestCase
             $removeGroupsResponse->data['groups_id_user_removed']
         );
 
-        match ($moduleCommunicationMatcher->getInvocationCount()) {
+        match ($moduleCommunicationMatcher->numberOfInvocations()) {
             1 => $this->assertEquals(ModuleCommunicationFactory::groupRemoveAllUserGroups(self::SYSTEM_KEY), $configActual),
             2 => $this->assertEquals(ModuleCommunicationFactory::notificationsRemoveAllUserNotifications(self::SYSTEM_KEY), $configActual),
             3 => $this->assertEquals(ModuleCommunicationFactory::productRemoveGroupsProducts($groupsIdRemoved, self::SYSTEM_KEY), $configActual),
@@ -218,7 +219,7 @@ class UserRemoveUseCaseTest extends TestCase
         return true;
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveUserAndAllItsDependencies(): void
     {
         $userId = ValueObjectFactory::createIdentifier(self::USER_ID);
@@ -265,7 +266,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->assertEquals($returnExpected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveUserGroupNoGroups(): void
     {
         $userId = ValueObjectFactory::createIdentifier(self::USER_ID);
@@ -279,7 +280,7 @@ class UserRemoveUseCaseTest extends TestCase
             ->expects($moduleCommunicationMatcher)
             ->method('__invoke')
             ->with($this->callback(fn (ModuleCommunicationConfigDto $config): bool => $this->assertModuleCommunicationConfigDtoIdOk($config, $removeGroupsResponse, $moduleCommunicationMatcher)))
-            ->willReturnCallback(fn (): ResponseDto => match ($moduleCommunicationMatcher->getInvocationCount()) {
+            ->willReturnCallback(fn (): ResponseDto => match ($moduleCommunicationMatcher->numberOfInvocations()) {
                 1 => $removeGroupsResponse ,
                 2 => $removeNotificationsResponse,
             });
@@ -304,7 +305,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->assertEquals($returnExpected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailErrorRemovingGroupsStatusError(): void
     {
         $input = new UserRemoveInputDto($this->userSession);
@@ -329,7 +330,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailErrorRemovingGroupsHasErrors(): void
     {
         $input = new UserRemoveInputDto($this->userSession);
@@ -354,7 +355,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveNotificationsStatusError(): void
     {
         $input = new UserRemoveInputDto($this->userSession);
@@ -385,7 +386,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveNotificationsHasErrors(): void
     {
         $input = new UserRemoveInputDto($this->userSession);
@@ -416,7 +417,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveProductsStatusError(): void
     {
         $input = new UserRemoveInputDto($this->userSession);
@@ -447,7 +448,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveProductsHasErrors(): void
     {
         $input = new UserRemoveInputDto($this->userSession);
@@ -478,7 +479,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingShopStatusError(): void
     {
         $input = new UserRemoveInputDto($this->userSession);
@@ -511,7 +512,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingShopHasErrors(): void
     {
         $input = new UserRemoveInputDto($this->userSession);
@@ -544,7 +545,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingOrdersStatusError(): void
     {
         $input = new UserRemoveInputDto($this->userSession);
@@ -579,7 +580,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingOrdersHasErrors(): void
     {
         $input = new UserRemoveInputDto($this->userSession);
@@ -614,7 +615,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingListOrdersStatusError(): void
     {
         $input = new UserRemoveInputDto($this->userSession);
@@ -651,7 +652,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingListOrdersHasErrors(): void
     {
         $input = new UserRemoveInputDto($this->userSession);
@@ -688,7 +689,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoUserToRemoveFoundException(): void
     {
         $userId = ValueObjectFactory::createIdentifier(self::USER_ID);
@@ -733,7 +734,7 @@ class UserRemoveUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoUserToRemoveErrorException(): void
     {
         $userId = ValueObjectFactory::createIdentifier(self::USER_ID);

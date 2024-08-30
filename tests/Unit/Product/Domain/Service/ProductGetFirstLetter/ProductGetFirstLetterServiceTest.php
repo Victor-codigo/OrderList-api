@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ProductGetFirstLetter;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -17,6 +18,7 @@ class ProductGetFirstLetterServiceTest extends TestCase
     private ProductGetFirstLetterService $object;
     private MockObject|ProductRepositoryInterface $productRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -25,7 +27,7 @@ class ProductGetFirstLetterServiceTest extends TestCase
         $this->object = new ProductGetFirstLetterService($this->productRepository);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductsFirstLetterOfAGroup(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -43,7 +45,7 @@ class ProductGetFirstLetterServiceTest extends TestCase
         $this->assertSame($expected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGetProductsFirstLetterOfAGroupNoProducts(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');

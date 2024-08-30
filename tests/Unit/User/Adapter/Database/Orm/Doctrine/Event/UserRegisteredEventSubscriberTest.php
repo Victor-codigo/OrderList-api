@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Database\Orm\Doctrine\Event;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PostPersistEventArgs;
@@ -38,7 +39,7 @@ class UserRegisteredEventSubscriberTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldNotDispatchUserPreRegisteredEvent(): void
     {
         $event = new PostPersistEventArgs(new \stdClass(), $this->entityManager);
@@ -50,7 +51,7 @@ class UserRegisteredEventSubscriberTest extends TestCase
         $this->object->postPersist($event);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldDispatchUserPreRegisteredEventPreRegisteredDataIsNull(): void
     {
         $event = new PostPersistEventArgs($this->user, $this->entityManager);
@@ -85,7 +86,7 @@ class UserRegisteredEventSubscriberTest extends TestCase
         $this->object->postPersist($event);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldDispatchUserPreRegisteredEventPreRegisteredDataIsNotNull(): void
     {
         $event = new PostPersistEventArgs($this->user, $this->entityManager);

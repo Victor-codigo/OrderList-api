@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array\RolesType;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Exception\LogicException;
@@ -27,7 +28,7 @@ class RolesTypeTest extends TestCase
         $this->object = new RolesType();
     }
 
-    /** @test */
+    #[Test]
     public function convertToDatabaseValueReturnACorrectJson(): void
     {
         $roles = new Roles([new Rol(USER_ROLES::ADMIN), new Rol(USER_ROLES::USER)]);
@@ -37,7 +38,7 @@ class RolesTypeTest extends TestCase
         $this->assertEquals(json_encode([USER_ROLES::ADMIN, USER_ROLES::USER]), $return);
     }
 
-    /** @test */
+    #[Test]
     public function convertToDatabaseValueEmptyValuesToNull(): void
     {
         $roles = new Roles([]);
@@ -47,7 +48,7 @@ class RolesTypeTest extends TestCase
         $this->assertNull($return);
     }
 
-    /** @test */
+    #[Test]
     public function convertToDatabaseValueThrowExceptionInvalidArgument(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -55,7 +56,7 @@ class RolesTypeTest extends TestCase
         $this->object->convertToDatabaseValue('', $this->abstractPlatform);
     }
 
-    /** @test */
+    #[Test]
     public function convertToPHPValueValueIsNullAndReturnNull(): void
     {
         $return = $this->object->convertToPHPValue(null, $this->abstractPlatform);
@@ -63,7 +64,7 @@ class RolesTypeTest extends TestCase
         $this->assertNull($return);
     }
 
-    /** @test */
+    #[Test]
     public function convertToPHPValueIsArrayEmptyReturnsEmptyRoles(): void
     {
         $return = $this->object->convertToPHPValue(json_encode([]), $this->abstractPlatform);
@@ -72,7 +73,7 @@ class RolesTypeTest extends TestCase
         $this->assertEmpty($return->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function convertToPHPValueManyRolesAndReturnRolesWithTheRoles(): void
     {
         $roles = [USER_ROLES::NOT_ACTIVE, USER_ROLES::USER];
@@ -89,7 +90,7 @@ class RolesTypeTest extends TestCase
         $this->assertSame($roles, $rolesReturned);
     }
 
-    /** @test */
+    #[Test]
     public function convertToPHPValueInvalidArgumentException(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -97,7 +98,7 @@ class RolesTypeTest extends TestCase
         $this->object->convertToPHPValue('{', $this->abstractPlatform);
     }
 
-    /** @test */
+    #[Test]
     public function convertToPHPValueJsonMalformedExpectLogicException(): void
     {
         $this->expectException(LogicException::class);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\UnitMeasureType;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -26,7 +27,7 @@ class UnitMeasureTypeTest extends TestCase
         $this->object = new UnitMeasureType();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldConvertToDatabaseValue(): void
     {
         $value = ValueObjectFactory::createUnit(UNIT_MEASURE_TYPE::UNITS);
@@ -35,7 +36,7 @@ class UnitMeasureTypeTest extends TestCase
         $this->assertSame(UNIT_MEASURE_TYPE::UNITS->value, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldConvertNullValueToNullForDatabaseValue(): void
     {
         $return = $this->object->convertToDatabaseValue(null, $this->platform);
@@ -43,7 +44,7 @@ class UnitMeasureTypeTest extends TestCase
         $this->assertNull($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailConvertingDataToDatabaseValueValueTypeIsNotValid(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -52,7 +53,7 @@ class UnitMeasureTypeTest extends TestCase
         $this->object->convertToDatabaseValue($value, $this->platform);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldConvertToPhpValue(): void
     {
         $value = UNIT_MEASURE_TYPE::UNITS->value;
@@ -62,7 +63,7 @@ class UnitMeasureTypeTest extends TestCase
         $this->assertEquals($expects, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailConvertingToPhpValue(): void
     {
         $this->expectException(InvalidArgumentException::class);

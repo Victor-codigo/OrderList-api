@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Application\NotificationRemoveAllUserNotifications\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -28,7 +29,7 @@ class NotificationRemoveAllUserNotificationsInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $object = new DtoNotificationRemoveAllUserNotificationsInputDto(
@@ -41,7 +42,7 @@ class NotificationRemoveAllUserNotificationsInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSystemKeyIsNull(): void
     {
         $object = new DtoNotificationRemoveAllUserNotificationsInputDto(

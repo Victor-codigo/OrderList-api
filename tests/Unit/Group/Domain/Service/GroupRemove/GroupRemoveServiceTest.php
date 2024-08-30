@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupRemove;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
@@ -71,7 +72,7 @@ class GroupRemoveServiceTest extends TestCase
         return true;
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveTheGroup(): void
     {
         $groupsId = [
@@ -103,7 +104,7 @@ class GroupRemoveServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailTheGroupCanNotRemoveGroupImage(): void
     {
         $groupsId = [
@@ -138,7 +139,7 @@ class GroupRemoveServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupNotFound(): void
     {
         $groupsId = [
@@ -165,7 +166,7 @@ class GroupRemoveServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupTypeIsUser(): void
     {
         $groupsId = [
@@ -194,7 +195,7 @@ class GroupRemoveServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailConnectionError(): void
     {
         $groupsId = [

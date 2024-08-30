@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Application\ProductRemoveAllGroupsProducts\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -26,7 +27,7 @@ class ProductRemoveAllGroupsProductsInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $object = new ProductRemoveAllGroupsProductsInputDto(
@@ -43,7 +44,7 @@ class ProductRemoveAllGroupsProductsInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdAreEmpty(): void
     {
         $object = new ProductRemoveAllGroupsProductsInputDto(
@@ -57,7 +58,7 @@ class ProductRemoveAllGroupsProductsInputDtoTest extends TestCase
         $this->assertEquals(['groups_id_empty' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdAreWrong(): void
     {
         $object = new ProductRemoveAllGroupsProductsInputDto(
@@ -75,7 +76,7 @@ class ProductRemoveAllGroupsProductsInputDtoTest extends TestCase
         $this->assertEquals(['groups_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSystemKeyIsEmpty(): void
     {
         $object = new ProductRemoveAllGroupsProductsInputDto(

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\ListOrders\Adapter\Http\Controller\ListOrdersRemove;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +20,7 @@ class ListOrdersRemoveControllerTest extends WebClientTestCase
     private const string LIST_ORDERS_ID_2 = 'd446eab9-5199-48d0-91f5-0407a86bcb4f';
     private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveListOrders(): void
     {
         $listsOrdersId = [
@@ -51,7 +52,7 @@ class ListOrdersRemoveControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingListsOrdersListsOrdersIdIsNull(): void
     {
         $listsOrdersId = null;
@@ -75,7 +76,7 @@ class ListOrdersRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank'], $responseContent->errors->lists_orders_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingListsOrdersGroupIdIsNull(): void
     {
         $listsOrdersId = [
@@ -102,7 +103,7 @@ class ListOrdersRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingListsOrdersUserDoesNotBelongsToThGroup(): void
     {
         $listsOrdersId = [
@@ -129,7 +130,7 @@ class ListOrdersRemoveControllerTest extends WebClientTestCase
         $this->assertEquals('You not belong to the group', $responseContent->errors->permissions);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingListOrdersListOrderIdNotFound(): void
     {
         $listsOrdersId = ['9d1a5942-850f-41f9-a32a-38927978ce5c'];

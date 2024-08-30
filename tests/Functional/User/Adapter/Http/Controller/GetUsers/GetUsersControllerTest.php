@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\GetUsers;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\User\USER_ROLES;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
@@ -107,12 +108,12 @@ class GetUsersControllerTest extends WebClientTestCase
                     $user->getRoles()->getRolesEnums()),
                 $users
             ),
-            'usersCreatedOn' => array_map(fn (User $user) => $user->getCreatedOn()->format('Y-m-d H:i:s'), $users),
+            'usersCreatedOn' => array_map(fn (User $user): string => $user->getCreatedOn()->format('Y-m-d H:i:s'), $users),
             'usersImages' => array_map(fn (User $user): ?string => $user->getProfile()->getImage()->getValue(), $users),
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnThreeUsers(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -141,7 +142,7 @@ class GetUsersControllerTest extends WebClientTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnThreeUsersNotUsersDeletedOrNotActive(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -161,7 +162,7 @@ class GetUsersControllerTest extends WebClientTestCase
         $this->assertCount(count($this->getUsersIds()), $responseContent->data);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnAnUserDifferentFromItself(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -189,7 +190,7 @@ class GetUsersControllerTest extends WebClientTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnThreeUsersForAdminUser(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();
@@ -220,7 +221,7 @@ class GetUsersControllerTest extends WebClientTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnUsersOwnData(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -250,7 +251,7 @@ class GetUsersControllerTest extends WebClientTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoUsersSent(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -265,7 +266,7 @@ class GetUsersControllerTest extends WebClientTestCase
         $this->assertResponseStructureIsOk($response, [], [], Response::HTTP_METHOD_NOT_ALLOWED);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersIdWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -286,7 +287,7 @@ class GetUsersControllerTest extends WebClientTestCase
         $this->assertSame([['uuid_too_long'], ['uuid_too_long']], $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersIdNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -303,7 +304,7 @@ class GetUsersControllerTest extends WebClientTestCase
         $this->assertNull($responseContent);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersIdAreDeletedOrNotActivated(): void
     {
         $client = $this->getNewClientAuthenticatedUser();

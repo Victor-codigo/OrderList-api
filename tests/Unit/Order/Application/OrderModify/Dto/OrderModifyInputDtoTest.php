@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Application\OrderModify\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -26,7 +27,7 @@ class OrderModifyInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
@@ -53,7 +54,7 @@ class OrderModifyInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateShopIdIsNull(): void
     {
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
@@ -80,7 +81,7 @@ class OrderModifyInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateDescriptionIdIsNull(): void
     {
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
@@ -107,7 +108,7 @@ class OrderModifyInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateAmountIdIsNull(): void
     {
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
@@ -134,7 +135,7 @@ class OrderModifyInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingOrderIsNull(): void
     {
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
@@ -161,7 +162,7 @@ class OrderModifyInputDtoTest extends TestCase
         $this->assertEquals(['order_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingOrderIsWrong(): void
     {
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
@@ -188,7 +189,7 @@ class OrderModifyInputDtoTest extends TestCase
         $this->assertEquals(['order_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateGroupIdIsNull(): void
     {
         $groupId = null;
@@ -215,7 +216,7 @@ class OrderModifyInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateGroupIdIsWrong(): void
     {
         $groupId = 'wrong id';
@@ -242,7 +243,7 @@ class OrderModifyInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateListOrdersIdIsNull(): void
     {
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
@@ -269,7 +270,7 @@ class OrderModifyInputDtoTest extends TestCase
         $this->assertEquals(['list_orders_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateListOrdersIdIsWrong(): void
     {
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
@@ -296,7 +297,7 @@ class OrderModifyInputDtoTest extends TestCase
         $this->assertEquals(['list_orders_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateProductIdIsNull(): void
     {
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
@@ -323,7 +324,7 @@ class OrderModifyInputDtoTest extends TestCase
         $this->assertEquals(['product_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateProductIdIsWrong(): void
     {
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
@@ -350,7 +351,7 @@ class OrderModifyInputDtoTest extends TestCase
         $this->assertEquals(['product_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateShopIdIsWrong(): void
     {
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
@@ -377,7 +378,7 @@ class OrderModifyInputDtoTest extends TestCase
         $this->assertEquals(['shop_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingDescriptionIsTooLong(): void
     {
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';
@@ -404,7 +405,7 @@ class OrderModifyInputDtoTest extends TestCase
         $this->assertEquals(['description' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingAmountIsNegative(): void
     {
         $groupId = '1d641e0d-da1f-4f8b-9d90-ab01a42ef620';

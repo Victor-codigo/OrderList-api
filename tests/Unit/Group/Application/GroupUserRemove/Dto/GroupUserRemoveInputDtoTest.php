@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupUserRemove\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -36,7 +37,7 @@ class GroupUserRemoveInputDtoTest extends TestCase
         return UserShared::fromPrimitives('', '', '', [USER_ROLES::USER], null, new \DateTime());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateGroupUserRemoveValidation(): void
     {
         $userSession = $this->getUserSession();
@@ -47,7 +48,7 @@ class GroupUserRemoveInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $userSession = $this->getUserSession();
@@ -58,7 +59,7 @@ class GroupUserRemoveInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdNotValid(): void
     {
         $userSession = $this->getUserSession();
@@ -69,7 +70,7 @@ class GroupUserRemoveInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersIdIsNull(): void
     {
         $userSession = $this->getUserSession();
@@ -80,7 +81,7 @@ class GroupUserRemoveInputDtoTest extends TestCase
         $this->assertEquals(['users_id' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersIdNotValid(): void
     {
         $userSession = $this->getUserSession();

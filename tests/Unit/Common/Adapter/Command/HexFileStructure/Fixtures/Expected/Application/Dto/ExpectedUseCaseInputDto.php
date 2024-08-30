@@ -9,10 +9,6 @@ use Common\Domain\Validation\ValidationInterface;
 
 class EndpointInputDto implements ServiceInputDtoInterface
 {
-    public function __construct()
-    {
-    }
-
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {

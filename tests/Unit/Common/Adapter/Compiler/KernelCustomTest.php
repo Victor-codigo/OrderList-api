@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Compiler;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Compiler\KernelCustom;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -15,6 +16,7 @@ class KernelCustomTest extends TestCase
     private KernelCustom $object;
     private MockObject|Dotenv $dotEnv;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -23,7 +25,7 @@ class KernelCustomTest extends TestCase
         $this->object = new KernelCustom($this->dotEnv);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnTestEnvironmentParameterIsTest(): void
     {
         $environment = 'test';
@@ -39,7 +41,7 @@ class KernelCustomTest extends TestCase
         $this->assertEquals($_ENV['APP_ENV'], 'test');
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnDevEnvironmentParameterIsDev(): void
     {
         $environment = 'dev';
@@ -55,7 +57,7 @@ class KernelCustomTest extends TestCase
         $this->assertEquals($_ENV['APP_ENV'], 'test');
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnDevEnvironmentParameterDevRequestQueryNotEnvParameter(): void
     {
         $environment = 'dev';
@@ -71,7 +73,7 @@ class KernelCustomTest extends TestCase
         $this->assertEquals($_ENV['APP_ENV'], 'test');
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnDevEnvironmentParameterDevRequestQueryNotValid(): void
     {
         $environment = 'dev';
@@ -94,7 +96,7 @@ class KernelCustomTest extends TestCase
         $this->object->changeEnvironmentByRequestQuery($environment, $projectDir);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnTestEnvironmentParameterDevRequestQueryTest(): void
     {
         $environment = 'dev';
@@ -123,7 +125,7 @@ class KernelCustomTest extends TestCase
         $this->assertEquals($_ENV['APP_ENV'], $_REQUEST['env']);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnDevEnvironmentParameterDevRequestQueryNotValidType(): void
     {
         $environment = 'dev';

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Adapter\Http\GetProductShopPriceRequestDto;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Product\Adapter\Http\Controller\GetProductShopPrice\Dto\GetProductShopPriceRequestDto;
 use Symfony\Component\HttpFoundation\InputBag;
@@ -31,7 +32,7 @@ class GetProductShopPriceRequestDtoTest extends TestCase
         return new GetProductShopPriceRequestDto($request);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldProcessAllData(): void
     {
         $request = [
@@ -46,7 +47,7 @@ class GetProductShopPriceRequestDtoTest extends TestCase
         $this->assertEquals($request['shops_id'], $requestDto->shopsId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldProcessAllProductsProductsIdIsNull(): void
     {
         $request = [
@@ -61,7 +62,7 @@ class GetProductShopPriceRequestDtoTest extends TestCase
         $this->assertEquals($request['shops_id'], $requestDto->shopsId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldProcessAllProductsShopsIdIsNull(): void
     {
         $request = [
@@ -76,7 +77,7 @@ class GetProductShopPriceRequestDtoTest extends TestCase
         $this->assertEquals(null, $requestDto->shopsId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldNotProcessAllProducts(): void
     {
         $request = [
@@ -91,7 +92,7 @@ class GetProductShopPriceRequestDtoTest extends TestCase
         $this->assertEquals($request['shops_id'], $requestDto->shopsId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldNotProcessAllShops(): void
     {
         $request = [

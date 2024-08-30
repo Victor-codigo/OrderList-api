@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Adapter\Database\Orm\Doctrine\Repository;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
@@ -143,7 +144,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSaveTheOrderInDatabase(): void
     {
         $orderNew = $this->getNewOrder();
@@ -161,7 +162,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->assertSame($orderNew, $orderSaved);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailOrderIdAlreadyExists(): void
     {
         $orderExists = $this->getExistsOrder();
@@ -176,7 +177,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->object->save([$orderExists]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSavingDataBaseError(): void
     {
         $this->expectException(DBConnectionException::class);
@@ -192,7 +193,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->object->save([$this->getNewOrder()]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveTheOrder(): void
     {
         $order = $this->getExistsOrder();
@@ -204,7 +205,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->assertEmpty($orderRemoved);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingTheOrdersErrorConnection(): void
     {
         $this->expectException(DBConnectionException::class);
@@ -222,7 +223,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->object->remove([$order]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetOrdersByIdAndGroupOrderAsc(): void
     {
         $orderAsc = true;
@@ -246,7 +247,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetOrdersByIdAndGroupOrderDesc(): void
     {
         $orderAsc = false;
@@ -270,7 +271,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingOrdersByIdAndGroupNotFound(): void
     {
         $orderAsc = true;
@@ -286,7 +287,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->object->findOrdersByIdOrFail($groupId, $ordersId, $orderAsc);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindOrdersByListName(): void
     {
         $orderAsc = true;
@@ -301,7 +302,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->assertEqualsCanonicalizing($ordersDb, $expectedOrders);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFindOrdersByListNameGroupNotFound(): void
     {
         $orderAsc = true;
@@ -312,7 +313,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->object->findOrdersByListOrdersNameOrFail($groupId, $listOrdersName, $orderAsc);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindOrdersByListOrdersIdAndProductName(): void
     {
         $orderAsc = true;
@@ -335,7 +336,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->assertEqualsCanonicalizing($ordersDb, $expectedOrders);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindOrdersByProductNameListOrdersIdIsNull(): void
     {
         $orderAsc = true;
@@ -355,7 +356,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->assertEqualsCanonicalizing($ordersDb, $expectedOrders);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindOrdersByProductName(): void
     {
         $orderAsc = true;
@@ -375,7 +376,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->assertEqualsCanonicalizing($ordersDb, $expectedOrders);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFindingOrdersByProductNameGroupNotFound(): void
     {
         $orderAsc = true;
@@ -391,7 +392,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->object->findOrdersByProductNameFilterOrFail($groupId, $listOrdersId, $filterText, $orderAsc);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindOrdersByListOrdersIdAndShopName(): void
     {
         $orderAsc = true;
@@ -414,7 +415,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->assertEqualsCanonicalizing($ordersDb, $expectedOrders);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindOrdersByShopName(): void
     {
         $orderAsc = true;
@@ -436,7 +437,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->assertEqualsCanonicalizing($ordersDb, $expectedOrders);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindOrdersByShopNameListOrdersIdIsNull(): void
     {
         $orderAsc = true;
@@ -458,7 +459,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->assertEqualsCanonicalizing($ordersDb, $expectedOrders);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindOrdersByShopNameGroupNotFound(): void
     {
         $orderAsc = true;
@@ -474,7 +475,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->object->findOrdersByShopNameFilterOrFail($groupId, $listOrdersId, $filterText, $orderAsc);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindOrdersByeGroupId(): void
     {
         $orderAsc = true;
@@ -488,7 +489,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->assertEqualsCanonicalizing($ordersDb, $expectedOrders);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindOrdersByGroupIdNotFound(): void
     {
         $orderAsc = true;
@@ -498,7 +499,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->object->findOrdersByGroupIdOrFail($groupId, $orderAsc);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetOrdersByListOrdersIdProductsIdAndShopsId(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -518,7 +519,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->assertEquals($ordersExpected, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetOrdersByListOrdersIdProductsIdAndShopsIdIsEqualsToNull(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -535,7 +536,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->assertEquals($ordersExpected, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingOrdersByListOrdersIdProductsIdAndShopsIdNotFound(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -551,7 +552,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->object->findOrdersByListOrdersIdProductIdAndShopIdOrFail($groupId, $listOrdersId, $productsId, $shopId);
     }
 
-    /** @test */
+    #[Test]
     public function idShouldFindAllOrdersOfAListOfOrders(): void
     {
         $listOrdersId = ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID);
@@ -568,7 +569,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->assertEqualsCanonicalizing($ordersExpected, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function idShouldFailFindingAllOrdersOfAListOfOrdersNotFound(): void
     {
         $listOrdersId = ValueObjectFactory::createIdentifier('id not found');
@@ -579,7 +580,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->object->findOrdersByListOrdersIdOrFail($listOrdersId, $groupId, $orderAsc);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindAllOrdersOfAGroups(): void
     {
         $groupsId = [
@@ -595,7 +596,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $this->assertEquals($expect, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoOrdersFoundInGroups(): void
     {
         $groupsId = [

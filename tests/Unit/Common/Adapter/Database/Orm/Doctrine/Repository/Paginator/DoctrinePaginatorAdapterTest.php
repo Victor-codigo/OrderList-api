@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Repository\Paginator;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Database\Orm\Doctrine\Repository\Paginator\DoctrinePaginatorAdapter;
 use Common\Adapter\Database\Orm\Doctrine\Repository\Paginator\Exception\PaginatorPageException;
 use Common\Domain\Exception\InvalidArgumentException;
@@ -152,7 +153,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         return $this->createObjectTest($query, $paginator);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAPaginator(): void
     {
         $pageItems = 5;
@@ -173,7 +174,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertSame($query, $paginator->getQuery());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetPageItems(): void
     {
         $pageItems = 5;
@@ -192,7 +193,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertEquals($pageItems, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGetPageItemsQueryNotSet(): void
     {
         $pageItems = 5;
@@ -209,7 +210,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $object->getPageItems();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetPaginateResultPageOne(): void
     {
         $pageItems = 5;
@@ -234,7 +235,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertEquals($object, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetPaginateResultPageTwo(): void
     {
         $pageItems = 5;
@@ -259,7 +260,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertEquals($object, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetPaginateResultPageThree(): void
     {
         $pageItems = 5;
@@ -284,7 +285,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertEquals($object, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetPaginateResultPageFour(): void
     {
         $pageItems = 5;
@@ -309,7 +310,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertEquals($object, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingPaginationPageItemsLowerThanOne(): void
     {
         $pageItems = 0;
@@ -328,7 +329,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $object->setPagination($page, $pageItems);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingPaginationPageLowerThanOne(): void
     {
         $pageItems = 5;
@@ -347,7 +348,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $object->setPagination($page, $pageItems);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetPaginationPageGreaterThanTotalPagesToLastPage(): void
     {
         $pageItems = 5;
@@ -372,7 +373,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertInstanceOf(DoctrinePaginatorAdapter::class, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAPageRange(): void
     {
         $pageIni = 1;
@@ -416,7 +417,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageIniIsSmallerThanZero(): void
     {
         $pageIni = 0;
@@ -438,7 +439,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageIniIsBiggerThanPageEnd(): void
     {
         $pageIni = 4;
@@ -459,7 +460,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetLessOfThePageRangeLimitPagesExceded(): void
     {
         $pageIni = 1;
@@ -500,7 +501,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetOnlyOnePage(): void
     {
         $pageIni = 1;
@@ -532,7 +533,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingPageCurrentPageQueryNotSet(): void
     {
         $object = new DoctrinePaginatorAdapter();
@@ -560,7 +561,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertEquals($page, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetPageCurrentPageTwo(): void
     {
         $pageItems = 5;
@@ -580,7 +581,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertEquals($page, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetPageCurrentPageThree(): void
     {
         $pageItems = 5;
@@ -600,7 +601,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertEquals($page, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetPageCurrentPageFour(): void
     {
         $pageItems = 5;
@@ -620,7 +621,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertEquals($page, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetPagesTotal(): void
     {
         $pageItems = 5;
@@ -632,7 +633,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertEquals(4, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetPagesTotalResultEmpty(): void
     {
         $pageItems = 5;
@@ -645,7 +646,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertEquals(1, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingPagesTotalPageQueryNotSet(): void
     {
         $object = new DoctrinePaginatorAdapter();
@@ -654,7 +655,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $object->getPagesTotal();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldHasNextPage(): void
     {
         $pageItems = 5;
@@ -667,7 +668,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertTrue($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldHasNotNextPage(): void
     {
         $pageItems = 5;
@@ -687,7 +688,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertFalse($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailHasNextPageQueryNotSet(): void
     {
         $object = new DoctrinePaginatorAdapter();
@@ -696,7 +697,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $object->hasNext();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldHasPrevious(): void
     {
         $pageItems = 5;
@@ -716,7 +717,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertTrue($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldHasNotPrevious(): void
     {
         $pageItems = 5;
@@ -736,7 +737,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertFalse($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailHasPreviousQueryNotSet(): void
     {
         $object = new DoctrinePaginatorAdapter();
@@ -745,7 +746,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $object->hasPrevious();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetPageNextNumber(): void
     {
         $pageItems = 5;
@@ -764,7 +765,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertEquals(2, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldNotGetPageNextNumber(): void
     {
         $pageItems = 5;
@@ -783,7 +784,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertNull($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingPageNextNumberQueryNotSet(): void
     {
         $object = new DoctrinePaginatorAdapter();
@@ -792,7 +793,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $object->getPageNextNumber();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetPagePreviousNumber(): void
     {
         $pageItems = 5;
@@ -811,7 +812,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertEquals(3, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldNotGetPagePreviousNumber(): void
     {
         $pageItems = 5;
@@ -830,7 +831,7 @@ class DoctrinePaginatorAdapterTest extends TestCase
         $this->assertNull($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingPagePreviousNumberQueryNotSet(): void
     {
         $object = new DoctrinePaginatorAdapter();

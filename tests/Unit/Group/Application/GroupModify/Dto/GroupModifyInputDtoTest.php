@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupModify\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
@@ -57,7 +58,7 @@ class GroupModifyInputDtoTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateTheInput(): void
     {
         $user = $this->getUser();
@@ -77,7 +78,7 @@ class GroupModifyInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateTheInputImageRemoveIsTrue(): void
     {
         $user = $this->getUser();
@@ -97,7 +98,7 @@ class GroupModifyInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateDescriptionIsNull(): void
     {
         $user = $this->getUser();
@@ -116,7 +117,7 @@ class GroupModifyInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateImageIsNull(): void
     {
         $user = $this->getUser();
@@ -135,7 +136,7 @@ class GroupModifyInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $user = $this->getUser();
@@ -155,7 +156,7 @@ class GroupModifyInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNotValid(): void
     {
         $user = $this->getUser();
@@ -175,7 +176,7 @@ class GroupModifyInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsNull(): void
     {
         $user = $this->getUser();
@@ -194,7 +195,7 @@ class GroupModifyInputDtoTest extends TestCase
         $this->assertEquals(['name' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsNotValid(): void
     {
         $user = $this->getUser();
@@ -213,7 +214,7 @@ class GroupModifyInputDtoTest extends TestCase
         $this->assertEquals(['name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDescriptionIsTooLong(): void
     {
         $user = $this->getUser();
@@ -233,7 +234,7 @@ class GroupModifyInputDtoTest extends TestCase
         $this->assertEquals(['description' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageMimeTypeNotAllowed(): void
     {
         $user = $this->getUser();
@@ -253,7 +254,7 @@ class GroupModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_INVALID_MIME_TYPE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageSizeFormTooLarge(): void
     {
         $user = $this->getUser();
@@ -274,7 +275,7 @@ class GroupModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_IMAGE_TOO_LARGE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageSizeIniTooLarge(): void
     {
         $user = $this->getUser();
@@ -295,7 +296,7 @@ class GroupModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_INIT_SIZE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageNoUploaded(): void
     {
         $user = $this->getUser();
@@ -316,7 +317,7 @@ class GroupModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_NO_FILE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImagePartiallyUploaded(): void
     {
         $user = $this->getUser();
@@ -337,7 +338,7 @@ class GroupModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_PARTIAL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageCantWrite(): void
     {
         $user = $this->getUser();

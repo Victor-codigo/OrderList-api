@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Adapter\Database\Orm\Doctrine\Repository;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
@@ -65,7 +66,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSaveTheProductInDatabase(): void
     {
         $productNew = $this->getNewProduct();
@@ -76,7 +77,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         $this->assertSame($productNew, $productSaved);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailProductIdAlreadyExists(): void
     {
         $this->expectException(DBUniqueConstraintException::class);
@@ -84,7 +85,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         $this->object->save($this->getExistsProduct());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSavingDataBaseError(): void
     {
         $this->expectException(DBConnectionException::class);
@@ -100,7 +101,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         $this->object->save($this->getNewProduct());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveTheProduct(): void
     {
         $product = $this->getExistsProduct();
@@ -112,7 +113,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         $this->assertEmpty($productRemoved);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingTheProductErrorConnection(): void
     {
         $this->expectException(DBConnectionException::class);
@@ -130,7 +131,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         $this->object->remove([$product]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetTheProductsOfAGroupWhitAName(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -144,7 +145,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingTheProductOfAGroupWithANameNoProduct(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -154,7 +155,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         $this->object->findProductsByGroupAndNameOrFail($groupId, $productName);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetTheProductsOfAGroupWhitANameAndProductNameStartsWith(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -168,7 +169,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAllProductsOfAGroupOrderAsc(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -182,7 +183,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAllProductsOfAGroupProductsIdOrderAsc(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -201,7 +202,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAllProductsOfAGroupProductsIdOrderDesc(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -220,7 +221,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAllProductsOfAGroupAndAShopsIdOrderAsc(): void
     {
         $shopId = ValueObjectFactory::createIdentifier(self::SHOP_ID);
@@ -240,7 +241,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingAllProductsOfAGroupNotFound(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('fc4f5962-02d1-4d80-b3ae-8aeffbcb6268');
@@ -249,7 +250,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         $this->object->findProductsOrFail($groupId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductsOfAGroupAndProductNameOrderAsc(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -267,7 +268,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductsOfAGroupWithProductNameOrderDesc(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -285,7 +286,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupAndProductNameNotFound(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -295,7 +296,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         $this->object->findProductsByProductNameOrFail($groupId, $productName);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAllProductsOfAGroupWithProductNameFilterOrderAsc(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -319,7 +320,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAllProductsOfAGroupWithProductNameFilterOrderDesc(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -343,7 +344,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingAllProductsOfAGroupWithProductNameFilterNotFound(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -357,7 +358,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         $this->object->findProductsByProductNameFilterOrFail($groupId, $productNameFilter);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAllProductsOfAGroupWithShopNameFilterOrderAsc(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -381,7 +382,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAllProductsOfAGroupWithShopNameFilterOrderDesc(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -405,7 +406,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingAllProductsOfAGroupWithShopNameFilterNotFound(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -419,7 +420,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         $this->object->findProductsByShopNameFilterOrFail($groupId, $shopNameFilter);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindAllProductsOfAGroups(): void
     {
         $groupsId = [
@@ -435,7 +436,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         $this->assertEquals($expect, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoProductsFoundInGroups(): void
     {
         $groupsId = [
@@ -446,7 +447,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         $this->object->findGroupsProductsOrFail($groupsId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetFirstLetterOfAllProductsInAGroup(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -457,7 +458,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         $this->assertEquals($expected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGetFirstLetterOfAllProductsInAGroupNoProducts(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID_2);

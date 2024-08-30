@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\ListOrders\Adapter\Http\Controller\ListOrdersGetPrice;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +23,7 @@ class ListOrdersGetPriceControllerTest extends WebClientTestCase
     private const float PRICE_TOTAL = 514.115;
     private const float PRICE_BOUGHT = 407.015;
 
-    /** @test */
+    #[Test]
     public function itShouldGetListOrdersPrice(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -43,7 +44,7 @@ class ListOrdersGetPriceControllerTest extends WebClientTestCase
         $this->assertEquals(self::PRICE_BOUGHT, round($responseContent->data->bought, 3));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetListOrdersPriceAllOrdersHasNotPrice(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -64,7 +65,7 @@ class ListOrdersGetPriceControllerTest extends WebClientTestCase
         $this->assertEquals(0, $responseContent->data->bought);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingListOrdersPriceListOrdersIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -84,7 +85,7 @@ class ListOrdersGetPriceControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->list_orders_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingListOrdersPriceListOrdersIdIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -105,7 +106,7 @@ class ListOrdersGetPriceControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->list_orders_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingListOrdersPriceListOrdersIdIsNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -126,7 +127,7 @@ class ListOrdersGetPriceControllerTest extends WebClientTestCase
         $this->assertEquals('List of orders not found', $responseContent->errors->list_orders_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingListOrdersPriceGroupIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -146,7 +147,7 @@ class ListOrdersGetPriceControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingListOrdersPriceGroupIdIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -167,7 +168,7 @@ class ListOrdersGetPriceControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingListOrdersUserNotBelongsToTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();

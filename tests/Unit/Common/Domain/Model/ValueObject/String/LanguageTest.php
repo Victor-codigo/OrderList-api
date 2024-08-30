@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Language;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -27,7 +28,7 @@ class LanguageTest extends TestCase
         return new Language($language);
     }
 
-    /** @test */
+    #[Test]
     public function languageOk(): void
     {
         $token = $this->createLanguage('en');
@@ -36,7 +37,7 @@ class LanguageTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function languageNotBlank(): void
     {
         $language = $this->createLanguage('');
@@ -45,7 +46,7 @@ class LanguageTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::CHOICE_NOT_SUCH], $return);
     }
 
-    /** @test */
+    #[Test]
     public function languageNotNull(): void
     {
         $language = $this->createLanguage(null);
@@ -54,7 +55,7 @@ class LanguageTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL], $return);
     }
 
-    /** @test */
+    #[Test]
     public function languageNoValid(): void
     {
         $language = $this->createLanguage('eng');
@@ -63,7 +64,7 @@ class LanguageTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::LANGUAGE, VALIDATION_ERRORS::CHOICE_NOT_SUCH], $return);
     }
 
-    /** @test */
+    #[Test]
     public function languageNotEnglishOrSpanishLanguage(): void
     {
         $language = $this->createLanguage('fr');

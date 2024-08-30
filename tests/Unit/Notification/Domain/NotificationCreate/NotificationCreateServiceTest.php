@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Domain\NotificationCreate;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\Array\NotificationData;
@@ -38,7 +39,7 @@ class NotificationCreateServiceTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateANotification(): void
     {
         $input = new NotificationCreateDto(
@@ -80,7 +81,7 @@ class NotificationCreateServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateManyNotifications(): void
     {
         $input = new NotificationCreateDto(
@@ -126,7 +127,7 @@ class NotificationCreateServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailThereIsAlreadyANotificationWithTheSameId(): void
     {
         $input = new NotificationCreateDto(
@@ -144,7 +145,7 @@ class NotificationCreateServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDatabaseError(): void
     {
         $input = new NotificationCreateDto(

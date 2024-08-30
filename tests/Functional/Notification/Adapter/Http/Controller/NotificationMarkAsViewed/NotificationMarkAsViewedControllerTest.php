@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Notification\Adapter\Http\Controller\NotificationMarkAsViewed;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +22,7 @@ class NotificationMarkAsViewedControllerTest extends WebClientTestCase
         'f7621fbd-0c8e-4a8a-8059-9e87b8ea4fe1',
     ];
 
-    /** @test */
+    #[Test]
     public function itShouldMarkNotificationsAsViewed(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -43,7 +44,7 @@ class NotificationMarkAsViewedControllerTest extends WebClientTestCase
         $this->assertEquals(self::NOTIFICATIONS_ID, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailMarkingNotificationsAsViewedNotificationsIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -65,7 +66,7 @@ class NotificationMarkAsViewedControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank'], $responseContent->errors->notifications_empty);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailMarkingNotificationsAsViewedNotificationsIdIsEmpty(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -87,7 +88,7 @@ class NotificationMarkAsViewedControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank'], $responseContent->errors->notifications_empty);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailMarkingNotificationsAsViewedNotificationsIdAreWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -118,7 +119,7 @@ class NotificationMarkAsViewedControllerTest extends WebClientTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailMarkingNotificationsAsViewedNotificationsIdNotExists(): void
     {
         $client = $this->getNewClientAuthenticatedUser();

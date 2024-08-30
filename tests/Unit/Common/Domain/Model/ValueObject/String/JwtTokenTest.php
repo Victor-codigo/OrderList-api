@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Jwt\JwtLexikAdapter;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\JwtToken;
@@ -32,7 +33,7 @@ class JwtTokenTest extends TestCase
         return new JwtToken($token);
     }
 
-    /** @test */
+    #[Test]
     public function tokenOk(): void
     {
         $token = $this->createToken();
@@ -41,7 +42,7 @@ class JwtTokenTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function tokenNotBlank(): void
     {
         $return = $this->validator->validateValueObject(new JwtToken(''));
@@ -49,7 +50,7 @@ class JwtTokenTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::STRING_TOO_SHORT], $return);
     }
 
-    /** @test */
+    #[Test]
     public function tokenNotNull(): void
     {
         $return = $this->validator->validateValueObject(new JwtToken(null));
@@ -57,7 +58,7 @@ class JwtTokenTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL], $return);
     }
 
-    /** @test */
+    #[Test]
     public function tokenTooShort(): void
     {
         $return = $this->validator->validateValueObject(new JwtToken(str_pad('', 35, '-')));

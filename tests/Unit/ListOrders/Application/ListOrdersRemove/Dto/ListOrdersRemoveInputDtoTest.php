@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Application\ListOrdersRemove\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -25,7 +26,7 @@ class ListOrdersRemoveInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $listOrdersId = [
@@ -40,7 +41,7 @@ class ListOrdersRemoveInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailListsOrdersIdIsNull(): void
     {
         $listOrdersId = null;
@@ -52,7 +53,7 @@ class ListOrdersRemoveInputDtoTest extends TestCase
         $this->assertEquals(['lists_orders_id' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailListsOrdersIdIsWrong(): void
     {
         $listOrdersId = [
@@ -67,7 +68,7 @@ class ListOrdersRemoveInputDtoTest extends TestCase
         $this->assertEquals(['lists_orders_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIsNull(): void
     {
         $listOrdersId = [
@@ -82,7 +83,7 @@ class ListOrdersRemoveInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsWrong(): void
     {
         $listOrdersId = [
@@ -97,7 +98,7 @@ class ListOrdersRemoveInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailListOrdersAndGroupIdIsWrong(): void
     {
         $listOrdersId = [

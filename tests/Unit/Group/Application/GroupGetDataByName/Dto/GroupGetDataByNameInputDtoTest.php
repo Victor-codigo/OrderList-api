@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupGetDataByName\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -25,7 +26,7 @@ class GroupGetDataByNameInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $groupName = 'groupName';
@@ -35,7 +36,7 @@ class GroupGetDataByNameInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupNameIsNull(): void
     {
         $groupName = null;
@@ -45,7 +46,7 @@ class GroupGetDataByNameInputDtoTest extends TestCase
         $this->assertEquals(['group_name' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupNameIsWrong(): void
     {
         $groupName = 'not valid name-';

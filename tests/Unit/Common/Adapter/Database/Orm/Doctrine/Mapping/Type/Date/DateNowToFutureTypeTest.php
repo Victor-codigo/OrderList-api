@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Date;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Date\DateNowToFutureType;
 use Common\Domain\Model\ValueObject\Date\DateNowToFuture;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -25,7 +26,7 @@ class DateNowToFutureTypeTest extends TestCase
         $this->object = new DateNowToFutureType();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldConvertToPhpValueFromNullToNull(): void
     {
         $return = $this->object->convertToPHPValue(null, $this->platform);
@@ -34,7 +35,7 @@ class DateNowToFutureTypeTest extends TestCase
         $this->assertNull($return->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldConvertToPhpValueFromDateToDateTime(): void
     {
         $dateTime = new \DateTime();
@@ -47,7 +48,7 @@ class DateNowToFutureTypeTest extends TestCase
         $this->assertEquals($dateTime->format('Y-m-d H:i:s'), $return->getValue()->format('Y-m-d H:i:s'));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldConvertToDatabaseValueFromNullToNull(): void
     {
         $dateNowToFuture = ValueObjectFactory::createDateNowToFuture(null);
@@ -59,7 +60,7 @@ class DateNowToFutureTypeTest extends TestCase
         $this->assertNull($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldConvertToDatabaseValueFromDateToString(): void
     {
         $dateNowToFuture = ValueObjectFactory::createDateNowToFuture(new \DateTime());

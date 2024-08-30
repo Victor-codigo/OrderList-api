@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupGetGroupsAdmins;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -122,7 +123,7 @@ class GroupGetGroupsAdminsUseCaseTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetGroupsAdmins(): void
     {
         $userGroups = $this->getUsersGroups();
@@ -160,7 +161,7 @@ class GroupGetGroupsAdminsUseCaseTest extends TestCase
         $this->assertEquals($userGroupsIdExpected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsWrong(): void
     {
         $input = new GroupGetGroupsAdminsInputDto(
@@ -195,7 +196,7 @@ class GroupGetGroupsAdminsUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoGroupsFound(): void
     {
         $input = new GroupGetGroupsAdminsInputDto(

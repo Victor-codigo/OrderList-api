@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Application\NotificationMarkAsViewed;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -25,7 +26,7 @@ class NotificationMarkAsViewedInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $object = new NotificationMarkAsViewedInputDto(
@@ -41,7 +42,7 @@ class NotificationMarkAsViewedInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNotificationsIdIsNull(): void
     {
         $object = new NotificationMarkAsViewedInputDto(
@@ -54,7 +55,7 @@ class NotificationMarkAsViewedInputDtoTest extends TestCase
         $this->assertEquals(['notifications_empty' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNotificationsIdIsEmpty(): void
     {
         $object = new NotificationMarkAsViewedInputDto(
@@ -67,7 +68,7 @@ class NotificationMarkAsViewedInputDtoTest extends TestCase
         $this->assertEquals(['notifications_empty' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNotificationsIdWrong(): void
     {
         $object = new NotificationMarkAsViewedInputDto(

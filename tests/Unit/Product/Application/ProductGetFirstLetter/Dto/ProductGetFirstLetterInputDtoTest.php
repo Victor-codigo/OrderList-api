@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Application\ProductGetFirstLetter\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
@@ -14,6 +15,7 @@ class ProductGetFirstLetterInputDtoTest extends TestCase
 {
     private ValidationInterface $validator;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -21,7 +23,7 @@ class ProductGetFirstLetterInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $object = new ProductGetFirstLetterInputDto('4b513296-14ac-4fb1-a574-05bc9b1dbe3f');
@@ -31,7 +33,7 @@ class ProductGetFirstLetterInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $object = new ProductGetFirstLetterInputDto(null);
@@ -41,7 +43,7 @@ class ProductGetFirstLetterInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsWrong(): void
     {
         $object = new ProductGetFirstLetterInputDto('wrong id');

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\GetUsers\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -117,7 +118,7 @@ class GetUsersInputDtoTest extends TestCase
         return array_slice($ids, 0, $numIds);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateUsersId(): void
     {
         $usersId = $this->getIds(self::NUM_MAX_USERS - 1);
@@ -129,7 +130,7 @@ class GetUsersInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailIdsMissing(): void
     {
         $this->object = $this->createGetUsersInputDto(null);
@@ -138,7 +139,7 @@ class GetUsersInputDtoTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::NOT_NULL, VALIDATION_ERRORS::NOT_BLANK], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailIdsEmpty(): void
     {
         $this->object = $this->createGetUsersInputDto([]);
@@ -147,7 +148,7 @@ class GetUsersInputDtoTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailIdsIsWrong(): void
     {
         $usersId = $this->getIds(5);

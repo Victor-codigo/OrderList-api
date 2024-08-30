@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Http\Controller\GetUsers\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use User\Adapter\Http\Controller\GetUsers\Dto\GetUsersRequestDto;
@@ -32,7 +33,7 @@ class GetUsersRequestDtoTest extends TestCase
         return new GetUsersRequestDto($request);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldProcessAllIds(): void
     {
         $requestDto = $this->createRequest(array_fill(0, self::USERS_NUM_MAX, self::USER_ID));
@@ -40,7 +41,7 @@ class GetUsersRequestDtoTest extends TestCase
         $this->assertCount(self::USERS_NUM_MAX, $requestDto->usersId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldProcessOnlyTheMaximum(): void
     {
         $requestDto = $this->createRequest(array_fill(0, self::USERS_NUM_MAX + 1, self::USER_ID));
@@ -48,7 +49,7 @@ class GetUsersRequestDtoTest extends TestCase
         $this->assertCount(self::USERS_NUM_MAX, $requestDto->usersId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldProcessNotUsersSent(): void
     {
         $requestDto = $this->createRequest(null);

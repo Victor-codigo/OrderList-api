@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Application\ListOrdersRemoveAllGroupsListsOrders\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -45,7 +46,7 @@ class ListOrdersRemoveAllGroupsListsOrdersInputDtoTest extends TestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $object = new ListOrdersRemoveAllGroupsListsOrdersInputDto(
@@ -60,7 +61,7 @@ class ListOrdersRemoveAllGroupsListsOrdersInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateGroupsIdToRemoveIsNull(): void
     {
         $object = new ListOrdersRemoveAllGroupsListsOrdersInputDto(
@@ -75,7 +76,7 @@ class ListOrdersRemoveAllGroupsListsOrdersInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdToRemoveWrong(): void
     {
         $object = new ListOrdersRemoveAllGroupsListsOrdersInputDto(
@@ -90,7 +91,7 @@ class ListOrdersRemoveAllGroupsListsOrdersInputDtoTest extends TestCase
         $this->assertEquals(['groups_id_remove' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdToChangeUserIdWrong(): void
     {
         $object = new ListOrdersRemoveAllGroupsListsOrdersInputDto(
@@ -105,7 +106,7 @@ class ListOrdersRemoveAllGroupsListsOrdersInputDtoTest extends TestCase
         $this->assertEquals(['groups_id_change_user_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSystemKeyIsNull(): void
     {
         $object = new ListOrdersRemoveAllGroupsListsOrdersInputDto(

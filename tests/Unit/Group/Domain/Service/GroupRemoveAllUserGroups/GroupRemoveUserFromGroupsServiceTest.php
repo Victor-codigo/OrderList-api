@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupRemoveAllUserGroups;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -246,7 +247,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
         $this->assertEquals($usersGroupsToSetAsAdmin, $usersGroupsRemoveOutput->usersGroupsIdSetAsAdmin);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveUserFromGroups(): void
     {
         $groups = $this->getGroupsOfUsersGroups();
@@ -302,7 +303,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
         $this->assertReturnIdOk($groupsToRemoveExpected, array_values($usersGroupsToRemove), $usersGroupsToSetAsAdmin, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldNotRemoveGroupsNoGroupsPassed(): void
     {
         $this->userGroupRepository
@@ -337,7 +338,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
         $this->assertReturnIdOk([], [], [], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveOnlyGroupsNotUsers(): void
     {
         $groups = $this->getGroupsOfUsersGroups();
@@ -392,7 +393,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
         $this->assertReturnIdOk($groupsToRemoveExpected, array_values($usersGroupsToRemove), $usersGroupsToSetAsAdmin, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveOnlyUsersNotGroups(): void
     {
         $groups = $this->getGroupsOfUsersGroups();
@@ -447,7 +448,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
         $this->assertReturnIdOk($groupsToRemoveExpected, array_values($usersGroupsToRemove), $usersGroupsToSetAsAdmin, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupUsersNumberNotFound(): void
     {
         $groups = $this->getGroupsOfUsersGroups();
@@ -484,7 +485,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
         $this->object->__invoke($groups, $usersGroups);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveGroupsException(): void
     {
         $groups = $this->getGroupsOfUsersGroups();
@@ -529,7 +530,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
         $this->object->__invoke($groups, $usersGroups);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveUsersException(): void
     {
         $groups = $this->getGroupsOfUsersGroups();
@@ -580,7 +581,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
         $this->object->__invoke($groups, $usersGroups);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldNotChangeUsersToAdminUsersNotFound(): void
     {
         $groups = $this->getGroupsOfUsersGroups();

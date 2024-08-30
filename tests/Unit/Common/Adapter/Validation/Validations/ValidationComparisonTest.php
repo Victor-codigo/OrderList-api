@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation\Validations;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
@@ -19,7 +20,7 @@ class ValidationComparisonTest extends TestCase
         $this->object = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function validateEqualToOk(): void
     {
         $return = $this->object
@@ -34,7 +35,7 @@ class ValidationComparisonTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateEqualToError(): void
     {
         $return = $this->object
@@ -49,7 +50,7 @@ class ValidationComparisonTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateNotEqualToOk(): void
     {
         $return = $this->object
@@ -64,7 +65,7 @@ class ValidationComparisonTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateNotEqualToError(): void
     {
         $return = $this->object
@@ -79,7 +80,7 @@ class ValidationComparisonTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateIdenticalToOk(): void
     {
         $return = $this->object
@@ -94,7 +95,7 @@ class ValidationComparisonTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateIdenticalToError(): void
     {
         $return = $this->object
@@ -109,7 +110,7 @@ class ValidationComparisonTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateNotIdenticalToOk(): void
     {
         $return = $this->object
@@ -124,7 +125,7 @@ class ValidationComparisonTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateNotIdenticalToError(): void
     {
         $return = $this->object
@@ -139,7 +140,7 @@ class ValidationComparisonTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateLessThanOk(): void
     {
         $return = $this->object
@@ -154,7 +155,7 @@ class ValidationComparisonTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateLessThanError(): void
     {
         $return = $this->object
@@ -169,7 +170,7 @@ class ValidationComparisonTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateLessThanOrEqualOk(): void
     {
         $return = $this->object
@@ -184,7 +185,7 @@ class ValidationComparisonTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateLessThanOrEqualError(): void
     {
         $return = $this->object
@@ -199,7 +200,7 @@ class ValidationComparisonTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateGreaterThanOk(): void
     {
         $return = $this->object
@@ -214,7 +215,7 @@ class ValidationComparisonTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateGreaterThanError(): void
     {
         $return = $this->object
@@ -229,7 +230,7 @@ class ValidationComparisonTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateGreaterThanOrEqualOk(): void
     {
         $return = $this->object
@@ -244,7 +245,7 @@ class ValidationComparisonTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateGreaterThanOrEqualError(): void
     {
         $return = $this->object
@@ -259,7 +260,7 @@ class ValidationComparisonTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateRangeOk(): void
     {
         $return = $this->object
@@ -274,7 +275,7 @@ class ValidationComparisonTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateRangeError(): void
     {
         $return = $this->object

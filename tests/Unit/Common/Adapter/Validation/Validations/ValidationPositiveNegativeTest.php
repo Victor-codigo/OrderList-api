@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation\Validations;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
@@ -19,7 +20,7 @@ class ValidationPositiveNegativeTest extends TestCase
         $this->object = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function validatePositiveOk(): void
     {
         $return = $this->object
@@ -34,7 +35,7 @@ class ValidationPositiveNegativeTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validatePositiveError(): void
     {
         $return = $this->object
@@ -49,7 +50,7 @@ class ValidationPositiveNegativeTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validatePositiveOrZeroOk(): void
     {
         $return = $this->object
@@ -64,7 +65,7 @@ class ValidationPositiveNegativeTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validatePositiveOrZeroError(): void
     {
         $return = $this->object
@@ -79,7 +80,7 @@ class ValidationPositiveNegativeTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateNegativeOk(): void
     {
         $return = $this->object
@@ -94,7 +95,7 @@ class ValidationPositiveNegativeTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateNegativeError(): void
     {
         $return = $this->object
@@ -109,7 +110,7 @@ class ValidationPositiveNegativeTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateNegativeOrZeroOk(): void
     {
         $return = $this->object
@@ -124,7 +125,7 @@ class ValidationPositiveNegativeTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateNegativeOrZeroError(): void
     {
         $return = $this->object

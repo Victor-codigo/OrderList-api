@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Order\Adapter\Http\Controller\OrderModify;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +24,7 @@ class OrderModifyControllerTest extends WebClientTestCase
     private const string PRODUCT_NOT_IN_A_SHOP_ID = 'ca10c90a-c7e6-4594-89e9-71d2f5e74710';
     private const string SHOP_ID = 'f6ae3da3-c8f2-4ccb-9143-0f361eec850e';
 
-    /** @test */
+    #[Test]
     public function itShouldModifyOrder(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -50,7 +51,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals(self::ORDER_ID, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyOrderShopIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -77,7 +78,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals(self::ORDER_ID, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyOrderDescriptionIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -104,7 +105,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals(self::ORDER_ID, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyOrderAmountIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -131,7 +132,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals(self::ORDER_ID, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingOrderOrderIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -158,7 +159,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->order_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingOrderOrderIdIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -185,7 +186,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->order_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingOrderGroupIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -212,7 +213,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingOrderGroupIdIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -239,7 +240,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingOrderListOrdersIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -266,7 +267,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->list_orders_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingOrderListOrdersIdIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -293,7 +294,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->list_orders_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingOrderListOrdersIdNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -320,7 +321,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals('List orders not found', $responseContent->errors->list_orders_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingOrderProductIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -347,7 +348,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->product_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingOrderProductIdIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -374,7 +375,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->product_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingOrderShopIdIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -401,7 +402,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->shop_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingOrderDescriptionIsTooLong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -428,7 +429,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals(['string_too_long'], $responseContent->errors->description);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingOrderAmountIsNegative(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -455,7 +456,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals(['positive_or_zero'], $responseContent->errors->amount);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingOrderOrderNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -482,7 +483,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals('Order not found', $responseContent->errors->order_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingOrderProductNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -509,7 +510,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals('Product not found', $responseContent->errors->product_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingOrderShopNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -536,7 +537,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals('Shop not found, or product is not in the shop', $responseContent->errors->shop_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingOrderProductNotInAShop(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -563,7 +564,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals('Shop not found, or product is not in the shop', $responseContent->errors->shop_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingOrderProductAndShopRepeatedInListOrders(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -590,7 +591,7 @@ class OrderModifyControllerTest extends WebClientTestCase
         $this->assertEquals('Product and shop are already in the order list', $responseContent->errors->order_product_and_shop_repeated);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingOrderUserDoesNotBelongsToTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Event;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Event\EventDispatcherSymfonyAdapter;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -28,7 +29,7 @@ class EventDispatcherSymfonyAdapterTest extends TestCase
         $this->object = new EventDispatcherSymfonyAdapter($this->eventDispatcher);
     }
 
-    /** @test */
+    #[Test]
     public function addNewListener(): void
     {
         $eventName = 'MyEvent';
@@ -43,7 +44,7 @@ class EventDispatcherSymfonyAdapterTest extends TestCase
         $this->object->addListener($eventName, $listener, $priority);
     }
 
-    /** @test */
+    #[Test]
     public function addNewSubscriberWithoutListenerDefined(): void
     {
         $subscriber = new CustomEventSubscriber();
@@ -56,7 +57,7 @@ class EventDispatcherSymfonyAdapterTest extends TestCase
         $this->object->addSubscriber($subscriber);
     }
 
-    /** @test */
+    #[Test]
     public function addNewSubscriberWithOneMethodDefinedNoPriority(): void
     {
         $subscriber = new CustomEventSubscriberWithOneMethod();
@@ -69,7 +70,7 @@ class EventDispatcherSymfonyAdapterTest extends TestCase
         $this->object->addSubscriber($subscriber);
     }
 
-    /** @test */
+    #[Test]
     public function addNewSubscriberWithOneMethodDefinedWithPriority(): void
     {
         $subscriber = new CustomEventSubscriberWithOneMethodWithPriority();
@@ -82,7 +83,7 @@ class EventDispatcherSymfonyAdapterTest extends TestCase
         $this->object->addSubscriber($subscriber);
     }
 
-    /** @test */
+    #[Test]
     public function addNewSubscriberWithManyMethodsDefined(): void
     {
         $subscriber = new CustomEventSubscriberWithManyMethods();
@@ -92,7 +93,7 @@ class EventDispatcherSymfonyAdapterTest extends TestCase
             ->expects($matcher)
             ->method('addListener')
             ->willReturnCallback(function (string $event, callable $callback, int $priority) use ($subscriber, $matcher): void {
-                $expectedCallNumber = $matcher->getInvocationCount();
+                $expectedCallNumber = $matcher->numberOfInvocations();
                 match ([$expectedCallNumber, $event, $callback, $priority]) {
                     [1, CustomEvent::class, [$subscriber, '__invoke'], 0],
                     [2, CustomEvent::class, [$subscriber, 'handler'], 0],
@@ -106,7 +107,7 @@ class EventDispatcherSymfonyAdapterTest extends TestCase
         $this->object->addSubscriber($subscriber);
     }
 
-    /** @test */
+    #[Test]
     public function dispatchEventNoEventSubscribers(): void
     {
         $event = new CustomEvent();
@@ -120,7 +121,7 @@ class EventDispatcherSymfonyAdapterTest extends TestCase
         $this->object->dispatch($event);
     }
 
-    /** @test */
+    #[Test]
     public function dispatchEventWithEventSubscribers(): void
     {
         $event = new CustomEvent();

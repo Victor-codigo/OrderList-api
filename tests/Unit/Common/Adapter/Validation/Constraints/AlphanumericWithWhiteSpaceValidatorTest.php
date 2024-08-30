@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation\Constraints;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\Constraints\AlphanumericWithWhiteSpace\AlphanumericWithWhiteSpace;
 use Common\Adapter\Validation\Constraints\AlphanumericWithWhiteSpace\AlphanumericWithWhiteSpaceValidator;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -29,14 +30,14 @@ class AlphanumericWithWhiteSpaceValidatorTest extends TestCase
         $this->object = new AlphanumericWithWhiteSpaceValidator();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValueIsNotClassAlphanumericWithWhitespace(): void
     {
         $this->expectException(UnexpectedTypeException::class);
         $this->object->validate('', $this->constraint);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValueIsNull(): void
     {
         $return = $this->object->validate(null, $this->alphanumericWithWhiteSpace);
@@ -44,7 +45,7 @@ class AlphanumericWithWhiteSpaceValidatorTest extends TestCase
         $this->assertNull($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValueIsEmptyString(): void
     {
         $return = $this->object->validate('', $this->alphanumericWithWhiteSpace);
@@ -52,14 +53,14 @@ class AlphanumericWithWhiteSpaceValidatorTest extends TestCase
         $this->assertNull($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValueCantBeConvertedToString(): void
     {
         $this->expectException(UnexpectedTypeException::class);
         $this->object->validate(new \stdClass(), $this->alphanumericWithWhiteSpace);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValueIsStringAlphanumericWithWhiteSpace(): void
     {
         $this->alphanumericWithWhiteSpace->pattern = self::PATTERN;
@@ -68,7 +69,7 @@ class AlphanumericWithWhiteSpaceValidatorTest extends TestCase
         $this->object->validate('lola_hello 22', $this->alphanumericWithWhiteSpace);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValueIsStringAlphanumericWithWhiteSpaceAndAccents(): void
     {
         $this->alphanumericWithWhiteSpace->pattern = self::PATTERN;
@@ -77,7 +78,7 @@ class AlphanumericWithWhiteSpaceValidatorTest extends TestCase
         $this->object->validate('lolá_hëllò 22', $this->alphanumericWithWhiteSpace);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValueIsStringNotAlphanumericWithWhiteSpace(): void
     {
         $this->alphanumericWithWhiteSpace->pattern = self::PATTERN;

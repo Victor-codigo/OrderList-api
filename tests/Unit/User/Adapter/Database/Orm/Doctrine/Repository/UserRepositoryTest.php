@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Database\Orm\Doctrine\Repository;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
@@ -40,7 +41,7 @@ class UserRepositoryTest extends DataBaseTestCase
         $this->connectionException = $this->createMock(ConnectionException::class);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSaveTheUserInDataBase(): void
     {
         $userNew = $this->getNewUser();
@@ -50,7 +51,7 @@ class UserRepositoryTest extends DataBaseTestCase
         $this->assertSame($userNew, $userSaved);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailEmailAlreadyExists(): void
     {
         $this->expectException(DBUniqueConstraintException::class);
@@ -58,7 +59,7 @@ class UserRepositoryTest extends DataBaseTestCase
         $this->userRepository->save($this->getExitsUser());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSavingDataBaseError(): void
     {
         $this->expectException(DBConnectionException::class);
@@ -74,7 +75,7 @@ class UserRepositoryTest extends DataBaseTestCase
         $this->userRepository->save($this->getNewUser());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveTheUserInDataBase(): void
     {
         $userNew = $this->getNewUser();
@@ -84,7 +85,7 @@ class UserRepositoryTest extends DataBaseTestCase
         $this->assertEmpty($userRemoved);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingDataBaseError(): void
     {
         $this->expectException(DBConnectionException::class);
@@ -100,7 +101,7 @@ class UserRepositoryTest extends DataBaseTestCase
         $this->userRepository->remove([$this->getNewUser()]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindAUserById(): void
     {
         $userId = new Identifier(self::USER_ID);
@@ -109,7 +110,7 @@ class UserRepositoryTest extends DataBaseTestCase
         $this->assertEquals($userId, $return->getId());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFindingAUserById(): void
     {
         $this->expectException(DBNotFoundException::class);
@@ -118,7 +119,7 @@ class UserRepositoryTest extends DataBaseTestCase
         $this->userRepository->findUserByIdOrFail($userId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindAUserByIdNoCache(): void
     {
         $userId = new Identifier(self::USER_ID);
@@ -129,7 +130,7 @@ class UserRepositoryTest extends DataBaseTestCase
         $this->assertEquals($return->getEmail(), $returnNoCache->getEmail());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindAUserByEmail(): void
     {
         $userEmail = new Email(self::USER_EMAIL);
@@ -138,7 +139,7 @@ class UserRepositoryTest extends DataBaseTestCase
         $this->assertEquals($userEmail, $return->getEmail());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFindingAUserByEmail(): void
     {
         $this->expectException(DBNotFoundException::class);
@@ -147,7 +148,7 @@ class UserRepositoryTest extends DataBaseTestCase
         $this->userRepository->findUserByEmailOrFail($userEmail);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnManyUsersById(): void
     {
         $usersId = [
@@ -169,7 +170,7 @@ class UserRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoIds(): void
     {
         $this->expectException(DBNotFoundException::class);
@@ -177,7 +178,7 @@ class UserRepositoryTest extends DataBaseTestCase
         $this->userRepository->findUsersByIdOrFail([]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailIdsDoesNotExistsInDataBase(): void
     {
         $this->expectException(DBNotFoundException::class);
@@ -190,7 +191,7 @@ class UserRepositoryTest extends DataBaseTestCase
         $this->userRepository->findUsersByIdOrFail($usersId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnManyUsersByName(): void
     {
         $usersName = [
@@ -212,7 +213,7 @@ class UserRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoNames(): void
     {
         $this->expectException(DBNotFoundException::class);
@@ -220,7 +221,7 @@ class UserRepositoryTest extends DataBaseTestCase
         $this->userRepository->findUsersByNameOrFail([]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNamesDoesNotExistsInDataBase(): void
     {
         $this->expectException(DBNotFoundException::class);
@@ -233,7 +234,7 @@ class UserRepositoryTest extends DataBaseTestCase
         $this->userRepository->findUsersByNameOrFail($usersId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindUsersNotActiveTimeActivationExpired(): void
     {
         $return = $this->userRepository->findUsersTimeActivationExpiredOrFail(-1);
@@ -245,7 +246,7 @@ class UserRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFindingUsersNotActiveTimeActivationExpiredNoUsers(): void
     {
         $this->expectException(DBNotFoundException::class);

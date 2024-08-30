@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupGetAdmins;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,7 @@ class GroupGetAdminsControllerTest extends WebClientTestCase
     private const string GROUP_USER_EMAIL_NOT_BELONGS_TO_THE_GROUP = 'email.other.active@host.com';
     private const string GROUP_USER_PASSWORD_NOT_BELONGS_TO_THE_GROUP = '123456';
 
-    /** @test */
+    #[Test]
     public function itShouldGetTheAdminsOfTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -43,7 +44,7 @@ class GroupGetAdminsControllerTest extends WebClientTestCase
         $this->assertContainsEquals(self::GROUP_USER_ADMIN_ID, $responseContent->data->admins);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingTheAdminsOfTheGroupGroupIdIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -62,7 +63,7 @@ class GroupGetAdminsControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingTheAdminsOfTheGroupGroupIdNotFound(): void
     {
         $groupId = '7989382f-8f91-476e-87fd-f4cf68e7e314';
@@ -82,7 +83,7 @@ class GroupGetAdminsControllerTest extends WebClientTestCase
         $this->assertEquals('Group not Found', $responseContent->errors->group_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingTheAdminsOfTheGroupUserDoesNotBelongsToTheGroup(): void
     {
         $client = $this->getNewClientAuthenticated(self::GROUP_USER_EMAIL_NOT_BELONGS_TO_THE_GROUP, self::GROUP_USER_PASSWORD_NOT_BELONGS_TO_THE_GROUP);
@@ -101,7 +102,7 @@ class GroupGetAdminsControllerTest extends WebClientTestCase
         $this->assertEquals('You have not permissions', $responseContent->errors->permissions);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingTheAdminsOfTheGroupUserNotAuthorized(): void
     {
         $client = $this->getNewClientNoAuthenticated();

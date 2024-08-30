@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Domain\Service\ShopRemoveAllGroupsShops;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
@@ -89,7 +90,7 @@ class ShopRemoveAllGroupsShopsServiceTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveAllShopsFromGroups(): void
     {
         $shops = $this->getGroupsShops();
@@ -130,7 +131,7 @@ class ShopRemoveAllGroupsShopsServiceTest extends TestCase
         $this->assertEquals($shopsId, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoShopsFound(): void
     {
         $input = new ShopRemoveAllGroupsShopsDto([
@@ -160,7 +161,7 @@ class ShopRemoveAllGroupsShopsServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveImagenError(): void
     {
         $shops = $this->getGroupsShops();
@@ -199,7 +200,7 @@ class ShopRemoveAllGroupsShopsServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveEntitiesError(): void
     {
         $shops = $this->getGroupsShops();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\HtmlTemplate;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Translator\TranslatorSymfonyAdapter;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\HtmlTemplate\TemplateDtoBase;
@@ -34,7 +35,7 @@ class TemplateDtoBaseTest extends TestCase
             ->getMock();
     }
 
-    /** @test */
+    #[Test]
     public function translateThrowsInvalidArguemtexception(): void
     {
         $templateId = TemplateId::create('id', []);
@@ -50,7 +51,7 @@ class TemplateDtoBaseTest extends TestCase
         $translateMethod->invoke($this->object, $templateId);
     }
 
-    /** @test */
+    #[Test]
     public function translateIsOk(): void
     {
         $templateId = TemplateId::create('id', []);

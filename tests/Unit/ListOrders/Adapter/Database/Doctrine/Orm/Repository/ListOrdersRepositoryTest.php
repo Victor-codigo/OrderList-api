@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Adapter\Database\Doctrine\Orm\Repository;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
@@ -115,7 +116,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSaveTheListOrdersInDatabase(): void
     {
         $listOrders = $this->getListOrders();
@@ -128,7 +129,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->assertSame($listOrders, $listOrdersSaved);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailListOrdersIdAlreadyExists(): void
     {
         $listOrders = $this->getListOrdersExists();
@@ -137,7 +138,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->object->save([$listOrders]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSavingDataBaseError(): void
     {
         /** @var MockObject|ObjectManager $objectManagerMock */
@@ -153,7 +154,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->object->save([$this->getListOrders()]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSaveTheListOrdersAndItsOrders(): void
     {
         $listOrders = $this->getListOrders();
@@ -167,7 +168,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->assertSame($listOrders, $listOrdersSaved);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSavingTheListOrdersAndItsOrdersListAlreadyExists(): void
     {
         $listOrders = $this->getListOrdersExists();
@@ -178,7 +179,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->object->saveListOrdersAndOrders($listOrders);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSavingTheListOrdersAndItsOrdersListDataBaseError(): void
     {
         /** @var MockObject|ObjectManager $objectManagerMock */
@@ -194,7 +195,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->object->saveListOrdersAndOrders($this->getListOrders());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveTheListOrders(): void
     {
         $listOrdersExists = $this->getListOrdersExists();
@@ -206,7 +207,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->assertEmpty($orderRemoved);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingDataBaseError(): void
     {
         /** @var MockObject|ObjectManager $objectManagerMock */
@@ -222,7 +223,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->object->remove([$this->getListOrders()]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindListOrdersById(): void
     {
         $return = $this->object->findListOrderByIdOrFail(self::LIST_ORDERS_ID);
@@ -237,7 +238,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindListOrdersByIdGroupId(): void
     {
         $return = $this->object->findListOrderByIdOrFail(
@@ -255,7 +256,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFindingListOrdersByIdNotFound(): void
     {
         $listOrdersId = '28fbc151-06eb-4d98-8479-12188432f5d8';
@@ -264,7 +265,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->object->findListOrderByIdOrFail([$listOrdersId]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFindingListOrdersByIdGroupIdNotFound(): void
     {
         $listOrdersId = self::LIST_ORDERS_ID;
@@ -274,7 +275,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->object->findListOrderByIdOrFail($listOrdersId, $groupId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindListOrdersOfAGroup(): void
     {
         $return = $this->object->findListOrdersGroup(
@@ -292,7 +293,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFindingListOrdersOfAGroupNotFound(): void
     {
         $this->expectException(DBNotFoundException::class);
@@ -302,7 +303,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindListOrdersByListOrdersNameFilterEquals(): void
     {
         $listOrdersName = ValueObjectFactory::createNameWithSpaces('List order name 2');
@@ -321,7 +322,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->assertEquals($listOrdersExpected, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindListOrdersByListOrdersNameFilterStartsWith(): void
     {
         $listOrdersName = ValueObjectFactory::createNameWithSpaces('List order');
@@ -347,7 +348,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->assertEquals($listOrdersExpected, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindListOrdersByListOrdersNameFilterEndsWith(): void
     {
         $listOrdersName = ValueObjectFactory::createNameWithSpaces('name 3');
@@ -371,7 +372,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->assertEquals($listOrdersExpected, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindListOrdersByListOrdersNameFilterContains(): void
     {
         $listOrdersName = ValueObjectFactory::createNameWithSpaces('name');
@@ -397,7 +398,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->assertEquals($listOrdersExpected, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindListOrdersByProductsNameFilterEquals(): void
     {
         $productName = ValueObjectFactory::createNameWithSpaces('Juan Carlos');
@@ -419,7 +420,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->assertEquals($listOrdersExpected, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindListOrdersByProductsNameFilterStartsWith(): void
     {
         $productName = ValueObjectFactory::createNameWithSpaces('Peri');
@@ -438,7 +439,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->assertEquals($listOrdersExpected, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindListOrdersByProductsNameFilterEndsWith(): void
     {
         $productName = ValueObjectFactory::createNameWithSpaces('Carlos');
@@ -461,7 +462,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->assertEquals($listOrdersExpected, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindListOrdersByProductsNameFilterContains(): void
     {
         $productName = ValueObjectFactory::createNameWithSpaces('Carl');
@@ -484,7 +485,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->assertEquals($listOrdersExpected, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFindListOrdersByProductsNameFilterContainsNotFound(): void
     {
         $productName = ValueObjectFactory::createNameWithSpaces('not found');
@@ -501,7 +502,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindListOrdersByShopsNameFilterEquals(): void
     {
         $productName = ValueObjectFactory::createNameWithSpaces('Shop name 1');
@@ -520,7 +521,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->assertEquals($listOrdersExpected, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindListOrdersByShopsNameFilterStartsWith(): void
     {
         $productName = ValueObjectFactory::createNameWithSpaces('Shop name');
@@ -542,7 +543,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->assertEquals($listOrdersExpected, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindListOrdersByShopsNameFilterEndsWith(): void
     {
         $productName = ValueObjectFactory::createNameWithSpaces('name 1');
@@ -561,7 +562,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->assertEquals($listOrdersExpected, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindListOrdersByShopsNameFilterContains(): void
     {
         $productName = ValueObjectFactory::createNameWithSpaces('name');
@@ -584,7 +585,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->assertEquals($listOrdersExpected, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFindListOrdersByShopsNameFilterContainsNotFound(): void
     {
         $productName = ValueObjectFactory::createNameWithSpaces('not found');
@@ -601,7 +602,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindAllListsOrdersOfAGroups(): void
     {
         $groupsId = [
@@ -617,7 +618,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->assertEquals($expect, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoListsOrdersFoundInGroups(): void
     {
         $groupsId = [
@@ -628,7 +629,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->object->findGroupsListsOrdersOrFail($groupsId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetFirstLetterOfAllListOrdersInAGroup(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -639,7 +640,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->assertEquals($expected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGetFirstLetterOfAllListOrdersInAGroupNoListOrders(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID_3);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Command\UsersRemoveActivationExpired;
 
+use PHPUnit\Framework\Attributes\Test;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -31,7 +32,7 @@ class UsersRemoveActivationExpiredCommandTest extends KernelTestCase
         $this->commandTester = new CommandTester($this->command);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveUsersNotActiveAndTimeExpired(): void
     {
         $this->commandTester->execute([]);

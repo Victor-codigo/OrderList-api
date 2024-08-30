@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Security\Jwt\JwtListener;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Validation\User\USER_ROLES;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTEncodedEvent;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -41,7 +42,7 @@ class JwtEncodedListenerTest extends TestCase
         $this->object = new JwtEncodedListener($this->security, $this->requestStack);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldAddToHeadersTheTokenCreated(): void
     {
         $userRoles = [USER_ROLES::USER_FIRST_LOGIN->value];
@@ -72,7 +73,7 @@ class JwtEncodedListenerTest extends TestCase
         $this->assertEquals('Bearer '.self::TOKEN, $this->request->headers->get('Authorization'));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldNotAddToHeadersTheTokenCreated(): void
     {
         $userRoles = [USER_ROLES::USER->value];

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserGetByNameController;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\User\USER_ROLES;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -56,7 +57,7 @@ class UserGetByNameControllerTest extends WebClientTestCase
         return $userRoles;
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetUserInfoByName(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -79,7 +80,7 @@ class UserGetByNameControllerTest extends WebClientTestCase
         $this->assertEquals($userData[0]->getName()->getValue(), $responseContent->data[0]->name);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetUserInfoByNameUserSessionAdmin(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();
@@ -109,7 +110,7 @@ class UserGetByNameControllerTest extends WebClientTestCase
         $this->assertIsString($responseContent->data[0]->created_on);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetUserInfoByNameUserSessionIsHimself(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -139,7 +140,7 @@ class UserGetByNameControllerTest extends WebClientTestCase
         $this->assertIsString($responseContent->data[0]->created_on);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetUserInfoByNameManyUsers(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -165,7 +166,7 @@ class UserGetByNameControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetUserInfoByName51Users(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -188,7 +189,7 @@ class UserGetByNameControllerTest extends WebClientTestCase
         $this->assertEquals($userData[0]->getName()->getValue(), $responseContent->data[0]->name);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingUserInfoByNameUserNotValid(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -207,7 +208,7 @@ class UserGetByNameControllerTest extends WebClientTestCase
         $this->assertEquals(['alphanumeric_with_whitespace'], $responseContent->errors->users_name);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingUserInfoByNameUserNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedUser();

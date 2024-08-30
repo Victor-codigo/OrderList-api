@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupUserRemove;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -76,7 +77,7 @@ class GroupUserRemoveServiceTest extends TestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveUsersFromTheGroup(): void
     {
         $usersGroup = $this->getUsersGroup();
@@ -124,7 +125,7 @@ class GroupUserRemoveServiceTest extends TestCase
         $this->assertEquals($usersId, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersAreNotInTheGroup(): void
     {
         $usersGroup = $this->getUsersGroup();
@@ -155,7 +156,7 @@ class GroupUserRemoveServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupNotFound(): void
     {
         $usersGroup = $this->getUsersGroup();
@@ -183,7 +184,7 @@ class GroupUserRemoveServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupTypeIsUser(): void
     {
         $usersGroup = $this->getUsersGroup();
@@ -212,7 +213,7 @@ class GroupUserRemoveServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveOnlyOneUserFromTheGroupOthersDoNotBelongToTheGroup(): void
     {
         $usersGroup = $this->getUsersGroup();
@@ -257,7 +258,7 @@ class GroupUserRemoveServiceTest extends TestCase
         $this->assertEquals([$usersId[0]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingCanNotRemoveAllUsersOfTheGroup(): void
     {
         $usersGroup = $this->getUsersGroup();
@@ -298,7 +299,7 @@ class GroupUserRemoveServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingCanNotRemoveAllAdminsFromTheGroup(): void
     {
         $usersGroup = $this->getUsersGroup();

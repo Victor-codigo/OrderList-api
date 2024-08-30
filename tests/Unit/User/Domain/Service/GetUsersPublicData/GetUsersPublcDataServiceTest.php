@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Domain\Service\GetUsersPublicData;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\Array\Roles;
@@ -73,7 +74,7 @@ class GetUsersPublcDataServiceTest extends TestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetTheUsersPublicData(): void
     {
         $usersId = $this->getUsersId();
@@ -101,7 +102,7 @@ class GetUsersPublcDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetTheUsersPrivateData(): void
     {
         $usersId = $this->getUsersId();
@@ -142,7 +143,7 @@ class GetUsersPublcDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetOnlyUsersThatAreActiveAndNotDeleted(): void
     {
         $usersId = array_merge($this->getUsersId(), $this->getUsersIdDeletedOrNotActive());
@@ -161,7 +162,7 @@ class GetUsersPublcDataServiceTest extends TestCase
         $this->assertCount(count($this->getUsersId()), $return->usersData);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetUsersByName(): void
     {
         $usersName = array_map(fn (User $user): NameWithSpaces => $user->getName(), $this->getUsers());
@@ -180,7 +181,7 @@ class GetUsersPublcDataServiceTest extends TestCase
         $this->assertCount(count($usersName), $return->usersData);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoUsersPassToFind(): void
     {
         $this->expectException(LogicException::class);
@@ -189,7 +190,7 @@ class GetUsersPublcDataServiceTest extends TestCase
         $this->object->__invoke($usersDto, SCOPE::PRIVATE);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersPassAreNotIdentifiersOrNames(): void
     {
         $users = [
@@ -204,7 +205,7 @@ class GetUsersPublcDataServiceTest extends TestCase
         $this->object->__invoke($usersDto, SCOPE::PRIVATE);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoUsersFound(): void
     {
         $usersId = array_map(fn (User $user): Identifier => $user->getId(), $this->getUsersDeletedOrNotActive());
@@ -220,7 +221,7 @@ class GetUsersPublcDataServiceTest extends TestCase
         $this->object->__invoke($usersDto, SCOPE::PRIVATE);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersAreNotValid(): void
     {
         $usersId = $this->getUsersIdDeletedOrNotActive();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserGetByNAme\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
@@ -25,7 +26,7 @@ class UserGetByNameInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $userName = 'Juan';
@@ -35,7 +36,7 @@ class UserGetByNameInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateManyNames(): void
     {
         $userName = ['Juan', 'Pedro', 'Ana', 'José María'];
@@ -45,7 +46,7 @@ class UserGetByNameInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNotValidUserName(): void
     {
         $userName = 'Juan y Medio+';
@@ -55,7 +56,7 @@ class UserGetByNameInputDtoTest extends TestCase
         $this->assertEquals(['users_name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserNameIsNull(): void
     {
         $userName = null;

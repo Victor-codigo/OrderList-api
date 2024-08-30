@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Product\Adapter\Http\Controller\ProductRemove;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +23,7 @@ class ProductRemoveControllerTest extends WebClientTestCase
     private const string PRODUCT_EXISTS_2_ID = '8b6d650b-7bb7-4850-bf25-36cda9bce801';
     private const string SHOP_EXISTS_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveAProduct(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -45,7 +46,7 @@ class ProductRemoveControllerTest extends WebClientTestCase
         $this->assertEquals([self::PRODUCT_EXISTS_ID], $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveManyProductWithoutShop(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -70,7 +71,7 @@ class ProductRemoveControllerTest extends WebClientTestCase
         $this->assertEqualsCanonicalizing([self::PRODUCT_EXISTS_ID, self::PRODUCT_EXISTS_2_ID], $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingAProductGroupIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -93,7 +94,7 @@ class ProductRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingAProductGroupIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -116,7 +117,7 @@ class ProductRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingAProductGroupNotExists(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -139,7 +140,7 @@ class ProductRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingAProductProductIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -162,7 +163,7 @@ class ProductRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank'], $responseContent->errors->products_id_empty);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingAProductProductIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -185,7 +186,7 @@ class ProductRemoveControllerTest extends WebClientTestCase
         $this->assertEquals([['uuid_invalid_characters']], $responseContent->errors->products_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingAProductNotExists(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -208,7 +209,7 @@ class ProductRemoveControllerTest extends WebClientTestCase
         $this->assertEquals('Product not found', $responseContent->errors->product_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingAProductShopIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -231,7 +232,7 @@ class ProductRemoveControllerTest extends WebClientTestCase
         $this->assertEquals([['uuid_invalid_characters']], $responseContent->errors->shops_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingAProductShopNotExists(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -254,7 +255,7 @@ class ProductRemoveControllerTest extends WebClientTestCase
         $this->assertEquals('Product not found', $responseContent->errors->product_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingAProductShopNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -277,7 +278,7 @@ class ProductRemoveControllerTest extends WebClientTestCase
         $this->assertEquals('Product not found', $responseContent->errors->product_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingAProductUserNotBelongsToTheGroup(): void
     {
         $client = $this->getNewClientAuthenticated(self::USER_HAS_NO_GROUP_EMAIL, self::USER_HAS_NO_GROUP_PASSWORD);

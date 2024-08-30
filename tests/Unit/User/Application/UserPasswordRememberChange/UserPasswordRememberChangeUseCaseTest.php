@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserPasswordRememberChange;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\JwtToken\JwtHS256Interface;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -47,7 +48,7 @@ class UserPasswordRememberChangeUseCaseTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldChangeThePassword(): void
     {
         $token = 'token';
@@ -101,7 +102,7 @@ class UserPasswordRememberChangeUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailChangeThePasswordNotificationError(): void
     {
         $token = 'token';

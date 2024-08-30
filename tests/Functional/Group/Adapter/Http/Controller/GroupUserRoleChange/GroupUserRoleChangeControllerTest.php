@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupUserRoleChange;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +32,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
         parent::setUp();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldChangeGroupUsersRolToAdmin(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -57,7 +58,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldChangeGroupUsersRolToUser(): void
     {
         $usersIdToChangeRol = [self::USERS_ID[1], self::USERS_ID[2]];
@@ -84,7 +85,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersIdAreNotValid(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -107,7 +108,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
         $this->assertEmpty($responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -130,7 +131,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
         $this->assertEquals(['group_id' => ['not_blank', 'not_null']], (array) $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNotValid(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -153,7 +154,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
         $this->assertEquals(['group_id' => ['uuid_invalid_characters']], (array) $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupUserIdIsNotGroupAdmin(): void
     {
         $client = $this->getNewClientAuthenticated(self::USER_NOT_GROUP_ADMIN_NAME, self::USER_NOT_GROUP_ADMINPASSWORD);
@@ -175,7 +176,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
         $this->assertSame('Permissions denied', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsRegistered(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -197,7 +198,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
         $this->assertSame('Users do not exist in the group', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -220,7 +221,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
         $this->assertEquals(['users' => ['not_blank']], (array) $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNotAllUsersIdAreValid(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -243,7 +244,7 @@ class GroupUserRoleChangeControllerTest extends WebClientTestCase
         $this->assertEquals(['users' => ['uuid_invalid_characters']], (array) $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupShouldHaveAtLeastOneAdmin(): void
     {
         $client = $this->getNewClientAuthenticatedUser();

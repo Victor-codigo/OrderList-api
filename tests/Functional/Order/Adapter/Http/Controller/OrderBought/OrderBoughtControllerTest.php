@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Order\Adapter\Http\Controller\OrderBought;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -25,7 +26,7 @@ class OrderBoughtControllerTest extends WebClientTestCase
         parent::setUp();
     }
 
-    private static function boughtDataProvider(): iterable
+    public static function boughtDataProvider(): iterable
     {
         yield [
             '5cfe52e5-db78-41b3-9acd-c3c84924cb9b',
@@ -44,10 +45,8 @@ class OrderBoughtControllerTest extends WebClientTestCase
         ];
     }
 
-    /**
-     * @test
-     */
     #[DataProvider('boughtDataProvider')]
+    #[Test]
     public function itShouldSetBought(?string $orderId, ?string $groupId, ?bool $bought): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -71,7 +70,7 @@ class OrderBoughtControllerTest extends WebClientTestCase
         $this->assertEquals($orderId, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingBoughtOrderIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -94,7 +93,7 @@ class OrderBoughtControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->order_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingBoughtOrderIdIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -118,7 +117,7 @@ class OrderBoughtControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->order_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingBoughtOrderIdNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -142,7 +141,7 @@ class OrderBoughtControllerTest extends WebClientTestCase
         $this->assertEquals('Order not found', $responseContent->errors->order_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingBoughtGroupIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -165,7 +164,7 @@ class OrderBoughtControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingBoughtGroupIdIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -189,7 +188,7 @@ class OrderBoughtControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingBoughtUserNotBelongsToTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();

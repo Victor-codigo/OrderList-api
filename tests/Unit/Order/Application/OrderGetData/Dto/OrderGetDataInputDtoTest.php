@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Application\OrderGetData\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -36,7 +37,7 @@ class OrderGetDataInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $object = new OrderGetDataInputDto(
@@ -57,7 +58,7 @@ class OrderGetDataInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateListOrdersIdOrdersIdFilterSectionTextAndValueAreNull(): void
     {
         $object = new OrderGetDataInputDto(
@@ -78,7 +79,7 @@ class OrderGetDataInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $object = new OrderGetDataInputDto(
@@ -99,7 +100,7 @@ class OrderGetDataInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsWrong(): void
     {
         $object = new OrderGetDataInputDto(
@@ -120,7 +121,7 @@ class OrderGetDataInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailListOrdersIdIsWrong(): void
     {
         $object = new OrderGetDataInputDto(
@@ -141,7 +142,7 @@ class OrderGetDataInputDtoTest extends TestCase
         $this->assertEquals(['list_orders_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailOrdersIdIsWrong(): void
     {
         $object = new OrderGetDataInputDto(
@@ -162,7 +163,7 @@ class OrderGetDataInputDtoTest extends TestCase
         $this->assertEquals(['orders_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageIsNull(): void
     {
         $object = new OrderGetDataInputDto(
@@ -183,7 +184,7 @@ class OrderGetDataInputDtoTest extends TestCase
         $this->assertEquals(['page' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageIsWrong(): void
     {
         $object = new OrderGetDataInputDto(
@@ -204,7 +205,7 @@ class OrderGetDataInputDtoTest extends TestCase
         $this->assertEquals(['page' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageItemsIsNull(): void
     {
         $object = new OrderGetDataInputDto(
@@ -225,7 +226,7 @@ class OrderGetDataInputDtoTest extends TestCase
         $this->assertEquals(['page_items' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageItemsIsWrong(): void
     {
         $object = new OrderGetDataInputDto(
@@ -246,7 +247,7 @@ class OrderGetDataInputDtoTest extends TestCase
         $this->assertEquals(['page_items' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFilterSectionIsWrong(): void
     {
         $object = new OrderGetDataInputDto(
@@ -267,7 +268,7 @@ class OrderGetDataInputDtoTest extends TestCase
         $this->assertEquals(['section_filter_type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFilterTextIsWrong(): void
     {
         $object = new OrderGetDataInputDto(
@@ -288,7 +289,7 @@ class OrderGetDataInputDtoTest extends TestCase
         $this->assertEquals(['text_filter_type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFilterValueIsNull(): void
     {
         $object = new OrderGetDataInputDto(
@@ -314,7 +315,7 @@ class OrderGetDataInputDtoTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFilterSectionOrFilterTextIsNull(): void
     {
         $object = new OrderGetDataInputDto(

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupUserRolChangeInputDto\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -43,7 +44,7 @@ class GroupUserRolChangeInputDtoTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateTheInput(): void
     {
         $object = new GroupUserRoleChangeInputDto(
@@ -58,7 +59,7 @@ class GroupUserRolChangeInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $object = new GroupUserRoleChangeInputDto(
@@ -73,7 +74,7 @@ class GroupUserRolChangeInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNotValid(): void
     {
         $object = new GroupUserRoleChangeInputDto(
@@ -88,7 +89,7 @@ class GroupUserRolChangeInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersIdIsNull(): void
     {
         $object = new GroupUserRoleChangeInputDto(
@@ -102,7 +103,7 @@ class GroupUserRolChangeInputDtoTest extends TestCase
         $this->assertEquals(['users' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersIdNotValid(): void
     {
         $object = new GroupUserRoleChangeInputDto(
@@ -117,7 +118,7 @@ class GroupUserRolChangeInputDtoTest extends TestCase
         $this->assertEquals(['users' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailAdminIsNull(): void
     {
         $object = new GroupUserRoleChangeInputDto(
@@ -133,7 +134,7 @@ class GroupUserRolChangeInputDtoTest extends TestCase
         $this->assertEquals(GROUP_ROLES::USER, $object->rol->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailAdminIsFalse(): void
     {
         $object = new GroupUserRoleChangeInputDto(
@@ -149,7 +150,7 @@ class GroupUserRolChangeInputDtoTest extends TestCase
         $this->assertEquals(GROUP_ROLES::USER, $object->rol->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailAdminIsTrue(): void
     {
         $object = new GroupUserRoleChangeInputDto(

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Object;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\GroupType;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -22,7 +23,7 @@ class GroupTypeTest extends TestCase
         $this->validation = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateTheGroupType(): void
     {
         $object = new GroupType(GROUP_TYPE::GROUP);
@@ -31,7 +32,7 @@ class GroupTypeTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailIsNull(): void
     {
         $object = new GroupType(null);
@@ -40,7 +41,7 @@ class GroupTypeTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::NOT_NULL], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailIsBank(): void
     {
         $object = new GroupType(new \stdClass());

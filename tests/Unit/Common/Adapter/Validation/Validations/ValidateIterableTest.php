@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation\Validations;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use PHPUnit\Framework\TestCase;
@@ -20,7 +21,7 @@ class ValidateIterableTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateCountExactly(): void
     {
         $array = [1, 2, 3, 4, 5];
@@ -33,7 +34,7 @@ class ValidateIterableTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateCountExactlyZeroItems(): void
     {
         $array = [];
@@ -46,7 +47,7 @@ class ValidateIterableTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCountNotExactly(): void
     {
         $array = [1, 2, 3, 4, 5];
@@ -59,7 +60,7 @@ class ValidateIterableTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::ITERABLE_NOT_EQUAL], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateCountRangeMin(): void
     {
         $array = [1, 2, 3, 4, 5];
@@ -72,7 +73,7 @@ class ValidateIterableTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateCountRangeMax(): void
     {
         $array = [1, 2, 3, 4, 5];
@@ -85,7 +86,7 @@ class ValidateIterableTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCountRangeMin(): void
     {
         $array = [1, 2, 3, 4, 5];
@@ -98,7 +99,7 @@ class ValidateIterableTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::ITERABLE_TOO_FEW], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCountRangeMax(): void
     {
         $array = [1, 2, 3, 4, 5];
@@ -111,7 +112,7 @@ class ValidateIterableTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::ITERABLE_TOO_MANY], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateDividibleBy(): void
     {
         $array = [1, 2, 3, 4, 5, 6];
@@ -124,7 +125,7 @@ class ValidateIterableTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNotDivisibleBy(): void
     {
         $array = [1, 2, 3, 4, 5, 6];

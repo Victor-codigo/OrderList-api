@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Adapter\Database\Orm\Doctrine\Repository;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -58,7 +59,7 @@ class ProductShopRepositoryTest extends DataBaseTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSavingDataBaseError(): void
     {
         /** @var MockObject|ObjectManager $objectManagerMock */
@@ -74,7 +75,7 @@ class ProductShopRepositoryTest extends DataBaseTestCase
         $this->object->save([$this->getNewProductShop(1.3, UNIT_MEASURE_TYPE::UNITS)]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindAllShopsOfAProduct(): void
     {
         $productId = ValueObjectFactory::createIdentifier(self::PRODUCT_ID);
@@ -87,7 +88,7 @@ class ProductShopRepositoryTest extends DataBaseTestCase
         $this->assertEquals($productExpected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindAllProductsOfAShop(): void
     {
         $shopId = ValueObjectFactory::createIdentifier(self::SHOP_ID);
@@ -100,7 +101,7 @@ class ProductShopRepositoryTest extends DataBaseTestCase
         $this->assertEquals($shopExpected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindAProductsOfAShop(): void
     {
         $productId = ValueObjectFactory::createIdentifier(self::PRODUCT_ID);
@@ -117,7 +118,7 @@ class ProductShopRepositoryTest extends DataBaseTestCase
         $this->assertEquals($shopExpected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindAProductsOfAShopOfAGroup(): void
     {
         $productId = ValueObjectFactory::createIdentifier(self::PRODUCT_ID);
@@ -135,7 +136,7 @@ class ProductShopRepositoryTest extends DataBaseTestCase
         $this->assertEquals($shopExpected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFindAProductsOrAShopsNotFound(): void
     {
         $productId = ValueObjectFactory::createIdentifier(self::PRODUCT_ID);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupGetDataByName;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -82,7 +83,7 @@ class GroupGetDataByNameServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetTheGroupDataByTheName(): void
     {
         $groupDataExpected = $this->getGroupData();
@@ -102,7 +103,7 @@ class GroupGetDataByNameServiceTest extends TestCase
         $this->assertGroupIdOk($groupDataExpected, $return, $input->userImage);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetTheGroupDataGroupTypeUser(): void
     {
         $groupDataExpected = $this->getGroupTypeUserData();
@@ -122,7 +123,7 @@ class GroupGetDataByNameServiceTest extends TestCase
         $this->assertGroupIdOk($groupDataExpected, $return, $input->userImage);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetTheGroupDataByTheNameNoImage(): void
     {
         $groupDataExpected = $this->getGroupData();
@@ -143,7 +144,7 @@ class GroupGetDataByNameServiceTest extends TestCase
         $this->assertGroupIdOk($groupDataExpected, $return, $input->userImage);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingTheGroupDataByTheName(): void
     {
         $input = new GroupGetDataByNameDto(

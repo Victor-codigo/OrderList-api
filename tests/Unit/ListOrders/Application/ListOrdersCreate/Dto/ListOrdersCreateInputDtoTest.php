@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Application\ListOrdersCreate\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -28,7 +29,7 @@ class ListOrdersCreateInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $object = new ListOrdersCreateInputDto(
@@ -44,7 +45,7 @@ class ListOrdersCreateInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateDescriptionIsNull(): void
     {
         $object = new ListOrdersCreateInputDto(
@@ -60,7 +61,7 @@ class ListOrdersCreateInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateDateToBuyIsNull(): void
     {
         $object = new ListOrdersCreateInputDto(
@@ -76,7 +77,7 @@ class ListOrdersCreateInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateDateToBuyIsWrong(): void
     {
         $object = new ListOrdersCreateInputDto(
@@ -92,7 +93,7 @@ class ListOrdersCreateInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $object = new ListOrdersCreateInputDto(
@@ -108,7 +109,7 @@ class ListOrdersCreateInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsWrong(): void
     {
         $object = new ListOrdersCreateInputDto(
@@ -124,7 +125,7 @@ class ListOrdersCreateInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsNull(): void
     {
         $object = new ListOrdersCreateInputDto(
@@ -140,7 +141,7 @@ class ListOrdersCreateInputDtoTest extends TestCase
         $this->assertEquals(['name' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsWrong(): void
     {
         $object = new ListOrdersCreateInputDto(
@@ -156,7 +157,7 @@ class ListOrdersCreateInputDtoTest extends TestCase
         $this->assertEquals(['name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDescriptionTooLong(): void
     {
         $object = new ListOrdersCreateInputDto(
@@ -172,7 +173,7 @@ class ListOrdersCreateInputDtoTest extends TestCase
         $this->assertEquals(['description' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDateToBuyIsWrong(): void
     {
         $datetimeNow = new \DateTime();

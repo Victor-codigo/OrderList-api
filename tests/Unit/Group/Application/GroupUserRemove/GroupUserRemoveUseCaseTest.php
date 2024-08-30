@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupUserRemove;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -59,7 +60,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveTheUsersFromTheGroup(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -125,7 +126,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $this->assertEquals($usersId, $return->usersId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveHimselfFromTheGroup(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -191,7 +192,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $this->assertEquals($usersId, $return->usersId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveHimselfFromTheGroupManyUsersProvided(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -236,7 +237,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveHimselfFromTheGroupUserProvidedIsNotUserSession(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -282,7 +283,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveTheUsersFromTheGroupNotificationError(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');

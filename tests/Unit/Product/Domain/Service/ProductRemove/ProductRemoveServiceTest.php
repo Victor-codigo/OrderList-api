@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ProductRemove;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -63,7 +64,7 @@ class ProductRemoveServiceTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveAProduct(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -99,7 +100,7 @@ class ProductRemoveServiceTest extends TestCase
         $this->assertEquals($productsId, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveManyProducts(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -141,7 +142,7 @@ class ProductRemoveServiceTest extends TestCase
             ->expects($entityImageRemoveServiceMatcher)
             ->method('__invoke')
             ->willReturnCallback(function (Product $productToRemove, Path $productImagePathToRemove) use ($entityImageRemoveServiceMatcher, $products, $productImagePath): bool {
-                $this->assertEquals($products[$entityImageRemoveServiceMatcher->getInvocationCount() - 1], $productToRemove);
+                $this->assertEquals($products[$entityImageRemoveServiceMatcher->numberOfInvocations() - 1], $productToRemove);
                 $this->assertEquals($productImagePath, $productImagePathToRemove);
 
                 return true;
@@ -154,7 +155,7 @@ class ProductRemoveServiceTest extends TestCase
         $this->assertEquals($productsId, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveAProductImageFileExists(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -192,7 +193,7 @@ class ProductRemoveServiceTest extends TestCase
         $this->assertEquals($productsId, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveAProductImageFileNotExists(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -229,7 +230,7 @@ class ProductRemoveServiceTest extends TestCase
         $this->assertEquals($productsId, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingAProductImageFileRemoveException(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -263,7 +264,7 @@ class ProductRemoveServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingAProductProductNotFound(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');

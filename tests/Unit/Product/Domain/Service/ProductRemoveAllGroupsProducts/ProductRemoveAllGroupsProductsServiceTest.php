@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ProductRemoveAllGroupsProducts;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
@@ -89,7 +90,7 @@ class ProductRemoveAllGroupsProductsServiceTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveAllProductsFromGroups(): void
     {
         $products = $this->getGroupsProducts();
@@ -130,7 +131,7 @@ class ProductRemoveAllGroupsProductsServiceTest extends TestCase
         $this->assertEquals($productsId, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoProductsFound(): void
     {
         $input = new ProductRemoveAllGroupsProductsDto([
@@ -160,7 +161,7 @@ class ProductRemoveAllGroupsProductsServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveImagenError(): void
     {
         $products = $this->getGroupsProducts();
@@ -199,7 +200,7 @@ class ProductRemoveAllGroupsProductsServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveEntitiesError(): void
     {
         $products = $this->getGroupsProducts();

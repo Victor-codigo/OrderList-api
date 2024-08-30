@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Service\Image\EntityImageRemove;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -33,7 +34,7 @@ class EntityImageRemoveServiceTest extends TestCase
         $this->object = new EntityImageRemoveService();
     }
 
-    /** @test */
+    #[Test]
     public function ittShouldDoNothingEntityImageIsNull(): void
     {
         $this->entity
@@ -57,7 +58,7 @@ class EntityImageRemoveServiceTest extends TestCase
         $this->object->__invoke($this->entity, $this->imagesPathToStorage);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldDoNothingImagesPathToStorageIsNull(): void
     {
         $this->entity
@@ -82,7 +83,7 @@ class EntityImageRemoveServiceTest extends TestCase
         $this->object->__invoke($this->entity, $this->imagesPathToStorage);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetEntityImageToNullAndNotRemoveImageFileNotExists(): void
     {
         $this->entity
@@ -109,7 +110,7 @@ class EntityImageRemoveServiceTest extends TestCase
         $this->object->__invoke($this->entity, $this->imagesPathToStorage);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetEntityImageToNullAndNotRemoveImageFileCanNotBeRemoved(): void
     {
         $this->entity
@@ -137,7 +138,7 @@ class EntityImageRemoveServiceTest extends TestCase
         $this->object->__invoke($this->entity, $this->imagesPathToStorage);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetEntityImageToNullAndRemoveImageFile(): void
     {
         $this->entity

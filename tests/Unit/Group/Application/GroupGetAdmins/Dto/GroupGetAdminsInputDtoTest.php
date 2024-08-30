@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupGetAdmins\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -26,7 +27,7 @@ class GroupGetAdminsInputDtoTest extends TestCase
         $this->userSession = $this->createMock(UserShared::class);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $groupId = 'dad79f1c-52a8-4cf7-812b-62fc8bff7043';
@@ -37,7 +38,7 @@ class GroupGetAdminsInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $groupId = null;
@@ -48,7 +49,7 @@ class GroupGetAdminsInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsWrong(): void
     {
         $groupId = 'group id wrong';

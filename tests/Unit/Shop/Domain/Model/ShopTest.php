@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Domain\Model;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Exception\LogicException;
 use PHPUnit\Framework\TestCase;
 use Shop\Domain\Model\Shop;
 
 class ShopTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function itShouldCreateAShopFromArray(): void
     {
         $shopData = [
@@ -32,7 +33,7 @@ class ShopTest extends TestCase
         $this->assertEquals($shopData['image'], $return->getImage()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAShopFromArrayAddressNotExists(): void
     {
         $shopData = [
@@ -53,7 +54,7 @@ class ShopTest extends TestCase
         $this->assertEquals($shopData['image'], $return->getImage()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAShopFromArrayDescriptionNotExists(): void
     {
         $shopData = [
@@ -74,7 +75,7 @@ class ShopTest extends TestCase
         $this->assertEquals($shopData['image'], $return->getImage()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAShopFromArrayImageNotExists(): void
     {
         $shopData = [
@@ -95,7 +96,7 @@ class ShopTest extends TestCase
         $this->assertEquals(null, $return->getImage()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAShopFromArrayIdNotExists(): void
     {
         $shopData = [
@@ -110,7 +111,7 @@ class ShopTest extends TestCase
         Shop::fromPrimitiveArrayOfData($shopData);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAShopFromArrayGroupIdNotExists(): void
     {
         $shopData = [
@@ -125,7 +126,7 @@ class ShopTest extends TestCase
         Shop::fromPrimitiveArrayOfData($shopData);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAShopFromArrayNameNotExists(): void
     {
         $shopData = [

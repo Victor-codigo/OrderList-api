@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Integer;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -22,7 +23,7 @@ class PaginatorPageItemsTest extends TestCase
         $this->validation = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidatePageItemsIsOne(): void
     {
         $object = ValueObjectFactory::createPaginatorPageItems(1);
@@ -31,7 +32,7 @@ class PaginatorPageItemsTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageItemsIsNull(): void
     {
         $object = ValueObjectFactory::createPaginatorPageItems(null);
@@ -40,7 +41,7 @@ class PaginatorPageItemsTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageItemsIsZero(): void
     {
         $object = ValueObjectFactory::createPaginatorPageItems(0);
@@ -49,7 +50,7 @@ class PaginatorPageItemsTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::GREATER_THAN], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageItemsGraterThan100(): void
     {
         $object = ValueObjectFactory::createPaginatorPageItems(101);

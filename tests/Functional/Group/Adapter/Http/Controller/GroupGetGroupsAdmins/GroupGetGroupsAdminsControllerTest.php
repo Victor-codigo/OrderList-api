@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupGetGroupsAdmins;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +28,7 @@ class GroupGetGroupsAdminsControllerTest extends WebClientTestCase
         parent::setUp();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAdminsOfGroups(): void
     {
         $page = 1;
@@ -69,7 +70,7 @@ class GroupGetGroupsAdminsControllerTest extends WebClientTestCase
         $this->assertEquals($groupsAdminsExpected, (array) $responseContent->data->groups);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAdminsOf100Groups(): void
     {
         $page = 1;
@@ -109,7 +110,7 @@ class GroupGetGroupsAdminsControllerTest extends WebClientTestCase
         $this->assertEquals($groupsAdminsExpected, (array) $responseContent->data->groups);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdIsWrong(): void
     {
         $page = 1;
@@ -134,7 +135,7 @@ class GroupGetGroupsAdminsControllerTest extends WebClientTestCase
         $this->assertEquals([['uuid_invalid_characters']], (array) $responseContent->errors->groups_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdIsNotFound(): void
     {
         $page = 1;
@@ -154,7 +155,7 @@ class GroupGetGroupsAdminsControllerTest extends WebClientTestCase
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageIsNull(): void
     {
         $pageItems = 1;
@@ -177,7 +178,7 @@ class GroupGetGroupsAdminsControllerTest extends WebClientTestCase
         $this->assertEquals(['greater_than'], (array) $responseContent->errors->page);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageIsWrong(): void
     {
         $page = -1;
@@ -202,7 +203,7 @@ class GroupGetGroupsAdminsControllerTest extends WebClientTestCase
         $this->assertEquals(['greater_than'], (array) $responseContent->errors->page);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageItemsIsNull(): void
     {
         $page = 1;
@@ -225,7 +226,7 @@ class GroupGetGroupsAdminsControllerTest extends WebClientTestCase
         $this->assertEquals(['greater_than'], (array) $responseContent->errors->page_items);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageItemsIsWrong(): void
     {
         $page = 1;

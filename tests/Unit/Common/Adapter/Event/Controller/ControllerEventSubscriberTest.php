@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Event\Controller;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Event\Controller\ControllerEventSubscriber;
 use Common\Adapter\Http\TryoutPermissions\Exception\TryoutUserRoutePermissionsException;
 use Common\Adapter\Http\TryoutPermissions\TryoutUserRoutePermissionsValidation;
@@ -49,7 +50,7 @@ class ControllerEventSubscriberTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateRouteForTryoutUser(): void
     {
         $userSessionId = ValueObjectFactory::createIdentifier(self::USER_SESSION_ID);
@@ -82,7 +83,7 @@ class ControllerEventSubscriberTest extends TestCase
         $this->object->__invoke($this->controllerEvent);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateNoSessionUser(): void
     {
         $this->controllerEvent
@@ -110,7 +111,7 @@ class ControllerEventSubscriberTest extends TestCase
         $this->object->__invoke($this->controllerEvent);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidateRouteForTryoutUser(): void
     {
         $userSessionId = ValueObjectFactory::createIdentifier(self::USER_SESSION_ID);

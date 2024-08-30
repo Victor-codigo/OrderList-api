@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Mailer;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Mailer\MailerSymfonyAdapter;
 use Common\Domain\Mailer\Exception\MailerSentException;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -26,7 +27,7 @@ class MailerSymfonyAdapterTest extends TestCase
         $this->object = new MailerSymfonyAdapter($this->mailer);
     }
 
-    /** @test */
+    #[Test]
     public function sendAnEmailOk(): void
     {
         $this->mailer
@@ -37,7 +38,7 @@ class MailerSymfonyAdapterTest extends TestCase
         $this->object->send();
     }
 
-    /** @test */
+    #[Test]
     public function sendAnEmailThrow(): void
     {
         $this->expectException(MailerSentException::class);

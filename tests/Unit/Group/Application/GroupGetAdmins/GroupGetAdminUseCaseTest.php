@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupGetAdmins;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -56,7 +57,7 @@ class GroupGetAdminUseCaseTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidationGroupIdWrong(): void
     {
         $groupId = 'group id';
@@ -71,7 +72,7 @@ class GroupGetAdminUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupNotFound(): void
     {
         $groupId = 'group id';
@@ -92,7 +93,7 @@ class GroupGetAdminUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserSessionDoesNotBelongsToGroup(): void
     {
         $groupId = 'group id';
@@ -119,7 +120,7 @@ class GroupGetAdminUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAdminsOfTheGroupUserSessionIsAdmin(): void
     {
         $groupId = 'group id';
@@ -158,7 +159,7 @@ class GroupGetAdminUseCaseTest extends TestCase
         $this->assertEquals($return->admins, $groupAdminsIds);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAdminsOfTheGroupUserSessionIsNotAdmin(): void
     {
         $groupId = 'group id';

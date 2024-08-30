@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Application\ListOrdersGetData\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -27,7 +28,7 @@ class ListOrdersGetDataInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $object = new ListOrdersGetDataInputDto(
@@ -51,7 +52,7 @@ class ListOrdersGetDataInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateListOrdersIdIsNull(): void
     {
         $object = new ListOrdersGetDataInputDto(
@@ -71,7 +72,7 @@ class ListOrdersGetDataInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateListOrdersIdIsEmpty(): void
     {
         $object = new ListOrdersGetDataInputDto(
@@ -91,7 +92,7 @@ class ListOrdersGetDataInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateAllParametersAreNull(): void
     {
         $object = new ListOrdersGetDataInputDto(
@@ -111,7 +112,7 @@ class ListOrdersGetDataInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateFilterSection(): void
     {
         $object = new ListOrdersGetDataInputDto(
@@ -131,7 +132,7 @@ class ListOrdersGetDataInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateFilterText(): void
     {
         $object = new ListOrdersGetDataInputDto(
@@ -151,7 +152,7 @@ class ListOrdersGetDataInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingGroupIdIsNull(): void
     {
         $object = new ListOrdersGetDataInputDto(
@@ -175,7 +176,7 @@ class ListOrdersGetDataInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingGroupIdIsWrong(): void
     {
         $object = new ListOrdersGetDataInputDto(
@@ -199,7 +200,7 @@ class ListOrdersGetDataInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingListOrdersIdIsWrong(): void
     {
         $object = new ListOrdersGetDataInputDto(
@@ -221,7 +222,7 @@ class ListOrdersGetDataInputDtoTest extends TestCase
         $this->assertEquals(['list_orders_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingFilterSectionValueIsWrong(): void
     {
         $object = new ListOrdersGetDataInputDto(
@@ -246,7 +247,7 @@ class ListOrdersGetDataInputDtoTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingFilterSectionIsWrong(): void
     {
         $object = new ListOrdersGetDataInputDto(
@@ -266,7 +267,7 @@ class ListOrdersGetDataInputDtoTest extends TestCase
         $this->assertEquals(['section_filter_type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingFilterTextIsWrong(): void
     {
         $object = new ListOrdersGetDataInputDto(
@@ -286,7 +287,7 @@ class ListOrdersGetDataInputDtoTest extends TestCase
         $this->assertEquals(['text_filter_type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingFilterSectionAndTextAreNotBothPresent(): void
     {
         $object = new ListOrdersGetDataInputDto(
@@ -306,7 +307,7 @@ class ListOrdersGetDataInputDtoTest extends TestCase
         $this->assertEquals(['filter_section_and_text_not_empty' => [VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingPageIsWrong(): void
     {
         $object = new ListOrdersGetDataInputDto(
@@ -326,7 +327,7 @@ class ListOrdersGetDataInputDtoTest extends TestCase
         $this->assertEquals(['page' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingPageItemsIsWrong(): void
     {
         $object = new ListOrdersGetDataInputDto(

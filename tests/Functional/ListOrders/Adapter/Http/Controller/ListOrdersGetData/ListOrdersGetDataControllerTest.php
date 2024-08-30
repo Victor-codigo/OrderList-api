@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\ListOrders\Adapter\Http\Controller\ListOrdersGetData;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use ListOrders\Domain\Model\ListOrders;
@@ -98,7 +99,7 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetDataOfListOrders(): void
     {
         $listOrders = $this->getListOrders();
@@ -126,7 +127,7 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
         $this->assertResponseIsOK($listOrders, $responseContent);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetDataOfListOrdersListOrdersOfAGroup(): void
     {
         $listOrders = $this->getListOrders();
@@ -150,7 +151,7 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
         $this->assertResponseIsOK($listOrders, $responseContent);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetDataOfListOrdersListOrdersIdOnlyProcess100(): void
     {
         $listOrders = $this->getListOrders();
@@ -178,7 +179,7 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
         $this->assertResponseIsOK($listOrders, $responseContent);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetDataOfListOrdersFilterSection(): void
     {
         $listOrders = $this->getListOrders();
@@ -208,7 +209,7 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
         $this->assertResponseIsOK($listOrders, $responseContent);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingDataOfListOrdersGroupIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -227,7 +228,7 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingDataOfListOrdersGroupIdIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -247,7 +248,7 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingDataOfListOrdersListOrdersIdWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -267,7 +268,7 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
         $this->assertEquals([['uuid_invalid_characters']], $responseContent->errors->list_orders_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingDataOfListOrdersListOrdersIdNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -285,7 +286,7 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingDataOfListOrdersFilterSectionIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -309,7 +310,7 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingDataOfListOrdersFilterTextIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -333,7 +334,7 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingDataOfListOrdersFilterSectionAndTextAreNotPresent(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -356,7 +357,7 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingDataOfListOrdersFilterValueIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -380,7 +381,7 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingDataOfListOrdersPageIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -403,7 +404,7 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingDataOfListOrdersPageIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -427,7 +428,7 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingDataOfListOrdersPageItemsIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -450,7 +451,7 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingDataOfListOrdersPageItemsIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -474,7 +475,7 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingDataOfListOrdersUserNotBelongsToTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();

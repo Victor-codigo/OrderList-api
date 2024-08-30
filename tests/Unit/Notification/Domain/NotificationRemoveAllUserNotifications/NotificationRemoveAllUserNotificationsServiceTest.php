@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Domain\NotificationRemoveAllUserNotifications;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -73,7 +74,7 @@ class NotificationRemoveAllUserNotificationsServiceTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveAllUserNotifications(): void
     {
         $userNotifications = $this->getUserNotifications();
@@ -104,7 +105,7 @@ class NotificationRemoveAllUserNotificationsServiceTest extends TestCase
         $this->assertEquals($userNotificationsId, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoUserNotificationsFound(): void
     {
         $input = new NotificationRemoveAllUserNotificationsDto(
@@ -129,7 +130,7 @@ class NotificationRemoveAllUserNotificationsServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingNotifications(): void
     {
         $userNotifications = $this->getUserNotifications();

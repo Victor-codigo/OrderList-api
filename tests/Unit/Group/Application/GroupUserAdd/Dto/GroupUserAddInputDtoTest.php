@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupUserAdd\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Security\UserShared;
@@ -42,7 +43,7 @@ class GroupUserAddInputDtoTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateAdminIsTrue(): void
     {
         $object = new GroupUserAddInputDto(
@@ -60,7 +61,7 @@ class GroupUserAddInputDtoTest extends TestCase
         $this->assertEquals(GROUP_ROLES::ADMIN, $object->rol->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateAdminIsFalse(): void
     {
         $object = new GroupUserAddInputDto(
@@ -78,7 +79,7 @@ class GroupUserAddInputDtoTest extends TestCase
         $this->assertEquals(GROUP_ROLES::USER, $object->rol->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateAdminIsNull(): void
     {
         $object = new GroupUserAddInputDto(
@@ -96,7 +97,7 @@ class GroupUserAddInputDtoTest extends TestCase
         $this->assertEquals(GROUP_ROLES::USER, $object->rol->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $object = new GroupUserAddInputDto(
@@ -114,7 +115,7 @@ class GroupUserAddInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNotValid(): void
     {
         $object = new GroupUserAddInputDto(
@@ -132,7 +133,7 @@ class GroupUserAddInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersIdIsNull(): void
     {
         $object = new GroupUserAddInputDto(
@@ -150,7 +151,7 @@ class GroupUserAddInputDtoTest extends TestCase
         $this->assertEquals(['users' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNotAllUsersIdAreValid(): void
     {
         $object = new GroupUserAddInputDto(

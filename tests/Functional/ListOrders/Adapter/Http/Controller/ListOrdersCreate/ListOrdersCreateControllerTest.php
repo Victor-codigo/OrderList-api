@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\ListOrders\Adapter\Http\Controller\ListOrdersCreate;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +27,7 @@ class ListOrdersCreateControllerTest extends WebClientTestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateListOrders(): void
     {
         $ordersData = $this->getListOrders();
@@ -51,7 +52,7 @@ class ListOrdersCreateControllerTest extends WebClientTestCase
         $this->assertIsString($responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateListOrdersDescriptionANdDateToBuyAreNull(): void
     {
         $ordersData = $this->getListOrders();
@@ -76,7 +77,7 @@ class ListOrdersCreateControllerTest extends WebClientTestCase
         $this->assertIsString($responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateListOrdersDateToBuyIsWrong(): void
     {
         $ordersData = $this->getListOrders();
@@ -101,7 +102,7 @@ class ListOrdersCreateControllerTest extends WebClientTestCase
         $this->assertIsString($responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingListOrdersGroupIdIsNull(): void
     {
         $ordersData = $this->getListOrders();
@@ -126,7 +127,7 @@ class ListOrdersCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingListOrdersGroupIdIsWrong(): void
     {
         $ordersData = $this->getListOrders();
@@ -151,7 +152,7 @@ class ListOrdersCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingListOrdersNameIsNull(): void
     {
         $ordersData = $this->getListOrders();
@@ -176,7 +177,7 @@ class ListOrdersCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->name);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingListOrdersNameIsWrong(): void
     {
         $ordersData = $this->getListOrders();
@@ -201,7 +202,7 @@ class ListOrdersCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['alphanumeric_with_whitespace'], $responseContent->errors->name);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingListOrdersNameAlreadyExists(): void
     {
         $ordersData = $this->getListOrders();
@@ -226,7 +227,7 @@ class ListOrdersCreateControllerTest extends WebClientTestCase
         $this->assertEquals('The name already exists', $responseContent->errors->name_exists);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingListOrdersUserDoesNotBelongToTheGroup(): void
     {
         $ordersData = $this->getListOrders();

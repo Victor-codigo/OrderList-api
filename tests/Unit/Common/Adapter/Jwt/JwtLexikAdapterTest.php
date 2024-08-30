@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Jwt;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Jwt\Exception\JwtException;
 use Common\Adapter\Jwt\JwtLexikAdapter;
 use PHPUnit\Framework\TestCase;
@@ -22,7 +23,7 @@ class JwtLexikAdapterTest extends TestCase
         $this->object = new JwtLexikAdapter('33');
     }
 
-    /** @test */
+    #[Test]
     public function itShouldEncodeTheDataInTheTokenCorrectly(): void
     {
         $data = [
@@ -45,7 +46,7 @@ class JwtLexikAdapterTest extends TestCase
         $this->assertGreaterThanOrEqual($tokenDecoded->iat, $tokenDecoded->exp);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldEncodeTheDataInTheTokenExpirationIsZero(): void
     {
         $data = [
@@ -68,7 +69,7 @@ class JwtLexikAdapterTest extends TestCase
         $this->assertGreaterThanOrEqual($tokenDecoded->iat, $tokenDecoded->exp);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldDecodeTheTokenCorrectly(): void
     {
         $expect = [
@@ -86,7 +87,7 @@ class JwtLexikAdapterTest extends TestCase
         $this->assertSame($expect, (array) $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailWrongToken(): void
     {
         $this->expectException(JwtException::class);
@@ -94,7 +95,7 @@ class JwtLexikAdapterTest extends TestCase
         $this->object->decode(self::TOKEN.'-wrong token');
     }
 
-    /** @test */
+    #[Test]
     public function itShouldNotBeExpired(): void
     {
         $tokenDecoded = new \stdClass();
@@ -106,7 +107,7 @@ class JwtLexikAdapterTest extends TestCase
         $this->assertFalse($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldBeExpired(): void
     {
         $tokenDecoded = new \stdClass();
@@ -118,7 +119,7 @@ class JwtLexikAdapterTest extends TestCase
         $this->assertTrue($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldBeExpiredBadFormedNotIatAttribute(): void
     {
         $tokenDecoded = new \stdClass();
@@ -129,7 +130,7 @@ class JwtLexikAdapterTest extends TestCase
         $this->assertTrue($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldBeExpiredBadFormedNotExpAttribute(): void
     {
         $tokenDecoded = new \stdClass();
@@ -140,7 +141,7 @@ class JwtLexikAdapterTest extends TestCase
         $this->assertTrue($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldBeExpiredBadFormedNotAitAndExpAttribute(): void
     {
         $tokenDecoded = new \stdClass();

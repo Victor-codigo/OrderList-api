@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Security\Jwt\JwtListener;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -38,7 +39,7 @@ class JwtCreatedListenerTest extends TestCase
         $this->object = new JwtCreatedListener();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetUserIdInUsername(): void
     {
         $userId = ValueObjectFactory::createIdentifier('this is an id');

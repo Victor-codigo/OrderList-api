@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Group;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -24,7 +25,7 @@ class FilterTest extends TestCase
         $this->validation = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateTheFilter(): void
     {
         $object = new Filter(
@@ -38,7 +39,7 @@ class FilterTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsEmpty(): void
     {
         $object = new Filter(
@@ -52,7 +53,7 @@ class FilterTest extends TestCase
         $this->assertEquals(['name' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailTypeIsNull(): void
     {
         $object = new Filter(
@@ -66,7 +67,7 @@ class FilterTest extends TestCase
         $this->assertEquals(['type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailTypeIsWrong(): void
     {
         $object = new Filter(
@@ -80,7 +81,7 @@ class FilterTest extends TestCase
         $this->assertEquals(['type' => [VALIDATION_ERRORS::CHOICE_NOT_SUCH]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValueIsNull(): void
     {
         $object = new Filter(
@@ -94,7 +95,7 @@ class FilterTest extends TestCase
         $this->assertEquals(['value' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValueIsWrong(): void
     {
         $object = new Filter(
@@ -108,7 +109,7 @@ class FilterTest extends TestCase
         $this->assertEquals(['value' => [VALIDATION_ERRORS::ALPHANUMERIC]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValueAndTypeAreWrong(): void
     {
         $object = new Filter(

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Object;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\GroupImage;
 use Common\Domain\Ports\FileUpload\FileInterface;
@@ -72,7 +73,7 @@ class GroupImageTest extends TestCase
         return $fileInterface;
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateTheGroupImage(): void
     {
         /** @var MockObject|File $file */
@@ -90,7 +91,7 @@ class GroupImageTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateGroupImageIsNull(): void
     {
         $this->object = new GroupImage(null);
@@ -99,7 +100,7 @@ class GroupImageTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFileMimeTypeCanNotBeTxt(): void
     {
         $return = $this->validator->validateValueObject($this->object);
@@ -107,7 +108,7 @@ class GroupImageTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_INVALID_MIME_TYPE], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFileNotFound(): void
     {
         $object = new GroupImage($this->getFileInterface(self::PATH_FILE_NOT_FOUND));
@@ -117,7 +118,7 @@ class GroupImageTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_NOT_FOUND], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFileIsNotReadable(): void
     {
         BuiltInFunctionsReturn::$is_readable = false;
@@ -127,7 +128,7 @@ class GroupImageTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_NOT_READABLE], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFileIsEmpty(): void
     {
         $fileInterface = $this->getFileInterface(self::PATH_FILE_EMPTY);
@@ -146,7 +147,7 @@ class GroupImageTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_EMPTY], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFileSizeIsLargeThan2MB(): void
     {
         /** @var MockObject|File $file */
@@ -164,7 +165,7 @@ class GroupImageTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::FILE_IMAGE_TOO_LARGE], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateFileWidthHasNotMinWidth(): void
     {
         /** @var MockObject|File $file */
@@ -181,7 +182,7 @@ class GroupImageTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateFileWidthHasNotMaxWidth(): void
     {
         /** @var MockObject|File $file */
@@ -199,7 +200,7 @@ class GroupImageTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateFileHeighHasNotMinWidth(): void
     {
         /** @var MockObject|File $file */
@@ -217,7 +218,7 @@ class GroupImageTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateFileHeighHasNotMaxWidth(): void
     {
         /** @var MockObject|File $file */
@@ -235,7 +236,7 @@ class GroupImageTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateFilePixelsHasNotMinWidth(): void
     {
         /** @var MockObject|File $file */
@@ -253,7 +254,7 @@ class GroupImageTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateFilePixelsHasNotMaxWidth(): void
     {
         /** @var MockObject|File $file */
@@ -271,7 +272,7 @@ class GroupImageTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateFileAspectRatioHasNotMinWidth(): void
     {
         /** @var MockObject|File $file */
@@ -289,7 +290,7 @@ class GroupImageTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateFileAspectRatioHasNotMaxWidth(): void
     {
         /** @var MockObject|File $file */
@@ -307,7 +308,7 @@ class GroupImageTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateFileCanBeAnSquare(): void
     {
         /** @var MockObject|File $file */
@@ -326,7 +327,7 @@ class GroupImageTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateFileIsCorrupted(): void
     {
         /** @var MockObject|File $file */
@@ -345,7 +346,7 @@ class GroupImageTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnNullAsAValidationValue(): void
     {
         $object = new GroupImage(null);
@@ -354,7 +355,7 @@ class GroupImageTest extends TestCase
         $this->assertNull($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnTheValidationValue(): void
     {
         $return = $this->object->getValidationValue();

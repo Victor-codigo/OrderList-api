@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Http\ArgumentResolver;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Http\ArgumentResolver\Exception\InvalidJsonException;
 use Common\Adapter\Http\ArgumentResolver\Exception\InvalidMimeTypeException;
 use Common\Adapter\Http\ArgumentResolver\RequestValidation;
@@ -20,7 +21,7 @@ class RequestValidationTest extends TestCase
         $this->requestValidation = new RequestValidation();
     }
 
-    /** @test */
+    #[Test]
     public function contentTypeIncorrect(): void
     {
         $this->expectException(InvalidJsonException::class);
@@ -38,7 +39,7 @@ class RequestValidationTest extends TestCase
         $this->requestValidation->__invoke($request);
     }
 
-    /** @test */
+    #[Test]
     public function errorCreatingJsonParams(): void
     {
         $this->expectException(InvalidJsonException::class);
@@ -56,7 +57,7 @@ class RequestValidationTest extends TestCase
         $this->requestValidation->__invoke($request);
     }
 
-    /** @test */
+    #[Test]
     public function responseErrorContentTypeNameWrong(): void
     {
         $this->expectException(InvalidMimeTypeException::class);
@@ -74,7 +75,7 @@ class RequestValidationTest extends TestCase
         $this->requestValidation->__invoke($request);
     }
 
-    /** @test */
+    #[Test]
     public function responseOk(): void
     {
         $request = Request::create(
@@ -93,7 +94,7 @@ class RequestValidationTest extends TestCase
             'RequestValidation: Error creating request content');
     }
 
-    /** @test */
+    #[Test]
     public function responseGetRequestOk(): void
     {
         $request = Request::create(

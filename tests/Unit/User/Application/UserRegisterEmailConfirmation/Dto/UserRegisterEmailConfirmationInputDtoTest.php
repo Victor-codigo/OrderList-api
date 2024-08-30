@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserRegisterEmailConfirmation\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
@@ -24,7 +25,7 @@ class UserRegisterEmailConfirmationInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateTheToken(): void
     {
         $userEmailConfirmationInputDto = new UserEmailConfirmationInputDto(str_pad('', self::TOKEN_MIN_LENGTH, '-'));
@@ -33,7 +34,7 @@ class UserRegisterEmailConfirmationInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailTokenTooShort(): void
     {
         $userEmailConfirmationInputDto = new UserEmailConfirmationInputDto(str_pad('', self::TOKEN_MIN_LENGTH - 1, '-'));

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\ListOrders\Adapter\Http\Controller\LIstOrderModify;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,7 +28,7 @@ class ListOrdersModifyControllerTest extends WebClientTestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyListOrders(): void
     {
         $ordersData = $this->getListOrders();
@@ -53,7 +54,7 @@ class ListOrdersModifyControllerTest extends WebClientTestCase
         $this->assertIsString($responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyListOrdersDescriptionAndDateToBuyAreNull(): void
     {
         $ordersData = $this->getListOrders();
@@ -79,7 +80,7 @@ class ListOrdersModifyControllerTest extends WebClientTestCase
         $this->assertIsString($responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyListOrdersDateToBuyAreIsWrong(): void
     {
         $ordersData = $this->getListOrders();
@@ -105,7 +106,7 @@ class ListOrdersModifyControllerTest extends WebClientTestCase
         $this->assertIsString($responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingListOrdersListOrdersIsNull(): void
     {
         $ordersData = $this->getListOrders();
@@ -131,7 +132,7 @@ class ListOrdersModifyControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->list_orders_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingListOrdersListOrdersIsWrong(): void
     {
         $ordersData = $this->getListOrders();
@@ -157,7 +158,7 @@ class ListOrdersModifyControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->list_orders_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingListOrdersGroupIdIsNull(): void
     {
         $ordersData = $this->getListOrders();
@@ -183,7 +184,7 @@ class ListOrdersModifyControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingListOrdersGroupIdIsWrong(): void
     {
         $ordersData = $this->getListOrders();
@@ -209,7 +210,7 @@ class ListOrdersModifyControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingListOrdersNameIsNull(): void
     {
         $ordersData = $this->getListOrders();
@@ -235,7 +236,7 @@ class ListOrdersModifyControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->name);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingListOrdersNameIsWrong(): void
     {
         $ordersData = $this->getListOrders();
@@ -261,7 +262,7 @@ class ListOrdersModifyControllerTest extends WebClientTestCase
         $this->assertEquals(['string_too_long'], $responseContent->errors->name);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingListOrdersDescriptionIsWrong(): void
     {
         $ordersData = $this->getListOrders();
@@ -287,7 +288,7 @@ class ListOrdersModifyControllerTest extends WebClientTestCase
         $this->assertEquals(['string_too_long'], $responseContent->errors->description);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingListOrdersUserDoesNotBelongToTheGroup(): void
     {
         $ordersData = $this->getListOrders();
@@ -313,7 +314,7 @@ class ListOrdersModifyControllerTest extends WebClientTestCase
         $this->assertEquals('You not belong to the group', $responseContent->errors->permissions);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingListOrdersListOrderIdNotFound(): void
     {
         $ordersData = $this->getListOrders();
@@ -339,7 +340,7 @@ class ListOrdersModifyControllerTest extends WebClientTestCase
         $this->assertEquals('List of orders not found', $responseContent->errors->list_orders_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingListOrdersNameIsAlreadyRegistered(): void
     {
         $ordersData = $this->getListOrders();

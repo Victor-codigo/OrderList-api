@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation\Validations;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
@@ -19,7 +20,7 @@ class ValidateChoiceTest extends TestCase
         $this->object = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function validateChoiceOk(): void
     {
         $return = $this->object
@@ -34,7 +35,7 @@ class ValidateChoiceTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateChoiceError(): void
     {
         $return = $this->object

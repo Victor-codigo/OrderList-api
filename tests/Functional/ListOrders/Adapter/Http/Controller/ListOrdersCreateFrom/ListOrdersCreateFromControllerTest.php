@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\ListOrders\Adapter\Http\Controller\ListOrdersCreateFrom;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +19,7 @@ class ListOrdersCreateFromControllerTest extends WebClientTestCase
     private const string LIST_ORDERS_CREATE_FROM_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
     private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
 
-    /** @test */
+    #[Test]
     public function itShouldCreateListOrdersFromOther(): void
     {
         $listOrderNewName = 'list orders new name';
@@ -42,7 +43,7 @@ class ListOrdersCreateFromControllerTest extends WebClientTestCase
         $this->assertIsString($responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateListOrdersFromOtherListOrdersIdIsNull(): void
     {
         $listOrderNewName = 'list orders new name';
@@ -65,7 +66,7 @@ class ListOrdersCreateFromControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->list_orders_id_create_from);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateListOrdersFromOtherListOrdersIdIsWrong(): void
     {
         $listOrderNewName = 'list orders new name';
@@ -89,7 +90,7 @@ class ListOrdersCreateFromControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->list_orders_id_create_from);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateListOrdersFromOtherGroupIdIsNull(): void
     {
         $listOrderNewName = 'list orders new name';
@@ -112,7 +113,7 @@ class ListOrdersCreateFromControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateListOrdersFromOtherGroupIdIsWrong(): void
     {
         $listOrderNewName = 'list orders new name';
@@ -136,7 +137,7 @@ class ListOrdersCreateFromControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateListOrdersFromOtherNameIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -158,7 +159,7 @@ class ListOrdersCreateFromControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->name);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateListOrdersFromOtherNameIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -181,7 +182,7 @@ class ListOrdersCreateFromControllerTest extends WebClientTestCase
         $this->assertEquals(['alphanumeric_with_whitespace'], $responseContent->errors->name);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateListOrdersFromOtherListOrdersIdNotFound(): void
     {
         $listOrderNewName = 'list orders new name';
@@ -205,7 +206,7 @@ class ListOrdersCreateFromControllerTest extends WebClientTestCase
         $this->assertEquals('The list orders id to create from, not found', $responseContent->errors->list_orders_create_from_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateListOrdersFromOtherListOrdersNameAlreadyExists(): void
     {
         $listOrderNewName = 'List order name 1';
@@ -229,7 +230,7 @@ class ListOrdersCreateFromControllerTest extends WebClientTestCase
         $this->assertEquals('The name already exists', $responseContent->errors->name_exists);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateListOrdersFromOtherUserNotBelongsToTheGroup(): void
     {
         $listOrderNewName = 'list orders new name';

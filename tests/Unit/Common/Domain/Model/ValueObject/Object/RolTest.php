@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Object;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Model\ValueObject\Object\Rol;
@@ -26,7 +27,7 @@ class RolTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function validationForUserRolesOk(): void
     {
         $this->object = $this->createRol(USER_ROLES::ADMIN);
@@ -35,7 +36,7 @@ class RolTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function validationForGroupRolesOk(): void
     {
         $this->object = $this->createRol(GROUP_ROLES::ADMIN);
@@ -44,7 +45,7 @@ class RolTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function checkNotBlankNotNull(): void
     {
         $this->object = $this->createRol(null);
@@ -53,7 +54,7 @@ class RolTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL], $return);
     }
 
-    /** @test */
+    #[Test]
     public function checkRolNotValid(): void
     {
         $this->object = $this->createRol(new \stdClass());
@@ -62,7 +63,7 @@ class RolTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::CHOICE_NOT_SUCH], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateARolFromStringForUsersRole(): void
     {
         $return = Rol::fromString(USER_ROLES::USER->value);
@@ -70,7 +71,7 @@ class RolTest extends TestCase
         $this->assertEquals(ValueObjectFactory::createRol(USER_ROLES::USER), $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateARolFromStringForGroupRole(): void
     {
         $return = Rol::fromString(GROUP_ROLES::USER->value);
@@ -78,7 +79,7 @@ class RolTest extends TestCase
         $this->assertEquals(ValueObjectFactory::createRol(GROUP_ROLES::USER), $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingARolFromString(): void
     {
         $this->expectException(InvalidArgumentException::class);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersGetFirstLetter;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use ListOrders\Domain\Ports\ListOrdersRepositoryInterface;
@@ -17,6 +18,7 @@ class ListOrdersGetFirstLetterServiceTest extends TestCase
     private ListOrdersGetFirstLetterService $object;
     private MockObject|ListOrdersRepositoryInterface $listOrdersRepository;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -25,7 +27,7 @@ class ListOrdersGetFirstLetterServiceTest extends TestCase
         $this->object = new ListOrdersGetFirstLetterService($this->listOrdersRepository);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetListOrdersFirstLetterOfAGroup(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -43,7 +45,7 @@ class ListOrdersGetFirstLetterServiceTest extends TestCase
         $this->assertSame($expected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGetListOrdersFirstLetterOfAGroupNoListOrders(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');

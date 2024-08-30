@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Notification\Adapter\Http\Controller\NotificationCreate;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
@@ -20,7 +21,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
     private const string USER_2_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
     private const string USER_3_ID = '6df60afd-f7c3-4c2c-b920-e265f266c560';
 
-    /** @test */
+    #[Test]
     public function itShouldCreateANotification(): void
     {
         $usersId = [self::USER_ID];
@@ -46,7 +47,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
         $this->assertCount(count($usersId), $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateManyNotifications(): void
     {
         $usersId = [
@@ -76,7 +77,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
         $this->assertCount(count($usersId), $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAUserNotificationNotificationDataIsNull(): void
     {
         $usersId = [
@@ -106,7 +107,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
         $this->assertCount(count($usersId), $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAUserNotificationUserIdNotValid(): void
     {
         $usersId = [
@@ -136,7 +137,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->users_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAUsersNotificationOneUserIdNotFound(): void
     {
         $usersId = [
@@ -166,7 +167,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
         $this->assertEquals('Wrong users', $responseContent->errors->users_wrong);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAUsersNotificationNoUsersIdNotFound(): void
     {
         $usersId = [
@@ -194,7 +195,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
         $this->assertEquals('Wrong users', $responseContent->errors->users_wrong);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAUsersNotificationNoUsersProvided(): void
     {
         $usersId = [];
@@ -220,7 +221,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank'], $responseContent->errors->users_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAUserNotificationTypeWrong(): void
     {
         $usersId = [
@@ -250,7 +251,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->type);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAUserNotificationSystemKeyIsNull(): void
     {
         $usersId = [
@@ -279,7 +280,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank'], $responseContent->errors->system_key);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAUserNotificationSystemKeyIsWrong(): void
     {
         $usersId = [
@@ -308,7 +309,7 @@ class NotificationCreateControllerTest extends WebClientTestCase
         $this->assertEquals('The system key is wrong', $responseContent->errors->system_key);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAUserNotificationNotAuthorized(): void
     {
         $usersId = [

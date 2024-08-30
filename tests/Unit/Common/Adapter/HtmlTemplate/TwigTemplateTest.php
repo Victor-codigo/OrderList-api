@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\HtmlTemplate;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\HtmlTemplate\TwigTemplate;
 use Common\Domain\HtmlTemplate\Exception\TemplateCantBeFoundException;
 use Common\Domain\HtmlTemplate\Exception\TemplateRenderingException;
@@ -31,7 +32,7 @@ class TwigTemplateTest extends TestCase
         $this->object = new TwigTemplate($this->twig);
     }
 
-    /** @test */
+    #[Test]
     public function renderTemplateNoParamsToPass(): void
     {
         $renderReturn = 'template code';
@@ -46,7 +47,7 @@ class TwigTemplateTest extends TestCase
         $this->assertEquals($renderReturn, $return);
     }
 
-    /** @test */
+    #[Test]
     public function renderTemplateWithParamsToPass(): void
     {
         $renderReturn = 'template code';
@@ -62,7 +63,7 @@ class TwigTemplateTest extends TestCase
         $this->assertEquals($renderReturn, $return);
     }
 
-    /** @test */
+    #[Test]
     public function renderTemplateSyntaxException(): void
     {
         $renderReturn = 'template code';
@@ -79,7 +80,7 @@ class TwigTemplateTest extends TestCase
         $this->assertEquals($renderReturn, $return);
     }
 
-    /** @test */
+    #[Test]
     public function renderTemplateLoadException(): void
     {
         $renderReturn = 'template code';
@@ -96,7 +97,7 @@ class TwigTemplateTest extends TestCase
         $this->assertEquals($renderReturn, $return);
     }
 
-    /** @test */
+    #[Test]
     public function renderTemplateRunTimeException(): void
     {
         $renderReturn = 'template code';

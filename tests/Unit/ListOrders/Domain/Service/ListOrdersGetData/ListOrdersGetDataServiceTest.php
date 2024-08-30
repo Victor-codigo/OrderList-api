@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersGetData;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -92,7 +93,7 @@ class ListOrdersGetDataServiceTest extends TestCase
         $this->assertEquals($listOrderDataExpected->getCreatedOn()->format('Y-m-d H:i:s'), $listOrderDataActual['created_on']);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetListOrdersDataOfAGroup(): void
     {
         $page = ValueObjectFactory::createPaginatorPage(1);
@@ -150,7 +151,7 @@ class ListOrdersGetDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetListOrdersDataListOrdersId(): void
     {
         $page = ValueObjectFactory::createPaginatorPage(1);
@@ -207,7 +208,7 @@ class ListOrdersGetDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetListOrdersDataListOrdersNameStartsWith(): void
     {
         $page = ValueObjectFactory::createPaginatorPage(1);
@@ -275,7 +276,7 @@ class ListOrdersGetDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetListOrdersDataProductNameStartsWith(): void
     {
         $page = ValueObjectFactory::createPaginatorPage(1);
@@ -343,7 +344,7 @@ class ListOrdersGetDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetListOrdersDataShopNameStartsWith(): void
     {
         $page = ValueObjectFactory::createPaginatorPage(1);
@@ -411,7 +412,7 @@ class ListOrdersGetDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingListOrdersDataGroupNotFound(): void
     {
         $page = ValueObjectFactory::createPaginatorPage(1);
@@ -460,7 +461,7 @@ class ListOrdersGetDataServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingListOrdersDataListOrdersIdNotFound(): void
     {
         $page = ValueObjectFactory::createPaginatorPage(1);
@@ -509,7 +510,7 @@ class ListOrdersGetDataServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingListOrdersDataListOrdersNameNotFound(): void
     {
         $page = ValueObjectFactory::createPaginatorPage(1);
@@ -568,7 +569,7 @@ class ListOrdersGetDataServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingListOrdersDataProductNameNotFound(): void
     {
         $page = ValueObjectFactory::createPaginatorPage(1);
@@ -627,7 +628,7 @@ class ListOrdersGetDataServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingListOrdersShopNameNotFound(): void
     {
         $page = ValueObjectFactory::createPaginatorPage(1);

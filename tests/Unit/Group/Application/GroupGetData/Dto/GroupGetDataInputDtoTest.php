@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupGetData\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -32,7 +33,7 @@ class GroupGetDataInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateTheInput(): void
     {
         $object = new GroupGetDataInputDto($this->user, self::GROUPS_ID);
@@ -41,7 +42,7 @@ class GroupGetDataInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdIsNull(): void
     {
         $object = new GroupGetDataInputDto($this->user, null);
@@ -50,7 +51,7 @@ class GroupGetDataInputDtoTest extends TestCase
         $this->assertEquals(['groups_id' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdIsEmpty(): void
     {
         $object = new GroupGetDataInputDto($this->user, []);
@@ -59,7 +60,7 @@ class GroupGetDataInputDtoTest extends TestCase
         $this->assertEquals(['groups_id' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdAreWrong(): void
     {
         $groupsId = self::GROUPS_ID;

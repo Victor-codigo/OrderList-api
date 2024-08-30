@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupUserAdd;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Array\Roles;
@@ -177,7 +178,7 @@ class GroupUserAddServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldAddTheUsersToTheGroup(): void
     {
         $usersId = [
@@ -196,7 +197,7 @@ class GroupUserAddServiceTest extends TestCase
         $this->assertUserGroupIsEqualToUserGroup($expectUsersGroup, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldAddOnlyOneUserToTheGroup(): void
     {
         $usersId = [
@@ -215,7 +216,7 @@ class GroupUserAddServiceTest extends TestCase
         $this->assertUserGroupIsEqualToUserGroup($expectUsersGroup, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldNotAddUsersToTheGroupAllUsersAreAlreadyAdded(): void
     {
         $usersId = [
@@ -231,7 +232,7 @@ class GroupUserAddServiceTest extends TestCase
         $this->object->__invoke($groupUserAddDto);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupDoesNotExists(): void
     {
         $usersId = [
@@ -260,7 +261,7 @@ class GroupUserAddServiceTest extends TestCase
         return Group::fromPrimitives(self::GROUP_TYPE_USER_ID, 'GroupTwo', GROUP_TYPE::USER, 'This is a group of one user', 'image_of_group_type_user');
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupTypeUsers(): void
     {
         $usersId = [
@@ -285,7 +286,7 @@ class GroupUserAddServiceTest extends TestCase
         $this->object->__invoke($groupUserAddDto);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDatabaseErrorConnection(): void
     {
         $usersId = [
@@ -302,7 +303,7 @@ class GroupUserAddServiceTest extends TestCase
         $this->object->__invoke($groupUserAddDto);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupHasReachItMaximumNumberOfUsers100(): void
     {
         $usersId = [

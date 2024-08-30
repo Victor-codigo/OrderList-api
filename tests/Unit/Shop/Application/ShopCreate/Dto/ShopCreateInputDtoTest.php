@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Application\ShopCreate\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
@@ -58,7 +59,7 @@ class ShopCreateInputDtoTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $groupId = self::GROUP_ID;
@@ -73,7 +74,7 @@ class ShopCreateInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $groupId = null;
@@ -88,7 +89,7 @@ class ShopCreateInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsWrong(): void
     {
         $groupId = 'group id wrong';
@@ -103,7 +104,7 @@ class ShopCreateInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsNull(): void
     {
         $groupId = self::GROUP_ID;
@@ -118,7 +119,7 @@ class ShopCreateInputDtoTest extends TestCase
         $this->assertEquals(['name' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsWrong(): void
     {
         $groupId = self::GROUP_ID;
@@ -133,7 +134,7 @@ class ShopCreateInputDtoTest extends TestCase
         $this->assertEquals(['name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailAddressIsWrong(): void
     {
         $groupId = self::GROUP_ID;
@@ -148,7 +149,7 @@ class ShopCreateInputDtoTest extends TestCase
         $this->assertEquals(['address' => [VALIDATION_ERRORS::REGEX_FAIL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailAddressIsNull(): void
     {
         $groupId = self::GROUP_ID;
@@ -163,7 +164,7 @@ class ShopCreateInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDescriptionWrong(): void
     {
         $groupId = self::GROUP_ID;
@@ -178,7 +179,7 @@ class ShopCreateInputDtoTest extends TestCase
         $this->assertEquals(['description' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDescriptionIsNull(): void
     {
         $groupId = self::GROUP_ID;
@@ -193,7 +194,7 @@ class ShopCreateInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageWrong(): void
     {
         $groupId = self::GROUP_ID;
@@ -208,7 +209,7 @@ class ShopCreateInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_NO_FILE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageIsNull(): void
     {
         $groupId = self::GROUP_ID;
@@ -223,7 +224,7 @@ class ShopCreateInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailAllParamsAreWrong(): void
     {
         $groupId = 'group id wrong';
@@ -245,7 +246,7 @@ class ShopCreateInputDtoTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopImageMimeTypeNotAllowed(): void
     {
         $groupId = self::GROUP_ID;
@@ -260,7 +261,7 @@ class ShopCreateInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_INVALID_MIME_TYPE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopImageSizeFormTooLarge(): void
     {
         $groupId = self::GROUP_ID;
@@ -276,7 +277,7 @@ class ShopCreateInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_IMAGE_TOO_LARGE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopImageSizeIniTooLarge(): void
     {
         $groupId = self::GROUP_ID;
@@ -292,7 +293,7 @@ class ShopCreateInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_INIT_SIZE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopImageNoUploaded(): void
     {
         $groupId = self::GROUP_ID;
@@ -307,7 +308,7 @@ class ShopCreateInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_NO_FILE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopImagePartiallyUploaded(): void
     {
         $groupId = self::GROUP_ID;
@@ -322,7 +323,7 @@ class ShopCreateInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_PARTIAL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopImageCantWrite(): void
     {
         $groupId = self::GROUP_ID;
@@ -337,7 +338,7 @@ class ShopCreateInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_CANT_WRITE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopImageErrorExtension(): void
     {
         $groupId = self::GROUP_ID;
@@ -352,7 +353,7 @@ class ShopCreateInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_EXTENSION]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopImageErrorTmpDir(): void
     {
         $groupId = self::GROUP_ID;

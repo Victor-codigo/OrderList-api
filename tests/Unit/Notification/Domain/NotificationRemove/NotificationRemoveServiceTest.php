@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Domain\NotificationRemove;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -48,7 +49,7 @@ class NotificationRemoveServiceTest extends TestCase
         ]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveNotifications(): void
     {
         $notifications = $this->getNotifications();
@@ -80,7 +81,7 @@ class NotificationRemoveServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingNotificationsNotFound(): void
     {
         $notifications = $this->getNotifications();
@@ -105,7 +106,7 @@ class NotificationRemoveServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingDatabaseErrorConnection(): void
     {
         $notifications = $this->getNotifications();

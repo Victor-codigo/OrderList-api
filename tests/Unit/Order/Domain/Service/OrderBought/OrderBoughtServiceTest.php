@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Domain\Service\OrderBought;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -51,16 +52,14 @@ class OrderBoughtServiceTest extends TestCase
         );
     }
 
-    private static function boughtDataProvider(): iterable
+    public static function boughtDataProvider(): iterable
     {
         yield [true];
         yield [false];
     }
 
-    /**
-     * @test
-     */
     #[DataProvider('boughtDataProvider')]
+    #[Test]
     public function itShouldSetBought(bool $bought): void
     {
         $input = new OrderBoughtDto(
@@ -100,9 +99,7 @@ class OrderBoughtServiceTest extends TestCase
         $this->assertEquals($this->order, $return);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function itShouldFAilSettingBoughtOrderNotFound(): void
     {
         $input = new OrderBoughtDto(

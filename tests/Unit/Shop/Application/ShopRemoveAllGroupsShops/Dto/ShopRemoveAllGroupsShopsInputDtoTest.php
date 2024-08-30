@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Application\ShopRemoveAllGroupsShops\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -26,7 +27,7 @@ class ShopRemoveAllGroupsShopsInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $object = new ShopRemoveAllGroupsShopsInputDto(
@@ -43,7 +44,7 @@ class ShopRemoveAllGroupsShopsInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdAreEmpty(): void
     {
         $object = new ShopRemoveAllGroupsShopsInputDto(
@@ -57,7 +58,7 @@ class ShopRemoveAllGroupsShopsInputDtoTest extends TestCase
         $this->assertEquals(['groups_id_empty' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdAreWrong(): void
     {
         $object = new ShopRemoveAllGroupsShopsInputDto(
@@ -75,7 +76,7 @@ class ShopRemoveAllGroupsShopsInputDtoTest extends TestCase
         $this->assertEquals(['groups_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSystemKeyIsEmpty(): void
     {
         $object = new ShopRemoveAllGroupsShopsInputDto(

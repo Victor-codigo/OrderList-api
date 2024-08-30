@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserRegister\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -26,7 +27,7 @@ class UserRegisterInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function validationWorks(): void
     {
         $this->object = UserRegisterInputDto::create(
@@ -42,7 +43,7 @@ class UserRegisterInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function validationEmailMissing(): void
     {
         $this->object = UserRegisterInputDto::create(
@@ -58,7 +59,7 @@ class UserRegisterInputDtoTest extends TestCase
         $this->assertSame(['email' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationEmailWrong(): void
     {
         $this->object = UserRegisterInputDto::create(
@@ -74,7 +75,7 @@ class UserRegisterInputDtoTest extends TestCase
         $this->assertSame(['email' => [VALIDATION_ERRORS::EMAIL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationPasswordMissing(): void
     {
         $this->object = UserRegisterInputDto::create(
@@ -90,7 +91,7 @@ class UserRegisterInputDtoTest extends TestCase
         $this->assertEquals(['password' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationPasswordWrong(): void
     {
         $this->object = UserRegisterInputDto::create(
@@ -106,7 +107,7 @@ class UserRegisterInputDtoTest extends TestCase
         $this->assertEquals(['password' => [VALIDATION_ERRORS::STRING_TOO_SHORT]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationNameMissing(): void
     {
         $this->object = UserRegisterInputDto::create(
@@ -122,7 +123,7 @@ class UserRegisterInputDtoTest extends TestCase
         $this->assertEquals(['name' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationNameWrong(): void
     {
         $this->object = UserRegisterInputDto::create(
@@ -138,7 +139,7 @@ class UserRegisterInputDtoTest extends TestCase
         $this->assertEquals(['name' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::STRING_TOO_SHORT]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationRolesMissing(): void
     {
         $this->object = UserRegisterInputDto::create(
@@ -154,7 +155,7 @@ class UserRegisterInputDtoTest extends TestCase
         $this->assertEquals(['roles' => [VALIDATION_ERRORS::NOT_NULL, VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function validationRolesWrong(): void
     {
         $this->object = UserRegisterInputDto::create(

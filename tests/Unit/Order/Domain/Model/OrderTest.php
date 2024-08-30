@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Domain\Model;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use ListOrders\Domain\Model\ListOrders;
 use Order\Domain\Model\Order;
@@ -36,7 +37,7 @@ class OrderTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCloneOrderWithNewId(): void
     {
         $orderNewId = ValueObjectFactory::createIdentifier('order new id');

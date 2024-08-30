@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Adapter\Database\Orm\Doctrine\Repository;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
@@ -68,7 +69,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSaveTheShopInDatabase(): void
     {
         $shopNew = $this->getNewShop();
@@ -79,7 +80,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         $this->assertSame($shopNew, $shopSaved);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopIdAlreadyExists(): void
     {
         $this->expectException(DBUniqueConstraintException::class);
@@ -87,7 +88,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         $this->object->save($this->getExistsShop());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSavingDataBaseError(): void
     {
         $this->expectException(DBConnectionException::class);
@@ -103,7 +104,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         $this->object->save($this->getNewShop());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveTheShop(): void
     {
         $shop = $this->getExistsShop();
@@ -115,7 +116,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         $this->assertEmpty($shopRemoved);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingTheShopErrorConnection(): void
     {
         $this->expectException(DBConnectionException::class);
@@ -133,7 +134,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         $this->object->remove([$group]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAllShopsOfAGroupOrderAsc(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -153,7 +154,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAllShopsOfAGroupOrderDesc(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -173,7 +174,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetShopsOfAGroupByShopIdOrderAsc(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -198,7 +199,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAllShopsOfAGroupByProductId(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -219,7 +220,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAllShopsOfGroupByShopIdANdProductId(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -239,7 +240,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetShopsOfAGroupByName(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -260,7 +261,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAllShopsOfAGroupThatNameStartsWith(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -285,7 +286,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAllShopsOfAGroupThatNameEndsWith(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -307,7 +308,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetAllShopsOfAGroupAndThatContains(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -332,7 +333,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingAllShopsOfAGroupNotFound(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('fc4f5962-02d1-4d80-b3ae-8aeffbcb6268');
@@ -341,7 +342,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         $this->object->findShopsOrFail($groupId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindAllShopsOfAGroups(): void
     {
         $groupsId = [
@@ -357,7 +358,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         $this->assertEquals($expect, iterator_to_array($return));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoShopsFoundInGroups(): void
     {
         $groupsId = [
@@ -368,7 +369,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         $this->object->findGroupsShopsOrFail($groupsId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingShopsOfAGroupByNameNotFound(): void
     {
         $shopName = ValueObjectFactory::createNameWithSpaces('name not found');
@@ -378,7 +379,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         $this->object->findShopByShopNameOrFail($groupId, $shopName, true);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingShopNameFilterNotFound(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -392,7 +393,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         $this->object->findShopByShopNameFilterOrFail($groupId, $shopNameFilter);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetFirstLetterOfAllShopsInAGroup(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -403,7 +404,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         $this->assertEquals($expected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGetFirstLetterOfAllShopsInAGroupNoShops(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID_NO_SHOPS);

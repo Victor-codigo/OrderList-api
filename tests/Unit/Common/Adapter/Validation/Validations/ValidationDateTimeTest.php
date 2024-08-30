@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation\Validations;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
@@ -19,7 +20,7 @@ class ValidationDateTimeTest extends TestCase
         $this->object = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function validateDateOk(): void
     {
         $return = $this->object
@@ -34,7 +35,7 @@ class ValidationDateTimeTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateDateError(): void
     {
         $return = $this->object
@@ -49,7 +50,7 @@ class ValidationDateTimeTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateDateTimeOk(): void
     {
         $return = $this->object
@@ -64,7 +65,7 @@ class ValidationDateTimeTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateDateTimeError(): void
     {
         $return = $this->object
@@ -79,7 +80,7 @@ class ValidationDateTimeTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateTimeOk(): void
     {
         $return = $this->object
@@ -94,7 +95,7 @@ class ValidationDateTimeTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateTimeError(): void
     {
         $return = $this->object
@@ -109,7 +110,7 @@ class ValidationDateTimeTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateTimeZoneOk(): void
     {
         $return = $this->object
@@ -124,7 +125,7 @@ class ValidationDateTimeTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateTimeZoneError(): void
     {
         $return = $this->object
@@ -139,7 +140,7 @@ class ValidationDateTimeTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateTimeZoneRestrictionAreaError(): void
     {
         $return = $this->object

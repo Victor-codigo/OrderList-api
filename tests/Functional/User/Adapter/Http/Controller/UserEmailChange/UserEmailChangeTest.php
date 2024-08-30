@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserEmailChange;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -25,7 +26,7 @@ class UserEmailChangeTest extends WebClientTestCase
         parent::setUp();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheEmail(): void
     {
         $emailNew = 'new.email@host.com';
@@ -54,7 +55,7 @@ class UserEmailChangeTest extends WebClientTestCase
         $this->assertEquals($emailNew, $user->getEmail()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailEmailIsNull(): void
     {
         $emailNew = null;
@@ -78,7 +79,7 @@ class UserEmailChangeTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailEmailNotValid(): void
     {
         $emailNew = 'new.email@host';
@@ -102,7 +103,7 @@ class UserEmailChangeTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordIsNull(): void
     {
         $emailNew = 'new.email@host.com';
@@ -126,7 +127,7 @@ class UserEmailChangeTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordIsTooShort(): void
     {
         $emailNew = 'new.email@host.com';
@@ -150,7 +151,7 @@ class UserEmailChangeTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordIsTooLong(): void
     {
         $emailNew = 'new.email@host.com';
@@ -174,7 +175,7 @@ class UserEmailChangeTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordIsWrong(): void
     {
         $emailNew = 'new.email@host.com';

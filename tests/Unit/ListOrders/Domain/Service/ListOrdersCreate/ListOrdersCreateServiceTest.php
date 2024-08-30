@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersCreate;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -55,7 +56,7 @@ class ListOrdersCreateServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAListOrders(): void
     {
         $listOrders = $this->getListOrders();
@@ -79,7 +80,7 @@ class ListOrdersCreateServiceTest extends TestCase
         $this->assertListOrderIsOk([$listOrders], [$return]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAListOrdersDatabaseErrorUniqueConstraint(): void
     {
         $listOrders = $this->getListOrders();
@@ -103,7 +104,7 @@ class ListOrdersCreateServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAListOrdersDatabaseError(): void
     {
         $listOrders = $this->getListOrders();

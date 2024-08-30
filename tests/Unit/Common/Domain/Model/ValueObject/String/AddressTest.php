@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Address;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -29,7 +30,7 @@ class AddressTest extends TestCase
         return new Address($address);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $address = $this->createAddress(self::VALID_ADDRESS);
@@ -38,7 +39,7 @@ class AddressTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateIsNull(): void
     {
         $address = $this->createAddress(null);
@@ -47,7 +48,7 @@ class AddressTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFail(): void
     {
         $address = $this->createAddress('C\ igual=');
@@ -56,7 +57,7 @@ class AddressTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::REGEX_FAIL], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailMoreThan100Characters(): void
     {
         $address = $this->createAddress(str_pad('', 101, 'p'));

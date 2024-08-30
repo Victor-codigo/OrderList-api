@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\GetProductShopPrice;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -101,7 +102,7 @@ class GetProductShopPriceServiceTest extends TestCase
         $this->assertEquals($productExpected->getUnit()->getValue()->value, $productActual['unit']);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductsPrices(): void
     {
         $productsExpected = $this->getProductsPrice();
@@ -128,7 +129,7 @@ class GetProductShopPriceServiceTest extends TestCase
         $this->assertProductShopIsOk($productsExpected[0], $return[0]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGetProductsPricesProductNotFound(): void
     {
         $input = new GetProductShopPriceDto(

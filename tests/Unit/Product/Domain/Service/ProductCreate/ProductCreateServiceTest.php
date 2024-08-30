@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ProductCreate;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\FileUpload\Exception\FileUploadException;
@@ -67,7 +68,7 @@ class ProductCreateServiceTest extends TestCase
         return true;
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAProductAllData(): void
     {
         $productDescription = 'product 1 description';
@@ -117,7 +118,7 @@ class ProductCreateServiceTest extends TestCase
         $this->assertEquals(self::IMAGE_UPLOADED_FILE_NAME, $return->getImage()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAProductDescriptionIsNull(): void
     {
         $productDescription = null;
@@ -167,7 +168,7 @@ class ProductCreateServiceTest extends TestCase
         $this->assertEquals(self::IMAGE_UPLOADED_FILE_NAME, $return->getImage()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAProductImageIsNull(): void
     {
         $productDescription = 'product 1 description';
@@ -210,7 +211,7 @@ class ProductCreateServiceTest extends TestCase
         $this->assertNull($return->getImage()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailProductNameAlreadyExists(): void
     {
         $productDescription = 'product 1 description';
@@ -246,7 +247,7 @@ class ProductCreateServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFileUploadException(): void
     {
         $productDescription = 'product 1 description';
@@ -285,7 +286,7 @@ class ProductCreateServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSaveError(): void
     {
         $productDescription = 'product 1 description';

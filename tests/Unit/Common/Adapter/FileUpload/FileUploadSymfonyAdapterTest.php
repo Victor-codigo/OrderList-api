@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\FileUpload;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\FileUpload\BuiltInFunctionsReturn;
 use Common\Adapter\FileUpload\FileUploadSymfonyAdapter;
 use Common\Domain\Exception\LogicException;
@@ -52,7 +53,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
         BuiltInFunctionsReturn::$unlink = null;
     }
 
-    /** @test */
+    #[Test]
     public function istShouldThrowLogicExceptionGettingTheFileName(): void
     {
         $this->expectException(LogicException::class);
@@ -60,7 +61,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
         $this->object->getFileName();
     }
 
-    /** @test */
+    #[Test]
     public function istShouldGettingTheFileName(): void
     {
         $pathToSaveFile = 'path/to/save/file';
@@ -107,7 +108,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
             ->willReturn($safeFileName);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldUploadTheFile(): void
     {
         $pathToSaveFile = 'path/to/save/file';
@@ -122,7 +123,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
         $this->object->__invoke($this->file, $pathToSaveFile);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldUploadTheFileAndRemoveFileToReplace(): void
     {
         $pathToSaveFile = 'path/to/save/file';
@@ -140,7 +141,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
         $this->object->__invoke($this->file, $pathToSaveFile, $pathToReplaceFile);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldUploadTheFileAndRemoveFileToReplaceFileToReplaceNotExists(): void
     {
         $pathToSaveFile = 'path/to/save/file';
@@ -158,7 +159,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
         $this->object->__invoke($this->file, $pathToSaveFile, $pathToReplaceFile);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldThrowFileUploadReplaceException(): void
     {
         $pathToSaveFile = 'path/to/save/file';
@@ -198,7 +199,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
         $this->object->__invoke($this->file, $pathToSaveFile, $pathToReplaceFile);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldThrowFileUploadCanNotWriteException(): void
     {
         $pathToSaveFile = 'path/to/save/file';
@@ -221,7 +222,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
         $this->object->__invoke($this->file, $pathToSaveFile);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldThrowFileUploadExtensionFileException(): void
     {
         $pathToSaveFile = 'path/to/save/file';
@@ -244,7 +245,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
         $this->object->__invoke($this->file, $pathToSaveFile);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldThrowFileUploadSizeException(): void
     {
         $pathToSaveFile = 'path/to/save/file';
@@ -267,7 +268,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
         $this->object->__invoke($this->file, $pathToSaveFile);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldThrowFileUploadIniSizeException(): void
     {
         $pathToSaveFile = 'path/to/save/file';
@@ -290,7 +291,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
         $this->object->__invoke($this->file, $pathToSaveFile);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldThrowFileUploadNoFileException(): void
     {
         $pathToSaveFile = 'path/to/save/file';
@@ -313,7 +314,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
         $this->object->__invoke($this->file, $pathToSaveFile);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldThrowFileUploadTmpDirFileException(): void
     {
         $pathToSaveFile = 'path/to/save/file';
@@ -336,7 +337,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
         $this->object->__invoke($this->file, $pathToSaveFile);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldThrowFileUploadPartialFileException(): void
     {
         $pathToSaveFile = 'path/to/save/file';
@@ -359,7 +360,7 @@ class FileUploadSymfonyAdapterTest extends TestCase
         $this->object->__invoke($this->file, $pathToSaveFile);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldThrowFileUploadException(): void
     {
         $pathToSaveFile = 'path/to/save/file';

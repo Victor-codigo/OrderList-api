@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserEmailChange\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -25,7 +26,7 @@ class UserEmailChangeInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $userEmail = '';
@@ -42,7 +43,7 @@ class UserEmailChangeInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailEmailIsNull(): void
     {
         $userEmail = '';
@@ -59,7 +60,7 @@ class UserEmailChangeInputDtoTest extends TestCase
         $this->assertEquals(['email' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailEmailNotValid(): void
     {
         $userEmail = '';
@@ -76,7 +77,7 @@ class UserEmailChangeInputDtoTest extends TestCase
         $this->assertEquals(['email' => [VALIDATION_ERRORS::EMAIL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordIsNull(): void
     {
         $userEmail = '';
@@ -93,7 +94,7 @@ class UserEmailChangeInputDtoTest extends TestCase
         $this->assertEquals(['password' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordNIsTooShort(): void
     {
         $userEmail = '';
@@ -110,7 +111,7 @@ class UserEmailChangeInputDtoTest extends TestCase
         $this->assertEquals(['password' => [VALIDATION_ERRORS::STRING_TOO_SHORT]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordIsTooLong(): void
     {
         $userEmail = '';

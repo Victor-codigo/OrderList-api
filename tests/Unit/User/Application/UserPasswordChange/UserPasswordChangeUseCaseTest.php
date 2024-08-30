@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserPasswordChange;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -48,7 +49,7 @@ class UserPasswordChangeUseCaseTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldChangeThePassword(): void
     {
         $userId = 'user id';
@@ -96,7 +97,7 @@ class UserPasswordChangeUseCaseTest extends TestCase
         $this->assertTrue($return->success);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailChangeThePasswordNotificationError(): void
     {
         $userId = 'user id';

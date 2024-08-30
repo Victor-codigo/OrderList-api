@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Order\Adapter\Http\Controller\OrderRemove;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +22,7 @@ class OrderRemoveControllerTest extends WebClientTestCase
         'a0b4760a-9037-477a-8b84-d059ae5ee7e9',
     ];
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveOrders(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -48,7 +49,7 @@ class OrderRemoveControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingOrdersGroupIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -70,7 +71,7 @@ class OrderRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingOrdersGroupIdIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -92,7 +93,7 @@ class OrderRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingOrdersOrdersAreEmpty(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -114,7 +115,7 @@ class OrderRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank'], $responseContent->errors->orders_empty);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingOrdersOrdersAreWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -141,7 +142,7 @@ class OrderRemoveControllerTest extends WebClientTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingUserDoesNotBelongToTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();
@@ -163,7 +164,7 @@ class OrderRemoveControllerTest extends WebClientTestCase
         $this->assertEquals('You not belong to the group', $responseContent->errors->permissions);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingOrdersNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedUser();

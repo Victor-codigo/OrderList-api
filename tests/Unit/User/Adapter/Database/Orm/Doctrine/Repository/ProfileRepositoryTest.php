@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Database\Orm\Doctrine\Repository;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -26,7 +27,7 @@ class ProfileRepositoryTest extends DataBaseTestCase
         $this->object = $this->entityManager->getRepository(Profile::class);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnThreeProfiles(): void
     {
         $usersId = [
@@ -50,7 +51,7 @@ class ProfileRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoIdsPassed(): void
     {
         $this->expectException(DBNotFoundException::class);
@@ -58,7 +59,7 @@ class ProfileRepositoryTest extends DataBaseTestCase
         $this->object->findProfilesOrFail([]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNotFoundIds(): void
     {
         $this->expectException(DBNotFoundException::class);

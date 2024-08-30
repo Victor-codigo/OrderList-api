@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Application\OrderBought;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -24,10 +25,10 @@ class OrderBoughtInputDtoTest extends TestCase
         parent::setUp();
 
         $this->validator = new ValidationChain();
-        self::userSession = $this->createMock(UserShared::class);
+        self::$userSession = $this->createMock(UserShared::class);
     }
 
-    private static function inputDataProvider(): iterable
+    public static function inputDataProvider(): iterable
     {
         self::$userSession = self::createMock(UserShared::class);
 
@@ -45,10 +46,8 @@ class OrderBoughtInputDtoTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
     #[DataProvider('inputDataProvider')]
+    #[Test]
     public function itShouldValidate(UserShared $userSession, ?string $orderId, ?string $groupId, ?bool $bought): void
     {
         $object = new OrderBoughtInputDto($userSession, $orderId, $groupId, $bought);
@@ -57,7 +56,7 @@ class OrderBoughtInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingOrderIdIsNull(): void
     {
         $orderId = null;
@@ -69,7 +68,7 @@ class OrderBoughtInputDtoTest extends TestCase
         $this->assertEquals(['order_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingOrderIdIsWrong(): void
     {
         $orderId = 'wrong id';
@@ -81,7 +80,7 @@ class OrderBoughtInputDtoTest extends TestCase
         $this->assertEquals(['order_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingGroupIdIsNull(): void
     {
         $orderId = '7de5b898-5e5a-4394-9239-fb45f453f63e';
@@ -93,7 +92,7 @@ class OrderBoughtInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingGroupIdIsWrong(): void
     {
         $orderId = '7de5b898-5e5a-4394-9239-fb45f453f63e';

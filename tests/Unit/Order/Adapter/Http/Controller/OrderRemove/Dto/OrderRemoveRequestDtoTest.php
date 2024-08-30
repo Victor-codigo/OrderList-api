@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Adapter\Http\Controller\OrderRemove\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Order\Adapter\Http\Controller\OrderRemove\Dto\OrderRemoveRequestDto;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +23,7 @@ class OrderRemoveRequestDtoTest extends TestCase
         parent::setUp();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetOrdersIdToNullWhenRequestOrdersIsNull(): void
     {
         $content = [
@@ -36,7 +37,7 @@ class OrderRemoveRequestDtoTest extends TestCase
         $this->assertEquals(self::GROUP_ID, $object->groupId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetOrdersIdToEqualOfTheRequest(): void
     {
         $content = [
@@ -50,7 +51,7 @@ class OrderRemoveRequestDtoTest extends TestCase
         $this->assertEquals(self::GROUP_ID, $object->groupId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetOrdersIdToOnly100(): void
     {
         $ordersId = array_fill(0, 100, self::ORDERS_ID[0]);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Domain\Service\UserFirstLogin;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
@@ -53,7 +54,7 @@ class UserFirstLoginServiceTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldLeaveItIsNotFirstLogin(): void
     {
         $input = new UserFirstLoginDto($this->user);
@@ -74,7 +75,7 @@ class UserFirstLoginServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCouldNotCreateUserGroup(): void
     {
         $groupName = ValueObjectFactory::createNameWithSpaces('groupName');
@@ -105,7 +106,7 @@ class UserFirstLoginServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateTheUserGroupAndChangeRoleAndCreateNotification(): void
     {
         $userName = ValueObjectFactory::createNameWithSpaces('userName');
@@ -162,7 +163,7 @@ class UserFirstLoginServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNotificationUserRegistered(): void
     {
         $userName = ValueObjectFactory::createNameWithSpaces('userName');

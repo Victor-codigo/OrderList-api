@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Jwt;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Jwt\JwtFirebaseHS256Adapter;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -36,7 +37,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
             ->getMock();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldEncodeWithoutExpirationTime(): void
     {
         $return = $this->object->encode(self::PAYLOAD);
@@ -51,7 +52,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
         $this->assertEquals(self::PAYLOAD['param3'], $tokenDecoded->param3);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldEncodeWitExpirationTimeAt3600Seconds(): void
     {
         $expirationInSeconds = 60 * 60 * 24;
@@ -77,7 +78,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
         $this->assertEquals(self::PAYLOAD['param3'], $tokenDecoded->param3);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldDecodedTheToken(): void
     {
         $token = JWT::encode(self::PAYLOAD, self::SECRET_KEY, JwtFirebaseHS256Adapter::ALGORITHM);
@@ -91,7 +92,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
         $this->assertEquals(self::PAYLOAD['param3'], $tokenDecoded->param3);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldNotBeExpiredNotAttributeExpired(): void
     {
         $token = $this->object->encode(self::PAYLOAD);
@@ -109,7 +110,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
         $this->assertFalse($hasExpired);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldNotBeExpiredTimeToExpireIsTheSameAsTimeNow(): void
     {
         $expirationInSeconds = 60 * 60 * 24;
@@ -121,7 +122,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
             ->expects($matcher)
             ->method('getDateTime')
             ->willReturnCallback(function (?float $timestamp) use ($matcher, $dateTimeTokenExpiration, $dateTimeNow) {
-                $expectedNumCall = $matcher->getInvocationCount();
+                $expectedNumCall = $matcher->numberOfInvocations();
 
                 return match ([$expectedNumCall, $timestamp]) {
                     [1, null] => $dateTimeNow ,
@@ -140,7 +141,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
         $this->assertFalse($hasExpired);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldNotBeExpiredTimeToExpireIsHigherThanTimeNow(): void
     {
         $expirationInSeconds = 60 * 60 * 24;
@@ -155,7 +156,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
             ->expects($matcher)
             ->method('getDateTime')
             ->willReturnCallback(function (float $timestamp) use ($matcher, $dateTimeTokenExpiration, $dateTimeNow, $dateTimeTokenExpirationLessOne) {
-                $expectedNumCall = $matcher->getInvocationCount();
+                $expectedNumCall = $matcher->numberOfInvocations();
 
                 return match ([$expectedNumCall, $timestamp]) {
                     [1, null] => $dateTimeNow,
@@ -174,7 +175,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
         $this->assertFalse($hasExpired);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldBeExpiredTimeToExpireIsLowerThanTimeNow(): void
     {
         $expirationInSeconds = 60 * 60 * 24;
@@ -187,7 +188,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
             ->expects($matcher)
             ->method('getDateTime')
             ->willReturnCallback(function (float $timestamp) use ($matcher, $dateTimeNow, $dateTimeTokenExpiration, $dataTimeTokenExpirationPlusOne) {
-                $expectedNumCall = $matcher->getInvocationCount();
+                $expectedNumCall = $matcher->numberOfInvocations();
 
                 return match ([$expectedNumCall, $timestamp]) {
                     [1, null] => $dateTimeNow,

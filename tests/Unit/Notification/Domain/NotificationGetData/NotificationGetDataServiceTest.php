@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Domain\NotificationGetData;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -85,7 +86,7 @@ class NotificationGetDataServiceTest extends TestCase
         ]);
     }
 
-    private static function providerNotificationLanguage(): array
+    public static function providerNotificationLanguage(): array
     {
         return [
             ['en'],
@@ -93,10 +94,8 @@ class NotificationGetDataServiceTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
     #[DataProvider('providerNotificationLanguage')]
+    #[Test]
     public function itShouldGetNotificationData(string $providerLang): void
     {
         $notifications = $this->getNotifications();
@@ -172,7 +171,7 @@ class NotificationGetDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingNotificationDataNotificationsNotFound(): void
     {
         $page = ValueObjectFactory::createPaginatorPage(1);

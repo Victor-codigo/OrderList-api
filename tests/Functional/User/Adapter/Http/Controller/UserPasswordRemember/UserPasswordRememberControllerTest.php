@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserPasswordRemember;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -29,7 +30,7 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
         $this->client = $this->getNewClient();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldAcceptRequestAndSendAnEmailOfConfirmation(): void
     {
         $clientData = [
@@ -48,7 +49,7 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
         $this->assertEmailIsSent(self::EMAIL_ALREADY_EXISTS);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailEmailIsWrong(): void
     {
         $clientData = [
@@ -67,7 +68,7 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
         $this->assertEmailIsNotSent();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailEmailIsEmpty(): void
     {
         $clientData = [
@@ -86,7 +87,7 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
         $this->assertEmailIsNotSent();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailEmailIsNotSent(): void
     {
         $clientData = [
@@ -104,7 +105,7 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
         $this->assertEmailIsNotSent();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailEmailNotFound(): void
     {
         $clientData = [
@@ -122,7 +123,7 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
         $this->assertEmailIsNotSent();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordRememberUrlIsMissed(): void
     {
         $clientData = [
@@ -141,7 +142,7 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
         $this->assertEmailIsNotSent();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordRememberUrlIsBlank(): void
     {
         $clientData = [
@@ -160,7 +161,7 @@ class UserPasswordRememberControllerTest extends WebClientTestCase
         $this->assertEmailIsNotSent();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordRememberUrlIsWrong(): void
     {
         $clientData = [

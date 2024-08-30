@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ProductModify;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\FileUpload\Exception\File\FileException;
@@ -54,7 +55,7 @@ class ProductModifyServiceTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailProductNotFound(): void
     {
         $input = new ProductModifyDto(
@@ -111,7 +112,7 @@ class ProductModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyProductNameIsEqualToProducts(): void
     {
         $input = new ProductModifyDto(
@@ -183,7 +184,7 @@ class ProductModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailProductNameRepeated(): void
     {
         $input = new ProductModifyDto(
@@ -242,7 +243,7 @@ class ProductModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheProductNameImageAndDescription(): void
     {
         $input = new ProductModifyDto(
@@ -317,7 +318,7 @@ class ProductModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyNothing(): void
     {
         $input = new ProductModifyDto(
@@ -388,7 +389,7 @@ class ProductModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingProductUploadServiceException(): void
     {
         $input = new ProductModifyDto(
@@ -463,7 +464,7 @@ class ProductModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheProductNameDescriptionAndRemoveImage(): void
     {
         $input = new ProductModifyDto(
@@ -538,7 +539,7 @@ class ProductModifyServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingTheProductNameDescriptionAndRemoveImageErrorOnSave(): void
     {
         $input = new ProductModifyDto(

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Product\Adapter\Http\Controller\SetProductShopPrice;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -35,7 +36,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         UNIT_MEASURE_TYPE::KG,
     ];
 
-    /** @test */
+    #[Test]
     public function itShouldSetThePriceOfAProductForShops(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -72,7 +73,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetForAShopProductsPrices(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -109,7 +110,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetThePriceOfAProductForAShopProductNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();
@@ -134,7 +135,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertSame('Product, shop and price set', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetThePriceOfAProductForAShopShopIdNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();
@@ -159,7 +160,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertSame('Product, shop and price set', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetThePriceOfAProductForAShopProductsOrShopsIdNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();
@@ -184,7 +185,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertSame('Product, shop and price set', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetThePriceOfAProductForAShopProductNotInTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();
@@ -209,7 +210,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertSame('Product, shop and price set', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingThePriceOfAProductForAShopShopsPricesAndUnitsNotEquals(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -235,7 +236,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertEquals(['not_equal_to'], $responseContent->errors->products_or_shops_prices_units_not_equals);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingThePriceOfAProductForAShopShopsPricesAndUnitsDifferentNotEquals(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -261,7 +262,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertEquals(['not_equal_to'], $responseContent->errors->products_or_shops_prices_units_not_equals);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingThePriceOfAProductForAShopProductsOrShopsIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -287,7 +288,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertEquals(['not_equal_to'], $responseContent->errors->products_or_shops_prices_units_not_equals);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingThePriceOfAProductForAShopProductsOrShopsIdValueIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -313,7 +314,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertEquals([['not_blank', 'not_null'], ['not_blank', 'not_null']], $responseContent->errors->products_or_shops_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingThePriceOfAProductForAShopProductIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -339,7 +340,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertEquals(['not_null'], $responseContent->errors->product_id_and_shop_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingThePriceOfAProductForAShopProductIdWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -365,7 +366,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->product_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingThePriceOfAProductForAShopShopIdWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -391,7 +392,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->shop_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingThePriceOfAProductForAShopProductsOrShopsIdWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -417,7 +418,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertEquals([['uuid_invalid_characters']], $responseContent->errors->products_or_shops_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingThePriceOfAProductForAShopGroupIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -443,7 +444,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingThePriceOfAProductForAShopGroupIdWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -469,7 +470,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingThePriceOfAProductForAShopPriceIsNegative(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -495,7 +496,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertEquals([['positive_or_zero']], $responseContent->errors->prices);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingThePriceOfAProductForAShopUnitIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -521,7 +522,7 @@ class SetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertEquals([['choice_not_such'], ['choice_not_such']], $responseContent->errors->units);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSettingThePriceOfAProductForAShopUserNotBelongToTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();

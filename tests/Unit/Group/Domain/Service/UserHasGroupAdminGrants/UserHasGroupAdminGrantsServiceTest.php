@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\UserHasGroupAdminGrants;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Group\GROUP_ROLES;
@@ -53,7 +54,7 @@ class UserHasGroupAdminGrantsServiceTest extends TestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnThatIsAValidAdminOfTheGroupOneAdmin(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -74,7 +75,7 @@ class UserHasGroupAdminGrantsServiceTest extends TestCase
         $this->assertTrue($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnThatIsAValidAdminOfTheGroupManyAdmins(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
@@ -95,7 +96,7 @@ class UserHasGroupAdminGrantsServiceTest extends TestCase
         $this->assertTrue($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnThatIsNotAValidAdminOfTheGroup(): void
     {
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);

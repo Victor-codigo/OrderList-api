@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\ListOrders\Adapter\Http\Controller\ListOrdersGetFirstLetter;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,9 +18,8 @@ class ListOrdersGetFirstLetterControllerTest extends WebClientTestCase
     private const string METHOD = 'GET';
     private const string GROUP_EXISTS_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const string GROUP_ID_NO_LIST_ORDERS = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
-    private const string GROUP_ID_NOT_PERMISSIONS = '0dc4ec43-13c4-31cf-a3a3-aca81e96a4c8';
 
-    /** @test */
+    #[Test]
     public function itShouldGetListOrdersFirstLetterSavedInDataBase(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -43,7 +43,7 @@ class ListOrdersGetFirstLetterControllerTest extends WebClientTestCase
         $this->assertEquals($expected, $responseContent->data);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGetListOrdersFirstLetterSavedInDataBaseListOrdersNotFound(): void
     {
         $groupId = self::GROUP_ID_NO_LIST_ORDERS;
@@ -61,7 +61,7 @@ class ListOrdersGetFirstLetterControllerTest extends WebClientTestCase
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -81,7 +81,7 @@ class ListOrdersGetFirstLetterControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsWrong(): void
     {
         $groupId = 'wrong id';
@@ -104,7 +104,7 @@ class ListOrdersGetFirstLetterControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetListOrdersFirstLetterSavedInDataBaseNotPermissions(): void
     {
         $groupId = self::GROUP_EXISTS_ID;

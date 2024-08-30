@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupRemove\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -28,7 +29,7 @@ class GroupRemoveInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateGroupId(): void
     {
         $groupRemoveInputDto = new GroupRemoveInputDto($this->userSession, [self::GROUP_ID]);
@@ -37,7 +38,7 @@ class GroupRemoveInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateGroupsId(): void
     {
         $groupRemoveInputDto = new GroupRemoveInputDto($this->userSession, [self::GROUP_ID, self::GROUP_2_ID]);
@@ -46,7 +47,7 @@ class GroupRemoveInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdIsNull(): void
     {
         $groupRemoveInputDto = new GroupRemoveInputDto($this->userSession, null);
@@ -55,7 +56,7 @@ class GroupRemoveInputDtoTest extends TestCase
         $this->assertEquals(['groups_id_empty' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdAreWrong(): void
     {
         $groupRemoveInputDto = new GroupRemoveInputDto($this->userSession, ['id not valid', 'other not valid id']);

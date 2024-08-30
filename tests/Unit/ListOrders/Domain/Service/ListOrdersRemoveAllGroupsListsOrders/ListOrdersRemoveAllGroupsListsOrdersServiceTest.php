@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersRemoveAllGroupsListsOrders;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -162,7 +163,7 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
         ]];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveGroupListsOrdersAndSetListsOrdersUserId(): void
     {
         $listsOrdersToRemove = $this->getListsOrdersToRemove();
@@ -182,7 +183,7 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
             ->expects($listOrdersRepositoryMatcher)
             ->method('findGroupsListsOrdersOrFail')
             ->with($this->callback(function (array $groupsId) use ($listOrdersRepositoryMatcher, $input, $groupsIdToChangeUserId): bool {
-                match ($listOrdersRepositoryMatcher->getInvocationCount()) {
+                match ($listOrdersRepositoryMatcher->numberOfInvocations()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveListsOrders, $groupsId),
                     2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
                 };
@@ -222,7 +223,7 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
         $this->assertEquals($listsOrdersIdToChangeUserId, $return->listsOrdersIdChangedUserId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldOnlyChangeListsOrdersUsersId(): void
     {
         $listsOrdersToChangeUserId = $this->getListsOrdersToChangeUserId();
@@ -266,7 +267,7 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
         $this->assertEquals($listsOrdersIdToChangeUserId, $return->listsOrdersIdChangedUserId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldOnlyChangeListsOrdersUsersIdGroupsIdToRemoveNotFound(): void
     {
         $listsOrdersToChangeUserId = $this->getListsOrdersToChangeUserId();
@@ -284,14 +285,14 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
             ->expects($listOrdersRepositoryMatcher)
             ->method('findGroupsListsOrdersOrFail')
             ->with($this->callback(function (array $groupsId) use ($listOrdersRepositoryMatcher, $input, $groupsIdToChangeUserId): bool {
-                match ($listOrdersRepositoryMatcher->getInvocationCount()) {
+                match ($listOrdersRepositoryMatcher->numberOfInvocations()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveListsOrders, $groupsId),
                     2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
                 };
 
                 return true;
             }))
-            ->willReturnCallback(fn (): MockObject|PaginatorInterface => match ($listOrdersRepositoryMatcher->getInvocationCount()) {
+            ->willReturnCallback(fn (): MockObject|PaginatorInterface => match ($listOrdersRepositoryMatcher->numberOfInvocations()) {
                 1 => throw new DBNotFoundException(),
                 2 => $this->listsOrdersToChangeUserIdPaginator
             });
@@ -321,7 +322,7 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
         $this->assertEquals($listsOrdersIdToChangeUserId, $return->listsOrdersIdChangedUserId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveListsOrdersError(): void
     {
         $listsOrdersToRemove = $this->getListsOrdersToRemove();
@@ -361,7 +362,7 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldOnlyRemoveGroupListsOrders(): void
     {
         $listsOrdersToRemove = $this->getListsOrdersToRemove();
@@ -403,7 +404,7 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
         $this->assertEmpty($return->listsOrdersIdChangedUserId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldOnlyRemoveListsOrdersFromGroupsIdToRemoveListsOrdersToChangeUserIdGroupsIdNotFound(): void
     {
         $listsOrdersToRemove = $this->getListsOrdersToRemove();
@@ -420,14 +421,14 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
             ->expects($listOrdersRepositoryMatcher)
             ->method('findGroupsListsOrdersOrFail')
             ->with($this->callback(function (array $groupsId) use ($listOrdersRepositoryMatcher, $input, $groupsIdToChangeUserId): bool {
-                match ($listOrdersRepositoryMatcher->getInvocationCount()) {
+                match ($listOrdersRepositoryMatcher->numberOfInvocations()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveListsOrders, $groupsId),
                     2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
                 };
 
                 return true;
             }))
-            ->willReturnCallback(fn (): MockObject|PaginatorInterface => match ($listOrdersRepositoryMatcher->getInvocationCount()) {
+            ->willReturnCallback(fn (): MockObject|PaginatorInterface => match ($listOrdersRepositoryMatcher->numberOfInvocations()) {
                 1 => $this->listsOrdersToRemovePaginator,
                 2 => throw new DBNotFoundException()
             });
@@ -457,7 +458,7 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
         $this->assertEmpty($return->listsOrdersIdChangedUserId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailChangingListsOrdersUserId(): void
     {
         $listsOrdersToRemove = $this->getListsOrdersToRemove();
@@ -475,7 +476,7 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
             ->expects($listOrdersRepositoryMatcher)
             ->method('findGroupsListsOrdersOrFail')
             ->with($this->callback(function (array $groupsId) use ($listOrdersRepositoryMatcher, $input, $groupsIdToChangeUserId): bool {
-                match ($listOrdersRepositoryMatcher->getInvocationCount()) {
+                match ($listOrdersRepositoryMatcher->numberOfInvocations()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveListsOrders, $groupsId),
                     2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
                 };

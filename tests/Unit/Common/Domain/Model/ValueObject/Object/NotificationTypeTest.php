@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Object;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\NotificationType;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -22,7 +23,7 @@ class NotificationTypeTest extends TestCase
         $this->validation = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateTheNotificationType(): void
     {
         $object = new NotificationType(NOTIFICATION_TYPE::USER_REGISTERED);
@@ -31,7 +32,7 @@ class NotificationTypeTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailIsNull(): void
     {
         $object = new NotificationType(null);
@@ -40,7 +41,7 @@ class NotificationTypeTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailIsNotNotificationType(): void
     {
         $object = new NotificationType(new \stdClass());

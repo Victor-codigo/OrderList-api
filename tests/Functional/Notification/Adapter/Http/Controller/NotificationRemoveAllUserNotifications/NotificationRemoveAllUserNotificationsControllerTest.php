@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Notification\Adapter\Http\Controller\NotificationRemoveAllUserNotifications;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +30,7 @@ class NotificationRemoveAllUserNotificationsControllerTest extends WebClientTest
         parent::setUp();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveNotifications(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -52,7 +53,7 @@ class NotificationRemoveAllUserNotificationsControllerTest extends WebClientTest
         $this->assertEqualsCanonicalizing(self::NOTIFICATION_ID_TO_REMOVE, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoUserNotifications(): void
     {
         $client = $this->getNewClientAuthenticated('email.other_2.active@host.com', '123456');
@@ -69,7 +70,7 @@ class NotificationRemoveAllUserNotificationsControllerTest extends WebClientTest
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSystemKeyIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -89,7 +90,7 @@ class NotificationRemoveAllUserNotificationsControllerTest extends WebClientTest
         $this->assertEquals(['not_blank'], $responseContent->errors->system_key);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSystemKeyIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();

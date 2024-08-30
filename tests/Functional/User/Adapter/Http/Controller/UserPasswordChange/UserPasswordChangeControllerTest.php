@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserPasswordChange;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -23,7 +24,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
     private const string ID_USER_NOT_ACTIVE = 'bd2cbad1-6ccf-48e3-bb92-bc9961bc011e';
     private const string ID_USER_OTHER = 'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7';
 
-    /** @test */
+    #[Test]
     public function itShouldChangeTheUserPasswordUserSessionIsItself(): void
     {
         $clientData = [
@@ -50,7 +51,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         $this->assertEquals($userHasher->getPassword(), $userSaved->getpassword()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldChangeTheUserPasswordUserSessionIsAdmin(): void
     {
         $clientData = [
@@ -77,7 +78,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         $this->assertEquals($userHasher->getPassword(), $userSaved->getPassword()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailChangingOtherUserPasswordUserSessionIsNotAdmin(): void
     {
         $clientData = [
@@ -97,7 +98,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         $this->assertSame('You have not permissions', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDataNotSent(): void
     {
         $clientData = [];
@@ -122,7 +123,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         $this->assertEquals($errorExpected, $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailIdNotValid(): void
     {
         $clientData = [
@@ -149,7 +150,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         $this->assertEquals($errorExpected, $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordOldNotValid(): void
     {
         $clientData = [
@@ -176,7 +177,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         $this->assertEquals($errorExpected, $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordNewNotValid(): void
     {
         $clientData = [
@@ -203,7 +204,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         $this->assertEquals($errorExpected, $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordNewRepeatNotValid(): void
     {
         $clientData = [
@@ -230,7 +231,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         $this->assertEquals($errorExpected, $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailIdUserDoesNotExists(): void
     {
         $clientData = [
@@ -254,7 +255,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         $this->assertSame('It could not change password', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailIdUserPasswordIsWrong(): void
     {
         $clientData = [
@@ -278,7 +279,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         $this->assertSame('Password old is wrong', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailIdUserIsNotActive(): void
     {
         $clientData = [
@@ -302,7 +303,7 @@ class UserPasswordChangeControllerTest extends WebClientTestCase
         $this->assertSame('User is not active', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailIdUserPasswordNewAndRepeatNewAreNotEquals(): void
     {
         $clientData = [

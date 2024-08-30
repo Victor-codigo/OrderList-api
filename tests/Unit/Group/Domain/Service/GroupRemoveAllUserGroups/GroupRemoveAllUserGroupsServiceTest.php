@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupRemoveAllUserGroups;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -146,7 +147,7 @@ class GroupRemoveAllUserGroupsServiceTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveUserGroups(): void
     {
         $pageItems = ValueObjectFactory::createPaginatorPageItems(100);
@@ -209,7 +210,7 @@ class GroupRemoveAllUserGroupsServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldNotRemoveGroupsAndUsersNoGroupsFound(): void
     {
         $pageItems = ValueObjectFactory::createPaginatorPageItems(100);
@@ -250,7 +251,7 @@ class GroupRemoveAllUserGroupsServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGetAllGroupsUserToRemoveNotFoundException(): void
     {
         $pageItems = ValueObjectFactory::createPaginatorPageItems(100);
@@ -284,7 +285,7 @@ class GroupRemoveAllUserGroupsServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsNotFoundException(): void
     {
         $pageItems = ValueObjectFactory::createPaginatorPageItems(100);
@@ -323,7 +324,7 @@ class GroupRemoveAllUserGroupsServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserGroupsRemoveNotFoundException(): void
     {
         $pageItems = ValueObjectFactory::createPaginatorPageItems(100);

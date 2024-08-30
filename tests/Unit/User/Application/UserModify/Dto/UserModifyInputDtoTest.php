@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserModify\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -43,7 +44,7 @@ class UserModifyInputDtoTest extends TestCase
         BuiltInFunctionsReturn::$unlink = null;
     }
 
-    /** @test */
+    #[Test]
     public function itShouldBeValid(): void
     {
         $object = UserModifyInputDto::create(
@@ -59,7 +60,7 @@ class UserModifyInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldBeValidImageRemoveIsNull(): void
     {
         $object = UserModifyInputDto::create(
@@ -75,7 +76,7 @@ class UserModifyInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldBeValidImageRemoveIsTrue(): void
     {
         $object = UserModifyInputDto::create(
@@ -91,7 +92,7 @@ class UserModifyInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldBeValidImageIsNull(): void
     {
         $object = UserModifyInputDto::create(
@@ -107,7 +108,7 @@ class UserModifyInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoName(): void
     {
         $object = UserModifyInputDto::create(
@@ -123,7 +124,7 @@ class UserModifyInputDtoTest extends TestCase
         $this->assertEquals(['name' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsTooShort(): void
     {
         $object = UserModifyInputDto::create(
@@ -139,7 +140,7 @@ class UserModifyInputDtoTest extends TestCase
         $this->assertEquals(['name' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::STRING_TOO_SHORT]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsTooLarge(): void
     {
         $object = UserModifyInputDto::create(
@@ -155,7 +156,7 @@ class UserModifyInputDtoTest extends TestCase
         $this->assertEquals(['name' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsNotAlphanumeric(): void
     {
         $object = UserModifyInputDto::create(
@@ -171,7 +172,7 @@ class UserModifyInputDtoTest extends TestCase
         $this->assertEquals(['name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageMimeTypeNotAllowed(): void
     {
         $object = UserModifyInputDto::create(
@@ -187,7 +188,7 @@ class UserModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_INVALID_MIME_TYPE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageSizeFormTooLarge(): void
     {
         $object = UserModifyInputDto::create(
@@ -204,7 +205,7 @@ class UserModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_IMAGE_TOO_LARGE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageSizeIniTooLarge(): void
     {
         $object = UserModifyInputDto::create(
@@ -221,7 +222,7 @@ class UserModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_INIT_SIZE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageNoUploaded(): void
     {
         $object = UserModifyInputDto::create(
@@ -237,7 +238,7 @@ class UserModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_NO_FILE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImagePartilallyUploaded(): void
     {
         $object = UserModifyInputDto::create(
@@ -253,7 +254,7 @@ class UserModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_PARTIAL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageCantWrite(): void
     {
         $object = UserModifyInputDto::create(
@@ -269,7 +270,7 @@ class UserModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_CANT_WRITE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageErrorExtension(): void
     {
         $object = UserModifyInputDto::create(
@@ -285,7 +286,7 @@ class UserModifyInputDtoTest extends TestCase
         $this->assertEquals(['image' => [VALIDATION_ERRORS::FILE_UPLOAD_EXTENSION]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageErrorTmpDir(): void
     {
         $object = UserModifyInputDto::create(

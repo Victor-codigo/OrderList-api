@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Event\Exception;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Event\Exception\ExceptionEventSubscriber;
 use Common\Adapter\Http\Exception\HttpResponseException;
 use Common\Domain\Exception\DomainInternalErrorException;
@@ -50,7 +51,7 @@ class ExceptionEventSubscriberTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnAn404Error(): void
     {
         $exception = new NotFoundHttpException('NotFoundHttpException');
@@ -66,7 +67,7 @@ class ExceptionEventSubscriberTest extends TestCase
         $this->assertEquals(ExceptionEventSubscriber::ERROR_404_MESSAGE, $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnAn403Error(): void
     {
         $exception = new AccessDeniedHttpException('AccessDeniedHttpException');
@@ -82,7 +83,7 @@ class ExceptionEventSubscriberTest extends TestCase
         $this->assertEquals(ExceptionEventSubscriber::ERROR_403_MESSAGE, $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnAn500Error(): void
     {
         $exception = new DomainInternalErrorException('DomainInternalErrorException');
@@ -98,7 +99,7 @@ class ExceptionEventSubscriberTest extends TestCase
         $this->assertEquals(ExceptionEventSubscriber::ERROR_500_MESSAGE, $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnAnMethodNotAllowedError(): void
     {
         $exception = new MethodNotAllowedHttpException([], 'MethodNotAllowedHttpException');
@@ -114,7 +115,7 @@ class ExceptionEventSubscriberTest extends TestCase
         $this->assertEquals(ExceptionEventSubscriber::ERROR_METHOD_NOT_ALLOWED, $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnAnBadRequestHttpException(): void
     {
         $exception = new BadRequestHttpException('BadRequestHttpException');
@@ -130,7 +131,7 @@ class ExceptionEventSubscriberTest extends TestCase
         $this->assertEquals('BadRequestHttpException', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnHttpResponseExceptionThrownHttpResponseException(): void
     {
         $responseDto = $this->getResponseDto();
@@ -151,7 +152,7 @@ class ExceptionEventSubscriberTest extends TestCase
         $this->assertEquals((object) $responseDto->getErrors(), $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnHttpResponseExceptionThrownDomainExceptionOutput(): void
     {
         $expectedException = DomainExceptionOutputForTesting::fromMessage('DomainExceptionOutputForTesting');
@@ -169,7 +170,7 @@ class ExceptionEventSubscriberTest extends TestCase
         $this->assertEquals((object) $expectedException->getErrors(), $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnHttpResponseExceptionThrownNotADomainExceptionOutput(): void
     {
         $expectedException = new \Exception('Exception');

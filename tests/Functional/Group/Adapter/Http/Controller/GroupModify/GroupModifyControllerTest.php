@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupModify;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -63,7 +64,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         return new UploadedFile($path, $originalName, $mimeType, $error, true);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -90,7 +91,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertSame(self::GROUP_ID, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheGroupDescriptionIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -117,7 +118,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertSame(self::GROUP_ID, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheGroupImageIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -142,7 +143,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertSame(self::GROUP_ID, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheGroupImageRemoveIsTrue(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -170,7 +171,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertSame(self::GROUP_ID, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -197,7 +198,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertSame(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNotValid(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -224,7 +225,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertSame(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -251,7 +252,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertSame(['not_blank', 'not_null'], $responseContent->errors->name);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsNotValid(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -278,7 +279,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertSame(['alphanumeric_with_whitespace'], $responseContent->errors->name);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDescriptionIsTooLong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -305,7 +306,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertSame(['string_too_long'], $responseContent->errors->description);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserSessionIsNotAdminInTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();
@@ -332,7 +333,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertSame('Not permissions in this group', $responseContent->errors->permissions);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();
@@ -359,7 +360,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertSame('Group not found', $responseContent->errors->group_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupTypeIsUser(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -386,7 +387,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertSame('Not permissions in this group', $responseContent->errors->permissions);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageMimeTypeNotAllowed(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -413,7 +414,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertSame(['file_invalid_mime_type'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageSizeFormTooLarge(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -440,7 +441,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_form_size'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageSizeIniTooLarge(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -467,7 +468,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_init_size'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageNoUploaded(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -494,7 +495,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_no_file'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImagePartiallyUploaded(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -521,7 +522,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_partial'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageCantWrite(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -548,7 +549,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_cant_write'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageErrorExtension(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -575,7 +576,7 @@ class GroupModifyControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_extension'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageErrorTmpDir(): void
     {
         $client = $this->getNewClientAuthenticatedUser();

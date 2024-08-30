@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Notification\Adapter\Http\Controller\NotificationRemove;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,7 +35,7 @@ class NotificationRemoveControllerTest extends WebClientTestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveNotifications(): void
     {
         $notificationsId = $this->getNotificationsIds();
@@ -59,7 +60,7 @@ class NotificationRemoveControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveMaximumOf100Notifications(): void
     {
         $notificationsId = array_fill(0, 100, self::NOTIFICATION_ID_1);
@@ -83,7 +84,7 @@ class NotificationRemoveControllerTest extends WebClientTestCase
         $this->assertEquals($responseContent->data->id[0], self::NOTIFICATION_ID_1);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveNotificationsWrongIds(): void
     {
         $notificationsId = [
@@ -108,7 +109,7 @@ class NotificationRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->notifications_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveNotificationsNotFound(): void
     {
         $notificationsId = [
@@ -129,7 +130,7 @@ class NotificationRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveNotificationsNoGrantsToRemove(): void
     {
         $notificationsId = [
@@ -150,7 +151,7 @@ class NotificationRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveNotificationsNotAuthorized(): void
     {
         $notificationsId = [

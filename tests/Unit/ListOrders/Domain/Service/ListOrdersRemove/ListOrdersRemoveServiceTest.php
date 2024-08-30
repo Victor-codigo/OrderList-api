@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersRemove;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -64,7 +65,7 @@ class ListOrdersRemoveServiceTest extends TestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveListsOrders(): void
     {
         $listOrders = $this->getListOrders();
@@ -103,7 +104,7 @@ class ListOrdersRemoveServiceTest extends TestCase
         $this->assertEquals($listOrders, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveListsOrdersThatExists(): void
     {
         $listOrders = $this->getListOrders();
@@ -142,7 +143,7 @@ class ListOrdersRemoveServiceTest extends TestCase
         $this->assertEquals([$listOrders[0], $listOrders[2]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingListsOrdersNotFound(): void
     {
         $input = new ListOrdersRemoveDto(
@@ -176,7 +177,7 @@ class ListOrdersRemoveServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingListsOrdersRemoveError(): void
     {
         $listOrders = $this->getListOrders();

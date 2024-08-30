@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Object;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\UnitMeasure;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -22,7 +23,7 @@ class UnitMeasureTest extends TestCase
         $this->validation = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateTheUnitMeasureType(): void
     {
         $object = new UnitMeasure(UNIT_MEASURE_TYPE::UNITS);
@@ -31,7 +32,7 @@ class UnitMeasureTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateIsNull(): void
     {
         $object = new UnitMeasure(null);
@@ -40,7 +41,7 @@ class UnitMeasureTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::NOT_NULL], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailIsNotUnitMeasureType(): void
     {
         $object = new UnitMeasure(new \stdClass());

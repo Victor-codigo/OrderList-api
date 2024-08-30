@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupUserAdd;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -36,7 +37,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
         parent::setUp();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldAddByIdAllUsersToTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -60,7 +61,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertEquals(self::USER_TO_ADD_IDS, $responseContent->data->id);
     }
 
-    private static function providerUsersToAddByName(): array
+    public static function providerUsersToAddByName(): array
     {
         return [
             [
@@ -72,10 +73,8 @@ class GroupUserAddControllerTest extends WebClientTestCase
         ];
     }
 
-    /**
-     * @test
-     */
     #[DataProvider('providerUsersToAddByName')]
+    #[Test]
     public function itShouldAddByNameAllUsersToTheGroup(array $users): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -103,7 +102,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldAddOnlyTwoUsersToTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -127,7 +126,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertSame(self::USER_TO_ADD_IDS, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldAddAllUsersToTheGroupAdminIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -151,7 +150,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertEquals(self::USER_TO_ADD_IDS, (array) $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldAddAllUsersToTheGroupAdminIsFalse(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -175,7 +174,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertEquals(self::USER_TO_ADD_IDS, (array) $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -199,7 +198,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertSame(['group_id' => ['not_blank', 'not_null']], (array) $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNotValid(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -223,7 +222,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertSame(['group_id' => ['uuid_invalid_characters']], (array) $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNotExists(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -247,7 +246,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertSame(['group_not_found' => 'Group not found'], (array) $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -271,7 +270,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertSame(['users' => ['not_blank']], (array) $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersAreNotRegisteredOrActive(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -295,7 +294,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertSame(['users_validation' => 'Wrong users'], (array) $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersNameNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -319,7 +318,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertSame(['users_validation' => 'Wrong users'], (array) $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupTypeIsUser22(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -343,7 +342,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertSame(['permission' => 'Permissions denied'], (array) $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersIdAreNotValid(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -367,7 +366,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertSame(['users' => ['uuid_invalid_characters']], (array) $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUsersAreEmpty(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -391,7 +390,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertSame(['users' => ['not_blank']], (array) $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserIsNotAdminOfTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();
@@ -415,7 +414,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertSame(['permission' => 'Permissions denied'], (array) $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupUsersNumberExceeded100(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -439,7 +438,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertSame(['group_users_exceeded' => 'Group User number exceeded'], (array) $responseContent->errors);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUnauthorizedUser(): void
     {
         $client = $this->getNewClientAuthenticated('not valid user', 'password');

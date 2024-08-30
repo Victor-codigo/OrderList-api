@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserRemove;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +22,7 @@ class UserRemoveControllerTest extends WebClientTestCase
 
     private UserRemoveController $object;
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveTheUserSessionWithAllItsData(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -41,7 +42,7 @@ class UserRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(self::USER_ID, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveTheUserSessionHasNoGroupsNoNotifications(): void
     {
         $client = $this->getNewClientAuthenticated('email.other_2.active@host.com', '123456');
@@ -61,7 +62,7 @@ class UserRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(self::USER_ID_HAS_NO_GROUP, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserNotAuthorized(): void
     {
         $client = $this->getNewClientNoAuthenticated();

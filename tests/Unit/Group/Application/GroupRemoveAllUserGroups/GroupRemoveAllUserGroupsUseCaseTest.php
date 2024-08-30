@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupRemoveAllUserGroups;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
@@ -212,7 +213,7 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveGroupsAndSendNotifications(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
@@ -257,7 +258,7 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
         $this->assertEquals($expected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoGroupsFoundException(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
@@ -286,7 +287,7 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModuleNotificationError(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
@@ -329,7 +330,7 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSystemKeyIsNull(): void
     {
         $input = new GroupRemoveAllUserGroupsInputDto(
@@ -353,7 +354,7 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSystemKeyIsWrong(): void
     {
         $input = new GroupRemoveAllUserGroupsInputDto(

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupRemove;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +26,7 @@ class GroupRemoveControllerTest extends WebClientTestCase
         parent::setUp();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -46,7 +47,7 @@ class GroupRemoveControllerTest extends WebClientTestCase
         $this->assertSame([self::GROUP_ID, self::GROUP_2_ID], $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull22(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -67,7 +68,7 @@ class GroupRemoveControllerTest extends WebClientTestCase
         $this->assertSame(['not_blank'], $responseContent->errors->groups_id_empty);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNotValid(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -88,7 +89,7 @@ class GroupRemoveControllerTest extends WebClientTestCase
         $this->assertSame([['uuid_invalid_characters']], $responseContent->errors->groups_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -109,7 +110,7 @@ class GroupRemoveControllerTest extends WebClientTestCase
         $this->assertSame('Group not found', $responseContent->errors->group_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupTypeUser(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -130,7 +131,7 @@ class GroupRemoveControllerTest extends WebClientTestCase
         $this->assertSame('Not permissions in this group', $responseContent->errors->permissions);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserIdIsNotAdmin(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();

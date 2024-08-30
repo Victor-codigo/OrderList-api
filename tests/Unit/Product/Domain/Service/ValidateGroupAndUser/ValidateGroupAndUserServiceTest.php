@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ValidateGroupAndUser;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -29,7 +30,7 @@ class ValidateGroupAndUserServiceTest extends TestCase
         $this->object = new ValidateGroupAndUserService($this->moduleCommunication);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateTheGroupAndTheUser(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -59,7 +60,7 @@ class ValidateGroupAndUserServiceTest extends TestCase
         $this->object->__invoke($groupId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingTheGroupAndTheUserGotErrors(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
@@ -89,7 +90,7 @@ class ValidateGroupAndUserServiceTest extends TestCase
         $this->object->__invoke($groupId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValidatingTheGroupAndTheUserNoContent(): void
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');

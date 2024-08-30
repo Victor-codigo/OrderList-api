@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Product\Adapter\Http\Controller\ProductModify;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -64,7 +65,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         return new UploadedFile($path, $originalName, $mimeType, $error, true);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheProduct(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -94,7 +95,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         $this->assertSame(self::PRODUCT_ID, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheProductNameIsTheSame(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -124,7 +125,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         $this->assertSame(self::PRODUCT_ID, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheProductNameDescriptionImageAreNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -151,7 +152,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         $this->assertSame(self::PRODUCT_ID, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheProductImageRemoveIsTrue(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -178,7 +179,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         $this->assertSame(self::PRODUCT_ID, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingTheProductIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -208,7 +209,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         $this->assertSame(['not_blank', 'not_null'], $responseContent->errors->product_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingTheGroupIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -238,7 +239,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         $this->assertSame(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingTheProductNameIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -268,7 +269,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         $this->assertSame(['alphanumeric_with_whitespace'], $responseContent->errors->name);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingTheProductNameIsRepeated(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -298,7 +299,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         $this->assertSame('Product name repeated', $responseContent->errors->product_name_repeated);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingTheProductDescriptionIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -328,7 +329,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         $this->assertSame(['string_too_long'], $responseContent->errors->description);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingTheProductIdNotExists(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -359,7 +360,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         $this->assertSame('Product not found', $responseContent->errors->product_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingTheProductDoesNotBelongsGroupId(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -389,7 +390,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         $this->assertSame('Product not found', $responseContent->errors->product_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageMimeTypeNotAllowed(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -418,7 +419,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         $this->assertSame(['file_invalid_mime_type'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageSizeFormTooLarge(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -447,7 +448,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_form_size'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageSizeIniTooLarge(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -476,7 +477,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_init_size'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageNoUploaded(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -505,7 +506,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_no_file'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImagePartiallyUploaded(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -534,7 +535,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_partial'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageCantWrite(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -563,7 +564,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_cant_write'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageErrorExtension(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -592,7 +593,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_extension'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageErrorTmpDir(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -621,7 +622,7 @@ class ProductModifyControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_no_tmp_dir'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailModifyingUserNotBelongsToTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedAdmin();

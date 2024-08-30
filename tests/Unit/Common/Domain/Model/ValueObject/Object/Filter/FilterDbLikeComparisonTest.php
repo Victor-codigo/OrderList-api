@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Object\Filter;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\Filter\FilterDbLikeComparison;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -23,7 +24,7 @@ class FilterDbLikeComparisonTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateStarsWith(): void
     {
         $this->object = new FilterDbLikeComparison(FILTER_STRING_COMPARISON::STARTS_WITH);
@@ -33,7 +34,7 @@ class FilterDbLikeComparisonTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateEndsWith(): void
     {
         $this->object = new FilterDbLikeComparison(FILTER_STRING_COMPARISON::ENDS_WITH);
@@ -43,7 +44,7 @@ class FilterDbLikeComparisonTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateContainsWith(): void
     {
         $this->object = new FilterDbLikeComparison(FILTER_STRING_COMPARISON::CONTAINS);
@@ -53,7 +54,7 @@ class FilterDbLikeComparisonTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateEqualsWith(): void
     {
         $this->object = new FilterDbLikeComparison(FILTER_STRING_COMPARISON::EQUALS);
@@ -63,7 +64,7 @@ class FilterDbLikeComparisonTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFilterCanNotBeNull(): void
     {
         $this->object = new FilterDbLikeComparison(null);
@@ -73,7 +74,7 @@ class FilterDbLikeComparisonTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFilterNotValid(): void
     {
         $this->object = new FilterDbLikeComparison(new \stdClass());

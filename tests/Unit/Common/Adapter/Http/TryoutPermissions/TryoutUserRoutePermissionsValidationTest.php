@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Http\TryoutPermissions;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Http\TryoutPermissions\Exception\TryoutUserRoutePermissionsException;
 use Common\Adapter\Http\TryoutPermissions\TryoutUserRoutePermissionsValidation;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -26,7 +27,7 @@ class TryoutUserRoutePermissionsValidationTest extends TestCase
         $this->object = new TryoutUserRoutePermissionsValidation(self::USER_TRY_OUT_ID);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateCurrentUserIsNotTryoutUser(): void
     {
         $this->expectNotToPerformAssertions();
@@ -35,7 +36,7 @@ class TryoutUserRoutePermissionsValidationTest extends TestCase
         $this->object->__invoke($userCurrentId, self::ROUTE_VALID);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateCurrentUserIsTryoutUserRouteValid(): void
     {
         $this->expectNotToPerformAssertions();
@@ -44,7 +45,7 @@ class TryoutUserRoutePermissionsValidationTest extends TestCase
         $this->object->__invoke($userCurrentId, self::ROUTE_VALID);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCurrentUserIsTryoutUserRouteNotValid(): void
     {
         $userCurrentId = ValueObjectFactory::createIdentifier(self::USER_TRY_OUT_ID);

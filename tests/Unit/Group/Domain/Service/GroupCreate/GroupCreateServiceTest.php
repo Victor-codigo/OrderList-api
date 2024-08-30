@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupCreate;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
@@ -81,7 +82,7 @@ class GroupCreateServiceTest extends DataBaseTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateTheGroupTypeUser(): void
     {
         $groupCreateDto = $this->createGroupCreateDto($this->imageUploaded, GROUP_TYPE::USER);
@@ -116,7 +117,7 @@ class GroupCreateServiceTest extends DataBaseTestCase
         $this->assertEquals(ValueObjectFactory::createGroupType(GROUP_TYPE::USER), $return->getType());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateTheGroupTypeGroup(): void
     {
         $groupCreateDto = $this->createGroupCreateDto($this->imageUploaded, GROUP_TYPE::GROUP);
@@ -149,7 +150,7 @@ class GroupCreateServiceTest extends DataBaseTestCase
         $this->assertEquals(ValueObjectFactory::createGroupType(GROUP_TYPE::GROUP), $return->getType());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateTheGroupImageIsNull(): void
     {
         $groupCreateDto = $this->createGroupCreateDto(null, GROUP_TYPE::GROUP);
@@ -180,7 +181,7 @@ class GroupCreateServiceTest extends DataBaseTestCase
         $this->assertEquals(ValueObjectFactory::createGroupType(GROUP_TYPE::GROUP), $return->getType());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailIdIsAlreadyRegistered(): void
     {
         $this->expectException(DBUniqueConstraintException::class);
@@ -210,7 +211,7 @@ class GroupCreateServiceTest extends DataBaseTestCase
         $this->object->__invoke($groupCreateDto);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDatabaseConnectionException(): void
     {
         $this->expectException(DBConnectionException::class);
@@ -240,7 +241,7 @@ class GroupCreateServiceTest extends DataBaseTestCase
         $this->object->__invoke($groupCreateDto);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUploadException(): void
     {
         $this->expectException(DBConnectionException::class);
@@ -269,7 +270,7 @@ class GroupCreateServiceTest extends DataBaseTestCase
         $this->object->__invoke($groupCreateDto);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailTheUserAlreadyHaveAUserGroup(): void
     {
         $groupCreateDto = $this->createGroupCreateDto($this->imageUploaded, GROUP_TYPE::USER);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupCreate;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -62,7 +63,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         return new UploadedFile($path, $originalName, $mimetype, $error, true);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAGroupTypeGroup(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -90,7 +91,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         $this->assertIsString($responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAGroupTypeUser(): void
     {
         $client = $this->getNewClientAuthenticated(self::USER_HAS_NO_GROUP_EMAIL, self::USER_HAS_NO_GROUP_PASSWORD);
@@ -118,7 +119,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         $this->assertIsString($responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAGroupDescriptionIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -145,7 +146,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         $this->assertIsString($responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAGroupImageIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -169,7 +170,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         $this->assertIsString($responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDescriptionIsTooLong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -196,7 +197,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['string_too_long'], $responseContent->errors->description);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailTypeGroupIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -223,7 +224,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['not_null'], $responseContent->errors->type);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserAlreadyHasAUserGroup(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -250,7 +251,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         $this->assertEquals('User already has a group of type user', $responseContent->errors->group_type_user_repeated);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -277,7 +278,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->name);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsTooShort(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -304,7 +305,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'string_too_short'], $responseContent->errors->name);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsTooLong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -331,7 +332,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['string_too_long'], $responseContent->errors->name);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupNameAlreadyExists(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -357,7 +358,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         $this->assertSame('The group name already exists', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNotPermission(): void
     {
         $client = $this->getNewClientAuthenticated('email@user.com', 'not allowed user');
@@ -379,7 +380,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageMimeTypeNotAllowed(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -406,7 +407,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         $this->assertSame(['file_invalid_mime_type'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageSizeFormTooLarge(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -433,7 +434,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_form_size'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageSizeIniTooLarge(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -460,7 +461,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_init_size'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageNoUploaded(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -487,7 +488,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_no_file'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImagePartiallyUploaded(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -514,7 +515,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_partial'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageCantWrite(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -541,7 +542,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_cant_write'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageErrorExtension(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -568,7 +569,7 @@ class GroupCreateControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_extension'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageErrorTmpDir(): void
     {
         $client = $this->getNewClientAuthenticatedUser();

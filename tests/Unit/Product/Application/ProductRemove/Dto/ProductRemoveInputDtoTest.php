@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Application\ProductRemove\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -30,7 +31,7 @@ class ProductRemoveInputDtoTest extends TestCase
         $this->userShared = $this->createMock(UserShared::class);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $groupId = self::GROUP_ID;
@@ -43,7 +44,7 @@ class ProductRemoveInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateManyProductsAndShopIds(): void
     {
         $groupId = self::GROUP_ID;
@@ -62,7 +63,7 @@ class ProductRemoveInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateShopsIdIsNull(): void
     {
         $groupId = self::GROUP_ID;
@@ -75,7 +76,7 @@ class ProductRemoveInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $groupId = null;
@@ -88,7 +89,7 @@ class ProductRemoveInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsWrong(): void
     {
         $groupId = 'wrong group id';
@@ -101,7 +102,7 @@ class ProductRemoveInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailProductIdIsNull(): void
     {
         $groupId = self::GROUP_ID;
@@ -114,7 +115,7 @@ class ProductRemoveInputDtoTest extends TestCase
         $this->assertEquals(['products_id_empty' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailProductIdIsWrong(): void
     {
         $groupId = self::GROUP_ID;
@@ -127,7 +128,7 @@ class ProductRemoveInputDtoTest extends TestCase
         $this->assertEquals(['products_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopIdIsWrong(): void
     {
         $groupId = self::GROUP_ID;
@@ -140,7 +141,7 @@ class ProductRemoveInputDtoTest extends TestCase
         $this->assertEquals(['shops_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdProductIdAreNull(): void
     {
         $groupId = null;

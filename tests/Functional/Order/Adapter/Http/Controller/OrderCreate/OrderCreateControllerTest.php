@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Order\Adapter\Http\Controller\OrderCreate;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -77,7 +78,7 @@ class OrderCreateControllerTest extends WebClientTestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateOrders(): void
     {
         $ordersData = $this->getOrdersDataNew();
@@ -102,7 +103,7 @@ class OrderCreateControllerTest extends WebClientTestCase
         $this->assertCount(count($ordersData), $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateOrdersDescriptionAndAmountAreNull(): void
     {
         $ordersData = $this->getOrdersDataNew();
@@ -131,7 +132,7 @@ class OrderCreateControllerTest extends WebClientTestCase
         $this->assertCount(count($ordersData), $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateOrdersShopIdIsNull(): void
     {
         $ordersData = $this->getOrdersDataNew();
@@ -158,7 +159,7 @@ class OrderCreateControllerTest extends WebClientTestCase
         $this->assertCount(count($ordersData), $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingOrdersGroupIdIsNull(): void
     {
         $ordersData = $this->getOrdersDataNew();
@@ -182,7 +183,7 @@ class OrderCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingOrdersGroupIdIsWrong(): void
     {
         $ordersData = $this->getOrdersDataNew();
@@ -206,7 +207,7 @@ class OrderCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingOrdersIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -229,7 +230,7 @@ class OrderCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank'], $responseContent->errors->orders_empty);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingOrdersListsOrdersIdIsNull(): void
     {
         $ordersData = $this->getOrdersDataNew();
@@ -252,7 +253,7 @@ class OrderCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->list_orders_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingOrdersListsOrdersIdINotFound(): void
     {
         $ordersData = $this->getOrdersDataNew();
@@ -276,7 +277,7 @@ class OrderCreateControllerTest extends WebClientTestCase
         $this->assertEquals('List of orders or lists of orders not found', $responseContent->errors->list_orders_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingOrdersProductIdIsNull(): void
     {
         $ordersData = $this->getOrdersDataNew();
@@ -301,7 +302,7 @@ class OrderCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors[0]->product_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingOrdersProductIdINotFound(): void
     {
         $ordersData = $this->getOrdersDataNew();
@@ -326,7 +327,7 @@ class OrderCreateControllerTest extends WebClientTestCase
         $this->assertEquals('Product or products not found', $responseContent->errors->product_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingOrdersNoneProductIdIFound(): void
     {
         $ordersData = $this->getOrdersDataNew();
@@ -352,7 +353,7 @@ class OrderCreateControllerTest extends WebClientTestCase
         $this->assertEquals('Product or products not found', $responseContent->errors->product_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingOrdersShopIdINotFound(): void
     {
         $ordersData = $this->getOrdersDataNew();
@@ -377,7 +378,7 @@ class OrderCreateControllerTest extends WebClientTestCase
         $this->assertEquals('Shop or shops not found', $responseContent->errors->shop_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingOrdersNoneShopIdIFound(): void
     {
         $ordersData = $this->getOrdersDataNew();
@@ -403,7 +404,7 @@ class OrderCreateControllerTest extends WebClientTestCase
         $this->assertEquals('Shop or shops not found', $responseContent->errors->shop_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingOrdersProductAndShopRepeated(): void
     {
         $ordersData = $this->getOrdersData();
@@ -427,7 +428,7 @@ class OrderCreateControllerTest extends WebClientTestCase
         $this->assertEquals('Product and shop are already in the order list', $responseContent->errors->order_product_and_shop_repeated);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingOrdersUserNotBelongsToTheGroup(): void
     {
         $ordersData = $this->getOrdersDataNew();

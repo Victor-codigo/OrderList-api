@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserModify;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -66,7 +67,7 @@ class UserModifyControllerTest extends WebClientTestCase
         rmdir($this->pathImageUser);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheUserNameAndImage(): void
     {
         $name = 'MariaMod';
@@ -99,7 +100,7 @@ class UserModifyControllerTest extends WebClientTestCase
         $this->assertNotNull($user->getProfile()->getImage()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheUserImageIsNull(): void
     {
         $name = 'MariaMod';
@@ -128,7 +129,7 @@ class UserModifyControllerTest extends WebClientTestCase
         $this->assertEquals($name, $user->getName()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheUserImageRemoveIsNull(): void
     {
         $name = 'MariaMod';
@@ -160,7 +161,7 @@ class UserModifyControllerTest extends WebClientTestCase
         $this->assertNotNull($user->getProfile()->getImage()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheUserImageRemoveIsTrue(): void
     {
         $name = 'MariaMod';
@@ -190,7 +191,7 @@ class UserModifyControllerTest extends WebClientTestCase
         $this->assertNull($user->getProfile()->getImage()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldModifyTheUserImageRemoveIsTrueAndImageIsNotNull(): void
     {
         $name = 'MariaMod';
@@ -223,7 +224,7 @@ class UserModifyControllerTest extends WebClientTestCase
         $this->assertNotNull($user->getProfile()->getImage()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsTooShort(): void
     {
         $name = '';
@@ -250,7 +251,7 @@ class UserModifyControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsTooLarge(): void
     {
         $name = str_pad('', 51, 'u');
@@ -277,7 +278,7 @@ class UserModifyControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageMimeTypeNotAllowed(): void
     {
         $name = 'maria';
@@ -304,7 +305,7 @@ class UserModifyControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCanNotDeleteUserFormerImage(): void
     {
         $this->getEntityManager()->getConnection()->update(
@@ -339,7 +340,7 @@ class UserModifyControllerTest extends WebClientTestCase
         $this->assertSame('An error has been occurred', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageSizeFormTooLarge(): void
     {
         $name = 'MariaMod';
@@ -367,7 +368,7 @@ class UserModifyControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageSizeIniTooLarge(): void
     {
         $name = 'MariaMod';
@@ -395,7 +396,7 @@ class UserModifyControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageNoUploaded(): void
     {
         $name = 'MariaMod';
@@ -423,7 +424,7 @@ class UserModifyControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImagePartiallyUploaded(): void
     {
         $name = 'MariaMod';
@@ -451,7 +452,7 @@ class UserModifyControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageCantWrite(): void
     {
         $name = 'MariaMod';
@@ -479,7 +480,7 @@ class UserModifyControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageErrorExtension(): void
     {
         $name = 'MariaMod';
@@ -507,7 +508,7 @@ class UserModifyControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageErrorTmpDir(): void
     {
         $name = 'MariaMod';

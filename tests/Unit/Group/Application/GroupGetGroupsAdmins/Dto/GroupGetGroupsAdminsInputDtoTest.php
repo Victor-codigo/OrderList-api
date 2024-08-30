@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupGetGroupsAdmins\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -26,7 +27,7 @@ class GroupGetGroupsAdminsInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $object = new GroupGetGroupsAdminsInputDto(
@@ -44,7 +45,7 @@ class GroupGetGroupsAdminsInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdIsEmpty(): void
     {
         $object = new GroupGetGroupsAdminsInputDto(
@@ -59,7 +60,7 @@ class GroupGetGroupsAdminsInputDtoTest extends TestCase
         $this->assertEquals(['groups_id_empty' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdIsWrong(): void
     {
         $object = new GroupGetGroupsAdminsInputDto(
@@ -74,7 +75,7 @@ class GroupGetGroupsAdminsInputDtoTest extends TestCase
         $this->assertEquals(['groups_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageIsNull(): void
     {
         $object = new GroupGetGroupsAdminsInputDto(
@@ -92,7 +93,7 @@ class GroupGetGroupsAdminsInputDtoTest extends TestCase
         $this->assertEquals(['page' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageIsWrong(): void
     {
         $object = new GroupGetGroupsAdminsInputDto(
@@ -109,7 +110,7 @@ class GroupGetGroupsAdminsInputDtoTest extends TestCase
         $this->assertEquals(['page' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageItemsIsNull(): void
     {
         $object = new GroupGetGroupsAdminsInputDto(
@@ -127,7 +128,7 @@ class GroupGetGroupsAdminsInputDtoTest extends TestCase
         $this->assertEquals(['page_items' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageItemsIsWrong(): void
     {
         $object = new GroupGetGroupsAdminsInputDto(

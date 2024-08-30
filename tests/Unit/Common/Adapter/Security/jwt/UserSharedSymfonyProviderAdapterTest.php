@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Security\jwt;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Adapter\Security\jwt\UserSharedSymfonyProviderAdapter;
 use Common\Adapter\Security\UserSharedSymfonyAdapter;
@@ -48,7 +49,7 @@ class UserSharedSymfonyProviderAdapterTest extends TestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldLoadTheUserByIdentifier(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
@@ -68,7 +69,7 @@ class UserSharedSymfonyProviderAdapterTest extends TestCase
         $this->assertInstanceOf(UserSharedSymfonyAdapter::class, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailLoadingTheUserByIdentifierError400(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
@@ -84,7 +85,7 @@ class UserSharedSymfonyProviderAdapterTest extends TestCase
         $this->object->loadUserByIdentifier($userId->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailLoadingTheUserByIdentifierErrorModuleCommunication(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
@@ -100,7 +101,7 @@ class UserSharedSymfonyProviderAdapterTest extends TestCase
         $this->object->loadUserByIdentifier($userId->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailLoadingTheUserByIdentifierErrorValueError(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
@@ -116,7 +117,7 @@ class UserSharedSymfonyProviderAdapterTest extends TestCase
         $this->object->loadUserByIdentifier($userId->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRefreshTheUser(): void
     {
         $userSharedSymfonyAdapter = $this->createMock(UserSharedSymfonyAdapter::class);
@@ -125,7 +126,7 @@ class UserSharedSymfonyProviderAdapterTest extends TestCase
         $this->assertSame($userSharedSymfonyAdapter, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRefreshTheUserUserIsNotAValidType(): void
     {
         $userSharedSymfonyAdapter = $this->createMock(UserInterface::class);

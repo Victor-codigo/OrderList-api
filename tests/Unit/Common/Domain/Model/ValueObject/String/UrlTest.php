@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Url;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -27,7 +28,7 @@ class UrlTest extends TestCase
         return new Url($url);
     }
 
-    /** @test */
+    #[Test]
     public function urlWithHttpOk(): void
     {
         $url = $this->createUrl('http://www.domain.com');
@@ -36,7 +37,7 @@ class UrlTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function urlWithHttpsOk(): void
     {
         $url = $this->createUrl('https://www.domain.com');
@@ -45,7 +46,7 @@ class UrlTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function urlNotBlank(): void
     {
         $email = $this->createUrl('');
@@ -54,7 +55,7 @@ class UrlTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK], $return);
     }
 
-    /** @test */
+    #[Test]
     public function urlNotNull(): void
     {
         $url = $this->createUrl(null);
@@ -63,7 +64,7 @@ class UrlTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL], $return);
     }
 
-    /** @test */
+    #[Test]
     public function urlNotValid(): void
     {
         $url = $this->createUrl('www.domain.com');

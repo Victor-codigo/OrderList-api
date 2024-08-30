@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupUserRoleChange;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -99,7 +100,7 @@ class GroupUserRoleChangeTest extends TestCase
         return true;
     }
 
-    /** @test */
+    #[Test]
     public function itShouldChangeUsersRoleToGroupAdmin(): void
     {
         $expectUsersToSave = $this->getFindGroupUsersOrFailReturn(self::USERS_ID, GROUP_ROLES::USER);
@@ -125,7 +126,7 @@ class GroupUserRoleChangeTest extends TestCase
         $this->assertEquals(self::USERS_ID, $usersId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldChangeUsersRoleToGroupUser(): void
     {
         $users = $this->getFindGroupUsersOrFailReturn(self::USERS_ID, GROUP_ROLES::ADMIN);
@@ -152,7 +153,7 @@ class GroupUserRoleChangeTest extends TestCase
         $this->assertEquals([self::USERS_ID[1], self::USERS_ID[2]], $usersId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldChangeThreeUsersOneOfThenIsNotFromTheGroup(): void
     {
         $expectUsersToSave = $this->getFindGroupUsersOrFailReturn(self::USERS_ID, GROUP_ROLES::ADMIN);
@@ -180,7 +181,7 @@ class GroupUserRoleChangeTest extends TestCase
         $this->assertEquals(self::USERS_ID, $usersId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldNotChangeUsersRolNoneOfTheUsersBelongsToTheGroup(): void
     {
         $this->userGroupRepository
@@ -200,7 +201,7 @@ class GroupUserRoleChangeTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoAdminsInTheGroup(): void
     {
         $this->expectException(GroupWithoutAdminsException::class);
@@ -225,7 +226,7 @@ class GroupUserRoleChangeTest extends TestCase
         $this->assertEquals(self::USERS_ID, $usersId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupNotFound(): void
     {
         $this->expectException(DBNotFoundException::class);

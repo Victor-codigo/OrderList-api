@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Application\ShopGetData\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
@@ -33,7 +34,7 @@ class ShopGetDataInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $object = new ShopGetDataInputDto(
@@ -53,7 +54,7 @@ class ShopGetDataInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateShopsIdIsNull(): void
     {
         $object = new ShopGetDataInputDto(
@@ -73,7 +74,7 @@ class ShopGetDataInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateProductsIdIsNull(): void
     {
         $object = new ShopGetDataInputDto(
@@ -93,7 +94,7 @@ class ShopGetDataInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateNoFilter(): void
     {
         $object = new ShopGetDataInputDto(
@@ -113,7 +114,7 @@ class ShopGetDataInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $object = new ShopGetDataInputDto(
@@ -133,7 +134,7 @@ class ShopGetDataInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsWrong(): void
     {
         $object = new ShopGetDataInputDto(
@@ -153,7 +154,7 @@ class ShopGetDataInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopsIdAreWrong(): void
     {
         $object = new ShopGetDataInputDto(
@@ -176,7 +177,7 @@ class ShopGetDataInputDtoTest extends TestCase
         $this->assertEquals(['shops_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS], [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailProductsIdAreWrong(): void
     {
         $object = new ShopGetDataInputDto(
@@ -199,7 +200,7 @@ class ShopGetDataInputDtoTest extends TestCase
         $this->assertEquals(['products_id' => [[VALIDATION_ERRORS::UUID_INVALID_CHARACTERS], [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopNameFilterTypeIsNull(): void
     {
         $object = new ShopGetDataInputDto(
@@ -219,7 +220,7 @@ class ShopGetDataInputDtoTest extends TestCase
         $this->assertEquals(['shop_filter_type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopNameFilterTypeIsWrong(): void
     {
         $object = new ShopGetDataInputDto(
@@ -239,7 +240,7 @@ class ShopGetDataInputDtoTest extends TestCase
         $this->assertEquals(['shop_filter_type' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopNameFilterValueIsNull(): void
     {
         $object = new ShopGetDataInputDto(
@@ -259,7 +260,7 @@ class ShopGetDataInputDtoTest extends TestCase
         $this->assertEquals(['shop_filter_value' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopFilterValueIsWrong(): void
     {
         $object = new ShopGetDataInputDto(
@@ -279,7 +280,7 @@ class ShopGetDataInputDtoTest extends TestCase
         $this->assertEquals(['shop_filter_value' => [VALIDATION_ERRORS::STRING_TOO_LONG]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopValueIsWrong(): void
     {
         $object = new ShopGetDataInputDto(
@@ -299,7 +300,7 @@ class ShopGetDataInputDtoTest extends TestCase
         $this->assertEquals(['shop_name' => [VALIDATION_ERRORS::ALPHANUMERIC_WITH_WHITESPACE]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageIsNull(): void
     {
         $object = new ShopGetDataInputDto(
@@ -319,7 +320,7 @@ class ShopGetDataInputDtoTest extends TestCase
         $this->assertEquals(['page' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageIsWrong(): void
     {
         $object = new ShopGetDataInputDto(
@@ -339,7 +340,7 @@ class ShopGetDataInputDtoTest extends TestCase
         $this->assertEquals(['page' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageItemsIsNull(): void
     {
         $object = new ShopGetDataInputDto(
@@ -359,7 +360,7 @@ class ShopGetDataInputDtoTest extends TestCase
         $this->assertEquals(['page_items' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageItemsIsWrong(): void
     {
         $object = new ShopGetDataInputDto(
@@ -379,7 +380,7 @@ class ShopGetDataInputDtoTest extends TestCase
         $this->assertEquals(['page_items' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailAllInputsAreWrong(): void
     {
         $object = new ShopGetDataInputDto(

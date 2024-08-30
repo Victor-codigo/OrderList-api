@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Shop\Adapter\Http\Controller\ShopCreate;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -62,7 +63,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         return new UploadedFile($path, $originalName, $mimetype, $error, true);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAShop(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -90,7 +91,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertIsString($responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAShopAddressIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -117,7 +118,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertIsString($responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAShopDescriptionIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -145,7 +146,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertIsString($responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAShopImageIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -170,7 +171,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertIsString($responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailAddressIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -198,7 +199,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['regex_fail'], $responseContent->errors->address);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDescriptionIsTooLong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -226,7 +227,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['string_too_long'], $responseContent->errors->description);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopGroupIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -254,7 +255,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopGroupIdIsNotAValidUuid(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -282,7 +283,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopGroupIdDoesNotExists(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -310,7 +311,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertEquals('Error validating the group', $responseContent->errors->permissions);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopGroupIdExistsButUserDoesNotBelongToTheGroup(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -338,7 +339,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertEquals('Error validating the group', $responseContent->errors->permissions);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -366,7 +367,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->name);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsTooShort(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -394,7 +395,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'string_too_short'], $responseContent->errors->name);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameIsTooLong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -422,7 +423,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertEquals(['string_too_long'], $responseContent->errors->name);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopNameAlreadyExists(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -449,7 +450,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertSame('Shop name already exists', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNotPermission(): void
     {
         $client = $this->getNewClientAuthenticated('email@user.com', 'not allowed user');
@@ -472,7 +473,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageMimeTypeNotAllowed(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -500,7 +501,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertSame(['file_invalid_mime_type'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageSizeFormTooLarge(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -528,7 +529,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_form_size'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageSizeIniTooLarge(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -556,7 +557,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_init_size'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageNoUploaded22(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -584,7 +585,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_no_file'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImagePartiallyUploaded(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -612,7 +613,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_partial'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageCantWrite(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -640,7 +641,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_cant_write'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageErrorExtension(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -668,7 +669,7 @@ class ShopCreateControllerTest extends WebClientTestCase
         $this->assertSame(['file_upload_extension'], $responseContent->errors->image);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailImageErrorTmpDir(): void
     {
         $client = $this->getNewClientAuthenticatedUser();

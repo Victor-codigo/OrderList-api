@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Product\Adapter\Http\Controller\GetProductShopPrice;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -31,7 +32,7 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertContains($productShopActual->unit, $productShopExpected->units);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetThePriceOfAProductForAShop(): void
     {
         $requestData = [
@@ -69,7 +70,7 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertProductShopIsOk((object) $requestData, $responseContent->data[0]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetThePriceOfAProductsForAShop(): void
     {
         $requestData = [
@@ -112,7 +113,7 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetThePriceOfAProductForADifferentShops(): void
     {
         $requestData = [
@@ -154,7 +155,7 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetThePriceOfAProductsForADifferentShops(): void
     {
         $requestData = [
@@ -198,7 +199,7 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetThePriceOfAProductForAllShops(): void
     {
         $requestData = [
@@ -241,7 +242,7 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetThePriceOfAllProductsOfAShop(): void
     {
         $requestData = [
@@ -283,7 +284,7 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingThePriceOfAProductGroupIsNull(): void
     {
         $requestData = [
@@ -312,7 +313,7 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingThePriceOfAProductGroupIsWrong(): void
     {
         $requestData = [
@@ -343,7 +344,7 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingThePriceOfAProductProductIsWrong(): void
     {
         $requestData = [
@@ -374,7 +375,7 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertEquals([['uuid_invalid_characters']], $responseContent->errors->products_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingThePriceOfAProductShopIsWrong(): void
     {
         $requestData = [
@@ -405,7 +406,7 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertEquals([['uuid_invalid_characters']], $responseContent->errors->shops_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingThePriceOfAProductShopIsNullAndProductIdIsNull(): void
     {
         $requestData = [
@@ -429,7 +430,7 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank'], $responseContent->errors->shops_id_empty);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingThePriceOfAProductUserNotBelongsToTheGroup(): void
     {
         $requestData = [
@@ -460,7 +461,7 @@ class GetProductShopPriceControllerTest extends WebClientTestCase
         $this->assertEquals('You not belong to the group', $responseContent->errors->permissions);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingThePriceOfAProductProductNotFound(): void
     {
         $requestData = [

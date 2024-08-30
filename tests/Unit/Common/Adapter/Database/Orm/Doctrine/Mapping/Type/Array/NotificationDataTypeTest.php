@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array\NotificationDataType;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Exception\LogicException;
@@ -42,7 +43,7 @@ class NotificationDataTypeTest extends TestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function convertToDatabaseValueReturnACorrectJson(): void
     {
         $notificationData = $this->getNotificationData();
@@ -53,7 +54,7 @@ class NotificationDataTypeTest extends TestCase
         $this->assertEquals(json_encode($notificationData), $return);
     }
 
-    /** @test */
+    #[Test]
     public function convertToDatabaseValueEmptyValuesToNull(): void
     {
         $notificationData = new NotificationData([]);
@@ -63,7 +64,7 @@ class NotificationDataTypeTest extends TestCase
         $this->assertNull($return);
     }
 
-    /** @test */
+    #[Test]
     public function convertToDatabaseValueThrowExceptionInvalidArgument(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -71,7 +72,7 @@ class NotificationDataTypeTest extends TestCase
         $this->object->convertToDatabaseValue('', $this->abstractPlatform);
     }
 
-    /** @test */
+    #[Test]
     public function convertToPHPValueValueIsNullAndReturnsArrayEmpty(): void
     {
         $return = $this->object->convertToPHPValue(null, $this->abstractPlatform);
@@ -81,7 +82,7 @@ class NotificationDataTypeTest extends TestCase
         $this->assertEmpty($return->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function convertToPHPValueIsArrayEmptyReturnsArrayEmpty(): void
     {
         $return = $this->object->convertToPHPValue(null, $this->abstractPlatform);
@@ -91,7 +92,7 @@ class NotificationDataTypeTest extends TestCase
         $this->assertEmpty($return->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function convertToPHPValueNotificationData(): void
     {
         $notificationData = $this->getNotificationData();
@@ -101,7 +102,7 @@ class NotificationDataTypeTest extends TestCase
         $this->assertSame($notificationData, $return->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function convertToPHPValueInvalidArgumentException(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -109,7 +110,7 @@ class NotificationDataTypeTest extends TestCase
         $this->object->convertToPHPValue('{', $this->abstractPlatform);
     }
 
-    /** @test */
+    #[Test]
     public function convertToPHPValueJsonMalformedExpectLogicException(): void
     {
         $this->expectException(LogicException::class);

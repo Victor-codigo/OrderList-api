@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Product\Adapter\Http\Controller\ProductGetData;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -106,7 +107,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductsOfAGroupOrderAsc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -135,7 +136,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertResponseDataIsOk($page, 1, $productDataExpected, $responseContent->data);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductsOfAGroupOrderDesc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -164,7 +165,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertResponseDataIsOk($page, 1, array_reverse($productDataExpected), $responseContent->data);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductsOfAGroupByProductIdOrderAsc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -204,7 +205,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductsOfAGroupByProductIdOrderDesc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -247,7 +248,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductsOfAGroupByShopIdOrderAsc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -285,7 +286,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductsOfAGroupByShopIdOrderDesc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -328,7 +329,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductsOfAGroupByProductName(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -358,7 +359,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertResponseDataIsOk($page, 1, [$productDataExpected[1]], $responseContent->data);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductsOfAGroupByProductNameFilterOrderAsc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -398,7 +399,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductsOfAGroupByProductNameFilterOrderDesc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -439,7 +440,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductsOfAGroupByShopNameFilterOrderAsc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -479,7 +480,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductsOfAGroupByShopNameFilterOrderDesc(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -520,7 +521,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetProductsOfAGroupPagination(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -559,7 +560,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupGroupIdIsNull(): void
     {
         $productId = 'f7d0840a-11c8-49ae-bf12-b29eb66afab4';
@@ -586,7 +587,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupGroupIdIsWrong(): void
     {
         $groupId = 'wrong group id';
@@ -615,7 +616,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupGroupIdNotFound(): void
     {
         $groupId = 'f7d0840a-11c8-49ae-bf12-b29eb66afab4';
@@ -644,7 +645,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals('You have not permissions', $responseContent->errors->permissions);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupGroupIdNotPermissions(): void
     {
         $groupId = self::GROUP_ID_NOT_PERMISSIONS;
@@ -673,7 +674,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals('You have not permissions', $responseContent->errors->permissions);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupProductIdIsWrong(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -702,7 +703,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals([['uuid_invalid_characters']], $responseContent->errors->products_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupProductIdNotFound(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -726,7 +727,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupShopsIdIsWrong(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -755,7 +756,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals([['uuid_invalid_characters']], $responseContent->errors->shops_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupShopsIdNotFound(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -779,7 +780,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupProductNameIsWrong(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -808,7 +809,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['alphanumeric_with_whitespace'], $responseContent->errors->product_name);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupProductNameNotFound(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -832,7 +833,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupProductNameFilterTypeIsNull(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -861,7 +862,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->product_name_filter_type);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupProductNameFilterTypeIsWrong(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -892,7 +893,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->product_name_filter_type);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupProductNameFilterValueIsNull(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -921,7 +922,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->product_name_filter_value);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupProductNameFilterValueIsWrong(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -952,7 +953,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['alphanumeric_with_whitespace'], $responseContent->errors->product_name_filter_value);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupShopNameFilterTypeIsNull(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -981,7 +982,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->shop_name_filter_type);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupShopNameFilterTypeIsWrong(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -1012,7 +1013,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->shop_name_filter_type);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupShopNameFilterValueIsNull(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -1041,7 +1042,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->shop_name_filter_value);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupShopNameFilterValueIsWrong(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -1072,7 +1073,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['alphanumeric_with_whitespace'], $responseContent->errors->shop_name_filter_value);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupPageIsNull(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -1097,7 +1098,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['greater_than'], $responseContent->errors->page);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupPageIsWrong(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -1124,7 +1125,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['greater_than'], $responseContent->errors->page);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupPageItemsIsNull(): void
     {
         $groupId = self::GROUP_EXISTS_ID;
@@ -1149,7 +1150,7 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertEquals(['greater_than'], $responseContent->errors->page_items);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingProductsOfAGroupPageItemsIsWrong(): void
     {
         $groupId = self::GROUP_EXISTS_ID;

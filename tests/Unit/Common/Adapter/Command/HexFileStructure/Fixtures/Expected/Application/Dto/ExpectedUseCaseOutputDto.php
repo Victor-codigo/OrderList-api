@@ -6,7 +6,4 @@ namespace Module\Application\Endpoint\Dto;
 
 class EndpointOutputDto
 {
-    public function __construct(
-    ) {
-    }
 }

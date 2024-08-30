@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Domain\Service\ShopGetData;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\Group\Filter;
@@ -82,7 +83,7 @@ class ShopGetDataServiceTest extends TestCase
         $this->assertIsString($shopDataActual['created_on']);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetShopsDataOrderByShopIdAndProductIdAsc(): void
     {
         $shops = $this->getShops();
@@ -140,7 +141,7 @@ class ShopGetDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetShopsDataOfAGroupOrderByNameAsc(): void
     {
         $shops = $this->getShops();
@@ -193,7 +194,7 @@ class ShopGetDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetShopsDataByShopNameOrderByNameAsc(): void
     {
         $shops = $this->getShops();
@@ -250,7 +251,7 @@ class ShopGetDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetShopsDataWithFilterOrderByNameAsc(): void
     {
         $shops = $this->getShops();
@@ -307,7 +308,7 @@ class ShopGetDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetShopsDataAllInputsAreNull(): void
     {
         $input = new ShopGetDataDto(
@@ -349,7 +350,7 @@ class ShopGetDataServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGetShopsDataNoShopsFound(): void
     {
         $input = new ShopGetDataDto(

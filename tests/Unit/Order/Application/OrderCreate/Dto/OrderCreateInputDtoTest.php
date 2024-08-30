@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Application\OrderCreate\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -56,7 +57,7 @@ class OrderCreateInputDtoTest extends TestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $ordersData = $this->getOrdersData();
@@ -68,7 +69,7 @@ class OrderCreateInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateShopIdIsNull(): void
     {
         $ordersData = $this->getOrdersData();
@@ -81,7 +82,7 @@ class OrderCreateInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateOrdersDescriptionIsNull(): void
     {
         $ordersData = $this->getOrdersData();
@@ -96,7 +97,7 @@ class OrderCreateInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateOrdersAmountIsNull(): void
     {
         $ordersData = $this->getOrdersData();
@@ -111,7 +112,7 @@ class OrderCreateInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailOrdersDataIdsNull(): void
     {
         $object = new OrderCreateInputDto($this->userSession, self::GROUP_ID_NEW, self::LIST_ORDERS_ID, null);
@@ -121,7 +122,7 @@ class OrderCreateInputDtoTest extends TestCase
         $this->assertEquals(['orders_empty' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $ordersData = $this->getOrdersData();
@@ -133,7 +134,7 @@ class OrderCreateInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsWrong(): void
     {
         $ordersData = $this->getOrdersData();
@@ -145,7 +146,7 @@ class OrderCreateInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailListsOrdersIdIsNull(): void
     {
         $ordersData = $this->getOrdersData();
@@ -157,7 +158,7 @@ class OrderCreateInputDtoTest extends TestCase
         $this->assertEquals(['list_orders_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailManyListsOrdersIdIsNull(): void
     {
         $ordersData = $this->getOrdersData();
@@ -176,7 +177,7 @@ class OrderCreateInputDtoTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailListOrdersIsWrong(): void
     {
         $ordersData = $this->getOrdersData();
@@ -188,7 +189,7 @@ class OrderCreateInputDtoTest extends TestCase
         $this->assertEquals(['list_orders_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailProductIdIsNull(): void
     {
         $ordersData = $this->getOrdersData();
@@ -201,7 +202,7 @@ class OrderCreateInputDtoTest extends TestCase
         $this->assertEquals([['product_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailManyProductIdIsNull(): void
     {
         $ordersData = $this->getOrdersData();
@@ -220,7 +221,7 @@ class OrderCreateInputDtoTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailProductIdIsWrong(): void
     {
         $ordersData = $this->getOrdersData();
@@ -233,7 +234,7 @@ class OrderCreateInputDtoTest extends TestCase
         $this->assertEquals([['product_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopIdIsWrong(): void
     {
         $ordersData = $this->getOrdersData();
@@ -246,7 +247,7 @@ class OrderCreateInputDtoTest extends TestCase
         $this->assertEquals([['shop_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDescriptionIsTooLong(): void
     {
         $ordersData = $this->getOrdersData();
@@ -259,7 +260,7 @@ class OrderCreateInputDtoTest extends TestCase
         $this->assertEquals([['description' => [VALIDATION_ERRORS::STRING_TOO_LONG]]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailAmountIsLessThanZero(): void
     {
         $ordersData = $this->getOrdersData();

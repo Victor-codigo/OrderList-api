@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation\Constraints;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\Constraints\Alphanumeric\Alphanumeric;
 use Common\Adapter\Validation\Constraints\Alphanumeric\AlphanumericValidator;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -29,7 +30,7 @@ class AlphanumericValidatorTest extends TestCase
         $this->object = new AlphanumericValidator();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailValueIsNotClassAlphanumericValidator(): void
     {
         $this->expectException(UnexpectedTypeException::class);
@@ -37,7 +38,7 @@ class AlphanumericValidatorTest extends TestCase
         $this->object->validate('', $this->constraint);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValueIsNull(): void
     {
         $return = $this->object->validate(null, $this->alphanumeric);
@@ -45,7 +46,7 @@ class AlphanumericValidatorTest extends TestCase
         $this->assertNull($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValueIsEmptyString(): void
     {
         $return = $this->object->validate('', $this->alphanumeric);
@@ -53,7 +54,7 @@ class AlphanumericValidatorTest extends TestCase
         $this->assertNull($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValueCantBeConvertedToString(): void
     {
         $this->expectException(UnexpectedTypeException::class);
@@ -61,7 +62,7 @@ class AlphanumericValidatorTest extends TestCase
         $this->object->validate(new \stdClass(), $this->alphanumeric);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValueIsStringAlphanumeric(): void
     {
         $this->alphanumeric->pattern = self::PATTERN;
@@ -70,7 +71,7 @@ class AlphanumericValidatorTest extends TestCase
         $this->object->validate('lola_hello22', $this->alphanumeric);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateStringAlphanumericWithAccents(): void
     {
         $this->alphanumeric->pattern = self::PATTERN;
@@ -79,7 +80,7 @@ class AlphanumericValidatorTest extends TestCase
         $this->object->validate('lolá_hëllò22', $this->alphanumeric);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValueIsStringNotAlphanumeric(): void
     {
         $this->alphanumeric->pattern = self::PATTERN;

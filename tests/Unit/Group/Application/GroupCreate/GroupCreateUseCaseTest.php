@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupCreate;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
@@ -49,7 +50,7 @@ class GroupCreateUseCaseTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateTheGroupWithCreateNotification(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
@@ -107,7 +108,7 @@ class GroupCreateUseCaseTest extends TestCase
         $this->assertEquals($groupId, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateTheGroupWithoutCreateNotification(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
@@ -155,7 +156,7 @@ class GroupCreateUseCaseTest extends TestCase
         $this->assertEquals($groupId, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreateTheGroupNotificationError(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');

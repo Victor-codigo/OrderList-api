@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Shop\Adapter\Http\Controller\ShopRemove;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +25,7 @@ class ShopRemoveControllerTest extends WebClientTestCase
         'f6ae3da3-c8f2-4ccb-9143-0f361eec850e',
     ];
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveShops(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -48,7 +49,7 @@ class ShopRemoveControllerTest extends WebClientTestCase
         $this->assertEqualsCanonicalizing(self::SHOP_EXISTS_ID, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveShopsWithShopIdValid(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -78,7 +79,7 @@ class ShopRemoveControllerTest extends WebClientTestCase
         $this->assertEqualsCanonicalizing(self::SHOP_EXISTS_ID, $responseContent->data->id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveAMaxOf100ShopsId(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -102,7 +103,7 @@ class ShopRemoveControllerTest extends WebClientTestCase
         $this->assertSame('Shop not found', $responseContent->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingShopsGroupIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -124,7 +125,7 @@ class ShopRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingShopsGroupNotExists(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -146,7 +147,7 @@ class ShopRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingShopsShopIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -168,7 +169,7 @@ class ShopRemoveControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank'], $responseContent->errors->shops_id_empty);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingShopsShopIdWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -190,7 +191,7 @@ class ShopRemoveControllerTest extends WebClientTestCase
         $this->assertEquals([['uuid_invalid_characters']], $responseContent->errors->shops_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingShopsNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -212,7 +213,7 @@ class ShopRemoveControllerTest extends WebClientTestCase
         $this->assertEquals('Shop not found', $responseContent->errors->shop_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingShopsGroupNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -234,7 +235,7 @@ class ShopRemoveControllerTest extends WebClientTestCase
         $this->assertEquals('You have not permissions', $responseContent->errors->permissions);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingShopsUserNotBelongsToTheGroup(): void
     {
         $client = $this->getNewClientAuthenticated(self::USER_HAS_NO_GROUP_EMAIL, self::USER_HAS_NO_GROUP_PASSWORD);

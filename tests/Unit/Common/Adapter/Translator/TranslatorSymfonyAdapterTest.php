@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Translator;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Translator\TranslatorSymfonyAdapter;
 use Common\Domain\Exception\InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -27,7 +28,7 @@ class TranslatorSymfonyAdapterTest extends TestCase
         $this->object = new TranslatorSymfonyAdapter($this->translator, $this->localeSwitcher);
     }
 
-    /** @test */
+    #[Test]
     public function translateIdentifier(): void
     {
         $id = 'identifier';
@@ -47,7 +48,7 @@ class TranslatorSymfonyAdapterTest extends TestCase
         $this->assertEquals($textTranslated, $return);
     }
 
-    /** @test */
+    #[Test]
     public function translateThrowsInvalidArgumentException(): void
     {
         $id = 'identifier';

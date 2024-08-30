@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Domain\Service\GetUsersProfilePublicData;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -69,7 +70,7 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetTheUsersProfilePublicData(): void
     {
         $profilesId = $this->getProfilesId();
@@ -97,7 +98,7 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetTheUsersProfilePrivateData(): void
     {
         $profilesId = $this->getProfilesId();
@@ -125,7 +126,7 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoUsersProfileFound(): void
     {
         $this->expectException(DBNotFoundException::class);

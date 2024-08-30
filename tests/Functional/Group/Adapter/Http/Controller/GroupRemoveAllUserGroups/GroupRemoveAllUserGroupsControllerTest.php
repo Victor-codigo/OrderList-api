@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupRemoveAllUserGroups;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +24,7 @@ class GroupRemoveAllUserGroupsControllerTest extends WebClientTestCase
         parent::setUp();
     }
 
-    /** @test */
+    #[Test]
     public function userHasGroupsIsAdminGroupsIsUserAndChangeAdmins(): void
     {
         $groupsIdToRemove = [
@@ -68,7 +69,7 @@ class GroupRemoveAllUserGroupsControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function userHasOnlyGroupsToRemove(): void
     {
         $groupsIdToRemove = [
@@ -97,7 +98,7 @@ class GroupRemoveAllUserGroupsControllerTest extends WebClientTestCase
         $this->assertEmpty($responseContent->data->groups_id_user_set_as_admin);
     }
 
-    /** @test */
+    #[Test]
     public function userHasUserToRemove(): void
     {
         $groupsIdUserRemoved = [
@@ -125,7 +126,7 @@ class GroupRemoveAllUserGroupsControllerTest extends WebClientTestCase
         $this->assertEmpty($responseContent->data->groups_id_user_set_as_admin);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSystemKeyIsNull(): void
     {
         $client = $this->getNewClientAuthenticated('email.other_3.active@host.com', '123456');
@@ -145,7 +146,7 @@ class GroupRemoveAllUserGroupsControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank'], $responseContent->errors->system_key);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSystemKeyIsWrong(): void
     {
         $client = $this->getNewClientAuthenticated('email.other_3.active@host.com', '123456');

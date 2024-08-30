@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserEmailChange;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -44,7 +45,7 @@ class UserEmailChangeUseCaseTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldChangeUserEmail(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
@@ -83,7 +84,7 @@ class UserEmailChangeUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailChangeUserEmailNotificationError(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');

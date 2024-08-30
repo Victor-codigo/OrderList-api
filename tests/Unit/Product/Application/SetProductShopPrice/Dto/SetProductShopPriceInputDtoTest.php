@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Application\SetProductShopPrice\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -31,7 +32,7 @@ class SetProductShopPriceInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateProductId(): void
     {
         $object = new SetProductShopPriceInputDto(
@@ -49,7 +50,7 @@ class SetProductShopPriceInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateShopId(): void
     {
         $object = new SetProductShopPriceInputDto(
@@ -67,7 +68,7 @@ class SetProductShopPriceInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateProductsOrShopsIdPricesAndUnitsEmpty(): void
     {
         $object = new SetProductShopPriceInputDto(
@@ -85,7 +86,7 @@ class SetProductShopPriceInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailProductIdAndShopIdAreNull(): void
     {
         $object = new SetProductShopPriceInputDto(
@@ -103,7 +104,7 @@ class SetProductShopPriceInputDtoTest extends TestCase
         $this->assertEquals(['product_id_and_shop_id' => [VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailProductIdIsWrong(): void
     {
         $object = new SetProductShopPriceInputDto(
@@ -121,7 +122,7 @@ class SetProductShopPriceInputDtoTest extends TestCase
         $this->assertEquals(['product_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopIdIsWrong(): void
     {
         $object = new SetProductShopPriceInputDto(
@@ -139,7 +140,7 @@ class SetProductShopPriceInputDtoTest extends TestCase
         $this->assertEquals(['shop_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $object = new SetProductShopPriceInputDto(
@@ -157,7 +158,7 @@ class SetProductShopPriceInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsWrong(): void
     {
         $object = new SetProductShopPriceInputDto(
@@ -175,7 +176,7 @@ class SetProductShopPriceInputDtoTest extends TestCase
         $this->assertEquals(['group_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPricesIsNull(): void
     {
         $object = new SetProductShopPriceInputDto(
@@ -197,7 +198,7 @@ class SetProductShopPriceInputDtoTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUnitsIsNull(): void
     {
         $object = new SetProductShopPriceInputDto(
@@ -219,7 +220,7 @@ class SetProductShopPriceInputDtoTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPricesIsNegative(): void
     {
         $object = new SetProductShopPriceInputDto(
@@ -237,7 +238,7 @@ class SetProductShopPriceInputDtoTest extends TestCase
         $this->assertEquals(['prices' => [[VALIDATION_ERRORS::POSITIVE_OR_ZERO]]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUnitsIsNotValid(): void
     {
         $object = new SetProductShopPriceInputDto(
@@ -255,7 +256,7 @@ class SetProductShopPriceInputDtoTest extends TestCase
         $this->assertEquals(['units' => [[VALIDATION_ERRORS::CHOICE_NOT_SUCH]]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailProductsOrShopsIdIrWrong(): void
     {
         $object = new SetProductShopPriceInputDto(

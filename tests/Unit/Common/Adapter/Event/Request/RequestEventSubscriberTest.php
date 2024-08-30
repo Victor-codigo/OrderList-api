@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Event\Request;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Event\Request\RequestEventSubscriber;
 use Common\Adapter\Validation\ValidationChain;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -28,7 +29,7 @@ class RequestEventSubscriberTest extends TestCase
         $this->object = new RequestEventSubscriber(new ValidationChain());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetLocaleAsSpanish(): void
     {
         $this->event
@@ -45,7 +46,7 @@ class RequestEventSubscriberTest extends TestCase
         $this->object->__invoke($this->event);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSetLocaleAsEnglish(): void
     {
         $this->event
@@ -62,7 +63,7 @@ class RequestEventSubscriberTest extends TestCase
         $this->object->__invoke($this->event);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldChangeLocaleNoLangInQueryString(): void
     {
         $this->event
@@ -78,7 +79,7 @@ class RequestEventSubscriberTest extends TestCase
         $this->object->__invoke($this->event);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldChangeLocaleWrongLang(): void
     {
         $this->event

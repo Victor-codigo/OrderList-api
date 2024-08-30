@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersCreateFrom;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -152,11 +153,9 @@ class ListOrdersCreateFromServiceTest extends TestCase
         yield [false];
     }
 
-    /**
-     * @test
-     *
-     * */
+    
     #[DataProvider('createListOrdersDataProvider')]
+    #[Test]
     public function itShouldCreateAListOrdersFromOtherListOrders(bool $hasOrders): void
     {
         $listOrdersOld = $this->getListOrders(self::LIST_ORDERS_ID_OLD, $hasOrders);
@@ -213,7 +212,7 @@ class ListOrdersCreateFromServiceTest extends TestCase
         $this->assertListOrdersOrdersNewIsOk($listOrdersOld, $return, $input->userId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAListOrdersFromOtherListOrdersNameAlreadyExists(): void
     {
         $listOrdersOld = $this->getListOrders(self::LIST_ORDERS_ID_OLD, true);
@@ -263,7 +262,7 @@ class ListOrdersCreateFromServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAListOrdersFromOtherListOrdersNotFound(): void
     {
         $input = new ListOrdersCreateFromDto(
@@ -303,7 +302,7 @@ class ListOrdersCreateFromServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAListOrdersFromOtherErrorSaving(): void
     {
         $listOrdersOld = $this->getListOrders(self::LIST_ORDERS_ID_OLD, true);

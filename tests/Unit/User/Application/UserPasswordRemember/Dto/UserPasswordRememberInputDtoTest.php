@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserPasswordRemember\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
@@ -22,7 +23,7 @@ class UserPasswordRememberInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidateEmailIsCorrect(): void
     {
         $userPasswordRememberDto = new UserPasswordRememberInputDto(
@@ -34,7 +35,7 @@ class UserPasswordRememberInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailEmailIsNull(): void
     {
         $userPasswordRememberDto = new UserPasswordRememberInputDto(
@@ -46,7 +47,7 @@ class UserPasswordRememberInputDtoTest extends TestCase
         $this->assertSame(['email' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailEmailIsBlank(): void
     {
         $userPasswordRememberDto = new UserPasswordRememberInputDto(
@@ -58,7 +59,7 @@ class UserPasswordRememberInputDtoTest extends TestCase
         $this->assertSame(['email' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailEmailIsWrong(): void
     {
         $userPasswordRememberDto = new UserPasswordRememberInputDto(
@@ -69,7 +70,7 @@ class UserPasswordRememberInputDtoTest extends TestCase
         $this->assertSame(['email' => [VALIDATION_ERRORS::EMAIL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUrlIsNull(): void
     {
         $userPasswordRememberDto = new UserPasswordRememberInputDto(
@@ -81,7 +82,7 @@ class UserPasswordRememberInputDtoTest extends TestCase
         $this->assertSame(['passwordRememberUrl' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUrlIsBlank(): void
     {
         $userPasswordRememberDto = new UserPasswordRememberInputDto(
@@ -93,7 +94,7 @@ class UserPasswordRememberInputDtoTest extends TestCase
         $this->assertSame(['passwordRememberUrl' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUrlIsWrong(): void
     {
         $userPasswordRememberDto = new UserPasswordRememberInputDto(

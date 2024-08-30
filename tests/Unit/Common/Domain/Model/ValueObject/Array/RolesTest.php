@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Array;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Object\Rol;
@@ -24,7 +25,7 @@ class RolesTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function isAValidRoles(): void
     {
         $this->object = $this->createRoles([USER_ROLES::USER, USER_ROLES::ADMIN]);
@@ -33,7 +34,7 @@ class RolesTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function noRolesError(): void
     {
         $this->object = $this->createRoles([]);
@@ -42,7 +43,7 @@ class RolesTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK], $return);
     }
 
-    /** @test */
+    #[Test]
     public function checkNotNullAndNotBlank(): void
     {
         $this->object = $this->createRoles(null);
@@ -51,7 +52,7 @@ class RolesTest extends TestCase
         $this->assertEquals([VALIDATION_ERRORS::NOT_BLANK], $return);
     }
 
-    /** @test */
+    #[Test]
     public function checkIfRolesHasRol(): void
     {
         $this->object = $this->createRoles([USER_ROLES::ADMIN, USER_ROLES::USER]);
@@ -60,7 +61,7 @@ class RolesTest extends TestCase
         $this->assertTrue($return);
     }
 
-    /** @test */
+    #[Test]
     public function checkIfRolesHasNotRol(): void
     {
         $this->object = $this->createRoles([USER_ROLES::ADMIN, USER_ROLES::USER]);
@@ -69,7 +70,7 @@ class RolesTest extends TestCase
         $this->assertFalse($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnRolesEnumEmptyNoRoles(): void
     {
         $this->object = $this->createRoles(null);
@@ -78,7 +79,7 @@ class RolesTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnRolesEnum(): void
     {
         $roles = [USER_ROLES::ADMIN, USER_ROLES::USER];

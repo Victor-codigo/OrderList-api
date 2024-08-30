@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Float;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Float\AmountType;
 use Common\Domain\Model\ValueObject\Float\Amount;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -21,7 +22,7 @@ class AmountTypeTest extends TestCase
         $this->abstractPlatform = $this->createMock(AbstractPlatform::class);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnAValidPhpValuePassedInt(): void
     {
         $value = 3;
@@ -32,7 +33,7 @@ class AmountTypeTest extends TestCase
         $this->assertEquals($value, $return->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnAValidPhpValuePassedFloat(): void
     {
         $value = 3.2;
@@ -43,7 +44,7 @@ class AmountTypeTest extends TestCase
         $this->assertEquals($value, $return->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnAValidPhpValuePassedString(): void
     {
         $value = '3.2';

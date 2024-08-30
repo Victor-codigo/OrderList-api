@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Order\Adapter\Http\Controller\OrderRemoveAllGroupsOrders;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +33,7 @@ class OrderRemoveAllGroupsOrdersControllerTest extends WebClientTestCase
         '376008f2-4d7e-4072-8bd3-1e42ebe0c6da',
     ];
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveGroupsIdOrders(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -62,7 +63,7 @@ class OrderRemoveAllGroupsOrdersControllerTest extends WebClientTestCase
         $this->assertEmpty($responseContent->data->orders_id_user_changed);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldChangeAllGroupsOrdersUserId(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -93,7 +94,7 @@ class OrderRemoveAllGroupsOrdersControllerTest extends WebClientTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveOrdersAndChangeOrdersUserId(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -123,7 +124,7 @@ class OrderRemoveAllGroupsOrdersControllerTest extends WebClientTestCase
         $this->assertEqualsCanonicalizing(self::ORDERS_ID_GROUP_2, $responseContent->data->orders_id_user_changed);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldNotRemoveOrChangeNoGroupsIdProvided(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -149,7 +150,7 @@ class OrderRemoveAllGroupsOrdersControllerTest extends WebClientTestCase
         $this->assertEmpty($responseContent->data->orders_id_user_changed);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldNotRemoveOrChangeGroupsIdProvidedNotFound(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -179,7 +180,7 @@ class OrderRemoveAllGroupsOrdersControllerTest extends WebClientTestCase
         $this->assertEmpty($responseContent->data->orders_id_user_changed);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdToRemoveAreWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -209,7 +210,7 @@ class OrderRemoveAllGroupsOrdersControllerTest extends WebClientTestCase
         $this->assertEquals([['uuid_invalid_characters']], $responseContent->errors->groups_id_remove);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupsIdToChangeUserIdAreWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -239,7 +240,7 @@ class OrderRemoveAllGroupsOrdersControllerTest extends WebClientTestCase
         $this->assertEquals([['uuid_invalid_characters']], $responseContent->errors->groups_id_change_user_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSystemKeyIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -267,7 +268,7 @@ class OrderRemoveAllGroupsOrdersControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank'], $responseContent->errors->system_key);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSystemKeyIsWrong(): void
     {
         $client = $this->getNewClientAuthenticatedUser();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Security\User;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\User\USER_ROLES;
@@ -33,7 +34,7 @@ class UserSymfonyAdapterTest extends TestCase
         $this->object = new UserSymfonyAdapter($this->passwordHAsher, $this->user);
     }
 
-    /** @test */
+    #[Test]
     public function returnsTheUser(): void
     {
         $return = $this->object->getUser();
@@ -42,7 +43,7 @@ class UserSymfonyAdapterTest extends TestCase
             'getUser: User returned is not the expected');
     }
 
-    /** @test */
+    #[Test]
     public function setsTheUser(): void
     {
         $userNew = $this->createMock(User::class);
@@ -55,7 +56,7 @@ class UserSymfonyAdapterTest extends TestCase
             'setUser: The user set is not the expected');
     }
 
-    /** @test */
+    #[Test]
     public function getRoles(): void
     {
         $roles = ValueObjectFactory::createRoles([new Rol(USER_ROLES::USER)]);
@@ -66,7 +67,7 @@ class UserSymfonyAdapterTest extends TestCase
             'getRoles: The roles returned is not the expected');
     }
 
-    /** @test */
+    #[Test]
     public function getTheIdentifier(): void
     {
         $email = ValueObjectFactory::createEmail('test@email.com');
@@ -77,7 +78,7 @@ class UserSymfonyAdapterTest extends TestCase
             'getUserIdentifier: The identifier returned is not the expected');
     }
 
-    /** @test */
+    #[Test]
     public function getTheIdentifierWhenItsNullShouldReturnEmptyString(): void
     {
         $email = ValueObjectFactory::createEmail(null);
@@ -87,7 +88,7 @@ class UserSymfonyAdapterTest extends TestCase
         $this->assertEquals($return, '');
     }
 
-    /** @test */
+    #[Test]
     public function getThePassword(): void
     {
         $password = ValueObjectFactory::createPassword('pass');
@@ -105,7 +106,7 @@ class UserSymfonyAdapterTest extends TestCase
             'getPassword: The password returned is not the expected');
     }
 
-    /** @test */
+    #[Test]
     public function getThePasswordWhenItsNullShouldReturnEmptyString(): void
     {
         $password = ValueObjectFactory::createPassword(null);
@@ -122,7 +123,7 @@ class UserSymfonyAdapterTest extends TestCase
         $this->assertEquals($return, '');
     }
 
-    /** @test */
+    #[Test]
     public function itShouldHashTheUserPassword(): void
     {
         $plainPassword = 'my password';
@@ -140,7 +141,7 @@ class UserSymfonyAdapterTest extends TestCase
         $this->assertSame($hashedPassword, $this->object->getPassword());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCheckIfThePasswordNeedRehash(): void
     {
         $this->passwordHAsher
@@ -154,7 +155,7 @@ class UserSymfonyAdapterTest extends TestCase
         $this->assertTrue($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCheckIfAPasswordIsValidAndNeedRehash(): void
     {
         $plainPassword = 'my password';
@@ -183,7 +184,7 @@ class UserSymfonyAdapterTest extends TestCase
         $this->assertTrue($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCheckIfAPasswordIsValidAndNotNeedRehash(): void
     {
         $plainPassword = 'my password';
@@ -209,7 +210,7 @@ class UserSymfonyAdapterTest extends TestCase
         $this->assertTrue($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCheckIfAPasswordIsValidAndItIsNot(): void
     {
         $plainPassword = 'my password';

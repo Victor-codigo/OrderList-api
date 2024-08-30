@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupGetUsers;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -169,7 +170,7 @@ class GroupGetUsersServiceTest extends TestCase
         );
     }
 
-    private static function getGroupUsersDataProvider(): iterable
+    public static function getGroupUsersDataProvider(): iterable
     {
         $usersExpectedData = self::getUsersExpected();
 
@@ -266,10 +267,8 @@ class GroupGetUsersServiceTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
     #[DataProvider('getGroupUsersDataProvider')]
+    #[Test]
     public function itShouldGetGroupUsers(GroupGetUsersDto $input, array $usersDataExpected): void
     {
         $groupUsersData = $this->getGroupUsersData();
@@ -303,7 +302,7 @@ class GroupGetUsersServiceTest extends TestCase
         $this->assertUserIsOk($usersDataExpected, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingGroupUsersUserNameNotFound(): void
     {
         $input = new GroupGetUsersDto(
@@ -352,7 +351,7 @@ class GroupGetUsersServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGetGroupUsersGroupHasNoUsers(): void
     {
         $input = new GroupGetUsersDto(
@@ -386,7 +385,7 @@ class GroupGetUsersServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGetGroupUsersErrorGettingUserData(): void
     {
         $groupUsersData = $this->getGroupUsersData();

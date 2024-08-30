@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Http\RequestDataValidation;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Http\RequestDataValidation\RequestDataValidation;
 use PHPUnit\Framework\TestCase;
 
@@ -30,7 +31,7 @@ class RequestDataValidationTest extends TestCase
         $this->objectMethodValidateArrayOverflow->setAccessible(true);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnNullValuesAreNull(): void
     {
         $values = null;
@@ -40,7 +41,7 @@ class RequestDataValidationTest extends TestCase
         $this->assertNull($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnOnly100Values(): void
     {
         $values = array_fill(0, 150, 'value');
@@ -50,7 +51,7 @@ class RequestDataValidationTest extends TestCase
         $this->assertCount($valuesMax, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnAllValues(): void
     {
         $values = array_fill(0, 50, 'value');
@@ -60,7 +61,7 @@ class RequestDataValidationTest extends TestCase
         $this->assertCount(50, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnNullValuesCsvAreNull(): void
     {
         $values = null;
@@ -70,7 +71,7 @@ class RequestDataValidationTest extends TestCase
         $this->assertNull($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnOnly100ValuesCsv(): void
     {
         $values = implode(
@@ -83,7 +84,7 @@ class RequestDataValidationTest extends TestCase
         $this->assertCount($valuesMax, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldReturnAllValuesCsv(): void
     {
         $values = implode(

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Domain\Service\ShopCreate;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\FileUpload\Exception\FileUploadException;
@@ -69,7 +70,7 @@ class ShopCreateServiceTest extends TestCase
         return true;
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAShopAllData(): void
     {
         $shopDescription = 'shop 1 description';
@@ -121,7 +122,7 @@ class ShopCreateServiceTest extends TestCase
         $this->assertEquals(self::IMAGE_UPLOADED_FILE_NAME, $return->getImage()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAShopDescriptionIsNull(): void
     {
         $shopDescription = null;
@@ -173,7 +174,7 @@ class ShopCreateServiceTest extends TestCase
         $this->assertEquals(self::IMAGE_UPLOADED_FILE_NAME, $return->getImage()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAShopAddressIsNull(): void
     {
         $shopDescription = 'shop 1 description';
@@ -225,7 +226,7 @@ class ShopCreateServiceTest extends TestCase
         $this->assertEquals(self::IMAGE_UPLOADED_FILE_NAME, $return->getImage()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAShopImageIsNull(): void
     {
         $shopDescription = 'shop 1 description';
@@ -270,7 +271,7 @@ class ShopCreateServiceTest extends TestCase
         $this->assertNull($return->getImage()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailShopNameAlreadyExists(): void
     {
         $shopDescription = 'shop 1 description';
@@ -307,7 +308,7 @@ class ShopCreateServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFileUploadException(): void
     {
         $shopDescription = 'shop 1 description';
@@ -347,7 +348,7 @@ class ShopCreateServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailResizeFileUploadedException(): void
     {
         $shopDescription = 'shop 1 description';
@@ -393,7 +394,7 @@ class ShopCreateServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailSaveError(): void
     {
         $shopDescription = 'shop 1 description';

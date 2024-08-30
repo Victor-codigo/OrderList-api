@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\NotificationTypeType;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -26,7 +27,7 @@ class NotificationTypeTypeTest extends TestCase
         $this->object = new NotificationTypeType();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldConvertToDatabaseValue(): void
     {
         $value = ValueObjectFactory::createNotificationType(NOTIFICATION_TYPE::USER_REGISTERED);
@@ -35,7 +36,7 @@ class NotificationTypeTypeTest extends TestCase
         $this->assertSame(NOTIFICATION_TYPE::USER_REGISTERED->value, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldConvertNullValueToNullForDatabaseValue(): void
     {
         $return = $this->object->convertToDatabaseValue(null, $this->platform);
@@ -43,7 +44,7 @@ class NotificationTypeTypeTest extends TestCase
         $this->assertNull($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailConvertingDataToDatabaseValueValueTypeIsNotValid(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -52,7 +53,7 @@ class NotificationTypeTypeTest extends TestCase
         $this->object->convertToDatabaseValue($value, $this->platform);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldConvertToPhpValue(): void
     {
         $value = NOTIFICATION_TYPE::USER_REGISTERED->value;
@@ -62,7 +63,7 @@ class NotificationTypeTypeTest extends TestCase
         $this->assertEquals($expects, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailConvertingToPhpValue(): void
     {
         $this->expectException(InvalidArgumentException::class);

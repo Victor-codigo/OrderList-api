@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Repository;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -75,7 +76,7 @@ class RepositoryBaseTest extends DataBaseTestCase
         $this->assertEquals($queryExpected->getParameters(), $queryActual->getParameters());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAPaginatorWithADqlAndItsParameters(): void
     {
         $dql = 'SELECT * FROM Users';
@@ -115,7 +116,7 @@ class RepositoryBaseTest extends DataBaseTestCase
         $this->assertEquals($this->paginator, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateAPaginatorWithADqlWithoutParameters(): void
     {
         $dql = 'SELECT * FROM Users';
@@ -149,7 +150,7 @@ class RepositoryBaseTest extends DataBaseTestCase
         $this->assertEquals($this->paginator, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailCreatingAPaginatorWithADqlAndItsParametersNotFound(): void
     {
         $dql = 'SELECT * FROM Users';

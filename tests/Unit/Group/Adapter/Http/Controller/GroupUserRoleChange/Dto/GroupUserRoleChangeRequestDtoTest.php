@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Adapter\Http\Controller\GroupUserRoleChange\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Group\Adapter\Http\Controller\GroupUserRoleChange\Dto\GroupUserRoleChangeRequestDto;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -38,7 +39,7 @@ class GroupUserRoleChangeRequestDtoTest extends TestCase
         return new GroupUserRoleChangeRequestDto($request);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldProcessAllIds(): void
     {
         $requestDto = $this->createRequest(array_fill(0, self::USERS_NUM_MAX, self::USER_ID));
@@ -46,7 +47,7 @@ class GroupUserRoleChangeRequestDtoTest extends TestCase
         $this->assertCount(self::USERS_NUM_MAX, $requestDto->usersId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldProcessOnlyTheMaximum(): void
     {
         $requestDto = $this->createRequest(array_fill(0, self::USERS_NUM_MAX + 1, self::USER_ID));
@@ -54,7 +55,7 @@ class GroupUserRoleChangeRequestDtoTest extends TestCase
         $this->assertCount(self::USERS_NUM_MAX, $requestDto->usersId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldProcessNotUsersSent(): void
     {
         $requestDto = $this->createRequest(null);

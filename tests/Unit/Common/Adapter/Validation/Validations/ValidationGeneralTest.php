@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation\Validations;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\TYPES;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -21,7 +22,7 @@ class ValidationGeneralTest extends TestCase
         $this->object = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function validateNotBlankOk(): void
     {
         $return = $this->object
@@ -36,7 +37,7 @@ class ValidationGeneralTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateNotBlankError(): void
     {
         $return = $this->object
@@ -51,7 +52,7 @@ class ValidationGeneralTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateNotNullOk(): void
     {
         $return = $this->object
@@ -66,7 +67,7 @@ class ValidationGeneralTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateNotNullError(): void
     {
         $return = $this->object
@@ -81,7 +82,7 @@ class ValidationGeneralTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateEmailOk(): void
     {
         $return = $this->object
@@ -96,7 +97,7 @@ class ValidationGeneralTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateEmailError(): void
     {
         $return = $this->object
@@ -111,7 +112,7 @@ class ValidationGeneralTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateTypeOk(): void
     {
         $return = $this->object
@@ -126,7 +127,7 @@ class ValidationGeneralTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateTypeError(): void
     {
         $return = $this->object
@@ -141,7 +142,7 @@ class ValidationGeneralTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateUniqueOk(): void
     {
         $return = $this->object
@@ -156,7 +157,7 @@ class ValidationGeneralTest extends TestCase
             'validate: It was expected to return an empty array');
     }
 
-    /** @test */
+    #[Test]
     public function validateUniqueError(): void
     {
         $return = $this->object

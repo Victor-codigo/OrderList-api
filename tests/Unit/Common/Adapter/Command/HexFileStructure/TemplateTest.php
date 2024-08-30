@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Command\HexFileStructure;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Command\HexFilesStructure\Exception\TemplateErrorException;
 use Common\Adapter\Command\HexFilesStructure\PLACEHOLDER;
 use Common\Adapter\Command\HexFilesStructure\Template;
@@ -40,7 +41,7 @@ class TemplateTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateATemplateInDestiny(): void
     {
         $this->object = new Template(self::TEMPLATE_PATH, self::TEMPLATE_OUTPUT_PATH);
@@ -50,7 +51,7 @@ class TemplateTest extends TestCase
         $this->assertFileEquals(self::TEMPLATE_EXPECTED_PATH, self::TEMPLATE_OUTPUT_PATH);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailTemplateNotFound(): void
     {
         $this->expectException(TemplateErrorException::class);
@@ -59,7 +60,7 @@ class TemplateTest extends TestCase
         $this->object->createDestiny($this->templatePlaceholder);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailTemplateOutputNotFound(): void
     {
         $this->expectException(TemplateErrorException::class);

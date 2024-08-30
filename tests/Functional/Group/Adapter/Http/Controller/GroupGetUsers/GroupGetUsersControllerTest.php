@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupGetUsers;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\Filter\FILTER_SECTION;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
@@ -36,7 +37,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetTheGroupUsersData(): void
     {
         $page = 1;
@@ -60,7 +61,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertUsersAreOk($responseContent, $pageItems, $page, 2);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGet50UsersNoLimitSet(): void
     {
         $page = 1;
@@ -83,7 +84,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertUsersAreOk($responseContent, $pageItems, $page, 2);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGet50UsersNoPageSet(): void
     {
         $page = 1;
@@ -106,7 +107,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertUsersAreOk($responseContent, $pageItems, $page, 2);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGet50UsersNoLimitAndNoOffsetSet(): void
     {
         $page = 1;
@@ -128,7 +129,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertUsersAreOk($responseContent, $pageItems, $page, 2);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGet5Users(): void
     {
         $page = 1;
@@ -152,7 +153,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertUsersAreOk($responseContent, $pageItems, $page, 20);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetUserByNameFilterEquals(): void
     {
         $page = 1;
@@ -184,7 +185,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertUsersAreOk($responseContent, 1, $page, 1);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetUserByNameFilterStartsWith(): void
     {
         $page = 1;
@@ -216,7 +217,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertUsersAreOk($responseContent, 1, $page, 1);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetUserByNameFilterEndsWith(): void
     {
         $page = 1;
@@ -248,7 +249,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertUsersAreOk($responseContent, 1, $page, 1);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetUserByNameFilterContains(): void
     {
         $page = 1;
@@ -280,7 +281,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertUsersAreOk($responseContent, 1, $page, 1);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldNotGetUserFilteredByNameUserNotExists(): void
     {
         $page = 1;
@@ -312,7 +313,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertEquals('Group not found', $responseContent->errors->group_not_found);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsEmpty(): void
     {
         $page = 1;
@@ -335,7 +336,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGroupIdIsNotValid(): void
     {
         $page = 1;
@@ -359,7 +360,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertEquals(['uuid_invalid_characters'], $responseContent->errors->group_id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailLimitTooHigh(): void
     {
         $page = 1;
@@ -384,7 +385,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertEquals(['less_than_or_equal'], $responseContent->errors->page_items);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailLimitTooLow(): void
     {
         $page = 1;
@@ -408,7 +409,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertEquals(['greater_than'], $responseContent->errors->page_items);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailOffsetTooLow(): void
     {
         $page = -1;
@@ -432,7 +433,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertEquals(['greater_than'], $responseContent->errors->page);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFilterSectionNotSet(): void
     {
         $page = 1;
@@ -460,7 +461,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertEquals(['not_null'], $responseContent->errors->filter_section_and_text_not_empty);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFilterTextNotSet(): void
     {
         $page = 1;
@@ -488,7 +489,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertEquals(['not_null'], $responseContent->errors->filter_section_and_text_not_empty);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFilterValueNotSet(): void
     {
         $page = 1;
@@ -517,7 +518,7 @@ class GroupGetUsersControllerTest extends WebClientTestCase
         $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->text_filter_value);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserSessionIsNotInTheGroup(): void
     {
         $page = 1;

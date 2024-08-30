@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupRemove;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
@@ -86,7 +87,7 @@ class GroupRemoveUseCaseTest extends TestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveTheGroups(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
@@ -154,7 +155,7 @@ class GroupRemoveUseCaseTest extends TestCase
         $this->assertEquals($groupsId, $return->groupsRemovedId);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveTheGroupNotificationError(): void
     {
         $userId = ValueObjectFactory::createIdentifier('user id');
@@ -221,7 +222,7 @@ class GroupRemoveUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveUserIsNotAdminOfTheGroup(): void
     {
         $groupsId = [
@@ -268,7 +269,7 @@ class GroupRemoveUseCaseTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveGroupIdNotFound(): void
     {
         $groupsId = [

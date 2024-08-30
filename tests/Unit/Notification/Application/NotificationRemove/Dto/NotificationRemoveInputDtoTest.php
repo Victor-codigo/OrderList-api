@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Application\NotificationRemove\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
@@ -40,7 +41,7 @@ class NotificationRemoveInputDtoTest extends TestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $notificationsIds = $this->getNotificationsIds();
@@ -50,7 +51,7 @@ class NotificationRemoveInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNotificationsAreEmpty(): void
     {
         $notificationsIds = null;
@@ -60,7 +61,7 @@ class NotificationRemoveInputDtoTest extends TestCase
         $this->assertEquals(['notifications_id' => [VALIDATION_ERRORS::NOT_BLANK]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNotificationsIdsNotValid(): void
     {
         $notificationsIds = $this->getNotificationsIds();

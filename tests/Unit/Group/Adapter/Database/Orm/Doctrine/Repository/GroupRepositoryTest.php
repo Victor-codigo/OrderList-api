@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Adapter\Database\Orm\Doctrine\Repository;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
@@ -78,7 +79,7 @@ class GroupRepositoryTest extends DataBaseTestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function itShouldSaveTheGroupInDatabase(): void
     {
         $groupNew = $this->getNewGroup();
@@ -94,7 +95,7 @@ class GroupRepositoryTest extends DataBaseTestCase
         $this->assertEquals($userGroupNew, $groupSaved->getUsers()->get(0));
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailIdAlreadyExists(): void
     {
         $this->expectException(DBUniqueConstraintException::class);
@@ -102,7 +103,7 @@ class GroupRepositoryTest extends DataBaseTestCase
         $this->object->save($this->getExistsGroup());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailDataBaseError(): void
     {
         $this->expectException(DBConnectionException::class);
@@ -118,7 +119,7 @@ class GroupRepositoryTest extends DataBaseTestCase
         $this->object->save($this->getNewGroup());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveTheGroup(): void
     {
         $groups = [
@@ -142,7 +143,7 @@ class GroupRepositoryTest extends DataBaseTestCase
         $this->assertEmpty($groupRemoved);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemovingTheGroupErrorConnection(): void
     {
         $this->expectException(DBConnectionException::class);
@@ -160,7 +161,7 @@ class GroupRepositoryTest extends DataBaseTestCase
         $this->object->remove([$group]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindAllGroupsById(): void
     {
         $groupId = [
@@ -176,7 +177,7 @@ class GroupRepositoryTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNoIdGroup(): void
     {
         $this->expectException(DBNotFoundException::class);
@@ -184,7 +185,7 @@ class GroupRepositoryTest extends DataBaseTestCase
         $this->object->findGroupsByIdOrFail([ValueObjectFactory::createIdentifier('0b13e52d-b058-32fb-8507-10dec634a07A')]);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFindAGroupByName(): void
     {
         $groupName = ValueObjectFactory::createNameWithSpaces('GroupOne');
@@ -194,7 +195,7 @@ class GroupRepositoryTest extends DataBaseTestCase
         $this->assertEquals($returnExpected[0], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailFindingAGroupByNameNotFound(): void
     {
         $this->expectException(DBNotFoundException::class);

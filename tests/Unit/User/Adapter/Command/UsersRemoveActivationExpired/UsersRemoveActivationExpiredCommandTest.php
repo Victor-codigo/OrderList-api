@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Command\UsersRemoveActivationExpired;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -47,7 +48,7 @@ class UsersRemoveActivationExpiredCommandTest extends TestCase
         return $method->invoke($command, $input, $output);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveUsersNotActiveAndTimeExpired(): void
     {
         $pagesNum = 3;
@@ -79,7 +80,7 @@ class UsersRemoveActivationExpiredCommandTest extends TestCase
         $this->assertEquals(Command::SUCCESS, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRemoveUsersNotActiveAndTimeExpiredNoUserToRemove(): void
     {
         $object = new UsersRemoveActivationExpiredCommand($this->userRepository, self::USER_NOT_ACTIVE_TIME_TO_EXPIRE);
@@ -107,7 +108,7 @@ class UsersRemoveActivationExpiredCommandTest extends TestCase
         $this->assertEquals(Command::SUCCESS, $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailRemoveUsersNotActiveAndTimeExpiredErrorRemoving(): void
     {
         $pagesNum = 3;

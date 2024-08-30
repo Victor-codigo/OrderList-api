@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Security\Jwt;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\User\USER_ROLES;
@@ -38,7 +39,7 @@ class UserSymfonyProviderAdapterTest extends TestCase
         $this->object = new UserSymfonyProviderAdapter($this->userRepository, $this->passwordHasher);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldLoadUserById(): void
     {
         $id = 'this is an id';
@@ -69,7 +70,7 @@ class UserSymfonyProviderAdapterTest extends TestCase
         $this->assertEquals($expectedUser, $return->getUser());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserIdDoesNotExists(): void
     {
         $id = 'this is an id';
@@ -94,7 +95,7 @@ class UserSymfonyProviderAdapterTest extends TestCase
         $this->object->loadUserByIdentifier($id);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldLoadUserByEmail(): void
     {
         $email = 'user@email.com';
@@ -125,7 +126,7 @@ class UserSymfonyProviderAdapterTest extends TestCase
         $this->assertEquals($expectedUser, $return->getUser());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserEmailDoesNotExists(): void
     {
         $email = 'user@email.com';
@@ -150,7 +151,7 @@ class UserSymfonyProviderAdapterTest extends TestCase
         $this->object->loadUserByIdentifier($email);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserIsNotActive(): void
     {
         $email = 'user@email.com';
@@ -177,7 +178,7 @@ class UserSymfonyProviderAdapterTest extends TestCase
         $this->object->loadUserByIdentifier($email);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserIsDeleted(): void
     {
         $email = 'user@email.com';
@@ -204,7 +205,7 @@ class UserSymfonyProviderAdapterTest extends TestCase
         $this->object->loadUserByIdentifier($email);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldUpdateTheUserPassword(): void
     {
         $passwordNew = 'new password';
@@ -225,7 +226,7 @@ class UserSymfonyProviderAdapterTest extends TestCase
         $this->assertSame($passwordNew, $expectedUser->getPassword()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldRefreshTheUser(): void
     {
         $email = 'user@email.com';
@@ -261,7 +262,7 @@ class UserSymfonyProviderAdapterTest extends TestCase
         $this->assertEquals($expectedUser, $return->getUser());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserNotSupported(): void
     {
         $this->user
@@ -272,7 +273,7 @@ class UserSymfonyProviderAdapterTest extends TestCase
         $this->object->refreshUser(new UserAdapter());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserEmailNotFound(): void
     {
         $email = 'user@email.com';

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Application\NotificationGetData\Dto;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -26,7 +27,7 @@ class NotificationGetDataInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldValidate(): void
     {
         $page = 1;
@@ -39,7 +40,7 @@ class NotificationGetDataInputDtoTest extends TestCase
         $this->assertEmpty($return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageIsNull(): void
     {
         $page = null;
@@ -52,7 +53,7 @@ class NotificationGetDataInputDtoTest extends TestCase
         $this->assertEquals(['page' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageIsLowerThanOne(): void
     {
         $page = 0;
@@ -65,7 +66,7 @@ class NotificationGetDataInputDtoTest extends TestCase
         $this->assertEquals(['page' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageItemsIsNull(): void
     {
         $page = 1;
@@ -78,7 +79,7 @@ class NotificationGetDataInputDtoTest extends TestCase
         $this->assertEquals(['page_items' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageItemsIsLowerThanOne(): void
     {
         $page = 1;
@@ -91,7 +92,7 @@ class NotificationGetDataInputDtoTest extends TestCase
         $this->assertEquals(['page_items' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageAndPageItemsIsGreaterThan100(): void
     {
         $page = 1;
@@ -104,7 +105,7 @@ class NotificationGetDataInputDtoTest extends TestCase
         $this->assertEquals(['page_items' => [VALIDATION_ERRORS::LESS_THAN_OR_EQUAL]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailLanguageIsWrong(): void
     {
         $page = 1;
@@ -117,7 +118,7 @@ class NotificationGetDataInputDtoTest extends TestCase
         $this->assertEquals(['lang' => [VALIDATION_ERRORS::CHOICE_NOT_SUCH]], $return);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPageAndPageItemsIsLowerThanOne(): void
     {
         $page = 0;

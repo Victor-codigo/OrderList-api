@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserRegisterEmailConfirmation;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Validation\User\USER_ROLES;
@@ -33,7 +34,7 @@ class UserRegisterEmailConfirmationControllerTest extends WebClientTestCase
         $this->client = $this->getNewClientNoAuthenticated();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldActivateTheUser(): void
     {
         $token = $this->generateToken(['username' => self::USER_ID], 86_400); // 24H
@@ -57,7 +58,7 @@ class UserRegisterEmailConfirmationControllerTest extends WebClientTestCase
         $this->assertContainsEquals(new Rol(USER_ROLES::USER_FIRST_LOGIN), $userSaved->getRoles()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailWrongToken(): void
     {
         $token = $this->generateToken(['username' => self::USER_ID], 86_400); // 24H
@@ -75,7 +76,7 @@ class UserRegisterEmailConfirmationControllerTest extends WebClientTestCase
         $this->assertEquals([new Rol(USER_ROLES::NOT_ACTIVE)], $userSaved->getRoles()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailTokenHasExpired(): void
     {
         $token = $this->generateToken(['username' => self::USER_ID], 0);
@@ -93,7 +94,7 @@ class UserRegisterEmailConfirmationControllerTest extends WebClientTestCase
         $this->assertEquals([new Rol(USER_ROLES::NOT_ACTIVE)], $userSaved->getRoles()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserIsAlreadyActive(): void
     {
         $token = $this->generateToken(['username' => self::USER_ID_ALREADY_REGISTERED], 86_400); // 24H
@@ -111,7 +112,7 @@ class UserRegisterEmailConfirmationControllerTest extends WebClientTestCase
         $this->assertEquals([new Rol(USER_ROLES::USER)], $userSaved->getRoles()->getValue());
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserDoesNotExists(): void
     {
         $token = $this->generateToken(['username' => self::USER_ID_NOT_EXISTS], 86_400); // 24H
@@ -129,7 +130,7 @@ class UserRegisterEmailConfirmationControllerTest extends WebClientTestCase
         $this->assertNull($userSaved);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailTokenValidation(): void
     {
         $token = 'is.not.valid-token';

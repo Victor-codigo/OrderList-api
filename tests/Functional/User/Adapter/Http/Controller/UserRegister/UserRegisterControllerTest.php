@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserRegister;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -29,7 +30,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         parent::setUp();
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserAlreadyExists(): void
     {
         $clientData = [
@@ -58,7 +59,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertSame('The email already exists', $content->message);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateTheUserNameLowerBound(): void
     {
         $clientData = [
@@ -99,7 +100,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertEmailIsSent($clientData['email']);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateTheUserNameUpperBound(): void
     {
         static::$clientNoAuthenticated = $this->getNewClient();
@@ -143,7 +144,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertEmailIsSent($clientData['email']);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailOnNameTooShort(): void
     {
         static::$clientNoAuthenticated = $this->getNewClient();
@@ -175,7 +176,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertRowDoesNotExistInDataBase('email', new Email($clientData['email']), User::class);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailOnNameTooLong(): void
     {
         static::$clientNoAuthenticated = $this->getNewClient();
@@ -207,7 +208,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertRowDoesNotExistInDataBase('email', new Email($clientData['email']), User::class);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailOnNameNotAlphanumeric(): void
     {
         static::$clientNoAuthenticated = $this->getNewClient();
@@ -239,7 +240,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertRowDoesNotExistInDataBase('email', new Email($clientData['email']), User::class);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailNameNotSet(): void
     {
         static::$clientNoAuthenticated = $this->getNewClient();
@@ -270,7 +271,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertRowDoesNotExistInDataBase('email', new Email($clientData['email']), User::class);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailOnEmail(): void
     {
         static::$clientNoAuthenticated = $this->getNewClient();
@@ -302,7 +303,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertRowDoesNotExistInDataBase('email', new Email($clientData['email']), User::class);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailEmailNotSet(): void
     {
         static::$clientNoAuthenticated = $this->getNewClient();
@@ -333,7 +334,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertRowDoesNotExistInDataBase('name', new NameWithSpaces($clientData['name']), User::class);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateTheUserPasswordBoundLower(): void
     {
         static::$clientNoAuthenticated = $this->getNewClient();
@@ -374,7 +375,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertEmailIsSent($clientData['email']);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldCreateTheUserPasswordBoundUpper(): void
     {
         static::$clientNoAuthenticated = $this->getNewClient();
@@ -415,7 +416,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertEmailIsSent($clientData['email']);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordToShort(): void
     {
         static::$clientNoAuthenticated = $this->getNewClient();
@@ -447,7 +448,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertRowDoesNotExistInDataBase('email', new Email($clientData['email']), User::class);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordTooLong(): void
     {
         static::$clientNoAuthenticated = $this->getNewClient();
@@ -479,7 +480,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertRowDoesNotExistInDataBase('email', new Email($clientData['email']), User::class);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailPasswordNotSet(): void
     {
         static::$clientNoAuthenticated = $this->getNewClient();
@@ -511,7 +512,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertRowDoesNotExistInDataBase('email', new Email($clientData['email']), User::class);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUrlConfirmEmailNotSet(): void
     {
         static::$clientNoAuthenticated = $this->getNewClient();
@@ -542,7 +543,7 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertRowDoesNotExistInDataBase('email', new Email($clientData['email']), User::class);
     }
 
-    /** @test */
+    #[Test]
     public function itShoulFailUrlConfirmEmailNotValid(): void
     {
         static::$clientNoAuthenticated = $this->getNewClient();

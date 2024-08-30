@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Domain\Service\OrderGetData;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -257,7 +258,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetOrdersDataByGroupIdAndOrdersId22(): void
     {
         $input = new OrderGetDataDto(
@@ -316,7 +317,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetOrdersDataByGroupIdListOrdersIdAndProductName(): void
     {
         $filterValue = ValueObjectFactory::createNameWithSpaces('Product name');
@@ -384,7 +385,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetOrdersDataByGroupIdListOrdersIdAndOrderName(): void
     {
         $filterValue = ValueObjectFactory::createNameWithSpaces('Product name');
@@ -452,7 +453,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetOrdersDataByGroupIdListOrdersIdAndShopName(): void
     {
         $filterValue = ValueObjectFactory::createNameWithSpaces('Shop name');
@@ -520,7 +521,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetOrdersDataByGroupIdListOrdersName(): void
     {
         $filterValue = ValueObjectFactory::createNameWithSpaces('Shop name');
@@ -588,7 +589,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetOrdersDataByGroupIdListOrdersId(): void
     {
         $filterValue = ValueObjectFactory::createNameWithSpaces(null);
@@ -656,7 +657,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldGetOrdersDataByGroupId(): void
     {
         $input = new OrderGetDataDto(
@@ -723,7 +724,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailGettingOrdersDataByGroupIdNotFound(): void
     {
         $input = new OrderGetDataDto(

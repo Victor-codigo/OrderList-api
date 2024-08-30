@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Domain\Service\EmailConfirmationJwtTokenValidation;
 
+use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Jwt\Exception\JwtTokenExpiredException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
@@ -44,7 +45,7 @@ class EmailConfirmationJwtTokenValidationServiceTest extends TestCase
         };
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailTokenHasExpired(): void
     {
         $token = ValueObjectFactory::createJwtToken('token');
@@ -67,7 +68,7 @@ class EmailConfirmationJwtTokenValidationServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserIdNotFound(): void
     {
         $token = ValueObjectFactory::createJwtToken('token');
@@ -96,7 +97,7 @@ class EmailConfirmationJwtTokenValidationServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailUserHasNotRolNotActive(): void
     {
         $token = ValueObjectFactory::createJwtToken('token');
@@ -133,7 +134,7 @@ class EmailConfirmationJwtTokenValidationServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldFailErrorDatabaseConnection(): void
     {
         $token = ValueObjectFactory::createJwtToken('token');
@@ -181,7 +182,7 @@ class EmailConfirmationJwtTokenValidationServiceTest extends TestCase
         $this->object->__invoke($input);
     }
 
-    /** @test */
+    #[Test]
     public function itShouldActivateTheUser(): void
     {
         $token = ValueObjectFactory::createJwtToken('token');
