@@ -32,6 +32,7 @@ class NotificationRepositoryTest extends DataBaseTestCase
     private const string NOTIFICATION_IN_DATABASE_3 = 'f79ddff5-486b-4b5f-af64-b99fe9154fc1';
 
     private NotificationRepository $object;
+    private MockObject|ConnectionException $connectionException;
 
     #[\Override]
     protected function setUp(): void
@@ -39,6 +40,7 @@ class NotificationRepositoryTest extends DataBaseTestCase
         parent::setUp();
 
         $this->object = $this->entityManager->getRepository(Notification::class);
+        $this->connectionException = $this->createMock(ConnectionException::class);
     }
 
     private function getNotificationData(): array
@@ -137,7 +139,7 @@ class NotificationRepositoryTest extends DataBaseTestCase
         $objectManagerMock
         ->expects($this->once())
         ->method('flush')
-        ->willThrowException(ConnectionException::driverRequired(''));
+        ->willThrowException($this->connectionException);
 
         $this->mockObjectManager($this->object, $objectManagerMock);
 

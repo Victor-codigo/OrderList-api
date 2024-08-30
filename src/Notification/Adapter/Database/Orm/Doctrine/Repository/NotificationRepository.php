@@ -11,6 +11,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintE
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\ORM\Exception\EntityIdentityCollisionException;
 use Doctrine\Persistence\ManagerRegistry;
 use Notification\Domain\Model\Notification;
 use Notification\Domain\Ports\Notification\NotificationRepositoryInterface;
@@ -39,7 +40,7 @@ class NotificationRepository extends RepositoryBase implements NotificationRepos
             }
 
             $this->objectManager->flush();
-        } catch (UniqueConstraintViolationException $e) {
+        } catch (UniqueConstraintViolationException|EntityIdentityCollisionException $e) {
             throw DBUniqueConstraintException::fromId($notification->getId()->getValue(), $e->getCode());
         } catch (\Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
