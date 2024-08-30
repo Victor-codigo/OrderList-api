@@ -15,6 +15,7 @@ use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Validation\User\USER_ROLES;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\ORM\Exception\EntityIdentityCollisionException;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 use Override;
@@ -40,7 +41,7 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
         try {
             $this->objectManager->persist($user);
             $this->objectManager->flush();
-        } catch (UniqueConstraintViolationException $e) {
+        } catch (UniqueConstraintViolationException|EntityIdentityCollisionException $e) {
             throw DBUniqueConstraintException::fromEmail($user->getEmail()->getValue(), $e->getCode());
         } catch (Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
