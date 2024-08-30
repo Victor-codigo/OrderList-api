@@ -14,6 +14,7 @@ use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\ORM\Exception\EntityIdentityCollisionException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\Persistence\ManagerRegistry;
@@ -319,7 +320,7 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
             }
 
             $this->objectManager->flush();
-        } catch (UniqueConstraintViolationException $e) {
+        } catch (UniqueConstraintViolationException|EntityIdentityCollisionException $e) {
             throw DBUniqueConstraintException::fromId($userGroup->getId(), $e->getCode());
         } catch (\Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
