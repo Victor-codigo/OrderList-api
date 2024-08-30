@@ -24,6 +24,7 @@ class GroupRepositoryTest extends DataBaseTestCase
     use RefreshDatabaseTrait;
 
     private GroupRepository $object;
+    private MockObject|ConnectionException $connectionException;
 
     #[\Override]
     protected function setUp(): void
@@ -31,6 +32,7 @@ class GroupRepositoryTest extends DataBaseTestCase
         parent::setUp();
 
         $this->object = $this->entityManager->getRepository(Group::class);
+        $this->connectionException = $this->createMock(ConnectionException::class);
     }
 
     private function getNewGroup(): Group
@@ -110,7 +112,7 @@ class GroupRepositoryTest extends DataBaseTestCase
         $objectManagerMock
             ->expects($this->once())
             ->method('flush')
-            ->willThrowException(ConnectionException::driverRequired(''));
+            ->willThrowException($this->connectionException);
 
         $this->mockObjectManager($this->object, $objectManagerMock);
         $this->object->save($this->getNewGroup());
@@ -152,7 +154,7 @@ class GroupRepositoryTest extends DataBaseTestCase
         $objectManagerMock
             ->expects($this->once())
             ->method('flush')
-            ->willThrowException(ConnectionException::driverRequired(''));
+            ->willThrowException($this->connectionException);
 
         $this->mockObjectManager($this->object, $objectManagerMock);
         $this->object->remove([$group]);
