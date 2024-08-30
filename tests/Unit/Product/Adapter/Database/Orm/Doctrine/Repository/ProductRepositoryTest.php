@@ -32,6 +32,7 @@ class ProductRepositoryTest extends DataBaseTestCase
     private const string PRODUCT_ID_4 = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
 
     private ProductRepository $object;
+    private MockObject|ConnectionException $connectionException;
 
     #[\Override]
     protected function setUp(): void
@@ -39,6 +40,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         parent::setUp();
 
         $this->object = $this->entityManager->getRepository(Product::class);
+        $this->connectionException = $this->createMock(ConnectionException::class);
     }
 
     private function getNewProduct(): Product
@@ -92,7 +94,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         $objectManagerMock
             ->expects($this->once())
             ->method('flush')
-            ->willThrowException(ConnectionException::driverRequired(''));
+            ->willThrowException($this->connectionException);
 
         $this->mockObjectManager($this->object, $objectManagerMock);
         $this->object->save($this->getNewProduct());
@@ -122,7 +124,7 @@ class ProductRepositoryTest extends DataBaseTestCase
         $objectManagerMock
             ->expects($this->once())
             ->method('flush')
-            ->willThrowException(ConnectionException::driverRequired(''));
+            ->willThrowException($this->connectionException);
 
         $this->mockObjectManager($this->object, $objectManagerMock);
         $this->object->remove([$product]);
