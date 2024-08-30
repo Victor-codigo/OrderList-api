@@ -33,6 +33,7 @@ class ShopRepositoryTest extends DataBaseTestCase
     private const string SHOP_ID_4 = 'cc7f5dd6-02ba-4bd9-b5c1-5b65d81e59a0';
 
     private ShopRepository $object;
+    private MockObject|ConnectionException $connectionException;
 
     #[\Override]
     protected function setUp(): void
@@ -40,6 +41,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         parent::setUp();
 
         $this->object = $this->entityManager->getRepository(Shop::class);
+        $this->connectionException = $this->createMock(ConnectionException::class);
     }
 
     private function getNewShop(): Shop
@@ -95,7 +97,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         $objectManagerMock
             ->expects($this->once())
             ->method('flush')
-            ->willThrowException(ConnectionException::driverRequired(''));
+            ->willThrowException($this->connectionException);
 
         $this->mockObjectManager($this->object, $objectManagerMock);
         $this->object->save($this->getNewShop());
@@ -125,7 +127,7 @@ class ShopRepositoryTest extends DataBaseTestCase
         $objectManagerMock
             ->expects($this->once())
             ->method('flush')
-            ->willThrowException(ConnectionException::driverRequired(''));
+            ->willThrowException($this->connectionException);
 
         $this->mockObjectManager($this->object, $objectManagerMock);
         $this->object->remove([$group]);
