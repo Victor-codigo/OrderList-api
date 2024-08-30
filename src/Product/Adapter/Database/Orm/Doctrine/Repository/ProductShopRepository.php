@@ -11,6 +11,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintE
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\ORM\Exception\EntityIdentityCollisionException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 use Product\Domain\Model\Product;
@@ -41,7 +42,7 @@ class ProductShopRepository extends RepositoryBase implements ProductShopReposit
             }
 
             $this->objectManager->flush();
-        } catch (UniqueConstraintViolationException $e) {
+        } catch (UniqueConstraintViolationException|EntityIdentityCollisionException $e) {
             throw DBUniqueConstraintException::fromId($productShop->getId(), $e->getCode());
         } catch (\Throwable $e) {
             throw DBConnectionException::fromConnection($e->getCode());
