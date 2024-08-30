@@ -29,6 +29,7 @@ class UserRepositoryTest extends DataBaseTestCase
     private const string USER_NOT_ACTIVE_ID = 'bd2cbad1-6ccf-48e3-bb92-bc9961bc011e';
 
     private UserRepository $userRepository;
+    private MockObject|ConnectionException $connectionException;
 
     #[\Override]
     protected function setUp(): void
@@ -36,6 +37,7 @@ class UserRepositoryTest extends DataBaseTestCase
         parent::setUp();
 
         $this->userRepository = $this->entityManager->getRepository(User::class);
+        $this->connectionException = $this->createMock(ConnectionException::class);
     }
 
     /** @test */
@@ -66,7 +68,7 @@ class UserRepositoryTest extends DataBaseTestCase
         $objectManagerMock
             ->expects($this->once())
             ->method('flush')
-            ->willThrowException(ConnectionException::driverRequired(''));
+            ->willThrowException($this->connectionException);
 
         $this->mockObjectManager($this->userRepository, $objectManagerMock);
         $this->userRepository->save($this->getNewUser());
@@ -92,7 +94,7 @@ class UserRepositoryTest extends DataBaseTestCase
         $objectManagerMock
             ->expects($this->once())
             ->method('flush')
-            ->willThrowException(ConnectionException::driverRequired(''));
+            ->willThrowException($this->connectionException);
 
         $this->mockObjectManager($this->userRepository, $objectManagerMock);
         $this->userRepository->remove([$this->getNewUser()]);
