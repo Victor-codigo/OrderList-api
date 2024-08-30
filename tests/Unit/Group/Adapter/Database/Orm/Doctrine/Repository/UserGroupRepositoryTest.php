@@ -12,7 +12,9 @@ use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\Group\GROUP_TYPE;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\Query\Parameter;
 use Group\Adapter\Database\Orm\Doctrine\Repository\UserGroupRepository;
 use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
@@ -370,10 +372,10 @@ class UserGroupRepositoryTest extends DataBaseTestCase
             ->leftJoin(Group::class, 'g', Join::WITH, 'u.groupId = g.id')
             ->where('g.type = :type')
             ->andWhere('u.userId = :userId')
-            ->setParameters([
-                'type' => GROUP_TYPE::GROUP,
-                'userId' => $userId,
-            ])
+            ->setParameters(new ArrayCollection([
+                new Parameter('type', GROUP_TYPE::GROUP),
+                new Parameter('userId', $userId),
+            ]))
             ->getQuery()
             ->getResult();
 
@@ -396,11 +398,11 @@ class UserGroupRepositoryTest extends DataBaseTestCase
             ->where('u.userId = :userId')
             ->andWhere('g.type = :type')
             ->andWhere('JSON_CONTAINS(u.roles, :groupRoles) = 1')
-            ->setParameters([
-                'userId' => $userId,
-                'type' => GROUP_TYPE::GROUP->value,
-                'groupRoles' => '"'.GROUP_ROLES::ADMIN->value.'"',
-            ])
+            ->setParameters(new ArrayCollection([
+                new Parameter('userId', $userId),
+                new Parameter('type', GROUP_TYPE::GROUP->value),
+                new Parameter('groupRoles', '"'.GROUP_ROLES::ADMIN->value.'"'),
+            ]))
             ->getQuery()
             ->getResult();
 
