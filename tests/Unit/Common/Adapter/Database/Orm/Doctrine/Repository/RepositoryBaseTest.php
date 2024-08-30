@@ -33,7 +33,10 @@ class RepositoryBaseTest extends DataBaseTestCase
         $this->managerRegistry = $this->createMock(ManagerRegistry::class);
         $this->entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $this->objectManager = $this->createMock(ObjectManager::class);
-        $this->classMetadata = $this->createMock(ClassMetadata::class);
+        $this->classMetadata = $this
+            ->getMockBuilder(ClassMetadata::class)
+            ->setConstructorArgs(['ClassMetadataName'])
+            ->getMock();
         $this->paginator = $this->createMock(PaginatorInterface::class);
 
         $this->managerRegistry

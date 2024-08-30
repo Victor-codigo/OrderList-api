@@ -41,6 +41,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     private ListOrdersRepository $object;
     private ProductRepository $productRepository;
     private ShopRepository $shopRepository;
+    private MockObject|ConnectionException $connectionException;
 
     #[\Override]
     protected function setUp(): void
@@ -50,6 +51,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->object = $this->entityManager->getRepository(ListOrders::class);
         $this->productRepository = $this->entityManager->getRepository(Product::class);
         $this->shopRepository = $this->entityManager->getRepository(Shop::class);
+        $this->connectionException = $this->createMock(ConnectionException::class);
     }
 
     private function getListOrders(): ListOrders
@@ -143,7 +145,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $objectManagerMock
         ->expects($this->once())
         ->method('flush')
-        ->willThrowException(ConnectionException::driverRequired(''));
+        ->willThrowException($this->connectionException);
 
         $this->mockObjectManager($this->object, $objectManagerMock);
 
@@ -184,7 +186,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $objectManagerMock
             ->expects($this->once())
             ->method('flush')
-            ->willThrowException(ConnectionException::driverRequired(''));
+            ->willThrowException($this->connectionException);
 
         $this->mockObjectManager($this->object, $objectManagerMock);
 
@@ -212,7 +214,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $objectManagerMock
         ->expects($this->once())
         ->method('flush')
-        ->willThrowException(ConnectionException::driverRequired(''));
+        ->willThrowException($this->connectionException);
 
         $this->mockObjectManager($this->object, $objectManagerMock);
 
