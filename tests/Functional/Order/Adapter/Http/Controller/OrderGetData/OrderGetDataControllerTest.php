@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Functional\Order\Adapter\Http\Controller\OrderGetData;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\Filter\FILTER_SECTION;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
@@ -12,6 +11,7 @@ use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use ListOrders\Domain\Model\ListOrders;
 use Order\Domain\Model\Order;
+use PHPUnit\Framework\Attributes\Test;
 use Product\Domain\Model\Product;
 use Product\Domain\Model\ProductShop;
 use Shop\Domain\Model\Shop;
@@ -279,7 +279,7 @@ class OrderGetDataControllerTest extends WebClientTestCase
     }
 
     #[Test]
-    public function itShouldGetOrdersDataByGroupId22(): void
+    public function itShouldGetOrdersDataByGroupId(): void
     {
         $groupId = self::GROUP_ID;
         $page = 1;

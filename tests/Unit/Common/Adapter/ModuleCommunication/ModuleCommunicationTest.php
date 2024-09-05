@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\ModuleCommunication;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationErrorResponseException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationTokenNotFoundInRequestException;
@@ -21,6 +20,7 @@ use Common\Domain\Ports\HttpClient\HttpClientResponseInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use Lexik\Bundle\JWTAuthenticationBundle\TokenExtractor\TokenExtractorInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface;
 use Test\Unit\Common\Adapter\ModuleCommunication\Fixtures\AUTHENTICATION_SOURCE;
 use Test\Unit\Common\Adapter\ModuleCommunication\Fixtures\ModuleCommunicationConfigTestDto;
-use Test\Unit\Common\Adapter\ModuleCommunication\Fixtures\ModuleCommunicationFactoryTest;
+use Test\Unit\Common\Adapter\ModuleCommunication\Fixtures\ModuleCommunicationFactoryForTesting;
 
 class ModuleCommunicationTest extends TestCase
 {
@@ -175,7 +175,7 @@ class ModuleCommunicationTest extends TestCase
 
                match ($this->getContentNumCalls) {
                    1 => $this->assertTrue($throwException),
-                   default => $this->assertFalse($throwException)
+                   default => $this->assertFalse($throwException),
                };
 
                return true;
@@ -212,7 +212,7 @@ class ModuleCommunicationTest extends TestCase
             'header2',
         ];
 
-        $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
+        $routeConfig = ModuleCommunicationFactoryForTesting::json(true, $content, $query, [], $cookies, $headers);
         $this->mockRequestMethod($routeConfig, self::URL, self::URL, AUTHENTICATION_SOURCE::REQUEST);
 
         $return = $this->object->__invoke($routeConfig);
@@ -238,7 +238,7 @@ class ModuleCommunicationTest extends TestCase
             'header1',
             'header2',
         ];
-        $routeConfig = ModuleCommunicationFactoryTest::form(true, $content, $query, [], $cookies, $headers);
+        $routeConfig = ModuleCommunicationFactoryForTesting::form(true, $content, $query, [], $cookies, $headers);
         $this->mockRequestMethod($routeConfig, self::URL, self::URL, AUTHENTICATION_SOURCE::REQUEST);
 
         $return = $this->object->__invoke($routeConfig);
@@ -265,7 +265,7 @@ class ModuleCommunicationTest extends TestCase
             'header1',
             'header2',
         ];
-        $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
+        $routeConfig = ModuleCommunicationFactoryForTesting::json(true, $content, $query, [], $cookies, $headers);
         $this->mockRequestMethod($routeConfig, self::URL, self::URL, AUTHENTICATION_SOURCE::REQUEST);
 
         $return = $this->object->__invoke($routeConfig);
@@ -276,7 +276,7 @@ class ModuleCommunicationTest extends TestCase
     #[Test]
     public function itShouldCreateAValidRequestNoDevOrTestUrlWithoutQueryString(): void
     {
-        $routeConfig = ModuleCommunicationFactoryTest::json(true);
+        $routeConfig = ModuleCommunicationFactoryForTesting::json(true);
         $this->mockRequestMethod($routeConfig, self::URL, self::URL, AUTHENTICATION_SOURCE::REQUEST);
 
         $this->object->__invoke($routeConfig);
@@ -287,7 +287,7 @@ class ModuleCommunicationTest extends TestCase
     {
         $url = self::URL;
         $urlExpected = "{$url}?XDEBUG_SESSION=VSCODE";
-        $routeConfig = ModuleCommunicationFactoryTest::json(true);
+        $routeConfig = ModuleCommunicationFactoryForTesting::json(true);
 
         $this->object = new ModuleCommunication(
             $this->httpClient,
@@ -307,7 +307,7 @@ class ModuleCommunicationTest extends TestCase
     {
         $url = self::URL;
         $urlExpected = "{$url}?XDEBUG_SESSION=VSCODE&env=test";
-        $routeConfig = ModuleCommunicationFactoryTest::json(true);
+        $routeConfig = ModuleCommunicationFactoryForTesting::json(true);
 
         $this->object = new ModuleCommunication(
             $this->httpClient,
@@ -327,7 +327,7 @@ class ModuleCommunicationTest extends TestCase
     {
         $url = self::URL.'?param1=value1&param2=value2';
         $urlExpected = self::URL.'?XDEBUG_SESSION=VSCODE&env=test&param1=value1&param2=value2';
-        $routeConfig = ModuleCommunicationFactoryTest::json(true);
+        $routeConfig = ModuleCommunicationFactoryForTesting::json(true);
 
         $this->object = new ModuleCommunication(
             $this->httpClient,
@@ -347,7 +347,7 @@ class ModuleCommunicationTest extends TestCase
     {
         $url = self::URL.'?param1=value1&param2=value2';
         $urlExpected = self::URL.'?XDEBUG_SESSION=VSCODE&env=test&param1=value1&param2=value2';
-        $routeConfig = ModuleCommunicationFactoryTest::json(true, [], [], [], [], [
+        $routeConfig = ModuleCommunicationFactoryForTesting::json(true, [], [], [], [], [
             'Authorization' => 'Bearer '.self::JWT_TOKEN,
         ]);
 
@@ -369,7 +369,7 @@ class ModuleCommunicationTest extends TestCase
     {
         $url = self::URL.'?param1=value1&param2=value2';
         $urlExpected = self::URL.'?XDEBUG_SESSION=VSCODE&env=test&param1=value1&param2=value2';
-        $routeConfig = ModuleCommunicationFactoryTest::json(true, [], [], [], [], [
+        $routeConfig = ModuleCommunicationFactoryForTesting::json(true, [], [], [], [], [
             'Authorization' => self::JWT_TOKEN,
         ]);
 
@@ -392,7 +392,7 @@ class ModuleCommunicationTest extends TestCase
     {
         $url = self::URL.'?param1=value1&param2=value2';
         $urlExpected = self::URL.'?XDEBUG_SESSION=VSCODE&env=test&param1=value1&param2=value2';
-        $routeConfig = ModuleCommunicationFactoryTest::json(true);
+        $routeConfig = ModuleCommunicationFactoryForTesting::json(true);
 
         $this->object = new ModuleCommunication(
             $this->httpClient,
@@ -427,7 +427,7 @@ class ModuleCommunicationTest extends TestCase
             'header1',
             'header2',
         ];
-        $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
+        $routeConfig = ModuleCommunicationFactoryForTesting::json(true, $content, $query, [], $cookies, $headers);
         $this->mockRequestMethod($routeConfig, self::URL, self::URL, AUTHENTICATION_SOURCE::REQUEST);
         $this->expectException(ModuleCommunicationException::class);
 
@@ -457,7 +457,7 @@ class ModuleCommunicationTest extends TestCase
             'header1',
             'header2',
         ];
-        $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
+        $routeConfig = ModuleCommunicationFactoryForTesting::json(true, $content, $query, [], $cookies, $headers);
         $this->mockRequestMethod($routeConfig, self::URL, self::URL, AUTHENTICATION_SOURCE::REQUEST, Error400Exception::fromMessage('', $httpExceptionInterface));
 
         $return = $this->object->__invoke($routeConfig);
@@ -486,7 +486,7 @@ class ModuleCommunicationTest extends TestCase
             'header1',
             'header2',
         ];
-        $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
+        $routeConfig = ModuleCommunicationFactoryForTesting::json(true, $content, $query, [], $cookies, $headers);
         $this->mockRequestMethod($routeConfig, self::URL, self::URL, AUTHENTICATION_SOURCE::REQUEST, Error500Exception::fromMessage('', $httpExceptionInterface));
 
         $return = $this->object->__invoke($routeConfig);
@@ -514,7 +514,7 @@ class ModuleCommunicationTest extends TestCase
             'header1',
             'header2',
         ];
-        $routeConfig = ModuleCommunicationFactoryTest::json(true, $content, $query, [], $cookies, $headers);
+        $routeConfig = ModuleCommunicationFactoryForTesting::json(true, $content, $query, [], $cookies, $headers);
         $this->mockRequestMethod($routeConfig, self::URL, self::URL, AUTHENTICATION_SOURCE::REQUEST, NetworkException::fromMessage(''));
 
         $this->object->__invoke($routeConfig);
@@ -523,7 +523,7 @@ class ModuleCommunicationTest extends TestCase
     #[Test]
     public function itShouldGetARangeOfPages(): void
     {
-        $routeConfig = ModuleCommunicationFactoryTest::json(
+        $routeConfig = ModuleCommunicationFactoryForTesting::json(
             true,
             [],
             [
@@ -571,7 +571,7 @@ class ModuleCommunicationTest extends TestCase
     #[Test]
     public function itShouldGetARangeOfPagesNoContent(): void
     {
-        $routeConfig = ModuleCommunicationFactoryTest::json(
+        $routeConfig = ModuleCommunicationFactoryForTesting::json(
             true,
             [],
             [
@@ -618,7 +618,7 @@ class ModuleCommunicationTest extends TestCase
     #[Test]
     public function itShouldGetARangeOfPagesNoPageEndSet(): void
     {
-        $routeConfig = ModuleCommunicationFactoryTest::json(
+        $routeConfig = ModuleCommunicationFactoryForTesting::json(
             true,
             [],
             [
@@ -666,7 +666,7 @@ class ModuleCommunicationTest extends TestCase
     #[Test]
     public function itShouldGetARangeOfPagesPageEndIsBiggerThanPagesTotal(): void
     {
-        $routeConfig = ModuleCommunicationFactoryTest::json(
+        $routeConfig = ModuleCommunicationFactoryForTesting::json(
             true,
             [],
             [
@@ -767,7 +767,7 @@ class ModuleCommunicationTest extends TestCase
     #[Test]
     public function itShouldFailPageIniIsLessThanZero(): void
     {
-        $routeConfig = ModuleCommunicationFactoryTest::json(
+        $routeConfig = ModuleCommunicationFactoryForTesting::json(
             true,
             [],
             [
@@ -797,7 +797,7 @@ class ModuleCommunicationTest extends TestCase
     #[Test]
     public function itShouldFailResponseStatusIsNotOk(): void
     {
-        $routeConfig = ModuleCommunicationFactoryTest::json(
+        $routeConfig = ModuleCommunicationFactoryForTesting::json(
             true,
             [],
             [
@@ -868,7 +868,7 @@ class ModuleCommunicationTest extends TestCase
     #[Test]
     public function itShouldFailResponseHasErrors(): void
     {
-        $routeConfig = ModuleCommunicationFactoryTest::json(
+        $routeConfig = ModuleCommunicationFactoryForTesting::json(
             true,
             [],
             [

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupRemove;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
@@ -48,7 +48,7 @@ class GroupRemoveControllerTest extends WebClientTestCase
     }
 
     #[Test]
-    public function itShouldFailGroupIdIsNull22(): void
+    public function itShouldFailGroupIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(

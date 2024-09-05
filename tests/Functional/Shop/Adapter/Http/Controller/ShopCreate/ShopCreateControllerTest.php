@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Functional\Shop\Adapter\Http\Controller\ShopCreate;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
@@ -558,7 +558,7 @@ class ShopCreateControllerTest extends WebClientTestCase
     }
 
     #[Test]
-    public function itShouldFailImageNoUploaded22(): void
+    public function itShouldFailImageNoUploaded(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $this->createImageTestPath();

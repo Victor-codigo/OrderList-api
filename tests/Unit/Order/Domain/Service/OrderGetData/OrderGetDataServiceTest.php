@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Domain\Service\OrderGetData;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -18,6 +17,7 @@ use Order\Domain\Model\Order;
 use Order\Domain\Ports\Repository\OrderRepositoryInterface;
 use Order\Domain\Service\OrderGetData\Dto\OrderGetDataDto;
 use Order\Domain\Service\OrderGetData\OrderGetDataService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Product\Domain\Model\Product;
 use Product\Domain\Model\ProductShop;
@@ -259,7 +259,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
     }
 
     #[Test]
-    public function itShouldGetOrdersDataByGroupIdAndOrdersId22(): void
+    public function itShouldGetOrdersDataByGroupIdAndOrdersId(): void
     {
         $input = new OrderGetDataDto(
             ValueObjectFactory::createIdentifier(self::GROUP_ID),

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupUserAdd;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
@@ -319,7 +319,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     }
 
     #[Test]
-    public function itShouldFailGroupTypeIsUser22(): void
+    public function itShouldFailGroupTypeIsUser(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(

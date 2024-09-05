@@ -6,7 +6,7 @@ namespace Test\Unit\Common\Adapter\ModuleCommunication\Fixtures;
 
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 
-class ModuleCommunicationFactoryTest
+class ModuleCommunicationFactoryForTesting
 {
     public static function json(bool $authentication, array $content = [], array $query = [], array $files = [], array $cookies = [], array $headers = []): ModuleCommunicationConfigDto
     {

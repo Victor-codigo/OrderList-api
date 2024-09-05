@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupGetUsers\Dto;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -13,6 +12,7 @@ use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupGetUsers\Dto\GroupGetUsersInputDto;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -242,7 +242,7 @@ class GroupGetUsersInputDtoTest extends TestCase
 
     #[DataProvider('inputDataProvider')]
     #[Test]
-    public function itShouldValidateInput22(GroupGetUsersInputDto $object, array $errors): void
+    public function itShouldValidateInput(GroupGetUsersInputDto $object, array $errors): void
     {
         $return = $object->validate($this->validator);
 
