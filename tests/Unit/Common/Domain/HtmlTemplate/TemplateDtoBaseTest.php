@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\HtmlTemplate;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Translator\TranslatorSymfonyAdapter;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\HtmlTemplate\TemplateDtoBase;
 use Common\Domain\HtmlTemplate\TemplateId;
 use Common\Domain\Ports\Translator\TranslatorInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\LocaleSwitcher;
@@ -27,7 +27,7 @@ class TemplateDtoBaseTest extends TestCase
     {
         parent::setUp();
 
-        $this->symfonyTranslator = $this->getMockForAbstractClass(SymfonyTranslatorInterface::class);
+        $this->symfonyTranslator = $this->createMock(SymfonyTranslatorInterface::class);
         $this->symfonyLocaleSwitcher = $this->createMock(LocaleSwitcher::class);
         $this->translator = new TranslatorSymfonyAdapter($this->symfonyTranslator, $this->symfonyLocaleSwitcher);
         $this->object = $this->getMockBuilder(TemplateDtoBase::class)

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Repository;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -14,6 +13,7 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\Unit\DataBaseTestCase;
 
@@ -58,7 +58,7 @@ class RepositoryBaseTest extends DataBaseTestCase
         $this->object = $this
             ->getMockBuilder(RepositoryBase::class)
             ->setConstructorArgs([$this->managerRegistry, 'entityClass', $this->paginator])
-            ->getMockForAbstractClass();
+            ->getMock();
     }
 
     private function invokeProtectedMethod(object $object, string $name, array $args = []): mixed

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Mailer;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Mailer\MailerSymfonyAdapter;
 use Common\Domain\Mailer\Exception\MailerSentException;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -23,7 +23,7 @@ class MailerSymfonyAdapterTest extends TestCase
     {
         parent::setUp();
 
-        $this->mailer = $this->getMockForAbstractClass(MailerInterface::class);
+        $this->mailer = $this->createMock(MailerInterface::class);
         $this->object = new MailerSymfonyAdapter($this->mailer);
     }
 

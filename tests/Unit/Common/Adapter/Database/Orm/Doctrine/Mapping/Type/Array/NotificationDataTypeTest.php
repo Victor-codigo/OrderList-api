@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array\NotificationDataType;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\Array\NotificationData;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class NotificationDataTypeTest extends TestCase
@@ -22,7 +22,7 @@ class NotificationDataTypeTest extends TestCase
     {
         parent::setUp();
 
-        $this->abstractPlatform = $this->getMockForAbstractClass(AbstractPlatform::class);
+        $this->abstractPlatform = $this->createMock(AbstractPlatform::class);
         $this->object = new NotificationDataType();
     }
 

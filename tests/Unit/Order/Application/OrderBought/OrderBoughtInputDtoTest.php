@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Application\OrderBought;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use Order\Application\OrderBought\Dto\OrderBoughtInputDto;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -30,7 +30,7 @@ class OrderBoughtInputDtoTest extends TestCase
 
     public static function inputDataProvider(): iterable
     {
-        self::$userSession = self::createMock(UserShared::class);
+        self::$userSession = self::createStub(UserShared::class);
 
         yield [
             self::$userSession,

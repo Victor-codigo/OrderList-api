@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Translator;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Translator\TranslatorSymfonyAdapter;
 use Common\Domain\Exception\InvalidArgumentException;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\LocaleSwitcher;
@@ -24,7 +24,7 @@ class TranslatorSymfonyAdapterTest extends TestCase
         parent::setUp();
 
         $this->localeSwitcher = $this->createMock(LocaleSwitcher::class);
-        $this->translator = $this->getMockForAbstractClass(TranslatorInterface::class);
+        $this->translator = $this->createMock(TranslatorInterface::class);
         $this->object = new TranslatorSymfonyAdapter($this->translator, $this->localeSwitcher);
     }
 
