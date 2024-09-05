@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Compiler;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Compiler\KernelCustom;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Dotenv\Dotenv;
@@ -23,6 +23,12 @@ class KernelCustomTest extends TestCase
 
         $this->dotEnv = $this->createMock(Dotenv::class);
         $this->object = new KernelCustom($this->dotEnv);
+    }
+
+    #[\Override]
+    protected function tearDown(): void
+    {
+        unset($_REQUEST['env']);
     }
 
     #[Test]
