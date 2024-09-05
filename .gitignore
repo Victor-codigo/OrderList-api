@@ -11,11 +11,6 @@
 /public/assets/img/shops/
 /public/assets/img/users/
 ###< symfony/framework-bundle ###
-###> symfony/phpunit-bridge ###
-/.phpunit.cache
-/phpunit.xml
-###< symfony/phpunit-bridge ###
-
 # ---------------------------------------
 
 .vscode/
@@ -34,3 +29,14 @@ public/code-coverage
 ###> phpstan/phpstan ###
 phpstan.neon
 ###< phpstan/phpstan ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+.phpunit.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###

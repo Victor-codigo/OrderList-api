@@ -133,13 +133,13 @@
         "dg/bypass-finals": "^v1.5.1",
         "friendsofphp/php-cs-fixer": "^v3.40.0",
         "hautelook/alice-bundle": "^2.12.2",
-        "phpunit/phpunit": "^11.0.0",
+        "phpunit/phpunit": "^10.5.0",
         "rector/rector": "^1.2",
-        "symfony/browser-kit": "v6.4.8",
+        "symfony/browser-kit": "^v6.4.8",
         "symfony/css-selector": "v6.4.8",
         "symfony/debug-bundle": "v6.4.8",
         "symfony/maker-bundle": "^1.48",
-        "symfony/phpunit-bridge": "v6.4.9",
+        "symfony/phpunit-bridge": "^v7.1.0",
         "symfony/stopwatch": "v6.4.8",
         "symfony/web-profiler-bundle": "v6.4.8"
     }

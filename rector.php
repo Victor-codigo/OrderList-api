@@ -12,7 +12,7 @@ use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
 
 return RectorConfig::configure()
     ->withPaths([
-        // __DIR__.'/src',
+        __DIR__.'/src',
         __DIR__.'/tests',
     ])
     // uncomment to reach your current PHP version

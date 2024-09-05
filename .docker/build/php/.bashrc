@@ -30,7 +30,7 @@ alias puc="bin/phpunit --coverage-clover coverage.xml --configuration phpunit.xm
 alias puchtml="bin/phpunit --configuration phpunit.xml.dist --coverage-html public/code-coverage"
 alias puf="bin/phpunit --configuration phpunit.xml.dist --filter"
 alias pufc="bin/phpunit --coverage-clover coverage.xml --configuration phpunit.xml.dist --filter"
-alias puts="phpunit --configuration phpunit.xml.dist --testsuite"
+alias puts="bin/phpunit --configuration phpunit.xml.dist --testsuite"
 
 alias ll="ls -la"
 

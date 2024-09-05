@@ -1,26 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- https://phpunit.readthedocs.io/en/latest/configuration.html -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-         backupGlobals="false"
-         colors="true"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
          bootstrap="tests/bootstrap.php"
-         convertDeprecationsToExceptions="false"
->
+         cacheDirectory=".phpunit.cache"
+         executionOrder="depends,defects"
+         requireCoverageMetadata="false"
+         beStrictAboutCoverageMetadata="true"
+         beStrictAboutOutputDuringTests="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         displayDetailsOnTestsThatTriggerDeprecations="true"
+         displayDetailsOnTestsThatTriggerNotices="true"
+         displayDetailsOnTestsThatTriggerWarnings="true"
+         displayDetailsOnTestsThatTriggerErrors="true"
+         colors="true">
+
     <php>
+        <ini name="memory_limit" value="1024M" />
         <ini name="display_errors" value="1" />
         <ini name="error_reporting" value="-1" />
-        <ini name="memory_limit" value="1024M" />
         <server name="APP_ENV" value="test" force="true" />
-        <env name="APP_ENV" value="test" force="true" />
         <server name="SHELL_VERBOSITY" value="-1" />
         <server name="SYMFONY_PHPUNIT_REMOVE" value="" />
-        <server name="SYMFONY_PHPUNIT_VERSION" value="9.5" />
+        <server name="SYMFONY_PHPUNIT_VERSION" value="10.5" />
+        <env name="APP_ENV" value="test" force="true" />
     </php>
 
+    <source restrictDeprecations="true"
+            restrictNotices="true"
+            restrictWarnings="true">
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
+
+
+    <coverage includeUncoveredFiles="false"
+              pathCoverage="true"
+              ignoreDeprecatedCodeUnits="true"
+              disableCodeCoverageIgnore="true">
+    </coverage>
+
     <testsuites>
-        <testsuite name="Project Test Suite">
+        <testsuite name="all">
             <directory>tests</directory>
         </testsuite>
         <testsuite name="functional">
@@ -60,21 +82,4 @@
             <directory suffix="Test.php">tests/Functional/Order</directory>
         </testsuite>
     </testsuites>
-
-    <coverage processUncoveredFiles="true">
-        <include>
-            <directory suffix=".php">src</directory>
-        </include>
-    </coverage>
-
-    <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
-    </listeners>
-
-    <!-- Run `composer require symfony/panther` before enabling this extension -->
-    <!--
-    <extensions>
-        <extension class="Symfony\Component\Panther\ServerExtension" />
-    </extensions>
-    -->
 </phpunit>
