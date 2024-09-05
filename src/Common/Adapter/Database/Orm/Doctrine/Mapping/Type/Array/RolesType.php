@@ -64,6 +64,10 @@ class RolesType extends TypeBase
             $roles = json_decode((string) $value, true, 512, JSON_THROW_ON_ERROR);
             $rolesObject = [];
 
+            if (!is_array($roles)) {
+                throw new \DomainException();
+            }
+
             foreach ($roles as $rol) {
                 $rolesObject[] = Rol::fromString($rol);
             }
@@ -71,7 +75,7 @@ class RolesType extends TypeBase
             return new Roles($rolesObject);
         } catch (\JsonException) {
             throw InvalidArgumentException::fromMessage('convertToPHPValue: data base roles, is not a valid json string');
-        } catch (\Exception) {
+        } catch (\Throwable) {
             throw LogicException::fromMessage('convertToPHPValue: data base roles, can\'t be converted to a rol');
         }
     }

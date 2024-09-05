@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Array\RolesType;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Exception\LogicException;
@@ -12,6 +11,7 @@ use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Validation\User\USER_ROLES;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class RolesTypeTest extends TestCase
@@ -24,7 +24,7 @@ class RolesTypeTest extends TestCase
     {
         parent::setUp();
 
-        $this->abstractPlatform = $this->getMockForAbstractClass(AbstractPlatform::class);
+        $this->abstractPlatform = $this->createMock(AbstractPlatform::class);
         $this->object = new RolesType();
     }
 
@@ -99,7 +99,7 @@ class RolesTypeTest extends TestCase
     }
 
     #[Test]
-    public function convertToPHPValueJsonMalformedExpectLogicException(): void
+    public function convertToPHPValueJsonMalformedExpectLogicException2589654(): void
     {
         $this->expectException(LogicException::class);
 
