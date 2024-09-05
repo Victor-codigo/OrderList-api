@@ -20,6 +20,10 @@ class Template
     private function compile(array $placeholders): string
     {
         try {
+            if (!file_exists($this->templatePath)) {
+                throw new \DomainException();
+            }
+
             $fileContent = file_get_contents($this->templatePath);
 
             return str_ireplace(
@@ -27,8 +31,8 @@ class Template
                 array_values($placeholders),
                 $fileContent
             );
-        } catch (\Exception) {
-            throw TemplateErrorException::fromMessage('The template could not be readed');
+        } catch (\Throwable) {
+            throw TemplateErrorException::fromMessage('The template could not be read');
         }
     }
 
@@ -40,8 +44,12 @@ class Template
         $templateCompiled = $this->compile($placeholders);
 
         try {
-            file_put_contents($this->templateDestinationPath, $templateCompiled);
-        } catch (\Exception) {
+            $result = @file_put_contents($this->templateDestinationPath, $templateCompiled);
+
+            if (false === $result) {
+                throw new \DomainException();
+            }
+        } catch (\Throwable) {
             throw TemplateErrorException::fromMessage('The template could not be created');
         }
     }

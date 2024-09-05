@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Command\HexFileStructure;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Command\HexFilesStructure\Exception\TemplateErrorException;
 use Common\Adapter\Command\HexFilesStructure\PLACEHOLDER;
 use Common\Adapter\Command\HexFilesStructure\Template;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class TemplateTest extends TestCase
