@@ -8,6 +8,10 @@ use Module\Domain\Service\Endpoint\Dto\EndpointDto;
 
 class EndpointService
 {
+    public function __construct(
+    ) {
+    }
+
     public function __invoke(EndpointDto $input)
     {
     }

@@ -6,4 +6,7 @@ namespace Module\Domain\Service\Endpoint\Dto;
 
 class EndpointDto
 {
+    public function __construct(
+    ) {
+    }
 }

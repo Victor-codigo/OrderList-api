@@ -6,6 +6,10 @@ namespace NamespaceName;
 
 class EndpointNameDto
 {
+    public function __construct(
+    ) {
+    }
+
     public function __invoke(EndpointNameDto $args): void
     {
         // NamespaceInnerLayerName
