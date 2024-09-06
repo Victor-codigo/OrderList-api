@@ -83,7 +83,7 @@ jobs:
           SOURCE: "."
           TARGET: ${{ secrets.DEPLOY_PATH }}
           EXCLUDE: "public/assets/img/users/, public/assets/img/groups/, public/assets/img/products/, public/assets/img/shops/"
-          ARGS: "-rlgoDzvc --delete"
+          ARGS: "-rlgoDzvc --delete --include='.htaccess'"
 
       - name: Create entrypoint symbol
         uses: appleboy/ssh-action@v1.0.3
