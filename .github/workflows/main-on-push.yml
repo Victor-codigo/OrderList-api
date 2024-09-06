@@ -25,6 +25,8 @@ jobs:
       - name: Clone repository
         uses: actions/checkout@v4.1.7
 
+      - run: ls -la public
+
       # Composer cache
       - name: Get Composer Cache Directory
         id: composer-cache
@@ -43,6 +45,8 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           make setup-deploy
+          ls -la
+          ls -la public
         env:
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
@@ -73,6 +77,8 @@ jobs:
           name: app-production-artifact
           path: .
 
+      - run: ls -la public
+
       - name: Deploy to server
         uses: easingthemes/ssh-deploy@v5.1.0
         with:
@@ -83,8 +89,7 @@ jobs:
           SOURCE: ""
           TARGET: ${{ secrets.DEPLOY_PATH }}
           EXCLUDE: "public/assets/img/users/, public/assets/img/groups/, public/assets/img/products/, public/assets/img/shops/"
-          # ARGS: "-rlgoDzvc --delete"
-          ARGS: "-rlgoDzv --delete"
+          ARGS: "-rlgoDzvc --delete"
 
       - name: Create entrypoint symbol
         uses: appleboy/ssh-action@v1.0.3
