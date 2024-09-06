@@ -83,21 +83,22 @@ jobs:
           SOURCE: "./"
           TARGET: ${{ secrets.DEPLOY_PATH }}
           EXCLUDE: "public/assets/img/users/, public/assets/img/groups/, public/assets/img/products/, public/assets/img/shops/"
-          ARGS: "-rlgoDzvc --delete"
+          ARGS: "-a --delete"
+          # ARGS: "-rlgoDzvc --delete"
 
-      # - name: Create entrypoint symbol
-      #   uses: appleboy/ssh-action@v1.0.3
-      #   with:
-      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
-      #     host: ${{ secrets.REMOTE_HOST }}
-      #     username: ${{ secrets.REMOTE_USER }}
-      #     password: ${{ secrets.PASSWORD }}
-      #     port: ${{ secrets.REMOTE_PORT }}
-      #     script: |
-      #       mkdir -p ${{ secrets.DEPLOY_PUBLIC_PATH }}
-      #       ln -sfn ${{ secrets.DEPLOY_PATH }}/public ${{ secrets.DEPLOY_PUBLIC_PATH }}/api
-      #       ln -sfn ${{ secrets.DEPLOY_PATH }}/public/index.php ${{ secrets.DEPLOY_PUBLIC_PATH }}/index_api.php
-      #       cp ${{ secrets.DEPLOY_PATH }}/../config/OrderList-api/AppConfig.php ${{ secrets.DEPLOY_PATH }}/src/Common/Domain/Config/AppConfig.php
-      #       cp ${{ secrets.DEPLOY_PATH }}/../config/OrderList-api/VALUE_OBJECTS_CONSTRAINTS.php ${{ secrets.DEPLOY_PATH }}src/Common/Domain/Model/ValueObject/Constraints/VALUE_OBJECTS_CONSTRAINTS.php
-      #       chmod u=rw,g=r,o=r ${{ secrets.DEPLOY_PATH }}/public/assets/.htaccess
-      #       chmod -R u=rwx,g=rx,o=rx ${{ secrets.DEPLOY_PATH }}/public/assets
+      - name: Create entrypoint symbol
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USER }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.REMOTE_PORT }}
+          script: |
+            mkdir -p ${{ secrets.DEPLOY_PUBLIC_PATH }}
+            ln -sfn ${{ secrets.DEPLOY_PATH }}/public ${{ secrets.DEPLOY_PUBLIC_PATH }}/api
+            ln -sfn ${{ secrets.DEPLOY_PATH }}/public/index.php ${{ secrets.DEPLOY_PUBLIC_PATH }}/index_api.php
+            cp ${{ secrets.DEPLOY_PATH }}/../config/OrderList-api/AppConfig.php ${{ secrets.DEPLOY_PATH }}/src/Common/Domain/Config/AppConfig.php
+            cp ${{ secrets.DEPLOY_PATH }}/../config/OrderList-api/VALUE_OBJECTS_CONSTRAINTS.php ${{ secrets.DEPLOY_PATH }}src/Common/Domain/Model/ValueObject/Constraints/VALUE_OBJECTS_CONSTRAINTS.php
+            chmod u=rw,g=r,o=r ${{ secrets.DEPLOY_PATH }}/public/assets/.htaccess
+            chmod -R u=rwx,g=rx,o=rx ${{ secrets.DEPLOY_PATH }}/public/assets
