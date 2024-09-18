@@ -16,7 +16,7 @@ include ${PATH_ENV_FILE}
 
 # Executes docket-compose
 dockerCompose = \
-	docker-compose \
+	docker compose \
 	-f ./build/docker-compose.yml \
 	--env-file ${PATH_ENV_FILE} \
 	-p ${APP_NAME} \
