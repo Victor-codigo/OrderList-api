@@ -2,7 +2,7 @@
 server {
     listen 80;
     # listen 443 ssl http2;
-    server_name 127.0.0.1 orderlist.client;
+    server_name 127.0.0.1 localhost;
 
     # Path for SSL config/key/certificate
     # ssl_certificate /etc/ssl/certs/nginx/example1.crt;
@@ -51,7 +51,7 @@ server {
     location = /backend-not-found.html {
         allow all;
     }
-    
+
     location / {
         return 404;
     }
