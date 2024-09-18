@@ -53,13 +53,13 @@ RUN docker-php-ext-install pdo pdo_mysql
 
 # install GD
 RUN apt-get update && apt-get install -y \
-                libfreetype-dev \
-                libjpeg62-turbo-dev \
-                libpng-dev
+    libfreetype-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-        && docker-php-ext-install -j$(nproc) gd \
-        && docker-php-ext-enable gd
+    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-enable gd
 
 # Install OPCACHE
 RUN docker-php-ext-install pdo pdo_mysql opcache
@@ -97,9 +97,6 @@ RUN git config --global user.email $GIT_EMAIL
 RUN git config --global user.name $GIT_NAME
 
 
-# Work path
-WORKDIR $WORK_DIR
-
 # Create user developer
 ARG USER_ID
 ARG GROUP_ID
@@ -108,6 +105,10 @@ RUN addgroup --gid $GROUP_ID developers
 RUN adduser --disabled-password --gecos '' --uid $USER_ID --gid $GROUP_ID developer
 
 USER $USER_ID
+
+# Work path
+WORKDIR $WORK_DIR
+# RUN chown -R $USER_ID:$GROUP_ID $WORK_DIR
 
 # Share ssh keys with container
 RUN mkdir -p ~/.ssh && ln -s /run/secrets/ssh-keys ~/.ssh/id_ed25519
