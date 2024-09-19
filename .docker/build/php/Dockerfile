@@ -92,10 +92,6 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 # Timezone
 RUN ln -snf /usr/share/zoneinfo/$TIMEZONE /etc/localtime && echo $TIMEZONE > /etc/timezone
 
-# Git configuration
-RUN git config --global user.email $GIT_EMAIL
-RUN git config --global user.name $GIT_NAME
-
 
 # Create user developer
 ARG USER_ID
@@ -108,7 +104,7 @@ USER $USER_ID
 
 # Work path
 WORKDIR $WORK_DIR
-# RUN chown -R $USER_ID:$GROUP_ID $WORK_DIR
+
 
 # Share ssh keys with container
 RUN mkdir -p ~/.ssh && ln -s /run/secrets/ssh-keys ~/.ssh/id_ed25519
@@ -120,3 +116,6 @@ RUN cat /home/developer/.bashrc_temp >> /home/developer/.bashrc
 RUN rm /home/developer/.bashrc_temp
 
 
+# Git configuration
+RUN git config --global user.email $GIT_EMAIL
+RUN git config --global user.name $GIT_NAME
