@@ -2,7 +2,7 @@ server {
     server_name symfony.local;
     listen 80;
 
-    root /home/developer/OrderList-api/public;
+    root /home/developer/projects/OrderList-api/public;
     index index.php index.html index.htm;
 
     access_log /var/log/nginx/php-access.log;
