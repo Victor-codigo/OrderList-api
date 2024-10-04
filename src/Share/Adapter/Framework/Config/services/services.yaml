@@ -1,0 +1,22 @@
+parameters:
+  share.expiration.time: "%env(int:SHARED_EXPIRATION_TIME)%"
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+    bind:
+      $sharedExpirationTime: "%share.expiration.time%"
+
+  # Adapter
+  Share\Adapter\:
+    resource: "../../../../../Share/Adapter/"
+
+  # Application
+  Share\Application\:
+    resource: "../../../../../Share/Application/"
+
+  # Domain
+  Share\Domain\:
+    resource: "../../../../../Share/Domain/"

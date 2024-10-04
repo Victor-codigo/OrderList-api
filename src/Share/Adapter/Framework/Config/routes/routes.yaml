@@ -1,0 +1,9 @@
+# -------------------------------------------------------------
+# SHARE CREATE A LIST OF ORDERS
+# -------------------------------------------------------------
+share_create_list_orders:
+  path: /api/v{api_version}/share/list-orders
+  methods: POST
+  controller: Share\Adapter\Http\Controller\ShareListOrdersCreate\ShareListOrdersCreateController
+  requirements:
+    api_version: '\d+[.\d]?'

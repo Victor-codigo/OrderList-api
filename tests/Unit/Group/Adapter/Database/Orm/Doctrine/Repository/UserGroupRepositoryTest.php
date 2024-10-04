@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Adapter\Database\Orm\Doctrine\Repository;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Object\Rol;
@@ -20,12 +19,13 @@ use Group\Adapter\Database\Orm\Doctrine\Repository\UserGroupRepository;
 use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
-use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
+use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Test\Unit\DataBaseTestCase;
 
 class UserGroupRepositoryTest extends DataBaseTestCase
 {
-    use RefreshDatabaseTrait;
+    use ReloadDatabaseTrait;
 
     private const string GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
     private const string GROUP_2_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';

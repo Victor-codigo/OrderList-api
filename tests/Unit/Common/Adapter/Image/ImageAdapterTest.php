@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Image;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Image\BuiltInFunctionsReturn;
 use Common\Adapter\Image\ImagineAdapter;
 use Common\Domain\Image\Exception\ImageResizeException;
@@ -12,10 +11,11 @@ use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-require_once '/usr/src/tests/BuiltinFunctions/ImageAdapter.php';
+require_once 'tests/BuiltinFunctions/ImageAdapter.php';
 
 class ImageAdapterTest extends TestCase
 {

@@ -1,0 +1,12 @@
+Common\Domain\Model\ValueObject\String\Identifier:
+  share_id:
+    __construct:
+      value: "72b37f9c-ff55-4581-a131-4270e73012a2"
+
+Share\Domain\Model\Share:
+  entity-share:
+    __construct:
+      id: "@share_id"
+      listOrders: "@entity-listOrder"
+      user: "@entity-user_active"
+      expire: <(new DateTime('2024-10-1 12:00'))>
