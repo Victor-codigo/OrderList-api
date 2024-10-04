@@ -80,3 +80,6 @@ imports:
     - {
           resource: "../../../../../Notification/Adapter/Framework/Config/packages/doctrine.yaml",
       }
+    - {
+          resource: "../../../../../Share/Adapter/Framework/Config/packages/doctrine.yaml",
+      }

@@ -27,6 +27,10 @@ class ListOrders
      * @var Collection<Order>
      */
     private Collection $orders;
+    /**
+     * @var Collection<Share>
+     */
+    private Collection $shares;
 
     public function getId(): Identifier
     {
@@ -124,6 +128,7 @@ class ListOrders
         $this->createdOn = new \DateTime();
 
         $this->orders = new ArrayCollection();
+        $this->shares = new ArrayCollection();
     }
 
     public static function fromPrimitives(string $id, string $groupId, string $userId, string $name, ?string $description, ?\DateTime $dateToBuy): self

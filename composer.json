@@ -76,7 +76,8 @@
             "Shop\\": "src/Shop/",
             "User\\": "src/User/",
             "Notification\\": "src/Notification/",
-            "Common\\": "src/Common/"
+            "Common\\": "src/Common/",
+            "Share\\": "src/Share/"
         },
         "exclude-from-classmap": [
             "/tests/Unit/Common/Adapter/Command/HexFileStructure/Fixtures/",
@@ -92,7 +93,8 @@
             "Shop\\Test\\Unit\\": "src/tests/Unit/Shop/",
             "User\\Test\\Unit\\": "src/tests/Unit/User/",
             "Notification\\Test\\Unit\\": "src/tests/Unit/Notification/",
-            "Common\\Test\\Unit\\": "src/tests/Unit/Common/"
+            "Common\\Test\\Unit\\": "src/tests/Unit/Common/",
+            "Share\\Test\\Unit\\": "src/tests/Unit/Share/"
         },
         "exclude-from-classmap": [
             "/tests/Unit/Common/Adapter/Command/HexFileStructure/Fixtures/",

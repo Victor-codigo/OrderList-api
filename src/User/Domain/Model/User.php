@@ -16,6 +16,8 @@ use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserRolesGetterSetterTrait;
 use Common\Domain\Service\Image\EntityImageModifyInterface;
 use Common\Domain\Validation\User\USER_ROLES;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use User\Domain\Event\UserPreRegistered\UserPreRegisteredEvent;
 
 class User implements EntityImageModifyInterface
@@ -30,6 +32,11 @@ class User implements EntityImageModifyInterface
     private Roles $roles;
     private \DateTime $createdOn;
     private Profile $profile;
+
+    /**
+     * @var Collection<Share>
+     */
+    private Collection $shares;
 
     private ?UserPreRegisteredEvent $userPreRegisteredEventData = null;
 
@@ -127,6 +134,7 @@ class User implements EntityImageModifyInterface
             $this->getId(),
             ValueObjectFactory::createPath(null)
         );
+        $this->shares = new ArrayCollection();
     }
 
     /**

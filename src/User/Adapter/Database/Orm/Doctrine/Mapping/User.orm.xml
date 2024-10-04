@@ -29,17 +29,26 @@
                type="datetime"/>
 
         <!-- User - Profile -->
-        <one-to-one field="profile" target-entity="User\Domain\Model\Profile">
-            <join-column name="id" referenced-column-name="id" />
+        <one-to-one field="profile"
+                    target-entity="User\Domain\Model\Profile">
+            <join-column name="id"
+                         referenced-column-name="id" />
 
             <cascade>
                 <cascade-all/>
             </cascade>
         </one-to-one>
 
+        <!-- User - Share -->
+        <one-to-many field="shares"
+                     target-entity="Share\Domain\Model\Share"
+                     mapped-by="user" />
+
         <unique-constraints>
-            <unique-constraint name="u_users_id" columns="id"/>
-            <unique-constraint name="u_users_email" columns="email"/>
+            <unique-constraint name="u_users_id"
+                               columns="id"/>
+            <unique-constraint name="u_users_email"
+                               columns="email"/>
         </unique-constraints>
     </entity>
 </doctrine-mapping>
