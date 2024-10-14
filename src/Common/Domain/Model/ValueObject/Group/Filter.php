@@ -19,11 +19,11 @@ class Filter
     }
 
     /**
-     * @return array<{
-     *   name: VALIDATION_ERRORS[]
-     *   type: VALIDATION_ERRORS[]
+     * @return array{}|array{
+     *   name: VALIDATION_ERRORS[],
+     *   type: VALIDATION_ERRORS[],
      *   value: VALIDATION_ERRORS[]
-     * }>
+     * }
      */
     public function validate(ValidationInterface $validator): array
     {

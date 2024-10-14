@@ -89,7 +89,7 @@ class GetProductShopPriceController extends AbstractController
 {
     public function __construct(
         private GetProductShopPriceUseCase $GetProductShopPriceUseCase,
-        private Security $security
+        private Security $security,
     ) {
     }
 
@@ -102,6 +102,10 @@ class GetProductShopPriceController extends AbstractController
         return $this->createResponse($productsPrice);
     }
 
+    /**
+     * @param string[]|null $productsId
+     * @param string[]|null $shopsId
+     */
     private function createGetProductShopPriceInputDto(?array $productsId, ?array $shopsId, ?string $groupId): GetProductShopPriceInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */

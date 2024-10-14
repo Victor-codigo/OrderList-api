@@ -9,14 +9,17 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 
 class NotificationMarkAsViewedOutputDto implements ApplicationOutputInterface
 {
+    /**
+     * @param Identifier[] $notificationIds
+     */
     public function __construct(
-        /**
-         * @param Identifier[] $notificationIds
-         */
-        public readonly array $notificationIds
+        public readonly array $notificationIds,
     ) {
     }
 
+    /**
+     * @return string[]
+     */
     #[\Override]
     public function toArray(): array
     {

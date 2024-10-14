@@ -6,6 +6,7 @@ namespace Notification\Application\NotificationRemoveAllUserNotifications\Dto;
 
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 
 class NotificationRemoveAllUserNotificationsInputDto implements ServiceInputDtoInterface
@@ -19,6 +20,9 @@ class NotificationRemoveAllUserNotificationsInputDto implements ServiceInputDtoI
         $this->systemKey = $systemKey ?? '';
     }
 
+    /**
+     * @return array<string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {

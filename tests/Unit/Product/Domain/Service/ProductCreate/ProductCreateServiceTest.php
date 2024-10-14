@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ProductCreate;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\FileUpload\Exception\FileUploadException;
@@ -13,6 +12,7 @@ use Common\Domain\Ports\FileUpload\FileUploadInterface;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
 use Common\Domain\Ports\Image\ImageInterface;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Product\Domain\Model\Product;
@@ -28,11 +28,14 @@ class ProductCreateServiceTest extends TestCase
     private const string GROUP_ID = '82633054-84ad-4748-8ea2-8be0201c7b3a';
 
     private ProductCreateService $object;
-    private MockObject|ProductRepositoryInterface $productRepository;
-    private MockObject|FileUploadInterface $fileUpload;
-    private MockObject|UploadedFileInterface $productImageFile;
-    private MockObject|PaginatorInterface $paginator;
-    private MockObject|ImageInterface $image;
+    private MockObject&ProductRepositoryInterface $productRepository;
+    private MockObject&FileUploadInterface $fileUpload;
+    private MockObject&UploadedFileInterface $productImageFile;
+    /**
+     * @var MockObject&PaginatorInterface<int, Product>
+     */
+    private MockObject&PaginatorInterface $paginator;
+    private MockObject&ImageInterface $image;
 
     #[\Override]
     protected function setUp(): void

@@ -9,11 +9,17 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 
 class ProductRemoveOutputDto implements ApplicationOutputInterface
 {
+    /**
+     * @param Identifier[] $productsId
+     */
     public function __construct(
-        public readonly array $productsId
+        public readonly array $productsId,
     ) {
     }
 
+    /**
+     * @return array{ id: string[] }
+     */
     #[\Override]
     public function toArray(): array
     {

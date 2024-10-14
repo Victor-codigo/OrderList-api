@@ -22,16 +22,24 @@ use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 
+/**
+ * @phpstan-extends RepositoryBase<UserGroup>
+ */
 class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryInterface
 {
+    /**
+     * @param PaginatorInterface<int, object> $paginator
+     */
     public function __construct(
         ManagerRegistry $managerRegistry,
-        PaginatorInterface $paginator
+        PaginatorInterface $paginator,
     ) {
         parent::__construct($managerRegistry, UserGroup::class, $paginator);
     }
 
     /**
+     * @return PaginatorInterface<int, UserGroup>
+     *
      * @throws DBNotFoundException
      */
     #[\Override]
@@ -59,6 +67,8 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
 
     /**
      * @param Identifier[] $groupsId
+     *
+     * @return PaginatorInterface<int, UserGroup>
      *
      * @throws DBNotFoundException
      */
@@ -92,6 +102,8 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
 
     /**
      * @param Identifier[] $groupsId
+     *
+     * @return UserGroup[]
      *
      * @throws DBNotFoundException
      */
@@ -194,6 +206,8 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
     }
 
     /**
+     * @return PaginatorInterface<int, UserGroup>
+     *
      * @throws DBNotFoundException
      */
     #[\Override]
@@ -229,6 +243,8 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
     }
 
     /**
+     * @return PaginatorInterface<int, UserGroup>
+     *
      * @throws DBNotFoundException
      */
     #[\Override]
@@ -287,6 +303,11 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
     /**
      * @param Identifier[] $groupsId
      *
+     * @return PaginatorInterface<int, array{
+     *  groupId: string,
+     *  groupUsers: int
+     * }>
+     *
      * @throws DBNotFoundException
      */
     #[\Override]
@@ -315,13 +336,15 @@ class UserGroupRepository extends RepositoryBase implements UserGroupRepositoryI
     public function save(array $usersGroup): void
     {
         try {
+            $userGroupToSave = null;
             foreach ($usersGroup as $userGroup) {
+                $userGroupToSave = $userGroup;
                 $this->objectManager->persist($userGroup);
             }
 
             $this->objectManager->flush();
         } catch (UniqueConstraintViolationException|EntityIdentityCollisionException $e) {
-            throw DBUniqueConstraintException::fromId($userGroup->getId(), $e->getCode());
+            throw DBUniqueConstraintException::fromId($userGroupToSave->getId(), $e->getCode());
         } catch (\Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }

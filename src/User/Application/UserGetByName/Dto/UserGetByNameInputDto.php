@@ -7,6 +7,7 @@ namespace User\Application\UserGetByName\Dto;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use User\Domain\Model\User;
 
@@ -18,6 +19,9 @@ class UserGetByNameInputDto implements ServiceInputDtoInterface
      */
     public readonly ?array $usersName;
 
+    /**
+     * @param string[]|null $usersName
+     */
     public function __construct(User $userSession, ?array $usersName)
     {
         $this->userSession = $userSession;
@@ -27,6 +31,9 @@ class UserGetByNameInputDto implements ServiceInputDtoInterface
         );
     }
 
+    /**
+     * @return array{}|array<string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {

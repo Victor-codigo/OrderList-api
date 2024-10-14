@@ -65,7 +65,9 @@ class FileSymfonyAdapter implements FileInterface
     public function move(string $directory, ?string $name = null): FileInterface
     {
         try {
-            return $this->move($directory, $name);
+            $this->file->move($directory, $name);
+
+            return $this;
         } catch (SymfonyFileException $e) {
             throw FileException::fromMessage($e->getMessage());
         }

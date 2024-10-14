@@ -38,10 +38,13 @@ class HexFilesStructureCommand extends Command
     private ?string $outputPath;
 
     private readonly string $templatesPath;
+    /**
+     * @var string[]
+     */
     private array $filesCreated = [];
 
     public function __construct(
-        KernelInterface $kernel
+        KernelInterface $kernel,
     ) {
         $this->kernel = $kernel;
         $this->templatesPath = realpath(self::TEMPLATES_PATH).'/';
@@ -93,7 +96,7 @@ class HexFilesStructureCommand extends Command
                     $this->createDomain(),
                     $this->createApplication(),
                     $this->createAdapter(),
-                ]
+                ],
             };
 
             $this->writeOutput($output);
@@ -217,9 +220,9 @@ class HexFilesStructureCommand extends Command
     }
 
     /**
-     * @param string $templatePath            Path to templates relative to template's path
-     * @param string $templateDestinationPath path to oturput relative to output's path
-     * @param array  $placeholders            template's placeholders
+     * @param string                          $templatePath            Path to templates relative to template's path
+     * @param string                          $templateDestinationPath path to oturput relative to output's path
+     * @param array<string, string|int|float> $placeholders            template's placeholders
      *
      * @throws TemplateErrorException
      */

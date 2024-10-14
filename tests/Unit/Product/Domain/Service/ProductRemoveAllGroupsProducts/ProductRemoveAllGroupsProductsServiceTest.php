@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ProductRemoveAllGroupsProducts;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
@@ -12,6 +11,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Service\Image\EntityImageRemove\EntityImageRemoveService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Product\Domain\Model\Product;
@@ -26,9 +26,12 @@ class ProductRemoveAllGroupsProductsServiceTest extends TestCase
     private const string GROUP_ID_2 = 'group id 2';
 
     private ProductRemoveAllGroupsProductsService $object;
-    private MockObject|ProductRepositoryInterface $productRepository;
-    private MockObject|EntityImageRemoveService $entityImageRemoveService;
-    private MockObject|PaginatorInterface $productsPaginator;
+    private MockObject&ProductRepositoryInterface $productRepository;
+    private MockObject&EntityImageRemoveService $entityImageRemoveService;
+    /**
+     * @var MockObject&PaginatorInterface<int, Product>
+     */
+    private MockObject&PaginatorInterface $productsPaginator;
 
     #[\Override]
     protected function setUp(): void
@@ -45,6 +48,9 @@ class ProductRemoveAllGroupsProductsServiceTest extends TestCase
         );
     }
 
+    /**
+     * @return Product[]
+     */
     private function getGroupsProducts(): array
     {
         return [
@@ -81,6 +87,8 @@ class ProductRemoveAllGroupsProductsServiceTest extends TestCase
 
     /**
      * @param Product[] $products
+     *
+     * @return Identifier[]
      */
     private function getProductsId(array $products): array
     {
@@ -117,7 +125,11 @@ class ProductRemoveAllGroupsProductsServiceTest extends TestCase
             ->expects($this->exactly(count($products)))
             ->method('__invoke')
             ->with(
-                $this->callback(fn (Product $product): true => $this->assertContainsEquals($product, $products) || true),
+                $this->callback(function (Product $product) use ($products): true {
+                    $this->assertContainsEquals($product, $products);
+
+                    return true;
+                }),
                 $productImagePath
             );
 
@@ -187,7 +199,11 @@ class ProductRemoveAllGroupsProductsServiceTest extends TestCase
             ->expects($this->once())
             ->method('__invoke')
             ->with(
-                $this->callback(fn (Product $product): true => $this->assertContainsEquals($product, $products) || true),
+                $this->callback(function (Product $product) use ($products): true {
+                    $this->assertContainsEquals($product, $products);
+
+                    return true;
+                }),
                 $productImagePath
             )
             ->willThrowException(new DomainInternalErrorException());
@@ -226,7 +242,11 @@ class ProductRemoveAllGroupsProductsServiceTest extends TestCase
             ->expects($this->exactly(count($products)))
             ->method('__invoke')
             ->with(
-                $this->callback(fn (Product $product): true => $this->assertContainsEquals($product, $products) || true),
+                $this->callback(function (Product $product) use ($products): true {
+                    $this->assertContainsEquals($product, $products);
+
+                    return true;
+                }),
                 $productImagePath
             );
 

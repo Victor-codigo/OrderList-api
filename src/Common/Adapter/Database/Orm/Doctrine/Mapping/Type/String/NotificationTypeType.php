@@ -27,7 +27,7 @@ class NotificationTypeType extends TypeBase
     #[\Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
-        /** @var NOTIFICATION_TYPE $notificationType */
+        /** @var ?NOTIFICATION_TYPE $notificationType */
         $notificationType = parent::convertToDatabaseValue($value, $platform);
 
         return null === $notificationType ? null : $notificationType->value;

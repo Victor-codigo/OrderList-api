@@ -23,15 +23,26 @@ use Group\Domain\Service\GroupGetUsers\Dto\GroupGetUsersDto;
 
 class GroupGetUsersService
 {
+    /**
+     * @var PaginatorInterface<int, UserGroup>
+     */
     private PaginatorInterface $groupUsersPaginator;
 
     public function __construct(
         private UserGroupRepositoryInterface $userGroupRepository,
-        private ModuleCommunicationInterface $moduleCommunication
+        private ModuleCommunicationInterface $moduleCommunication,
     ) {
     }
 
     /**
+     * @return array<int, array{
+     *  id: string,
+     *  name: string,
+     *  image: string|null,
+     *  created_on: string|null,
+     *  admin: bool
+     * }>
+     *
      * @throws DBNotFoundException
      * @throws DomainInternalErrorException
      */
@@ -63,6 +74,14 @@ class GroupGetUsersService
     /**
      * @param UserGroup[] $groupUsers
      *
+     * @return array<int, array{
+     *  id: string,
+     *  name: string,
+     *  image: string|null,
+     *  created_on: string|null,
+     *  admin: bool
+     * }>
+     *
      * @throws DomainInternalErrorException
      */
     private function getUsersData(array $groupUsers, ?Filter $filterText, bool $orderAsc): array
@@ -86,7 +105,17 @@ class GroupGetUsersService
                 $usersAdmin
             );
 
-            /** @var ResponseDto $usersData */
+            /** @var ResponseDto{
+             *  data: array<int, array{
+             *      id: string,
+             *      email: string,
+             *      name: string,
+             *      roles: string[],
+             *      created_on: string,
+             *      image: string|null
+             *      admin: bool
+             * }> $usersData
+             */
             $usersData = $this->moduleCommunication->__invoke(
                 ModuleCommunicationFactory::userGet($usersId)
             );
@@ -112,6 +141,25 @@ class GroupGetUsersService
         }
     }
 
+    /**
+     * @param array<int, array{
+     *  id: string,
+     *  email: string,
+     *  name: string,
+     *  roles: string,
+     *  created_on: string|null,
+     *  image: string|null,
+     *  admin: bool
+     * }> $usersData
+     *
+     * @return array<int, array{
+     *  id: string,
+     *  name: string,
+     *  image: string|null,
+     *  created_on: string|null,
+     *  admin: bool
+     * }>
+     */
     private function getUserData(array $usersData): array
     {
         return array_map(
@@ -126,6 +174,27 @@ class GroupGetUsersService
         );
     }
 
+    /**
+     * @param array<int, array{
+     *  id: string,
+     *  email: string,
+     *  name: string,
+     *  roles: string,
+     *  created_on: string,
+     *  image: string|null,
+     *  admin: bool
+     * }> $usersData
+     *
+     * @return array<int, array{
+     *  id: string,
+     *  email: string,
+     *  name: string,
+     *  roles: string,
+     *  created_on: string,
+     *  image: string|null,
+     *  admin: bool
+     * }>
+     */
     private function filterUsersByName(array $usersData, ?Filter $filterText): array
     {
         if (null === $filterText || $filterText->isNull()) {
@@ -162,6 +231,27 @@ class GroupGetUsersService
         return mb_eregi($patternWithoutAccents, $valueWithoutAccents);
     }
 
+    /**
+     * @param array<int, array{
+     *  id: string,
+     *  email: string,
+     *  name: string,
+     *  roles: string,
+     *  created_on: string,
+     *  image: string|null,
+     *  admin: bool
+     * }> $usersData
+     *
+     * @return array<int, array{
+     *  id: string,
+     *  email: string,
+     *  name: string,
+     *  roles: string,
+     *  created_on: string,
+     *  image: string|null,
+     *  admin: bool
+     * }>
+     */
     private function sortUsersByName(array $usersData, bool $orderAsc): array
     {
         usort($usersData, function (array $userData1, array $userData2) use ($orderAsc): int {

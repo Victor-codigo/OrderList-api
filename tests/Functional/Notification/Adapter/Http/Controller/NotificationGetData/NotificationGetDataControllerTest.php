@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Test\Functional\Notification\Adapter\Http\Controller\NotificationGetData;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Notification\Domain\Model\Notification;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
@@ -19,6 +19,9 @@ class NotificationGetDataControllerTest extends WebClientTestCase
     private const string ENDPOINT = '/api/v1/notification';
     private const string METHOD = 'GET';
 
+    /**
+     * @return Notification[]
+     */
     private function getNotificationsDatabaseData(): array
     {
         return [
@@ -29,6 +32,9 @@ class NotificationGetDataControllerTest extends WebClientTestCase
         ];
     }
 
+    /**
+     * @param Notification[] $notificationsDataExpected
+     */
     private function assertNotificationIsCorrect(object $notificationData, array $notificationsDataExpected): void
     {
         $notificationsExpectedIds = array_map(fn (Notification $notification): ?string => $notification->getId()->getValue(), $notificationsDataExpected);

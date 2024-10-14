@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Domain\Service\ShopRemoveAllGroupsShops;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
@@ -12,6 +11,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Service\Image\EntityImageRemove\EntityImageRemoveService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shop\Domain\Model\Shop;
@@ -26,9 +26,12 @@ class ShopRemoveAllGroupsShopsServiceTest extends TestCase
     private const string GROUP_ID_2 = 'group id 2';
 
     private ShopRemoveAllGroupsShopsService $object;
-    private MockObject|ShopRepositoryInterface $shopRepository;
-    private MockObject|EntityImageRemoveService $entityImageRemoveService;
-    private MockObject|PaginatorInterface $shopsPaginator;
+    private MockObject&ShopRepositoryInterface $shopRepository;
+    private MockObject&EntityImageRemoveService $entityImageRemoveService;
+    /**
+     * @var MockObject&PaginatorInterface<int, Shop>
+     */
+    private MockObject&PaginatorInterface $shopsPaginator;
 
     #[\Override]
     protected function setUp(): void
@@ -45,6 +48,9 @@ class ShopRemoveAllGroupsShopsServiceTest extends TestCase
         );
     }
 
+    /**
+     * @return Shop[]
+     */
     private function getGroupsShops(): array
     {
         return [
@@ -81,6 +87,8 @@ class ShopRemoveAllGroupsShopsServiceTest extends TestCase
 
     /**
      * @param Shop[] $shops
+     *
+     * @return Identifier[]
      */
     private function getShopsId(array $shops): array
     {
@@ -117,7 +125,11 @@ class ShopRemoveAllGroupsShopsServiceTest extends TestCase
             ->expects($this->exactly(count($shops)))
             ->method('__invoke')
             ->with(
-                $this->callback(fn (Shop $shop): true => $this->assertContainsEquals($shop, $shops) || true),
+                $this->callback(function (Shop $shop) use ($shops): true {
+                    $this->assertContainsEquals($shop, $shops);
+
+                    return true;
+                }),
                 $shopImagePath
             );
 
@@ -187,7 +199,11 @@ class ShopRemoveAllGroupsShopsServiceTest extends TestCase
             ->expects($this->once())
             ->method('__invoke')
             ->with(
-                $this->callback(fn (Shop $shop): true => $this->assertContainsEquals($shop, $shops) || true),
+                $this->callback(function (Shop $shop) use ($shops): true {
+                    $this->assertContainsEquals($shop, $shops);
+
+                    return true;
+                }),
                 $shopImagePath
             )
             ->willThrowException(new DomainInternalErrorException());
@@ -226,7 +242,11 @@ class ShopRemoveAllGroupsShopsServiceTest extends TestCase
             ->expects($this->exactly(count($shops)))
             ->method('__invoke')
             ->with(
-                $this->callback(fn (Shop $shop): true => $this->assertContainsEquals($shop, $shops) || true),
+                $this->callback(function (Shop $shop) use ($shops): true {
+                    $this->assertContainsEquals($shop, $shops);
+
+                    return true;
+                }),
                 $shopImagePath
             );
 

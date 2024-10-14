@@ -9,12 +9,11 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 
 class GroupUserAddDto
 {
+    /**
+     * @param Identifier[] $usersId
+     */
     public function __construct(
         public readonly Identifier $groupId,
-
-        /**
-         * @var Identifier[] $users
-         */
         public readonly array $usersId,
         public readonly Rol $rol,
     ) {

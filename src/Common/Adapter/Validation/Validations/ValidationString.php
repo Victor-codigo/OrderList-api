@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Validation\Validations;
 
-use Common\Adapter\Validation\Constraints\Alphanumeric\Alphanumeric;
 use Common\Adapter\Validation\Constraints\AlphanumericWithWhiteSpace\AlphanumericWithWhiteSpace;
+use Common\Adapter\Validation\Constraints\Alphanumeric\Alphanumeric;
 use Common\Domain\Validation\Common\PROTOCOLS;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Symfony\Component\Validator\Constraints\Json;
@@ -38,7 +38,7 @@ class ValidationString extends ValidationConstraintBase
     }
 
     /**
-     * @param array $versions Uuid::V...
+     * @param int[] $versions Uuid::V...
      */
     public function uuId(?array $versions = null, bool $strict = true): ValidationConstraint
     {

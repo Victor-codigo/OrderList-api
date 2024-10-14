@@ -68,6 +68,8 @@ class HttpClientResponse implements HttpClientResponseInterface
     }
 
     /**
+     * @return mixed[]
+     *
      * @throws NetworkException
      * @throws Error300Exception
      * @throws Error400Exception
@@ -90,12 +92,14 @@ class HttpClientResponse implements HttpClientResponseInterface
     }
 
     #[\Override]
-    public function getInfo(?bool $throwException = true): array
+    public function getInfo(?string $throwException = null): mixed
     {
         return $this->response->getInfo($throwException);
     }
 
     /**
+     * @return mixed[]
+     *
      * @throws DecodingException
      * @throws NetworkException
      * @throws Error300Exception

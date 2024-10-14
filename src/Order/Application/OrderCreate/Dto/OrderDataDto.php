@@ -12,7 +12,6 @@ use Common\Domain\Model\ValueObject\String\IdentifierNullable;
 class OrderDataDto
 {
     public function __construct(
-        public readonly Identifier $listOrdersId,
         public readonly Identifier $productId,
         public readonly IdentifierNullable $shopId,
         public readonly Identifier $userId,

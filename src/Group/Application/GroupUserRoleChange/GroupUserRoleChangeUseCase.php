@@ -28,7 +28,7 @@ class GroupUserRoleChangeUseCase extends ServiceBase
     public function __construct(
         private GroupUserRoleChangeService $groupUserRoleChangeService,
         private UserHasGroupAdminGrantsService $userHasGroupAdminGrantsService,
-        private ValidationInterface $validator
+        private ValidationInterface $validator,
     ) {
     }
 
@@ -69,6 +69,9 @@ class GroupUserRoleChangeUseCase extends ServiceBase
         }
     }
 
+    /**
+     * @param Identifier[] $usersId
+     */
     private function createGroupUserRoleChangeDto(?Identifier $groupId, array $usersId, Rol $rol): GroupUserRoleChangeDto
     {
         return new GroupUserRoleChangeDto($groupId, $usersId, $rol);

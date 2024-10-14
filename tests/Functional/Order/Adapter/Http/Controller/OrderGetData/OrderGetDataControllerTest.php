@@ -36,6 +36,9 @@ class OrderGetDataControllerTest extends WebClientTestCase
         'fad53d41-d396-4f5b-91c3-d30fd6b66845',
     ];
 
+    /**
+     * @return array<string, Order>
+     */
     private function getOrdersDataExpected(): array
     {
         $appProtocolAndDomain = static::getContainer()->getParameter('common.app.protocolAndDomain');
@@ -218,6 +221,9 @@ class OrderGetDataControllerTest extends WebClientTestCase
         ];
     }
 
+    /**
+     * @param array<string, mixed> $orderActual
+     */
     private function assertOrderIsOk(Order $orderExpected, array $orderActual): void
     {
         $this->assertArrayHasKey('id', $orderActual);

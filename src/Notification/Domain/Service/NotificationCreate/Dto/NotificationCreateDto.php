@@ -10,13 +10,13 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 
 class NotificationCreateDto
 {
+    /**
+     * @param Identifier[] $usersId
+     */
     public function __construct(
-        /**
-         * @param Identifier[] $usersId
-         */
         public readonly array $usersId,
         public readonly NotificationType $notificationType,
-        public readonly NotificationData $notificationData
+        public readonly NotificationData $notificationData,
     ) {
     }
 }

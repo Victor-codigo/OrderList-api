@@ -10,19 +10,22 @@ use Order\Domain\Model\Order;
 class OrderRemoveOutputDto implements ApplicationOutputInterface
 {
     /**
-     * @param string[] $ordersId
+     * @param Order[] $orders
      */
     public function __construct(
-        public readonly array $ordersId
+        public readonly array $orders,
     ) {
     }
 
+    /**
+     * @return array{ id: string[] }
+     */
     #[\Override]
     public function toArray(): array
     {
         $ordersIdPlain = array_map(
-            fn (Order $orderId): ?string => $orderId->getId()->getValue(),
-            $this->ordersId
+            fn (Order $order): ?string => $order->getId()->getValue(),
+            $this->orders
         );
 
         return [

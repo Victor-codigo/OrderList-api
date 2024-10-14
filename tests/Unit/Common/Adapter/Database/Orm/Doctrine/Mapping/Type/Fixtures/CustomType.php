@@ -15,6 +15,9 @@ class CustomType extends TypeBase
         return CustomValueObject::class;
     }
 
+    /**
+     * @param array<string, mixed> $column The column definition
+     */
     #[\Override]
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {

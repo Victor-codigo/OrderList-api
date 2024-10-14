@@ -8,6 +8,9 @@ class BuiltInFunctionsReturn
 {
     public static ?bool $is_readable = null;
     public static ?int $filesize = null;
+    /**
+     * @var array<int, int>|null
+     */
     public static ?array $getimagesize = null;
     public static ?bool $unlink = null;
     public static \GdImage|false|null $imagecreatefromstring = null;
@@ -23,7 +26,12 @@ function filesize(string $fileName): int
     return BuiltInFunctionsReturn::$filesize ?? \filesize($fileName);
 }
 
-function getimagesize(string $filename, ?array &$imageInfo = null): array
+/**
+ * @param array<string, mixed> $imageInfo
+ *
+ * @return array{0: int, 1: int, 2: int, 3: string, bits: int, channels: int, mime: string}|false
+ */
+function getimagesize(string $filename, ?array &$imageInfo = null): array|false
 {
     return BuiltInFunctionsReturn::$getimagesize ?? \getimagesize($filename, $imageInfo);
 }

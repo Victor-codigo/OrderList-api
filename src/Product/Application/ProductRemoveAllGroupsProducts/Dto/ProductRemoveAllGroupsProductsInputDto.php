@@ -8,6 +8,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 
 class ProductRemoveAllGroupsProductsInputDto implements ServiceInputDtoInterface
@@ -19,6 +20,9 @@ class ProductRemoveAllGroupsProductsInputDto implements ServiceInputDtoInterface
     public readonly array $groupsId;
     public readonly string $systemKey;
 
+    /**
+     * @param string[]|null $groupsId
+     */
     public function __construct(UserShared $userSession, ?array $groupsId, ?string $systemKey)
     {
         $this->userSession = $userSession;
@@ -29,6 +33,9 @@ class ProductRemoveAllGroupsProductsInputDto implements ServiceInputDtoInterface
         $this->systemKey = $systemKey ?? '';
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {

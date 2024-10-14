@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupRemoveAllUserGroups;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -19,6 +18,7 @@ use Group\Domain\Service\GroupRemoveAllUserGroups\Dto\GroupRemoveAllUserGroupsDt
 use Group\Domain\Service\GroupRemoveAllUserGroups\Dto\GroupRemoveAllUserGroupsOutputDto;
 use Group\Domain\Service\GroupRemoveAllUserGroups\GroupRemoveAllUserGroupsService;
 use Group\Domain\Service\GroupRemoveAllUserGroups\GroupRemoveUserFromGroupsService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,10 +27,13 @@ class GroupRemoveAllUserGroupsServiceTest extends TestCase
     private const string USER_ID = 'b23f12cf-75cb-402e-b771-77fba3b0875a';
 
     private GroupRemoveAllUserGroupsService $object;
-    private MockObject|GroupRepositoryInterface $groupRepository;
-    private MockObject|UserGroupRepositoryInterface $userGroupRepository;
-    private MockObject|GroupRemoveUserFromGroupsService $groupRemoveUserFromGroupsService;
-    private MockObject|PaginatorInterface $userGroupsPaginator;
+    private MockObject&GroupRepositoryInterface $groupRepository;
+    private MockObject&UserGroupRepositoryInterface $userGroupRepository;
+    private MockObject&GroupRemoveUserFromGroupsService $groupRemoveUserFromGroupsService;
+    /**
+     * @var MockObject&PaginatorInterface<int, UserGroup>
+     */
+    private MockObject&PaginatorInterface $userGroupsPaginator;
 
     #[\Override]
     protected function setUp(): void
@@ -54,6 +57,7 @@ class GroupRemoveAllUserGroupsServiceTest extends TestCase
      */
     private function getUserGroupsToRemove(): array
     {
+        /** @var MockObject&Group $group */
         $group = $this->createMock(Group::class);
 
         return [
@@ -91,7 +95,7 @@ class GroupRemoveAllUserGroupsServiceTest extends TestCase
     }
 
     /**
-     * @return Group[]
+     * @return array<string, Group>
      */
     private function getGroupsOfUsersGroups(): array
     {
@@ -194,7 +198,9 @@ class GroupRemoveAllUserGroupsServiceTest extends TestCase
             ->with($groups, $usersGroups)
             ->willReturn(new GroupRemoveAllUserGroupsOutputDto(
                 $groupsRemovedExpected,
+                // @phpstan-ignore argument.type
                 $userGroupsRemovedExpected,
+                // @phpstan-ignore argument.type
                 $usersGroupsSetAsAdminExpected,
                 $groups
             ));

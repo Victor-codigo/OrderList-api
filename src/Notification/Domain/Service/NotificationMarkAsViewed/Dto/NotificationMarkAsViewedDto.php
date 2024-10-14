@@ -8,10 +8,10 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 
 class NotificationMarkAsViewedDto
 {
+    /**
+     * @param Identifier[] $notificationId
+     */
     public function __construct(
-        /**
-         * @param Identifier[] $notificationId
-         */
         public readonly array $notificationId,
     ) {
     }

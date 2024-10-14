@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupGetAdmins;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -21,17 +20,20 @@ use Group\Application\GroupGetAdmins\GroupGetAdminsUseCase;
 use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class GroupGetAdminUseCaseTest extends TestCase
 {
     private GroupGetAdminsUseCase $object;
-    private MockObject|ValidatorInterface $validator;
-    private MockObject|UserGroupRepositoryInterface $userGroupRepository;
-    private MockObject|PaginatorInterface $paginator;
-    private MockObject|UserShared $userSession;
+    private MockObject&ValidationInterface $validator;
+    private MockObject&UserGroupRepositoryInterface $userGroupRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, Group>
+     */
+    private MockObject&PaginatorInterface $paginator;
+    private MockObject&UserShared $userSession;
 
     #[\Override]
     protected function setUp(): void
@@ -47,6 +49,7 @@ class GroupGetAdminUseCaseTest extends TestCase
 
     private function getGroupUsers(?string $setGroupId = null): \Iterator
     {
+        /** @var MockObject&Group $group */
         $group = $this->createMock(Group::class);
 
         return new \ArrayIterator([

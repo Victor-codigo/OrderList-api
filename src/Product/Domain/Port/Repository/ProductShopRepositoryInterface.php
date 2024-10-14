@@ -12,7 +12,7 @@ use Product\Domain\Model\ProductShop;
 interface ProductShopRepositoryInterface extends RepositoryInterface
 {
     /**
-     * @param ProductShop $productsShops
+     * @param ProductShop[] $productsShops
      *
      * @throws DBConnectionException
      */
@@ -28,6 +28,8 @@ interface ProductShopRepositoryInterface extends RepositoryInterface
     /**
      * @param Identifier[] $productId
      * @param Identifier[] $shopId
+     *
+     * @return PaginatorInterface<int, ProductShop>
      *
      * @throws DBNotFoundException
      */

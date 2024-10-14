@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupGetData;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -13,6 +12,7 @@ use Group\Domain\Model\Group;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Service\GroupGetData\Dto\GroupGetDataDto;
 use Group\Domain\Service\GroupGetData\GroupGetDataService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -83,6 +83,16 @@ class GroupGetDataServiceTest extends TestCase
             ->with($input->groupsId)
             ->willReturn($expectedGroupsData);
 
+        /**
+         * @var array<int, array{
+         *  group_id: string|null,
+         *  type:string,
+         *  name:string|null,
+         *  description:string|null,
+         *  image: string|null,
+         *  created_on: string
+         * }> $return
+         */
         $return = iterator_to_array($this->object->__invoke($input));
 
         $this->assertCount(2, $return);
@@ -127,6 +137,16 @@ class GroupGetDataServiceTest extends TestCase
             ->with($input->groupsId)
             ->willReturn($expectedGroupsData);
 
+        /**
+         * @var array<int, array{
+         *  group_id: string|null,
+         *  type: string,
+         *  name: string|null,
+         *  description: string|null,
+         *  image: string|null,
+         *  created_on: string
+         * }> $return
+         */
         $return = iterator_to_array($this->object->__invoke($input));
 
         $this->assertCount(1, $return);
@@ -169,6 +189,16 @@ class GroupGetDataServiceTest extends TestCase
             ->with($input->groupsId)
             ->willReturn($expectedGroupsData);
 
+        /**
+         * @var array<int, array{
+         *  group_id: string|null,
+         *  type: string,
+         *  name: string|null,
+         *  description: string|null,
+         *  image: string|null,
+         *  created_on: string
+         * }> $return
+         */
         $return = iterator_to_array($this->object->__invoke($input));
 
         $this->assertCount(3, $return);

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Functional\Product\Adapter\Http\Controller\ProductGetData;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
@@ -35,6 +35,11 @@ class ProductGetDataControllerTest extends WebClientTestCase
         parent::setUp();
     }
 
+    /**
+     * Undocumented function.
+     *
+     * @param array<int|string, mixed> $productDataExpected
+     */
     private function assertResponseDataIsOk(int $pageExpected, int $pagesTotalExpected, array $productDataExpected, object $responseActual): void
     {
         $this->assertTrue(property_exists($responseActual, 'page'));
@@ -50,6 +55,9 @@ class ProductGetDataControllerTest extends WebClientTestCase
         }
     }
 
+    /**
+     * @param array<int|string, mixed> $productDataExpected
+     */
     private function assertProductDataIsOk(array $productDataExpected, object $productDataActual): void
     {
         $this->assertTrue(property_exists($productDataActual, 'id'));
@@ -66,6 +74,16 @@ class ProductGetDataControllerTest extends WebClientTestCase
         $this->assertIsString($productDataActual->created_on);
     }
 
+    /**
+     * @return array<int, array{
+     *  id: string,
+     *  group_id: string,
+     *  name: string,
+     *  description: string,
+     *  image: string,
+     *  created_on: string,
+     * }>
+     */
     private function getProductsData(): array
     {
         $appProtocolAndDomain = static::getContainer()->getParameter('common.app.protocolAndDomain');

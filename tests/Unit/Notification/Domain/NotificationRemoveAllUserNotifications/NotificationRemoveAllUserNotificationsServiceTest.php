@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Domain\NotificationRemoveAllUserNotifications;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -15,14 +14,18 @@ use Notification\Domain\Model\Notification;
 use Notification\Domain\Ports\Notification\NotificationRepositoryInterface;
 use Notification\Domain\Service\NotificationRemoveAllUserNotifications\Dto\NotificationRemoveAllUserNotificationsDto;
 use Notification\Domain\Service\NotificationRemoveAllUserNotifications\NotificationRemoveAllUserNotificationsService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class NotificationRemoveAllUserNotificationsServiceTest extends TestCase
 {
     private NotificationRemoveAllUserNotificationsService $object;
-    private MockObject|NotificationRepositoryInterface $notificationRepository;
-    private MockObject|PaginatorInterface $notificationPaginator;
+    private MockObject&NotificationRepositoryInterface $notificationRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, Notification>
+     */
+    private MockObject&PaginatorInterface $notificationPaginator;
 
     #[\Override]
     protected function setUp(): void
@@ -36,6 +39,9 @@ class NotificationRemoveAllUserNotificationsServiceTest extends TestCase
         );
     }
 
+    /**
+     * @return Notification[]
+     */
     private function getUserNotifications(): array
     {
         return [
@@ -66,6 +72,11 @@ class NotificationRemoveAllUserNotificationsServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @param Notification[] $notifications
+     *
+     * @return Identifier[]
+     */
     private function getNotificationsId(array $notifications): array
     {
         return array_map(

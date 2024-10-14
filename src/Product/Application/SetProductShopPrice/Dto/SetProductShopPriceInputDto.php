@@ -21,7 +21,7 @@ class SetProductShopPriceInputDto implements ServiceInputDtoInterface
     public readonly Identifier $productId;
     public readonly Identifier $shopId;
     /**
-     * @var string[]
+     * @var Identifier[]
      */
     public readonly array $productsOrShopsId;
     /**
@@ -58,6 +58,9 @@ class SetProductShopPriceInputDto implements ServiceInputDtoInterface
         );
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {
@@ -91,7 +94,7 @@ class SetProductShopPriceInputDto implements ServiceInputDtoInterface
     }
 
     /**
-     * @return array<{product_id: string[]}>
+     * @return array{}|array<string, array<int|string, VALIDATION_ERRORS|array<int|string, VALIDATION_ERRORS[]>>>
      */
     private function validateProductId(ValidationInterface $validator): array
     {
@@ -109,7 +112,7 @@ class SetProductShopPriceInputDto implements ServiceInputDtoInterface
     }
 
     /**
-     * @return array<{shop_id: string[]}>
+     * @return array{}|array{shop_id: array<string, VALIDATION_ERRORS[]>}|array<string, array<int|string, VALIDATION_ERRORS|array<int|string, VALIDATION_ERRORS[]>>>
      */
     private function validateShopId(ValidationInterface $validator): array
     {
@@ -126,6 +129,9 @@ class SetProductShopPriceInputDto implements ServiceInputDtoInterface
         return $errorList;
     }
 
+    /**
+     * @return array{}|array<string, array<int|string, VALIDATION_ERRORS[]>>
+     */
     private function validatePrices(ValidationInterface $validator): array
     {
         $errorList = [];
@@ -138,6 +144,9 @@ class SetProductShopPriceInputDto implements ServiceInputDtoInterface
         return $errorList;
     }
 
+    /**
+     * @return array{}|array<string, array<string|int, VALIDATION_ERRORS[]>>
+     */
     private function validateUnits(ValidationInterface $validator): array
     {
         $errorList = [];
@@ -154,6 +163,9 @@ class SetProductShopPriceInputDto implements ServiceInputDtoInterface
         return $errorList;
     }
 
+    /**
+     * @return array{}|array<string, array<int|string, VALIDATION_ERRORS[]>>
+     */
     private function validateProductsOrShops(ValidationInterface $validator): array
     {
         $errorList = [];

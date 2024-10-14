@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ProductRemove;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -12,6 +11,7 @@ use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Service\Image\EntityImageRemove\EntityImageRemoveService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Product\Domain\Model\Product;
@@ -27,9 +27,12 @@ class ProductRemoveServiceTest extends TestCase
     private const string PRODUCT_IMAGE_PATH = 'path/to/product/image';
 
     private ProductRemoveService $object;
-    private MockObject|ProductRepositoryInterface $productRepository;
-    private MockObject|EntityImageRemoveService $entityImageRemoveService;
-    private MockObject|PaginatorInterface $paginator;
+    private MockObject&ProductRepositoryInterface $productRepository;
+    private MockObject&EntityImageRemoveService $entityImageRemoveService;
+    /**
+     * @var MockObject&PaginatorInterface<int, Product>
+     */
+    private MockObject&PaginatorInterface $paginator;
     private Path $productImagePath;
 
     #[\Override]

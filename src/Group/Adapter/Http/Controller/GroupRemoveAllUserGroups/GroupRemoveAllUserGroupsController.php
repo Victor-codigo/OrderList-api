@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Adapter\Http\Controller\GroupRemoveAllUserGroups;
 
+use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
@@ -80,7 +81,7 @@ class GroupRemoveAllUserGroupsController extends AbstractController
 {
     public function __construct(
         private Security $security,
-        private GroupRemoveAllUserGroupsUseCase $groupRemoveAllUserGroupsUseCase
+        private GroupRemoveAllUserGroupsUseCase $groupRemoveAllUserGroupsUseCase,
     ) {
     }
 

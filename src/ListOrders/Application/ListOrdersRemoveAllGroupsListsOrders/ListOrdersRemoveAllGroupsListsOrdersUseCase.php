@@ -9,6 +9,7 @@ use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationTokenNotFoundInRequestException;
 use Common\Domain\Config\AppConfig;
 use Common\Domain\Exception\DomainInternalErrorException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -29,7 +30,7 @@ class ListOrdersRemoveAllGroupsListsOrdersUseCase extends ServiceBase
         private ListOrdersRemoveAllGroupsListsOrdersService $listOrdersRemoveAllGroupsListsOrdersService,
         private ValidationInterface $validator,
         private ModuleCommunicationInterface $moduleCommunication,
-        private string $systemKey
+        private string $systemKey,
     ) {
     }
 
@@ -43,6 +44,7 @@ class ListOrdersRemoveAllGroupsListsOrdersUseCase extends ServiceBase
         $this->validation($input);
 
         try {
+            $listsOrdersIdRemovedAndUserIdChanged = null;
             foreach ($this->getGroupsAdmins($input->groupsIdToChangeUserId) as $groupsIdAdmins) {
                 $groupsIdAdminsOnePerGroup = $this->reduceGroupsAdminsToOnlyOneAdmin($groupsIdAdmins);
                 $listsOrdersIdRemovedAndUserIdChanged = $this->listOrdersRemoveAllGroupsListsOrdersService->__invoke(
@@ -74,6 +76,8 @@ class ListOrdersRemoveAllGroupsListsOrdersUseCase extends ServiceBase
 
     /**
      * @param Identifier[] $groupsId
+     *
+     * @return \Generator<array{}|array<string, string[]>>
      */
     private function getGroupsAdmins(array $groupsId): \Generator
     {
@@ -104,6 +108,14 @@ class ListOrdersRemoveAllGroupsListsOrdersUseCase extends ServiceBase
         }
     }
 
+    /**
+     * @param array<string, string[]> $groups
+     *
+     * @return array{}|array<int, array{
+     *  group_id: Identifier,
+     *  admin: Identifier
+     * }>
+     */
     private function reduceGroupsAdminsToOnlyOneAdmin(array $groups): array
     {
         $groupsIdAdminsReduced = [];
@@ -121,6 +133,13 @@ class ListOrdersRemoveAllGroupsListsOrdersUseCase extends ServiceBase
         return $groupsIdAdminsReduced;
     }
 
+    /**
+     * @param Identifier[] $groupsIdToRemove
+     * @param array{}|array<int, array{
+     *  group_id: Identifier,
+     *  admin: Identifier
+     * }> $groupsIdToChangeUserId
+     */
     private function createListOrdersRemoveAllGroupsListsOrdersDto(array $groupsIdToRemove, array $groupsIdToChangeUserId): ListOrdersRemoveAllGroupsListsOrdersDto
     {
         return new ListOrdersRemoveAllGroupsListsOrdersDto($groupsIdToRemove, $groupsIdToChangeUserId);

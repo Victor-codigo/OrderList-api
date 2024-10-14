@@ -70,7 +70,7 @@ class NotificationMarkAsViewedController extends AbstractController
 {
     public function __construct(
         private NotificationMarkAsViewedUseCase $notificationMarkAsViewedUseCase,
-        private Security $security
+        private Security $security,
     ) {
     }
 
@@ -83,6 +83,9 @@ class NotificationMarkAsViewedController extends AbstractController
         return $this->createResponse($notification);
     }
 
+    /**
+     * @param string[]|null $notificationsId
+     */
     private function createNotificationMarkAsViewedInputDto(?array $notificationsId): NotificationMarkAsViewedInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */

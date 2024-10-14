@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Security\Jwt;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\User\USER_ROLES;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\UserNotFoundException;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
 use Test\Unit\User\Adapter\Security\Jwt\Fixtures\UserAdapter;
 use User\Adapter\Security\Jwt\UserSymfonyProviderAdapter;
 use User\Adapter\Security\User\UserSymfonyAdapter;
@@ -22,10 +23,13 @@ use User\Domain\Port\User\UserInterface;
 
 class UserSymfonyProviderAdapterTest extends TestCase
 {
+    /**
+     * @var UserSymfonyProviderAdapter<SymfonyUserInterface>
+     */
     private UserSymfonyProviderAdapter $object;
-    private MockObject|UserRepositoryInterface $userRepository;
-    private MockObject|UserPasswordHasherInterface $passwordHasher;
-    private MockObject|UserAdapter $user;
+    private MockObject&UserRepositoryInterface $userRepository;
+    private MockObject&UserPasswordHasherInterface $passwordHasher;
+    private MockObject&UserSymfonyAdapter $user;
 
     #[\Override]
     protected function setUp(): void

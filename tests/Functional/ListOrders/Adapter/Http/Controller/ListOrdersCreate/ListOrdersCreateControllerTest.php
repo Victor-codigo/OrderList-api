@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Functional\ListOrders\Adapter\Http\Controller\ListOrdersCreate;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
@@ -17,6 +17,14 @@ class ListOrdersCreateControllerTest extends WebClientTestCase
     private const string ENDPOINT = '/api/v1/list-orders';
     private const string METHOD = 'POST';
 
+    /**
+     * @return array{
+     *  group_id: string,
+     *  name: string,
+     *  description: string,
+     *  date_to_buy: string
+     * }
+     */
     private function getListOrders(): array
     {
         return [

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Application\SetProductShopPrice\Dto;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Common\Domain\Validation\ValidationInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Product\Application\SetProductShopPrice\Dto\SetProductShopPriceInputDto;
@@ -265,6 +265,7 @@ class SetProductShopPriceInputDtoTest extends TestCase
             self::PRODUCT_ID,
             null,
             [self::SHOP_ID, 'wrong id'],
+            // @phpstan-ignore argument.type
             [null, null],
             [UNIT_MEASURE_TYPE::UNITS->value, UNIT_MEASURE_TYPE::KG->value]
         );

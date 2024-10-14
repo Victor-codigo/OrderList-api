@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Adapter\Database\Orm\Doctrine\Repository;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
@@ -12,9 +11,10 @@ use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Doctrine\DBAL\Exception\ConnectionException;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ObjectManager;
-use Group\Domain\Model\Group;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Shop\Adapter\Database\Orm\Doctrine\Repository\ShopRepository;
 use Shop\Domain\Model\Shop;
@@ -33,7 +33,10 @@ class ShopRepositoryTest extends DataBaseTestCase
     private const string SHOP_ID_2 = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
     private const string SHOP_ID_4 = 'cc7f5dd6-02ba-4bd9-b5c1-5b65d81e59a0';
 
-    private ShopRepository $object;
+    /**
+     * @var ShopRepository|EntityRepository<object>
+     */
+    private ShopRepository|EntityRepository $object;
     private MockObject|ConnectionException $connectionException;
 
     #[\Override]
@@ -74,7 +77,7 @@ class ShopRepositoryTest extends DataBaseTestCase
     {
         $shopNew = $this->getNewShop();
         $this->object->save($shopNew);
-        /** @var Group $shopSaved */
+        /** @var Shop $shopSaved */
         $shopSaved = $this->object->findOneBy(['id' => $shopNew->getId()]);
 
         $this->assertSame($shopNew, $shopSaved);
@@ -93,7 +96,7 @@ class ShopRepositoryTest extends DataBaseTestCase
     {
         $this->expectException(DBConnectionException::class);
 
-        /** @var MockObject|ObjectManager $objectManagerMock */
+        /** @var MockObject&ObjectManager $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock
             ->expects($this->once())

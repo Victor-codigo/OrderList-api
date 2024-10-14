@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Test\Functional;
 
 use Common\Adapter\Jwt\JwtLexikAdapter;
-use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,7 +25,7 @@ class WebClientTestCase extends WebTestCase
     private static ?KernelBrowser $clientAuthenticatedAdmin = null;
     protected static ?KernelBrowser $clientNoAuthenticated = null;
     /**
-     * @var EntityManager[]
+     * @var ObjectManager[]
      */
     private array $entityManagerArray = [];
 
@@ -33,9 +33,9 @@ class WebClientTestCase extends WebTestCase
     protected function tearDown(): void
     {
         parent::tearDown();
-        static::$clientAuthenticatedAdmin = null;
-        static::$clientAuthenticatedUser = null;
-        static::$clientNoAuthenticated = null;
+        self::$clientAuthenticatedAdmin = null;
+        self::$clientAuthenticatedUser = null;
+        self::$clientNoAuthenticated = null;
 
         foreach ($this->entityManagerArray as $entityManager) {
             $entityManager->close();
@@ -72,37 +72,37 @@ class WebClientTestCase extends WebTestCase
 
     protected function getCurrentClient(): ?KernelBrowser
     {
-        if (null !== static::$clientAuthenticatedUser) {
-            return static::$clientAuthenticatedUser;
+        if (null !== self::$clientAuthenticatedUser) {
+            return self::$clientAuthenticatedUser;
         }
 
-        if (null !== static::$clientAuthenticatedAdmin) {
-            return static::$clientAuthenticatedAdmin;
+        if (null !== self::$clientAuthenticatedAdmin) {
+            return self::$clientAuthenticatedAdmin;
         }
 
-        return static::$clientNoAuthenticated;
+        return self::$clientNoAuthenticated;
     }
 
     protected function getNewClientAuthenticatedUser(): KernelBrowser
     {
-        if (null === static::$clientAuthenticatedUser) {
-            static::$clientAuthenticatedUser = $this->getNewClientAuthenticated(self::USER_USER_EMAIL, self::USER_USER_PASSWORD);
+        if (null === self::$clientAuthenticatedUser) {
+            self::$clientAuthenticatedUser = $this->getNewClientAuthenticated(self::USER_USER_EMAIL, self::USER_USER_PASSWORD);
 
-            return static::$clientAuthenticatedUser;
+            return self::$clientAuthenticatedUser;
         }
 
-        return static::$clientAuthenticatedUser;
+        return self::$clientAuthenticatedUser;
     }
 
     protected function getNewClientAuthenticatedAdmin(): KernelBrowser
     {
-        if (null === static::$clientAuthenticatedAdmin) {
-            static::$clientAuthenticatedAdmin = $this->getNewClientAuthenticated(self::USER_ADMIN_EMAIL, self::USER_ADMIN_PASSWORD);
+        if (null === self::$clientAuthenticatedAdmin) {
+            self::$clientAuthenticatedAdmin = $this->getNewClientAuthenticated(self::USER_ADMIN_EMAIL, self::USER_ADMIN_PASSWORD);
 
-            return static::$clientAuthenticatedAdmin;
+            return self::$clientAuthenticatedAdmin;
         }
 
-        return static::$clientAuthenticatedAdmin;
+        return self::$clientAuthenticatedAdmin;
     }
 
     protected function getNewClientNoAuthenticated(): KernelBrowser
@@ -118,7 +118,7 @@ class WebClientTestCase extends WebTestCase
         return static::$clientNoAuthenticated;
     }
 
-    protected function getEntityManager(): EntityManager
+    protected function getEntityManager(): ObjectManager
     {
         $entityManager = $this->getCurrentClient()
             ->getContainer()
@@ -129,6 +129,9 @@ class WebClientTestCase extends WebTestCase
         return $entityManager;
     }
 
+    /**
+     * @param array<string|int, mixed> $data
+     */
     protected function generateToken(array $data, float $expire = 3600): string
     {
         $encoder = new JwtLexikAdapter(file_get_contents(self::PATH_PRIVATE_KEY));
@@ -136,7 +139,11 @@ class WebClientTestCase extends WebTestCase
         return $encoder->encode($data, $expire);
     }
 
-    protected function assertResponseStructureIsOk(Response $response, array $data = [], array $errors = [], int $responseCode = Response::HTTP_OK, string $contentType = self::CONTENT_TYPE_ALLOWED)
+    /**
+     * @param array<int|float|string, mixed> $data
+     * @param array<int|float|string>        $errors
+     */
+    protected function assertResponseStructureIsOk(Response $response, array $data = [], array $errors = [], int $responseCode = Response::HTTP_OK, string $contentType = self::CONTENT_TYPE_ALLOWED): void
     {
         $content = json_decode($response->getContent());
 
@@ -181,6 +188,7 @@ class WebClientTestCase extends WebTestCase
 
         foreach ($data as $item) {
             if (is_array($content->data) && is_string($item)) {
+                // @phpstan-ignore argument.type
                 $this->assertTrue(property_exists($content->data, $item));
             }
 
@@ -200,6 +208,11 @@ class WebClientTestCase extends WebTestCase
         }
     }
 
+    /**
+     * @phpstan-template T of object
+     *
+     * @param class-string<T> $entityClassName
+     */
     protected function assertRowDoesNotExistInDataBase(string $columnName, mixed $value, string $entityClassName): void
     {
         $entityManager = $this->getEntityManager();

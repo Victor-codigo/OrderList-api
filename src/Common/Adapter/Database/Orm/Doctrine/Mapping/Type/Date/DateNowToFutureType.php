@@ -29,7 +29,7 @@ class DateNowToFutureType extends DateType
     #[\Override]
     public function convertToDatabaseValue($value, AbstractPlatform $platform): mixed
     {
-        /** @var \DateTime $dateTime */
+        /** @var ?\DateTime $dateTime */
         $dateTime = parent::convertToDatabaseValue($value, $platform);
 
         if (null === $dateTime) {

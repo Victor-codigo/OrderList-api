@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Domain\Service\OrderRemoveAllGroupsOrders;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -15,6 +14,7 @@ use Order\Domain\Model\Order;
 use Order\Domain\Ports\Repository\OrderRepositoryInterface;
 use Order\Domain\Service\OrderRemoveAllGroupsOrders\Dto\OrderRemoveAllGroupsOrdersDto;
 use Order\Domain\Service\OrderRemoveAllGroupsOrders\OrderRemoveAllGroupsOrdersService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Product\Domain\Model\Product;
@@ -22,9 +22,15 @@ use Product\Domain\Model\Product;
 class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
 {
     private OrderRemoveAllGroupsOrdersService $object;
-    private MockObject|OrderRepositoryInterface $orderRepository;
-    private MockObject|PaginatorInterface $ordersToRemovePaginator;
-    private MockObject|PaginatorInterface $ordersToChangeUserIdPaginator;
+    private MockObject&OrderRepositoryInterface $orderRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, Order>
+     */
+    private MockObject&PaginatorInterface $ordersToRemovePaginator;
+    /**
+     * @var MockObject&PaginatorInterface<int, Order>
+     */
+    private MockObject&PaginatorInterface $ordersToChangeUserIdPaginator;
 
     #[\Override]
     protected function setUp(): void
@@ -42,7 +48,9 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
      */
     private function getOrdersToRemove(): array
     {
+        /** @var MockObject&ListOrders $listOrders */
         $listOrders = $this->createMock(ListOrders::class);
+        /** @var MockObject&Product $product */
         $product = $this->createMock(Product::class);
 
         return [
@@ -87,7 +95,9 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
      */
     private function getOrdersToChangeUserId(): array
     {
+        /** @var MockObject&ListOrders $listOrders */
         $listOrders = $this->createMock(ListOrders::class);
+        /** @var MockObject&Product $product */
         $product = $this->createMock(Product::class);
 
         return [
@@ -147,6 +157,8 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
     }
 
     /**
+     * @param Order[] $orders
+     *
      * @return Identifier[]
      */
     private function getOrdersId(array $orders): array
@@ -157,6 +169,9 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         );
     }
 
+    /**
+     * @return Identifier[]
+     */
     private function getGroupsIdToRemove(): array
     {
         return [
@@ -166,6 +181,9 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @return Identifier[]
+     */
     private function getGroupsIdToChangeUserId(): array
     {
         return [
@@ -175,6 +193,9 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<int, array{ group_id: Identifier, admin: Identifier }>
+     */
     private function getGroupsIdAndAdminToChangeUserId(): array
     {
         return [[
@@ -199,9 +220,9 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $ordersIdToChangeUserId = $this->getOrdersId($ordersToChangeUserId);
         $groupsIdToChangeUserId = $this->getGroupsIdToChangeUserId();
         $input = new OrderRemoveAllGroupsOrdersDto(
+            // @phpstan-ignore argument.type
             $this->getOrdersToRemove(),
             $this->getGroupsIdAndAdminToChangeUserId(),
-            ValueObjectFactory::createIdentifier('user id')
         );
 
         $orderRepositoryMatcher = $this->exactly(2);
@@ -211,7 +232,8 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
             ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId): bool {
                 match ($orderRepositoryMatcher->numberOfInvocations()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveOrders, $groupsId),
-                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
+                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId),
+                    default => throw new \LogicException('Not supporting more than 6 invocations'),
                 };
 
                 return true;
@@ -259,7 +281,6 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $input = new OrderRemoveAllGroupsOrdersDto(
             [],
             $this->getGroupsIdAndAdminToChangeUserId(),
-            ValueObjectFactory::createIdentifier('user id')
         );
 
         $this->orderRepository
@@ -301,9 +322,9 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $groupsIdToChangeUserId = $this->getGroupsIdToChangeUserId();
         $ordersToChangeUserIdExpected = $this->getOrdersToChangeUserIdAlreadyChanged($ordersToChangeUserId);
         $input = new OrderRemoveAllGroupsOrdersDto(
+            // @phpstan-ignore argument.type
             $this->getOrdersToRemove(),
             $this->getGroupsIdAndAdminToChangeUserId(),
-            ValueObjectFactory::createIdentifier('user id')
         );
 
         $orderRepositoryMatcher = $this->exactly(2);
@@ -313,14 +334,15 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
             ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId): bool {
                 match ($orderRepositoryMatcher->numberOfInvocations()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveOrders, $groupsId),
-                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
+                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId),
+                    default => throw new \LogicException('Not supporting more than 6 invocations'),
                 };
 
                 return true;
             }))
             ->willReturnCallback(fn (): MockObject|PaginatorInterface => match ($orderRepositoryMatcher->numberOfInvocations()) {
                 1 => throw new DBNotFoundException(),
-                2 => $this->ordersToChangeUserIdPaginator
+                2 => $this->ordersToChangeUserIdPaginator,
             });
 
         $this->ordersToRemovePaginator
@@ -355,7 +377,6 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $input = new OrderRemoveAllGroupsOrdersDto(
             $this->getGroupsIdToRemove(),
             $this->getGroupsIdAndAdminToChangeUserId(),
-            ValueObjectFactory::createIdentifier('user id')
         );
 
         $this->orderRepository
@@ -396,7 +417,6 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $input = new OrderRemoveAllGroupsOrdersDto(
             $this->getGroupsIdToRemove(),
             [],
-            null
         );
 
         $this->orderRepository
@@ -437,9 +457,9 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $ordersIdToRemove = $this->getOrdersId($ordersToRemove);
         $groupsIdToChangeUserId = $this->getGroupsIdToChangeUserId();
         $input = new OrderRemoveAllGroupsOrdersDto(
+            // @phpstan-ignore argument.type
             $this->getOrdersToRemove(),
             $this->getGroupsIdAndAdminToChangeUserId(),
-            ValueObjectFactory::createIdentifier('user id')
         );
 
         $orderRepositoryMatcher = $this->exactly(2);
@@ -449,14 +469,16 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
             ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId): bool {
                 match ($orderRepositoryMatcher->numberOfInvocations()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveOrders, $groupsId),
-                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
+                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId),
+                    default => throw new \LogicException('Not supporting more than 6 invocations'),
                 };
 
                 return true;
             }))
             ->willReturnCallback(fn (): MockObject|PaginatorInterface => match ($orderRepositoryMatcher->numberOfInvocations()) {
                 1 => $this->ordersToRemovePaginator,
-                2 => throw new DBNotFoundException()
+                2 => throw new DBNotFoundException(),
+                default => throw new \LogicException('Not supporting more than 6 invocations'),
             });
 
         $this->ordersToRemovePaginator
@@ -494,7 +516,6 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
         $input = new OrderRemoveAllGroupsOrdersDto(
             $this->getGroupsIdToRemove(),
             $this->getGroupsIdAndAdminToChangeUserId(),
-            ValueObjectFactory::createIdentifier('user id')
         );
 
         $orderRepositoryMatcher = $this->exactly(2);
@@ -504,7 +525,8 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
             ->with($this->callback(function (array $groupsId) use ($orderRepositoryMatcher, $input, $groupsIdToChangeUserId): bool {
                 match ($orderRepositoryMatcher->numberOfInvocations()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveOrders, $groupsId),
-                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
+                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId),
+                    default => throw new \LogicException('Not supporting more than 2 invocations'),
                 };
 
                 return true;

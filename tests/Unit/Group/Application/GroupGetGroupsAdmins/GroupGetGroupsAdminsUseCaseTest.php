@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupGetGroupsAdmins;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -20,6 +19,7 @@ use Group\Application\GroupGetGroupsAdmins\GroupGetGroupsAdminsUseCase;
 use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,10 +32,13 @@ class GroupGetGroupsAdminsUseCaseTest extends TestCase
     ];
 
     private GroupGetGroupsAdminsUseCase $object;
-    private MockObject|ValidationInterface $validator;
-    private MockObject|UserGroupRepositoryInterface $userGroupRepository;
-    private MockObject|UserShared $userSession;
-    private MockObject|PaginatorInterface $userGroupPaginator;
+    private MockObject&ValidationInterface $validator;
+    private MockObject&UserGroupRepositoryInterface $userGroupRepository;
+    private MockObject&UserShared $userSession;
+    /**
+     * @var MockObject&PaginatorInterface<int, UserGroup>
+     */
+    private MockObject&PaginatorInterface $userGroupPaginator;
 
     #[\Override]
     protected function setUp(): void
@@ -57,6 +60,7 @@ class GroupGetGroupsAdminsUseCaseTest extends TestCase
      */
     private function getUsersGroups(): array
     {
+        /** @var MockObject&Group $group */
         $group = $this->createMock(Group::class);
 
         return [
@@ -99,9 +103,6 @@ class GroupGetGroupsAdminsUseCaseTest extends TestCase
         ];
     }
 
-    /**
-     * @return UserGroup[]
-     */
     private function getUsersGroupsExpected(): GroupGetGroupsAdminsOutputDto
     {
         return new GroupGetGroupsAdminsOutputDto([

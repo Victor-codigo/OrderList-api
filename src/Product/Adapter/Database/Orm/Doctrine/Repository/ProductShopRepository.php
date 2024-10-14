@@ -18,11 +18,17 @@ use Product\Domain\Model\Product;
 use Product\Domain\Model\ProductShop;
 use Product\Domain\Port\Repository\ProductShopRepositoryInterface;
 
+/**
+ * @phpstan-extends RepositoryBase<ProductShop>
+ */
 class ProductShopRepository extends RepositoryBase implements ProductShopRepositoryInterface
 {
+    /**
+     * @param PaginatorInterface<int, object> $paginator
+     */
     public function __construct(
         ManagerRegistry $managerRegistry,
-        PaginatorInterface $paginator
+        PaginatorInterface $paginator,
     ) {
         parent::__construct($managerRegistry, ProductShop::class, $paginator);
     }
@@ -37,13 +43,15 @@ class ProductShopRepository extends RepositoryBase implements ProductShopReposit
     public function save(array $productsShops): void
     {
         try {
+            $productShopSave = null;
             foreach ($productsShops as $productShop) {
+                $productShopSave = $productShop;
                 $this->objectManager->persist($productShop);
             }
 
             $this->objectManager->flush();
         } catch (UniqueConstraintViolationException|EntityIdentityCollisionException $e) {
-            throw DBUniqueConstraintException::fromId($productShop->getId(), $e->getCode());
+            throw DBUniqueConstraintException::fromId($productShopSave->getId(), $e->getCode());
         } catch (\Throwable $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
@@ -69,6 +77,8 @@ class ProductShopRepository extends RepositoryBase implements ProductShopReposit
     }
 
     /**
+     * @return PaginatorInterface<int, ProductShop>
+     *
      * @throws DBNotFoundException
      */
     #[\Override]

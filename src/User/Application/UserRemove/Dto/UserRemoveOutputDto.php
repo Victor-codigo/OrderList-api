@@ -10,10 +10,13 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 class UserRemoveOutputDto implements ApplicationOutputInterface
 {
     public function __construct(
-        public readonly Identifier $userId
+        public readonly Identifier $userId,
     ) {
     }
 
+    /**
+     * @return string[]
+     */
     #[\Override]
     public function toArray(): array
     {

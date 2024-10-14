@@ -9,13 +9,16 @@ use Common\Domain\Application\ApplicationOutputInterface;
 readonly class ProductGetFirstLetterOutputDto implements ApplicationOutputInterface
 {
     /**
-     * @param array<int, string> $productsFirstLetter
+     * @param string[] $productsFirstLetter
      */
     public function __construct(
-        public array $productsFirstLetter
+        public array $productsFirstLetter,
     ) {
     }
 
+    /**
+     * @return string[]
+     */
     public function toArray(): array
     {
         return $this->productsFirstLetter;

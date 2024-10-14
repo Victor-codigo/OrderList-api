@@ -8,6 +8,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 
 class OrderCreateInputDto implements ServiceInputDtoInterface
@@ -21,6 +22,14 @@ class OrderCreateInputDto implements ServiceInputDtoInterface
      */
     public readonly array $ordersData;
 
+    /**
+     * @param array<int, array{
+     *  product_id: string,
+     *  shop_id: string,
+     *  description: string,
+     *  amount: float
+     * }>|null $ordersData
+     */
     public function __construct(UserShared $userSession, ?string $groupId, ?string $listOrdersId, ?array $ordersData)
     {
         $this->userSession = $userSession;
@@ -33,10 +42,17 @@ class OrderCreateInputDto implements ServiceInputDtoInterface
         );
     }
 
+    /**
+     * @param array{
+     *  product_id: string|null,
+     *  shop_id: string|null,
+     *  description: string|null,
+     *  amount: float|null
+     * } $orderData
+     */
     private function createOrderDto(array $orderData, Identifier $userSessionId): OrderDataDto
     {
         return new OrderDataDto(
-            ValueObjectFactory::createIdentifier($orderData['list_orders_id'] ?? null),
             ValueObjectFactory::createIdentifier($orderData['product_id'] ?? null),
             ValueObjectFactory::createIdentifierNullable($orderData['shop_id'] ?? null),
             $userSessionId,
@@ -45,6 +61,9 @@ class OrderCreateInputDto implements ServiceInputDtoInterface
         );
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {

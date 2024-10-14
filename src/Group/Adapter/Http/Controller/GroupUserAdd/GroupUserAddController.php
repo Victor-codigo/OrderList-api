@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Adapter\Http\Controller\GroupUserAdd;
 
+use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
@@ -117,7 +118,7 @@ class GroupUserAddController extends AbstractController
 {
     public function __construct(
         private GroupUserAddUseCase $groupUserAddUseCase,
-        private Security $security
+        private Security $security,
     ) {
     }
 
@@ -130,6 +131,9 @@ class GroupUserAddController extends AbstractController
         return $this->createResponse($usersModifiedId);
     }
 
+    /**
+     * @param string[]|null $users
+     */
     private function createGroupUserAddInputDto(?string $groupId, ?array $users, ?string $identifierType, ?bool $admin): GroupUserAddInputDto
     {
         /** @var UserSharedSymfonyAdapter userSharedAdapter */

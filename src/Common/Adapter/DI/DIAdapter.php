@@ -23,7 +23,7 @@ class DIAdapter implements DIInterface, ServiceSubscriberInterface
 {
     public function __construct(
         private ContainerInterface $DI,
-        private string $appProtocolAndDomain
+        private string $appProtocolAndDomain,
     ) {
     }
 
@@ -37,6 +37,8 @@ class DIAdapter implements DIInterface, ServiceSubscriberInterface
     }
 
     /**
+     * @param string[] $params
+     *
      * @throws RouteNotFoundException
      * @throws RouteParametersMissingException
      * @throws RouteInvalidParameterException
@@ -48,6 +50,8 @@ class DIAdapter implements DIInterface, ServiceSubscriberInterface
     }
 
     /**
+     * @param string[] $params
+     *
      * @throws RouteNotFoundException
      * @throws RouteParametersMissingException
      * @throws RouteInvalidParameterException
@@ -59,6 +63,8 @@ class DIAdapter implements DIInterface, ServiceSubscriberInterface
     }
 
     /**
+     * @param string[] $params
+     *
      * @throws RouteNotFoundException
      * @throws RouteParametersMissingException
      * @throws RouteInvalidParameterException
@@ -72,6 +78,8 @@ class DIAdapter implements DIInterface, ServiceSubscriberInterface
     }
 
     /**
+     * @param string[] $params
+     *
      * @throws RouteNotFoundException
      * @throws RouteParametersMissingException
      * @throws RouteInvalidParameterException

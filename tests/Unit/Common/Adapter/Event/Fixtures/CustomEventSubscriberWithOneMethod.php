@@ -12,6 +12,9 @@ class CustomEventSubscriberWithOneMethod implements EventDomainSubscriberInterfa
     {
     }
 
+    /**
+     * @return array<string, string[]>
+     */
     #[\Override]
     public static function getSubscribedEvents(): array
     {

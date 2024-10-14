@@ -14,7 +14,6 @@ use Common\Domain\Service\Image\EntityImageModifyInterface;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use User\Domain\Model\User;
 
 class Group implements EntityImageModifyInterface
 {
@@ -26,7 +25,7 @@ class Group implements EntityImageModifyInterface
     private GroupType $type;
 
     /**
-     * @var Collection<User>
+     * @var Collection<int, UserGroup>
      */
     private Collection $users;
 
@@ -91,7 +90,7 @@ class Group implements EntityImageModifyInterface
     }
 
     /**
-     * @return User[]
+     * @return Collection<int, UserGroup>
      */
     public function getUsers(): Collection
     {

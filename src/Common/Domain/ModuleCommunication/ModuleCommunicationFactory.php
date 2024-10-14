@@ -28,7 +28,7 @@ class ModuleCommunicationFactory
     public static function userLogin(Email $email, Password $password): ModuleCommunicationConfigDto
     {
         $attributes = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
         ];
 
         $content = [
@@ -61,7 +61,7 @@ class ModuleCommunicationFactory
         );
 
         $attributes = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
             'users_id' => implode(',', $usersIdPlain),
         ];
 
@@ -90,7 +90,7 @@ class ModuleCommunicationFactory
         );
 
         $attributes = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
             'users_id' => implode(',', $usersIdPlain),
         ];
 
@@ -112,6 +112,9 @@ class ModuleCommunicationFactory
         );
     }
 
+    /**
+     * @param NameWithSpaces[] $usersNames
+     */
     public static function userGetByName(array $usersNames): ModuleCommunicationConfigDto
     {
         $usersNamePlain = array_map(
@@ -120,7 +123,7 @@ class ModuleCommunicationFactory
         );
 
         $attributes = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
             'users_name' => implode(',', $usersNamePlain),
         ];
 
@@ -144,7 +147,7 @@ class ModuleCommunicationFactory
     public static function groupCreate(NameWithSpaces $name, Description $description, GROUP_TYPE $type, array $files, ?bool $notifyUser): ModuleCommunicationConfigDto
     {
         $attributes = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
         ];
 
         $content = [
@@ -182,7 +185,7 @@ class ModuleCommunicationFactory
         );
 
         $attributes = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
         ];
 
         $content = [
@@ -214,7 +217,7 @@ class ModuleCommunicationFactory
         );
 
         $attributes = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
             'groups_id' => implode(',', $groupsIdPlain),
         ];
 
@@ -235,7 +238,7 @@ class ModuleCommunicationFactory
     public static function groupGetUsers(Identifier $groupsId, PaginatorPage $page, PaginatorPageItems $pageItems): ModuleCommunicationConfigDto
     {
         $attributes = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
             'group_id' => $groupsId->getValue(),
         ];
 
@@ -261,7 +264,7 @@ class ModuleCommunicationFactory
     public static function groupGetAdmins(Identifier $groupId): ModuleCommunicationConfigDto
     {
         $attributes = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
             'group_id' => $groupId->getValue(),
         ];
 
@@ -279,6 +282,9 @@ class ModuleCommunicationFactory
         );
     }
 
+    /**
+     * @param Identifier[] $groupsId
+     */
     public static function groupGetGroupsAdmins(array $groupsId, PaginatorPage $page, PaginatorPageItems $pageItems): ModuleCommunicationConfigDto
     {
         $groupsIdString = array_map(
@@ -287,7 +293,7 @@ class ModuleCommunicationFactory
         );
 
         $attributes = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
             'groups_id' => implode(',', $groupsIdString),
         ];
         $query = [
@@ -312,7 +318,7 @@ class ModuleCommunicationFactory
     public static function groupUserGetGroups(?GROUP_TYPE $groupType, ?string $filterSection, ?string $filterText, ?string $filterValue, PaginatorPage $page, PaginatorPageItems $pageItems, bool $orderAsc): ModuleCommunicationConfigDto
     {
         $attributes = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
         ];
 
         $query = [
@@ -357,7 +363,7 @@ class ModuleCommunicationFactory
     public static function groupUserRemove(Identifier $groupId, array $usersId): ModuleCommunicationConfigDto
     {
         $attributes = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
         ];
 
         $content = [
@@ -385,7 +391,7 @@ class ModuleCommunicationFactory
     public static function groupRemoveAllUserGroups(string $systemKey): ModuleCommunicationConfigDto
     {
         $attributes = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
         ];
         $content = [
             'system_key' => $systemKey,
@@ -405,10 +411,14 @@ class ModuleCommunicationFactory
         );
     }
 
+    /**
+     * @param string[] $productsId
+     * @param string[] $shopsId
+     */
     public static function productGetData(Identifier $groupsId, array $productsId, array $shopsId = [], string $productNameStartsWith = ''): ModuleCommunicationConfigDto
     {
         $query = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
             'group_id' => $groupsId->getValue(),
         ];
 
@@ -444,7 +454,7 @@ class ModuleCommunicationFactory
     public static function productRemoveGroupsProducts(array $groupsId, string $systemKey): ModuleCommunicationConfigDto
     {
         $query = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
         ];
 
         $content = [
@@ -469,10 +479,14 @@ class ModuleCommunicationFactory
         );
     }
 
+    /**
+     * @param string[] $shopsId
+     * @param string[] $productsId
+     */
     public static function shopGetData(Identifier $groupsId, array $shopsId, array $productsId = [], string $shopNameStartsWith = ''): ModuleCommunicationConfigDto
     {
         $query = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
             'group_id' => $groupsId->getValue(),
         ];
 
@@ -508,7 +522,7 @@ class ModuleCommunicationFactory
     public static function shopRemoveGroupsShops(array $groupsId, string $systemKey): ModuleCommunicationConfigDto
     {
         $query = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
         ];
 
         $content = [
@@ -713,10 +727,13 @@ class ModuleCommunicationFactory
         return self::notificationCreate($content, $tokenSession);
     }
 
+    /**
+     * @param array<int|string, mixed> $content
+     */
     private static function notificationCreate(array $content, ?JwtToken $tokenSession): ModuleCommunicationConfigDto
     {
         $attributes = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
         ];
 
         if (null !== $tokenSession && !$tokenSession->isNull()) {
@@ -742,7 +759,7 @@ class ModuleCommunicationFactory
     public static function notificationsUserGetData(PaginatorPage $page, PaginatorPageItems $pageItems, Language $lang): ModuleCommunicationConfigDto
     {
         $attributes = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
         ];
 
         $query = [
@@ -776,7 +793,7 @@ class ModuleCommunicationFactory
         );
 
         $attributes = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
             'notifications_id' => implode(',', $notificationsIdString),
         ];
 
@@ -797,7 +814,7 @@ class ModuleCommunicationFactory
     public static function notificationsRemoveAllUserNotifications(string $systemKey): ModuleCommunicationConfigDto
     {
         $attributes = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
         ];
         $content = [
             'system_key' => $systemKey,
@@ -824,7 +841,7 @@ class ModuleCommunicationFactory
     public static function ordersRemoveAllUserOrdersOrChangeUserId(array $groupsIdToRemove, array $groupsIdToChangeUserId, string $systemKey): ModuleCommunicationConfigDto
     {
         $attributes = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
         ];
 
         $content = [
@@ -860,7 +877,7 @@ class ModuleCommunicationFactory
     public static function listOrdersRemoveAllUserListOrdersOrChangeUserId(array $groupsIdToRemove, array $groupsIdToChangeUserId, string $systemKey): ModuleCommunicationConfigDto
     {
         $attributes = [
-            'api_version' => static::API_VERSION,
+            'api_version' => self::API_VERSION,
         ];
 
         $content = [

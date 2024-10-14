@@ -9,8 +9,8 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 class ListOrdersRemoveAllGroupsListOrdersOutputDto
 {
     /**
-     * @param Identifier[]                                               $listsOrdersIdRemoved
-     * @param array<int, array{group_id: Identifier, admin: Identifier}> $listsOrdersIdChangedUserId
+     * @param Identifier[] $listsOrdersIdRemoved
+     * @param Identifier[] $listsOrdersIdChangedUserId
      */
     public function __construct(
         public readonly array $listsOrdersIdRemoved,

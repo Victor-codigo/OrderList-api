@@ -17,11 +17,20 @@ class GroupGetDataService
     public function __construct(
         private GroupRepositoryInterface $groupRepository,
         private string $groupPublicImagePath,
-        private string $appProtocolAndDomain
+        private string $appProtocolAndDomain,
     ) {
     }
 
     /**
+     * @return \Generator<int, array{
+     *  group_id: string|null,
+     *  type: string,
+     *  name: string|null,
+     *  description: string|null,
+     *  image: string|null,
+     *  created_on: string
+     * }>
+     *
      * @throws DBNotFoundException
      */
     public function __invoke(GroupGetDataDto $input): \Generator
@@ -55,6 +64,15 @@ class GroupGetDataService
 
     /**
      * @param Group[] $groups
+     *
+     * @return \Generator<int, array{
+     *  group_id: string|null,
+     *  type: string,
+     *  name: string|null,
+     *  description: string|null,
+     *  image: string|null,
+     *  created_on: string
+     * }>
      */
     private function getPrivateData(array $groups, Path $userImage): \Generator
     {

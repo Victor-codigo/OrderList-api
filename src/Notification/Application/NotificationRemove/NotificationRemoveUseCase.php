@@ -29,7 +29,7 @@ class NotificationRemoveUseCase extends ServiceBase
     public function __construct(
         private NotificationRemoveService $NotificationRemoveService,
         private ValidationInterface $validator,
-        private NotificationRepositoryInterface $notificationRepository
+        private NotificationRepositoryInterface $notificationRepository,
     ) {
     }
 
@@ -64,7 +64,7 @@ class NotificationRemoveUseCase extends ServiceBase
     }
 
     /**
-     * @param Notification[] $notificationsToDelete
+     * @param PaginatorInterface<int, Notification> $notificationsToDelete
      *
      * @return Notification[]
      */
@@ -82,6 +82,9 @@ class NotificationRemoveUseCase extends ServiceBase
         return $validNotifications;
     }
 
+    /**
+     * @param Notification[] $notifications
+     */
     private function createNotificationRemoveDto(array $notifications): NotificationRemoveDto
     {
         $notificationsId = array_map(
@@ -92,6 +95,9 @@ class NotificationRemoveUseCase extends ServiceBase
         return new NotificationRemoveDto($notificationsId);
     }
 
+    /**
+     * @param Notification[] $notifications
+     */
     private function createNotificationRemoveOutputDto(array $notifications): NotificationRemoveOutputDto
     {
         $notificationsId = array_map(

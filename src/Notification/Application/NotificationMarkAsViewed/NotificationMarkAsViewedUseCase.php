@@ -23,7 +23,7 @@ class NotificationMarkAsViewedUseCase extends ServiceBase
 {
     public function __construct(
         private NotificationMarkAsViewedService $notificationMarkAsViewedService,
-        private ValidationInterface $validator
+        private ValidationInterface $validator,
     ) {
     }
 
@@ -66,6 +66,9 @@ class NotificationMarkAsViewedUseCase extends ServiceBase
         return new NotificationMarkAsViewedDto($notificationsId);
     }
 
+    /**
+     * @param Notification[] $notifications
+     */
     private function createNotificationMarkAsViewedOutputDto(array $notifications): NotificationMarkAsViewedOutputDto
     {
         $notificationsId = array_map(

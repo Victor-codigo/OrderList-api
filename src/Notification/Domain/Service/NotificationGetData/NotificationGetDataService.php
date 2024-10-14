@@ -11,6 +11,7 @@ use Common\Domain\Model\ValueObject\String\Language;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Ports\Translator\TranslatorInterface;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
+use Notification\Domain\Model\Notification;
 use Notification\Domain\Ports\Notification\NotificationRepositoryInterface;
 use Notification\Domain\Service\NotificationGetData\Dto\NotificationGetDataDto;
 
@@ -20,11 +21,19 @@ class NotificationGetDataService
 
     public function __construct(
         private NotificationRepositoryInterface $notificationRepository,
-        private TranslatorInterface $translator
+        private TranslatorInterface $translator,
     ) {
     }
 
     /**
+     * @return array<int, array{
+     *  id: string|null,
+     *  user_id: string|null,
+     *  message: string|null,
+     *  viewed: bool,
+     *  created_on: string,
+     * }>
+     *
      * @throws DBNotFoundException
      * @throws LogicException
      */
@@ -36,9 +45,21 @@ class NotificationGetDataService
         return $this->getNotificationsData($notifications, $input->lang);
     }
 
+    /**
+     * @param PaginatorInterface<int, Notification> $notifications
+     *
+     * @return array<int, array{
+     *  id: string|null,
+     *  user_id: string|null,
+     *  message: string|null,
+     *  viewed: bool,
+     *  created_on: string,
+     * }>
+     */
     private function getNotificationsData(PaginatorInterface $notifications, Language $lang): array
     {
         $notificationsData = [];
+        /** @var Notification $notification */
         foreach ($notifications as $notification) {
             $notificationsData[] = [
                 'id' => $notification->getId()->getValue(),
@@ -68,7 +89,7 @@ class NotificationGetDataService
             NOTIFICATION_TYPE::USER_PASSWORD_CHANGED => 'notification.user.password_changed',
             NOTIFICATION_TYPE::USER_PASSWORD_REMEMBER => 'notification.user.password_remembered',
             NOTIFICATION_TYPE::USER_REGISTERED => 'notification.user.registered',
-            default => throw LogicException::fromMessage('Notification type not found')
+            default => throw LogicException::fromMessage('Notification type not found'),
         };
 
         return $this->translator->translate(

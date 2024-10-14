@@ -8,6 +8,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use User\Domain\Model\User;
 
@@ -28,6 +29,9 @@ class UserPasswordChangeInputDto implements ServiceInputDtoInterface
         $this->passwordNewRepeat = ValueObjectFactory::createPassword($passwordNewRepeat);
     }
 
+    /**
+     * @return array{}|array<int, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {

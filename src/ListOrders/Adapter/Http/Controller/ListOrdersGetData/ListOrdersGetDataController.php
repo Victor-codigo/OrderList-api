@@ -139,7 +139,7 @@ class ListOrdersGetDataController extends AbstractController
 {
     public function __construct(
         private ListOrdersGetDataUseCase $ListOrdersGetDataUseCase,
-        private Security $security
+        private Security $security,
     ) {
     }
 
@@ -161,6 +161,9 @@ class ListOrdersGetDataController extends AbstractController
         return $this->createResponse($listOrderData);
     }
 
+    /**
+     * @param string[]|null $listOrdersIds
+     */
     private function createListOrdersGetDataInputDto(?string $groupId, ?array $listOrdersIds, ?string $filterValue, bool $orderAsc, ?string $filterSection, ?string $filterText, ?int $page, ?int $pageItems): ListOrdersGetDataInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */

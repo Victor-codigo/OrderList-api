@@ -6,6 +6,7 @@ namespace User\Domain\Port\Repository;
 
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Ports\Repository\RepositoryInterface;
 use User\Domain\Model\User;
@@ -45,7 +46,7 @@ interface UserRepositoryInterface extends RepositoryInterface
     /**
      * @param Identifier[] $id
      *
-     * @return Users[]
+     * @return User[]
      *
      * @throws DBNotFoundException
      */
@@ -54,13 +55,15 @@ interface UserRepositoryInterface extends RepositoryInterface
     /**
      * @param NameWithSpaces[] $usersName
      *
-     * @return Users[]
+     * @return User[]
      *
      * @throws DBNotFoundException
      */
     public function findUsersByNameOrFail(array $usersName): array;
 
     /**
+     * @return PaginatorInterface<int, User>
+     *
      * @throws DBNotFoundException
      */
     public function findUsersTimeActivationExpiredOrFail(int $activationTime): PaginatorInterface;

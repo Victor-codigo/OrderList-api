@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace User\Domain\Service\UserRemove;
 
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -16,7 +17,7 @@ class UserRemoveService
     public function __construct(
         private UserRepositoryInterface $userRepository,
         private EntityImageRemoveService $entityImageRemoveService,
-        private string $userImagePath
+        private string $userImagePath,
     ) {
     }
 

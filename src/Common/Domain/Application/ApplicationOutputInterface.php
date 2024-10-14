@@ -6,5 +6,8 @@ namespace Common\Domain\Application;
 
 interface ApplicationOutputInterface
 {
+    /**
+     * @return mixed[]
+     */
     public function toArray(): array;
 }

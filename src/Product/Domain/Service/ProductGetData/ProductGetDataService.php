@@ -18,6 +18,9 @@ use Product\Domain\Service\ProductGetData\Dto\ProductGetDataDto;
 
 class ProductGetDataService
 {
+    /**
+     * @var PaginatorInterface<int, Product>|null
+     */
     private ?PaginatorInterface $productsPaginator = null;
 
     public function __construct(
@@ -28,6 +31,15 @@ class ProductGetDataService
     }
 
     /**
+     * @return array<int, array{
+     *  id: string,
+     *  group_id: string,
+     *  name: string,
+     *  description: string,
+     *  image: string|null,
+     *  created_on:string
+     * }>
+     *
      * @throws DBNotFoundException
      * @throws LogicException
      */
@@ -55,6 +67,8 @@ class ProductGetDataService
      * @param Identifier[] $productsId
      * @param Identifier[] $shopsId
      *
+     * @return PaginatorInterface<int, Product>|null
+     *
      * @throws DBNotFoundException
      */
     private function getProductsByProductIdOrShopsId(Identifier $groupId, array $productsId, array $shopsId, bool $orderAsc): ?PaginatorInterface
@@ -72,6 +86,8 @@ class ProductGetDataService
     }
 
     /**
+     * @return PaginatorInterface<int, Product>
+     *
      * @throws DBNotFoundException
      */
     private function getProductsByGroupId(Identifier $groupId, bool $orderAsc): PaginatorInterface
@@ -85,6 +101,8 @@ class ProductGetDataService
     }
 
     /**
+     * @return PaginatorInterface<int, Product>|null
+     *
      * @throws DBNotFoundException
      */
     private function getProductsByProductName(Identifier $groupId, NameWithSpaces $productName, bool $orderAsc): ?PaginatorInterface
@@ -97,6 +115,8 @@ class ProductGetDataService
     }
 
     /**
+     * @return PaginatorInterface<int, Product>|null
+     *
      * @throws DBNotFoundException
      */
     private function getProductByProductNameFilter(Identifier $groupId, Filter $productNameFilter, bool $orderAsc): ?PaginatorInterface
@@ -109,6 +129,8 @@ class ProductGetDataService
     }
 
     /**
+     * @return PaginatorInterface<int, Product>|null
+     *
      * @throws DBNotFoundException
      */
     private function getProductByShopNameFilter(Identifier $groupId, Filter $shopNameFilter, bool $orderAsc): ?PaginatorInterface
@@ -121,6 +143,17 @@ class ProductGetDataService
     }
 
     /**
+     * @param PaginatorInterface<int, Product> $productsPaginator
+     *
+     * @return array<int, array{
+     *  id: string,
+     *  group_id: string,
+     *  name: string,
+     *  description: string,
+     *  image: string|null,
+     *  created_on: string
+     * }>
+     *
      * @throws DBNotFoundException
      */
     private function getProductsData(PaginatorInterface $productsPaginator, PaginatorPage $page, PaginatorPageItems $pageItems): array

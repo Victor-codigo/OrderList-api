@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Product\Adapter\Http\Controller\ProductModify;
 
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
+use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Response\RESPONSE_STATUS;
@@ -92,7 +93,7 @@ class ProductModifyController extends AbstractController
 {
     public function __construct(
         private ProductModifyUseCase $productModifyUseCase,
-        private Security $security
+        private Security $security,
     ) {
     }
 

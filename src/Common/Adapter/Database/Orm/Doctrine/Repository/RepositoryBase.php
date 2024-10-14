@@ -14,12 +14,24 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * @phpstan-template TEntityClass of object
+ *
+ * @phpstan-extends ServiceEntityRepository<TEntityClass>
+ */
 abstract class RepositoryBase extends ServiceEntityRepository
 {
     protected ObjectManager $objectManager;
     protected EntityManagerInterface $entityManager;
+    /**
+     * @var PaginatorInterface<int, object>|null
+     */
     protected ?PaginatorInterface $paginator;
 
+    /**
+     * @param class-string                    $entityClass<T>
+     * @param PaginatorInterface<int, object> $paginator
+     */
     public function __construct(ManagerRegistry $managerRegistry, string $entityClass, ?PaginatorInterface $paginator = null)
     {
         parent::__construct($managerRegistry, $entityClass);
@@ -34,12 +46,16 @@ abstract class RepositoryBase extends ServiceEntityRepository
         return Uuid::v4()->toRfc4122();
     }
 
-    public function isValidUuid(string $id)
+    public function isValidUuid(string $id): bool
     {
         return Uuid::isValid($id);
     }
 
     /**
+     * @param mixed[] $parameters
+     *
+     * @return PaginatorInterface<int, mixed>
+     *
      * @throws DBNotFoundException
      */
     protected function queryPaginationOrFail(Query|QueryBuilder $query, array $parameters = []): PaginatorInterface
@@ -58,6 +74,10 @@ abstract class RepositoryBase extends ServiceEntityRepository
     }
 
     /**
+     * @param mixed[] $parameters
+     *
+     * @return PaginatorInterface<int, mixed>
+     *
      * @throws DBNotFoundException
      */
     protected function dqlPaginationOrFail(string $dql, array $parameters = []): PaginatorInterface

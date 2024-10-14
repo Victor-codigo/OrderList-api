@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupUserGetGroups;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -21,6 +20,7 @@ use Group\Domain\Service\GroupGetData\Dto\GroupGetDataDto;
 use Group\Domain\Service\GroupGetData\GroupGetDataService;
 use Group\Domain\Service\GroupUserGetGroups\Dto\GroupUserGetGroupsDto;
 use Group\Domain\Service\GroupUserGetGroups\GroupUserGetGroupsService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvocationOrder;
 use PHPUnit\Framework\TestCase;
@@ -32,8 +32,8 @@ class GroupUserGetGroupsServiceTest extends TestCase
     private const string PATH_TO_GROUP_IMAGE_PUBLIC_PATH = '/groupPublicImagePath';
 
     private GroupUserGetGroupsService $object;
-    private MockObject|UserGroupRepositoryInterface $userGroupRepository;
-    private MockObject|GroupRepositoryInterface $groupRepository;
+    private MockObject&UserGroupRepositoryInterface $userGroupRepository;
+    private MockObject&GroupRepositoryInterface $groupRepository;
     private GroupGetDataService $groupGetDataService;
 
     #[\Override]
@@ -54,10 +54,11 @@ class GroupUserGetGroupsServiceTest extends TestCase
     }
 
     /**
-     * @return UserGroup[]
+     * @return MockObject&PaginatorInterface<int, UserGroup>
      */
-    private function getUserGroups(): MockObject|PaginatorInterface
+    private function getUserGroups(): MockObject&PaginatorInterface
     {
+        /** @var MockObject&Group $group */
         $group = $this->createMock(Group::class);
         $userGroups = [
             UserGroup::fromPrimitives('fdb242b4-bac8-4463-88d0-0941bb0beee0', self::USER_ID, [GROUP_ROLES::ADMIN], $group),
@@ -65,7 +66,7 @@ class GroupUserGetGroupsServiceTest extends TestCase
             UserGroup::fromPrimitives('4b513296-14ac-4fb1-a574-05bc9b1dbe3f', self::USER_ID, [GROUP_ROLES::ADMIN], $group),
         ];
 
-        /** @var MockObject|PaginatorInterface $paginator */
+        /** @var MockObject&PaginatorInterface<int, UserGroup> $paginator */
         $paginator = $this->createMock(PaginatorInterface::class);
         $paginator
             ->expects($this->any())
@@ -91,6 +92,10 @@ class GroupUserGetGroupsServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @param Identifier[] $groupsId
+     * @param Group[]      $expectedGroupsData
+     */
     private function mockGroupGetDataService(array $groupsId, array $expectedGroupsData, InvocationOrder $timesInvokedFindGroupsByIdOrFail): void
     {
         $this->groupRepository

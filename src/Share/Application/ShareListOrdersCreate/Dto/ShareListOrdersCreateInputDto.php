@@ -8,6 +8,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 
 readonly class ShareListOrdersCreateInputDto implements ServiceInputDtoInterface
@@ -21,6 +22,9 @@ readonly class ShareListOrdersCreateInputDto implements ServiceInputDtoInterface
         $this->listOrdersId = ValueObjectFactory::createIdentifier($listOrdersId);
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {

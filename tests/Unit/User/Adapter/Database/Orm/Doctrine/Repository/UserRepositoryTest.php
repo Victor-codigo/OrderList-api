@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Database\Orm\Doctrine\Repository;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
@@ -16,6 +15,7 @@ use Common\Domain\Validation\User\USER_ROLES;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\Persistence\ObjectManager;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\Unit\DataBaseTestCase;
 use User\Adapter\Database\Orm\Doctrine\Repository\UserRepository;
@@ -227,9 +227,9 @@ class UserRepositoryTest extends DataBaseTestCase
         $this->expectException(DBNotFoundException::class);
 
         $usersId = [
-            ValueObjectFactory::createIdentifier('NameNotExisting1'),
-            ValueObjectFactory::createIdentifier('NameNotExisting2'),
-            ValueObjectFactory::createIdentifier('NameNotExisting3'),
+            ValueObjectFactory::createNameWithSpaces('NameNotExisting1'),
+            ValueObjectFactory::createNameWithSpaces('NameNotExisting2'),
+            ValueObjectFactory::createNameWithSpaces('NameNotExisting3'),
         ];
         $this->userRepository->findUsersByNameOrFail($usersId);
     }

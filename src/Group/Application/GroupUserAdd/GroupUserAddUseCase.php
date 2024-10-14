@@ -45,7 +45,7 @@ class GroupUserAddUseCase extends ServiceBase
         private UserHasGroupAdminGrantsService $userHasGroupAdminGrantsService,
         private GroupUserAddService $groupUserAddService,
         private ModuleCommunicationInterface $moduleCommunication,
-        private string $systemKey
+        private string $systemKey,
     ) {
     }
 
@@ -140,10 +140,32 @@ class GroupUserAddUseCase extends ServiceBase
     }
 
     /**
+     * @param NameWithSpaces[] $usersNames
+     *
+     * @return array<int, array{
+     *      id: string,
+     *      email: string,
+     *      name: string,
+     *      roles: string[],
+     *      created_on: string,
+     *      image: string|null
+     * }>
+     *
      * @throws GroupUserAddUsersValidationException
      */
     private function getUserByNameOrFail(array $usersNames): array
     {
+        /**
+         * @var object{
+         *  data: array<int, array{
+         *      id: string,
+         *      email: string,
+         *      name: string,
+         *      roles: string[],
+         *      created_on: string,
+         *      image: string|null
+         * }>} $response
+         */
         $response = $this->moduleCommunication->__invoke(
             ModuleCommunicationFactory::userGetByName($usersNames)
         );
@@ -174,6 +196,9 @@ class GroupUserAddUseCase extends ServiceBase
         }
     }
 
+    /**
+     * @param Identifier[] $usersId
+     */
     private function createGroupUserAddDto(Identifier $groupId, array $usersId, Rol $rol): GroupUserAddDto
     {
         return new GroupUserAddDto(

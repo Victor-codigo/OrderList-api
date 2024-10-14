@@ -7,7 +7,7 @@ namespace Common\Domain\Event;
 interface EventDomainSubscriberInterface
 {
     /**
-     * @return array<string, array<string, int>>
+     * @return array<int|string, string|array<int, int|string>>
      */
     public static function getSubscribedEvents(): array;
 }

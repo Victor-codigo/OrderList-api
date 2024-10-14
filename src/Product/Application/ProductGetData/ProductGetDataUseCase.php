@@ -24,7 +24,7 @@ class ProductGetDataUseCase extends ServiceBase
     public function __construct(
         private ProductGetDataService $productGetDataService,
         private ValidationInterface $validator,
-        private ValidateGroupAndUserService $validateGroupAndUserService
+        private ValidateGroupAndUserService $validateGroupAndUserService,
     ) {
     }
 
@@ -73,6 +73,16 @@ class ProductGetDataUseCase extends ServiceBase
         );
     }
 
+    /**
+     * @param array<int, array{
+     *  id: string,
+     *  group_id: string,
+     *  name: string,
+     *  description: string,
+     *  image: string|null,
+     *  created_on: string
+     * }> $productsData
+     */
     private function createProductGetDataOutputDto(array $productsData, PaginatorPage $page, int $pagesTotal): ProductGetDataOutputDto
     {
         return new ProductGetDataOutputDto($page, $pagesTotal, $productsData);

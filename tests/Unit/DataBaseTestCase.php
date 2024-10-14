@@ -6,7 +6,6 @@ namespace Test\Unit;
 
 use Common\Domain\Exception\LogicException;
 use Common\Kernel;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -27,6 +26,7 @@ abstract class DataBaseTestCase extends KernelTestCase
             throw new LogicException('Only executable in test environment');
         }
 
+        // @phpstan-ignore assign.propertyType
         $this->entityManager = $kernel
             ->getContainer()
             ->get('doctrine')
@@ -48,7 +48,7 @@ abstract class DataBaseTestCase extends KernelTestCase
         return Kernel::class;
     }
 
-    protected function mockObjectManager(ServiceEntityRepositoryInterface $repository, MockObject|ObjectManager $objectManagerMock): void
+    protected function mockObjectManager(object $repository, MockObject|ObjectManager $objectManagerMock): void
     {
         $userRepositoryReflection = new \ReflectionClass($repository);
         $objectManagerProperty = $userRepositoryReflection->getProperty('objectManager');

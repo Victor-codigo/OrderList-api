@@ -6,6 +6,9 @@ namespace Common\Domain\Ports\JwtToken;
 
 interface JwtHS256Interface
 {
+    /**
+     * @param array<int|string, mixed> $data
+     */
     public function encode(array $data, float $expire = 3600): string;
 
     /**

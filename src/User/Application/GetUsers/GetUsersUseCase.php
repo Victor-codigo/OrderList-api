@@ -7,6 +7,10 @@ namespace User\Application\GetUsers;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Object\Rol;
+use Common\Domain\Model\ValueObject\String\Email;
+use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
+use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectBase;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Struct\SCOPE;
@@ -27,7 +31,7 @@ class GetUsersUseCase extends ServiceBase
     public function __construct(
         private GeUsersPublicDataService $geUsersPublicDataService,
         private GetUsersProfilePublicDataService $getUsersProfilePublicDataService,
-        private ValidationInterface $validator
+        private ValidationInterface $validator,
     ) {
     }
 
@@ -71,6 +75,9 @@ class GetUsersUseCase extends ServiceBase
         }
     }
 
+    /**
+     * @param Identifier[] $usersId
+     */
     private function getScope(User $userSession, array $usersId): SCOPE
     {
         if ($userSession->getRoles()->has(new Rol(USER_ROLES::ADMIN))) {
@@ -84,21 +91,49 @@ class GetUsersUseCase extends ServiceBase
         return SCOPE::PUBLIC;
     }
 
+    /**
+     * @param Identifier[]|NameWithSpaces[] $usersId
+     */
     private function createGetUsersPublicDataDto(array $usersId): GetUsersPublicDataDto
     {
         return new GetUsersPublicDataDto($usersId);
     }
 
+    /**
+     * @param Identifier[] $usersId
+     */
     private function createGetUsersProfilePublicDataDto(array $usersId): GetUsersProfilePublicDataDto
     {
         return new GetUsersProfilePublicDataDto($usersId);
     }
 
+    /**
+     * @param array<int, User[]> $users
+     */
     private function createGetUsersOutputDto(array $users): GetUsersOutputDto
     {
         return new GetUsersOutputDto($users);
     }
 
+    /**
+     * @param array<int, array{
+     *  id: Identifier,
+     *  name: NameWithSpaces
+     * }>|array<int, array{
+     *  id: Identifier,
+     *  email: Email,
+     *  name: NameWithSpaces,
+     *  roles: Roles,
+     *  image: Path|null,
+     *  created_on: \DateTime
+     * }> $users
+     * @param array<int, array{
+     *  id: Identifier,
+     *  image: Path|null
+     * }> $profiles
+     *
+     * @return array<int, User[]>
+     */
     private function mergeUserAndProfileData(array $users, array $profiles): array
     {
         $usersArray = array_map($this->getItemPlain(...), $users);
@@ -118,6 +153,8 @@ class GetUsersUseCase extends ServiceBase
     }
 
     /**
+     * @param mixed[] $item
+     *
      * @return mixed[]
      */
     private function getItemPlain(array $item): array
@@ -128,7 +165,7 @@ class GetUsersUseCase extends ServiceBase
                 $value instanceof Roles => $value->getRolesEnums(),
                 $value instanceof ValueObjectBase => $value->getValue(),
                 $value instanceof \DateTime => $value->format('Y-m-d H:i:s'),
-                default => $value
+                default => $value,
             };
         }
 

@@ -21,7 +21,7 @@ class GroupUserRemoveService
 {
     public function __construct(
         private UserGroupRepositoryInterface $userGroupRepository,
-        private GroupRepositoryInterface $groupRepository
+        private GroupRepositoryInterface $groupRepository,
     ) {
     }
 
@@ -62,6 +62,8 @@ class GroupUserRemoveService
     }
 
     /**
+     * @param UserGroup[] $usersGroupToRemove
+     *
      * @throws GroupUserRemoveEmptyException
      */
     private function validateNotToRemoveAllUsersOfTheGroup(Identifier $groupId, array $usersGroupToRemove): void
@@ -74,6 +76,8 @@ class GroupUserRemoveService
     }
 
     /**
+     * @param UserGroup[] $usersGroupToRemove
+     *
      * @throws GroupUserRemoveGroupWithoutAdminException
      */
     private function validateNoRemoveAllAdminsFromTheGroup(Identifier $groupId, array $usersGroupToRemove): void

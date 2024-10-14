@@ -29,7 +29,7 @@ class NotificationCreateUseCase extends ServiceBase
         private NotificationCreateService $notificationCreateService,
         private ValidationInterface $validator,
         private ModuleCommunicationInterface $moduleCommunication,
-        private string $systemKey
+        private string $systemKey,
     ) {
     }
 
@@ -96,11 +96,17 @@ class NotificationCreateUseCase extends ServiceBase
         }
     }
 
+    /**
+     * @param Identifier[] $usersId
+     */
     private function createNotificationCreateDto(array $usersId, NotificationType $notificationType, NotificationData $notificationData): NotificationCreateDto
     {
         return new NotificationCreateDto($usersId, $notificationType, $notificationData);
     }
 
+    /**
+     * @param Notification[] $notifications
+     */
     private function createNotificationCreateOutputDto(array $notifications): NotificationCreateOutputDto
     {
         $notificationsId = array_map(

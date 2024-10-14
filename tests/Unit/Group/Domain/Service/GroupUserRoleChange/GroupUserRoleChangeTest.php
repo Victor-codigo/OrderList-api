@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupUserRoleChange;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -18,8 +17,10 @@ use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupUserRoleChange\Dto\GroupUserRoleChangeDto;
 use Group\Domain\Service\GroupUserRoleChange\Exception\GroupWithoutAdminsException;
 use Group\Domain\Service\GroupUserRoleChange\GroupUserRoleChangeService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use User\Domain\Model\User;
 
 class GroupUserRoleChangeTest extends TestCase
 {
@@ -32,7 +33,7 @@ class GroupUserRoleChangeTest extends TestCase
 
     private GroupUserRoleChangeService $object;
     private Group $group;
-    private MockObject|UserGroupRepositoryInterface $userGroupRepository;
+    private MockObject&UserGroupRepositoryInterface $userGroupRepository;
 
     #[\Override]
     protected function setUp(): void
@@ -63,15 +64,17 @@ class GroupUserRoleChangeTest extends TestCase
 
     /**
      * @param string[] $usersIdRoleChanged
+     *
+     * @return MockObject&PaginatorInterface<int, UserGroup>
      */
-    private function getFindGroupUsersOrFailReturn(array $usersIdRoleChanged, GROUP_ROLES $groupRol): MockObject|PaginatorInterface
+    private function getFindGroupUsersOrFailReturn(array $usersIdRoleChanged, GROUP_ROLES $groupRol): MockObject&PaginatorInterface
     {
         $usersGroup = array_map(
             fn (string $userId): UserGroup => UserGroup::fromPrimitives(self::GROUP_ID, $userId, [$groupRol], $this->group),
             $usersIdRoleChanged
         );
 
-        /** @var MockObject|PaginatorInterface $paginator */
+        /** @var MockObject&PaginatorInterface<int, User> $paginator */
         $paginator = $this->createMock(PaginatorInterface::class);
         $paginator
             ->expects($this->any())

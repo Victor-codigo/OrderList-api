@@ -42,4 +42,10 @@ class CustomValueObject extends ValueObjectBase
     {
         return [];
     }
+
+    #[\Override]
+    public function isNull(): bool
+    {
+        return null === $this->value;
+    }
 }

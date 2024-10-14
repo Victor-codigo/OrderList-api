@@ -8,6 +8,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 
 class GroupRemoveInputDto implements ServiceInputDtoInterface
@@ -30,6 +31,9 @@ class GroupRemoveInputDto implements ServiceInputDtoInterface
         );
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {

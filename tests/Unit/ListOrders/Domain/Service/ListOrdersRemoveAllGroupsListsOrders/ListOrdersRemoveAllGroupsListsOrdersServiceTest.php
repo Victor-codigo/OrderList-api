@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersRemoveAllGroupsListsOrders;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -14,15 +13,22 @@ use ListOrders\Domain\Model\ListOrders;
 use ListOrders\Domain\Ports\ListOrdersRepositoryInterface;
 use ListOrders\Domain\Service\ListOrdersRemoveAllGroupsListsOrders\Dto\ListOrdersRemoveAllGroupsListsOrdersDto;
 use ListOrders\Domain\Service\ListOrdersRemoveAllGroupsListsOrders\ListOrdersRemoveAllGroupsListsOrdersService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
 {
     private ListOrdersRemoveAllGroupsListsOrdersService $object;
-    private MockObject|ListOrdersRepositoryInterface $listOrdersRepository;
-    private MockObject|PaginatorInterface $listsOrdersToRemovePaginator;
-    private MockObject|PaginatorInterface $listsOrdersToChangeUserIdPaginator;
+    private MockObject&ListOrdersRepositoryInterface $listOrdersRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, ListOrders>
+     */
+    private MockObject&PaginatorInterface $listsOrdersToRemovePaginator;
+    /**
+     * @var MockObject&PaginatorInterface<int, ListOrders>
+     */
+    private MockObject&PaginatorInterface $listsOrdersToChangeUserIdPaginator;
 
     #[\Override]
     protected function setUp(): void
@@ -121,6 +127,8 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
     }
 
     /**
+     * @param ListOrders[] $listsOrders
+     *
      * @return Identifier[]
      */
     private function getListsOrdersId(array $listsOrders): array
@@ -131,6 +139,9 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
         );
     }
 
+    /**
+     * @return Identifier[]
+     */
     private function getGroupsIdToRemove(): array
     {
         return [
@@ -140,6 +151,9 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @return Identifier[]
+     */
     private function getGroupsIdToChangeUserId(): array
     {
         return [
@@ -149,6 +163,9 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<int, array{ group_id: Identifier, admin: Identifier }>
+     */
     private function getGroupsIdAndAdminToChangeUserId(): array
     {
         return [[
@@ -173,9 +190,8 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
         $listsOrdersIdToChangeUserId = $this->getListsOrdersId($listsOrdersToChangeUserId);
         $groupsIdToChangeUserId = $this->getGroupsIdToChangeUserId();
         $input = new ListOrdersRemoveAllGroupsListsOrdersDto(
-            $this->getListsOrdersToRemove(),
+            $listsOrdersIdToRemove,
             $this->getGroupsIdAndAdminToChangeUserId(),
-            ValueObjectFactory::createIdentifier('user id')
         );
 
         $listOrdersRepositoryMatcher = $this->exactly(2);
@@ -185,7 +201,8 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
             ->with($this->callback(function (array $groupsId) use ($listOrdersRepositoryMatcher, $input, $groupsIdToChangeUserId): bool {
                 match ($listOrdersRepositoryMatcher->numberOfInvocations()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveListsOrders, $groupsId),
-                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
+                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId),
+                    default => throw new \LogicException('Not Supporting more than 2 invocations'),
                 };
 
                 return true;
@@ -233,7 +250,6 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
         $input = new ListOrdersRemoveAllGroupsListsOrdersDto(
             [],
             $this->getGroupsIdAndAdminToChangeUserId(),
-            ValueObjectFactory::createIdentifier('user id')
         );
 
         $this->listOrdersRepository
@@ -270,14 +286,15 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
     #[Test]
     public function itShouldOnlyChangeListsOrdersUsersIdGroupsIdToRemoveNotFound(): void
     {
+        $listsOrdersToRemove = $this->getListsOrdersToRemove();
+        $listsOrdersIdToRemove = $this->getListsOrdersId($listsOrdersToRemove);
         $listsOrdersToChangeUserId = $this->getListsOrdersToChangeUserId();
         $listsOrdersIdToChangeUserId = $this->getListsOrdersId($listsOrdersToChangeUserId);
         $groupsIdToChangeUserId = $this->getGroupsIdToChangeUserId();
         $listsOrdersToChangeUserIdExpected = $this->getListsOrdersToChangeUserIdAlreadyChanged($listsOrdersToChangeUserId);
         $input = new ListOrdersRemoveAllGroupsListsOrdersDto(
-            $this->getListsOrdersToRemove(),
+            $listsOrdersIdToRemove,
             $this->getGroupsIdAndAdminToChangeUserId(),
-            ValueObjectFactory::createIdentifier('user id')
         );
 
         $listOrdersRepositoryMatcher = $this->exactly(2);
@@ -287,14 +304,16 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
             ->with($this->callback(function (array $groupsId) use ($listOrdersRepositoryMatcher, $input, $groupsIdToChangeUserId): bool {
                 match ($listOrdersRepositoryMatcher->numberOfInvocations()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveListsOrders, $groupsId),
-                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
+                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId),
+                    default => throw new \LogicException('Not Supporting more than 2 invocations'),
                 };
 
                 return true;
             }))
             ->willReturnCallback(fn (): MockObject|PaginatorInterface => match ($listOrdersRepositoryMatcher->numberOfInvocations()) {
                 1 => throw new DBNotFoundException(),
-                2 => $this->listsOrdersToChangeUserIdPaginator
+                2 => $this->listsOrdersToChangeUserIdPaginator,
+                default => throw new \LogicException('Not Supporting more than 2 invocations'),
             });
 
         $this->listsOrdersToRemovePaginator
@@ -329,7 +348,6 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
         $input = new ListOrdersRemoveAllGroupsListsOrdersDto(
             $this->getGroupsIdToRemove(),
             $this->getGroupsIdAndAdminToChangeUserId(),
-            ValueObjectFactory::createIdentifier('user id')
         );
 
         $this->listOrdersRepository
@@ -370,7 +388,6 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
         $input = new ListOrdersRemoveAllGroupsListsOrdersDto(
             $this->getGroupsIdToRemove(),
             [],
-            null
         );
 
         $this->listOrdersRepository
@@ -411,9 +428,8 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
         $listsOrdersIdToRemove = $this->getListsOrdersId($listsOrdersToRemove);
         $groupsIdToChangeUserId = $this->getGroupsIdToChangeUserId();
         $input = new ListOrdersRemoveAllGroupsListsOrdersDto(
-            $this->getListsOrdersToRemove(),
+            $listsOrdersIdToRemove,
             $this->getGroupsIdAndAdminToChangeUserId(),
-            ValueObjectFactory::createIdentifier('user id')
         );
 
         $listOrdersRepositoryMatcher = $this->exactly(2);
@@ -423,14 +439,16 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
             ->with($this->callback(function (array $groupsId) use ($listOrdersRepositoryMatcher, $input, $groupsIdToChangeUserId): bool {
                 match ($listOrdersRepositoryMatcher->numberOfInvocations()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveListsOrders, $groupsId),
-                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
+                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId),
+                    default => throw new \LogicException('Not Supporting more than 2 invocations'),
                 };
 
                 return true;
             }))
             ->willReturnCallback(fn (): MockObject|PaginatorInterface => match ($listOrdersRepositoryMatcher->numberOfInvocations()) {
                 1 => $this->listsOrdersToRemovePaginator,
-                2 => throw new DBNotFoundException()
+                2 => throw new DBNotFoundException(),
+                default => throw new \LogicException('Not Supporting more than 2 invocations'),
             });
 
         $this->listsOrdersToRemovePaginator
@@ -462,13 +480,13 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
     public function itShouldFailChangingListsOrdersUserId(): void
     {
         $listsOrdersToRemove = $this->getListsOrdersToRemove();
+        $listsOrdersIdToRemove = $this->getListsOrdersId($listsOrdersToRemove);
         $listsOrdersToChangeUserId = $this->getListsOrdersToChangeUserId();
         $groupsIdToChangeUserId = $this->getGroupsIdToChangeUserId();
         $listsOrdersToChangeUserIdExpected = $this->getListsOrdersToChangeUserIdAlreadyChanged($listsOrdersToChangeUserId);
         $input = new ListOrdersRemoveAllGroupsListsOrdersDto(
-            $this->getGroupsIdToRemove(),
+            $listsOrdersIdToRemove,
             $this->getGroupsIdAndAdminToChangeUserId(),
-            ValueObjectFactory::createIdentifier('user id')
         );
 
         $listOrdersRepositoryMatcher = $this->exactly(2);
@@ -478,7 +496,8 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
             ->with($this->callback(function (array $groupsId) use ($listOrdersRepositoryMatcher, $input, $groupsIdToChangeUserId): bool {
                 match ($listOrdersRepositoryMatcher->numberOfInvocations()) {
                     1 => $this->assertEquals($input->groupsIdToRemoveListsOrders, $groupsId),
-                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId)
+                    2 => $this->assertEquals($groupsIdToChangeUserId, $groupsId),
+                    default => throw new \LogicException('Not Supporting more than 2 invocations'),
                 };
 
                 return true;

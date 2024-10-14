@@ -51,6 +51,69 @@ class ModuleCommunicationConfigTestDto implements ModuleCommunicationConfigDtoPa
         return $this->query['page'];
     }
 
+    #[\Override]
+    public function getRoute(): string
+    {
+        return $this->route;
+    }
+
+    #[\Override]
+    public function getMethod(): string
+    {
+        return $this->method;
+    }
+
+    #[\Override]
+    public function getAuthentication(): bool
+    {
+        return $this->authentication;
+    }
+
+    #[\Override]
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
+    #[\Override]
+    public function getQuery(): array
+    {
+        return $this->query;
+    }
+
+    /**
+     * @return UploadedFileInterface[]
+     */
+    #[\Override]
+    public function getFiles(): array
+    {
+        return $this->files;
+    }
+
+    #[\Override]
+    public function getContentType(): string
+    {
+        return $this->contentType;
+    }
+
+    #[\Override]
+    public function getContent(): array
+    {
+        return $this->content;
+    }
+
+    #[\Override]
+    public function getCookies(): array
+    {
+        return $this->cookies;
+    }
+
+    #[\Override]
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
     /**
      * Gets the path (separated by ".") where pages total is set in array response.
      */

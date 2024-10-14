@@ -7,6 +7,8 @@ namespace Common\Domain\Ports\DI;
 interface DIInterface
 {
     /**
+     * @param string[] $params
+     *
      * @throws RouteNotFoundException
      * @throws RouteParametersMissingException
      * @throws RouteInvalidParameterException
@@ -14,6 +16,8 @@ interface DIInterface
     public function getUrlRouteAbsolute(string $route, array $params): string;
 
     /**
+     * @param string[] $params
+     *
      * @throws RouteNotFoundException
      * @throws RouteParametersMissingException
      * @throws RouteInvalidParameterException
@@ -21,6 +25,8 @@ interface DIInterface
     public function getUrlRouteRelative(string $route, array $params): string;
 
     /**
+     * @param string[] $params
+     *
      * @throws RouteNotFoundException
      * @throws RouteParametersMissingException
      * @throws RouteInvalidParameterException

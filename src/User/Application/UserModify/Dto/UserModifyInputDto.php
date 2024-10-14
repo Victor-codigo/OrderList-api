@@ -10,6 +10,7 @@ use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use User\Domain\Model\User;
 
@@ -26,7 +27,7 @@ class UserModifyInputDto implements ServiceInputDtoInterface
         ?string $name,
         ?bool $imageRemove,
         ?UploadedFileInterface $image,
-        User $user
+        User $user,
     ) {
         $this->email = ValueObjectFactory::createEmail($email);
         $this->name = ValueObjectFactory::createNameWithSpaces($name);
@@ -40,7 +41,7 @@ class UserModifyInputDto implements ServiceInputDtoInterface
         ?string $name,
         ?bool $imageRemove,
         ?UploadedFileInterface $image,
-        User $user
+        User $user,
     ): self {
         return new self(
             $email,
@@ -51,6 +52,9 @@ class UserModifyInputDto implements ServiceInputDtoInterface
         );
     }
 
+    /**
+     * @return array{}|array<int, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {

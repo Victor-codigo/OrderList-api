@@ -8,6 +8,7 @@ use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Exception\EntityIdentityCollisionException;
@@ -15,6 +16,9 @@ use Doctrine\Persistence\ManagerRegistry;
 use Group\Domain\Model\Group;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 
+/**
+ * @phpstan-extends RepositoryBase<Group>
+ */
 class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
 {
     public function __construct(ManagerRegistry $managerRegistry)
@@ -59,6 +63,8 @@ class GroupRepository extends RepositoryBase implements GroupRepositoryInterface
     }
 
     /**
+     * @param Identifier[] $groupsId
+     *
      * @return Group[]
      *
      * @throws DBNotFoundException

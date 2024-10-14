@@ -65,7 +65,7 @@ class ConstraintFactory
     }
 
     /**
-     * @param array $versions Uuid::V...
+     * @param int[] $versions Uuid::V...
      */
     public static function uuId(?array $versions = null, bool $strict = true): ConstraintDto
     {
@@ -246,6 +246,9 @@ class ConstraintFactory
         ]);
     }
 
+    /**
+     * @param string[]|string|null $mimeTypes
+     */
     public static function file(mixed $maxSize, array|string|null $mimeTypes): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::FILE, [
@@ -254,6 +257,9 @@ class ConstraintFactory
         ]);
     }
 
+    /**
+     * @param string[]|string|null $mimeTypes
+     */
     public static function image(
         mixed $maxSize,
         array|string|null $mimeTypes,
@@ -269,7 +275,7 @@ class ConstraintFactory
         bool $allowLandscape = true,
         bool $allowPortrait = true,
         bool $allowSquareImage = true,
-        bool $detectCorrupted = false
+        bool $detectCorrupted = false,
     ): ConstraintDto {
         return new ConstraintDto(CONSTRAINTS_NAMES::FILE_IMAGE, [
             'maxSize' => $maxSize,
@@ -290,6 +296,9 @@ class ConstraintFactory
         ]);
     }
 
+    /**
+     * @param mixed[]|null $choices
+     */
     public static function choice(?array $choices, ?bool $multiple, ?bool $strict, ?int $min, ?int $max): ConstraintDto
     {
         return new ConstraintDto(CONSTRAINTS_NAMES::CHOICE, [

@@ -28,6 +28,9 @@ class OrderBoughtInputDtoTest extends TestCase
         self::$userSession = $this->createMock(UserShared::class);
     }
 
+    /**
+     * @return iterable<array<int, UserShared|string|bool>>
+     */
     public static function inputDataProvider(): iterable
     {
         self::$userSession = self::createStub(UserShared::class);

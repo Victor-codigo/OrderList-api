@@ -24,7 +24,7 @@ class ShopGetDataUseCase extends ServiceBase
     public function __construct(
         private ShopGetDataService $shopGetDataService,
         private ValidationInterface $validator,
-        private ValidateGroupAndUserService $validateGroupAndUserService
+        private ValidateGroupAndUserService $validateGroupAndUserService,
     ) {
     }
 
@@ -72,6 +72,17 @@ class ShopGetDataUseCase extends ServiceBase
         );
     }
 
+    /**
+     * @param array<int, array{
+     *  id: string,
+     *  group_id: string,
+     *  name: string,
+     *  address: string,
+     *  description: string,
+     *  image: string|null,
+     *  created_on: string
+     * }> $shopsData
+     */
     private function createShopGetDataOutputDto(PaginatorPage $page, int $pagesTotal, array $shopsData): ShopGetDataOutputDto
     {
         return new ShopGetDataOutputDto($page, $pagesTotal, $shopsData);

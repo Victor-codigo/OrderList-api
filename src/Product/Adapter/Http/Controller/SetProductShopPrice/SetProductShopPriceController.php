@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Product\Adapter\Http\Controller\SetProductShopPrice;
 
+use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
@@ -83,7 +84,7 @@ class SetProductShopPriceController extends AbstractController
 {
     public function __construct(
         private SetProductShopPriceUseCase $setProductShopPriceUseCase,
-        private Security $security
+        private Security $security,
     ) {
     }
 
@@ -104,7 +105,9 @@ class SetProductShopPriceController extends AbstractController
     }
 
     /**
-     * @param float[]|null $prices
+     * @param string[]|null $productsOrShopsId
+     * @param float[]|null  $prices
+     * @param string[]|null $units
      */
     private function createShopProductSetPriceInputDto(?string $groupId, ?string $productId, ?string $shopId, ?array $productsOrShopsId, ?array $prices, ?array $units): SetProductShopPriceInputDto
     {

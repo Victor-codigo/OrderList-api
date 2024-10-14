@@ -8,5 +8,5 @@ interface RepositoryInterface
 {
     public function generateId(): string;
 
-    public function isValidUuid(string $id);
+    public function isValidUuid(string $id): bool;
 }

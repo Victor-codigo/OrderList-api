@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Adapter\Http\Controller\GroupGetData\Dto;
 
-use PHPUnit\Framework\Attributes\Test;
 use Group\Adapter\Http\Controller\GroupGetData\Dto\GroupGetDataRequestDto;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +21,9 @@ class GroupGetDataRequestDtoTest extends TestCase
         parent::setUp();
     }
 
+    /**
+     * @param array<int, string|bool>|null $attributes
+     */
     private function createRequest(?array $attributes): GroupGetDataRequestDto
     {
         $requestAttributes = [

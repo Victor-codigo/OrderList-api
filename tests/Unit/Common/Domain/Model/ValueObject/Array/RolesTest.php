@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Array;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\User\USER_ROLES;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class RolesTest extends TestCase
@@ -89,6 +89,9 @@ class RolesTest extends TestCase
         $this->assertSame($roles, $return);
     }
 
+    /**
+     * @param USER_ROLES[]|null $roles
+     */
     private function createRoles(?array $roles): Roles
     {
         $rolesValueObject = [];

@@ -28,11 +28,11 @@ class Shop implements EntityImageModifyInterface
     private \DateTime $createdOn;
 
     /**
-     * @var Collection<ProductShop>
+     * @var Collection<int, ProductShop>
      */
     private Collection $productShop;
     /**
-     * @var Collection<Shop>
+     * @var Collection<int, Order>
      */
     private Collection $orders;
 
@@ -102,7 +102,7 @@ class Shop implements EntityImageModifyInterface
     }
 
     /**
-     * @return Collection<ProductShop>
+     * @return Collection<int, ProductShop>
      */
     public function getProductShop(): Collection
     {
@@ -127,13 +127,16 @@ class Shop implements EntityImageModifyInterface
     }
 
     /**
-     * @return Collection<Order>
+     * @return Collection<int, Order>
      */
     public function getOrders(): Collection
     {
         return $this->orders;
     }
 
+    /**
+     * @param Order[] $orders
+     */
     public function setOrders(array $orders): self
     {
         $this->orders = new ArrayCollection($orders);
@@ -174,11 +177,20 @@ class Shop implements EntityImageModifyInterface
         );
     }
 
+    /**
+     * @param array{
+     *  id: string,
+     *  group_id: string,
+     *  name: string,
+     *  address?: string|null,
+     *  description?: string|null,
+     *  image?: string|null,
+     * } $data
+     */
     public static function fromPrimitiveArrayOfData(array $data): self
     {
-        if (!isset($data['id'])
-        || !isset($data['group_id'])
-        || !isset($data['name'])) {
+        // @phpstan-ignore isset.offset, isset.offset, isset.offset, booleanOr.alwaysFalse, booleanOr.alwaysFalse
+        if (!isset($data['id']) || !isset($data['group_id']) || !isset($data['name'])) {
             throw LogicException::fromMessage('Not enough data parameters to create a Shop');
         }
 

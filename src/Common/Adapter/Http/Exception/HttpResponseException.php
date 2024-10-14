@@ -12,6 +12,9 @@ class HttpResponseException extends \Exception implements HttpExceptionInterface
 {
     private ResponseDto $responseData;
     private int $statusCode;
+    /**
+     * @var string[]
+     */
     private array $headers = [];
 
     public function __construct(string $message = '', int $code = 0, ?\Throwable $previous = null)
@@ -55,6 +58,9 @@ class HttpResponseException extends \Exception implements HttpExceptionInterface
         return $this->statusCode;
     }
 
+    /**
+     * @param string[] $headers
+     */
     public function setHeaders(array $headers): static
     {
         $this->headers = $headers;
@@ -62,6 +68,9 @@ class HttpResponseException extends \Exception implements HttpExceptionInterface
         return $this;
     }
 
+    /**
+     * @return string[]
+     */
     #[\Override]
     public function getHeaders(): array
     {

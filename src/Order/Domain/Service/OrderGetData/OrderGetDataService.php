@@ -20,17 +20,47 @@ use Product\Domain\Model\ProductShop;
 
 class OrderGetDataService
 {
+    /**
+     * @var PaginatorInterface<int, Order>|null
+     */
     private ?PaginatorInterface $ordersPaginator = null;
 
     public function __construct(
         private OrderRepositoryInterface $orderRepository,
         private string $productPublicImagePath,
         private string $shopPublicImagePath,
-        private string $appProtocolAndDomain
+        private string $appProtocolAndDomain,
     ) {
     }
 
     /**
+     * @return array<int, array{
+     *  id: string|null,
+     *  group_id: string|null,
+     *  list_orders_id: string|null,
+     *  user_id: string|null,
+     *  description: string|null,
+     *  amount: float|null,
+     *  bought: bool,
+     *  created_on: string,
+     *  product: array{
+     *      id: string|null,
+     *      name: string|null,
+     *      description: string|null,
+     *      image: string|null,
+     *      created_on: string
+     *  },
+     *  shop: array{}|array{
+     *      id: string|null,
+     *      name: string|null,
+     *      description: string|null,
+     *      created_on: string
+     * },
+     *  productShop: array{}|array{
+     *      price: float|null,
+     *      unit: object|null
+     * }}>
+     *
      * @throws DBNotFoundException
      */
     public function __invoke(OrderGetDataDto $input): array
@@ -50,6 +80,34 @@ class OrderGetDataService
         return $this->ordersPaginator->getPagesTotal();
     }
 
+    /**
+     * @return array<int, array{
+     *  id: string|null,
+     *  group_id: string|null,
+     *  list_orders_id: string|null,
+     *  user_id: string|null,
+     *  description: string|null,
+     *  amount: float|null,
+     *  bought: bool,
+     *  created_on: string,
+     *  product: array{
+     *      id: string|null,
+     *      name: string|null,
+     *      description: string|null,
+     *      image: string|null,
+     *      created_on: string
+     *  },
+     *  shop: array{}|array{
+     *      id: string|null,
+     *      name: string|null,
+     *      description: string|null,
+     *      created_on: string
+     * },
+     *  productShop: array{}|array{
+     *      price: float|null,
+     *      unit: object|null
+     * }}>
+     */
     private function getOrdersData(PaginatorPage $page, PaginatorPageItems $pageItems): array
     {
         $this->ordersPaginator->setPagination($page->getValue(), $pageItems->getValue());
@@ -64,6 +122,8 @@ class OrderGetDataService
     /**
      * @param Identifier[] $ordersId
      *
+     * @return PaginatorInterface<int, Order>|null
+     *
      * @throws DBNotFoundException
      */
     private function getOrdersByOrdersId(Identifier $groupId, array $ordersId, bool $orderAsc): ?PaginatorInterface
@@ -76,14 +136,18 @@ class OrderGetDataService
     }
 
     /**
+     * @return PaginatorInterface<int, Order>
+     *
      * @throws DBNotFoundException
      */
-    private function getOrdersByGroupId(Identifier $groupId, bool $orderAsc): ?PaginatorInterface
+    private function getOrdersByGroupId(Identifier $groupId, bool $orderAsc): PaginatorInterface
     {
         return $this->orderRepository->findOrdersByGroupIdOrFail($groupId, $orderAsc);
     }
 
     /**
+     * @return PaginatorInterface<int, Order>
+     *
      * @throws DBNotFoundException
      */
     private function getOrdersByProductName(Identifier $groupId, IdentifierNullable $listOrdersId, ?Filter $filterSection, ?Filter $filterText, bool $orderAsc): ?PaginatorInterface
@@ -105,6 +169,8 @@ class OrderGetDataService
     }
 
     /**
+     * @return PaginatorInterface<int, Order>
+     *
      * @throws DBNotFoundException
      */
     private function getOrdersByShopName(Identifier $groupId, IdentifierNullable $listOrdersId, ?Filter $filterSection, ?Filter $filterText, bool $orderAsc): ?PaginatorInterface
@@ -125,6 +191,8 @@ class OrderGetDataService
     }
 
     /**
+     * @return PaginatorInterface<int, Order>
+     *
      * @throws DBNotFoundException
      */
     private function getOrdersByListOrdersName(Identifier $groupId, ?Filter $filterSection, ?Filter $filterText, bool $orderAsc): ?PaginatorInterface
@@ -145,6 +213,8 @@ class OrderGetDataService
     }
 
     /**
+     * @return PaginatorInterface<int, Order>
+     *
      * @throws DBNotFoundException
      */
     private function getOrdersByListOrdersId(Identifier $groupId, IdentifierNullable $listOrdersId, bool $orderAsc): ?PaginatorInterface
@@ -156,6 +226,34 @@ class OrderGetDataService
         return $this->orderRepository->findOrdersByListOrdersIdOrFail($listOrdersId->toIdentifier(), $groupId, $orderAsc);
     }
 
+    /**
+     * @return array{
+     *  id: string|null,
+     *  group_id: string|null,
+     *  list_orders_id: string|null,
+     *  user_id: string|null,
+     *  description: string|null,
+     *  amount: float|null,
+     *  bought: bool,
+     *  created_on: string,
+     *  product: array{
+     *      id: string|null,
+     *      name: string|null,
+     *      description: string|null,
+     *      image: string|null,
+     *      created_on: string
+     *  },
+     *  shop: array{}|array{
+     *      id: string|null,
+     *      name: string|null,
+     *      description: string|null,
+     *      created_on: string
+     * },
+     *  productShop: array{}|array{
+     *      price: float|null,
+     *      unit: object|null
+     * }}
+     */
     private function getOrderData(Order $order): array
     {
         return [
@@ -182,7 +280,12 @@ class OrderGetDataService
     }
 
     /**
-     * @return array<{id: string, name: string, description: string, created_on: string}>
+     * @return array{}|array{
+     *  id: string,
+     *  name: string,
+     *  description: string,
+     *  created_on: string
+     * }
      */
     private function getProductShopData(Order $order): array
     {
@@ -203,7 +306,10 @@ class OrderGetDataService
     }
 
     /**
-     * @return array<{price: float, unit: string}>
+     * @return array{}|array{
+     *  price: float|null,
+     *  unit: object|null
+     * }
      */
     private function getProductShopPrice(Order $order): array
     {

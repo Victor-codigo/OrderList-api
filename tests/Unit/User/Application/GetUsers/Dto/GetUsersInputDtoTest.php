@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\GetUsers\Dto;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use User\Application\GetUsers\Dto\GetUsersInputDto;
 use User\Domain\Model\User;
@@ -28,6 +28,9 @@ class GetUsersInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
+    /**
+     * @param string[]|null $usersId
+     */
     private function createGetUsersInputDto(?array $usersId): GetUsersInputDto
     {
         $user = $this->createMock(User::class);
@@ -35,6 +38,9 @@ class GetUsersInputDtoTest extends TestCase
         return new GetUsersInputDto($user, $usersId);
     }
 
+    /**
+     * @return string[]
+     */
     private function getIds(int $numIds): array
     {
         $ids = [

@@ -15,10 +15,19 @@ class SetProductShopPriceOutputDto implements ApplicationOutputInterface
      */
     public function __construct(
         private Identifier $groupId,
-        private array $productShop
+        private array $productShop,
     ) {
     }
 
+    /**
+     * @return array<int, array{
+     *  group_id: string|null,
+     *  product_id: string|null,
+     *  shop_id: string|null,
+     *  price: float|null,
+     *  unit: string|null
+     * }>
+     */
     #[\Override]
     public function toArray(): array
     {
@@ -28,7 +37,7 @@ class SetProductShopPriceOutputDto implements ApplicationOutputInterface
                 'product_id' => $productShop->getProductId()->getValue(),
                 'shop_id' => $productShop->getShopId()->getValue(),
                 'price' => $productShop->getPrice()->getValue(),
-                'unit' => $productShop->getUnit()->getValue()->value,
+                'unit' => $productShop->getUnit()->getValue()?->value,
             ],
             $this->productShop
         );

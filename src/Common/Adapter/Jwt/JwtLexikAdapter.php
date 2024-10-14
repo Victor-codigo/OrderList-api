@@ -21,6 +21,9 @@ class JwtLexikAdapter implements JwtHS256Interface
         $this->secretKey = $secretKey;
     }
 
+    /**
+     * @param array<int|string, mixed> $data
+     */
     #[\Override]
     public function encode(array $data, float $expireTimeInSeconds = 3600): string
     {

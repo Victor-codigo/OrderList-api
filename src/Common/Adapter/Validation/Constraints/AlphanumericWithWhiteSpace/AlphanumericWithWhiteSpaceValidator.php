@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Adapter\Validation\Constraints\AlphanumericWithWhiteSpace;
 
+use Common\Adapter\Validation\Constraints\Alphanumeric\Alphanumeric;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\RegexValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;

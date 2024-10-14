@@ -31,10 +31,13 @@ class ShareListOrdersCreateServiceTest extends TestCase
     private const int SHARED_EXPIRATION_TIME = 30;
 
     private ShareListOrdersCreateService $object;
-    private MockObject|ShareRepositoryInterface $shareRepository;
-    private MockObject|ListOrdersRepositoryInterface $listOrdersRepository;
-    private MockObject|PaginatorInterface $listOrdersRepositoryPaginator;
-    private MockObject|UserRepositoryInterface $userRepository;
+    private MockObject&ShareRepositoryInterface $shareRepository;
+    private MockObject&ListOrdersRepositoryInterface $listOrdersRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, Share>
+     */
+    private MockObject&PaginatorInterface $listOrdersRepositoryPaginator;
+    private MockObject&UserRepositoryInterface $userRepository;
 
     protected function setUp(): void
     {

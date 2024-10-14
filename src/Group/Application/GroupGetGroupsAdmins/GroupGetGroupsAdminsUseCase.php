@@ -22,7 +22,7 @@ class GroupGetGroupsAdminsUseCase extends ServiceBase
 {
     public function __construct(
         private ValidationInterface $validator,
-        private UserGroupRepositoryInterface $userGroupRepository
+        private UserGroupRepositoryInterface $userGroupRepository,
     ) {
     }
 
@@ -62,7 +62,7 @@ class GroupGetGroupsAdminsUseCase extends ServiceBase
     /**
      * @param UserGroup[] $groupsUsers
      *
-     * @return array<string, array<string>>
+     * @return array<string, string[]>
      */
     private function setUsersByGroup(array $groupsUsers): array
     {
@@ -78,6 +78,9 @@ class GroupGetGroupsAdminsUseCase extends ServiceBase
         return $usersGroupedByGroupId;
     }
 
+    /**
+     * @param array<string, string[]> $groupAdminsIds
+     */
     private function createGroupGetAdminsOutputDto(array $groupAdminsIds, PaginatorPage $page, int $pagesTotal): GroupGetGroupsAdminsOutputDto
     {
         return new GroupGetGroupsAdminsOutputDto($groupAdminsIds, $page, $pagesTotal);

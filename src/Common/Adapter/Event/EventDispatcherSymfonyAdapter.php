@@ -37,6 +37,7 @@ class EventDispatcherSymfonyAdapter implements EventDispatcherInterface
                 $eventParams = ['__invoke', 0];
             }
 
+            // @phpstan-ignore function.impossibleType
             if (!is_array($eventParams[0])) {
                 $eventParams = [$eventParams];
             }
@@ -45,12 +46,18 @@ class EventDispatcherSymfonyAdapter implements EventDispatcherInterface
         }
     }
 
+    /**
+     * @param string[]|callable $listener
+     */
     #[\Override]
     public function addListener(string $eventName, array|callable $listener, int $priority = 0): void
     {
         $this->eventDispatcher->addListener($eventName, $listener, $priority);
     }
 
+    /**
+     * @param array<int|string, string|array<int, int|string>> $eventParams
+     */
     private function setSubscriberListeners(EventDomainSubscriberInterface $subscriber, string $eventName, array $eventParams): void
     {
         foreach ($eventParams as $params) {

@@ -26,7 +26,7 @@ class UserRemoveUseCase extends ServiceBase
     public function __construct(
         private UserRemoveService $userRemoveService,
         private ModuleCommunicationInterface $moduleCommunication,
-        private string $systemKey
+        private string $systemKey,
     ) {
     }
 
@@ -77,12 +77,12 @@ class UserRemoveUseCase extends ServiceBase
 
     /**
      * @return array{
-     *      groups_id_removed: string[],
-     *      groups_id_user_removed: string[],
-     *      groups_id_user_set_as_admin: array<{
-     *          group_id: string
-     *          user_id: string
-     *      }>
+     *  groups_id_removed: Identifier[],
+     *  groups_id_user_removed: Identifier[],
+     *  groups_id_user_set_as_admin: array<int, array{
+     *      group_id: Identifier,
+     *      user_id: Identifier
+     *  }>
      * }
      *
      * @throws UserRemoveGroupsNotFoundException
@@ -104,7 +104,24 @@ class UserRemoveUseCase extends ServiceBase
             throw UserRemoveRequestException::fromMessage('Error removing user groups');
         }
 
-        return $response->data;
+        $responseData = [];
+        $responseData['groups_id_removed'] = array_map(
+            fn (string $groupsIdRemoved) => ValueObjectFactory::createIdentifier($groupsIdRemoved),
+            $response->data['groups_id_removed']
+        );
+        $responseData['groups_id_user_removed'] = array_map(
+            fn (string $groupsIdUserRemoved) => ValueObjectFactory::createIdentifier($groupsIdUserRemoved),
+            $response->data['groups_id_user_removed']
+        );
+        $responseData['groups_id_user_set_as_admin'] = array_map(
+            fn (array $groupsIdUserSetAsAdmin) => [
+                'group_id' => ValueObjectFactory::createIdentifier($groupsIdUserSetAsAdmin['group_id']),
+                'user_id' => ValueObjectFactory::createIdentifier($groupsIdUserSetAsAdmin['user_id']),
+            ],
+            $response->data['groups_id_user_set_as_admin']
+        );
+
+        return $responseData;
     }
 
     /**
@@ -122,7 +139,7 @@ class UserRemoveUseCase extends ServiceBase
     }
 
     /**
-     * @param string[] $groupsId
+     * @param Identifier[] $groupsId
      *
      * @throws UserRemoveRequestException
      */
@@ -132,13 +149,8 @@ class UserRemoveUseCase extends ServiceBase
             return;
         }
 
-        $groupsIdIdentifier = array_map(
-            fn (string $groupId): Identifier => ValueObjectFactory::createIdentifier($groupId),
-            $groupsId
-        );
-
         $response = $this->moduleCommunication->__invoke(
-            ModuleCommunicationFactory::productRemoveGroupsProducts($groupsIdIdentifier, $systemKey)
+            ModuleCommunicationFactory::productRemoveGroupsProducts($groupsId, $systemKey)
         );
 
         if (RESPONSE_STATUS::OK !== $response->getStatus() || !empty($response->getErrors())) {
@@ -148,7 +160,7 @@ class UserRemoveUseCase extends ServiceBase
 
     /**
      * @param Identifier[] $groupsIdToRemove
-     * @param Identifier[] $groupsIdToRemove
+     * @param Identifier[] $groupsIdToChangeUserId
      *
      * @throws UserRemoveRequestException
      */
@@ -158,20 +170,10 @@ class UserRemoveUseCase extends ServiceBase
             return;
         }
 
-        $groupsIdToRemoveIdentifier = array_map(
-            fn (string $groupId): Identifier => ValueObjectFactory::createIdentifier($groupId),
-            $groupsIdToRemove
-        );
-
-        $groupsIdToChangeUserIdIdentifier = array_map(
-            fn (string $groupId): Identifier => ValueObjectFactory::createIdentifier($groupId),
-            $groupsIdToChangeUserId
-        );
-
         $response = $this->moduleCommunication->__invoke(
             ModuleCommunicationFactory::ordersRemoveAllUserOrdersOrChangeUserId(
-                $groupsIdToRemoveIdentifier,
-                $groupsIdToChangeUserIdIdentifier,
+                $groupsIdToRemove,
+                $groupsIdToChangeUserId,
                 $systemKey
             )
         );
@@ -183,7 +185,7 @@ class UserRemoveUseCase extends ServiceBase
 
     /**
      * @param Identifier[] $groupsIdToRemove
-     * @param Identifier[] $groupsIdToRemove
+     * @param Identifier[] $groupsIdToChangeUserId
      *
      * @throws UserRemoveRequestException
      */
@@ -193,20 +195,10 @@ class UserRemoveUseCase extends ServiceBase
             return;
         }
 
-        $groupsIdToRemoveIdentifier = array_map(
-            fn (string $groupId): Identifier => ValueObjectFactory::createIdentifier($groupId),
-            $groupsIdToRemove
-        );
-
-        $groupsIdToChangeUserIdIdentifier = array_map(
-            fn (string $groupId): Identifier => ValueObjectFactory::createIdentifier($groupId),
-            $groupsIdToChangeUserId
-        );
-
         $response = $this->moduleCommunication->__invoke(
             ModuleCommunicationFactory::listOrdersRemoveAllUserListOrdersOrChangeUserId(
-                $groupsIdToRemoveIdentifier,
-                $groupsIdToChangeUserIdIdentifier,
+                $groupsIdToRemove,
+                $groupsIdToChangeUserId,
                 $systemKey
             )
         );
@@ -227,13 +219,8 @@ class UserRemoveUseCase extends ServiceBase
             return;
         }
 
-        $groupsIdIdentifier = array_map(
-            fn (string $groupId): Identifier => ValueObjectFactory::createIdentifier($groupId),
-            $groupsId
-        );
-
         $response = $this->moduleCommunication->__invoke(
-            ModuleCommunicationFactory::shopRemoveGroupsShops($groupsIdIdentifier, $systemKey)
+            ModuleCommunicationFactory::shopRemoveGroupsShops($groupsId, $systemKey)
         );
 
         if (RESPONSE_STATUS::OK !== $response->getStatus() || !empty($response->getErrors())) {

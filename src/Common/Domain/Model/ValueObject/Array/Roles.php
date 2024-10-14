@@ -36,7 +36,7 @@ class Roles extends ArrayValueObject
     }
 
     /**
-     * @param USER_ROLES[]
+     * @param USER_ROLES[] $roles
      */
     public static function create(array $roles): static
     {

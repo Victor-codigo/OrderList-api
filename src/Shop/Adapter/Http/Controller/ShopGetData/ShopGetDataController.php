@@ -155,7 +155,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ShopGetDataController extends AbstractController
 {
     public function __construct(
-        private ShopGetDataUseCase $shopGetDataUseCase
+        private ShopGetDataUseCase $shopGetDataUseCase,
     ) {
     }
 
@@ -178,6 +178,10 @@ class ShopGetDataController extends AbstractController
         return $this->createResponse($shops);
     }
 
+    /**
+     * @param string[]|null $shopsId
+     * @param string[]|null $productsId
+     */
     private function createShopGetDataInputDto(
         ?string $groupId,
         ?array $shopsId,

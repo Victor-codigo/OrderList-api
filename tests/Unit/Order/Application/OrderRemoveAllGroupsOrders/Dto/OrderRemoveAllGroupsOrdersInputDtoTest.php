@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Application\OrderRemoveAllGroupsOrders\Dto;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use Order\Application\OrderRemoveAllGroupsOrders\Dto\OrderRemoveAllGroupsOrdersInputDto;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class OrderRemoveAllGroupsOrdersInputDtoTest extends TestCase
@@ -28,6 +28,9 @@ class OrderRemoveAllGroupsOrdersInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
+    /**
+     * @return string[]
+     */
     private function getGroupsIdToRemove(): array
     {
         return [
@@ -37,6 +40,9 @@ class OrderRemoveAllGroupsOrdersInputDtoTest extends TestCase
         ];
     }
 
+    /**
+     * @return string[]
+     */
     private function getGroupsIdToChangeUserId(): array
     {
         return [

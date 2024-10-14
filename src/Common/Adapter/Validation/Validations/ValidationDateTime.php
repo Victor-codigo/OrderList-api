@@ -46,9 +46,6 @@ class ValidationDateTime extends ValidationConstraintBase
         );
     }
 
-    /**
-     * @param \DateTimeZone|null $timeZone
-     */
     public function timeZone(?int $timeZone): ValidationConstraint
     {
         return $this->createConstraint(

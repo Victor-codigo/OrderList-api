@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Adapter\Http\Controller\GroupUserRoleChange\Dto;
 
-use PHPUnit\Framework\Attributes\Test;
 use Group\Adapter\Http\Controller\GroupUserRoleChange\Dto\GroupUserRoleChangeRequestDto;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 
 class GroupUserRoleChangeRequestDtoTest extends TestCase
@@ -21,6 +21,9 @@ class GroupUserRoleChangeRequestDtoTest extends TestCase
         parent::setUp();
     }
 
+    /**
+     * @param array<int, int|string>|null $attributes
+     */
     private function createRequest(?array $attributes): GroupUserRoleChangeRequestDto
     {
         $requestAttributes = [
@@ -34,7 +37,7 @@ class GroupUserRoleChangeRequestDtoTest extends TestCase
         }
 
         $request = new Request();
-        $request->request = new ParameterBag($requestAttributes);
+        $request->request = new InputBag($requestAttributes);
 
         return new GroupUserRoleChangeRequestDto($request);
     }

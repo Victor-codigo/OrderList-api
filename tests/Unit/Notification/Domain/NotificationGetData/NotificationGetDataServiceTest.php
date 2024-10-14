@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Domain\NotificationGetData;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -15,6 +14,7 @@ use Notification\Domain\Ports\Notification\NotificationRepositoryInterface;
 use Notification\Domain\Service\NotificationGetData\Dto\NotificationGetDataDto;
 use Notification\Domain\Service\NotificationGetData\NotificationGetDataService;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,9 +32,12 @@ class NotificationGetDataServiceTest extends TestCase
     private const string TRANSLATOR_DOMAIN = 'Notifications';
 
     private NotificationGetDataService $object;
-    private MockObject|NotificationRepositoryInterface $notificationRepository;
-    private MockObject|PaginatorInterface $paginator;
-    private MockObject|TranslatorInterface $translator;
+    private MockObject&NotificationRepositoryInterface $notificationRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, Notification>
+     */
+    private MockObject&PaginatorInterface $paginator;
+    private MockObject&TranslatorInterface $translator;
 
     #[\Override]
     protected function setUp(): void
@@ -47,9 +50,6 @@ class NotificationGetDataServiceTest extends TestCase
         $this->object = new NotificationGetDataService($this->notificationRepository, $this->translator);
     }
 
-    /**
-     * @return Notification[]
-     */
     private function getNotifications(): \Iterator
     {
         $notificationGroupUserAdded = [
@@ -86,6 +86,9 @@ class NotificationGetDataServiceTest extends TestCase
         ]);
     }
 
+    /**
+     * @return array<int, array<int, string>>
+     */
     public static function providerNotificationLanguage(): array
     {
         return [
@@ -123,7 +126,7 @@ class NotificationGetDataServiceTest extends TestCase
             ->willReturn($this->paginator);
 
         $this->translator
-            ->expects($this->exactly(count($notifications)))
+            ->expects($this->exactly(iterator_count($notifications)))
             ->method('translate')
             ->with($this->callback(function (string $placeholder) use ($notificationsTypes): bool {
                 static $callNumber = 0;
@@ -137,7 +140,8 @@ class NotificationGetDataServiceTest extends TestCase
                     NOTIFICATION_TYPE::USER_EMAIL_CHANGED => $this->assertEquals('notification.user.email_changed', $placeholder),
                     NOTIFICATION_TYPE::USER_PASSWORD_CHANGED => $this->assertEquals('notification.user.password_changed', $placeholder),
                     NOTIFICATION_TYPE::USER_PASSWORD_REMEMBER => $this->assertEquals('notification.user.password_remembered', $placeholder),
-                    NOTIFICATION_TYPE::USER_REGISTERED => $this->assertEquals('notification.user.registered', $placeholder)
+                    NOTIFICATION_TYPE::USER_REGISTERED => $this->assertEquals('notification.user.registered', $placeholder),
+                    default => throw new \LogicException('Not supporting this value'),
                 };
 
                 return true;
@@ -155,7 +159,7 @@ class NotificationGetDataServiceTest extends TestCase
 
         $return = $this->object->__invoke($input);
 
-        $this->assertCount(count($notifications), $return);
+        $this->assertCount(iterator_count($notifications), $return);
 
         foreach ($return as $notificationData) {
             $this->assertArrayHasKey('id', $notificationData);

@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Application\NotificationRemove\Dto;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
-use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use Notification\Application\NotificationRemove\Dto\NotificationRemoveInputDto;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -32,12 +31,15 @@ class NotificationRemoveInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
+    /**
+     * @return string[]
+     */
     private function getNotificationsIds(): array
     {
         return [
-            ValueObjectFactory::createIdentifier(self::NOTIFICATION_ID_1),
-            ValueObjectFactory::createIdentifier(self::NOTIFICATION_ID_2),
-            ValueObjectFactory::createIdentifier(self::NOTIFICATION_ID_3),
+            self::NOTIFICATION_ID_1,
+            self::NOTIFICATION_ID_2,
+            self::NOTIFICATION_ID_3,
         ];
     }
 

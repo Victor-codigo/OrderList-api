@@ -21,7 +21,7 @@ class GroupUserGetGroupsUseCase extends ServiceBase
 {
     public function __construct(
         private GroupUserGetGroupsService $groupUserGetGroupsService,
-        private ValidationInterface $validator
+        private ValidationInterface $validator,
     ) {
     }
 

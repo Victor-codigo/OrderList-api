@@ -12,17 +12,27 @@ class GroupRemoveAllGroupsOutputDto implements ApplicationOutputInterface
     /**
      * @param Identifier[] $groupsIdRemoved
      * @param Identifier[] $groupsIdUserRemoved
-     * @param Identifier[] $groupsIdUserSetAsAdmin
+     * @param array{}|array{
+     *  group_id: Identifier,
+     *  user_id: Identifier
+     * } $groupsIdUserSetAsAdmin
      */
     public function __construct(
         public array $groupsIdRemoved,
         public array $groupsIdUserRemoved,
-        public array $groupsIdUserSetAsAdmin
+        public array $groupsIdUserSetAsAdmin,
     ) {
     }
 
     /**
-     * @return string[]
+     * @return array{}|array{
+     *  groups_id_removed: string[],
+     *  groups_id_user_removed: string[],
+     *  groups_id_user_set_as_admin: array{
+     *      group_id: string,
+     *      user_id: string
+     *  }[]
+     * }
      */
     #[\Override]
     public function toArray(): array
@@ -37,9 +47,10 @@ class GroupRemoveAllGroupsOutputDto implements ApplicationOutputInterface
                 $this->groupsIdUserRemoved
             ),
             'groups_id_user_set_as_admin' => array_map(
+                // @phpstan-ignore argument.type
                 fn (array $groupUserId): array => [
-                    'group_id' => $groupUserId['group_id']->getValue(),
-                    'user_id' => $groupUserId['user_id']->getValue(),
+                    'group_id' => (string) $groupUserId['group_id']->getValue(),
+                    'user_id' => (string) $groupUserId['user_id']->getValue(),
                 ],
                 $this->groupsIdUserSetAsAdmin
             ),

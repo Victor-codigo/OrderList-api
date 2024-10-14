@@ -20,6 +20,9 @@ class GetUsersRequestDtoTest extends TestCase
         parent::setUp();
     }
 
+    /**
+     * @param array<string|int, string>|null $attributes
+     */
     private function createRequest(?array $attributes): GetUsersRequestDto
     {
         if (null === $attributes) {

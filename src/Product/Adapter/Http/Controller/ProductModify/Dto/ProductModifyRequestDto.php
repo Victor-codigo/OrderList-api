@@ -14,7 +14,6 @@ class ProductModifyRequestDto implements RequestDtoInterface
     public readonly ?string $productId;
     public readonly ?string $name;
     public readonly ?string $description;
-    public readonly ?float $price;
     public readonly ?UploadedFile $image;
     public readonly bool $imageRemove;
 

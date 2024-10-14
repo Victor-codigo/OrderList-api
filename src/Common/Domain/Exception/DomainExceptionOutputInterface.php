@@ -11,6 +11,9 @@ interface DomainExceptionOutputInterface
 {
     public function getMessage(): string;
 
+    /**
+     * @return array<string, string>
+     */
     public function getErrors(): array;
 
     public function getStatus(): RESPONSE_STATUS;

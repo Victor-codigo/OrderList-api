@@ -39,4 +39,10 @@ abstract class DateValueObject extends ValueObjectBase
     {
         return $this->value === $value->getValue();
     }
+
+    #[\Override]
+    public function isNull(): bool
+    {
+        return null === $this->value;
+    }
 }

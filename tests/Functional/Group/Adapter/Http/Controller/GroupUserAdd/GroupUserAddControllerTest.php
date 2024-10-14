@@ -61,6 +61,9 @@ class GroupUserAddControllerTest extends WebClientTestCase
         $this->assertEquals(self::USER_TO_ADD_IDS, $responseContent->data->id);
     }
 
+    /**
+     * @return array<int, array<int, array<string, string>>>
+     */
     public static function providerUsersToAddByName(): array
     {
         return [
@@ -73,6 +76,9 @@ class GroupUserAddControllerTest extends WebClientTestCase
         ];
     }
 
+    /**
+     * @param array<int, array<int, array<string, string>>> $users
+     */
     #[DataProvider('providerUsersToAddByName')]
     #[Test]
     public function itShouldAddByNameAllUsersToTheGroup(array $users): void

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupGetDataByName;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -13,6 +12,7 @@ use Group\Domain\Model\Group;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Service\GroupGetDataByName\Dto\GroupGetDataByNameDto;
 use Group\Domain\Service\GroupGetDataByName\GroupGetDataByNameService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -55,6 +55,9 @@ class GroupGetDataByNameServiceTest extends TestCase
         );
     }
 
+    /**
+     * @param array<string, mixed> $groupDataActual
+     */
     private function assertGroupIdOk(Group $groupDataExpected, array $groupDataActual, Path $userImage): void
     {
         $this->assertArrayHasKey('group_id', $groupDataActual);

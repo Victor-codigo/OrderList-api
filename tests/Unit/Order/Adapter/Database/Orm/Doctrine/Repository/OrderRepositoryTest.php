@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Adapter\Database\Orm\Doctrine\Repository;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
@@ -18,6 +17,7 @@ use ListOrders\Domain\Model\ListOrders;
 use ListOrders\Domain\Ports\ListOrdersRepositoryInterface;
 use Order\Adapter\Database\Orm\Doctrine\Repository\OrderRepository;
 use Order\Domain\Model\Order;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Product\Domain\Model\Product;
 use Product\Domain\Port\Repository\ProductRepositoryInterface;
@@ -156,7 +156,7 @@ class OrderRepositoryTest extends DataBaseTestCase
         $orderNew->setShop($shop);
 
         $this->object->save([$orderNew]);
-        /** @var Group $orderSaved */
+        /** @var Order $orderSaved */
         $orderSaved = $this->object->findOneBy(['id' => $orderNew->getId()]);
 
         $this->assertSame($orderNew, $orderSaved);
@@ -237,7 +237,7 @@ class OrderRepositoryTest extends DataBaseTestCase
 
         $expectedOrders = $this->object->findBy($ordersId);
 
-        $ordersPaginator = $this->object->findOrdersByIdOrFail($groupId, $ordersId, $orderAsc);
+        $ordersPaginator = $this->object->findOrdersByIdOrFail($groupId, $ordersId['id'], $orderAsc);
         $ordersDb = iterator_to_array($ordersPaginator);
 
         $this->assertCount(count($ordersDb), $ordersDb);
@@ -261,7 +261,7 @@ class OrderRepositoryTest extends DataBaseTestCase
 
         $expectedOrders = $this->object->findBy($ordersId);
 
-        $ordersPaginator = $this->object->findOrdersByIdOrFail($groupId, $ordersId, $orderAsc);
+        $ordersPaginator = $this->object->findOrdersByIdOrFail($groupId, $ordersId['id'], $orderAsc);
         $ordersDb = iterator_to_array($ordersPaginator);
 
         $this->assertCount(count($ordersDb), $ordersDb);
@@ -277,10 +277,8 @@ class OrderRepositoryTest extends DataBaseTestCase
         $orderAsc = true;
         $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
         $ordersId = [
-            'id' => [
-                'f1f309b4-6afb-4733-b823-b31914be12bd',
-                'e15586d2-24b2-47b4-97cc-508a4cb259ec',
-            ],
+            ValueObjectFactory::createIdentifier('f1f309b4-6afb-4733-b823-b31914be12bd'),
+            ValueObjectFactory::createIdentifier('e15586d2-24b2-47b4-97cc-508a4cb259ec'),
         ];
 
         $this->expectException(DBNotFoundException::class);

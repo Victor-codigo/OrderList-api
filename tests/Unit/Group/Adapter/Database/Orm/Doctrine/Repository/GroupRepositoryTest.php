@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Adapter\Database\Orm\Doctrine\Repository;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
@@ -12,11 +11,13 @@ use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Doctrine\DBAL\Exception\ConnectionException;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ObjectManager;
 use Group\Adapter\Database\Orm\Doctrine\Repository\GroupRepository;
 use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\Unit\DataBaseTestCase;
 
@@ -24,7 +25,10 @@ class GroupRepositoryTest extends DataBaseTestCase
 {
     use RefreshDatabaseTrait;
 
-    private GroupRepository $object;
+    /**
+     * @var GroupRepository|EntityRepository<Group>
+     */
+    private GroupRepository|EntityRepository $object;
     private MockObject|ConnectionException $connectionException;
 
     #[\Override]
@@ -69,6 +73,9 @@ class GroupRepositoryTest extends DataBaseTestCase
         );
     }
 
+    /**
+     * @param GROUP_ROLES[] $roles
+     */
     private function getNewUserGroup(Group $group, array $roles): UserGroup
     {
         return UserGroup::fromPrimitives(

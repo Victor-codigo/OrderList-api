@@ -16,6 +16,9 @@ trait EventRegisterTrait
         $this->eventsRegistered[] = $event;
     }
 
+    /**
+     * @return EventDomainInterface[]
+     */
     public function getEventsRegistered(): array
     {
         return $this->eventsRegistered;

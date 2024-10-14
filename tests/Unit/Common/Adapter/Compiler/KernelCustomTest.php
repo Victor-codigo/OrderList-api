@@ -14,13 +14,15 @@ use Symfony\Component\Dotenv\Exception\PathException;
 class KernelCustomTest extends TestCase
 {
     private KernelCustom $object;
-    private MockObject|Dotenv $dotEnv;
+    // @phpstan-ignore property.unresolvableNativeType
+    private MockObject&Dotenv $dotEnv;
 
     #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
 
+        // @phpstan-ignore method.unresolvableReturnType
         $this->dotEnv = $this->createMock(Dotenv::class);
         $this->object = new KernelCustom($this->dotEnv);
     }

@@ -133,7 +133,7 @@ class OrderCreateService
     /**
      * @param OrderDataServiceDto[] $orders
      *
-     * @return Product[]
+     * @return array<string, Shop>
      */
     private function getShops(Identifier $groupId, array $orders): array
     {

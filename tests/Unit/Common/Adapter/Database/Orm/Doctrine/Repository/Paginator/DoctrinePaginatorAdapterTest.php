@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Repository\Paginator;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Database\Orm\Doctrine\Repository\Paginator\DoctrinePaginatorAdapter;
 use Common\Adapter\Database\Orm\Doctrine\Repository\Paginator\Exception\PaginatorPageException;
 use Common\Domain\Exception\InvalidArgumentException;
@@ -15,6 +14,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Test\Unit\Common\Adapter\Database\Orm\Doctrine\Repository\Paginator\Fixtures\QueryResult;
@@ -51,6 +51,9 @@ class DoctrinePaginatorAdapterTest extends TestCase
             ->willReturn($this->abstractPlatform);
     }
 
+    /**
+     * @return QueryResult[]
+     */
     private function getQueryResult(): array
     {
         return [
@@ -77,6 +80,9 @@ class DoctrinePaginatorAdapterTest extends TestCase
         ];
     }
 
+    /**
+     * @param QueryResult[] $queryResult
+     */
     private function mockPaginator(Query $query, array $queryResult): MockObject|Paginator
     {
         /** @var MockObject|Paginator $paginator */
@@ -107,6 +113,9 @@ class DoctrinePaginatorAdapterTest extends TestCase
         return $object;
     }
 
+    /**
+     * @param QueryResult[] $queryResult
+     */
     private function mockQuery(array $queryResult, EntityManager $entityManager, int $pageItems): MockObject|Query
     {
         /** @var MockObject|Query */

@@ -13,6 +13,7 @@ use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\Query\Parameter;
 use Group\Adapter\Database\Orm\Doctrine\Repository\UserGroupRepository;
@@ -34,8 +35,14 @@ class UserGroupRepositoryTest extends DataBaseTestCase
     private const string GROUP_5_ID = '78b96ac1-ffcc-458b-8f48-b40c6e65261f';
     private const string GROUP_USER_ADMIN_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
-    private UserGroupRepository $object;
-    private GroupRepositoryInterface $groupRepository;
+    /**
+     * @var UserGroupRepository|EntityRepository<UserGroup>
+     */
+    private UserGroupRepository|EntityRepository $object;
+    /**
+     * @var GroupRepositoryInterface|EntityRepository<Group>
+     */
+    private GroupRepositoryInterface|EntityRepository $groupRepository;
 
     #[\Override]
     protected function setUp(): void
@@ -99,10 +106,10 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         ];
 
         $return = $this->object->findGroupsUsersOrFail([
-            self::GROUP_ID,
-            self::GROUP_2_ID,
-            self::GROUP_3_ID,
-            self::GROUP_5_ID,
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifier(self::GROUP_2_ID),
+            ValueObjectFactory::createIdentifier(self::GROUP_3_ID),
+            ValueObjectFactory::createIdentifier(self::GROUP_5_ID),
         ],
             GROUP_ROLES::ADMIN
         );
@@ -135,8 +142,8 @@ class UserGroupRepositoryTest extends DataBaseTestCase
         ];
 
         $return = $this->object->findGroupsUsersOrFail([
-            self::GROUP_ID,
-            self::GROUP_5_ID,
+            ValueObjectFactory::createIdentifier(self::GROUP_ID),
+            ValueObjectFactory::createIdentifier(self::GROUP_5_ID),
         ],
             GROUP_ROLES::USER
         );
@@ -158,7 +165,11 @@ class UserGroupRepositoryTest extends DataBaseTestCase
     public function itShouldFailNoUsersGroupsFound(): void
     {
         $this->expectException(DBNotFoundException::class);
-        $this->object->findGroupsUsersOrFail(['2eca818d-281f-4c7d-908e-b9b57017e1d0'], GROUP_ROLES::ADMIN);
+        $this->object->findGroupsUsersOrFail([
+            ValueObjectFactory::createIdentifier('2eca818d-281f-4c7d-908e-b9b57017e1d0'),
+        ],
+            GROUP_ROLES::ADMIN
+        );
     }
 
     #[Test]

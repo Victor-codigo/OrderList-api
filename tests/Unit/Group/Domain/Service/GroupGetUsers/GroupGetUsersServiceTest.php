@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupGetUsers;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -13,6 +12,7 @@ use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\Filter\FILTER_SECTION;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\Group\GROUP_ROLES;
@@ -22,9 +22,9 @@ use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupGetUsers\Dto\GroupGetUsersDto;
 use Group\Domain\Service\GroupGetUsers\GroupGetUsersService;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use User\Domain\Model\User;
 
 class GroupGetUsersServiceTest extends TestCase
 {
@@ -32,9 +32,12 @@ class GroupGetUsersServiceTest extends TestCase
     private const string USER_PUBLIC_IMAGE_PATH = '/userPublicImagePath';
 
     private GroupGetUsersService $object;
-    private MockObject|UserGroupRepositoryInterface $userGroupRepository;
-    private MockObject|ModuleCommunicationInterface $moduleCommunication;
-    private MockObject|PaginatorInterface $pagination;
+    private MockObject&UserGroupRepositoryInterface $userGroupRepository;
+    private MockObject&ModuleCommunicationInterface $moduleCommunication;
+    /**
+     * @var MockObject&PaginatorInterface<int, Group>
+     */
+    private MockObject&PaginatorInterface $pagination;
 
     #[\Override]
     protected function setUp(): void
@@ -47,11 +50,18 @@ class GroupGetUsersServiceTest extends TestCase
         $this->object = new GroupGetUsersService(
             $this->userGroupRepository,
             $this->moduleCommunication,
-            self::USER_PUBLIC_IMAGE_PATH,
-            self::APP_PROTOCOL_AND_DOMAIN,
         );
     }
 
+    /**
+     * @return array<int, array{
+     *  id: string,
+     *  name: string,
+     *  image: string,
+     *  created_on: string,
+     *  admin: bool,
+     * }>
+     */
     private static function getUsers(): array
     {
         return [
@@ -79,6 +89,15 @@ class GroupGetUsersServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<int, array{
+     *  id: string,
+     *  name: string,
+     *  image: string,
+     *  created_on: string,
+     *  admin: bool,
+     * }>
+     */
     private static function getUsersExpected(): array
     {
         $users = self::getUsers();
@@ -125,7 +144,14 @@ class GroupGetUsersServiceTest extends TestCase
     }
 
     /**
-     * @param User[] $usersExpected
+     * @param array<int, array{
+     *  id: string,
+     *  name: string,
+     *  image: string,
+     *  created_on: string,
+     *  admin: bool
+     * }> $usersExpected
+     * @param array<int|string, mixed> $users
      */
     private function assertUserIsOk(array $usersExpected, array $users): void
     {
@@ -147,7 +173,14 @@ class GroupGetUsersServiceTest extends TestCase
     }
 
     /**
-     * @param User[] $data
+     * @param array<int, array{
+     *  id: string,
+     *  name: string,
+     *  image: string|null,
+     *  created_on: string,
+     *  admin: bool
+     * }> $data
+     * @param VALIDATION_ERRORS[] $errors
      */
     private function getUsersResponseDto(array $data, array $errors, RESPONSE_STATUS $status): ResponseDto
     {
@@ -170,6 +203,9 @@ class GroupGetUsersServiceTest extends TestCase
         );
     }
 
+    /**
+     * @return iterable<array<int, GroupGetUsersDto|array<string, string|bool>>>
+     */
     public static function getGroupUsersDataProvider(): iterable
     {
         $usersExpectedData = self::getUsersExpected();
@@ -267,6 +303,9 @@ class GroupGetUsersServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @param array<int, array{id:string, name:string, image:string, created_on:string, admin:bool}> $usersDataExpected
+     */
     #[DataProvider('getGroupUsersDataProvider')]
     #[Test]
     public function itShouldGetGroupUsers(GroupGetUsersDto $input, array $usersDataExpected): void

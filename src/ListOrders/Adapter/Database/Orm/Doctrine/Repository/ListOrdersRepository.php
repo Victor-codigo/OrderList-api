@@ -20,11 +20,17 @@ use Order\Domain\Model\Order;
 use Product\Domain\Model\Product;
 use Shop\Domain\Model\Shop;
 
+/**
+ * @phpstan-extends RepositoryBase<ListOrders>
+ */
 class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositoryInterface
 {
+    /**
+     * @param PaginatorInterface<int, object> $paginator
+     */
     public function __construct(
         ManagerRegistry $managerRegistry,
-        PaginatorInterface $paginator
+        PaginatorInterface $paginator,
     ) {
         parent::__construct($managerRegistry, ListOrders::class, $paginator);
     }
@@ -38,13 +44,15 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     public function save(array $listsOrders): void
     {
         try {
+            $listOrdersToSave = null;
             foreach ($listsOrders as $listOrders) {
+                $listOrdersToSave = $listOrders;
                 $this->objectManager->persist($listOrders);
             }
 
             $this->objectManager->flush();
         } catch (UniqueConstraintViolationException|EntityIdentityCollisionException $e) {
-            throw DBUniqueConstraintException::fromId($listOrders->getId()->getValue(), $e->getCode());
+            throw DBUniqueConstraintException::fromId($listOrdersToSave->getId()->getValue(), $e->getCode());
         } catch (\Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
@@ -92,6 +100,8 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     /**
      * @param Identifier[] $ListsOrdersId
      *
+     * @return PaginatorInterface<int, ListOrders>
+     *
      * @throws DBNotFoundException
      */
     public function findListOrderByIdOrFail(array $ListsOrdersId, ?Identifier $groupId = null): PaginatorInterface
@@ -113,6 +123,8 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     }
 
     /**
+     * @return PaginatorInterface<int, ListOrders>
+     *
      * @throws DBNotFoundException
      */
     public function findListOrdersGroup(Identifier $groupId, bool $orderAsc): PaginatorInterface
@@ -132,6 +144,8 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     }
 
     /**
+     * @return PaginatorInterface<int, ListOrders>
+     *
      * @throws DBNotFoundException
      */
     public function findListOrderByListOrdersNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface
@@ -153,6 +167,8 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     }
 
     /**
+     * @return PaginatorInterface<int, ListOrders>
+     *
      * @throws DBNotFoundException
      */
     public function findListOrderByProductNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface
@@ -178,6 +194,8 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     }
 
     /**
+     * @return PaginatorInterface<int, ListOrders>
+     *
      * @throws DBNotFoundException
      */
     public function findListOrderByShopNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface
@@ -205,6 +223,8 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     /**
      * @param Identifier[] $groupsId
      *
+     * @return PaginatorInterface<int, ListOrders>
+     *
      * @throws DBNotFoundException
      */
     public function findGroupsListsOrdersOrFail(array $groupsId): PaginatorInterface
@@ -222,6 +242,8 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     }
 
     /**
+     * @return array<int, string>
+     *
      * @throws DBNotFoundException
      */
     public function findGroupListOrdersFirstLetterOrFail(Identifier $groupId): array

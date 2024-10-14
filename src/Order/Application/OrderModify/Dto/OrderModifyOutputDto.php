@@ -10,10 +10,13 @@ use Order\Domain\Model\Order;
 class OrderModifyOutputDto implements ApplicationOutputInterface
 {
     public function __construct(
-        public readonly Order $order
+        public readonly Order $order,
     ) {
     }
 
+    /**
+     * @return array{ id: string }
+     */
     #[\Override]
     public function toArray(): array
     {

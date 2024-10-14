@@ -11,6 +11,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\ValidationInterface;
 
@@ -35,6 +36,10 @@ class ProductGetDataInputDto implements ServiceInputDtoInterface
     public readonly PaginatorPage $page;
     public readonly PaginatorPageItems $pageItems;
 
+    /**
+     * @param string[]|null $productsId
+     * @param string[]|null $shopsId
+     */
     public function __construct(
         ?string $groupId,
         ?array $productsId,
@@ -77,6 +82,9 @@ class ProductGetDataInputDto implements ServiceInputDtoInterface
         $this->pageItems = ValueObjectFactory::createPaginatorPageItems($pageItems);
     }
 
+    /**
+     * @return array{}|array<string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {
@@ -123,6 +131,9 @@ class ProductGetDataInputDto implements ServiceInputDtoInterface
         return $errorList;
     }
 
+    /**
+     * @return array<string, VALIDATION_ERRORS[]>
+     */
     private function validateFilter(ValidationInterface $validator, Filter $filter, string $errorPrefix): array
     {
         if ($filter->getFilter()->isNull()

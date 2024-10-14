@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupGetData;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Group\Domain\Model\Group;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
@@ -21,6 +21,9 @@ class GroupGetDataControllerTest extends WebClientTestCase
     private const string GROUP_USER_ONLY_GROUP_EMAIL = 'email.other.active@host.com';
     private const string GROUP_USER_ONLY_GROUP_PASSWORD = '123456';
 
+    /**
+     * @return Group[]
+     */
     private function getGroupsData(): array
     {
         return [
@@ -29,6 +32,9 @@ class GroupGetDataControllerTest extends WebClientTestCase
         ];
     }
 
+    /**
+     * @return Group[]
+     */
     private function getGroupsDoNotExitsData(): array
     {
         return [

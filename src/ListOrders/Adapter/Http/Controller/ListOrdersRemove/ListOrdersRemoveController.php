@@ -72,7 +72,7 @@ class ListOrdersRemoveController extends AbstractController
 {
     public function __construct(
         private ListOrdersRemoveUseCase $listOrdersRemoveUseCase,
-        private Security $security
+        private Security $security,
     ) {
     }
 
@@ -85,6 +85,9 @@ class ListOrdersRemoveController extends AbstractController
         return $this->createResponse($listOrdersRemovedId);
     }
 
+    /**
+     * @param string[]|null $listsOrdersId
+     */
     private function createListOrdersRemoveInputDto(?string $groupId, ?array $listsOrdersId): ListOrdersRemoveInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */

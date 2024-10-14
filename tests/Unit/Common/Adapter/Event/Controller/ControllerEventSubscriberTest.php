@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Event\Controller;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Event\Controller\ControllerEventSubscriber;
 use Common\Adapter\Http\TryoutPermissions\Exception\TryoutUserRoutePermissionsException;
 use Common\Adapter\Http\TryoutPermissions\TryoutUserRoutePermissionsValidation;
 use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -23,11 +23,12 @@ class ControllerEventSubscriberTest extends TestCase
     private const string ROUTE_CURRENT = 'current_route';
 
     private ControllerEventSubscriber $object;
-    private MockObject|TryoutUserRoutePermissionsValidation $tryoutUserPermissionsValidation;
-    private MockObject|Security $security;
-    private MockObject|ControllerEvent $controllerEvent;
-    private MockObject|UserSharedSymfonyAdapter $userSymfonyAdapter;
-    private MockObject|UserShared $user;
+    private MockObject&TryoutUserRoutePermissionsValidation $tryoutUserPermissionsValidation;
+    private MockObject&Security $security;
+    // @phpstan-ignore property.unresolvableNativeType
+    private MockObject&ControllerEvent $controllerEvent;
+    private MockObject&UserSharedSymfonyAdapter $userSymfonyAdapter;
+    private MockObject&UserShared $user;
     private Request $request;
 
     #[\Override]
@@ -37,6 +38,7 @@ class ControllerEventSubscriberTest extends TestCase
 
         $this->tryoutUserPermissionsValidation = $this->createMock(TryoutUserRoutePermissionsValidation::class);
         $this->security = $this->createMock(Security::class);
+        // @phpstan-ignore method.unresolvableReturnType
         $this->controllerEvent = $this->createMock(ControllerEvent::class);
         $this->userSymfonyAdapter = $this->createMock(UserSharedSymfonyAdapter::class);
         $this->user = $this->createMock(UserShared::class);

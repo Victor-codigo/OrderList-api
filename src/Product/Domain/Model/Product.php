@@ -25,11 +25,11 @@ class Product implements EntityImageModifyInterface
     private \DateTime $createdOn;
 
     /**
-     * @var Collection<Order>
+     * @var Collection<int, Order>
      */
     private Collection $orders;
     /**
-     * @var Collection<ProductShop>
+     * @var Collection<int, ProductShop>
      */
     private Collection $productShop;
 
@@ -86,6 +86,9 @@ class Product implements EntityImageModifyInterface
         return $this->createdOn;
     }
 
+    /**
+     * @return Collection<int, Order>
+     */
     public function getOrders(): Collection
     {
         return $this->orders;
@@ -108,6 +111,9 @@ class Product implements EntityImageModifyInterface
         return $this;
     }
 
+    /**
+     * @return Collection<int, ProductShop>
+     */
     public function getProductShop(): Collection
     {
         return $this->productShop;
@@ -153,11 +159,19 @@ class Product implements EntityImageModifyInterface
         );
     }
 
+    /**
+     * @param array{
+     *  id: string,
+     *  group_id: string,
+     *  name: string,
+     *  description?: string|null,
+     *  image?: string|null
+     * } $productData
+     */
     public static function fromPrimitiveArrayOfData(array $productData): self
     {
-        if (!isset($productData['id'])
-        || !isset($productData['group_id'])
-        || !isset($productData['name'])) {
+        // @phpstan-ignore isset.offset, booleanOr.alwaysFalse, booleanOr.alwaysFalse, isset.offset, isset.offset
+        if (!isset($productData['id']) || !isset($productData['group_id']) || !isset($productData['name'])) {
             throw LogicException::fromMessage('Not enough data parameters to create a Product');
         }
 

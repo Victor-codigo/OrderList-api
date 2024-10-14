@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Adapter\Orm\Doctrine\Repository;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
@@ -12,10 +11,12 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Doctrine\DBAL\Exception\ConnectionException;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ObjectManager;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use Notification\Adapter\Database\Orm\Doctrine\Repository\NotificationRepository;
 use Notification\Domain\Model\Notification;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\Unit\DataBaseTestCase;
 
@@ -32,7 +33,10 @@ class NotificationRepositoryTest extends DataBaseTestCase
     private const string NOTIFICATION_IN_DATABASE_2 = '38dac117-2d4f-4057-8bc6-c972b5f439c6';
     private const string NOTIFICATION_IN_DATABASE_3 = 'f79ddff5-486b-4b5f-af64-b99fe9154fc1';
 
-    private NotificationRepository $object;
+    /**
+     * @var NotificationRepository|EntityRepository<Notification>
+     */
+    private NotificationRepository|EntityRepository $object;
     private MockObject|ConnectionException $connectionException;
 
     #[\Override]
@@ -44,6 +48,9 @@ class NotificationRepositoryTest extends DataBaseTestCase
         $this->connectionException = $this->createMock(ConnectionException::class);
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function getNotificationData(): array
     {
         return [

@@ -54,6 +54,15 @@ class NotificationGetDataUseCase extends ServiceBase
         return new NotificationGetDataDto($input->userSession->getId(), $input->page, $input->pageItems, $input->lang);
     }
 
+    /**
+     * @param array<int, array{
+     *  id: string|null,
+     *  user_id: string|null,
+     *  message: string|null,
+     *  viewed: bool,
+     *  created_on: string
+     * }> $notificationsData
+     */
     private function createNotificationGetDataOutputDto(array $notificationsData): NotificationGetDataOutputDto
     {
         return new NotificationGetDataOutputDto($notificationsData);

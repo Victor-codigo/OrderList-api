@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Domain\Service\GetUsersProfilePublicData;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Struct\SCOPE;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use User\Domain\Model\Profile;
@@ -31,9 +31,12 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
         parent::setUp();
 
         $this->profileRepository = $this->createMock(ProfileRepositoryInterface::class);
-        $this->object = new GetUsersProfilePublicDataService($this->profileRepository, self::USER_PUBLIC_IMAGE_PATH, self::APP_PROTOCOL_AND_DOMAIN, self::APP_PROTOCOL_AND_DOMAIN);
+        $this->object = new GetUsersProfilePublicDataService($this->profileRepository, self::USER_PUBLIC_IMAGE_PATH, self::APP_PROTOCOL_AND_DOMAIN);
     }
 
+    /**
+     * @return Identifier[]
+     */
     private function getProfilesId(): array
     {
         return [
@@ -43,6 +46,9 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @return Profile[]
+     */
     private function getProfiles(): array
     {
         return [
@@ -52,6 +58,9 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @return Profile[]
+     */
     private function getProfilesExpected(): array
     {
         $usersProfile = $this->getProfiles();

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupRemoveAllUserGroups;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
@@ -29,6 +28,7 @@ use Group\Domain\Model\UserGroup;
 use Group\Domain\Service\GroupRemoveAllUserGroups\Dto\GroupRemoveAllUserGroupsDto;
 use Group\Domain\Service\GroupRemoveAllUserGroups\Dto\GroupRemoveAllUserGroupsOutputDto;
 use Group\Domain\Service\GroupRemoveAllUserGroups\GroupRemoveAllUserGroupsService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -174,6 +174,12 @@ class GroupRemoveAllUserGroupsUseCaseTest extends TestCase
         return new ResponseDto([], [], '', $status);
     }
 
+    /**
+     * @return array{
+     *  usersId: Identifier[],
+     *  groupNames: NameWithSpaces[]
+     * }
+     */
     private function getUsersSetAsAdminNotificationData(): array
     {
         return [

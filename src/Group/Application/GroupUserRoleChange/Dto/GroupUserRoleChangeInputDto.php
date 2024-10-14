@@ -9,6 +9,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\ValidationInterface;
 
@@ -22,6 +23,9 @@ class GroupUserRoleChangeInputDto implements ServiceInputDtoInterface
     public readonly array $usersId;
     public readonly Rol $rol;
 
+    /**
+     * @param string[]|null $usersId
+     */
     public function __construct(UserShared $userSession, ?string $groupId, ?array $usersId, ?bool $admin)
     {
         $this->userSession = $userSession;
@@ -33,6 +37,9 @@ class GroupUserRoleChangeInputDto implements ServiceInputDtoInterface
         $this->rol = ValueObjectFactory::createRol($admin ? GROUP_ROLES::ADMIN : GROUP_ROLES::USER);
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {

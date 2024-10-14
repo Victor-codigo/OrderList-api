@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\GetUsers;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\User\USER_ROLES;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 use User\Domain\Model\User;
@@ -26,6 +26,9 @@ class GetUsersControllerTest extends WebClientTestCase
         parent::setUp();
     }
 
+    /**
+     * @return string[]
+     */
     private function getUsersIds(): array
     {
         return [
@@ -58,6 +61,15 @@ class GetUsersControllerTest extends WebClientTestCase
         ];
     }
 
+    /**
+     * @param array<string, object> $data
+     * @param string[]              $usersIds
+     * @param string[]              $usersEmails
+     * @param string[]              $usersNames
+     * @param USER_ROLES[]          $usersRoles
+     * @param string[]              $usersCreatedOn
+     * @param string[]              $usersImages
+     */
     private function assertValidUserDataPrivate(array $data, array $usersIds, array $usersEmails, array $usersNames, array $usersRoles, array $usersCreatedOn, array $usersImages): void
     {
         foreach ($data as $user) {
@@ -79,6 +91,12 @@ class GetUsersControllerTest extends WebClientTestCase
         }
     }
 
+    /**
+     * @param array<string, object> $data
+     * @param string[]              $usersIds
+     * @param string[]              $usersNames
+     * @param string[]              $usersImages
+     */
     private function assertValidUserDataPublic(array $data, array $usersIds, array $usersNames, array $usersImages): void
     {
         foreach ($data as $user) {
@@ -94,6 +112,11 @@ class GetUsersControllerTest extends WebClientTestCase
         }
     }
 
+    /**
+     * @param string[] $usersIds
+     *
+     * @return array<string, array<int, string|USER_ROLES>> $usersIds
+     */
     private function getUserDataFromDataBase(array $usersIds): array
     {
         $userRepository = $this->getEntityManager()->getRepository(User::class);
@@ -104,8 +127,10 @@ class GetUsersControllerTest extends WebClientTestCase
             'usersNames' => array_map(fn (User $user): ?string => $user->getName()->getValue(), $users),
             'usersRoles' => array_map(
                 fn (User $user): array => array_map(
+                    // @phpstan-ignore argument.type
                     fn (USER_ROLES $rol) => $rol->value,
-                    $user->getRoles()->getRolesEnums()),
+                    $user->getRoles()->getRolesEnums()
+                ),
                 $users
             ),
             'usersCreatedOn' => array_map(fn (User $user): string => $user->getCreatedOn()->format('Y-m-d H:i:s'), $users),

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Security\User;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\User\USER_ROLES;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -26,9 +26,12 @@ class UserSymfonyAdapterTest extends TestCase
         $this->loadUserSymfonyAdapter();
     }
 
-    private function loadUserSymfonyAdapter(array $userMethodMock = []): void
+    /**
+     * @param string[] $userMethodsMock
+     */
+    private function loadUserSymfonyAdapter(array $userMethodsMock = []): void
     {
-        $this->user = $this->createPartialMock(User::class, $userMethodMock);
+        $this->user = $this->createPartialMock(User::class, $userMethodsMock);
         $this->passwordHAsher = $this->createMock(UserPasswordHasherInterface::class);
 
         $this->object = new UserSymfonyAdapter($this->passwordHAsher, $this->user);

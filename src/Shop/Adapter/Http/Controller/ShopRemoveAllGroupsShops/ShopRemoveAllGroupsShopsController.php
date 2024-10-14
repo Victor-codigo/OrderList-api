@@ -86,7 +86,7 @@ class ShopRemoveAllGroupsShopsController extends AbstractController
 {
     public function __construct(
         private ShopRemoveAllGroupsShopsUseCase $shopRemoveAllGroupsShopsUseCase,
-        private Security $security
+        private Security $security,
     ) {
     }
 
@@ -99,6 +99,9 @@ class ShopRemoveAllGroupsShopsController extends AbstractController
         return $this->createResponse($shopRemoved);
     }
 
+    /**
+     * @param string[]|null $groupsId
+     */
     private function createShopRemoveAllGroupsShopsInputDto(?array $groupsId, ?string $systemKey): ShopRemoveAllGroupsShopsInputDto
     {
         /** @var UserSharedInterface $userSharedAdapter */

@@ -22,6 +22,15 @@ class GroupGetDataByNameService
     }
 
     /**
+     * @return array{
+     *  group_id: string|null,
+     *  type: string,
+     *  name: string|null,
+     *  description: string|null,
+     *  image: string|null,
+     *  created_on: string
+     * }
+     *
      * @throws DBNotFoundException
      */
     public function __invoke(GroupGetDataByNameDto $input): array
@@ -31,6 +40,16 @@ class GroupGetDataByNameService
         return $this->getData($groupData, $input->userImage);
     }
 
+    /**
+     * @return array{
+     *  group_id: string|null,
+     *  type: string,
+     *  name: string|null,
+     *  description: string|null,
+     *  image: string|null,
+     *  created_on: string
+     * }
+     */
     private function getData(Group $group, Path $userImage): array
     {
         $image = null;

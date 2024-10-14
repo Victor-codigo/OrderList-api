@@ -21,7 +21,6 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Product\Domain\Model\Product;
 use Product\Domain\Model\ProductShop;
-use Product\Domain\Port\Repository\ProductShopRepositoryInterface;
 use Shop\Domain\Model\Shop;
 use Test\Unit\DataBaseTestCase;
 
@@ -41,10 +40,11 @@ class OrderGetDataServiceTest extends DataBaseTestCase
     private const string SHOP_PUBLIC_PATH = '/shopPublicPath';
 
     private OrderGetDataService $object;
-    private MockObject|OrderRepositoryInterface $orderRepository;
-    private MockObject|ProductShopRepositoryInterface $productShopRepository;
-    private MockObject|PaginatorInterface $ordersPaginator;
-    private MockObject|PaginatorInterface $productsShopsPaginator;
+    private MockObject&OrderRepositoryInterface $orderRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, Order>
+     */
+    private MockObject&PaginatorInterface $ordersPaginator;
 
     #[\Override]
     protected function setUp(): void
@@ -52,9 +52,7 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         parent::setUp();
 
         $this->orderRepository = $this->createMock(OrderRepositoryInterface::class);
-        $this->productShopRepository = $this->createMock(ProductShopRepositoryInterface::class);
         $this->ordersPaginator = $this->createMock(PaginatorInterface::class);
-        $this->productsShopsPaginator = $this->createMock(PaginatorInterface::class);
         $this->object = new OrderGetDataService($this->orderRepository, self::PRODUCT_PUBLIC_PATH, self::SHOP_PUBLIC_PATH, self::APP_PROTOCOL_AND_DOMAIN);
     }
 
@@ -199,6 +197,9 @@ class OrderGetDataServiceTest extends DataBaseTestCase
         );
     }
 
+    /**
+     * @param array<string, mixed> $orderActual
+     */
     private function assertOrderDataIsOk(Order $orderExpected, array $orderActual): void
     {
         $this->assertArrayHasKey('id', $orderActual);

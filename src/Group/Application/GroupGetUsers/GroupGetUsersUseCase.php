@@ -24,7 +24,7 @@ class GroupGetUsersUseCase extends ServiceBase
     public function __construct(
         private GroupGetUsersService $groupGetUsersService,
         private UserGroupRepositoryInterface $userGroupRepository,
-        private ValidationInterface $validator
+        private ValidationInterface $validator,
     ) {
     }
 
@@ -88,6 +88,15 @@ class GroupGetUsersUseCase extends ServiceBase
         return new GroupGetUsersDto($input->groupId, $input->page, $input->pageItems, $input->filterSection, $input->filterText, $input->orderAsc);
     }
 
+    /**
+     * @param array<int, array{
+     *  id: string,
+     *  name: string,
+     *  image: string|null,
+     *  created_on: string|null,
+     *  admin: bool
+     * }> $users
+     */
     private function createGroupGetUsersOutputDto(array $users, PaginatorPage $page, int $pagesTotal): GroupGetUsersOutputDto
     {
         return new GroupGetUsersOutputDto($users, $page, $pagesTotal);

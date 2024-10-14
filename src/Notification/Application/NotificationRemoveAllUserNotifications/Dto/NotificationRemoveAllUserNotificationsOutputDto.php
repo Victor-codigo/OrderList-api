@@ -13,10 +13,13 @@ class NotificationRemoveAllUserNotificationsOutputDto implements ApplicationOutp
      * @param Identifier[] $notificationsRemovedId
      */
     public function __construct(
-        public readonly array $notificationsRemovedId
+        public readonly array $notificationsRemovedId,
     ) {
     }
 
+    /**
+     * @return array<int, string|null>
+     */
     #[\Override]
     public function toArray(): array
     {

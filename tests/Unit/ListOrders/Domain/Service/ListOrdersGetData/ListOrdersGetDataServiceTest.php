@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersGetData;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Validation\Filter\FILTER_SECTION;
@@ -14,14 +14,18 @@ use ListOrders\Domain\Model\ListOrders;
 use ListOrders\Domain\Ports\ListOrdersRepositoryInterface;
 use ListOrders\Domain\Service\ListOrdersGetData\Dto\ListOrdersGetDataDto;
 use ListOrders\Domain\Service\ListOrdersGetData\ListOrdersGetDataService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ListOrdersGetDataServiceTest extends TestCase
 {
     private ListOrdersGetDataService $object;
-    private MockObject|ListOrdersRepositoryInterface $listOrdersRepository;
-    private MockObject|PaginatorInterface $paginator;
+    private MockObject&ListOrdersRepositoryInterface $listOrdersRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, ListOrders>
+     */
+    private MockObject&PaginatorInterface $paginator;
 
     #[\Override]
     protected function setUp(): void
@@ -33,6 +37,9 @@ class ListOrdersGetDataServiceTest extends TestCase
         $this->object = new ListOrdersGetDataService($this->listOrdersRepository);
     }
 
+    /**
+     * @return array<string, ListOrders>
+     */
     private function getListOrders(): array
     {
         $datetime = \DateTime::createFromFormat('Y-m-d H:i:s', '2023-6-9 18:06:00');
@@ -65,6 +72,9 @@ class ListOrdersGetDataServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @return Identifier[]
+     */
     private function getListOrdersId(): array
     {
         return [
@@ -74,6 +84,9 @@ class ListOrdersGetDataServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @param array<string, mixed> $listOrderDataActual
+     */
     private function assertListOrderDataIsOk(ListOrders $listOrderDataExpected, array $listOrderDataActual): void
     {
         $this->assertArrayHasKey('id', $listOrderDataActual);

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shop\Adapter\Http\Controller\ShopCreate;
 
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
+use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
@@ -76,7 +77,7 @@ class ShopCreateController extends AbstractController
 {
     public function __construct(
         private ShopCreateUseCase $shopCreateUseCase,
-        private Security $security
+        private Security $security,
     ) {
     }
 

@@ -8,11 +8,11 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 
 class NotificationCreateOutputDto
 {
+    /**
+     * @param Identifier[] $notificationIds
+     */
     public function __construct(
-        /**
-         * @param Identifier[] $notificationIds
-         */
-        public readonly array $notificationIds
+        public readonly array $notificationIds,
     ) {
     }
 }

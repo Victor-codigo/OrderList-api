@@ -13,10 +13,13 @@ class ShopRemoveAllGroupsShopsOutputDto implements ApplicationOutputInterface
      * @param Identifier[] $shopsId
      */
     public function __construct(
-        public readonly array $shopsId
+        public readonly array $shopsId,
     ) {
     }
 
+    /**
+     * @return array{ id: array<int, string> }
+     */
     #[\Override]
     public function toArray(): array
     {

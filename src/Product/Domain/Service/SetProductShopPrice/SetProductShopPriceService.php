@@ -21,7 +21,7 @@ class SetProductShopPriceService
     public function __construct(
         private ProductShopRepositoryInterface $productShopRepository,
         private ProductRepositoryInterface $productRepository,
-        private ShopRepositoryInterface $shopRepository
+        private ShopRepositoryInterface $shopRepository,
     ) {
     }
 
@@ -45,9 +45,12 @@ class SetProductShopPriceService
     }
 
     /**
-     * @param ProductShop[] $productsOrShopsId
+     * @param Identifier[] $productsOrShopsId
      *
-     * @return array<{productsId: string[], shopsId: string[]}>
+     * @return array{
+     *  productsId: Identifier[]|ProductShop[],
+     *  shopsId: Identifier[]|ProductShop[]
+     * }
      */
     private function getProductsAndShops(Identifier $productId, Identifier $shopId, array $productsOrShopsId): array
     {
@@ -178,7 +181,12 @@ class SetProductShopPriceService
     }
 
     /**
-     * @param array<{productId: Identifier, shopÌd: Identifier, price: Money, unit: UnitMeasure}> $productsIdAndShopsIdPrice
+     * @param array{}|array{
+     *  productId: Identifier,
+     *  shopÌd: Identifier,
+     *  price: Money,
+     *  unit: UnitMeasure
+     * } $productsIdAndShopsIdPriceUnit
      *
      * @return ProductShop[]
      */
@@ -206,6 +214,7 @@ class SetProductShopPriceService
             return new ProductShop($productsDb[$productId], $shopsDb[$shopId], $productIdAndShopIdPriceUnit['price'], $productIdAndShopIdPriceUnit['unit']);
         };
 
+        // @phpstan-ignore argument.type
         $productsShopsCreated = array_map($createProductShopCallback, $productsIdAndShopsIdPriceUnit);
 
         return array_values(array_filter($productsShopsCreated));

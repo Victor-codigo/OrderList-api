@@ -23,7 +23,7 @@ class ShopGetFirstLetterUseCase extends ServiceBase
     public function __construct(
         private ShopGetFirstLetterService $shopGetFirstLetterService,
         private ValidationInterface $validator,
-        private ValidateGroupAndUserService $validateGroupAndUserService
+        private ValidateGroupAndUserService $validateGroupAndUserService,
     ) {
     }
 
@@ -62,6 +62,9 @@ class ShopGetFirstLetterUseCase extends ServiceBase
         return new ShopGetFirstLetterDto($input->groupId);
     }
 
+    /**
+     * @param array<int, string> $shopsFirstLetter
+     */
     private function createShopGetFirstLetterOutputDto(array $shopsFirstLetter): ShopGetFirstLetterOutputDto
     {
         return new ShopGetFirstLetterOutputDto($shopsFirstLetter);

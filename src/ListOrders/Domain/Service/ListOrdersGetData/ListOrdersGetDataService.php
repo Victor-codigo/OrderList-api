@@ -17,6 +17,9 @@ use ListOrders\Domain\Service\ListOrdersGetData\Dto\ListOrdersGetDataDto;
 
 class ListOrdersGetDataService
 {
+    /**
+     * @var PaginatorInterface<int, ListOrders>
+     */
     private PaginatorInterface $listOrdersPaginator;
 
     public function __construct(
@@ -25,6 +28,16 @@ class ListOrdersGetDataService
     }
 
     /**
+     * @return array<int, array{
+     *  id: string|null,
+     *  user_id: string|null,
+     *  group_id: string|null,
+     *  name: string|null,
+     *  description: string|null,
+     *  date_to_buy: string|null,
+     *  created_on: string
+     * }>
+     *
      * @throws DBNotFoundException
      * @throws LogicException
      */
@@ -41,7 +54,9 @@ class ListOrdersGetDataService
     }
 
     /**
-     * @return ListOrders[]
+     * @param Identifier[] $listOrdersId
+     *
+     * @return PaginatorInterface<int, ListOrders>
      *
      * @throws DBNotFoundException
      * @throws LogicException
@@ -66,6 +81,19 @@ class ListOrdersGetDataService
         return $listOrdersPaginator;
     }
 
+    /**
+     * @param PaginatorInterface<int, ListOrders> $listsOrders
+     *
+     * @return array<int, array{
+     *  id: string|null,
+     *  user_id: string|null,
+     *  group_id: string|null,
+     *  name: string|null,
+     *  description: string|null,
+     *  date_to_buy: string|null,
+     *  created_on: string
+     * }>
+     */
     private function getListOrderData(PaginatorInterface $listsOrders): array
     {
         return array_map(

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Database\Orm\Doctrine\Repository;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Test\Unit\DataBaseTestCase;
 use User\Adapter\Database\Orm\Doctrine\Repository\ProfileRepository;
 use User\Domain\Model\Profile;

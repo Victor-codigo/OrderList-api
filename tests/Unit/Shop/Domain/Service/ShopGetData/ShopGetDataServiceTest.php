@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Domain\Service\ShopGetData;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shop\Domain\Model\Shop;
@@ -24,8 +24,11 @@ class ShopGetDataServiceTest extends TestCase
     private const string SHOP_PUBLIC_IMAGE_PATH = '/shopPublicImagePath';
 
     private ShopGetDataService $object;
-    private MockObject|ShopRepositoryInterface $shopRepository;
-    private MockObject|PaginatorInterface $paginator;
+    private MockObject&ShopRepositoryInterface $shopRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, Shop>
+     */
+    private MockObject&PaginatorInterface $paginator;
 
     #[\Override]
     protected function setUp(): void
@@ -37,6 +40,9 @@ class ShopGetDataServiceTest extends TestCase
         $this->object = new ShopGetDataService($this->shopRepository, self::APP_PROTOCOL_AND_DOMAIN, self::SHOP_PUBLIC_IMAGE_PATH);
     }
 
+    /**
+     * @return Shop[]
+     */
     private function getShops(): array
     {
         return [
@@ -46,6 +52,9 @@ class ShopGetDataServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @return Shop[]
+     */
     private function getShopsExpected(): array
     {
         $shops = $this->getShops();
@@ -64,6 +73,9 @@ class ShopGetDataServiceTest extends TestCase
         );
     }
 
+    /**
+     * @param array<string, mixed> $shopDataActual
+     */
     private function assertShopDataIsOk(Shop $shopsDataExpected, array $shopDataActual): void
     {
         $this->assertArrayHasKey('id', $shopDataActual);

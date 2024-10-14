@@ -108,7 +108,7 @@ class GroupGetGroupsAdminsController extends AbstractController
 {
     public function __construct(
         private GroupGetGroupsAdminsUseCase $groupGetGroupsAdminsUseCase,
-        private Security $security
+        private Security $security,
     ) {
     }
 

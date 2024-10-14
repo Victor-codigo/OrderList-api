@@ -45,6 +45,9 @@ class GroupGetUsersInputDto implements ServiceInputDtoInterface
         $this->orderAsc = $orderAsc;
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {
@@ -77,6 +80,9 @@ class GroupGetUsersInputDto implements ServiceInputDtoInterface
         return $errorList;
     }
 
+    /**
+     * @return array{}|array<string, VALIDATION_ERRORS[]>
+     */
     private function validateFilter(ValidationInterface $validator, Filter $filter, string $errorPrefix): array
     {
         if ($filter->getFilter()->isNull()

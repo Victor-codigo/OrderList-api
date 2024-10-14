@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupCreate;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
@@ -23,6 +22,7 @@ use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupCreate\Dto\GroupCreateDto;
 use Group\Domain\Service\GroupCreate\Exception\GroupCreateUserGroupTypeAlreadyExitsException;
 use Group\Domain\Service\GroupCreate\GroupCreateService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Test\Unit\DataBaseTestCase;
 
@@ -96,7 +96,11 @@ class GroupCreateServiceTest extends DataBaseTestCase
         $this->groupRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Group $group): true => $this->assertGroupIsCreated($group, $groupCreateDto, GROUP_TYPE::USER, self::IMAGE_UPLOADED_FILE_NAME) || true));
+            ->with($this->callback(function (Group $group) use ($groupCreateDto): true {
+                $this->assertGroupIsCreated($group, $groupCreateDto, GROUP_TYPE::USER, self::IMAGE_UPLOADED_FILE_NAME);
+
+                return true;
+            }));
 
         $this->fileUpload
             ->expects($this->once())
@@ -129,7 +133,11 @@ class GroupCreateServiceTest extends DataBaseTestCase
         $this->groupRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Group $group): true => $this->assertGroupIsCreated($group, $groupCreateDto, GROUP_TYPE::GROUP, self::IMAGE_UPLOADED_FILE_NAME) || true));
+            ->with($this->callback(function (Group $group) use ($groupCreateDto): true {
+                $this->assertGroupIsCreated($group, $groupCreateDto, GROUP_TYPE::GROUP, self::IMAGE_UPLOADED_FILE_NAME);
+
+                return true;
+            }));
 
         $this->fileUpload
             ->expects($this->once())
@@ -162,7 +170,11 @@ class GroupCreateServiceTest extends DataBaseTestCase
         $this->groupRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Group $group): true => $this->assertGroupIsCreated($group, $groupCreateDto, GROUP_TYPE::GROUP, null) || true));
+            ->with($this->callback(function (Group $group) use ($groupCreateDto): true {
+                $this->assertGroupIsCreated($group, $groupCreateDto, GROUP_TYPE::GROUP, null);
+
+                return true;
+            }));
 
         $this->fileUpload
             ->expects($this->never())
@@ -205,7 +217,11 @@ class GroupCreateServiceTest extends DataBaseTestCase
         $this->groupRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Group $group): true => $this->assertGroupIsCreated($group, $groupCreateDto, GROUP_TYPE::GROUP, self::IMAGE_UPLOADED_FILE_NAME) || true))
+            ->with($this->callback(function (Group $group) use ($groupCreateDto): true {
+                $this->assertGroupIsCreated($group, $groupCreateDto, GROUP_TYPE::GROUP, self::IMAGE_UPLOADED_FILE_NAME);
+
+                return true;
+            }))
             ->willThrowException(new DBUniqueConstraintException());
 
         $this->object->__invoke($groupCreateDto);
@@ -235,7 +251,11 @@ class GroupCreateServiceTest extends DataBaseTestCase
         $this->groupRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (Group $group): true => $this->assertGroupIsCreated($group, $groupCreateDto, GROUP_TYPE::GROUP, self::IMAGE_UPLOADED_FILE_NAME) || true))
+            ->with($this->callback(function (Group $group) use ($groupCreateDto): true {
+                $this->assertGroupIsCreated($group, $groupCreateDto, GROUP_TYPE::GROUP, self::IMAGE_UPLOADED_FILE_NAME);
+
+                return true;
+            }))
             ->willThrowException(new DBConnectionException());
 
         $this->object->__invoke($groupCreateDto);

@@ -21,6 +21,8 @@ class HttpClientSymfonyAdapter implements HttpClientInterface
     }
 
     /**
+     * @param mixed[] $options
+     *
      * @throws UnsupportedOptionException
      */
     #[\Override]
@@ -35,6 +37,9 @@ class HttpClientSymfonyAdapter implements HttpClientInterface
         }
     }
 
+    /**
+     * @param mixed[] $options
+     */
     #[\Override]
     public function getNewInstance(array $options = []): static
     {

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersModify;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -13,6 +12,7 @@ use ListOrders\Domain\Model\ListOrders;
 use ListOrders\Domain\Ports\ListOrdersRepositoryInterface;
 use ListOrders\Domain\Service\ListOrdersModify\Dto\ListOrdersModifyDto;
 use ListOrders\Domain\Service\ListOrdersModify\ListOrdersModifyService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,8 +21,11 @@ class ListOrdersModifyServiceTest extends TestCase
     private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
 
     private ListOrdersModifyService $object;
-    private MockObject|ListOrdersRepositoryInterface $listOrdersToRepository;
-    private MockObject|PaginatorInterface $paginator;
+    private MockObject&ListOrdersRepositoryInterface $listOrdersToRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, ListOrders>
+     */
+    private MockObject&PaginatorInterface $paginator;
 
     #[\Override]
     protected function setUp(): void
@@ -46,6 +49,10 @@ class ListOrdersModifyServiceTest extends TestCase
         );
     }
 
+    /**
+     * @param ListOrders[] $listsOrdersExpected
+     * @param ListOrders[] $listsOrdersActual
+     */
     private function assertListOrdersIsOk(array $listsOrdersExpected, array $listsOrdersActual): void
     {
         foreach ($listsOrdersExpected as $key => $listOrdersExpected) {
@@ -88,7 +95,11 @@ class ListOrdersModifyServiceTest extends TestCase
         $this->listOrdersToRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(fn (array $listsOrdersActual): true => $this->assertListOrdersIsOk([$listOrderExpected], $listsOrdersActual) || true));
+            ->with($this->callback(function (array $listsOrdersActual) use ($listOrderExpected): true {
+                $this->assertListOrdersIsOk([$listOrderExpected], $listsOrdersActual);
+
+                return true;
+            }));
 
         $this->paginator
             ->expects($this->once())

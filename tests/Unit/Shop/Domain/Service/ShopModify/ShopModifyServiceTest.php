@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Domain\Service\ShopModify;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
-use Common\Domain\FileUpload\Exception\File\FileException;
 use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
+use Common\Domain\FileUpload\Exception\File\FileException;
 use Common\Domain\Image\Exception\ImageResizeException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\FileUploadInterface;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
 use Common\Domain\Ports\Image\ImageInterface;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shop\Domain\Model\Shop;
@@ -32,11 +32,14 @@ class ShopModifyServiceTest extends TestCase
     private const string SHOP_IMAGE_PATH = 'path\to\shops\images';
 
     private ShopModifyService $object;
-    private MockObject|ShopRepositoryInterface $shopRepository;
-    private MockObject|FileUploadInterface $fileUpload;
-    private MockObject|UploadedFileInterface $shopImage;
-    private MockObject|PaginatorInterface $paginator;
-    private MockObject|ImageInterface $image;
+    private MockObject&ShopRepositoryInterface $shopRepository;
+    private MockObject&FileUploadInterface $fileUpload;
+    private MockObject&UploadedFileInterface $shopImage;
+    /**
+     * @var MockObject&PaginatorInterface<int, Shop>
+     */
+    private MockObject&PaginatorInterface $paginator;
+    private MockObject&ImageInterface $image;
 
     #[\Override]
     protected function setUp(): void

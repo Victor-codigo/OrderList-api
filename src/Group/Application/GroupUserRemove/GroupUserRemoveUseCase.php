@@ -38,7 +38,7 @@ class GroupUserRemoveUseCase extends ServiceBase
         private GroupUserRemoveService $groupUserRemoveService,
         private ModuleCommunicationInterface $moduleCommunication,
         private GroupRepositoryInterface $groupRepository,
-        private string $systemKey
+        private string $systemKey,
     ) {
     }
 
@@ -139,6 +139,9 @@ class GroupUserRemoveUseCase extends ServiceBase
         return new GroupUserRemoveDto($input->groupId, $input->usersId);
     }
 
+    /**
+     * @param Identifier[] $usersRemovedId
+     */
     private function createGroupUserRemoveOutputDto(array $usersRemovedId): GroupUserRemoveOutputDto
     {
         return new GroupUserRemoveOutputDto($usersRemovedId);

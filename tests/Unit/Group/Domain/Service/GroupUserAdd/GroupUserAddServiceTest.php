@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupUserAdd;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\Array\Roles;
@@ -22,6 +21,7 @@ use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersAlreadyInTheGroupEx
 use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersMaxNumberExceededException;
 use Group\Domain\Service\GroupUserAdd\Exception\GroupAddUsersPermissionsException;
 use Group\Domain\Service\GroupUserAdd\GroupUserAddService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,8 +31,8 @@ class GroupUserAddServiceTest extends TestCase
     private const string GROUP_TYPE_USER_ID = 'a5002966-dbf7-4f76-a862-23a04b5ca465';
 
     private GroupUserAddService $object;
-    private MockObject|UserGroupRepositoryInterface $userGroupRepository;
-    private MockObject|GroupRepositoryInterface $groupRepository;
+    private MockObject&UserGroupRepositoryInterface $userGroupRepository;
+    private MockObject&GroupRepositoryInterface $groupRepository;
 
     #[\Override]
     protected function setUp(): void
@@ -62,9 +62,9 @@ class GroupUserAddServiceTest extends TestCase
     }
 
     /**
-     * @return UserGroup[]
+     * @return MockObject&PaginatorInterface<int, UserGroup>
      */
-    private function getFindGroupUsersOrFailReturn(): MockObject|PaginatorInterface
+    private function getFindGroupUsersOrFailReturn(): MockObject&PaginatorInterface
     {
         $group = $this->getFindGroupsByIdOrFailReturn()[0];
         $usersGroup = [
@@ -73,7 +73,7 @@ class GroupUserAddServiceTest extends TestCase
             UserGroup::fromPrimitives(self::GROUP_ID, '4586fd14-f2de-4c22-b96d-65a8f70ed2ed', [GROUP_ROLES::USER], $group),
         ];
 
-        /** @var MockObject|PaginatorInterface */
+        /** @var MockObject&PaginatorInterface<int, UserGroup> $paginator */
         $paginator = $this->createMock(PaginatorInterface::class);
         $paginator
             ->expects($this->any())
@@ -87,6 +87,9 @@ class GroupUserAddServiceTest extends TestCase
         return $paginator;
     }
 
+    /**
+     * @return Group[]
+     */
     private function getFindGroupsByIdOrFailReturn(): array
     {
         return [Group::fromPrimitives(self::GROUP_ID, 'GroupName', GROUP_TYPE::GROUP, 'Description', null)];
@@ -105,6 +108,10 @@ class GroupUserAddServiceTest extends TestCase
         );
     }
 
+    /**
+     * @param UserGroup[] $expectUsersGroup
+     * @param UserGroup[] $actualUserGroup
+     */
     private function assertUserGroupIsEqualToUserGroup(array $expectUsersGroup, array $actualUserGroup): bool
     {
         $this->assertEquals(
@@ -154,6 +161,9 @@ class GroupUserAddServiceTest extends TestCase
         return true;
     }
 
+    /**
+     * @param UserGroup[] $expectUsersGroup
+     */
     private function mockMethodsInvoke(GroupUserAddDto $groupUserAddDto, array $expectUsersGroup, ?\Exception $saveException = null): void
     {
         $this->userGroupRepository

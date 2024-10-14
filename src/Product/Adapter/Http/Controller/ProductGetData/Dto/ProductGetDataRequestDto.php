@@ -17,7 +17,13 @@ class ProductGetDataRequestDto implements RequestDtoInterface
     private const int SHOPS_NUM_MAX = AppConfig::ENDPOINT_PRODUCT_GET_SHOPS_MAX;
 
     public readonly ?string $groupId;
+    /**
+     * @var string[]|null
+     */
     public readonly ?array $productsId;
+    /**
+     * @var string[]|null
+     */
     public readonly ?array $shopsId;
     public readonly ?string $productName;
 

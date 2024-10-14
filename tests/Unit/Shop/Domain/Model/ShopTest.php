@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Domain\Model;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Exception\LogicException;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Shop\Domain\Model\Shop;
 
@@ -108,6 +108,7 @@ class ShopTest extends TestCase
         ];
 
         $this->expectException(LogicException::class);
+        // @phpstan-ignore argument.type
         Shop::fromPrimitiveArrayOfData($shopData);
     }
 
@@ -123,6 +124,7 @@ class ShopTest extends TestCase
         ];
 
         $this->expectException(LogicException::class);
+        // @phpstan-ignore argument.type
         Shop::fromPrimitiveArrayOfData($shopData);
     }
 
@@ -138,6 +140,7 @@ class ShopTest extends TestCase
         ];
 
         $this->expectException(LogicException::class);
+        // @phpstan-ignore argument.type
         Shop::fromPrimitiveArrayOfData($shopData);
     }
 }

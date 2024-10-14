@@ -13,12 +13,13 @@ class GroupRemoveAllUserGroupsOutputDto
      * @param Group[]     $groupsIdRemoved
      * @param UserGroup[] $usersIdGroupsRemoved
      * @param UserGroup[] $usersGroupsIdSetAsAdmin
+     * @param Group[]     $groups
      */
     public function __construct(
         public readonly array $groupsIdRemoved,
         public readonly array $usersIdGroupsRemoved,
         public readonly array $usersGroupsIdSetAsAdmin,
-        public readonly array $groups
+        public readonly array $groups,
     ) {
     }
 }

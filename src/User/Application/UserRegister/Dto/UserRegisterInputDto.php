@@ -12,6 +12,7 @@ use Common\Domain\Model\ValueObject\String\Password;
 use Common\Domain\Model\ValueObject\String\Url;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 
 final class UserRegisterInputDto implements ServiceInputDtoInterface
@@ -32,7 +33,7 @@ final class UserRegisterInputDto implements ServiceInputDtoInterface
         ?string $name,
         ?array $roles,
         ?ProfileCreateInputDto $profile,
-        ?string $userRegisterEmailConfirmationUrl
+        ?string $userRegisterEmailConfirmationUrl,
     ) {
         $this->email = ValueObjectFactory::createEmail($email);
         $this->password = ValueObjectFactory::createPassword($password);
@@ -43,12 +44,15 @@ final class UserRegisterInputDto implements ServiceInputDtoInterface
         $this->userRegisterEmailConfirmationUrl = ValueObjectFactory::createUrl($userRegisterEmailConfirmationUrl);
     }
 
+    /**
+     * @param Rol[]|null $roles
+     */
     public static function create(
         ?string $email,
         ?string $password,
         ?string $name,
         ?array $roles,
-        ?string $userRegisterEmailConfirmationUrl
+        ?string $userRegisterEmailConfirmationUrl,
     ): self {
         $profile = ProfileCreateInputDto::create(null);
 
@@ -62,6 +66,9 @@ final class UserRegisterInputDto implements ServiceInputDtoInterface
         );
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {

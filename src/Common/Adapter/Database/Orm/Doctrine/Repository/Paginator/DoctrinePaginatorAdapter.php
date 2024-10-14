@@ -13,6 +13,9 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
+/**
+ * @phpstan-implements PaginatorInterface<int, mixed>
+ */
 class DoctrinePaginatorAdapter implements PaginatorInterface
 {
     public const MAX_RESULT_DEFAULT = AppConfig::PAGINATION_PAGE_ITEMS_MAX;
@@ -88,7 +91,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
     }
 
     /**
-     * @return \Generator<\Traversable>
+     * @return \Generator<\Traversable<mixed>>
      *
      * @throws InvalidArgumentException
      */
@@ -111,7 +114,7 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
     }
 
     /**
-     * @return \Generator<\Traversable>
+     * @return \Generator<\Traversable<mixed>>
      *
      * @throws InvalidArgumentException
      */
@@ -204,6 +207,9 @@ class DoctrinePaginatorAdapter implements PaginatorInterface
         return $this->getItemsTotal();
     }
 
+    /**
+     * @return \Traversable<int, mixed>>
+     */
     #[\Override]
     public function getIterator(): \Traversable
     {

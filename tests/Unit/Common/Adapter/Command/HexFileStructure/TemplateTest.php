@@ -17,6 +17,9 @@ class TemplateTest extends TestCase
     private const string TEMPLATE_OUTPUT_PATH = __DIR__.'/Fixtures/Output/Template/Output/TemplateOutput.php';
 
     private Template $object;
+    /**
+     * @var array<int|string, string>
+     */
     private array $templatePlaceholder;
 
     #[\Override]

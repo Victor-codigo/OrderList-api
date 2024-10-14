@@ -10,6 +10,7 @@ use Common\Domain\Model\ValueObject\String\Language;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 
 class NotificationGetDataInputDto implements ServiceInputDtoInterface
@@ -27,6 +28,9 @@ class NotificationGetDataInputDto implements ServiceInputDtoInterface
         $this->lang = ValueObjectFactory::createLanguage($lang);
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {

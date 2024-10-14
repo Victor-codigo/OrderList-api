@@ -12,7 +12,6 @@ class UserRegisterRequestDto implements RequestDtoInterface
     public readonly ?string $email;
     public readonly ?string $password;
     public readonly ?string $name;
-    public readonly ?string $registrationKey;
     public readonly ?string $userRegisterEmailConfirmationUrl;
 
     public function __construct(Request $request)

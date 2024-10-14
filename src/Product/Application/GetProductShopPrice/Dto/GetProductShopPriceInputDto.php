@@ -8,6 +8,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 
 class GetProductShopPriceInputDto implements ServiceInputDtoInterface
@@ -23,6 +24,10 @@ class GetProductShopPriceInputDto implements ServiceInputDtoInterface
     public readonly array $shopsId;
     public readonly Identifier $groupId;
 
+    /**
+     * @param string[]|null $productsId
+     * @param string[]|null $shopsId
+     */
     public function __construct(UserShared $userSession, ?array $productsId, ?array $shopsId, ?string $groupId)
     {
         $this->userSession = $userSession;
@@ -37,6 +42,9 @@ class GetProductShopPriceInputDto implements ServiceInputDtoInterface
         );
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {
@@ -60,6 +68,9 @@ class GetProductShopPriceInputDto implements ServiceInputDtoInterface
         return array_merge($errorListGroupId, $errorListProductsId, $errorListShopsId);
     }
 
+    /**
+     * @return array{}|array<string, array<int|string, VALIDATION_ERRORS[]>>|array<string, VALIDATION_ERRORS[]>
+     */
     private function validateProductsId(ValidationInterface $validator): array
     {
         $errorListProductsIdEmpty = $validator
@@ -79,6 +90,9 @@ class GetProductShopPriceInputDto implements ServiceInputDtoInterface
         return $errorListProductsId;
     }
 
+    /**
+     * @return array{}|array<string, array<int|string, VALIDATION_ERRORS[]>>|array<string, VALIDATION_ERRORS[]>
+     */
     private function validateShopsId(ValidationInterface $validator): array
     {
         $errorListShopsIdEmpty = $validator

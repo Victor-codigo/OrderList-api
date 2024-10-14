@@ -10,13 +10,16 @@ use ListOrders\Domain\Model\ListOrders;
 class ListOrdersRemoveOutputDto implements ApplicationOutputInterface
 {
     /**
-     * @var ListOrders[]
+     * @param ListOrders[] $listsOrders
      */
     public function __construct(
-        public readonly array $listsOrders
+        public readonly array $listsOrders,
     ) {
     }
 
+    /**
+     * @return array{ id: string[] }
+     */
     #[\Override]
     public function toArray(): array
     {

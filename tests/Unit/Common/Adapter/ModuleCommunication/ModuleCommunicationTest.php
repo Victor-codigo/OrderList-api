@@ -99,6 +99,9 @@ class ModuleCommunicationTest extends TestCase
             ->setErrors($responseDto['errors']);
     }
 
+    /**
+     * @param array<string, mixed> $options
+     */
     private function assertRequestOptionsIsOk(array $options, ModuleCommunicationConfigDto $routeConfig): void
     {
         if ('multipart/form-data' === $routeConfig->contentType) {
@@ -160,7 +163,11 @@ class ModuleCommunicationTest extends TestCase
             ->with(
                 $routeConfig->method,
                 $this->equalTo($expectedUrl),
-                $this->callback(fn (array $options): true => $this->assertRequestOptionsIsOk($options, $routeConfig) || true)
+                $this->callback(function (array $options) use ($routeConfig): true {
+                    $this->assertRequestOptionsIsOk($options, $routeConfig);
+
+                    return true;
+                })
             )
             ->willReturn($this->httpClientResponse);
 

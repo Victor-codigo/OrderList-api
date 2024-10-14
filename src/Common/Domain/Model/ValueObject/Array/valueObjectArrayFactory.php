@@ -16,6 +16,9 @@ class valueObjectArrayFactory
         return new Roles($roles);
     }
 
+    /**
+     * @param array<string, string> $data
+     */
     public static function createNotificationData(?array $data): NotificationData
     {
         return new NotificationData($data);

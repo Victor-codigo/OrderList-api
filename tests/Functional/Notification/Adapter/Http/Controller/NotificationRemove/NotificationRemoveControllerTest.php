@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Functional\Notification\Adapter\Http\Controller\NotificationRemove;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
@@ -26,6 +26,9 @@ class NotificationRemoveControllerTest extends WebClientTestCase
         parent::setUp();
     }
 
+    /**
+     * @return string[]
+     */
     private function getNotificationsIds(): array
     {
         return [

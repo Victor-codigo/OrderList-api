@@ -11,6 +11,9 @@ use Doctrine\Persistence\ManagerRegistry;
 use User\Domain\Model\Profile;
 use User\Domain\Port\Repository\ProfileRepositoryInterface;
 
+/**
+ * @phpstan-extends RepositoryBase<Profile>
+ */
 class ProfileRepository extends RepositoryBase implements ProfileRepositoryInterface
 {
     public function __construct(ManagerRegistry $managerRegistry)
@@ -19,7 +22,7 @@ class ProfileRepository extends RepositoryBase implements ProfileRepositoryInter
     }
 
     /**
-     * @param Identifier $id
+     * @param Identifier[] $id
      *
      * @return Profile[]
      */

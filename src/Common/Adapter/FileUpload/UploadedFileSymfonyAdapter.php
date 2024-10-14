@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Common\Adapter\FileUpload;
 
-use Common\Domain\FileUpload\Exception\File\FileException;
 use Common\Domain\FileUpload\Exception\FileUploadCanNotWriteException;
 use Common\Domain\FileUpload\Exception\FileUploadException;
 use Common\Domain\FileUpload\Exception\FileUploadExtensionFileException;
@@ -13,6 +12,7 @@ use Common\Domain\FileUpload\Exception\FileUploadNoFileException;
 use Common\Domain\FileUpload\Exception\FileUploadPartialFileException;
 use Common\Domain\FileUpload\Exception\FileUploadSizeException;
 use Common\Domain\FileUpload\Exception\FileUploadTmpDirFileException;
+use Common\Domain\FileUpload\Exception\File\FileException;
 use Common\Domain\Ports\FileUpload\FileInterface;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
 use Symfony\Component\HttpFoundation\File\Exception\CannotWriteFileException;
@@ -129,9 +129,10 @@ class UploadedFileSymfonyAdapter extends FileSymfonyAdapter implements UploadedF
     public function move(string $directory, ?string $name = null): FileInterface
     {
         try {
-            $file = $this->file->move($directory, $name);
+            $fileSymfonyAdapter = new FileSymfonyAdapter($this->file);
+            $fileSymfonyAdapter->move($directory, $name);
 
-            return new FileSymfonyAdapter($file);
+            return $fileSymfonyAdapter;
         } catch (CannotWriteFileException) {
             throw FileUploadCanNotWriteException::fromMessage('UPLOAD_ERR_CANT_WRITE error occurred');
         } catch (ExtensionFileException) {

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Functional\Shop\Adapter\Http\Controller\ShopGetData;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
@@ -21,6 +21,9 @@ class ShopGetDataControllerTest extends WebClientTestCase
     private const string SHOP_EXISTS_ID = 'e6c1d350-f010-403c-a2d4-3865c14630ec';
     private const string PRODUCT_EXISTS_ID = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
 
+    /**
+     * @param array<string|int, mixed> $responsesExpected
+     */
     private function assertResponseIsOk(array $responsesExpected, object $responseActual): void
     {
         $this->assertTrue(property_exists($responseActual, 'page'));
@@ -34,6 +37,9 @@ class ShopGetDataControllerTest extends WebClientTestCase
         }
     }
 
+    /**
+     * @param array<string, mixed> $shopsDataExpected
+     */
     private function assertShopDataIsOk(array $shopsDataExpected, object $shopDataActual): void
     {
         $this->assertTrue(property_exists($shopDataActual, 'id'));
@@ -52,6 +58,17 @@ class ShopGetDataControllerTest extends WebClientTestCase
         $this->assertIsString($shopDataActual->created_on);
     }
 
+    /**
+     * @return array<int, array{
+     *  id: string,
+     *  group_id: string,
+     *  name: string,
+     *  address: string,
+     *  description: string,
+     *  image: string,
+     *  created_on: string
+     * }>
+     */
     private function getShops(): array
     {
         $appProtocolAndDomain = static::getContainer()->getParameter('common.app.protocolAndDomain');

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Adapter\Http\Controller\GroupUserAdd\Dto;
 
-use PHPUnit\Framework\Attributes\Test;
 use Group\Adapter\Http\Controller\GroupUserAdd\Dto\GroupUserAddRequestDto;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +21,9 @@ class GroupUserAddRequestDtoTest extends TestCase
         parent::setUp();
     }
 
+    /**
+     * @param array<int, string|bool>|null $attributes
+     */
     private function createRequest(?array $attributes): GroupUserAddRequestDto
     {
         $requestAttributes = [

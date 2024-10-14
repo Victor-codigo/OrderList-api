@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Command\UsersRemoveActivationExpired;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
@@ -21,11 +21,14 @@ class UsersRemoveActivationExpiredCommandTest extends TestCase
 {
     private const int USER_NOT_ACTIVE_TIME_TO_EXPIRE = 100;
 
-    private MockObject|UserRepositoryInterface $userRepository;
-    private MockObject|User $userNotActive;
-    private MockObject|PaginatorInterface $paginator;
-    private MockObject|InputInterface $input;
-    private MockObject|OutputInterface $output;
+    private MockObject&UserRepositoryInterface $userRepository;
+    private MockObject&User $userNotActive;
+    /**
+     * @var MockObject&PaginatorInterface<int, User>
+     */
+    private MockObject&PaginatorInterface $paginator;
+    private MockObject&InputInterface $input;
+    private MockObject&OutputInterface $output;
 
     #[\Override]
     protected function setUp(): void

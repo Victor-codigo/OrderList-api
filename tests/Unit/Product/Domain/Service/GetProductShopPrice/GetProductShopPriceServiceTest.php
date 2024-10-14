@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\GetProductShopPrice;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Product\Domain\Model\Product;
@@ -21,8 +21,11 @@ use Shop\Domain\Model\Shop;
 class GetProductShopPriceServiceTest extends TestCase
 {
     private GetProductShopPriceService $object;
-    private MockObject|ProductShopRepositoryInterface $productShopRepository;
-    private MockObject|PaginatorInterface $paginator;
+    private MockObject&ProductShopRepositoryInterface $productShopRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, Product>
+     */
+    private MockObject&PaginatorInterface $paginator;
 
     #[\Override]
     protected function setUp(): void
@@ -34,6 +37,9 @@ class GetProductShopPriceServiceTest extends TestCase
         $this->object = new GetProductShopPriceService($this->productShopRepository);
     }
 
+    /**
+     * @return ProductShop[]
+     */
     private function getProductsPrice(): array
     {
         /** @var MockObject|Product $product */
@@ -91,6 +97,9 @@ class GetProductShopPriceServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @param array<string, mixed> $productActual
+     */
     private function assertProductShopIsOk(ProductShop $productExpected, array $productActual): void
     {
         $this->assertArrayHasKey('product_id', $productActual);

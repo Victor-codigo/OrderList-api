@@ -32,7 +32,7 @@ class GroupRemoveUseCase extends ServiceBase
         private GroupRepositoryInterface $groupRepository,
         private ValidationInterface $validator,
         private ModuleCommunicationInterface $moduleCommunication,
-        private $systemKey
+        private readonly string $systemKey,
     ) {
     }
 
@@ -101,7 +101,7 @@ class GroupRemoveUseCase extends ServiceBase
     }
 
     /**
-     * @param string[] $groupsId
+     * @param Identifier[] $groupsId
      */
     private function createGroupRemoveOutputDto(array $groupsId): GroupRemoveOutputDto
     {

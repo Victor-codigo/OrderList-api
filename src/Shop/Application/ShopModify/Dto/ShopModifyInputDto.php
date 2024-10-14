@@ -13,6 +13,7 @@ use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 
 class ShopModifyInputDto implements ServiceInputDtoInterface
@@ -38,6 +39,9 @@ class ShopModifyInputDto implements ServiceInputDtoInterface
         $this->imageRemove = $imageRemove;
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {

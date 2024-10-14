@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace User\Domain\Service\GetUsersProfilePublicData;
 
+use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Struct\SCOPE;
+use User\Domain\Model\Profile;
 use User\Domain\Port\Repository\ProfileRepositoryInterface;
 use User\Domain\Service\GetUsersProfilePublicData\Dto\GetUsersProfilePublicDataDto;
 use User\Domain\Service\GetUsersProfilePublicData\Dto\GetUsersProfilePublicDataOutputDto;
@@ -15,7 +18,7 @@ class GetUsersProfilePublicDataService
     public function __construct(
         private ProfileRepositoryInterface $profileRepository,
         private string $userPublicImagePath,
-        private string $appProtocolAndDomain
+        private string $appProtocolAndDomain,
     ) {
     }
 
@@ -24,12 +27,17 @@ class GetUsersProfilePublicDataService
         $profiles = $this->profileRepository->findProfilesOrFail($usersDto->usersId);
         $profilesData = match ($scope) {
             SCOPE::PRIVATE => $this->getProfilesPrivateData($profiles),
-            SCOPE::PUBLIC => $this->getProfilesPublicData($profiles)
+            SCOPE::PUBLIC => $this->getProfilesPublicData($profiles),
         };
 
         return new GetUsersProfilePublicDataOutputDto($profilesData);
     }
 
+    /**
+     * @param Profile[] $profiles
+     *
+     * @return array<int, array{ id: Identifier, image: Path|null }>
+     */
     private function getProfilesPublicData(array $profiles): array
     {
         $profilesData = [];
@@ -46,6 +54,11 @@ class GetUsersProfilePublicDataService
         return $profilesData;
     }
 
+    /**
+     * @param Profile[] $profiles
+     *
+     * @return array<int, array{ id: Identifier, image: Path|null }>
+     */
     private function getProfilesPrivateData(array $profiles): array
     {
         $profileData = [];

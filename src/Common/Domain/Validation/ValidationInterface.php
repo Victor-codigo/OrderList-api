@@ -7,6 +7,7 @@ namespace Common\Domain\Validation;
 use Common\Adapter\Validation\Validations\ValidationConstraint;
 use Common\Domain\Validation\Common\PROTOCOLS;
 use Common\Domain\Validation\Common\TYPES;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\User\EMAIL_TYPES;
 
 interface ValidationInterface
@@ -17,15 +18,20 @@ interface ValidationInterface
 
     public function setConstraint(ValidationConstraint $constraint): void;
 
+    /**
+     * @return VALIDATION_ERRORS[]
+     */
     public function validate(bool $removeConstraints = true): array;
 
     /**
-     * @return VALIDATION_ERRORS[]
+     * @return array<int|string, VALIDATION_ERRORS|array<int|string, VALIDATION_ERRORS[]>>
      */
     public function validateValueObject(ValueObjectValidationInterface $valueObject): array;
 
     /**
-     * @return array<string, VALIDATION_ERRORS[]>
+     * @param array<int|string, ValueObjectValidationInterface> $valueObjects
+     *
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
      */
     public function validateValueObjectArray(array $valueObjects): array;
 
@@ -45,6 +51,9 @@ interface ValidationInterface
 
     public function stringRange(int $min, int $max): self;
 
+    /**
+     * @param int[]|null $versions
+     */
     public function uuId(?array $versions = null, bool $strict = true): self;
 
     public function regEx(string $pattern, bool $patternMatch = true): self;
@@ -102,14 +111,20 @@ interface ValidationInterface
 
     public function time(): self;
 
-    /**
-     * @param DateTimeZone|null $timeZone
-     */
     public function timeZone(?int $timeZone): self;
 
+    /**
+     * @param string[]|string|null $mimeTypes
+     */
     public function file(mixed $maxSize, array|string|null $mimeTypes): self;
 
+    /**
+     * @param string[]|string|null $mimeTypes
+     */
     public function image(mixed $maxSize, array|string|null $mimeTypes, ?int $filenameMaxLength = null, ?int $minWith = null, ?int $maxWith = null, ?int $minHeigh = null, ?int $maxHeigh = null, ?float $minPixels = null, ?float $maxPixels = null, ?float $minAspectRatio = null, ?float $maxAspectRatio = null, bool $allowLandscape = true, bool $allowPortrait = true, bool $allowSquareImage = true, bool $detectCorrupted = false): self;
 
+    /**
+     * @param mixed[]|null $choices
+     */
     public function choice(?array $choices, ?bool $multiple, ?bool $strict, ?int $min, ?int $max): self;
 }

@@ -19,12 +19,18 @@ use Test\Unit\DataBaseTestCase;
 
 class RepositoryBaseTest extends DataBaseTestCase
 {
+    /**
+     * @var RepositoryBase<object>
+     */
     private RepositoryBase $object;
-    private MockObject|ManagerRegistry $managerRegistry;
-    protected MockObject|EntityManagerInterface $entityManagerMock;
-    private MockObject|ObjectManager $objectManager;
-    private MockObject|ClassMetadata $classMetadata;
-    private MockObject|PaginatorInterface $paginator;
+    private MockObject&ManagerRegistry $managerRegistry;
+    protected MockObject&EntityManagerInterface $entityManagerMock;
+    private MockObject&ObjectManager $objectManager;
+    private MockObject&ClassMetadata $classMetadata;
+    /**
+     * @var MockObject&PaginatorInterface<int, object>
+     */
+    private MockObject&PaginatorInterface $paginator;
 
     #[\Override]
     protected function setUp(): void
@@ -61,6 +67,9 @@ class RepositoryBaseTest extends DataBaseTestCase
             ->getMock();
     }
 
+    /**
+     * @param array<int, string|array<string, string|int>> $args
+     */
     private function invokeProtectedMethod(object $object, string $name, array $args = []): mixed
     {
         $reflection = new \ReflectionClass($object);
@@ -100,7 +109,11 @@ class RepositoryBaseTest extends DataBaseTestCase
         $this->paginator
             ->expects($this->once())
             ->method('createPaginator')
-            ->with($this->callback(fn (Query $queryActual): true => $this->assertQueryIsOk($queryExpected, $queryActual) || true))
+            ->with($this->callback(function (Query $queryActual) use ($queryExpected): true {
+                $this->assertQueryIsOk($queryExpected, $queryActual);
+
+                return true;
+            }))
             ->willReturn($this->paginator);
 
         $this->paginator
@@ -135,7 +148,11 @@ class RepositoryBaseTest extends DataBaseTestCase
         $this->paginator
             ->expects($this->once())
             ->method('createPaginator')
-            ->with($this->callback(fn (Query $queryActual): true => $this->assertQueryIsOk($queryExpected, $queryActual) || true))
+            ->with($this->callback(function (Query $queryActual) use ($queryExpected): true {
+                $this->assertQueryIsOk($queryExpected, $queryActual);
+
+                return true;
+            }))
             ->willReturn($this->paginator);
 
         $this->paginator
@@ -174,7 +191,11 @@ class RepositoryBaseTest extends DataBaseTestCase
         $this->paginator
             ->expects($this->once())
             ->method('createPaginator')
-            ->with($this->callback(fn (Query $queryActual): true => $this->assertQueryIsOk($queryExpected, $queryActual) || true))
+            ->with($this->callback(function (Query $queryActual) use ($queryExpected): true {
+                $this->assertQueryIsOk($queryExpected, $queryActual);
+
+                return true;
+            }))
             ->willReturn($this->paginator);
 
         $this->paginator

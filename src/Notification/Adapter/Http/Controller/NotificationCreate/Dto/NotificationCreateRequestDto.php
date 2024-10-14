@@ -14,6 +14,9 @@ class NotificationCreateRequestDto implements RequestDtoInterface
      */
     public readonly ?array $userId;
     public readonly ?string $notificationType;
+    /**
+     * @var array<string, string>|null
+     */
     public readonly ?array $notificationData;
     public readonly ?string $systemKey;
 

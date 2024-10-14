@@ -15,10 +15,16 @@ class OrderRemoveAllGroupsOrdersOutputDto implements ApplicationOutputInterface
      */
     public function __construct(
         public readonly array $ordersIdRemoved,
-        public readonly array $ordersIdUserIdChanged
+        public readonly array $ordersIdUserIdChanged,
     ) {
     }
 
+    /**
+     * @return array{
+     *  orders_id_removed: string[],
+     *  orders_id_user_changed: string[]
+     * }
+     */
     #[\Override]
     public function toArray(): array
     {

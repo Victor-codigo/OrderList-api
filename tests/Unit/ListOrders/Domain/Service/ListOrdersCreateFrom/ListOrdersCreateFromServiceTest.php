@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersCreateFrom;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -18,8 +17,8 @@ use ListOrders\Domain\Service\ListOrdersCreateFrom\Exception\ListOrdersCreateFro
 use ListOrders\Domain\Service\ListOrdersCreateFrom\Exception\ListOrdersCreateFromNameAlreadyExistsException;
 use ListOrders\Domain\Service\ListOrdersCreateFrom\ListOrdersCreateFromService;
 use Order\Domain\Model\Order;
-use Order\Domain\Ports\Repository\OrderRepositoryInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Product\Domain\Model\Product;
@@ -32,9 +31,11 @@ class ListOrdersCreateFromServiceTest extends TestCase
     private const string ORDER_ID_NEW = 'order id new';
 
     private ListOrdersCreateFromService $object;
-    private MockObject|ListOrdersRepositoryInterface $listOrdersRepository;
-    private MockObject|OrderRepositoryInterface $ordersRepository;
-    private MockObject|PaginatorInterface $paginator;
+    private MockObject&ListOrdersRepositoryInterface $listOrdersRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, ListOrders>
+     */
+    private MockObject&PaginatorInterface $paginator;
 
     #[\Override]
     protected function setUp(): void
@@ -42,9 +43,8 @@ class ListOrdersCreateFromServiceTest extends TestCase
         parent::setUp();
 
         $this->listOrdersRepository = $this->createMock(ListOrdersRepositoryInterface::class);
-        $this->ordersRepository = $this->createMock(OrderRepositoryInterface::class);
         $this->paginator = $this->createMock(PaginatorInterface::class);
-        $this->object = new ListOrdersCreateFromService($this->listOrdersRepository, $this->ordersRepository);
+        $this->object = new ListOrdersCreateFromService($this->listOrdersRepository);
     }
 
     private function getListOrders(string $listOrdersName, bool $orders): MockObject|ListOrders
@@ -70,11 +70,18 @@ class ListOrdersCreateFromServiceTest extends TestCase
         return $listOrders;
     }
 
+    /**
+     * @return Order[]
+     */
     private function getOrders(MockObject|ListOrders $listOrders, string $orderName): array
     {
+        /** @var MockObject&Product $product1 */
         $product1 = $this->createMock(Product::class);
+        /** @var MockObject&Product $product2 */
         $product2 = $this->createMock(Product::class);
+        /** @var MockObject&Shop $shop1 */
         $shop1 = $this->createMock(Shop::class);
+        /** @var MockObject&Shop $shop2 */
         $shop2 = $this->createMock(Shop::class);
 
         return [
@@ -147,13 +154,15 @@ class ListOrdersCreateFromServiceTest extends TestCase
         }
     }
 
+    /**
+     * @return iterable<bool[]>
+     */
     public static function createListOrdersDataProvider(): iterable
     {
         yield [true];
         yield [false];
     }
 
-    
     #[DataProvider('createListOrdersDataProvider')]
     #[Test]
     public function itShouldCreateAListOrdersFromOtherListOrders(bool $hasOrders): void
@@ -195,7 +204,11 @@ class ListOrdersCreateFromServiceTest extends TestCase
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('saveListOrdersAndOrders')
-            ->with($this->callback(fn (ListOrders $listOrdersNew): true => $this->assertListOrdersOrdersNewIsOk($listOrdersOld, $listOrdersNew, $input->userId) || true));
+            ->with($this->callback(function (ListOrders $listOrdersNew) use ($listOrdersOld, $input): true {
+                $this->assertListOrdersOrdersNewIsOk($listOrdersOld, $listOrdersNew, $input->userId);
+
+                return true;
+            }));
 
         $this->paginator
             ->expects($this->once())

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Adapter\Http\Controller\GroupUserRemove;
 
+use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
@@ -86,7 +87,7 @@ class GroupUserRemoveController extends AbstractController
 {
     public function __construct(
         private Security $security,
-        private GroupUserRemoveUseCase $groupUserRemoveUseCase
+        private GroupUserRemoveUseCase $groupUserRemoveUseCase,
     ) {
     }
 
@@ -99,9 +100,12 @@ class GroupUserRemoveController extends AbstractController
         return $this->createResponse($groupUsersRemoveOutput);
     }
 
+    /**
+     * @param string[]|null $usersId
+     */
     private function createGroupUserRemoveInputDto(?string $groupId, ?array $usersId): GroupUserRemoveInputDto
     {
-        /** @var UserShared $userAdapter */
+        /** @var UserSharedSymfonyAdapter $userAdapter */
         $userAdapter = $this->security->getUser();
 
         return new GroupUserRemoveInputDto($userAdapter->getUser(), $groupId, $usersId);

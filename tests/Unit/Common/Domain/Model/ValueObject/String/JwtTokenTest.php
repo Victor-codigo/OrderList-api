@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\String;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Jwt\JwtLexikAdapter;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\String\JwtToken;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class JwtTokenTest extends TestCase
@@ -25,6 +25,9 @@ class JwtTokenTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
+    /**
+     * @param mixed[] $data
+     */
     private function createToken(array $data = []): JwtToken
     {
         $encoder = new JwtLexikAdapter(file_get_contents(self::PATH_PRIVATE_KEY));

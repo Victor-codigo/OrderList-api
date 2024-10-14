@@ -34,7 +34,7 @@ class ImagineAdapter implements ImageInterface
         try {
             $this->imagine
                ->open($filePath->getValue())
-               ->resize(new Box($imageResizedWidth, $imageResizedHeight))
+               ->resize(new Box((int) $imageResizedWidth, (int) $imageResizedHeight))
                ->save($filePath->getValue());
         } catch (\RuntimeException|\InvalidArgumentException $e) {
             throw ImageResizeException::fromMessage($e->getMessage());
@@ -42,7 +42,10 @@ class ImagineAdapter implements ImageInterface
     }
 
     /**
-     * @return array<{width: int, height: int}>
+     * @return array{
+     *  width: int,
+     *  height: int
+     * }
      *
      * @throws ImageResizeException
      */
@@ -65,7 +68,10 @@ class ImagineAdapter implements ImageInterface
     }
 
     /**
-     * @return array<{width: int, height: int}>
+     * @return array{
+     *  width: float,
+     *  height: float
+     * }
      */
     private function getImageWidthResized(float $imageWidth, float $imageHeight, float $widthMax): array
     {
@@ -85,7 +91,10 @@ class ImagineAdapter implements ImageInterface
     }
 
     /**
-     * @return array<{width: int, height: int}>
+     * @return array{
+     *  width: float,
+     *  height: float
+     * }
      */
     private function getImageHeightResized(float $imageWidth, float $imageHeight, float $heightMax): array
     {

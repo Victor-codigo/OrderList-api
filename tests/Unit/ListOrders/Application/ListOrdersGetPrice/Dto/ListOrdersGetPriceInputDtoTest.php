@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Application\ListOrdersGetPrice\Dto;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use ListOrders\Application\ListOrdersGetPrice\Dto\ListOrdersGetPriceInputDto;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -34,7 +34,6 @@ class ListOrdersGetPriceInputDtoTest extends TestCase
             $this->userSession,
             'c12f772a-f7c5-448a-8998-cd2d8a218369',
             'a11309bf-62f3-4bd6-8340-3695adc4b967',
-            true
         );
 
         $return = $object->validate($this->validator);
@@ -49,7 +48,6 @@ class ListOrdersGetPriceInputDtoTest extends TestCase
             $this->userSession,
             null,
             'a11309bf-62f3-4bd6-8340-3695adc4b967',
-            true
         );
 
         $return = $object->validate($this->validator);
@@ -64,7 +62,6 @@ class ListOrdersGetPriceInputDtoTest extends TestCase
             $this->userSession,
             'wrong id',
             'a11309bf-62f3-4bd6-8340-3695adc4b967',
-            true
         );
 
         $return = $object->validate($this->validator);
@@ -79,7 +76,6 @@ class ListOrdersGetPriceInputDtoTest extends TestCase
             $this->userSession,
             'a11309bf-62f3-4bd6-8340-3695adc4b967',
             null,
-            true
         );
 
         $return = $object->validate($this->validator);
@@ -94,7 +90,6 @@ class ListOrdersGetPriceInputDtoTest extends TestCase
             $this->userSession,
             'a11309bf-62f3-4bd6-8340-3695adc4b967',
             'wrong id',
-            true
         );
 
         $return = $object->validate($this->validator);

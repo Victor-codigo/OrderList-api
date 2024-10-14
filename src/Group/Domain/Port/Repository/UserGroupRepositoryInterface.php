@@ -10,23 +10,30 @@ use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Ports\Repository\RepositoryInterface;
 use Common\Domain\Validation\Group\GROUP_ROLES;
 use Common\Domain\Validation\Group\GROUP_TYPE;
+use Group\Domain\Model\UserGroup;
 
 interface UserGroupRepositoryInterface extends RepositoryInterface
 {
     /**
      * @param Identifier[] $groupsId
      *
+     * @return PaginatorInterface<int, UserGroup>
+     *
      * @throws DBNotFoundException
      */
     public function findGroupsUsersOrFail(array $groupsId, GROUP_ROLES $groupRole): PaginatorInterface;
 
     /**
+     * @return PaginatorInterface<int, UserGroup>
+     *
      * @throws DBNotFoundException
      */
     public function findGroupUsersOrFail(Identifier $groupId): PaginatorInterface;
 
     /**
      * @param Identifier[] $groupsId
+     *
+     * @return UserGroup[]
      *
      * @throws DBNotFoundException
      */
@@ -49,11 +56,15 @@ interface UserGroupRepositoryInterface extends RepositoryInterface
     public function findGroupUsersByRol(Identifier $groupId, GROUP_ROLES $groupRol): array;
 
     /**
+     * @return PaginatorInterface<int, UserGroup>
+     *
      * @throws DBNotFoundException
      */
     public function findUserGroupsById(Identifier $userId, ?GROUP_ROLES $groupRol = null, ?GROUP_TYPE $groupType = null): PaginatorInterface;
 
     /**
+     * @return PaginatorInterface<int, UserGroup>
+     *
      * @throws DBNotFoundException
      */
     public function findUserGroupsByName(Identifier $userId, ?Filter $filterText, ?GROUP_TYPE $groupType, bool $orderAsc): PaginatorInterface;
@@ -65,6 +76,11 @@ interface UserGroupRepositoryInterface extends RepositoryInterface
 
     /**
      * @param Identifier[] $groupsId
+     *
+     * @return PaginatorInterface<int, array{
+     *  groupId: string,
+     *  groupUsers: int
+     * }>
      *
      * @throws DBNotFoundException
      */

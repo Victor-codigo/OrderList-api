@@ -9,10 +9,10 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 class GroupUserRoleChangeOutputDto
 {
     /**
-     * @var Identifier
+     * @param Identifier[] $usersModifiedIds
      */
     public function __construct(
-        public readonly array $usersModifiedIds
+        public readonly array $usersModifiedIds,
     ) {
     }
 }

@@ -13,7 +13,7 @@ use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 class UserHasGroupAdminGrantsService
 {
     public function __construct(
-        private UserGroupRepositoryInterface $userGroupRepository
+        private UserGroupRepositoryInterface $userGroupRepository,
     ) {
     }
 

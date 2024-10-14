@@ -27,7 +27,7 @@ class UserGetByNameUseCase extends ServiceBase
 {
     public function __construct(
         private GeUsersPublicDataService $geUsersPublicDataService,
-        private ValidationInterface $validator
+        private ValidationInterface $validator,
     ) {
     }
 
@@ -58,6 +58,9 @@ class UserGetByNameUseCase extends ServiceBase
         }
     }
 
+    /**
+     * @param NameWithSpaces[] $usersName
+     */
     private function getScope(User $userSession, array $usersName): SCOPE
     {
         if ($userSession->getRoles()->has(new Rol(USER_ROLES::ADMIN))) {
@@ -85,7 +88,7 @@ class UserGetByNameUseCase extends ServiceBase
         foreach ($userData->usersData as $userNumber => $userData) {
             foreach ($userData as $property => $data) {
                 if ($data instanceof Roles) {
-                    $userDataPlain[$userNumber][$property] = array_map(fn (Rol $rol) => $rol->getValue()->value, $data->getValue());
+                    $userDataPlain[$userNumber][$property] = array_map(fn (Rol $rol): string => $rol->getValue()->value, $data->getValue());
                     continue;
                 } elseif ($data instanceof \DateTime) {
                     $userDataPlain[$userNumber][$property] = $data->format('Y-m-d H:i:s');

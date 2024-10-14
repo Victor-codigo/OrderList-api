@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserRemove;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -15,6 +14,7 @@ use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use Common\Domain\Service\Exception\DomainErrorException;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Rule\InvokedCount;
 use PHPUnit\Framework\TestCase;
@@ -51,6 +51,9 @@ class UserRemoveUseCaseTest extends TestCase
         );
     }
 
+    /**
+     * @param array<string, string> $errors
+     */
     private function getRemoveGroupsResponse(RESPONSE_STATUS $status, bool $hasErrors, array $errors): ResponseDto
     {
         if ($hasErrors && empty($errors)) {
@@ -213,7 +216,8 @@ class UserRemoveUseCaseTest extends TestCase
                 self::SYSTEM_KEY
             ),
                 $configActual
-            )
+            ),
+            default => throw new \LogicException('Not supporting more than 6 invocations'),
         };
 
         return true;
@@ -283,6 +287,7 @@ class UserRemoveUseCaseTest extends TestCase
             ->willReturnCallback(fn (): ResponseDto => match ($moduleCommunicationMatcher->numberOfInvocations()) {
                 1 => $removeGroupsResponse ,
                 2 => $removeNotificationsResponse,
+                default => throw new \LogicException('Not Supporting more than 2 invocations'),
             });
 
         $this->userSession

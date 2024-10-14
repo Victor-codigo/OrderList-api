@@ -16,8 +16,14 @@ use Doctrine\Persistence\ManagerRegistry;
 use Notification\Domain\Model\Notification;
 use Notification\Domain\Ports\Notification\NotificationRepositoryInterface;
 
+/**
+ * @phpstan-extends RepositoryBase<Notification>
+ */
 class NotificationRepository extends RepositoryBase implements NotificationRepositoryInterface
 {
+    /**
+     * @param PaginatorInterface<int, object> $paginator
+     */
     public function __construct(ManagerRegistry $managerRegistry, PaginatorInterface $paginator)
     {
         parent::__construct($managerRegistry, Notification::class, $paginator);
@@ -35,13 +41,15 @@ class NotificationRepository extends RepositoryBase implements NotificationRepos
     public function save(array $notifications): void
     {
         try {
+            $notificationToSave = null;
             foreach ($notifications as $notification) {
+                $notificationToSave = $notification;
                 $this->objectManager->persist($notification);
             }
 
             $this->objectManager->flush();
         } catch (UniqueConstraintViolationException|EntityIdentityCollisionException $e) {
-            throw DBUniqueConstraintException::fromId($notification->getId()->getValue(), $e->getCode());
+            throw DBUniqueConstraintException::fromId($notificationToSave->getId()->getValue(), $e->getCode());
         } catch (\Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
@@ -68,6 +76,8 @@ class NotificationRepository extends RepositoryBase implements NotificationRepos
 
     /**
      * @param Identifier[] $notificationsId
+     *
+     * @return PaginatorInterface<int, Notification>
      *
      * @throws DBNotFoundException
      */
@@ -105,7 +115,7 @@ class NotificationRepository extends RepositoryBase implements NotificationRepos
     }
 
     /**
-     * @param Identifier[] $userId
+     * @return PaginatorInterface<int, Notification>
      *
      * @throws DBNotFoundException
      */

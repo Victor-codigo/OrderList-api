@@ -17,6 +17,9 @@ class NotificationData extends ArrayValueObject
             ->setConstraint(ConstraintFactory::type(TYPES::ARRAY));
     }
 
+    /**
+     * @return array{}
+     */
     #[\Override]
     public function getValueObjects(): array
     {

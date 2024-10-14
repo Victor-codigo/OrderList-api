@@ -25,7 +25,7 @@ class GroupGetDataUseCase extends ServiceBase
     public function __construct(
         private GroupGetDataService $groupGetDataService,
         private UserGroupRepositoryInterface $userGroupRepository,
-        private ValidationInterface $validator
+        private ValidationInterface $validator,
     ) {
     }
 
@@ -52,7 +52,7 @@ class GroupGetDataUseCase extends ServiceBase
     }
 
     /**
-     * @param Identifier[] $userGroupsValid
+     * @param UserGroup[] $userGroupsValid
      *
      * @throws ValueObjectValidationException
      * @throws GroupGetDataUserNotBelongsToTheGroupException
@@ -72,6 +72,8 @@ class GroupGetDataUseCase extends ServiceBase
 
     /**
      * @param Identifier[] $groupsId
+     *
+     * @return UserGroup[]
      *
      * @throws DBNotFoundException
      */
@@ -93,6 +95,16 @@ class GroupGetDataUseCase extends ServiceBase
         return new GroupGetDataDto($groupsId, GROUP_TYPE::GROUP, $userImage);
     }
 
+    /**
+     * @param \Generator<int, array{
+     *  group_id: string|null,
+     *  type: string,
+     *  name: string|null,
+     *  description: string|null,
+     *  image: string|null,
+     *  created_on: string
+     * }> $groupsData
+     */
     private function createGroupGetDataOutputDto(\Generator $groupsData): GroupGetDataOutputDto
     {
         return new GroupGetDataOutputDto($groupsData);

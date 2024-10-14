@@ -6,6 +6,7 @@ namespace Notification\Application\NotificationRemoveAllUserNotifications;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
@@ -21,7 +22,7 @@ class NotificationRemoveAllUserNotificationsUseCase extends ServiceBase
     public function __construct(
         private NotificationRemoveAllUserNotificationsService $notificationRemoveAllUserNotificationsService,
         private ValidationInterface $validator,
-        private string $systemKey
+        private string $systemKey,
     ) {
     }
 
@@ -68,6 +69,9 @@ class NotificationRemoveAllUserNotificationsUseCase extends ServiceBase
         return new NotificationRemoveAllUserNotificationsDto($input->userSession->getId());
     }
 
+    /**
+     * @param Identifier[] $notificationsRemovedId
+     */
     private function createNotificationRemoveAllUserNotificationsOutputDto(array $notificationsRemovedId): NotificationRemoveAllUserNotificationsOutputDto
     {
         return new NotificationRemoveAllUserNotificationsOutputDto($notificationsRemovedId);

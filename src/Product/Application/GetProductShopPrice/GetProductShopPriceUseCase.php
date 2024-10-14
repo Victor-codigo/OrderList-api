@@ -23,7 +23,7 @@ class GetProductShopPriceUseCase extends ServiceBase
     public function __construct(
         private GetProductShopPriceService $getProductShopPriceService,
         private ValidationInterface $validator,
-        private ValidateGroupAndUserService $validateGroupAndUserService
+        private ValidateGroupAndUserService $validateGroupAndUserService,
     ) {
     }
 
@@ -71,6 +71,14 @@ class GetProductShopPriceUseCase extends ServiceBase
         return new GetProductShopPriceDto($input->productsId, $input->shopsId, $input->groupId);
     }
 
+    /**
+     * @param array<int, array{
+     *  product_id: string|null,
+     *  shop_id: string|null,
+     *  price: float|null,
+     *  unit: string|null
+     * }> $productsShops
+     */
     private function createGetProductShopPriceOutputDto(array $productsShops): GetProductShopPriceOutputDto
     {
         return new GetProductShopPriceOutputDto($productsShops);

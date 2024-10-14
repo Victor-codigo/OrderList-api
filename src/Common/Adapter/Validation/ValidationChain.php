@@ -16,6 +16,7 @@ use Common\Adapter\Validation\Validations\ValidationPositiveNegative;
 use Common\Adapter\Validation\Validations\ValidationString;
 use Common\Domain\Validation\Common\PROTOCOLS;
 use Common\Domain\Validation\Common\TYPES;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\User\EMAIL_TYPES;
 use Common\Domain\Validation\ValidationInterface;
 use Common\Domain\Validation\ValueObjectValidationInterface;
@@ -63,6 +64,9 @@ class ValidationChain implements ValidationInterface
         $this->validator->setConstraint($constraint);
     }
 
+    /**
+     * @return VALIDATION_ERRORS[]
+     */
     #[\Override]
     public function validate(bool $removeConstraints = true): array
     {
@@ -70,7 +74,7 @@ class ValidationChain implements ValidationInterface
     }
 
     /**
-     * @return VALIDATION_ERRORS[]
+     * @return array<int|string, VALIDATION_ERRORS|array<int|string, VALIDATION_ERRORS[]>>
      */
     #[\Override]
     public function validateValueObject(ValueObjectValidationInterface $valueObject): array
@@ -79,7 +83,9 @@ class ValidationChain implements ValidationInterface
     }
 
     /**
-     * @return array<string, VALIDATION_ERRORS[]>
+     * @param array<string, ValueObjectValidationInterface> $valueObjects
+     *
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
      */
     #[\Override]
     public function validateValueObjectArray(array $valueObjects): array
@@ -151,6 +157,9 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    /**
+     * @param int[]|null $versions
+     */
     #[\Override]
     public function uuId(?array $versions = null, bool $strict = true): self
     {
@@ -370,9 +379,6 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
-    /**
-     * @param DateTimeZone|null $timeZone
-     */
     #[\Override]
     public function timeZone(?int $timeZone): self
     {
@@ -381,6 +387,9 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    /**
+     * @param string[]|string|null $mimeTypes
+     */
     #[\Override]
     public function file(mixed $maxSize, array|string|null $mimeTypes): self
     {
@@ -389,6 +398,9 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    /**
+     * @param string[]|string|null $mimeTypes
+     */
     #[\Override]
     public function image(
         mixed $maxSize,
@@ -405,7 +417,7 @@ class ValidationChain implements ValidationInterface
         bool $allowLandscape = true,
         bool $allowPortrait = true,
         bool $allowSquareImage = true,
-        bool $detectCorrupted = false
+        bool $detectCorrupted = false,
     ): self {
         $this->validator->setConstraint($this->file->image(
             $maxSize,
@@ -428,6 +440,9 @@ class ValidationChain implements ValidationInterface
         return $this;
     }
 
+    /**
+     * @param mixed[]|null $choices
+     */
     #[\Override]
     public function choice(?array $choices, ?bool $multiple, ?bool $strict, ?int $min, ?int $max): self
     {

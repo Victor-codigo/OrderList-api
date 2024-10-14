@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Domain\NotificationRemove;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -14,6 +13,7 @@ use Notification\Domain\Model\Notification;
 use Notification\Domain\Ports\Notification\NotificationRepositoryInterface;
 use Notification\Domain\Service\NotificationRemove\Dto\NotificationRemoveDto;
 use Notification\Domain\Service\NotificationRemove\NotificationRemoveService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -24,8 +24,11 @@ class NotificationRemoveServiceTest extends TestCase
     private const string NOTIFICATION_ID_3 = '79a674c7-e109-3094-b8d5-c19cc00f5519';
 
     private NotificationRemoveService $object;
-    private MockObject|NotificationRepositoryInterface $notificationRepository;
-    private MockObject|PaginatorInterface $paginator;
+    private MockObject&NotificationRepositoryInterface $notificationRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, Notification>
+     */
+    private MockObject&PaginatorInterface $paginator;
 
     #[\Override]
     protected function setUp(): void
@@ -37,9 +40,6 @@ class NotificationRemoveServiceTest extends TestCase
         $this->object = new NotificationRemoveService($this->notificationRepository);
     }
 
-    /**
-     * @return Notification[]
-     */
     private function getNotifications(): \Iterator
     {
         return new \ArrayIterator([
@@ -74,7 +74,7 @@ class NotificationRemoveServiceTest extends TestCase
 
         $return = $this->object->__invoke($input);
 
-        $this->assertCount(count($notifications), $return);
+        $this->assertCount(iterator_count($notifications), $return);
 
         foreach ($return as $notification) {
             $this->assertContainsEquals($notification->getId(), $notificationsIds);

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Domain\Service\ShopRemove;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shop\Domain\Model\Shop;
@@ -25,8 +25,11 @@ class ShopRemoveServiceTest extends TestCase
     private const string SHOP_IMAGE_PATH = 'path/to/shop/image';
 
     private ShopRemoveService $object;
-    private MockObject|ShopRepositoryInterface $shopRepository;
-    private MockObject|PaginatorInterface $paginator;
+    private MockObject&ShopRepositoryInterface $shopRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, Shop>
+     */
+    private MockObject&PaginatorInterface $paginator;
 
     #[\Override]
     protected function setUp(): void

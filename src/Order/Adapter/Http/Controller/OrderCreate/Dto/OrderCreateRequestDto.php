@@ -11,6 +11,14 @@ class OrderCreateRequestDto implements RequestDtoInterface
 {
     public readonly ?string $groupId;
     public readonly ?string $listOrdersId;
+    /**
+     * @var array<int, array{
+     *  product_id: string,
+     *  shop_id: string,
+     *  description: string,
+     *  amount: float
+     * }>|null
+     */
     public readonly ?array $ordersData;
 
     public function __construct(Request $request)

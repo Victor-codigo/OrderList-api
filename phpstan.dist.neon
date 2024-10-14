@@ -1,8 +1,36 @@
 parameters:
-    level: 0
+    level: 6
+
     paths:
-        - bin/
-        - config/
-        - public/
         - src/
         - tests/
+
+    excludePaths:
+        - src/Common/Adapter/Jwt/JwtFirebaseHS256Adapter.php
+        - tests/Unit/Common/Adapter/Jwt/JwtFirebaseHS256AdapterTest.php
+        - tests/Unit/Common/Adapter/Command/HexFileStructure/Fixtures/*
+        - tests/Unit/Common/Adapter/ModuleCommunication/Fixtures/*
+        - tests/Unit/Common/Adapter/Event/Fixtures/*
+        - tests/Unit/Common/Adapter/Database/Orm/Doctrine/Mapping/Type/Fixtures/*
+
+    ignoreErrors:
+        - identifier: method.void
+        - identifier: new.static
+        - identifier: new.noConstructor
+        - identifier: method.notFound
+        - identifier: throws.notThrowable
+        - identifier: match.unhandled
+
+    symfony:
+        containerXmlPath: var/cache/dev/Common_KernelDevDebugContainer.xml
+
+    doctrine:
+        objectManagerLoader: tests/Phpstan/object-manager.php
+
+includes:
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-symfony/rules.neon
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/phpstan/phpstan-doctrine/rules.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-phpunit/rules.neon

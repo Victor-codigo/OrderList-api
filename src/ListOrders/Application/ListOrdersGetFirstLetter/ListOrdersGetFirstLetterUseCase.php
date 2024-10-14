@@ -23,7 +23,7 @@ class ListOrdersGetFirstLetterUseCase extends ServiceBase
     public function __construct(
         private ListOrdersGetFirstLetterService $listOrdersGetFirstLetterService,
         private ValidationInterface $validator,
-        private ValidateGroupAndUserService $validateGroupAndUserService
+        private ValidateGroupAndUserService $validateGroupAndUserService,
     ) {
     }
 
@@ -62,6 +62,9 @@ class ListOrdersGetFirstLetterUseCase extends ServiceBase
         return new ListOrdersGetFirstLetterDto($input->groupId);
     }
 
+    /**
+     * @param string[] $listOrdersFirstLetter
+     */
     private function createListOrdersGetFirstLetterOutputDto(array $listOrdersFirstLetter): ListOrdersGetFirstLetterOutputDto
     {
         return new ListOrdersGetFirstLetterOutputDto($listOrdersFirstLetter);

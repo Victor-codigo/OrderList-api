@@ -4,9 +4,18 @@ declare(strict_types=1);
 
 namespace Common\Domain\ModuleCommunication;
 
+use Common\Domain\Ports\FileUpload\UploadedFileInterface;
+
 class ModuleCommunicationConfigDto implements ModuleCommunicationConfigDtoPaginatorInterface
 {
-    /** @param UploadedFileInterface[] $files */
+    /**
+     * @param array<int|string, mixed> $attributes
+     * @param array<int|string, mixed> $query
+     * @param UploadedFileInterface[]  $files
+     * @param array<int|string, mixed> $content
+     * @param array<int|string, mixed> $cookies
+     * @param array<int|string, mixed> $headers
+     * */
     public function __construct(
         public readonly string $route,
         public readonly string $method,
@@ -54,5 +63,83 @@ class ModuleCommunicationConfigDto implements ModuleCommunicationConfigDtoPagina
     public function getResponsePagesTotalPath(): string
     {
         return 'pages_total';
+    }
+
+    #[\Override]
+    public function getRoute(): string
+    {
+        return $this->route;
+    }
+
+    #[\Override]
+    public function getMethod(): string
+    {
+        return $this->method;
+    }
+
+    #[\Override]
+    public function getAuthentication(): bool
+    {
+        return $this->authentication;
+    }
+
+    /**
+     * @return array<int|string, mixed>
+     */
+    #[\Override]
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * @return array<int|string, mixed>
+     */
+    #[\Override]
+    public function getQuery(): array
+    {
+        return $this->query;
+    }
+
+    /**
+     * @return UploadedFileInterface[]
+     */
+    #[\Override]
+    public function getFiles(): array
+    {
+        return $this->files;
+    }
+
+    #[\Override]
+    public function getContentType(): string
+    {
+        return $this->contentType;
+    }
+
+    /**
+     * @return array<int|string, mixed>
+     */
+    #[\Override]
+    public function getContent(): array
+    {
+        return $this->content;
+    }
+
+    /**
+     * @return array<int|string, mixed>
+     */
+    #[\Override]
+    public function getCookies(): array
+    {
+        return $this->cookies;
+    }
+
+    /**
+     * @return array<int|string, mixed>
+     */
+    #[\Override]
+    public function getHeaders(): array
+    {
+        return $this->headers;
     }
 }

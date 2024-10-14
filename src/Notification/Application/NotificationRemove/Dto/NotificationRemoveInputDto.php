@@ -8,6 +8,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 
 class NotificationRemoveInputDto implements ServiceInputDtoInterface
@@ -18,6 +19,9 @@ class NotificationRemoveInputDto implements ServiceInputDtoInterface
      */
     public readonly array $notificationIds;
 
+    /**
+     * @param string[]|null $notificationsId
+     */
     public function __construct(UserShared $userSession, ?array $notificationsId)
     {
         $this->userSession = $userSession;
@@ -29,6 +33,9 @@ class NotificationRemoveInputDto implements ServiceInputDtoInterface
             );
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {

@@ -30,6 +30,9 @@ class GroupGetUsersInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
+    /**
+     * @return iterable<array<int, GroupGetUsersInputDto|array<string, VALIDATION_ERRORS[]>>>
+     */
     public static function inputDataProvider(): iterable
     {
         $userSession = self::createStub(UserShared::class);
@@ -240,6 +243,9 @@ class GroupGetUsersInputDtoTest extends TestCase
         ];
     }
 
+    /**
+     * @param array<string, VALIDATION_ERRORS[]> $errors
+     */
     #[DataProvider('inputDataProvider')]
     #[Test]
     public function itShouldValidateInput(GroupGetUsersInputDto $object, array $errors): void

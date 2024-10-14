@@ -13,13 +13,18 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use User\Adapter\Security\User\UserSymfonyAdapter;
 use User\Domain\Model\User;
 use User\Domain\Port\Repository\UserRepositoryInterface;
-use User\Domain\Port\User\UserInterface as UserUserInterface;
+use User\Domain\Port\User\UserInterface;
 
+/**
+ * @phpstan-template T of SymfonyUserInterface
+ *
+ * @phpstan-implements UserProviderInterface<T>
+ */
 class UserSymfonyProviderAdapter implements UserProviderInterface, PasswordUpgraderInterface
 {
     private UserRepositoryInterface $userRepository;
@@ -36,7 +41,7 @@ class UserSymfonyProviderAdapter implements UserProviderInterface, PasswordUpgra
      * @throws UserNotFoundException    if the user is not found
      */
     #[\Override]
-    public function refreshUser(UserInterface $user): UserInterface
+    public function refreshUser(SymfonyUserInterface $user): SymfonyUserInterface
     {
         if (!$user instanceof UserSymfonyAdapter) {
             throw new UnsupportedUserException(sprintf('It is not an instance of %s', UserSymfonyAdapter::class));
@@ -55,7 +60,7 @@ class UserSymfonyProviderAdapter implements UserProviderInterface, PasswordUpgra
      * @throws UserNotFoundException
      */
     #[\Override]
-    public function loadUserByIdentifier(string $identifier): UserInterface
+    public function loadUserByIdentifier(string $identifier): SymfonyUserInterface
     {
         try {
             if ($this->userRepository->isValidUuid($identifier)) {
@@ -109,7 +114,7 @@ class UserSymfonyProviderAdapter implements UserProviderInterface, PasswordUpgra
     #[\Override]
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
-        if (!$user instanceof UserUserInterface) {
+        if (!$user instanceof UserInterface) {
             return;
         }
 

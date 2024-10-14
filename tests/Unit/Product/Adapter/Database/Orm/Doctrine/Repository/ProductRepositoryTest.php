@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Adapter\Database\Orm\Doctrine\Repository;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
@@ -12,9 +11,10 @@ use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Doctrine\DBAL\Exception\ConnectionException;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ObjectManager;
-use Group\Domain\Model\Group;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Product\Adapter\Database\Orm\Doctrine\Repository\ProductRepository;
 use Product\Domain\Model\Product;
@@ -32,7 +32,10 @@ class ProductRepositoryTest extends DataBaseTestCase
     private const string PRODUCT_ID_3 = 'ca10c90a-c7e6-4594-89e9-71d2f5e74710';
     private const string PRODUCT_ID_4 = '7e3021d4-2d02-4386-8bbe-887cfe8697a8';
 
-    private ProductRepository $object;
+    /**
+     * @var ProductRepository|EntityRepository<Product>
+     */
+    private ProductRepository|EntityRepository $object;
     private MockObject|ConnectionException $connectionException;
 
     #[\Override]
@@ -71,7 +74,7 @@ class ProductRepositoryTest extends DataBaseTestCase
     {
         $productNew = $this->getNewProduct();
         $this->object->save($productNew);
-        /** @var Group $productSaved */
+        /** @var Product $productSaved */
         $productSaved = $this->object->findOneBy(['id' => $productNew->getId()]);
 
         $this->assertSame($productNew, $productSaved);

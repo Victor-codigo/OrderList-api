@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Domain\Service\OrderRemove;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -15,6 +14,7 @@ use Order\Domain\Model\Order;
 use Order\Domain\Ports\Repository\OrderRepositoryInterface;
 use Order\Domain\Service\OrderRemove\Dto\OrderRemoveDto;
 use Order\Domain\Service\OrderRemove\OrderRemoveService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Product\Domain\Model\Product;
@@ -26,8 +26,11 @@ class OrderRemoveServiceTest extends TestCase
     private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
 
     private OrderRemoveService $object;
-    private MockObject|OrderRepositoryInterface $orderRepository;
-    private MockObject|PaginatorInterface $paginator;
+    private MockObject&OrderRepositoryInterface $orderRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, Order>
+     */
+    private MockObject&PaginatorInterface $paginator;
 
     #[\Override]
     protected function setUp(): void
@@ -39,9 +42,16 @@ class OrderRemoveServiceTest extends TestCase
         $this->object = new OrderRemoveService($this->orderRepository);
     }
 
+    /**
+     * @param Identifier[] $ordersId
+     *
+     * @return Order[]
+     */
     private function createOrder(array $ordersId): array
     {
+        /** @var MockObject&ListOrders $listOrders */
         $listOrders = $this->createMock(ListOrders::class);
+        /** @var MockObject&Product $product */
         $product = $this->createMock(Product::class);
 
         return array_map(

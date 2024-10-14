@@ -52,6 +52,9 @@ class UserShared
         return $this->createdOn;
     }
 
+    /**
+     * @param USER_ROLES[] $roles
+     */
     public static function fromPrimitives(string $id, string $email, string $name, array $roles, ?string $image, \DateTime $createdOn): self
     {
         $roles = array_map(

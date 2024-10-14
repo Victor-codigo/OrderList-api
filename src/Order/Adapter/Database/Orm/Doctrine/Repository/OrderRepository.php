@@ -22,11 +22,17 @@ use Order\Domain\Ports\Repository\OrderRepositoryInterface;
 use Product\Domain\Model\Product;
 use Shop\Domain\Model\Shop;
 
+/**
+ * @phpstan-extends RepositoryBase<Order>
+ */
 class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
 {
+    /**
+     * @param PaginatorInterface<int, object> $paginator
+     */
     public function __construct(
         ManagerRegistry $managerRegistry,
-        PaginatorInterface $paginator
+        PaginatorInterface $paginator,
     ) {
         parent::__construct($managerRegistry, Order::class, $paginator);
     }
@@ -41,13 +47,15 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
     public function save(array $orders): void
     {
         try {
+            $orderToSave = null;
             foreach ($orders as $order) {
+                $orderToSave = $order;
                 $this->objectManager->persist($order);
             }
 
             $this->objectManager->flush();
         } catch (UniqueConstraintViolationException|EntityIdentityCollisionException $e) {
-            throw DBUniqueConstraintException::fromId($order->getId()->getValue(), $e->getCode());
+            throw DBUniqueConstraintException::fromId($orderToSave->getId()->getValue(), $e->getCode());
         } catch (\Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
@@ -75,6 +83,8 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
     /**
      * @param Identifier[] $ordersId
      *
+     * @return PaginatorInterface<int, Order>
+     *
      * @throws DBNotFoundException
      */
     #[\Override]
@@ -99,6 +109,8 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
     }
 
     /**
+     * @return PaginatorInterface<int, Order>
+     *
      * @throws DBNotFoundException
      */
     #[\Override]
@@ -125,6 +137,8 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
     }
 
     /**
+     * @return PaginatorInterface<int, Order>
+     *
      * @throws DBNotFoundException
      */
     #[\Override]
@@ -153,6 +167,8 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
     }
 
     /**
+     * @return PaginatorInterface<int, Order>
+     *
      * @throws DBNotFoundException
      */
     #[\Override]
@@ -181,6 +197,8 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
     }
 
     /**
+     * @return PaginatorInterface<int, Order>
+     *
      * @throws DBNotFoundException
      */
     #[\Override]
@@ -207,6 +225,8 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
     /**
      * @param Identifier[] $productsId
      * @param Identifier[] $shopsId
+     *
+     * @return PaginatorInterface<int, Order>
      *
      * @throws DBNotFoundException
      */
@@ -235,6 +255,8 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
     }
 
     /**
+     * @return PaginatorInterface<int, Order>
+     *
      * @throws DBNotFoundException
      */
     #[\Override]
@@ -262,6 +284,8 @@ class OrderRepository extends RepositoryBase implements OrderRepositoryInterface
 
     /**
      * @param Identifier[] $groupsId
+     *
+     * @return PaginatorInterface<int, Order>
      *
      * @throws DBNotFoundException
      */

@@ -12,10 +12,13 @@ class OrderCreateOutputDto implements ApplicationOutputInterface
      * @param string[] $ordersId
      */
     public function __construct(
-        public readonly array $ordersId
+        public readonly array $ordersId,
     ) {
     }
 
+    /**
+     * @return array{ id: string[] }
+     */
     #[\Override]
     public function toArray(): array
     {

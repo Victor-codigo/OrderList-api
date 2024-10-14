@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UserRemoveRequestDto implements RequestDtoInterface
 {
+    // @phpstan-ignore constructor.unusedParameter
     public function __construct(Request $request)
     {
     }

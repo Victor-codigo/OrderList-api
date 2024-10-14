@@ -6,6 +6,7 @@ namespace Group\Application\GroupRemoveAllUserGroups\Dto;
 
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 
 class GroupRemoveAllUserGroupsInputDto implements ServiceInputDtoInterface
@@ -19,6 +20,11 @@ class GroupRemoveAllUserGroupsInputDto implements ServiceInputDtoInterface
         $this->systemKey = $systemKey ?? '';
     }
 
+    /**
+     * @return array{}|array{
+     *  system_key: VALIDATION_ERRORS[]
+     * }
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {

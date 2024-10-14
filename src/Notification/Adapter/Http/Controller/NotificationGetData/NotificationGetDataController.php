@@ -101,7 +101,7 @@ class NotificationGetDataController extends AbstractController
 {
     public function __construct(
         private NotificationGetDataUseCase $NotificationGetDataUseCase,
-        private Security $security
+        private Security $security,
     ) {
     }
 
@@ -122,6 +122,15 @@ class NotificationGetDataController extends AbstractController
         return new NotificationGetDataInputDto($userSharedAdapter->getUser(), $page, $pageItems, $lang);
     }
 
+    /**
+     * @param array<int, array{
+     *  id: string|null,
+     *  user_id: string|null,
+     *  message: string|null,
+     *  viewed: bool,
+     *  created_on: string
+     * }> $notificationsData
+     */
     private function createResponse(array $notificationsData): JsonResponse
     {
         $responseDto = (new ResponseDto())

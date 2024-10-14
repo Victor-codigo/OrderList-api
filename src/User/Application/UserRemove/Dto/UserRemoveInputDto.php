@@ -17,6 +17,9 @@ class UserRemoveInputDto implements ServiceInputDtoInterface
         $this->userSession = $userSession;
     }
 
+    /**
+     * @return array{}
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {

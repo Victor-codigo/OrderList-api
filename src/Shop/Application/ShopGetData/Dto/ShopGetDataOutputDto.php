@@ -9,6 +9,17 @@ use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 
 class ShopGetDataOutputDto implements ApplicationOutputInterface
 {
+    /**
+     * @param array<int, array{
+     *  id: string,
+     *  group_id: string,
+     *  name: string,
+     *  address: string,
+     *  description: string,
+     *  image: string|null,
+     *  created_on: string
+     * }> $shopsData
+     */
     public function __construct(
         public readonly PaginatorPage $page,
         public readonly int $pagesTotal,
@@ -16,6 +27,21 @@ class ShopGetDataOutputDto implements ApplicationOutputInterface
     ) {
     }
 
+    /**
+     * @return array{
+     *  page: string|null,
+     *  pages_total: int,
+     *  shops: array<int, array{
+     *  id: string,
+     *  group_id: string,
+     *  name: string,
+     *  address: string,
+     *  description: string,
+     *  image: string|null,
+     *  created_on: string
+     * }>
+     * }
+     */
     #[\Override]
     public function toArray(): array
     {

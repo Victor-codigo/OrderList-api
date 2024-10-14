@@ -12,6 +12,7 @@ use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Common\Domain\Validation\ValidationInterface;
 
@@ -34,6 +35,9 @@ class GroupCreateInputDto implements ServiceInputDtoInterface
         $this->notify = $notify ?? true;
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {

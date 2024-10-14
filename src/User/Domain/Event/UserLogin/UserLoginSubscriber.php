@@ -12,7 +12,7 @@ use User\Domain\Service\UserFirstLogin\UserFirstLoginService;
 class UserLoginSubscriber implements EventDomainSubscriberInterface
 {
     /**
-     * @return array<string, array<string, int>>
+     * @return array<string|int, string|array<string, int>>
      */
     #[\Override]
     public static function getSubscribedEvents(): array
@@ -23,7 +23,7 @@ class UserLoginSubscriber implements EventDomainSubscriberInterface
     }
 
     public function __construct(
-        private UserFirstLoginService $userFirstLoginService
+        private UserFirstLoginService $userFirstLoginService,
     ) {
     }
 

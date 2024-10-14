@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Product\Adapter\Http\Controller\ProductCreate;
 
 use Common\Adapter\FileUpload\UploadedFileSymfonyAdapter;
+use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Model\ValueObject\Constraints\VALUE_OBJECTS_CONSTRAINTS;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
@@ -75,7 +76,7 @@ class ProductCreateController extends AbstractController
 {
     public function __construct(
         private ProductCreateUseCase $productCreateUseCase,
-        private Security $security
+        private Security $security,
     ) {
     }
 

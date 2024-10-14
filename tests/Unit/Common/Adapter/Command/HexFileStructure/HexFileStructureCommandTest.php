@@ -71,6 +71,9 @@ class HexFileStructureCommandTest extends KernelTestCase
         return rmdir($dir);
     }
 
+    /**
+     * @param array<string, string> $params
+     */
     public function assertDomainOutputIsCreated(array $params, string $outputPath): void
     {
         $outputServiceFile = $outputPath."{$params['module']}/Domain/Service/{$params['endpointName']}/{$params['endpointName']}Service.php";
@@ -92,6 +95,9 @@ class HexFileStructureCommandTest extends KernelTestCase
         $this->assertStringContainsString('CREATED '.$outputServiceDtoFile, $outputDisplay);
     }
 
+    /**
+     * @param array<string, string> $params
+     */
     public function assertApplicationOutputIsCreated(array $params, string $outputPath): void
     {
         $outputUseCaseFile = $outputPath."{$params['module']}/Application/{$params['endpointName']}/{$params['endpointName']}UseCase.php";
@@ -121,6 +127,9 @@ class HexFileStructureCommandTest extends KernelTestCase
         $this->assertStringContainsString('CREATED '.$outputUseCaseOutputDtoFile, $outputDisplay);
     }
 
+    /**
+     * @param array<string, string> $params
+     */
     public function assertAdapterOutputIsCreated(array $params, string $outputPath): void
     {
         $outputControllerFile = $outputPath."{$params['module']}/Adapter/Http/Controller/{$params['endpointName']}/{$params['endpointName']}Controller.php";

@@ -15,6 +15,8 @@ class Template
     }
 
     /**
+     * @param array<string, string|int|float> $placeholders
+     *
      * @throws TemplateErrorException
      */
     private function compile(array $placeholders): string
@@ -37,6 +39,8 @@ class Template
     }
 
     /**
+     * @param array<string, string|int|float> $placeholders
+     *
      * @throws TemplateErrorException
      */
     public function createDestiny(array $placeholders): void

@@ -32,6 +32,9 @@ class ListOrdersGetDataInputDto implements ServiceInputDtoInterface
     public readonly PaginatorPage $page;
     public readonly PaginatorPageItems $pageItems;
 
+    /**
+     * @param string[]|null $listOrdersIds
+     */
     public function __construct(UserShared $userShared, ?string $groupId, ?array $listOrdersIds, ?string $filterValue, bool $orderAsc, ?string $filterSection, ?string $filterText, ?int $page, ?int $pageItems)
     {
         $this->userSession = $userShared;
@@ -55,6 +58,9 @@ class ListOrdersGetDataInputDto implements ServiceInputDtoInterface
         $this->pageItems = ValueObjectFactory::createPaginatorPageItems($pageItems);
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {
@@ -70,6 +76,9 @@ class ListOrdersGetDataInputDto implements ServiceInputDtoInterface
         );
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
+     */
     private function validateListOrdersIdAndListOrdersIdNameStartsWith(ValidationInterface $validator): array
     {
         $errorList = $validator->validateValueObjectArray(['group_id' => $this->groupId]);
@@ -111,6 +120,9 @@ class ListOrdersGetDataInputDto implements ServiceInputDtoInterface
         return $errorList;
     }
 
+    /**
+     * @return array{}|array<string, VALIDATION_ERRORS[]>
+     */
     private function validateFilter(ValidationInterface $validator, Filter $filter, string $errorPrefix): array
     {
         if ($filter->getFilter()->isNull()

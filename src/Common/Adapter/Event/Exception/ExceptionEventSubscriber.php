@@ -93,6 +93,12 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
         return $this->createJsonResponse($responseException->getResponseData(), $responseException->getStatusCode());
     }
 
+    /**
+     * @return array{
+     *  responseDto: ResponseDto,
+     *  statusCode: RESPONSE_STATUS_HTTP
+     * }
+     */
     private function getCustomExceptionDto(\Throwable $exception): array
     {
         if ($exception instanceof DomainExceptionOutput) {
@@ -110,6 +116,12 @@ class ExceptionEventSubscriber implements EventSubscriberInterface
         return $this->getResponseDefault();
     }
 
+    /**
+     * @return array{
+     *  responseDto: ResponseDto,
+     *  statusCode: RESPONSE_STATUS_HTTP
+     * }
+     */
     private function getResponseDefault(): array
     {
         $response = (new ResponseDto())

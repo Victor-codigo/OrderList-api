@@ -18,6 +18,7 @@ use Common\Domain\Service\Image\EntityImageModifyInterface;
 use Common\Domain\Validation\User\USER_ROLES;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Share\Domain\Model\Share;
 use User\Domain\Event\UserPreRegistered\UserPreRegisteredEvent;
 
 class User implements EntityImageModifyInterface
@@ -31,10 +32,10 @@ class User implements EntityImageModifyInterface
     private Password $password;
     private Roles $roles;
     private \DateTime $createdOn;
-    private Profile $profile;
+    private ?Profile $profile;
 
     /**
-     * @var Collection<Share>
+     * @var Collection<int, Share>
      */
     private Collection $shares;
 

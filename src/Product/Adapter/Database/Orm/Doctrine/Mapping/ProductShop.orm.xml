@@ -55,6 +55,7 @@
 
               <join-column name="product_id"
                            referenced-column-name="id"
+                           nullable="false"
                            on-delete="CASCADE"/>
 
        </many-to-one>
@@ -66,6 +67,7 @@
 
               <join-column name="shop_id"
                            referenced-column-name="id"
+                           nullable="false"
                            on-delete="CASCADE" />
 
        </many-to-one>

@@ -22,11 +22,17 @@ use Override;
 use User\Domain\Model\User;
 use User\Domain\Port\Repository\UserRepositoryInterface;
 
+/**
+ * @phpstan-extends RepositoryBase<User>
+ */
 class UserRepository extends RepositoryBase implements UserRepositoryInterface
 {
+    /**
+     * @param PaginatorInterface<int, object> $paginator
+     */
     public function __construct(
         ManagerRegistry $managerRegistry,
-        PaginatorInterface $paginator
+        PaginatorInterface $paginator,
     ) {
         parent::__construct($managerRegistry, User::class, $paginator);
     }
@@ -126,7 +132,7 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
     /**
      * @param Identifier[] $id
      *
-     * @return Users[]
+     * @return User[]
      *
      * @throws DBNotFoundException
      */
@@ -145,7 +151,7 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
     /**
      * @param NameWithSpaces[] $usersName
      *
-     * @return Users[]
+     * @return User[]
      *
      * @throws DBNotFoundException
      */
@@ -162,6 +168,8 @@ class UserRepository extends RepositoryBase implements UserRepositoryInterface
     }
 
     /**
+     * @return PaginatorInterface<int, User>
+     *
      * @throws DBNotFoundException
      */
     #[\Override]

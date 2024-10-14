@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupRemoveAllUserGroups;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -18,6 +17,7 @@ use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupRemoveAllUserGroups\Dto\GroupRemoveAllUserGroupsOutputDto;
 use Group\Domain\Service\GroupRemoveAllUserGroups\GroupRemoveUserFromGroupsService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -26,9 +26,12 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
     private const string USER_ID = 'b23f12cf-75cb-402e-b771-77fba3b0875a';
 
     private GroupRemoveUserFromGroupsService $object;
-    private MockObject|GroupRepositoryInterface $groupRepository;
-    private MockObject|UserGroupRepositoryInterface $userGroupRepository;
-    private MockObject|PaginatorInterface $groupsUsersNumPaginator;
+    private MockObject&GroupRepositoryInterface $groupRepository;
+    private MockObject&UserGroupRepositoryInterface $userGroupRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, Group>
+     */
+    private MockObject&PaginatorInterface $groupsUsersNumPaginator;
 
     #[\Override]
     protected function setUp(): void
@@ -50,6 +53,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
      */
     private function getUserGroups(): array
     {
+        /** @var MockObject&Group $group */
         $group = $this->createMock(Group::class);
 
         return [
@@ -159,6 +163,9 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
         );
     }
 
+    /**
+     * @return array<int, array{ groupId: string, groupUsers: int }>
+     */
     private function getGroupsUsersNumber(): array
     {
         return [
@@ -185,6 +192,9 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<array{ groupId: string, groupUsers: int }>
+     */
     private function getGroupsUsersNumberAllSame(int $numUsers): array
     {
         $groupUsersNumbers = $this->getGroupsUsersNumber();
@@ -214,6 +224,7 @@ class GroupRemoveUserFromGroupsServiceTest extends TestCase
      */
     private function getUsersGroupsToSetAdmin(): array
     {
+        /** @var MockObject&Group $group */
         $group = $this->createMock(Group::class);
 
         return [

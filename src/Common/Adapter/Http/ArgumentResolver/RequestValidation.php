@@ -32,6 +32,8 @@ class RequestValidation
     }
 
     /**
+     * @return InputBag<bool|float|int|string>
+     *
      * @throws \JsonException
      */
     private function createParams(Request $request): InputBag
@@ -42,6 +44,9 @@ class RequestValidation
         };
     }
 
+    /**
+     * @return InputBag<bool|float|int|string>
+     */
     private function applicationJson(Request $request): InputBag
     {
         $params = (array) json_decode(

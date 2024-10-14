@@ -16,7 +16,6 @@ class OrderModifyRequestDto implements RequestDtoInterface
     public readonly ?string $shopId;
     public readonly ?string $description;
     public readonly ?float $amount;
-    public readonly ?string $unit;
 
     public function __construct(Request $request)
     {

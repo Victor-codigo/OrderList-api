@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Functional\Order\Adapter\Http\Controller\OrderBought;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
@@ -26,6 +26,9 @@ class OrderBoughtControllerTest extends WebClientTestCase
         parent::setUp();
     }
 
+    /**
+     * @return iterable<array<int, string|bool>>
+     */
     public static function boughtDataProvider(): iterable
     {
         yield [

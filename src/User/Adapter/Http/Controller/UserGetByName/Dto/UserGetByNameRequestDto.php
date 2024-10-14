@@ -5,32 +5,22 @@ declare(strict_types=1);
 namespace User\Adapter\Http\Controller\UserGetByName\Dto;
 
 use Common\Adapter\Http\Dto\RequestDtoInterface;
+use Common\Adapter\Http\RequestDataValidation\RequestDataValidation;
 use Symfony\Component\HttpFoundation\Request;
 
 class UserGetByNameRequestDto implements RequestDtoInterface
 {
+    use RequestDataValidation;
     private const int USERS_NUM_MAX = 50;
 
+    /**
+     * @var string[]|null
+     */
     public readonly ?array $usersName;
 
     public function __construct(Request $request)
     {
         $usersName = $request->attributes->get('users_name');
-        $this->usersName = $this->removeUsersOverflow($usersName);
-    }
-
-    private function removeUsersOverflow(?string $usersName): ?array
-    {
-        if (null === $usersName) {
-            return null;
-        }
-
-        $usersIdValid = explode(',', $usersName, self::USERS_NUM_MAX + 1);
-
-        if (count($usersIdValid) > self::USERS_NUM_MAX) {
-            $usersIdValid = array_slice($usersIdValid, 0, self::USERS_NUM_MAX);
-        }
-
-        return $usersIdValid;
+        $this->usersName = $this->validateCsvOverflow($usersName, self::USERS_NUM_MAX);
     }
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersGetPrice;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -16,6 +15,7 @@ use ListOrders\Domain\Service\ListOrdersGetPrice\Dto\ListOrdersGetPriceOutputDto
 use ListOrders\Domain\Service\ListOrdersGetPrice\ListOrdersGetPriceService;
 use Order\Domain\Model\Order;
 use Order\Domain\Ports\Repository\OrderRepositoryInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Product\Domain\Model\Product;
@@ -30,10 +30,16 @@ class ListOrdersGetPriceServiceTest extends TestCase
     private const int PRICE_BOUGHT = 100;
 
     private ListOrdersGetPriceService $object;
-    private MockObject|OrderRepositoryInterface $orderRepository;
-    private MockObject|ProductShopRepositoryInterface $productShopRepository;
-    private MockObject|PaginatorInterface $ordersPagination;
-    private MockObject|PaginatorInterface $productShopsPagination;
+    private MockObject&OrderRepositoryInterface $orderRepository;
+    private MockObject&ProductShopRepositoryInterface $productShopRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, Order>
+     */
+    private MockObject&PaginatorInterface $ordersPagination;
+    /**
+     * @var MockObject&PaginatorInterface<int, Product>
+     */
+    private MockObject&PaginatorInterface $productShopsPagination;
 
     #[\Override]
     protected function setUp(): void
@@ -129,6 +135,7 @@ class ListOrdersGetPriceServiceTest extends TestCase
      */
     private function getOrders(): array
     {
+        /** @var MockObject&ListOrders $listOrders */
         $listOrders = $this->createMock(ListOrders::class);
         $products = $this->getProducts();
         $shops = $this->getShops();

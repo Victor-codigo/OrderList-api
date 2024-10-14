@@ -13,11 +13,13 @@ class TranslatorSymfonyAdapter implements TranslatorInterface
 {
     public function __construct(
         private SymfonyTranslatorInterface $translator,
-        private LocaleSwitcher $localeSwitcher
+        private LocaleSwitcher $localeSwitcher,
     ) {
     }
 
     /**
+     * @param string[]|int[]|float[] $params
+     *
      * @throws InvalidArgumentException
      */
     #[\Override]

@@ -41,6 +41,16 @@ final class EmailRegistrationConfirmationDto extends TemplateDtoBase
         $this->farewell = TemplateId::create('farewell', ['hoursToExpire' => $this->emailUserRegistrationConfirmationExpire / 60 / 60]);
     }
 
+    /**
+     * @return array{
+     *  appName: string,
+     *  title: string,
+     *  welcome: string,
+     *  urlRegistrationConfirmation: string,
+     *  urlRegistrationConfirmationText: string,
+     *  farewell: string,
+     * }
+     */
     #[\Override]
     public function toArray(): array
     {

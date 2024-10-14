@@ -8,11 +8,11 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 
 class GetUsersProfilePublicDataDto
 {
-    /** @var Identifier[] */
-    public readonly array $usersId;
-
-    public function __construct(array $usersId)
-    {
-        $this->usersId = $usersId;
+    /**
+     * @param Identifier[] $usersId
+     */
+    public function __construct(
+        public readonly array $usersId,
+    ) {
     }
 }

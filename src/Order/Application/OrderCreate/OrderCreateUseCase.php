@@ -92,6 +92,9 @@ class OrderCreateUseCase extends ServiceBase
         return new OrderCreateDto($groupId, $listOrdersId, $ordersServiceData);
     }
 
+    /**
+     * @param Order[] $orders
+     */
     private function createOrderCreateOutputDto(array $orders): OrderCreateOutputDto
     {
         $ordersId = array_map(

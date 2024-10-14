@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Security\jwt;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
-use Common\Adapter\Security\jwt\UserSharedSymfonyProviderAdapter;
 use Common\Adapter\Security\UserSharedSymfonyAdapter;
+use Common\Adapter\Security\jwt\UserSharedSymfonyProviderAdapter;
 use Common\Domain\HttpClient\Exception\Error400Exception;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -15,17 +14,19 @@ use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\ResponseDto;
 use Lexik\Bundle\JWTAuthenticationBundle\Exception\UserNotFoundException;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserSharedSymfonyProviderAdapterTest extends TestCase
 {
+    /**
+     * @var UserSharedSymfonyProviderAdapter<UserInterface>
+     */
     private UserSharedSymfonyProviderAdapter $object;
     private MockObject|ModuleCommunicationInterface $moduleCommunication;
-    private MockObject|RequestStack $request;
 
     #[\Override]
     protected function setUp(): void
@@ -33,10 +34,19 @@ class UserSharedSymfonyProviderAdapterTest extends TestCase
         parent::setUp();
 
         $this->moduleCommunication = $this->createMock(ModuleCommunicationInterface::class);
-        $this->request = $this->createMock(RequestStack::class);
-        $this->object = new UserSharedSymfonyProviderAdapter($this->moduleCommunication, $this->request);
+        $this->object = new UserSharedSymfonyProviderAdapter($this->moduleCommunication);
     }
 
+    /**
+     * @return array{
+     *  id: string,
+     *  email: string,
+     *  name: string,
+     *  roles: string[],
+     *  image: string|null,
+     *  created_on: string
+     * }
+     */
     private function getUserData(Identifier $userId): array
     {
         return [

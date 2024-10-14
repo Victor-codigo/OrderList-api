@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupUserRemove;
 
-use PHPUnit\Framework\Attributes\Test;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -22,6 +22,7 @@ use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Service\GroupUserRemove\Dto\GroupUserRemoveDto;
 use Group\Domain\Service\GroupUserRemove\GroupUserRemoveService;
 use Group\Domain\Service\UserHasGroupAdminGrants\UserHasGroupAdminGrantsService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -66,9 +67,14 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $groupId = ValueObjectFactory::createIdentifier('group id');
         $groupName = ValueObjectFactory::createNameWithSpaces('group name');
         $usersId = [
-            ValueObjectFactory::createIdentifier('user id 1'),
-            ValueObjectFactory::createIdentifier('user id 2'),
+            'user id 1',
+            'user id 2',
         ];
+        $usersIdIdentifier = array_map(
+            fn (string $userId): Identifier => ValueObjectFactory::createIdentifier($userId),
+            $usersId
+        );
+
         $input = new GroupUserRemoveInputDto($this->userSession, $groupId->getValue(), $usersId);
 
         $this->validator
@@ -95,13 +101,13 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $this->groupUserRemoveService
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (GroupUserRemoveDto $serviceInput) use ($groupId, $usersId): bool {
+            ->with($this->callback(function (GroupUserRemoveDto $serviceInput) use ($groupId, $usersIdIdentifier): bool {
                 $this->assertEquals($groupId, $serviceInput->groupId);
-                $this->assertEquals($usersId, $serviceInput->usersId);
+                $this->assertEquals($usersIdIdentifier, $serviceInput->usersId);
 
                 return true;
             }))
-            ->willReturn($usersId);
+            ->willReturn($usersIdIdentifier);
 
         $this->group
             ->expects($this->once())
@@ -111,8 +117,8 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($usersId, $groupName): bool {
-                $this->assertEquals($usersId, $notificationDto->content['users_id']);
+            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($usersIdIdentifier, $groupName): bool {
+                $this->assertEquals($usersIdIdentifier, $notificationDto->content['users_id']);
                 $this->assertEquals($groupName, $notificationDto->content['notification_data']['group_name']);
                 $this->assertEquals(self::SYSTEM_KEY, $notificationDto->content['system_key']);
                 $this->assertEquals(NOTIFICATION_TYPE::GROUP_USER_REMOVED->value, $notificationDto->content['type']);
@@ -123,7 +129,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
 
         $return = $this->object->__invoke($input);
 
-        $this->assertEquals($usersId, $return->usersId);
+        $this->assertEquals($usersIdIdentifier, $return->usersId);
     }
 
     #[Test]
@@ -132,8 +138,12 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $groupId = ValueObjectFactory::createIdentifier('group id');
         $groupName = ValueObjectFactory::createNameWithSpaces('group name');
         $usersId = [
-            ValueObjectFactory::createIdentifier('user id 1'),
+            'user id 1',
         ];
+        $usersIdIdentifier = array_map(
+            fn (string $userId) => ValueObjectFactory::createIdentifier($userId),
+            $usersId
+        );
         $input = new GroupUserRemoveInputDto($this->userSession, $groupId->getValue(), $usersId);
 
         $this->validator
@@ -150,7 +160,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $this->userSession
             ->expects($this->once())
             ->method('getId')
-            ->willReturn($usersId[0]);
+            ->willReturn($usersIdIdentifier[0]);
 
         $this->groupRepository
             ->expects($this->once())
@@ -161,13 +171,13 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $this->groupUserRemoveService
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (GroupUserRemoveDto $serviceInput) use ($groupId, $usersId): bool {
+            ->with($this->callback(function (GroupUserRemoveDto $serviceInput) use ($groupId, $usersIdIdentifier): bool {
                 $this->assertEquals($groupId, $serviceInput->groupId);
-                $this->assertEquals($usersId, $serviceInput->usersId);
+                $this->assertEquals($usersIdIdentifier, $serviceInput->usersId);
 
                 return true;
             }))
-            ->willReturn($usersId);
+            ->willReturn($usersIdIdentifier);
 
         $this->group
             ->expects($this->once())
@@ -177,8 +187,8 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($usersId, $groupName): bool {
-                $this->assertEquals($usersId, $notificationDto->content['users_id']);
+            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($usersIdIdentifier, $groupName): bool {
+                $this->assertEquals($usersIdIdentifier, $notificationDto->content['users_id']);
                 $this->assertEquals($groupName, $notificationDto->content['notification_data']['group_name']);
                 $this->assertEquals(self::SYSTEM_KEY, $notificationDto->content['system_key']);
                 $this->assertEquals(NOTIFICATION_TYPE::GROUP_USER_REMOVED->value, $notificationDto->content['type']);
@@ -189,7 +199,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
 
         $return = $this->object->__invoke($input);
 
-        $this->assertEquals($usersId, $return->usersId);
+        $this->assertEquals($usersIdIdentifier, $return->usersId);
     }
 
     #[Test]
@@ -197,8 +207,8 @@ class GroupUserRemoveUseCaseTest extends TestCase
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
         $usersId = [
-            ValueObjectFactory::createIdentifier('user id 1'),
-            ValueObjectFactory::createIdentifier('user id 2'),
+            'user id 1',
+            'user id 2',
         ];
         $input = new GroupUserRemoveInputDto($this->userSession, $groupId->getValue(), $usersId);
 
@@ -242,7 +252,7 @@ class GroupUserRemoveUseCaseTest extends TestCase
     {
         $groupId = ValueObjectFactory::createIdentifier('group id');
         $usersId = [
-            ValueObjectFactory::createIdentifier('user id 1'),
+            'user id 1',
         ];
         $userIdOther = ValueObjectFactory::createIdentifier('user id other 1');
         $input = new GroupUserRemoveInputDto($this->userSession, $groupId->getValue(), $usersId);
@@ -289,9 +299,13 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $groupId = ValueObjectFactory::createIdentifier('group id');
         $groupName = ValueObjectFactory::createNameWithSpaces('group name');
         $usersId = [
-            ValueObjectFactory::createIdentifier('user id 1'),
-            ValueObjectFactory::createIdentifier('user id 2'),
+            'user id 1',
+            'user id 2',
         ];
+        $usersIdIdentifier = array_map(
+            fn ($userId) => ValueObjectFactory::createIdentifier($userId),
+            $usersId
+        );
         $input = new GroupUserRemoveInputDto($this->userSession, $groupId->getValue(), $usersId);
 
         $this->validator
@@ -314,13 +328,13 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $this->groupUserRemoveService
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (GroupUserRemoveDto $serviceInput) use ($groupId, $usersId): bool {
+            ->with($this->callback(function (GroupUserRemoveDto $serviceInput) use ($groupId, $usersIdIdentifier): bool {
                 $this->assertEquals($groupId, $serviceInput->groupId);
-                $this->assertEquals($usersId, $serviceInput->usersId);
+                $this->assertEquals($usersIdIdentifier, $serviceInput->usersId);
 
                 return true;
             }))
-            ->willReturn($usersId);
+            ->willReturn($usersIdIdentifier);
 
         $this->group
             ->expects($this->once())
@@ -330,8 +344,8 @@ class GroupUserRemoveUseCaseTest extends TestCase
         $this->moduleCommunication
             ->expects($this->once())
             ->method('__invoke')
-            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($usersId, $groupName): bool {
-                $this->assertEquals($usersId, $notificationDto->content['users_id']);
+            ->with($this->callback(function (ModuleCommunicationConfigDto $notificationDto) use ($usersIdIdentifier, $groupName): bool {
+                $this->assertEquals($usersIdIdentifier, $notificationDto->content['users_id']);
                 $this->assertEquals($groupName, $notificationDto->content['notification_data']['group_name']);
                 $this->assertEquals(self::SYSTEM_KEY, $notificationDto->content['system_key']);
                 $this->assertEquals(NOTIFICATION_TYPE::GROUP_USER_REMOVED->value, $notificationDto->content['type']);

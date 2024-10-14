@@ -38,6 +38,8 @@ class GroupUserGetGroupsService
     }
 
     /**
+     * @param PaginatorInterface<int, UserGroup> $userGroups
+     *
      * @throws DBNotFoundException
      */
     private function getUserGroups(PaginatorInterface $userGroups, ?GROUP_TYPE $groupType, PaginatorPage $page, PaginatorPageItems $pageItems, Path $userImage): GroupUserGetGroupsOutputDto
@@ -59,6 +61,17 @@ class GroupUserGetGroupsService
             $groupsIsAdmin
         );
 
+        /**
+         * @var array<int, array{
+         *  group_id: string|null,
+         *  type: string,
+         *  name: string|null,
+         *  description: string|null,
+         *  image: string|null,
+         *  created_on: string,
+         *  admin: bool
+         * }> $groupsData
+         */
         $groupsData = iterator_to_array($this->groupGetDataService->__invoke(
             $this->createGroupGetDataDto($groupsId, $groupType, $userImage)
         ));

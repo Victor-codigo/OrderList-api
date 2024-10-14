@@ -105,7 +105,7 @@ class GroupGetDataController extends AbstractController
 {
     public function __construct(
         private Security $security,
-        private GroupGetDataUseCase $groupGetDataUseCase
+        private GroupGetDataUseCase $groupGetDataUseCase,
     ) {
     }
 
@@ -118,6 +118,9 @@ class GroupGetDataController extends AbstractController
         return $this->createResponse($groupsData);
     }
 
+    /**
+     * @param string[]|null $groupsId
+     */
     private function createGroupGetDataInputDto(?array $groupsId): GroupGetDataInputDto
     {
         /** @var UserSharedSymfonyAdapter $userSharedAdapter */

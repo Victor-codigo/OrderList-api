@@ -39,6 +39,7 @@ abstract class TemplateDtoBase implements TemplateDtoInterface
     public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
+        $this->path = '';
     }
 
     /**

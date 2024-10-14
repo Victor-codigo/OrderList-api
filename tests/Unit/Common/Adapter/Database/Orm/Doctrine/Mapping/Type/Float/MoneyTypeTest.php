@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Float;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Float\MoneyType;
 use Common\Domain\Model\ValueObject\Float\Money;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class MoneyTypeTest extends TestCase
@@ -26,7 +26,7 @@ class MoneyTypeTest extends TestCase
     public function itShouldReturnAValidPhpValuePassedInt(): void
     {
         $value = 3;
-        $object = new MoneyType($value);
+        $object = new MoneyType();
         $return = $object->convertToPHPValue($value, $this->abstractPlatform);
 
         $this->assertInstanceOf(Money::class, $return);
@@ -37,7 +37,7 @@ class MoneyTypeTest extends TestCase
     public function itShouldReturnAValidPhpValuePassedFloat(): void
     {
         $value = 3.2;
-        $object = new MoneyType($value);
+        $object = new MoneyType();
         $return = $object->convertToPHPValue($value, $this->abstractPlatform);
 
         $this->assertInstanceOf(Money::class, $return);
@@ -48,7 +48,7 @@ class MoneyTypeTest extends TestCase
     public function itShouldReturnAValidPhpValuePassedString(): void
     {
         $value = '3.2';
-        $object = new MoneyType($value);
+        $object = new MoneyType();
         $return = $object->convertToPHPValue($value, $this->abstractPlatform);
 
         $this->assertInstanceOf(Money::class, $return);
@@ -59,7 +59,7 @@ class MoneyTypeTest extends TestCase
     public function itShouldReturnAValidPhpValuePassedNull(): void
     {
         $value = null;
-        $object = new MoneyType($value);
+        $object = new MoneyType();
         $return = $object->convertToPHPValue($value, $this->abstractPlatform);
 
         $this->assertInstanceOf(Money::class, $return);

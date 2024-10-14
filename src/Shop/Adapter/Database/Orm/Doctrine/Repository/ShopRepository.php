@@ -21,11 +21,17 @@ use Product\Domain\Model\ProductShop;
 use Shop\Domain\Model\Shop;
 use Shop\Domain\Port\Repository\ShopRepositoryInterface;
 
+/**
+ * @phpstan-extends RepositoryBase<Shop>
+ */
 class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
 {
+    /**
+     * @param PaginatorInterface<int, object> $paginator
+     */
     public function __construct(
         ManagerRegistry $managerRegistry,
-        PaginatorInterface $paginator
+        PaginatorInterface $paginator,
     ) {
         parent::__construct($managerRegistry, Shop::class, $paginator);
     }
@@ -70,6 +76,8 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
      * @param Identifier[]|null $shopsId
      * @param Identifier[]|null $productsId
      *
+     * @return PaginatorInterface<int, Shop>
+     *
      * @throws DBNotFoundException
      */
     #[\Override]
@@ -106,6 +114,8 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
     /**
      * @param Identifier[] $groupsId
      *
+     * @return PaginatorInterface<int, Shop>
+     *
      * @throws DBNotFoundException
      */
     #[\Override]
@@ -124,6 +134,8 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
     }
 
     /**
+     * @return PaginatorInterface<int, Shop>
+     *
      * @throws DBNotFoundException
      */
     #[\Override]
@@ -148,6 +160,8 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
     }
 
     /**
+     * @return PaginatorInterface<int, Shop>
+     *
      * @throws DBNotFoundException
      */
     #[\Override]
@@ -172,6 +186,8 @@ class ShopRepository extends RepositoryBase implements ShopRepositoryInterface
     }
 
     /**
+     * @return string[]
+     *
      * @throws DBNotFoundException
      */
     public function findGroupShopsFirstLetterOrFail(Identifier $groupId): array

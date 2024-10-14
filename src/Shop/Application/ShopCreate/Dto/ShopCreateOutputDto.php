@@ -10,10 +10,13 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 class ShopCreateOutputDto implements ApplicationOutputInterface
 {
     public function __construct(
-        public readonly Identifier $shopId
+        public readonly Identifier $shopId,
     ) {
     }
 
+    /**
+     * @return array{ id: string }
+     */
     #[\Override]
     public function toArray(): array
     {

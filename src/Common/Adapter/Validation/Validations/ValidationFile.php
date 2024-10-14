@@ -10,6 +10,9 @@ use Symfony\Component\Validator\Constraints\Image;
 
 class ValidationFile extends ValidationConstraintBase
 {
+    /**
+     * @param string[]|string|null $mimeTypes
+     */
     public function file(mixed $maxSize, array|string|null $mimeTypes): ValidationConstraint
     {
         return $this->createConstraint(
@@ -24,6 +27,9 @@ class ValidationFile extends ValidationConstraintBase
         );
     }
 
+    /**
+     * @param string[]|string|null $mimeTypes
+     */
     public function image(
         mixed $maxSize,
         array|string|null $mimeTypes,
@@ -39,7 +45,7 @@ class ValidationFile extends ValidationConstraintBase
         bool $allowLandscape = true,
         bool $allowPortrait = true,
         bool $allowSquareImage = true,
-        bool $detectCorrupted = false
+        bool $detectCorrupted = false,
     ): ValidationConstraint {
         return $this->createConstraint(
             new Image(

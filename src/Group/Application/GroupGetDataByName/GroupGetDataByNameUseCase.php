@@ -22,10 +22,9 @@ use Group\Domain\Service\GroupGetDataByName\GroupGetDataByNameService;
 class GroupGetDataByNameUseCase extends ServiceBase
 {
     public function __construct(
-        private GroupGetDataByNameService $GroupGetDataByNameService,
         private ValidationInterface $validator,
         private GroupGetDataByNameService $groupGetDataByNameService,
-        private ValidateGroupAndUserService $validateGroupAndUserService
+        private ValidateGroupAndUserService $validateGroupAndUserService,
     ) {
     }
 
@@ -65,6 +64,16 @@ class GroupGetDataByNameUseCase extends ServiceBase
         return new GroupGetDataByNameDto($input->groupName, $input->userSession->getImage());
     }
 
+    /**
+     * @param array{
+     *  group_id: string|null,
+     *  type: string,
+     *  name: string|null,
+     *  description: string|null,
+     *  image: string|null,
+     *  created_on: string
+     * } $groupData
+     */
     private function createGroupGetDataByNameOutputDto(array $groupData): GroupGetDataByNameOutputDto
     {
         return new GroupGetDataByNameOutputDto($groupData);

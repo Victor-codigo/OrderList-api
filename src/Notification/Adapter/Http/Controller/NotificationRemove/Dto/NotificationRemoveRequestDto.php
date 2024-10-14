@@ -15,6 +15,9 @@ class NotificationRemoveRequestDto implements RequestDtoInterface
 
     private const int NOTIFICATIONS_NUM_MAX = AppConfig::ENDPOINT_NOTIFICATION_REMOVE_MAX;
 
+    /**
+     * @var string[]|null
+     */
     public readonly ?array $notificationsId;
 
     public function __construct(Request $request)

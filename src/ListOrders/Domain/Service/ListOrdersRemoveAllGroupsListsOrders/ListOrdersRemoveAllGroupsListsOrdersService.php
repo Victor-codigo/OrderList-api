@@ -16,7 +16,7 @@ class ListOrdersRemoveAllGroupsListsOrdersService
     private const int LISTS_ORDERS_PAGINATOR_PAGE_ITEMS = 100;
 
     public function __construct(
-        private ListOrdersRepositoryInterface $listOrdersRepository
+        private ListOrdersRepositoryInterface $listOrdersRepository,
     ) {
     }
 
@@ -39,6 +39,8 @@ class ListOrdersRemoveAllGroupsListsOrdersService
     }
 
     /**
+     * @param Identifier[] $groupIds
+     *
      * @return Identifier[]
      *
      * @throws DBConnectionException
@@ -92,6 +94,7 @@ class ListOrdersRemoveAllGroupsListsOrdersService
 
             $listsOrdersPaginator = $this->listOrdersRepository->findGroupsListsOrdersOrFail($groupsId);
 
+            $listsOrdersIdChangedUserId = [];
             foreach ($listsOrdersPaginator->getAllPages(self::LISTS_ORDERS_PAGINATOR_PAGE_ITEMS) as $listOrdersIterator) {
                 $listsOrders = iterator_to_array($listOrdersIterator);
                 $listsOrdersIdChangedUserId[] = array_map(

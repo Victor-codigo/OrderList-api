@@ -11,6 +11,7 @@ use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\GroupRemoveAllUserGroups\Dto\GroupRemoveAllUserGroupsDto;
+use Group\Domain\Service\GroupRemoveAllUserGroups\Dto\GroupRemoveAllUserGroupsOutputDto;
 
 class GroupRemoveAllUserGroupsService
 {
@@ -19,7 +20,7 @@ class GroupRemoveAllUserGroupsService
     public function __construct(
         private GroupRepositoryInterface $groupRepository,
         private UserGroupRepositoryInterface $userGroupRepository,
-        private GroupRemoveUserFromGroupsService $groupRemoveUserFromGroupsService
+        private GroupRemoveUserFromGroupsService $groupRemoveUserFromGroupsService,
     ) {
     }
 

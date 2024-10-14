@@ -16,6 +16,9 @@ class GroupUserAddRequestDto implements RequestDtoInterface
     private const int USERS_NUM_MAX = AppConfig::ENDPOINT_GROUP_USER_ADD_MAX_USERS;
 
     public readonly ?string $groupId;
+    /**
+     * @var string[]|null
+     */
     public readonly ?array $users;
     public readonly ?string $identifierType;
     public readonly ?bool $admin;

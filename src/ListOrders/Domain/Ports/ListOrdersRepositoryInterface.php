@@ -36,26 +36,36 @@ interface ListOrdersRepositoryInterface extends RepositoryInterface
     /**
      * @param Identifier[] $ListsOrdersId
      *
+     * @return PaginatorInterface<int, ListOrders>
+     *
      * @throws DBNotFoundException
      */
     public function findListOrderByIdOrFail(array $ListsOrdersId, ?Identifier $groupId = null): PaginatorInterface;
 
     /**
+     * @return PaginatorInterface<int, ListOrders>
+     *
      * @throws DBNotFoundException
      */
     public function findListOrdersGroup(Identifier $groupId, bool $orderAsc): PaginatorInterface;
 
     /**
+     * @return PaginatorInterface<int, ListOrders>
+     *
      * @throws DBNotFoundException
      */
     public function findListOrderByListOrdersNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface;
 
     /**
+     * @return PaginatorInterface<int, ListOrders>
+     *
      * @throws DBNotFoundException
      */
     public function findListOrderByProductNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface;
 
     /**
+     * @return PaginatorInterface<int, ListOrders>
+     *
      * @throws DBNotFoundException
      */
     public function findListOrderByShopNameFilterOrFail(Identifier $groupId, Filter $filterText, bool $orderAsc): PaginatorInterface;
@@ -63,11 +73,15 @@ interface ListOrdersRepositoryInterface extends RepositoryInterface
     /**
      * @param Identifier[] $groupsId
      *
+     * @return PaginatorInterface<int, ListOrders>
+     *
      * @throws DBNotFoundException
      */
     public function findGroupsListsOrdersOrFail(array $groupsId): PaginatorInterface;
 
     /**
+     * @return array<int, string>
+     *
      * @throws DBNotFoundException
      */
     public function findGroupListOrdersFirstLetterOrFail(Identifier $groupId): array;

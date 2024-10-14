@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Functional\ListOrders\Adapter\Http\Controller\ListOrdersGetData;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use ListOrders\Domain\Model\ListOrders;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
@@ -23,6 +23,9 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
         'd446eab9-5199-48d0-91f5-0407a86bcb4f',
     ];
 
+    /**
+     * @param array<string, mixed> $listOrderDataActual
+     */
     private function assertListOrderDataIsOk(ListOrders $listOrderDataExpected, array $listOrderDataActual): void
     {
         $this->assertArrayHasKey('id', $listOrderDataActual);
@@ -61,6 +64,9 @@ class ListOrdersGetDataControllerTest extends WebClientTestCase
         }
     }
 
+    /**
+     * @return array<string, ListOrders>
+     */
     private function getListOrders(): array
     {
         return [

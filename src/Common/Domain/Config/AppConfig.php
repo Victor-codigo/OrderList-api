@@ -244,20 +244,20 @@ class AppConfig
 
     public static function valueObject(): VALUE_OBJECTS_CONSTRAINTS
     {
-        return static::getInstance()::$valueObject;
+        return self::getInstance()::$valueObject;
     }
 
     protected function __construct()
     {
-        static::$valueObject = new VALUE_OBJECTS_CONSTRAINTS();
+        self::$valueObject = new VALUE_OBJECTS_CONSTRAINTS();
     }
 
-    protected static function getInstance(): static
+    protected static function getInstance(): self
     {
-        if (null === static::$instance) {
-            static::$instance = new static();
+        if (null === self::$instance) {
+            self::$instance = new self();
         }
 
-        return static::$instance;
+        return self::$instance;
     }
 }

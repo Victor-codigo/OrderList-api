@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher;
 
 class RegisterEventDomainSubscribers implements CompilerPassInterface
 {
@@ -22,7 +23,7 @@ class RegisterEventDomainSubscribers implements CompilerPassInterface
     #[\Override]
     public function process(ContainerBuilder $container): void
     {
-        $eventDispatcherService = $container->get(static::EVENT_DISPATCHER_SERVICE);
+        $eventDispatcherService = $container->get(self::EVENT_DISPATCHER_SERVICE);
         $definition = $container->findDefinition(EventDispatcherSymfonyAdapter::class);
         $eventDomainSubscribers = $container->findTaggedServiceIds(static::EVENT_DOMAIN_SUBSCRIBER_TAG, true);
 
@@ -65,7 +66,7 @@ class RegisterEventDomainSubscribers implements CompilerPassInterface
         }
     }
 
-    private function getEventSubscriberLoader(EventDispatcher $eventDispatcherService): EventSubscriberLoader
+    private function getEventSubscriberLoader(TraceableEventDispatcher|EventDispatcher $eventDispatcherService): EventSubscriberLoader
     {
         return new EventSubscriberLoader($eventDispatcherService);
     }

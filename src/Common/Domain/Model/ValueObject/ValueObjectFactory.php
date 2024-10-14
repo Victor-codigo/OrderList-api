@@ -6,8 +6,8 @@ namespace Common\Domain\Model\ValueObject;
 
 use Common\Domain\Model\ValueObject\Array\NotificationData;
 use Common\Domain\Model\ValueObject\Array\Roles;
-use Common\Domain\Model\ValueObject\Array\valueObjectArrayFactory;
 use Common\Domain\Model\ValueObject\Array\ValueObjectArrayFactoryInterface;
+use Common\Domain\Model\ValueObject\Array\valueObjectArrayFactory;
 use Common\Domain\Model\ValueObject\Date\DateNowToFuture;
 use Common\Domain\Model\ValueObject\Date\ValueObjectDateFactory;
 use Common\Domain\Model\ValueObject\Date\ValueObjectDateFactoryInterface;
@@ -73,6 +73,9 @@ final class ValueObjectFactory implements ValueObjectStringFactoryInterface, Val
         return ValueObjectObjectFactory::createRol($roles);
     }
 
+    /**
+     * @param array<string, string>|null $data
+     */
     #[\Override]
     public static function createNotificationData(?array $data): NotificationData
     {

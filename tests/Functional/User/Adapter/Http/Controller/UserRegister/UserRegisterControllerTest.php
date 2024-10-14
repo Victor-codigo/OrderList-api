@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserRegister;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\Object\Rol;
 use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -12,6 +11,7 @@ use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\User\USER_ROLES;
 use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 use User\Domain\Model\Profile;
@@ -574,6 +574,9 @@ class UserRegisterControllerTest extends WebClientTestCase
         $this->assertRowDoesNotExistInDataBase('email', new Email($clientData['email']), User::class);
     }
 
+    /**
+     * @param USER_ROLES[] $roles
+     */
     private function assertUserRegisteredIsOk(string $userId, string $password, string $email, string $name, array $roles): void
     {
         $entityManager = $this->getEntityManager();

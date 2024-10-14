@@ -15,6 +15,12 @@ class ListOrdersGetPriceOutputDto implements ApplicationOutputInterface
     ) {
     }
 
+    /**
+     * @return array{
+     *  total: float|null,
+     *  bought: float|null
+     * }
+     */
     #[\Override]
     public function toArray(): array
     {

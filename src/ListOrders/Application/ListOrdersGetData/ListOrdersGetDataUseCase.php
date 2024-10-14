@@ -25,7 +25,7 @@ class ListOrdersGetDataUseCase extends ServiceBase
     public function __construct(
         private ListOrdersGetDataService $ListOrdersGetDataService,
         private ValidationInterface $validator,
-        private ValidateGroupAndUserService $validateGroupAndUserService
+        private ValidateGroupAndUserService $validateGroupAndUserService,
     ) {
     }
 
@@ -82,6 +82,17 @@ class ListOrdersGetDataUseCase extends ServiceBase
         );
     }
 
+    /**
+     * @param array<int, array{
+     *  id: string|null,
+     *  user_id: string|null,
+     *  group_id: string|null,
+     *  name: string|null,
+     *  description: string|null,
+     *  date_to_buy: string|null,
+     *  created_on: string
+     * }> $listsOrdersData
+     */
     private function createListOrdersGetDataOutputDto(array $listsOrdersData, PaginatorPage $page, int $pagesTotal): ListOrdersGetDataOutputDto
     {
         return new ListOrdersGetDataOutputDto($listsOrdersData, $page, $pagesTotal);

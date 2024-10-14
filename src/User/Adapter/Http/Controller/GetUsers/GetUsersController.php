@@ -14,6 +14,7 @@ use User\Adapter\Http\Controller\GetUsers\Dto\GetUsersRequestDto;
 use User\Adapter\Security\User\UserSymfonyAdapter;
 use User\Application\GetUsers\Dto\GetUsersInputDto;
 use User\Application\GetUsers\GetUsersUseCase;
+use User\Domain\Model\User;
 
 #[OA\Tag('User')]
 #[OA\Get(
@@ -119,6 +120,9 @@ class GetUsersController extends AbstractController
         return $this->createResponse($response->users);
     }
 
+    /**
+     * @param string[]|null $usersId
+     */
     private function createGetUsersInputDto(?array $usersId): GetUsersInputDto
     {
         /** @var UserSymfonyAdapter $user */
@@ -127,6 +131,9 @@ class GetUsersController extends AbstractController
         return new GetUsersInputDto($user->getUser(), $usersId);
     }
 
+    /**
+     * @param array<int, User[]> $users
+     */
     private function createResponse(array $users): JsonResponse
     {
         $response = new ResponseDto(message: 'Users found', data: $users);

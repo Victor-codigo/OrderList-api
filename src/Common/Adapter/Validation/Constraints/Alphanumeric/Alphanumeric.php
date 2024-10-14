@@ -20,13 +20,17 @@ class Alphanumeric extends Regex
      */
     protected static $errorNames = self::ERROR_NAMES;
 
+    /**
+     * @param string[]|null $groups
+     * @param mixed[]       $options
+     */
     public function __construct(
         ?string $message = null,
         ?string $htmlPattern = null,
         ?callable $normalizer = null,
         ?array $groups = null,
         mixed $payload = null,
-        array $options = []
+        array $options = [],
     ) {
         parent::__construct(
             '/^[A-Za-zÀ-ÿ0-9_]+$/i',

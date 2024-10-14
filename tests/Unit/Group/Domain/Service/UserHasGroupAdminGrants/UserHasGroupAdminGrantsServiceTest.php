@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\UserHasGroupAdminGrants;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Group\GROUP_ROLES;
@@ -13,6 +12,7 @@ use Group\Domain\Model\Group;
 use Group\Domain\Model\UserGroup;
 use Group\Domain\Port\Repository\UserGroupRepositoryInterface;
 use Group\Domain\Service\UserHasGroupAdminGrants\UserHasGroupAdminGrantsService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -43,6 +43,9 @@ class UserHasGroupAdminGrantsServiceTest extends TestCase
         return UserShared::fromPrimitives('0e588ccf-0bda-430b-bb82-c89e75f615a0', '', '', [USER_ROLES::USER], null, new \DateTime());
     }
 
+    /**
+     * @return UserGroup[]
+     */
     private function getGroupUsersAdmins(): array
     {
         $group = $this->createMock(Group::class);

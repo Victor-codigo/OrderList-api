@@ -33,7 +33,7 @@ class UserRegisterUseCase extends ServiceBase
         UserRepositoryInterface $repository,
         EventDispatcherInterface $eventDispatcher,
         ValidationInterface $validation,
-        PasswordHasherInterface $passwordHasher
+        PasswordHasherInterface&UserInterface $passwordHasher,
     ) {
         $this->repository = $repository;
         $this->eventDispatcher = $eventDispatcher;

@@ -24,7 +24,7 @@ class GroupGetAdminsUseCase extends ServiceBase
 {
     public function __construct(
         private ValidationInterface $validator,
-        private UserGroupRepositoryInterface $userGroupRepository
+        private UserGroupRepositoryInterface $userGroupRepository,
     ) {
     }
 
@@ -63,6 +63,8 @@ class GroupGetAdminsUseCase extends ServiceBase
     }
 
     /**
+     * @param PaginatorInterface<int, UserGroup> $usersGroup
+     *
      * @throws GroupGetAdminsGroupNotPermissionsException
      */
     private function validateUserSessionBelongsToTheGroup(PaginatorInterface $usersGroup, UserShared $userSession): void
@@ -77,6 +79,11 @@ class GroupGetAdminsUseCase extends ServiceBase
         }
     }
 
+    /**
+     * @param PaginatorInterface<int, UserGroup> $groupUsers
+     *
+     * @return string[]
+     */
     private function getAdminsIds(PaginatorInterface $groupUsers): array
     {
         $groupAdmins = array_filter(
@@ -90,11 +97,17 @@ class GroupGetAdminsUseCase extends ServiceBase
         );
     }
 
+    /**
+     * @param string[] $groupAdminsIds
+     */
     private function userSessionIsAdmin(array $groupAdminsIds, UserShared $userSession): bool
     {
         return in_array($userSession->getId()->getValue(), $groupAdminsIds);
     }
 
+    /**
+     * @param string[] $groupAdminsIds
+     */
     private function createGroupGetAdminsOutputDto(array $groupAdminsIds, UserShared $userSession): GroupGetAdminsOutputDto
     {
         return new GroupGetAdminsOutputDto(

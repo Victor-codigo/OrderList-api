@@ -21,11 +21,17 @@ use Product\Domain\Model\ProductShop;
 use Product\Domain\Port\Repository\ProductRepositoryInterface;
 use Shop\Domain\Model\Shop;
 
+/**
+ * @phpstan-extends RepositoryBase<Product>
+ */
 class ProductRepository extends RepositoryBase implements ProductRepositoryInterface
 {
+    /**
+     * @param PaginatorInterface<int, object> $paginator
+     */
     public function __construct(
         ManagerRegistry $managerRegistry,
-        PaginatorInterface $paginator
+        PaginatorInterface $paginator,
     ) {
         parent::__construct($managerRegistry, Product::class, $paginator);
     }
@@ -65,6 +71,8 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
     }
 
     /**
+     * @return PaginatorInterface<int, Product>
+     *
      * @throws DBNotFoundException
      */
     public function findProductsByGroupAndNameOrFail(Identifier $groupId, NameWithSpaces $name): PaginatorInterface
@@ -94,6 +102,8 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
     /**
      * @param Identifier[]|null $productsId
      * @param Identifier[]|null $shopsId
+     *
+     * @return PaginatorInterface<int, Product>
      *
      * @throws DBNotFoundException
      */
@@ -125,6 +135,11 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
         return $this->queryPaginationOrFail($query);
     }
 
+    /**
+     * @return PaginatorInterface<int, Product>
+     *
+     * @throws DBNotFoundException
+     */
     public function findProductsByProductNameOrFail(Identifier $groupId, NameWithSpaces $productName, bool $orderAsc = true): PaginatorInterface
     {
         $productEntity = Product::class;
@@ -145,6 +160,11 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
         ]);
     }
 
+    /**
+     * @return PaginatorInterface<int, Product>
+     *
+     * @throws DBNotFoundException
+     */
     public function findProductsByProductNameFilterOrFail(Identifier $groupId, Filter $productNameFilter, bool $orderAsc = true): PaginatorInterface
     {
         $productEntity = Product::class;
@@ -165,6 +185,11 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
         ]);
     }
 
+    /**
+     * @return PaginatorInterface<int, Product>
+     *
+     * @throws DBNotFoundException
+     */
     public function findProductsByShopNameFilterOrFail(Identifier $groupId, Filter $shopNameFilter, bool $orderAsc = true): PaginatorInterface
     {
         $productEntity = Product::class;
@@ -192,6 +217,8 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
     /**
      * @param Identifier[] $groupsId
      *
+     * @return PaginatorInterface<int, Product>
+     *
      * @throws DBNotFoundException
      */
     public function findGroupsProductsOrFail(array $groupsId): PaginatorInterface
@@ -209,6 +236,8 @@ class ProductRepository extends RepositoryBase implements ProductRepositoryInter
     }
 
     /**
+     * @return string[]
+     *
      * @throws DBNotFoundException
      */
     public function findGroupProductsFirstLetterOrFail(Identifier $groupId): array

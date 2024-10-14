@@ -10,6 +10,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Common\Domain\Validation\ValidationInterface;
 
@@ -24,6 +25,10 @@ class NotificationCreateInputDto implements ServiceInputDtoInterface
     public readonly NotificationData $notificationData;
     public readonly string $systemKey;
 
+    /**
+     * @param string[]|null              $usersId
+     * @param array<string, string>|null $notificationData
+     */
     public function __construct(UserShared $userSession, ?array $usersId, ?string $notificationType, ?array $notificationData, ?string $systemKey)
     {
         $this->systemKey = $systemKey ?? '';
@@ -40,6 +45,9 @@ class NotificationCreateInputDto implements ServiceInputDtoInterface
         );
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {
@@ -62,6 +70,9 @@ class NotificationCreateInputDto implements ServiceInputDtoInterface
         return $errorList;
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>|VALIDATION_ERRORS[]
+     */
     private function validateUsersId(ValidationInterface $validator): array
     {
         $errorList = $validator
@@ -84,6 +95,9 @@ class NotificationCreateInputDto implements ServiceInputDtoInterface
         return array_unique($errorList, SORT_REGULAR);
     }
 
+    /**
+     * @return VALIDATION_ERRORS[]
+     */
     private function validateSystemKey(ValidationInterface $validator): array
     {
         return $validator

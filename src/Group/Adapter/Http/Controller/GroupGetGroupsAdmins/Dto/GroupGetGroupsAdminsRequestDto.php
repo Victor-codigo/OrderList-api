@@ -15,6 +15,9 @@ class GroupGetGroupsAdminsRequestDto implements RequestDtoInterface
 
     private const int GROUPS_ID_MAX = AppConfig::ENDPOINT_GROUP_GET_GROUPS_ADMINS_MAX;
 
+    /**
+     * @var string[]|null
+     */
     public readonly ?array $groupsId;
     public readonly ?int $page;
     public readonly ?int $pageItems;

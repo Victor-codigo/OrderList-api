@@ -60,10 +60,18 @@ class GroupRemoveUserFromGroupsService
     /**
      * @param Identifier[] $groupsId
      *
+     * @return array<string, int>
+     *
      * @throws DBNotFoundException
      */
     private function getGroupsUsersNumber(array $groupsId): array
     {
+        /**
+         * @var array<int, array{
+         *  groupId: string,
+         *  groupUsers: int
+         * }>
+         */
         $groupsUsersNumPaginator = $this->userGroupRepository->findGroupsUsersNumberOrFail($groupsId);
 
         return array_combine(
@@ -79,8 +87,9 @@ class GroupRemoveUserFromGroupsService
     }
 
     /**
-     * @param Group[]     $groups
-     * @param UserGroup[] $usersGroupsIndexedByGroupId
+     * @param Group[]            $groups
+     * @param UserGroup[]        $usersGroupsIndexedByGroupId
+     * @param array<string, int> $groupsUsersNumber
      *
      * @return Identifier[]
      */
@@ -211,7 +220,6 @@ class GroupRemoveUserFromGroupsService
         try {
             $groupFirstUser = $this->userGroupRepository->findGroupsFirstUserByRolOrFail($groupsId, GROUP_ROLES::USER);
 
-            /** @var UserGroup $userGroup */
             foreach ($groupFirstUser as $userGroup) {
                 $userGroup->setRoles(ValueObjectFactory::createRoles([$adminRole]));
             }

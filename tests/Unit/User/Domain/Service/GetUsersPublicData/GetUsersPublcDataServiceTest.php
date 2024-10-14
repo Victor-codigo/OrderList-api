@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Domain\Service\GetUsersPublicData;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\Array\Roles;
@@ -15,6 +14,7 @@ use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Struct\SCOPE;
 use Common\Domain\Validation\User\USER_ROLES;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use User\Domain\Model\User;
@@ -40,6 +40,9 @@ class GetUsersPublcDataServiceTest extends TestCase
         $this->object = new GeUsersPublicDataService($this->userRepository, self::USER_PUBLIC_IMAGE_PATH, self::APP_PROTOCOL_AND_DOMAIN);
     }
 
+    /**
+     * @return array<Identifier>
+     */
     private function getUsersId(): array
     {
         return [
@@ -49,6 +52,9 @@ class GetUsersPublcDataServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<Identifier>
+     */
     private function getUsersIdDeletedOrNotActive(): array
     {
         return [
@@ -57,6 +63,9 @@ class GetUsersPublcDataServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @return User[]
+     */
     private function getUsers(): array
     {
         return [
@@ -66,6 +75,9 @@ class GetUsersPublcDataServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @return User[]
+     */
     private function getUsersDeletedOrNotActive(): array
     {
         return [
@@ -201,6 +213,7 @@ class GetUsersPublcDataServiceTest extends TestCase
 
         $this->expectException(LogicException::class);
 
+        // @phpstan-ignore argument.type
         $usersDto = new GetUsersPublicDataDto($users);
         $this->object->__invoke($usersDto, SCOPE::PRIVATE);
     }

@@ -11,6 +11,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\ValidationInterface;
 
@@ -31,6 +32,10 @@ class ShopGetDataInputDto implements ServiceInputDtoInterface
     public readonly PaginatorPageItems $pageItems;
     public readonly bool $orderAsc;
 
+    /**
+     * @param string[]|null $shopsId
+     * @param string[]|null $productsId
+     */
     public function __construct(
         ?string $groupId,
         ?array $shopsId,
@@ -40,7 +45,7 @@ class ShopGetDataInputDto implements ServiceInputDtoInterface
         ?string $shopName,
         ?bool $orderAsc,
         ?int $page,
-        ?int $pageItems
+        ?int $pageItems,
     ) {
         $this->groupId = ValueObjectFactory::createIdentifier($groupId);
         $this->shopName = ValueObjectFactory::createNameWithSpaces($shopName);
@@ -63,6 +68,9 @@ class ShopGetDataInputDto implements ServiceInputDtoInterface
         );
     }
 
+    /**
+     * @return array{}|array<string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {
@@ -103,6 +111,9 @@ class ShopGetDataInputDto implements ServiceInputDtoInterface
         return $errorList;
     }
 
+    /**
+     * @return array{}|array<string, VALIDATION_ERRORS[]>
+     */
     private function validateFilter(ValidationInterface $validator): array
     {
         if ($this->shopNameFilter->getFilter()->isNull()

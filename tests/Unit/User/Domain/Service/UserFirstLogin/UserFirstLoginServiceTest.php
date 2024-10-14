@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Domain\Service\UserFirstLogin;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
@@ -12,6 +11,7 @@ use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\ResponseDto;
 use Common\Domain\Service\Exception\DomainErrorException;
 use Common\Domain\Validation\User\USER_ROLES;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use User\Domain\Model\User;
@@ -26,10 +26,10 @@ use User\Domain\Service\UserFirstLogin\UserFirstLoginService;
 class UserFirstLoginServiceTest extends TestCase
 {
     private UserFirstLoginService $object;
-    private MockObject|UserRepositoryInterface $userRepository;
-    private MockObject|UserCreateGroupService $userCreateGroupService;
-    private MockObject|User $user;
-    private MockObject|ModuleCommunicationInterface $moduleCommunication;
+    private MockObject&UserRepositoryInterface $userRepository;
+    private MockObject&UserCreateGroupService $userCreateGroupService;
+    private MockObject&User $user;
+    private MockObject&ModuleCommunicationInterface $moduleCommunication;
     private string $appName;
     private string $systemKey;
 

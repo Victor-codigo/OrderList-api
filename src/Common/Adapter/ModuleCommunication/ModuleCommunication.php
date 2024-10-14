@@ -36,7 +36,7 @@ class ModuleCommunication implements ModuleCommunicationInterface
         private DIInterface $DI,
         private TokenExtractorInterface $jwtTokenExtractor,
         private RequestStack $request,
-        private string $appEnv
+        private string $appEnv,
     ) {
     }
 
@@ -49,10 +49,11 @@ class ModuleCommunication implements ModuleCommunicationInterface
     public function __invoke(ModuleCommunicationConfigDtoPaginatorInterface $routeConfig): ResponseDto
     {
         try {
+            $response = null;
             $response = $this->httpClient->request(
-                $routeConfig->method,
-                $this->getRequestUrl($routeConfig->route, array_merge($routeConfig->attributes, $routeConfig->query)),
-                $this->getOptions($routeConfig->authentication, $routeConfig->contentType, $routeConfig->content, $routeConfig->files, $routeConfig->cookies, $routeConfig->headers)
+                $routeConfig->getMethod(),
+                $this->getRequestUrl($routeConfig->getRoute(), array_merge($routeConfig->getAttributes(), $routeConfig->getQuery())),
+                $this->getOptions($routeConfig->getAuthentication(), $routeConfig->getContentType(), $routeConfig->getContent(), $routeConfig->getFiles(), $routeConfig->getCookies(), $routeConfig->getHeaders())
             );
 
             $responseContent = $response->getContent();
@@ -112,7 +113,7 @@ class ModuleCommunication implements ModuleCommunicationInterface
             }
 
             if ($firstCall) {
-                $pagesTotal = $this->getArrayValueByPath($response->data, $routeConfig->getResponsePagesTotalPath());
+                $pagesTotal = (int) $this->getArrayValueByPath($response->data, $routeConfig->getResponsePagesTotalPath());
                 $pageEnd = $hasPageEnd ? $pageEnd : $pagesTotal;
                 $firstCall = false;
             }
@@ -135,6 +136,10 @@ class ModuleCommunication implements ModuleCommunicationInterface
     }
 
     /**
+     * @param mixed[] $array
+     *
+     * @return string|int|float|mixed[]
+     *
      * @throws InvalidArgumentException
      */
     private function getArrayValueByPath(array $array, string $path): string|int|float|array
@@ -154,6 +159,14 @@ class ModuleCommunication implements ModuleCommunicationInterface
     }
 
     /**
+     * @param array{}|array{
+     *  data: mixed[],
+     *  errors: mixed[],
+     *  message: string,
+     *  status: string,
+     * } $responseContent
+     * @param string[] $responseHeaders
+     *
      * @throws \ValueError
      */
     private function createResponseDto(array $responseContent, array $responseHeaders): ResponseDto
@@ -168,6 +181,9 @@ class ModuleCommunication implements ModuleCommunicationInterface
         );
     }
 
+    /**
+     * @param string[] $attributes
+     */
     private function getRequestUrl(string $route, array $attributes): string
     {
         $url = $this->DI->getUrlRouteAbsoluteDomain($route, $attributes);
@@ -176,10 +192,10 @@ class ModuleCommunication implements ModuleCommunicationInterface
             return $url;
         }
 
-        $sessionDebug = static::DEV_QUERY_STRING;
+        $sessionDebug = self::DEV_QUERY_STRING;
 
         if ('test' === $this->appEnv) {
-            $sessionDebug .= '&'.static::TEST_QUERY_STRING;
+            $sessionDebug .= '&'.self::TEST_QUERY_STRING;
         }
 
         if (str_contains($url, '?')) {
@@ -190,8 +206,12 @@ class ModuleCommunication implements ModuleCommunicationInterface
     }
 
     /**
-     * @param Cookie[] $cookies
-     * @param string[] $headers
+     * @param Cookie[]              $cookies
+     * @param string[]              $headers
+     * @param mixed[]               $data
+     * @param array<string, string> $headers
+     *
+     * @return array<string, mixed>
      */
     private function json(?string $tokenSession = null, array $data = [], array $cookies = [], array $headers = []): array
     {
@@ -205,9 +225,12 @@ class ModuleCommunication implements ModuleCommunicationInterface
     }
 
     /**
+     * @param mixed[]                 $data
      * @param UploadedFileInterface[] $files
      * @param Cookie[]                $cookies
      * @param string[]                $headers
+     *
+     * @return array<string, mixed>
      */
     private function form(?string $tokenSession = null, array $data = [], array $files = [], array $cookies = [], array $headers = []): array
     {
@@ -226,8 +249,12 @@ class ModuleCommunication implements ModuleCommunicationInterface
     }
 
     /**
+     * @param mixed[]                 $content
      * @param UploadedFileInterface[] $files
-     * @param Cookie                  $cookies
+     * @param Cookie[]                $cookies
+     * @param string[]                $headers
+     *
+     * @return array<string, mixed>
      *
      * @throws ModuleCommunicationTokenNotFoundInRequestException
      */
@@ -240,7 +267,7 @@ class ModuleCommunication implements ModuleCommunicationInterface
 
         return match ($contentType) {
             'application/json' => $this->json($tokenSession, $content, $cookies, $headers),
-            'multipart/form-data' => $this->form($tokenSession, $content, $files, $cookies, $headers)
+            'multipart/form-data' => $this->form($tokenSession, $content, $files, $cookies, $headers),
         };
     }
 

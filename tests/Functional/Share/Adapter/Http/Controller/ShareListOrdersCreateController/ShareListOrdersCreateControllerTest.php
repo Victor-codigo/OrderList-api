@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Test\Unit\Share\Adapter\Http\Controller\ShareListOrdersCreate;
+namespace Test\Functional\Share\Adapter\Http\Controller\ShareListOrdersCreateController;
 
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Response\RESPONSE_STATUS;

@@ -15,6 +15,9 @@ class GetProductShopPriceRequestDtoTest extends TestCase
     private const string ID = '1befdbe2-9c14-42f0-850f-63e061e33b8f';
     private const int NUM_MAX = 100;
 
+    /**
+     * @param array<string, mixed>|null $requestData
+     */
     private function createRequest(?array $requestData): GetProductShopPriceRequestDto
     {
         $request = new Request();

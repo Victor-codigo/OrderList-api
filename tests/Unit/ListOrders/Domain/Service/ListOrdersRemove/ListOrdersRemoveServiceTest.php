@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersRemove;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -13,14 +12,18 @@ use ListOrders\Domain\Model\ListOrders;
 use ListOrders\Domain\Ports\ListOrdersRepositoryInterface;
 use ListOrders\Domain\Service\ListOrdersRemove\Dto\ListOrdersRemoveDto;
 use ListOrders\Domain\Service\ListOrdersRemove\ListOrdersRemoveService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ListOrdersRemoveServiceTest extends TestCase
 {
     private ListOrdersRemoveService $object;
-    private MockObject|ListOrdersRepositoryInterface $listOrdersRepository;
-    private MockObject|PaginatorInterface $paginator;
+    private MockObject&ListOrdersRepositoryInterface $listOrdersRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, ListOrders>
+     */
+    private MockObject&PaginatorInterface $paginator;
 
     #[\Override]
     protected function setUp(): void

@@ -17,10 +17,15 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
+/**
+ * @template-covariant TUser of UserInterface
+ *
+ * @implements UserProviderInterface<UserInterface>
+ */
 class UserSharedSymfonyProviderAdapter implements UserProviderInterface
 {
     public function __construct(
-        private ModuleCommunicationInterface $moduleCommunication
+        private ModuleCommunicationInterface $moduleCommunication,
     ) {
     }
 
@@ -54,6 +59,18 @@ class UserSharedSymfonyProviderAdapter implements UserProviderInterface
     {
         try {
             $userId = ValueObjectFactory::createIdentifier($identifier);
+
+            /**
+             * @var object{
+             *  data: array{}|array<int, array{
+             *      id: string,
+             *      email: string,
+             *      name: string,
+             *      roles: string[],
+             *      created_on: string,
+             *      image: string|null
+             * }>} $response
+             */
             $response = $this->moduleCommunication->__invoke(
                 ModuleCommunicationFactory::userGet([$userId])
             );
@@ -64,6 +81,16 @@ class UserSharedSymfonyProviderAdapter implements UserProviderInterface
         }
     }
 
+    /**
+     * @param array{}|array{
+     *  id: string,
+     *  email: string,
+     *  name: string,
+     *  roles: string[],
+     *  created_on: string,
+     *  image: string|null
+     * } $userData
+     */
     private function createUserSharedSymfonyAdapter(array $userData): UserSharedSymfonyAdapter
     {
         $roles = array_map(

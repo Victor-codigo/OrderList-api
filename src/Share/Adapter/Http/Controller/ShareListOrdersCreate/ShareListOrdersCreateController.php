@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Share\Adapter\Http\Controller\ShareListOrdersCreate;
 
+use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;

@@ -18,16 +18,29 @@ use Shop\Domain\Service\ShopGetData\Dto\ShopGetDataDto;
 
 class ShopGetDataService
 {
+    /**
+     * @var PaginatorInterface<int, Shop>|null
+     */
     private ?PaginatorInterface $shopsPaginator = null;
 
     public function __construct(
         private ShopRepositoryInterface $shopRepository,
         private string $appProtocolAndDomain,
-        private string $shopPublicImagePath
+        private string $shopPublicImagePath,
     ) {
     }
 
     /**
+     * @return array<int, array{
+     *  id: string,
+     *  group_id: string,
+     *  name: string,
+     *  address: string,
+     *  description: string,
+     *  image: string|null,
+     *  created_on: string
+     * }>
+     *
      * @throws DBNotFoundException
      * @throws LogicException
      */
@@ -54,6 +67,8 @@ class ShopGetDataService
      * @param Identifier[] $shopsId
      * @param Identifier[] $productsId
      *
+     * @return PaginatorInterface<int, Shop>|null
+     *
      * @throws DBNotFoundException
      */
     private function getShopsByShopIdAndProductId(Identifier $groupId, array $shopsId, array $productsId, bool $orderAsc): ?PaginatorInterface
@@ -71,9 +86,11 @@ class ShopGetDataService
     }
 
     /**
+     * @return PaginatorInterface<int, Shop>
+     *
      * @throws DBNotFoundException
      */
-    private function getShopsByGroupId(Identifier $groupId, bool $orderAsc): ?PaginatorInterface
+    private function getShopsByGroupId(Identifier $groupId, bool $orderAsc): PaginatorInterface
     {
         return $this->shopRepository->findShopsOrFail(
             $groupId,
@@ -84,6 +101,8 @@ class ShopGetDataService
     }
 
     /**
+     * @return PaginatorInterface<int, Shop>|null
+     *
      * @throws DBNotFoundException
      */
     private function getShopsByShopName(Identifier $groupId, NameWithSpaces $shopName, bool $orderAsc): ?PaginatorInterface
@@ -96,6 +115,8 @@ class ShopGetDataService
     }
 
     /**
+     * @return PaginatorInterface<int, Shop>|null
+     *
      * @throws DBNotFoundException
      */
     private function getShopsByShopNameFilter(Identifier $groupId, Filter $shopNameFilter, bool $orderAsc): ?PaginatorInterface
@@ -107,6 +128,19 @@ class ShopGetDataService
         return $this->shopRepository->findShopByShopNameFilterOrFail($groupId, $shopNameFilter, $orderAsc);
     }
 
+    /**
+     * @param PaginatorInterface<int, Shop> $shopsPaginator
+     *
+     * @return array<int, array{
+     *  id: string,
+     *  group_id: string,
+     *  name: string,
+     *  address: string,
+     *  description: string,
+     *  image: string|null,
+     *  created_on: string
+     * }>
+     */
     private function getShopsData(PaginatorInterface $shopsPaginator, PaginatorPage $page, PaginatorPageItems $pageItems): array
     {
         $shopsPaginator->setPagination($page->getValue(), $pageItems->getValue());

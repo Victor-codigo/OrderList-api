@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Domain\Service\OrderBought;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
@@ -14,6 +13,7 @@ use Order\Domain\Ports\Repository\OrderRepositoryInterface;
 use Order\Domain\Service\OrderBought\Dto\OrderBoughtDto;
 use Order\Domain\Service\OrderBought\OrderBoughtService;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Product\Domain\Model\Product;
@@ -22,9 +22,12 @@ use Shop\Domain\Model\Shop;
 class OrderBoughtServiceTest extends TestCase
 {
     private OrderBoughtService $object;
-    private MockObject|OrderRepositoryInterface $orderRepository;
-    private MockObject|PaginatorInterface $paginator;
-    private MockObject|Order $order;
+    private MockObject&OrderRepositoryInterface $orderRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, Order>
+     */
+    private MockObject&PaginatorInterface $paginator;
+    private MockObject&Order $order;
 
     #[\Override]
     protected function setUp(): void
@@ -39,6 +42,13 @@ class OrderBoughtServiceTest extends TestCase
 
     public function getOrder(): Order
     {
+        /** @var MockObject&ListOrders $listOrders */
+        $listOrders = $this->createMock(ListOrders::class);
+        /** @var MockObject&Product $product */
+        $product = $this->createMock(Product::class);
+        /** @var (MockObject&Shop)|null $shop */
+        $shop = $this->createMock(Shop::class);
+
         return Order::fromPrimitives(
             'order id',
             'group id',
@@ -46,12 +56,15 @@ class OrderBoughtServiceTest extends TestCase
             'order description',
             10,
             true,
-            $this->createMock(ListOrders::class),
-            $this->createMock(Product::class),
-            $this->createMock(Shop::class),
+            $listOrders,
+            $product,
+            $shop
         );
     }
 
+    /**
+     * @return iterable<bool[]>
+     */
     public static function boughtDataProvider(): iterable
     {
         yield [true];

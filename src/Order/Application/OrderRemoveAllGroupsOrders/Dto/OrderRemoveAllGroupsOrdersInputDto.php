@@ -8,6 +8,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 
 class OrderRemoveAllGroupsOrdersInputDto implements ServiceInputDtoInterface
@@ -24,6 +25,10 @@ class OrderRemoveAllGroupsOrdersInputDto implements ServiceInputDtoInterface
     public readonly array $groupsIdToChangeUserId;
     public readonly string $systemKey;
 
+    /**
+     * @param string[]|null $groupsIdToRemove
+     * @param string[]|null $groupsIdToChangeUserId
+     */
     public function __construct(UserShared $userSession, ?array $groupsIdToRemove, ?array $groupsIdToChangeUserId, ?string $systemKey)
     {
         $this->userSession = $userSession;
@@ -39,6 +44,9 @@ class OrderRemoveAllGroupsOrdersInputDto implements ServiceInputDtoInterface
         $this->systemKey = $systemKey ?? '';
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {

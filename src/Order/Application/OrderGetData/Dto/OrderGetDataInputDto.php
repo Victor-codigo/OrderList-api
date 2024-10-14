@@ -60,6 +60,9 @@ class OrderGetDataInputDto implements ServiceInputDtoInterface
         );
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {
@@ -87,6 +90,9 @@ class OrderGetDataInputDto implements ServiceInputDtoInterface
         return array_merge($errorList, $errorListOrders, $errorListFilterSection, $errorListFilterTest);
     }
 
+    /**
+     * @return array<string, array<int|string, VALIDATION_ERRORS[]>>
+     */
     private function validateOrdersId(ValidationInterface $validator): array
     {
         $errorListOrdersId = $validator->validateValueObjectArray($this->ordersId);
@@ -98,6 +104,9 @@ class OrderGetDataInputDto implements ServiceInputDtoInterface
         return $errorListOrdersId;
     }
 
+    /**
+     * @return array<string, VALIDATION_ERRORS[]>
+     */
     private function validateFilter(ValidationInterface $validator, Filter $filter, string $errorPrefix): array
     {
         if ($filter->getFilter()->isNull()

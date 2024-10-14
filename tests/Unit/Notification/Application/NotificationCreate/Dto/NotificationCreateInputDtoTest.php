@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Application\NotificationCreate\Dto;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Common\Domain\Validation\ValidationInterface;
 use Notification\Application\NotificationCreate\Dto\NotificationCreateInputDto;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,6 +31,9 @@ class NotificationCreateInputDtoTest extends TestCase
         $this->validator = new ValidationChain();
     }
 
+    /**
+     * @return array<string, string|int>
+     */
     private function getNotificationData(): array
     {
         return [

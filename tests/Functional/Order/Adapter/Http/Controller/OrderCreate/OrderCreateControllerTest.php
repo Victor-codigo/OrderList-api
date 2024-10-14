@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Functional\Order\Adapter\Http\Controller\OrderCreate;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
@@ -18,8 +18,6 @@ class OrderCreateControllerTest extends WebClientTestCase
     private const string METHOD = 'POST';
     private const string GROUP_EXISTS_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
     private const string LIST_ORDERS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
-
-    private string $pathImageProduct;
 
     #[\Override]
     protected function setUp(): void
@@ -33,6 +31,15 @@ class OrderCreateControllerTest extends WebClientTestCase
         parent::tearDown();
     }
 
+    /**
+     * @return array<int, array{
+     *  list_orders_id: string,
+     *  product_id: string,
+     *  shop_id: string,
+     *  description: string,
+     *  amount: float,
+     * }>
+     */
     private function getOrdersData(): array
     {
         return [
@@ -60,6 +67,14 @@ class OrderCreateControllerTest extends WebClientTestCase
         ];
     }
 
+    /**
+     * @return array<int, array{
+     *  product_id: string,
+     *  shop_id: string,
+     *  description: string,
+     *  amount: float
+     * }>
+     */
     private function getOrdersDataNew(): array
     {
         return [

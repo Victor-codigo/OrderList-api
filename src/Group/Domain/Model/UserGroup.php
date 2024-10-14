@@ -18,7 +18,7 @@ class UserGroup
         private Identifier $groupId,
         private Identifier $userId,
         private Roles $roles,
-        private Group $group
+        private Group $group,
     ) {
     }
 
@@ -26,7 +26,7 @@ class UserGroup
      * @param Rol[]         $roles
      * @param GROUP_ROLES[] $roles
      */
-    public static function fromPrimitives(string $groupId, string $userId, array $roles, group $group): self
+    public static function fromPrimitives(string $groupId, string $userId, array $roles, Group $group): self
     {
         $roles = array_map(
             fn (GROUP_ROLES $rol): Rol => ValueObjectFactory::createRol($rol),

@@ -8,7 +8,6 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionExcepti
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Common\Domain\Validation\User\USER_ROLES;
 use Doctrine\DBAL\Exception\ConnectionException;
 use Doctrine\Persistence\ObjectManager;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
@@ -30,8 +29,6 @@ class ShareRepositoryTest extends DataBaseTestCase
     private const string SHARE_ID_EXIST = '72b37f9c-ff55-4581-a131-4270e73012a2';
     private const string LIST_ORDERS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
     private const string USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
-    private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
-    private const string CREATION_DATE = '2024-10-1 12:00';
 
     private ShareRepository $object;
     private ListOrdersRepository $listOrdersRepository;
@@ -46,29 +43,6 @@ class ShareRepositoryTest extends DataBaseTestCase
         $this->listOrdersRepository = $this->entityManager->getRepository(ListOrders::class);
         $this->userRepository = $this->entityManager->getRepository(User::class);
         $this->connectionException = $this->createMock(ConnectionException::class);
-    }
-
-    private function createListOrders(): ListOrders
-    {
-        return ListOrders::fromPrimitives(
-            self::LIST_ORDERS_ID,
-            self::GROUP_ID,
-            self::USER_ID,
-            'list orders',
-            'list orders description',
-            new \DateTime(self::CREATION_DATE)
-        );
-    }
-
-    private function createUser(): User
-    {
-        return User::fromPrimitives(
-            self::USER_ID,
-            'user@email.com',
-            'user password',
-            'user name',
-            [USER_ROLES::USER]
-        );
     }
 
     private function createShare(ListOrders $listOrders, User $user, ?Identifier $id): Share
@@ -90,7 +64,7 @@ class ShareRepositoryTest extends DataBaseTestCase
 
         $this->object->save($share);
 
-        /** @var Share $exception */
+        /** @var Share $expected */
         $expected = $this->object->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::SHARE_ID_NEW)]);
 
         $this->assertEquals(self::SHARE_ID_NEW, $expected->getId()->getValue());

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Test\Functional\Group\Adapter\Http\Controller\GroupUserGetGroups;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\Filter\FILTER_SECTION;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Group\Domain\Model\Group;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
@@ -37,6 +37,12 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         ];
     }
 
+    /**
+     * @param string[]     $groupsId
+     * @param GROUP_TYPE[] $groupsType
+     * @param string[]     $groupsName
+     * @param string[]     $groupsDescription
+     */
     private function assertResponseDataIsOk(object $responseContent, array $groupsId, array $groupsType, array $groupsName, array $groupsDescription): void
     {
         $this->assertTrue(property_exists($responseContent->data, 'page'));
@@ -49,6 +55,12 @@ class GroupUserGetGroupsControllerTest extends WebClientTestCase
         }
     }
 
+    /**
+     * @param string[]     $groupsId
+     * @param GROUP_TYPE[] $groupsType
+     * @param string[]     $groupsName
+     * @param string[]     $groupsDescription
+     */
     private function assertGroupDataIsOk(object $groupData, array $groupsId, array $groupsType, array $groupsName, array $groupsDescription): void
     {
         $this->assertTrue(property_exists($groupData, 'group_id'));

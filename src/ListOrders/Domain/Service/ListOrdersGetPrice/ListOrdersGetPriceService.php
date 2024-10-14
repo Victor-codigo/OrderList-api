@@ -9,6 +9,7 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Model\ValueObject\Float\Money;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use Common\Domain\Ports\Paginator\PaginatorInterface;
 use ListOrders\Domain\Service\ListOrdersGetPrice\Dto\ListOrdersGetPriceDto;
 use ListOrders\Domain\Service\ListOrdersGetPrice\Dto\ListOrdersGetPriceOutputDto;
 use Order\Domain\Model\Order;
@@ -22,7 +23,7 @@ class ListOrdersGetPriceService
 
     public function __construct(
         private readonly OrderRepositoryInterface $orderRepository,
-        private readonly ProductShopRepositoryInterface $productShopRepository
+        private readonly ProductShopRepositoryInterface $productShopRepository,
     ) {
     }
 
@@ -32,6 +33,7 @@ class ListOrdersGetPriceService
         $listOrdersPagination->setPagination(1, self::LIST_ORDERS_MAX_ORDERS);
         $orders = iterator_to_array($listOrdersPagination);
         $productShopsPagination = $this->getProductsShopsPrices($orders, $input->groupId);
+        /** @var ProductShop[] $productsShops */
         $productsShops = iterator_to_array($productShopsPagination);
 
         return new ListOrdersGetPriceOutputDto(
@@ -43,9 +45,11 @@ class ListOrdersGetPriceService
     /**
      * @param Order[] $orders
      *
+     * @return PaginatorInterface<int, ProductShop>|\ArrayIterator<int, Order>
+     *
      * @throws DBNotFoundException
      */
-    private function getProductsShopsPrices(array $orders, Identifier $groupId): iterable
+    private function getProductsShopsPrices(array $orders, Identifier $groupId): PaginatorInterface|\ArrayIterator
     {
         $productsId = array_map(
             fn (Order $order): Identifier => $order->getProductId(),
@@ -58,11 +62,15 @@ class ListOrdersGetPriceService
 
         try {
             return $this->productShopRepository->findProductsAndShopsOrFail($productsId, $shopsId, $groupId);
-        } catch (DBNotFoundException) {
+        } catch (DBNotFoundException $e) {
             return new \ArrayIterator([]);
         }
     }
 
+    /**
+     * @param Order[]       $orders
+     * @param ProductShop[] $productsShops
+     */
     private function calculateListOrdersPrice(array $orders, array $productsShops, bool $bought): Money
     {
         $totalPrice = array_reduce(
@@ -74,6 +82,9 @@ class ListOrdersGetPriceService
         return ValueObjectFactory::createMoney($totalPrice);
     }
 
+    /**
+     * @param ProductShop[] $productsShops
+     */
     private function calculateOrderPrice(Order $order, array $productsShops, bool $bought): float
     {
         $productShop = $this->getProductShop($productsShops, $order->getProductId(), $order->getShopId());
@@ -93,6 +104,9 @@ class ListOrdersGetPriceService
         return $productShop->getPrice()->getValue() * $order->getAmount()->getValue();
     }
 
+    /**
+     * @param ProductShop[] $productsShops
+     */
     private function getProductShop(array $productsShops, Identifier $productId, Identifier $shopId): ?ProductShop
     {
         $productShop = array_filter(

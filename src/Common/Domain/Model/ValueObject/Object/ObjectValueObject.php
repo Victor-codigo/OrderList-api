@@ -43,4 +43,10 @@ abstract class ObjectValueObject extends ValueObjectBase
 
         return $this->value == $value->getValue();
     }
+
+    #[\Override]
+    public function isNull(): bool
+    {
+        return null === $this->value;
+    }
 }

@@ -25,7 +25,7 @@ class GroupUserAddService
 
     public function __construct(
         private UserGroupRepositoryInterface $userGroupRepository,
-        private GroupRepositoryInterface $groupRepository
+        private GroupRepositoryInterface $groupRepository,
     ) {
     }
 
@@ -63,7 +63,8 @@ class GroupUserAddService
     }
 
     /**
-     * @param Identifier[] $usersId
+     * @param PaginatorInterface<int, UserGroup> $usersGroup *
+     * @param Identifier[]                       $usersId
      *
      * @return Identifier[]
      *

@@ -12,7 +12,7 @@ use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 class ValueObjectValidationException extends DomainExceptionOutput implements ValidationExceptionInterface
 {
     /**
-     * @param array<string, VALIDATION_ERRORS[]> $errors
+     * @param array<int|string, array{}|array<int, VALIDATION_ERRORS|VALIDATION_ERRORS[]>> $errors
      */
     public static function fromArray(string $message, array $errors): self
     {
@@ -25,6 +25,11 @@ class ValueObjectValidationException extends DomainExceptionOutput implements Va
         return new static($message, $errorValueObject, RESPONSE_STATUS::ERROR, RESPONSE_STATUS_HTTP::BAD_REQUEST);
     }
 
+    /**
+     * @param array{}|array<int, VALIDATION_ERRORS|VALIDATION_ERRORS[]> $errorList
+     *
+     * @return array{}|array<int, VALIDATION_ERRORS|VALIDATION_ERRORS[]>
+     */
     private static function errorsToLower(array $errorList): array
     {
         $errorListToLower = [];

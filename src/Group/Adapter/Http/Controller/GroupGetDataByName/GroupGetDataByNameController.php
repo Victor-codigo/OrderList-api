@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Group\Adapter\Http\Controller\GroupGetDataByName;
 
+use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
@@ -104,7 +105,7 @@ class GroupGetDataByNameController extends AbstractController
 {
     public function __construct(
         private GroupGetDataByNameUseCase $GroupGetDataByNameUseCase,
-        private Security $security
+        private Security $security,
     ) {
     }
 

@@ -22,6 +22,8 @@ interface HttpClientResponseInterface
     public function getContent(bool $throwException = true): string;
 
     /**
+     * @return string[]
+     *
      * @throws NetworkException
      * @throws Error300Exception
      * @throws Error400Exception
@@ -29,9 +31,11 @@ interface HttpClientResponseInterface
      */
     public function getHeaders(bool $throwException = true): array;
 
-    public function getInfo(?bool $throwException = true): array;
+    public function getInfo(?string $throwException = null): mixed;
 
     /**
+     * @return mixed[]
+     *
      * @throws DecodingException
      * @throws NetworkException
      * @throws Error300Exception

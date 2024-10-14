@@ -17,7 +17,7 @@ class ControllerEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         private TryoutUserRoutePermissionsValidation $tryoutUserPermissionsValidation,
-        private Security $security
+        private Security $security,
     ) {
     }
 
@@ -42,7 +42,7 @@ class ControllerEventSubscriber implements EventSubscriberInterface
      */
     private function tryoutUserValidation(Request $request): void
     {
-        /** @var UserSharedSymfonyAdapter $userAdapterSymfony */
+        /** @var ?UserSharedSymfonyAdapter $userAdapterSymfony */
         $userAdapterSymfony = $this->security->getUser();
 
         if (null === $userAdapterSymfony) {

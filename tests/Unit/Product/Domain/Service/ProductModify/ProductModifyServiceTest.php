@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ProductModify;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\FileUpload\Exception\File\FileException;
@@ -13,6 +12,7 @@ use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Service\Image\UploadImage\Dto\UploadImageDto;
 use Common\Domain\Service\Image\UploadImage\UploadImageService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Product\Domain\Model\Product;
@@ -32,11 +32,14 @@ class ProductModifyServiceTest extends TestCase
     private const string PRODUCT_IMAGE_PATH = 'path\to\products\images';
 
     private ProductModifyService $object;
-    private MockObject|ProductRepositoryInterface $productRepository;
-    private MockObject|UploadImageService $uploadImageService;
-    private MockObject|PaginatorInterface $productsPaginator;
-    private MockObject|ProductImage $productImage;
-    private MockObject|Product $productFromDb;
+    private MockObject&ProductRepositoryInterface $productRepository;
+    private MockObject&UploadImageService $uploadImageService;
+    /**
+     * @var MockObject&PaginatorInterface<int, Product>
+     */
+    private MockObject&PaginatorInterface $productsPaginator;
+    private MockObject&ProductImage $productImage;
+    private MockObject&Product $productFromDb;
 
     #[\Override]
     protected function setUp(): void

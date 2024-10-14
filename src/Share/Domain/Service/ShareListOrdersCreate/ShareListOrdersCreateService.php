@@ -64,8 +64,13 @@ class ShareListOrdersCreateService
         $listOrdersPaginator = $this->listOrdersRepository->findListOrderByIdOrFail([$listOrdersId]);
         $listOrdersPaginator->setPagination(1, 1);
 
+        $listOrdersReturn = null;
         foreach ($listOrdersPaginator->getIterator() as $listOrders) {
-            return $listOrders;
+            $listOrdersReturn = $listOrders;
+
+            break;
         }
+
+        return $listOrdersReturn;
     }
 }

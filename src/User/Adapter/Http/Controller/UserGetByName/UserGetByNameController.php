@@ -82,7 +82,7 @@ class UserGetByNameController extends AbstractController
 {
     public function __construct(
         private UserGetByNameUseCase $UserGetByNameUseCase,
-        private Security $security
+        private Security $security,
     ) {
     }
 
@@ -95,6 +95,9 @@ class UserGetByNameController extends AbstractController
         return $this->createResponse($userFound->userData);
     }
 
+    /**
+     * @param string[]|null $userName
+     */
     private function createUserGetByNameInputDto(?array $userName): UserGetByNameInputDto
     {
         /** @var UserSymfonyAdapter $userAdapter */
@@ -103,6 +106,9 @@ class UserGetByNameController extends AbstractController
         return new UserGetByNameInputDto($userAdapter->getUser(), $userName);
     }
 
+    /**
+     * @param array<int, array<string, mixed>> $userData
+     */
     private function createResponse(array $userData): JsonResponse
     {
         $responseDto = (new ResponseDto())

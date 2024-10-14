@@ -14,8 +14,14 @@ use Doctrine\Persistence\ManagerRegistry;
 use Share\Domain\Model\Share;
 use Share\Domain\Port\Repository\ShareRepositoryInterface;
 
+/**
+ * @phpstan-extends RepositoryBase<Share>
+ */
 class ShareRepository extends RepositoryBase implements ShareRepositoryInterface
 {
+    /**
+     * @param PaginatorInterface<int, object> $paginator
+     */
     public function __construct(
         ManagerRegistry $managerRegistry,
         PaginatorInterface $paginator,

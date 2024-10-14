@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserModify;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +31,7 @@ class UserModifyControllerTest extends WebClientTestCase
     private const string PATH_IMAGE_NOT_ALLOWED = __DIR__.'/Fixtures/MimeTypeNotAllowed.txt';
     private const string PATH_IMAGE_NOT_ALLOWED_BACKUP = 'tests/Fixtures/Files/MimeTypeNotAllowed.txt';
 
-    private readonly string $pathImageUser;
+    private string $pathImageUser;
     private ?KernelBrowser $client;
 
     #[\Override]

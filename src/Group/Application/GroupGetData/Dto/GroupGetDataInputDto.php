@@ -8,6 +8,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 
 class GroupGetDataInputDto implements ServiceInputDtoInterface
@@ -18,6 +19,9 @@ class GroupGetDataInputDto implements ServiceInputDtoInterface
      */
     public readonly array $groupsId;
 
+    /**
+     * @param string[]|null $groupsId
+     */
     public function __construct(UserShared $userSession, ?array $groupsId)
     {
         $this->userSession = $userSession;
@@ -27,6 +31,9 @@ class GroupGetDataInputDto implements ServiceInputDtoInterface
         );
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {

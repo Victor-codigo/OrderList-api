@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserGetByNameController;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\User\USER_ROLES;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
-use User\Adapter\Http\Controller\UserGetByName\UserGetByNameController;
 use User\Domain\Model\User;
 
 class UserGetByNameControllerTest extends WebClientTestCase
@@ -19,8 +18,6 @@ class UserGetByNameControllerTest extends WebClientTestCase
 
     private const string ENDPOINT = '/api/v1/users/name';
     private const string METHOD = 'GET';
-
-    private UserGetByNameController $object;
 
     #[\Override]
     protected function setUp(): void
@@ -42,11 +39,14 @@ class UserGetByNameControllerTest extends WebClientTestCase
 
     /**
      * @param User[] $users
+     *
+     * @return array<int, array<int, string>>
      */
     private function getRolesString(array $users): array
     {
         $userRoles = [];
         foreach ($users as $user) {
+            /** @var USER_ROLES[] $roles */
             $roles = $user->getRoles()->getRolesEnums();
             $userRoles[] = array_map(
                 fn (USER_ROLES $userRoles) => $userRoles->value,

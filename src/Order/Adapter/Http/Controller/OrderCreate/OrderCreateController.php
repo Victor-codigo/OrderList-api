@@ -79,7 +79,7 @@ class OrderCreateController extends AbstractController
 {
     public function __construct(
         private OrderCreateUseCase $OrderCreateUseCase,
-        private Security $security
+        private Security $security,
     ) {
     }
 
@@ -92,6 +92,14 @@ class OrderCreateController extends AbstractController
         return $this->createResponse($ordersId);
     }
 
+    /**
+     * @param array<int, array{
+     *  product_id: string,
+     *  shop_id: string,
+     *  description: string,
+     *  amount: float
+     * }> $ordersData
+     */
     private function createOrderCreateInputDto(?string $groupId, ?string $listOrdersId, array $ordersData): OrderCreateInputDto
     {
         /** @var UserSharedSymfonyAdapter $userAdapter */

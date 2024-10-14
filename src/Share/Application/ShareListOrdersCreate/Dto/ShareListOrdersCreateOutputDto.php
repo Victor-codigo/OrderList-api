@@ -14,6 +14,9 @@ readonly class ShareListOrdersCreateOutputDto implements ApplicationOutputInterf
     ) {
     }
 
+    /**
+     * @return array{ list_orders_id: string }
+     */
     #[\Override]
     public function toArray(): array
     {

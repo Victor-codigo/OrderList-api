@@ -10,13 +10,16 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 class GroupUserAddOutputDto implements ApplicationOutputInterface
 {
     /**
-     * @var Identifier[]
+     * @param Identifier[] $usersId
      */
     public function __construct(
-        public readonly array $usersId
+        public readonly array $usersId,
     ) {
     }
 
+    /**
+     * @return array<int, string|null>
+     */
     #[\Override]
     public function toArray(): array
     {

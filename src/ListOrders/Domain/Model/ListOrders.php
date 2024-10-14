@@ -12,6 +12,7 @@ use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Order\Domain\Model\Order;
+use Share\Domain\Model\Share;
 
 class ListOrders
 {
@@ -24,11 +25,11 @@ class ListOrders
     private \DateTime $createdOn;
 
     /**
-     * @var Collection<Order>
+     * @var Collection<int, Order>
      */
     private Collection $orders;
     /**
-     * @var Collection<Share>
+     * @var Collection<int, Share>
      */
     private Collection $shares;
 
@@ -95,6 +96,9 @@ class ListOrders
         return $this->createdOn;
     }
 
+    /**
+     * @return Collection<int, Order>
+     */
     public function getOrders(): Collection
     {
         return $this->orders;

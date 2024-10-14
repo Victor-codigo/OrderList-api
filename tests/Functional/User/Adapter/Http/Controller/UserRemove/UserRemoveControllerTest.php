@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserRemove;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
-use User\Adapter\Http\Controller\UserRemove\UserRemoveController;
 
 class UserRemoveControllerTest extends WebClientTestCase
 {
@@ -19,8 +18,6 @@ class UserRemoveControllerTest extends WebClientTestCase
     private const string ENDPOINT = '/api/v1/users/remove';
     private const string USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
     private const string USER_ID_HAS_NO_GROUP = '1552b279-5f78-4585-ae1b-31be2faabba8';
-
-    private UserRemoveController $object;
 
     #[Test]
     public function itShouldRemoveTheUserSessionWithAllItsData(): void

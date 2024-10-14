@@ -16,7 +16,7 @@ use Group\Domain\Service\GroupUserRoleChange\Exception\GroupWithoutAdminsExcepti
 class GroupUserRoleChangeService
 {
     public function __construct(
-        private UserGroupRepositoryInterface $userGroupRepository
+        private UserGroupRepositoryInterface $userGroupRepository,
     ) {
     }
 
@@ -63,6 +63,7 @@ class GroupUserRoleChangeService
 
     /**
      * @param UserGroup[] $usersGroup
+     * @param UserGroup[] $usersToChangeRol
      *
      * @throws GroupWithoutAdminsException
      */

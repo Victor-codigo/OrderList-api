@@ -78,6 +78,9 @@ class Notification
         $this->createdOn = new \DateTime();
     }
 
+    /**
+     * @param array<string, string> $data
+     */
     public static function fromPrimitives(string $id, string $userId, NOTIFICATION_TYPE $type, array $data): self
     {
         return new self(

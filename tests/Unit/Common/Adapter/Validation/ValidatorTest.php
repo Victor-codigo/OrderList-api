@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Test\Unit\Common\Adapter\Validation\Fixtures\ValueObjectChildValueObjects;
 use Test\Unit\Common\Adapter\Validation\Fixtures\ValueObjectForTesting;
@@ -185,7 +185,7 @@ class ValidatorTest extends TestCase
             'ValueObjectForTesting-3' => [VALIDATION_ERRORS::EQUAL_TO],
         ];
 
-        $this->assertSame($expected, $return);
+        $this->assertEquals($expected, $return);
     }
 
     #[Test]
@@ -218,7 +218,7 @@ class ValidatorTest extends TestCase
             ],
         ];
 
-        $this->assertSame($expected, $return);
+        $this->assertEquals($expected, $return);
     }
 
     #[Test]

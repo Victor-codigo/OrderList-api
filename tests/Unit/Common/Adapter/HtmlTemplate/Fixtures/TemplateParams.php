@@ -17,6 +17,9 @@ class TemplateParams implements TemplateDtoInterface
         $this->param2 = $param2;
     }
 
+    /**
+     * @return array<string, int>
+     */
     #[\Override]
     public function toArray(): array
     {

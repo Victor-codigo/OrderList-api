@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersCreate;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -12,6 +11,7 @@ use ListOrders\Domain\Model\ListOrders;
 use ListOrders\Domain\Ports\ListOrdersRepositoryInterface;
 use ListOrders\Domain\Service\ListOrdersCreate\Dto\ListOrdersCreateDto;
 use ListOrders\Domain\Service\ListOrdersCreate\ListOrdersCreateService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -44,6 +44,10 @@ class ListOrdersCreateServiceTest extends TestCase
         );
     }
 
+    /**
+     * @param ListOrders[] $listsOrdersExpect
+     * @param ListOrders[] $listsOrdersActual
+     */
     private function assertListOrderIsOk(array $listsOrdersExpect, array $listsOrdersActual): void
     {
         foreach ($listsOrdersExpect as $key => $listOrdersExpect) {
@@ -71,9 +75,11 @@ class ListOrdersCreateServiceTest extends TestCase
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(
-                fn (array $listsOrdersToSave): true => $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave) || true)
-            );
+            ->with($this->callback(function (array $listsOrdersToSave) use ($listOrders): true {
+                $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave);
+
+                return true;
+            }));
 
         $return = $this->object->__invoke($input);
 
@@ -96,7 +102,11 @@ class ListOrdersCreateServiceTest extends TestCase
             ->expects($this->once())
             ->method('save')
             ->with($this->callback(
-                fn (array $listsOrdersToSave): true => $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave) || true)
+                function (array $listsOrdersToSave) use ($listOrders): true {
+                    $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave);
+
+                    return true;
+                })
             )
             ->willThrowException(new DBUniqueConstraintException());
 
@@ -119,8 +129,11 @@ class ListOrdersCreateServiceTest extends TestCase
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('save')
-            ->with($this->callback(
-                fn (array $listsOrdersToSave): true => $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave) || true)
+            ->with($this->callback(function (array $listsOrdersToSave) use ($listOrders): true {
+                $this->assertListOrderIsOk([$listOrders], $listsOrdersToSave);
+
+                return true;
+            })
             )
             ->willThrowException(new DBConnectionException());
 

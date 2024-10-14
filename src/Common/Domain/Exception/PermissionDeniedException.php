@@ -8,6 +8,9 @@ use Common\Domain\Validation\User\USER_ROLES;
 
 class PermissionDeniedException extends DomainException
 {
+    /**
+     * @param USER_ROLES[] $rolesNeeded
+     */
     public static function fromMessage(string $message, array $rolesNeeded): static
     {
         $roles = array_map(

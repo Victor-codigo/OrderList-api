@@ -16,12 +16,12 @@ use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
-use Order\Application\OrderRemove\Exception\OrderRemoveGroupAndUserValidationException;
-use Order\Application\OrderRemove\Exception\OrderRemoveOrdersNotFoundException;
 use Order\Application\OrderRemoveAllGroupsOrders\Dto\OrderRemoveAllGroupsOrdersInputDto;
 use Order\Application\OrderRemoveAllGroupsOrders\Dto\OrderRemoveAllGroupsOrdersOutputDto;
 use Order\Application\OrderRemoveAllGroupsOrders\Exception\OrderRemoveAllGroupsOrdersGroupsAdminsRequestException;
 use Order\Application\OrderRemoveAllGroupsOrders\Exception\OrderRemoveAllGroupsOrdersSystemKeyException;
+use Order\Application\OrderRemove\Exception\OrderRemoveGroupAndUserValidationException;
+use Order\Application\OrderRemove\Exception\OrderRemoveOrdersNotFoundException;
 use Order\Domain\Service\OrderRemoveAllGroupsOrders\Dto\OrderRemoveAllGroupsOrdersDto;
 use Order\Domain\Service\OrderRemoveAllGroupsOrders\Dto\OrderRemoveAllGroupsOrdersOutputDto as OrderRemoveAllGroupsOrdersOutputDtoService;
 use Order\Domain\Service\OrderRemoveAllGroupsOrders\OrderRemoveAllGroupsOrdersService;
@@ -32,7 +32,7 @@ class OrderRemoveAllGroupsOrdersUseCase extends ServiceBase
         private OrderRemoveAllGroupsOrdersService $orderRemoveAllGroupsOrdersService,
         private ValidationInterface $validator,
         private ModuleCommunicationInterface $moduleCommunication,
-        private string $systemKey
+        private string $systemKey,
     ) {
     }
 
@@ -46,6 +46,7 @@ class OrderRemoveAllGroupsOrdersUseCase extends ServiceBase
         $this->validation($input);
 
         try {
+            $ordersIdRemovedAndUserIdChanged = null;
             foreach ($this->getGroupsAdmins($input->groupsIdToChangeUserId) as $groupsIdAdmins) {
                 $groupsIdAdminsOnePerGroup = $this->reduceGroupsAdminsToOnlyOneAdmin($groupsIdAdmins);
                 $ordersIdRemovedAndUserIdChanged = $this->orderRemoveAllGroupsOrdersService->__invoke(
@@ -77,6 +78,8 @@ class OrderRemoveAllGroupsOrdersUseCase extends ServiceBase
 
     /**
      * @param Identifier[] $groupsId
+     *
+     * @return \Generator<array{}|array<string, string[]>>
      */
     private function getGroupsAdmins(array $groupsId): \Generator
     {
@@ -107,6 +110,14 @@ class OrderRemoveAllGroupsOrdersUseCase extends ServiceBase
         }
     }
 
+    /**
+     * @param array<string, string[]> $groups
+     *
+     * @return array<int, array{
+     *  group_id: Identifier,
+     *  admin: Identifier
+     * }>
+     */
     private function reduceGroupsAdminsToOnlyOneAdmin(array $groups): array
     {
         $groupsIdAdminsReduced = [];
@@ -124,6 +135,13 @@ class OrderRemoveAllGroupsOrdersUseCase extends ServiceBase
         return $groupsIdAdminsReduced;
     }
 
+    /**
+     * @param Identifier[] $groupsIdToRemove
+     * @param array<int, array{
+     *  group_id: Identifier,
+     *  admin: Identifier
+     * }> $groupsIdToChangeUserId
+     */
     private function createOrderRemoveAllGroupsOrdersDto(array $groupsIdToRemove, array $groupsIdToChangeUserId): OrderRemoveAllGroupsOrdersDto
     {
         return new OrderRemoveAllGroupsOrdersDto($groupsIdToRemove, $groupsIdToChangeUserId);

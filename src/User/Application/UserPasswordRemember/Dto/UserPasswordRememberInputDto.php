@@ -8,6 +8,7 @@ use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Url;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\ServiceInputDtoInterface;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 
 class UserPasswordRememberInputDto implements ServiceInputDtoInterface
@@ -21,6 +22,9 @@ class UserPasswordRememberInputDto implements ServiceInputDtoInterface
         $this->passwordRememberUrl = ValueObjectFactory::createUrl($passwordRememberUrl);
     }
 
+    /**
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
+     */
     #[\Override]
     public function validate(ValidationInterface $validator): array
     {

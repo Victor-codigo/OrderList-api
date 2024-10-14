@@ -74,7 +74,7 @@ class NotificationCreateController extends AbstractController
 {
     public function __construct(
         private NotificationCreateUseCase $NotificationCreateUseCase,
-        private Security $security
+        private Security $security,
     ) {
     }
 
@@ -88,7 +88,8 @@ class NotificationCreateController extends AbstractController
     }
 
     /**
-     * @param string[]|null $userId
+     * @param string[]|null              $userId
+     * @param array<string, string>|null $notificationData
      */
     private function createNotificationCreateInputDto(?array $userId, ?string $notificationType, ?array $notificationData, ?string $systemKey): NotificationCreateInputDto
     {

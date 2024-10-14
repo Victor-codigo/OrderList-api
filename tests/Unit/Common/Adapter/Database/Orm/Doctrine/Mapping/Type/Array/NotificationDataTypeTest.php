@@ -26,6 +26,9 @@ class NotificationDataTypeTest extends TestCase
         $this->object = new NotificationDataType();
     }
 
+    /**
+     * @return array<string, int|string|array<string, int|string>>
+     */
     private function getNotificationData(): array
     {
         return [

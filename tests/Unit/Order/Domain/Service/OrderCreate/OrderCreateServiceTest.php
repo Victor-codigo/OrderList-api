@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Domain\Service\OrderCreate;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\String\Identifier;
@@ -22,6 +21,7 @@ use Order\Domain\Service\OrderCreate\Exception\OrderCreateProductNotFoundExcepti
 use Order\Domain\Service\OrderCreate\Exception\OrderCreateProductShopRepeatedException;
 use Order\Domain\Service\OrderCreate\Exception\OrderCreateShopNotFoundException;
 use Order\Domain\Service\OrderCreate\OrderCreateService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Product\Domain\Model\Product;
@@ -34,11 +34,14 @@ class OrderCreateServiceTest extends TestCase
     public const LIST_ORDERS_ID = 'e39d9a07-0f40-42a7-84da-c90cdbd77bec';
 
     private OrderCreateService $object;
-    private MockObject|OrderRepositoryInterface $orderRepository;
-    private MockObject|ListOrdersRepositoryInterface $listOrdersRepository;
-    private MockObject|ProductRepositoryInterface $productRepository;
-    private MockObject|ShopRepositoryInterface $shopRepository;
-    private MockObject|PaginatorInterface $paginator;
+    private MockObject&OrderRepositoryInterface $orderRepository;
+    private MockObject&ListOrdersRepositoryInterface $listOrdersRepository;
+    private MockObject&ProductRepositoryInterface $productRepository;
+    private MockObject&ShopRepositoryInterface $shopRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, Order>
+     */
+    private MockObject&PaginatorInterface $paginator;
     private Identifier $groupId;
 
     #[\Override]

@@ -12,6 +12,10 @@ use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 
 class ProductGetDataDto
 {
+    /**
+     * @param Identifier[] $productsId
+     * @param Identifier[] $shopsId
+     */
     public function __construct(
         public readonly Identifier $groupId,
         public readonly array $productsId,

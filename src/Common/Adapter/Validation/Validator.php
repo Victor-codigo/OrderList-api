@@ -6,6 +6,7 @@ namespace Common\Adapter\Validation;
 
 use Common\Adapter\Validation\Validations\ValidationConstraint;
 use Common\Domain\Validation\Common\CONSTRAINTS_NAMES;
+use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use Common\Domain\Validation\ValueObjectValidationInterface;
 use Symfony\Component\Validator\Constraint;
@@ -23,6 +24,9 @@ class Validator
      */
     private array $constraints;
     private mixed $value = null;
+    /**
+     * @var array<string, callable>
+     */
     private array $validationCallbacks;
 
     public function getValue(): mixed
@@ -60,6 +64,7 @@ class Validator
             $this->constraints
         );
 
+        /** @var ConstraintViolationList $errors */
         $errors = $this->validator->validate($this->value, $constraints);
 
         if (count($errors) > 0) {
@@ -73,6 +78,9 @@ class Validator
         return $errorList;
     }
 
+    /**
+     * @return VALIDATION_ERRORS[]
+     */
     private function getListDomainErrors(ConstraintViolationList $errors): array
     {
         $errorList = [];
@@ -93,15 +101,20 @@ class Validator
 
     private function findDomainError(string $errorCode): ValidationConstraint
     {
+        $constraintToReturn = null;
         foreach ($this->constraints as $constraint) {
             if ($constraint->hasError($errorCode)) {
-                return $constraint;
+                $constraintToReturn = $constraint;
+
+                break;
             }
         }
+
+        return $constraintToReturn;
     }
 
     /**
-     * @return VALIDATION_ERRORS[]
+     * @return array<int|string, VALIDATION_ERRORS|array<int|string, VALIDATION_ERRORS[]>>
      */
     public function validateValueObject(ValueObjectValidationInterface $valueObject): array
     {
@@ -129,7 +142,7 @@ class Validator
     /**
      * @param array<string, ValueObjectValidationInterface> $valueObjects
      *
-     * @return array<string, VALIDATION_ERRORS[]>
+     * @return array{}|array<int|string, VALIDATION_ERRORS[]>
      */
     public function validateValueObjectArray(array $valueObjects): array
     {

@@ -23,7 +23,7 @@ class ProductGetFirstLetterUseCase extends ServiceBase
     public function __construct(
         private ProductGetFirstLetterService $productGetFirstLetterService,
         private ValidationInterface $validator,
-        private ValidateGroupAndUserService $validateGroupAndUserService
+        private ValidateGroupAndUserService $validateGroupAndUserService,
     ) {
     }
 
@@ -62,6 +62,9 @@ class ProductGetFirstLetterUseCase extends ServiceBase
         return new ProductGetFirstLetterDto($input->groupId);
     }
 
+    /**
+     * @param string[] $productsFirstLetter
+     */
     private function createProductGetFirstLetterOutputDto(array $productsFirstLetter): ProductGetFirstLetterOutputDto
     {
         return new ProductGetFirstLetterOutputDto($productsFirstLetter);

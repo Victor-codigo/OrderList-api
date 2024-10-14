@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Common\Domain\Ports\HtmlTemplate;
 
+use Common\Domain\HtmlTemplate\Exception\TemplateCantBeFoundException;
+use Common\Domain\HtmlTemplate\Exception\TemplateRenderingException;
+use Common\Domain\HtmlTemplate\Exception\TemplateSyntaxErrorException;
+
 interface HtmlTemplateInterface
 {
     /**
-     * @param array $params key - name
-     *                      value - value
-     *
      * @throws TemplateSyntaxErrorException
      * @throws TemplateCantBeFoundException
      * @throws TemplateRenderingException

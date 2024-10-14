@@ -28,6 +28,8 @@ class GroupUserRoleChangeRequestDto implements RequestDtoInterface
 
     /**
      * @param string[]|null $usersId
+     *
+     * @return string[]|null
      */
     private function removeUsersOverflow(?array $usersId): ?array
     {

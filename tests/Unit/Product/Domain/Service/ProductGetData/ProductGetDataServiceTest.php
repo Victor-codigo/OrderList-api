@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Domain\Service\ProductGetData;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Exception\LogicException;
 use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Product\Domain\Model\Product;
@@ -23,8 +23,11 @@ class ProductGetDataServiceTest extends TestCase
     private const string PRODUCT_PUBLIC_PATH = '/group/public/path';
 
     private ProductGetDataService $object;
-    private MockObject|ProductRepositoryInterface $productRepository;
-    private MockObject|PaginatorInterface $paginator;
+    private MockObject&ProductRepositoryInterface $productRepository;
+    /**
+     * @var MockObject&PaginatorInterface<int, Product>
+     */
+    private MockObject&PaginatorInterface $paginator;
 
     #[\Override]
     protected function setUp(): void
@@ -36,6 +39,9 @@ class ProductGetDataServiceTest extends TestCase
         $this->object = new ProductGetDataService($this->productRepository, self::PRODUCT_PUBLIC_PATH, self::APP_PROTOCOL_AND_DOMAIN);
     }
 
+    /**
+     * @return Product[]
+     */
     private function getProducts(): array
     {
         return [
@@ -45,6 +51,9 @@ class ProductGetDataServiceTest extends TestCase
         ];
     }
 
+    /**
+     * @return Product[]
+     */
     private function getProductsExpected(): array
     {
         $products = $this->getProducts();
@@ -63,6 +72,10 @@ class ProductGetDataServiceTest extends TestCase
         );
     }
 
+    /**
+     * @param Product[]            $productsDataExpected
+     * @param array<string, mixed> $productDataActual
+     */
     private function assertProductDataIsOk(array $productsDataExpected, array $productDataActual): void
     {
         $this->assertArrayHasKey('id', $productDataActual);

@@ -24,7 +24,7 @@ class OrderGetDataUseCase extends ServiceBase
     public function __construct(
         private OrderGetDataService $orderGetDataService,
         private ValidationInterface $validator,
-        private ValidateGroupAndUserService $validateGroupAndUserService
+        private ValidateGroupAndUserService $validateGroupAndUserService,
     ) {
     }
 
@@ -80,6 +80,34 @@ class OrderGetDataUseCase extends ServiceBase
         );
     }
 
+    /**
+     * @param array<int, array{
+     *  id: string|null,
+     *  group_id: string|null,
+     *  list_orders_id: string|null,
+     *  user_id: string|null,
+     *  description: string|null,
+     *  amount: float|null,
+     *  bought: bool,
+     *  created_on: string,
+     *  product: array{
+     *      id: string|null,
+     *      name: string|null,
+     *      description: string|null,
+     *      image: string|null,
+     *      created_on: string
+     *  },
+     *  shop: array{}|array{
+     *      id: string|null,
+     *      name: string|null,
+     *      description: string|null,
+     *      created_on: string
+     *  },
+     *  productShop: array{}|array{
+     *      price: float|null,
+     *      unit: object|null
+     * }}> $ordersData
+     */
     private function createOrderGetDataOutputDto(array $ordersData, PaginatorPage $page): OrderGetDataOutputDto
     {
         $pagesTotal = $this->orderGetDataService->getPagesTotal();

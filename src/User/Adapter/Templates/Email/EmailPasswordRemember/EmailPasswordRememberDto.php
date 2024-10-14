@@ -43,6 +43,17 @@ final class EmailPasswordRememberDto extends TemplateDtoBase
         $this->farewell = TemplateId::create('farewell', ['hoursToExpire' => $this->emailUserPasswordRememberExpireInSeconds / 60 / 60]);
     }
 
+    /**
+     * @return array{
+     *  appName: string,
+     *  userName: string,
+     *  title: string,
+     *  welcome: string,
+     *  urlPasswordRememberConfirm: string,
+     *  buttonRestorationText: string,
+     *  farewell: string
+     * }
+     */
     #[\Override]
     public function toArray(): array
     {

@@ -6,9 +6,12 @@ namespace User\Domain\Service\GetUsersPublicData;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\LogicException;
+use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\Object\Rol;
+use Common\Domain\Model\ValueObject\String\Email;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
+use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Struct\SCOPE;
 use Common\Domain\Validation\User\USER_ROLES;
@@ -22,7 +25,7 @@ class GeUsersPublicDataService
     public function __construct(
         private UserRepositoryInterface $userRepository,
         private string $userPublicImagePath,
-        private string $appProtocolAndDomain
+        private string $appProtocolAndDomain,
     ) {
     }
 
@@ -37,7 +40,7 @@ class GeUsersPublicDataService
 
         $usersData = match ($scope) {
             SCOPE::PRIVATE => $this->getUserPrivateData($usersValid),
-            SCOPE::PUBLIC => $this->getUserPublicData($usersValid)
+            SCOPE::PUBLIC => $this->getUserPublicData($usersValid),
         };
 
         return new GetUsersPublicDataOutputDto($usersData);
@@ -66,6 +69,8 @@ class GeUsersPublicDataService
     }
 
     /**
+     * @param Identifier[]|NameWithSpaces[] $users
+     *
      * @throws LogicException
      */
     private function hasUsersValid(array $users): void
@@ -81,6 +86,10 @@ class GeUsersPublicDataService
     }
 
     /**
+     * @param User[] $users
+     *
+     * @return array<int, User>
+     *
      * @throws DBNotFoundException
      */
     private function getValidUsers(array $users): array
@@ -100,6 +109,8 @@ class GeUsersPublicDataService
 
     /**
      * @param User[] $users
+     *
+     * @return array<int, array{ id: Identifier, name: NameWithSpaces }>
      */
     private function getUserPublicData(array $users): array
     {
@@ -116,6 +127,15 @@ class GeUsersPublicDataService
 
     /**
      * @param User[] $users
+     *
+     * @return array<int, array{
+     *  id: Identifier,
+     *  email: Email,
+     *  name: NameWithSpaces,
+     *  roles: Roles,
+     *  image: Path|null,
+     *  created_on: \DateTime
+     * }>
      */
     private function getUserPrivateData(array $users): array
     {

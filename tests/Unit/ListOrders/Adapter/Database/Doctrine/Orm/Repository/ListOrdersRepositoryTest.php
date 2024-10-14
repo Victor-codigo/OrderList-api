@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Adapter\Database\Doctrine\Orm\Repository;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Doctrine\DBAL\Exception\ConnectionException;
@@ -16,6 +16,7 @@ use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use ListOrders\Adapter\Database\Orm\Doctrine\Repository\ListOrdersRepository;
 use ListOrders\Domain\Model\ListOrders;
 use Order\Domain\Model\Order;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Product\Adapter\Database\Orm\Doctrine\Repository\ProductRepository;
 use Product\Domain\Model\Product;
@@ -55,6 +56,17 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         $this->connectionException = $this->createMock(ConnectionException::class);
     }
 
+    /**
+     * @return Identifier[]
+     */
+    private function getListOrdersId(): array
+    {
+        return array_map(
+            fn (string $listOrdersId) => ValueObjectFactory::createIdentifier($listOrdersId),
+            self::LIST_ORDERS_ID
+        );
+    }
+
     private function getListOrders(): ListOrders
     {
         return ListOrders::fromPrimitives(
@@ -79,6 +91,9 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
         );
     }
 
+    /**
+     * @return Order[]
+     */
     private function getOrders(ListOrders $listOrders): array
     {
         $product = $this->productRepository->findBy(['id' => [
@@ -123,7 +138,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
 
         $this->object->save([$listOrders]);
 
-        /** @var Group $listOrdersSaved */
+        /** @var ListOrders $listOrdersSaved */
         $listOrdersSaved = $this->object->findOneBy(['id' => $listOrders->getId()]);
 
         $this->assertSame($listOrders, $listOrdersSaved);
@@ -226,7 +241,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     #[Test]
     public function itShouldFindListOrdersById(): void
     {
-        $return = $this->object->findListOrderByIdOrFail(self::LIST_ORDERS_ID);
+        $return = $this->object->findListOrderByIdOrFail($this->getListOrdersId());
 
         $listOrdersExpected = $this->object->findBy(['id' => self::LIST_ORDERS_ID]);
         $listOrdersActual = iterator_to_array($return);
@@ -242,7 +257,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     public function itShouldFindListOrdersByIdGroupId(): void
     {
         $return = $this->object->findListOrderByIdOrFail(
-            self::LIST_ORDERS_ID,
+            $this->getListOrdersId(),
             ValueObjectFactory::createIdentifier(self::GROUP_ID)
         );
 
@@ -259,7 +274,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     #[Test]
     public function itShouldFailFindingListOrdersByIdNotFound(): void
     {
-        $listOrdersId = '28fbc151-06eb-4d98-8479-12188432f5d8';
+        $listOrdersId = ValueObjectFactory::createIdentifier('28fbc151-06eb-4d98-8479-12188432f5d8');
 
         $this->expectException(DBNotFoundException::class);
         $this->object->findListOrderByIdOrFail([$listOrdersId]);
@@ -268,7 +283,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     #[Test]
     public function itShouldFailFindingListOrdersByIdGroupIdNotFound(): void
     {
-        $listOrdersId = self::LIST_ORDERS_ID;
+        $listOrdersId = $this->getListOrdersId();
         $groupId = ValueObjectFactory::createIdentifier('not found id');
 
         $this->expectException(DBNotFoundException::class);
