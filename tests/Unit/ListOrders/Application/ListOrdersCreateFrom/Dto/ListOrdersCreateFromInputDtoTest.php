@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Application\ListOrdersCreateFrom\Dto;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use ListOrders\Application\ListOrdersCreateFrom\Dto\ListOrdersCreateFromInputDto;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -18,7 +18,7 @@ class ListOrdersCreateFromInputDtoTest extends TestCase
     private const string LIST_ORDERS_ID_CREATE_FROM = '466acd12-e6f9-4d5f-9c36-dda35ea45b05';
     private const string GROUP_ID = 'c593d795-72a1-4d29-8b1a-3ae6cdb6dcf8';
     private ValidationInterface $validator;
-    private MockObject|UserShared $userSession;
+    private MockObject&UserShared $userSession;
 
     #[\Override]
     protected function setUp(): void

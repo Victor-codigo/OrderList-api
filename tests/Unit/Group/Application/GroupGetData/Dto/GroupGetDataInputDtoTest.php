@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupGetData\Dto;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupGetData\Dto\GroupGetDataInputDto;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -22,7 +22,7 @@ class GroupGetDataInputDtoTest extends TestCase
     ];
 
     private ValidationInterface $validator;
-    private MockObject|UserShared $user;
+    private MockObject&UserShared $user;
 
     #[\Override]
     protected function setUp(): void

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\FileUpload;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\FileUpload\BuiltInFunctionsReturn;
 use Common\Adapter\FileUpload\FileUploadSymfonyAdapter;
 use Common\Domain\Exception\LogicException;
@@ -18,6 +17,7 @@ use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\FileUpload\Exception\FileUploadSizeException;
 use Common\Domain\FileUpload\Exception\FileUploadTmpDirFileException;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\Exception\CannotWriteFileException;
@@ -32,8 +32,8 @@ require_once 'tests/BuiltinFunctions/FileUploadSymfonyAdapter.php';
 
 class FileUploadSymfonyAdapterTest extends TestCase
 {
-    private MockObject|FileUploadSymfonyAdapter $object;
-    private MockObject|UploadedFileInterface $file;
+    private MockObject&FileUploadSymfonyAdapter $object;
+    private MockObject&UploadedFileInterface $file;
 
     #[\Override]
     protected function setUp(): void

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\HtmlTemplate;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\HtmlTemplate\TwigTemplate;
 use Common\Domain\HtmlTemplate\Exception\TemplateCantBeFoundException;
 use Common\Domain\HtmlTemplate\Exception\TemplateRenderingException;
 use Common\Domain\HtmlTemplate\Exception\TemplateSyntaxErrorException;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Test\Unit\Common\Adapter\HtmlTemplate\Fixtures\TemplateParams;
@@ -20,7 +20,7 @@ use Twig\Error\SyntaxError;
 class TwigTemplateTest extends TestCase
 {
     private TwigTemplate $object;
-    private MockObject|Environment $twig;
+    private MockObject&Environment $twig;
     private string $templatePath = '';
 
     #[\Override]

@@ -31,13 +31,13 @@ class GroupUserRemoveUseCaseTest extends TestCase
     private const string SYSTEM_KEY = 'systemKeyForDev';
 
     private GroupUserRemoveUseCase $object;
-    private MockObject|ValidationInterface $validator;
-    private MockObject|UserHasGroupAdminGrantsService $userHasGroupAdminGrantsService;
-    private MockObject|GroupUserRemoveService $groupUserRemoveService;
-    private MockObject|ModuleCommunicationInterface $moduleCommunication;
-    private MockObject|GroupRepositoryInterface $groupRepository;
-    private MockObject|UserShared $userSession;
-    private MockObject|Group $group;
+    private MockObject&ValidationInterface $validator;
+    private MockObject&UserHasGroupAdminGrantsService $userHasGroupAdminGrantsService;
+    private MockObject&GroupUserRemoveService $groupUserRemoveService;
+    private MockObject&ModuleCommunicationInterface $moduleCommunication;
+    private MockObject&GroupRepositoryInterface $groupRepository;
+    private MockObject&UserShared $userSession;
+    private MockObject&Group $group;
 
     #[\Override]
     protected function setUp(): void

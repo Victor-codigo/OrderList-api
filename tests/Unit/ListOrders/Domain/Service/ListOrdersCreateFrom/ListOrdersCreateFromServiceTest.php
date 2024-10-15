@@ -47,9 +47,9 @@ class ListOrdersCreateFromServiceTest extends TestCase
         $this->object = new ListOrdersCreateFromService($this->listOrdersRepository);
     }
 
-    private function getListOrders(string $listOrdersName, bool $orders): MockObject|ListOrders
+    private function getListOrders(string $listOrdersName, bool $orders): MockObject&ListOrders
     {
-        /** @var MockObject|ListOrders $listOrders */
+        /** @var MockObject&ListOrders $listOrders */
         $listOrders = $this->getMockBuilder(ListOrders::class)
             ->enableOriginalConstructor()
             ->setConstructorArgs([
@@ -73,7 +73,7 @@ class ListOrdersCreateFromServiceTest extends TestCase
     /**
      * @return Order[]
      */
-    private function getOrders(MockObject|ListOrders $listOrders, string $orderName): array
+    private function getOrders(MockObject&ListOrders $listOrders, string $orderName): array
     {
         /** @var MockObject&Product $product1 */
         $product1 = $this->createMock(Product::class);

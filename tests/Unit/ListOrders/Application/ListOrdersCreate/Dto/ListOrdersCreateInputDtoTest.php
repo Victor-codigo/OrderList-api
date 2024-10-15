@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Application\ListOrdersCreate\Dto;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use ListOrders\Application\ListOrdersCreate\Dto\ListOrdersCreateInputDto;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -18,7 +18,7 @@ class ListOrdersCreateInputDtoTest extends TestCase
     private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
 
     private ValidationInterface $validator;
-    private MockObject|UserShared $userSession;
+    private MockObject&UserShared $userSession;
 
     #[\Override]
     protected function setUp(): void

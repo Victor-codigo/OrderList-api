@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupRemove;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
@@ -16,6 +15,7 @@ use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Service\GroupRemove\Dto\GroupRemoveDto;
 use Group\Domain\Service\GroupRemove\Exception\GroupRemovePermissionsException;
 use Group\Domain\Service\GroupRemove\GroupRemoveService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -26,8 +26,8 @@ class GroupRemoveServiceTest extends TestCase
     private const string PATH_GROUP_IMAGES = 'path/to/group/images';
 
     private GroupRemoveService $object;
-    private MockObject|GroupRepositoryInterface $groupRepository;
-    private MockObject|EntityImageRemoveService $entityImageRemoveService;
+    private MockObject&GroupRepositoryInterface $groupRepository;
+    private MockObject&EntityImageRemoveService $entityImageRemoveService;
 
     #[\Override]
     protected function setUp(): void
@@ -66,7 +66,7 @@ class GroupRemoveServiceTest extends TestCase
             2 => [
                 $this->assertEquals($groups[1], $group),
                 $callCounter = 0,
-            ]
+            ],
         };
 
         return true;

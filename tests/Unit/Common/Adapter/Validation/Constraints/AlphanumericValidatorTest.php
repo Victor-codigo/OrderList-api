@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Validation\Constraints;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\Constraints\Alphanumeric\Alphanumeric;
 use Common\Adapter\Validation\Constraints\Alphanumeric\AlphanumericValidator;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraint;
@@ -17,8 +17,8 @@ class AlphanumericValidatorTest extends TestCase
     private const string PATTERN = '/^[A-Za-zÀ-ÿ0-9_]+$/i';
 
     private AlphanumericValidator $object;
-    private MockObject|Alphanumeric $alphanumeric;
-    private MockObject|Constraint $constraint;
+    private MockObject&Alphanumeric $alphanumeric;
+    private MockObject&Constraint $constraint;
 
     #[\Override]
     public function setUp(): void

@@ -22,7 +22,7 @@ class GroupGetDataByNameServiceTest extends TestCase
     private const string GROUP_PUBLIC_PATH = 'group/public/path';
 
     private GroupGetDataByNameService $object;
-    private MockObject|GroupRepositoryInterface $groupRepository;
+    private MockObject&GroupRepositoryInterface $groupRepository;
 
     #[\Override]
     protected function setUp(): void

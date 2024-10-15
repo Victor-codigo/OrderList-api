@@ -340,7 +340,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
 
                 return true;
             }))
-            ->willReturnCallback(fn (): MockObject|PaginatorInterface => match ($orderRepositoryMatcher->numberOfInvocations()) {
+            ->willReturnCallback(fn (): MockObject&PaginatorInterface => match ($orderRepositoryMatcher->numberOfInvocations()) {
                 1 => throw new DBNotFoundException(),
                 2 => $this->ordersToChangeUserIdPaginator,
             });
@@ -475,7 +475,7 @@ class OrderRemoveAllGroupsOrdersServiceTest extends TestCase
 
                 return true;
             }))
-            ->willReturnCallback(fn (): MockObject|PaginatorInterface => match ($orderRepositoryMatcher->numberOfInvocations()) {
+            ->willReturnCallback(fn (): MockObject&PaginatorInterface => match ($orderRepositoryMatcher->numberOfInvocations()) {
                 1 => $this->ordersToRemovePaginator,
                 2 => throw new DBNotFoundException(),
                 default => throw new \LogicException('Not supporting more than 6 invocations'),

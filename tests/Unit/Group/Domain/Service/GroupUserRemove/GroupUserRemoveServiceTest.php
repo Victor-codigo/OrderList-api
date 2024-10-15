@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupUserRemove;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -19,6 +18,7 @@ use Group\Domain\Service\GroupUserRemove\Exception\GroupUserRemoveEmptyException
 use Group\Domain\Service\GroupUserRemove\Exception\GroupUserRemoveGroupWithoutAdminException;
 use Group\Domain\Service\GroupUserRemove\Exception\GroupUserRemovePermissionsException;
 use Group\Domain\Service\GroupUserRemove\GroupUserRemoveService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,8 +27,8 @@ class GroupUserRemoveServiceTest extends TestCase
     private const string GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
 
     private GroupUserRemoveService $object;
-    private MockObject|UserGroupRepositoryInterface $userGroupRepository;
-    private MockObject|GroupRepositoryInterface $groupRepository;
+    private MockObject&UserGroupRepositoryInterface $userGroupRepository;
+    private MockObject&GroupRepositoryInterface $groupRepository;
 
     #[\Override]
     protected function setUp(): void
@@ -45,6 +45,7 @@ class GroupUserRemoveServiceTest extends TestCase
      */
     private function getUsersGroup(): array
     {
+        /** @var MockObject&Group */
         $group = $this->createMock(Group::class);
 
         return [
@@ -70,6 +71,7 @@ class GroupUserRemoveServiceTest extends TestCase
      */
     private function getUsersGroupAdmin(): array
     {
+        /** @var MockObject&Group $group */
         $group = $this->createMock(Group::class);
 
         return [

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Jwt;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Jwt\JwtFirebaseHS256Adapter;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -20,7 +20,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
         'param3' => true,
     ];
 
-    private MockObject|JwtFirebaseHS256Adapter $object;
+    private MockObject&JwtFirebaseHS256Adapter $object;
     private Key $secretKey;
 
     #[\Override]
@@ -128,7 +128,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
                     [1, null] => $dateTimeNow ,
                     [2, $dateTimeTokenExpiration->getTimestamp()] => $dateTimeTokenExpiration,
                     [3, null] => $dateTimeTokenExpiration,
-                    default => throw new \LogicException()
+                    default => throw new \LogicException(),
                 };
             });
 
@@ -162,7 +162,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
                     [1, null] => $dateTimeNow,
                     [2, $dateTimeTokenExpiration->getTimestamp()] => $dateTimeTokenExpiration,
                     [3, null] => $dateTimeTokenExpirationLessOne,
-                    default => throw new \LogicException()
+                    default => throw new \LogicException(),
                 };
             });
 
@@ -194,7 +194,7 @@ class JwtFirebaseHS256AdapterTest extends TestCase
                     [1, null] => $dateTimeNow,
                     [2, $dateTimeTokenExpiration->getTimestamp()] => $dateTimeTokenExpiration,
                     [3, null] => $dataTimeTokenExpirationPlusOne,
-                    default => throw new \LogicException()
+                    default => throw new \LogicException(),
                 };
             });
 

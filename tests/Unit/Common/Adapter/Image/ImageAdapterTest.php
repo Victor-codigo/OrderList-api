@@ -23,8 +23,8 @@ class ImageAdapterTest extends TestCase
     private const int HEIGHT_MAX = 1000;
 
     private ImagineAdapter $object;
-    private MockObject|Imagine $imagine;
-    private MockObject|ImageInterface $imageInterface;
+    private MockObject&Imagine $imagine;
+    private MockObject&ImageInterface $imageInterface;
 
     #[\Override]
     protected function setUp(): void

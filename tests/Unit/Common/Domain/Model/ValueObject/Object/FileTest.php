@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Object;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\File;
 use Common\Domain\Ports\FileUpload\FileInterface;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\File as SymfonyFile;
@@ -24,7 +24,7 @@ class FileTest extends TestCase
 
     private File $object;
     private ValidationChain $validator;
-    private MockObject|FileInterface $fileInterface;
+    private MockObject&FileInterface $fileInterface;
 
     #[\Override]
     public function setUp(): void
@@ -48,7 +48,7 @@ class FileTest extends TestCase
         BuiltInFunctionsReturn::$unlink = null;
     }
 
-    private function getFileInterface(string $fileName): MockObject|FileInterface
+    private function getFileInterface(string $fileName): MockObject&FileInterface
     {
         $file = $this
             ->getMockBuilder(SymfonyFile::class)
@@ -76,7 +76,7 @@ class FileTest extends TestCase
     #[Test]
     public function itShouldValidate(): void
     {
-        /** @var MockObject|SymfonyFile $file */
+        /** @var MockObject&SymfonyFile $file */
         $file = $this->fileInterface->getFile();
 
         $file
@@ -111,7 +111,7 @@ class FileTest extends TestCase
     #[Test]
     public function itShouldFailFileIsNotReadable(): void
     {
-        /** @var MockObject|SymfonyFile $file */
+        /** @var MockObject&SymfonyFile $file */
         $file = $this->fileInterface->getFile();
 
         $file
@@ -130,7 +130,7 @@ class FileTest extends TestCase
     public function itShouldFailFileIsEmpty(): void
     {
         $fileInterface = $this->getFileInterface(self::PATH_FILE_EMPTY);
-        /** @var MockObject|SymfonyFile $file */
+        /** @var MockObject&SymfonyFile $file */
         $file = $fileInterface->getFile();
         $file
             ->expects($this->any())
@@ -148,7 +148,7 @@ class FileTest extends TestCase
     #[Test]
     public function itShouldFailFileSizeIsLargeThan2MB(): void
     {
-        /** @var MockObject|SymfonyFile $file */
+        /** @var MockObject&SymfonyFile $file */
         $file = $this->fileInterface->getFile();
 
         $file

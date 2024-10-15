@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Service\Image\EntityImageRemove;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Path;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\Image\EntityImageModifyInterface;
 use Common\Domain\Service\Image\EntityImageRemove\BuiltInFunctionsReturn;
 use Common\Domain\Service\Image\EntityImageRemove\EntityImageRemoveService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -19,9 +19,9 @@ require_once 'tests/BuiltinFunctions/EntityImageRemoveService.php';
 class EntityImageRemoveServiceTest extends TestCase
 {
     private EntityImageRemoveService $object;
-    private MockObject|EntityImageModifyInterface $entity;
-    private MockObject|Path $imagesPathToStorage;
-    private MockObject|Path $entityImageName;
+    private MockObject&EntityImageModifyInterface $entity;
+    private MockObject&Path $imagesPathToStorage;
+    private MockObject&Path $entityImageName;
 
     #[\Override]
     protected function setUp(): void

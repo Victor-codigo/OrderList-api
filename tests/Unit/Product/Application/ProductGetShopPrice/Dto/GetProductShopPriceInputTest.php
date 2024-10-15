@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Application\ProductGetShopPrice\Dto;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Product\Application\GetProductShopPrice\Dto\GetProductShopPriceInputDto;
@@ -20,7 +20,7 @@ class GetProductShopPriceInputTest extends TestCase
     private const string GROUP_ID = 'b7ce77da-8741-4e32-b408-12e63459a1d2';
 
     private ValidationInterface $validator;
-    private MockObject|UserShared $userSession;
+    private MockObject&UserShared $userSession;
 
     #[\Override]
     protected function setUp(): void

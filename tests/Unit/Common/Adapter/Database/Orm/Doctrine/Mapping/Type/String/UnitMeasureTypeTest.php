@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\UnitMeasureType;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class UnitMeasureTypeTest extends TestCase
 {
     private UnitMeasureType $object;
-    private MockObject|AbstractPlatform $platform;
+    private MockObject&AbstractPlatform $platform;
 
     #[\Override]
     protected function setUp(): void

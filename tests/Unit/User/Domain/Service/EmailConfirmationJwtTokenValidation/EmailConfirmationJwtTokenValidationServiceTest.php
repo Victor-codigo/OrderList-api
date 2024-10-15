@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Domain\Service\EmailConfirmationJwtTokenValidation;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Jwt\Exception\JwtTokenExpiredException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
@@ -13,6 +12,7 @@ use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Ports\JwtToken\JwtHS256Interface;
 use Common\Domain\Validation\User\USER_ROLES;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use User\Domain\Model\User;
@@ -23,9 +23,9 @@ use User\Domain\Service\EmailConfirmationJwtTokenValidationService\EmailConfirma
 class EmailConfirmationJwtTokenValidationServiceTest extends TestCase
 {
     private EmailConfirmationJwtTokenValidationService $object;
-    private MockObject|JwtHS256Interface $jwt;
-    private MockObject|UserRepositoryInterface $userRepository;
-    private MockObject|User $user;
+    private MockObject&JwtHS256Interface $jwt;
+    private MockObject&UserRepositoryInterface $userRepository;
+    private MockObject&User $user;
 
     #[\Override]
     protected function setUp(): void
@@ -38,9 +38,14 @@ class EmailConfirmationJwtTokenValidationServiceTest extends TestCase
         $this->object = new EmailConfirmationJwtTokenValidationService($this->jwt, $this->userRepository);
     }
 
+    /**
+     * @return object{
+     *  username: string
+     * }
+     */
     private function createTokenClass(): object
     {
-        return new class() {
+        return new class {
             public string $username = 'user id';
         };
     }

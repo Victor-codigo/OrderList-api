@@ -43,7 +43,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     private ListOrdersRepository $object;
     private ProductRepository $productRepository;
     private ShopRepository $shopRepository;
-    private MockObject|ConnectionException $connectionException;
+    private MockObject&ConnectionException $connectionException;
 
     #[\Override]
     protected function setUp(): void
@@ -156,7 +156,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     #[Test]
     public function itShouldFailSavingDataBaseError(): void
     {
-        /** @var MockObject|ObjectManager $objectManagerMock */
+        /** @var MockObject&ObjectManager $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock
         ->expects($this->once())
@@ -197,7 +197,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     #[Test]
     public function itShouldFailSavingTheListOrdersAndItsOrdersListDataBaseError(): void
     {
-        /** @var MockObject|ObjectManager $objectManagerMock */
+        /** @var MockObject&ObjectManager $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock
             ->expects($this->once())
@@ -225,7 +225,7 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     #[Test]
     public function itShouldFailRemovingDataBaseError(): void
     {
-        /** @var MockObject|ObjectManager $objectManagerMock */
+        /** @var MockObject&ObjectManager $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock
         ->expects($this->once())

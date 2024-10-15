@@ -21,7 +21,7 @@ class ListOrdersCreateServiceTest extends TestCase
     private const string USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
     private ListOrdersCreateService $object;
-    private MockObject|ListOrdersRepositoryInterface $listOrdersRepository;
+    private MockObject&ListOrdersRepositoryInterface $listOrdersRepository;
 
     #[\Override]
     protected function setUp(): void

@@ -21,7 +21,7 @@ class SetProductShopPriceInputDtoTest extends TestCase
     private const string GROUP_ID = 'c9466728-e96c-4a68-8e33-479d524cf81b';
 
     private ValidationInterface $validator;
-    private MockObject|UserShared $userSession;
+    private MockObject&UserShared $userSession;
 
     #[\Override]
     protected function setUp(): void

@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 class ListOrdersGetPriceInputDtoTest extends TestCase
 {
     private ValidationInterface $validator;
-    private MockObject|UserShared $userSession;
+    private MockObject&UserShared $userSession;
 
     #[\Override]
     protected function setUp(): void

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\Shop\Domain\Service\ShopGetFirstLetter;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shop\Domain\Port\Repository\ShopRepositoryInterface;
@@ -16,7 +16,7 @@ use Shop\Domain\Service\ShopGetFirstLetter\ShopGetFirstLetterService;
 class ShopGetFirstLetterServiceTest extends TestCase
 {
     private ShopGetFirstLetterService $object;
-    private MockObject|ShopRepositoryInterface $shopRepository;
+    private MockObject&ShopRepositoryInterface $shopRepository;
 
     #[\Override]
     protected function setUp(): void

@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\String\NotificationTypeType;
 use Common\Domain\Exception\InvalidArgumentException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class NotificationTypeTypeTest extends TestCase
 {
     private NotificationTypeType $object;
-    private MockObject|AbstractPlatform $platform;
+    private MockObject&AbstractPlatform $platform;
 
     #[\Override]
     protected function setUp(): void

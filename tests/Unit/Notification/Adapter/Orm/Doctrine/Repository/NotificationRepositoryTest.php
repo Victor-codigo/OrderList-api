@@ -37,7 +37,7 @@ class NotificationRepositoryTest extends DataBaseTestCase
      * @var NotificationRepository|EntityRepository<Notification>
      */
     private NotificationRepository|EntityRepository $object;
-    private MockObject|ConnectionException $connectionException;
+    private MockObject&ConnectionException $connectionException;
 
     #[\Override]
     protected function setUp(): void
@@ -142,7 +142,7 @@ class NotificationRepositoryTest extends DataBaseTestCase
             $this->getNotificationData()
         );
 
-        /** @var MockObject|ObjectManager $objectManagerMock */
+        /** @var MockObject&ObjectManager $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock
         ->expects($this->once())

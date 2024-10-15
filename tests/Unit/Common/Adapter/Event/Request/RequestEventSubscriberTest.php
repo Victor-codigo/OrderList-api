@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Event\Request;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Event\Request\RequestEventSubscriber;
 use Common\Adapter\Validation\ValidationChain;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\InputBag;
@@ -16,8 +16,8 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 class RequestEventSubscriberTest extends TestCase
 {
     private RequestEventSubscriber $object;
-    private MockObject|RequestEvent $event;
-    private MockObject|Request $request;
+    private MockObject&RequestEvent $event;
+    private MockObject&Request $request;
 
     #[\Override]
     protected function setUp(): void

@@ -67,7 +67,7 @@ class OrderRepositoryTest extends DataBaseTestCase
     private ProductRepositoryInterface $productRepository;
     private ShopRepositoryInterface $shopRepository;
     private ListOrdersRepositoryInterface $listOrdersRepository;
-    private MockObject|ConnectionException $connectionException;
+    private MockObject&ConnectionException $connectionException;
 
     #[\Override]
     protected function setUp(): void
@@ -182,7 +182,7 @@ class OrderRepositoryTest extends DataBaseTestCase
     {
         $this->expectException(DBConnectionException::class);
 
-        /** @var MockObject|ObjectManager $objectManagerMock */
+        /** @var MockObject&ObjectManager $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock
             ->expects($this->once())
@@ -212,7 +212,7 @@ class OrderRepositoryTest extends DataBaseTestCase
 
         $order = $this->getNewOrder();
 
-        /** @var MockObject|ObjectManager $objectManagerMock */
+        /** @var MockObject&ObjectManager $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock
             ->expects($this->once())

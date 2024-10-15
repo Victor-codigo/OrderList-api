@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Security;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\User\USER_ROLES;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class UserSharedSymfonyAdapterTest extends TestCase
 {
     private UserSharedSymfonyAdapter $object;
-    private MockObject|UserShared $userShared;
+    private MockObject&UserShared $userShared;
 
     #[\Override]
     protected function setUp(): void

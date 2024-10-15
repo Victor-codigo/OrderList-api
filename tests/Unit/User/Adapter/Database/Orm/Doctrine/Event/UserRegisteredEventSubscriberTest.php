@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Database\Orm\Doctrine\Event;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\PostPersistEventArgs;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use User\Adapter\Database\Orm\Doctrine\Event\UserRegisteredEventSubscriber;
@@ -17,8 +17,8 @@ use User\Domain\Model\User;
 class UserRegisteredEventSubscriberTest extends TestCase
 {
     private UserRegisteredEventSubscriber $object;
-    private MockObject|EntityManagerInterface $entityManager;
-    private MockObject|User $user;
+    private MockObject&EntityManagerInterface $entityManager;
+    private MockObject&User $user;
 
     #[\Override]
     protected function setUp(): void

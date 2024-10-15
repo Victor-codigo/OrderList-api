@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Test\Unit\ListOrders\Domain\Service\ListOrdersGetFirstLetter;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use ListOrders\Domain\Ports\ListOrdersRepositoryInterface;
 use ListOrders\Domain\Service\ListOrdersGetFirstLetter\Dto\ListOrdersGetFirstLetterDto;
 use ListOrders\Domain\Service\ListOrdersGetFirstLetter\ListOrdersGetFirstLetterService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ListOrdersGetFirstLetterServiceTest extends TestCase
 {
     private ListOrdersGetFirstLetterService $object;
-    private MockObject|ListOrdersRepositoryInterface $listOrdersRepository;
+    private MockObject&ListOrdersRepositoryInterface $listOrdersRepository;
 
     #[\Override]
     protected function setUp(): void

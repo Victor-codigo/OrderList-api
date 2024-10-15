@@ -310,7 +310,7 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
 
                 return true;
             }))
-            ->willReturnCallback(fn (): MockObject|PaginatorInterface => match ($listOrdersRepositoryMatcher->numberOfInvocations()) {
+            ->willReturnCallback(fn (): MockObject&PaginatorInterface => match ($listOrdersRepositoryMatcher->numberOfInvocations()) {
                 1 => throw new DBNotFoundException(),
                 2 => $this->listsOrdersToChangeUserIdPaginator,
                 default => throw new \LogicException('Not Supporting more than 2 invocations'),
@@ -445,7 +445,7 @@ class ListOrdersRemoveAllGroupsListsOrdersServiceTest extends TestCase
 
                 return true;
             }))
-            ->willReturnCallback(fn (): MockObject|PaginatorInterface => match ($listOrdersRepositoryMatcher->numberOfInvocations()) {
+            ->willReturnCallback(fn (): MockObject&PaginatorInterface => match ($listOrdersRepositoryMatcher->numberOfInvocations()) {
                 1 => $this->listsOrdersToRemovePaginator,
                 2 => throw new DBNotFoundException(),
                 default => throw new \LogicException('Not Supporting more than 2 invocations'),

@@ -48,7 +48,7 @@ abstract class DataBaseTestCase extends KernelTestCase
         return Kernel::class;
     }
 
-    protected function mockObjectManager(object $repository, MockObject|ObjectManager $objectManagerMock): void
+    protected function mockObjectManager(object $repository, MockObject&ObjectManager $objectManagerMock): void
     {
         $userRepositoryReflection = new \ReflectionClass($repository);
         $objectManagerProperty = $userRepositoryReflection->getProperty('objectManager');

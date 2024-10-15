@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Test\Unit\Order\Application\OrderRemove\Dto;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
 use Order\Application\OrderRemove\Dto\OrderRemoveInputDto;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -22,7 +22,7 @@ class OrderRemoveInputDtoTest extends TestCase
     ];
 
     private ValidationInterface $validator;
-    private MockObject|UserShared $userSession;
+    private MockObject&UserShared $userSession;
 
     #[\Override]
     protected function setUp(): void

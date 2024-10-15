@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Http\ArgumentResolver;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Http\ArgumentResolver\ArgumentResolver;
 use Common\Adapter\Http\ArgumentResolver\Exception\InvalidJsonException;
 use Common\Adapter\Http\ArgumentResolver\Exception\InvalidMimeTypeException;
 use Common\Adapter\Http\ArgumentResolver\RequestValidation;
-use Exception;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,7 +21,7 @@ class ArgumentResolverTest extends TestCase
 {
     private RequestValidation $requestValidation;
     private Request $request;
-    private MockObject|ArgumentMetadata $argumentMetaData;
+    private MockObject&ArgumentMetadata $argumentMetaData;
 
     #[\Override]
     public function setUp(): void
@@ -208,10 +207,9 @@ class ArgumentResolverTest extends TestCase
             ->method('getType')
             ->willReturn(CustomRequestDtoThrowException::class);
 
-
         $this->request->headers->set('Content-Type', 'application/json');
 
-        $this->expectException(Exception::class);
+        $this->expectException(\Exception::class);
         foreach ($object->resolve($this->request, $this->argumentMetaData) as $dto) {
         }
     }

@@ -20,7 +20,7 @@ class NotificationRemoveInputDtoTest extends TestCase
     private const string NOTIFICATION_ID_3 = '79a674c7-e109-3094-b8d5-c19cc00f5519';
 
     private ValidationInterface $validator;
-    private MockObject|UserShared $userSession;
+    private MockObject&UserShared $userSession;
 
     #[\Override]
     protected function setUp(): void

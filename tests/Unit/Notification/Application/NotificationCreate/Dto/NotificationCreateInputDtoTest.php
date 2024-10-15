@@ -20,7 +20,7 @@ class NotificationCreateInputDtoTest extends TestCase
     private const string SYSTEM_KEY = 'system key';
 
     private ValidationInterface $validator;
-    private MockObject|UserShared $user;
+    private MockObject&UserShared $user;
 
     #[\Override]
     protected function setUp(): void

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Test\Unit\Product\Application\ProductRemove\Dto;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\ValidationInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Product\Application\ProductRemove\Dto\ProductRemoveInputDto;
@@ -20,7 +20,7 @@ class ProductRemoveInputDtoTest extends TestCase
     private const string SHOP_ID = 'de2cd24f-aaa6-46cd-9e60-875332f30d91';
 
     private ValidationInterface $validator;
-    private MockObject|UserShared $userShared;
+    private MockObject&UserShared $userShared;
 
     #[\Override]
     protected function setUp(): void

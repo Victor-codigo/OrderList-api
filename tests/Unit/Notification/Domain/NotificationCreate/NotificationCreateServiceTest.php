@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Notification\Domain\NotificationCreate;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\Array\NotificationData;
@@ -14,13 +13,14 @@ use Notification\Domain\Model\Notification;
 use Notification\Domain\Ports\Notification\NotificationRepositoryInterface;
 use Notification\Domain\Service\NotificationCreate\Dto\NotificationCreateDto;
 use Notification\Domain\Service\NotificationCreate\NotificationCreateService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class NotificationCreateServiceTest extends TestCase
 {
     private NotificationCreateService $object;
-    private MockObject|NotificationRepositoryInterface $notificationRepository;
+    private MockObject&NotificationRepositoryInterface $notificationRepository;
 
     #[\Override]
     protected function setUp(): void

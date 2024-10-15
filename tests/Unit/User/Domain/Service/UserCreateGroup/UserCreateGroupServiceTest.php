@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Domain\Service\UserCreateGroup;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use Common\Domain\Validation\Group\GROUP_TYPE;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use User\Domain\Service\UserCreateGroup\Dto\UserCreateGroupDto;
@@ -20,7 +20,7 @@ use User\Domain\Service\UserCreateGroup\UserCreateGroupService;
 class UserCreateGroupServiceTest extends TestCase
 {
     private UserCreateGroupService $object;
-    private MockObject|ModuleCommunicationInterface $moduleCommunication;
+    private MockObject&ModuleCommunicationInterface $moduleCommunication;
 
     #[\Override]
     protected function setUp(): void

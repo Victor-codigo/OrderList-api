@@ -13,8 +13,8 @@ use Test\Unit\Common\Domain\Event\Fixtures\TraitClass;
 
 class EventDispatchTraitTest extends TestCase
 {
-    private MockObject|TraitClass $object;
-    private MockObject|EventDispatcherInterface $eventDispatcher;
+    private TraitClass $object;
+    private MockObject&EventDispatcherInterface $eventDispatcher;
 
     #[\Override]
     public function setUp(): void

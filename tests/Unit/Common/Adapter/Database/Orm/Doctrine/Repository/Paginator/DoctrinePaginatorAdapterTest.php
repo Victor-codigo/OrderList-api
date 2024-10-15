@@ -21,9 +21,9 @@ use Test\Unit\Common\Adapter\Database\Orm\Doctrine\Repository\Paginator\Fixtures
 
 class DoctrinePaginatorAdapterTest extends TestCase
 {
-    private MockObject|Connection $connection;
-    private MockObject|EntityManager $entityManager;
-    private MockObject|AbstractPlatform $abstractPlatform;
+    private MockObject&Connection $connection;
+    private MockObject&EntityManager $entityManager;
+    private MockObject&AbstractPlatform $abstractPlatform;
 
     /**
      * @var QueryResult[]
@@ -83,9 +83,9 @@ class DoctrinePaginatorAdapterTest extends TestCase
     /**
      * @param QueryResult[] $queryResult
      */
-    private function mockPaginator(Query $query, array $queryResult): MockObject|Paginator
+    private function mockPaginator(Query $query, array $queryResult): MockObject&Paginator
     {
-        /** @var MockObject|Paginator $paginator */
+        /** @var MockObject&Paginator $paginator */
         $paginator = $this->createMock(Paginator::class);
 
         $paginator
@@ -116,9 +116,9 @@ class DoctrinePaginatorAdapterTest extends TestCase
     /**
      * @param QueryResult[] $queryResult
      */
-    private function mockQuery(array $queryResult, EntityManager $entityManager, int $pageItems): MockObject|Query
+    private function mockQuery(array $queryResult, EntityManager $entityManager, int $pageItems): MockObject&Query
     {
-        /** @var MockObject|Query */
+        /** @var MockObject&Query */
         $query = $this->createMock(Query::class);
 
         $query

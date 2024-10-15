@@ -29,7 +29,7 @@ class GetUsersPublcDataServiceTest extends TestCase
     private const string APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
 
     private GeUsersPublicDataService $object;
-    private MockObject|UserRepositoryInterface $userRepository;
+    private MockObject&UserRepositoryInterface $userRepository;
 
     #[\Override]
     protected function setUp(): void

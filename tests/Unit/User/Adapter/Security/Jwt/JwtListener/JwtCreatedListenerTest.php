@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Security\Jwt\JwtListener;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use User\Adapter\Security\Jwt\Listener\JwtCreatedListener;
@@ -16,9 +16,9 @@ use User\Domain\Model\User;
 class JwtCreatedListenerTest extends TestCase
 {
     private JwtCreatedListener $object;
-    private MockObject|JWTCreatedEvent $jwtEventCreated;
-    private MockObject|UserSymfonyAdapter $userAdapter;
-    private MockObject|User $user;
+    private MockObject&JWTCreatedEvent $jwtEventCreated;
+    private MockObject&UserSymfonyAdapter $userAdapter;
+    private MockObject&User $user;
 
     private const array EVENT_PARAMS = [
         'param1' => 1,

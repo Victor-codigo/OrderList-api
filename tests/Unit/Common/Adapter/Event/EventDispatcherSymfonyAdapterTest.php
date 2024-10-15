@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Event;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Event\EventDispatcherSymfonyAdapter;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -18,7 +18,7 @@ use Test\Unit\Common\Adapter\Event\Fixtures\CustomEventSubscriberWithOneMethodWi
 class EventDispatcherSymfonyAdapterTest extends TestCase
 {
     private EventDispatcherSymfonyAdapter $object;
-    private MockObject|EventDispatcher $eventDispatcher;
+    private MockObject&EventDispatcher $eventDispatcher;
 
     #[\Override]
     public function setUp(): void
@@ -100,7 +100,7 @@ class EventDispatcherSymfonyAdapterTest extends TestCase
                     [3, CustomEvent::class, [$subscriber, 'handler'], 5],
                     [4, CustomEvent::class, [$subscriber, 'execute'], 10],
                     [5, CustomEvent::class, [$subscriber, 'exe'], 20] => null,
-                    default => throw new \LogicException(sprintf('addListener withConsecutiveParameters Error: not match found. Call number[%d]', $expectedCallNumber))
+                    default => throw new \LogicException(sprintf('addListener withConsecutiveParameters Error: not match found. Call number[%d]', $expectedCallNumber)),
                 };
             });
 

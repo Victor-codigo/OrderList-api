@@ -29,7 +29,7 @@ class GroupRepositoryTest extends DataBaseTestCase
      * @var GroupRepository|EntityRepository<Group>
      */
     private GroupRepository|EntityRepository $object;
-    private MockObject|ConnectionException $connectionException;
+    private MockObject&ConnectionException $connectionException;
 
     #[\Override]
     protected function setUp(): void
@@ -115,7 +115,7 @@ class GroupRepositoryTest extends DataBaseTestCase
     {
         $this->expectException(DBConnectionException::class);
 
-        /** @var MockObject|ObjectManager $objectManagerMock */
+        /** @var MockObject&ObjectManager $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock
             ->expects($this->once())
@@ -157,7 +157,7 @@ class GroupRepositoryTest extends DataBaseTestCase
 
         $group = $this->getNewGroup();
 
-        /** @var MockObject|ObjectManager $objectManagerMock */
+        /** @var MockObject&ObjectManager $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock
             ->expects($this->once())

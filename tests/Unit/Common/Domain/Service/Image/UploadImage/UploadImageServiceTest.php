@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Service\Image\UploadImage;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\FileUpload\Exception\File\FileException;
 use Common\Domain\FileUpload\Exception\FileUploadReplaceException;
 use Common\Domain\Image\Exception\ImageResizeException;
@@ -18,6 +17,7 @@ use Common\Domain\Service\Image\EntityImageModifyInterface;
 use Common\Domain\Service\Image\UploadImage\BuiltInFunctionsReturn;
 use Common\Domain\Service\Image\UploadImage\Dto\UploadImageDto;
 use Common\Domain\Service\Image\UploadImage\UploadImageService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,11 +28,11 @@ class UploadImageServiceTest extends TestCase
     private const string IMAGES_PATH = 'path/to/images';
 
     private UploadImageService $object;
-    private MockObject|FileUploadInterface $fileUpload;
-    private MockObject|EntityImageModifyInterface $entity;
-    private MockObject|ObjectValueObject $imageUploaded;
-    private MockObject|UploadedFileInterface $uploadedFile;
-    private MockObject|ImageInterface $image;
+    private MockObject&FileUploadInterface $fileUpload;
+    private MockObject&EntityImageModifyInterface $entity;
+    private MockObject&ObjectValueObject $imageUploaded;
+    private MockObject&UploadedFileInterface $uploadedFile;
+    private MockObject&ImageInterface $image;
 
     #[\Override]
     protected function setUp(): void

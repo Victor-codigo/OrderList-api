@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserPasswordChange;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\Array\Roles;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -13,6 +12,7 @@ use Common\Domain\Response\ResponseDto;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Common\Domain\Validation\User\USER_ROLES;
 use Common\Domain\Validation\ValidationInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use User\Application\UserPasswordChange\Dto\UserPasswordChangeInputDto;
@@ -27,10 +27,10 @@ class UserPasswordChangeUseCaseTest extends TestCase
     private const string SYSTEM_KEY = 'systemKeForDev';
 
     private UserPasswordChangeUseCase $object;
-    private MockObject|UserPasswordChangeService $userPasswordChangeService;
-    private MockObject|ValidationInterface $validator;
-    private MockObject|ModuleCommunicationInterface $moduleCommunication;
-    private MockObject|User $userSession;
+    private MockObject&UserPasswordChangeService $userPasswordChangeService;
+    private MockObject&ValidationInterface $validator;
+    private MockObject&ModuleCommunicationInterface $moduleCommunication;
+    private MockObject&User $userSession;
 
     #[\Override]
     protected function setUp(): void

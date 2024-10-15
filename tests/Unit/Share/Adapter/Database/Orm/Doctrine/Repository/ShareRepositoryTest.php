@@ -33,7 +33,7 @@ class ShareRepositoryTest extends DataBaseTestCase
     private ShareRepository $object;
     private ListOrdersRepository $listOrdersRepository;
     private UserRepository $userRepository;
-    private MockObject|ConnectionException $connectionException;
+    private MockObject&ConnectionException $connectionException;
 
     protected function setUp(): void
     {
@@ -90,7 +90,7 @@ class ShareRepositoryTest extends DataBaseTestCase
 
         $this->expectException(DBConnectionException::class);
 
-        /** @var MockObject|ObjectManager $objectManagerMock */
+        /** @var MockObject&ObjectManager $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock
             ->expects($this->once())
@@ -122,7 +122,7 @@ class ShareRepositoryTest extends DataBaseTestCase
         $userDatabase = $this->userRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::USER_ID)]);
         $share = $this->createShare($listOrdersDatabase, $userDatabase, ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST));
 
-        /** @var MockObject|ObjectManager $objectManagerMock */
+        /** @var MockObject&ObjectManager $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock
             ->expects($this->once())

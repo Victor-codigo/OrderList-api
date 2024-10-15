@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Test\Unit\Common\Adapter\Security\jwt;
 
 use Common\Adapter\ModuleCommunication\Exception\ModuleCommunicationException;
-use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Adapter\Security\jwt\UserSharedSymfonyProviderAdapter;
+use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\HttpClient\Exception\Error400Exception;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -26,7 +26,7 @@ class UserSharedSymfonyProviderAdapterTest extends TestCase
      * @var UserSharedSymfonyProviderAdapter<UserInterface>
      */
     private UserSharedSymfonyProviderAdapter $object;
-    private MockObject|ModuleCommunicationInterface $moduleCommunication;
+    private MockObject&ModuleCommunicationInterface $moduleCommunication;
 
     #[\Override]
     protected function setUp(): void

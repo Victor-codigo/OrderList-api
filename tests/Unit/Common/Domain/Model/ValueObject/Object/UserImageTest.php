@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Domain\Model\ValueObject\Object;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Model\ValueObject\Object\UserImage;
 use Common\Domain\Ports\FileUpload\FileInterface;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\File;
@@ -24,7 +24,7 @@ class UserImageTest extends TestCase
 
     private UserImage $object;
     private ValidationChain $validator;
-    private MockObject|FileInterface $fileInterface;
+    private MockObject&FileInterface $fileInterface;
 
     #[\Override]
     public function setUp(): void
@@ -48,7 +48,7 @@ class UserImageTest extends TestCase
         BuiltInFunctionsReturn::$unlink = null;
     }
 
-    private function getFileInterface(string $fileName): MockObject|FileInterface
+    private function getFileInterface(string $fileName): MockObject&FileInterface
     {
         $file = $this
             ->getMockBuilder(File::class)
@@ -76,7 +76,7 @@ class UserImageTest extends TestCase
     #[Test]
     public function itShouldValidateTheImage(): void
     {
-        /** @var MockObject|File $file */
+        /** @var MockObject&File $file */
         $file = $this->fileInterface->getFile();
 
         $file
@@ -132,7 +132,7 @@ class UserImageTest extends TestCase
     public function itShouldFailFileIsEmpty(): void
     {
         $fileInterface = $this->getFileInterface(self::PATH_FILE_EMPTY);
-        /** @var MockObject|File $file */
+        /** @var MockObject&File $file */
         $file = $fileInterface->getFile();
         $file
             ->expects($this->any())
@@ -150,7 +150,7 @@ class UserImageTest extends TestCase
     #[Test]
     public function itShouldFailFileSizeIsLargeThan2MB(): void
     {
-        /** @var MockObject|File $file */
+        /** @var MockObject&File $file */
         $file = $this->fileInterface->getFile();
 
         $file
@@ -168,7 +168,7 @@ class UserImageTest extends TestCase
     #[Test]
     public function itShouldValidateFileWidthHasNotMinWidth(): void
     {
-        /** @var MockObject|File $file */
+        /** @var MockObject&File $file */
         $file = $this->fileInterface->getFile();
         $file
             ->expects($this->any())
@@ -185,7 +185,7 @@ class UserImageTest extends TestCase
     #[Test]
     public function itShouldValidateFileWidthHasNotMaxWidth(): void
     {
-        /** @var MockObject|File $file */
+        /** @var MockObject&File $file */
         $file = $this->fileInterface->getFile();
 
         $file
@@ -203,7 +203,7 @@ class UserImageTest extends TestCase
     #[Test]
     public function itShouldValidateFileHeighHasNotMinWidth(): void
     {
-        /** @var MockObject|File $file */
+        /** @var MockObject&File $file */
         $file = $this->fileInterface->getFile();
 
         $file
@@ -221,7 +221,7 @@ class UserImageTest extends TestCase
     #[Test]
     public function itShouldValidateFileHeighHasNotMaxWidth(): void
     {
-        /** @var MockObject|File $file */
+        /** @var MockObject&File $file */
         $file = $this->fileInterface->getFile();
 
         $file
@@ -239,7 +239,7 @@ class UserImageTest extends TestCase
     #[Test]
     public function itShouldValidateFilePixelsHasNotMinWidth(): void
     {
-        /** @var MockObject|File $file */
+        /** @var MockObject&File $file */
         $file = $this->fileInterface->getFile();
 
         $file
@@ -257,7 +257,7 @@ class UserImageTest extends TestCase
     #[Test]
     public function itShouldValidateFilePixelsHasNotMaxWidth(): void
     {
-        /** @var MockObject|File $file */
+        /** @var MockObject&File $file */
         $file = $this->fileInterface->getFile();
 
         $file
@@ -275,7 +275,7 @@ class UserImageTest extends TestCase
     #[Test]
     public function itShouldValidateFileAspectRatioHasNotMinWidth(): void
     {
-        /** @var MockObject|File $file */
+        /** @var MockObject&File $file */
         $file = $this->fileInterface->getFile();
 
         $file
@@ -293,7 +293,7 @@ class UserImageTest extends TestCase
     #[Test]
     public function itShouldValidateFileAspectRatioHasNotMaxWidth(): void
     {
-        /** @var MockObject|File $file */
+        /** @var MockObject&File $file */
         $file = $this->fileInterface->getFile();
 
         $file
@@ -311,7 +311,7 @@ class UserImageTest extends TestCase
     #[Test]
     public function itShouldValidateFileCanBeAnSquare(): void
     {
-        /** @var MockObject|File $file */
+        /** @var MockObject&File $file */
         $file = $this->fileInterface->getFile();
 
         $file
@@ -330,7 +330,7 @@ class UserImageTest extends TestCase
     #[Test]
     public function itShouldValidateFileIsCorrupted(): void
     {
-        /** @var MockObject|File $file */
+        /** @var MockObject&File $file */
         $file = $this->fileInterface->getFile();
 
         $file

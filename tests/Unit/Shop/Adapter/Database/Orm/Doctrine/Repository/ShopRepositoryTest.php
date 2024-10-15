@@ -37,7 +37,7 @@ class ShopRepositoryTest extends DataBaseTestCase
      * @var ShopRepository|EntityRepository<object>
      */
     private ShopRepository|EntityRepository $object;
-    private MockObject|ConnectionException $connectionException;
+    private MockObject&ConnectionException $connectionException;
 
     #[\Override]
     protected function setUp(): void
@@ -126,7 +126,7 @@ class ShopRepositoryTest extends DataBaseTestCase
 
         $group = $this->getNewShop();
 
-        /** @var MockObject|ObjectManager $objectManagerMock */
+        /** @var MockObject&ObjectManager $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock
             ->expects($this->once())

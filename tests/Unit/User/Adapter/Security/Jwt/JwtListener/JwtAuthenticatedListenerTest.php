@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Security\Jwt\JwtListener;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Ports\Event\EventDispatcherInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -20,11 +20,11 @@ use User\Domain\Model\User;
 class JwtAuthenticatedListenerTest extends TestCase
 {
     private JwtAuthenticatedListener $object;
-    private MockObject|EventDispatcherInterface $eventDispatcher;
-    private MockObject|Security $security;
-    private MockObject|UserSymfonyAdapter $userAdapter;
-    private MockObject|UserInterface $userAuthenticationEvent;
-    private MockObject|User $user;
+    private MockObject&EventDispatcherInterface $eventDispatcher;
+    private MockObject&Security $security;
+    private MockObject&UserSymfonyAdapter $userAdapter;
+    private MockObject&UserInterface $userAuthenticationEvent;
+    private MockObject&User $user;
 
     #[\Override]
     protected function setUp(): void

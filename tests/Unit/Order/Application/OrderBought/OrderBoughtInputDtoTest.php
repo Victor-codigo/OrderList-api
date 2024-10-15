@@ -12,11 +12,12 @@ use Order\Application\OrderBought\Dto\OrderBoughtInputDto;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub\Stub;
 use PHPUnit\Framework\TestCase;
 
 class OrderBoughtInputDtoTest extends TestCase
 {
-    private static MockObject|UserShared $userSession;
+    private static MockObject&UserShared $userSession;
     private ValidationInterface $validator;
 
     #[\Override]
@@ -33,16 +34,17 @@ class OrderBoughtInputDtoTest extends TestCase
      */
     public static function inputDataProvider(): iterable
     {
-        self::$userSession = self::createStub(UserShared::class);
+        /** @var Stub&UserShared $userSession */
+        $userSession = self::createStub(UserShared::class);
 
         yield [
-            self::$userSession,
+            $userSession,
             '47a79916-b7b8-4ff3-89f6-78279e6cc7fa',
             'f1112419-5118-413c-9c7a-2fa77e795b35',
             true,
         ];
         yield [
-            self::$userSession,
+            $userSession,
             '7de5b898-5e5a-4394-9239-fb45f453f63e',
             'ae384dd0-1162-4cbb-be0a-eaefd12203c4',
             false,

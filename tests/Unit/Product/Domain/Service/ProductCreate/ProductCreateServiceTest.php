@@ -50,7 +50,7 @@ class ProductCreateServiceTest extends TestCase
         $this->object = new ProductCreateService($this->productRepository, $this->fileUpload, $this->image, self::IMAGE_UPLOADED_PATH);
     }
 
-    private function createProductCreateDto(?string $description, MockObject|UploadedFileInterface|null $productImageFile): ProductCreateDto
+    private function createProductCreateDto(?string $description, (MockObject&UploadedFileInterface)|null $productImageFile): ProductCreateDto
     {
         return new ProductCreateDto(
             ValueObjectFactory::createIdentifier('276865ee-d120-46e9-a3f7-16f7c923a990'),

@@ -32,10 +32,10 @@ class GroupCreateServiceTest extends DataBaseTestCase
     private const string PATH_IMAGE_UPLOAD = __DIR__.'/Fixtures/Image.png';
 
     private GroupCreateService $object;
-    private MockObject|GroupRepositoryInterface $groupRepository;
-    private MockObject|UserGroupRepositoryInterface $userGroupRepository;
-    private MockObject|FileUploadInterface $fileUpload;
-    private MockObject|UploadedFileInterface $imageUploaded;
+    private MockObject&GroupRepositoryInterface $groupRepository;
+    private MockObject&UserGroupRepositoryInterface $userGroupRepository;
+    private MockObject&FileUploadInterface $fileUpload;
+    private MockObject&UploadedFileInterface $imageUploaded;
 
     #[\Override]
     protected function setUp(): void
@@ -49,7 +49,7 @@ class GroupCreateServiceTest extends DataBaseTestCase
         $this->object = new GroupCreateService($this->groupRepository, $this->userGroupRepository, $this->fileUpload, self::PATH_IMAGE_UPLOAD);
     }
 
-    private function createGroupCreateDto(MockObject|UploadedFileInterface|null $imageUploaded, GROUP_TYPE $groupType): GroupCreateDto
+    private function createGroupCreateDto((MockObject&UploadedFileInterface)|null $imageUploaded, GROUP_TYPE $groupType): GroupCreateDto
     {
         return new GroupCreateDto(
             ValueObjectFactory::createIdentifier('87c635dd-1861-430e-bbf8-9f21ac4b1b86'),

@@ -32,9 +32,9 @@ class UserRemoveUseCaseTest extends TestCase
     private const string SYSTEM_KEY = 'SystemDevKey';
 
     private UserRemoveUseCase $object;
-    private MockObject|UserRemoveService $userRemoveService;
-    private MockObject|ModuleCommunicationInterface $moduleCommunication;
-    private MockObject|User $userSession;
+    private MockObject&UserRemoveService $userRemoveService;
+    private MockObject&ModuleCommunicationInterface $moduleCommunication;
+    private MockObject&User $userSession;
 
     #[\Override]
     protected function setUp(): void

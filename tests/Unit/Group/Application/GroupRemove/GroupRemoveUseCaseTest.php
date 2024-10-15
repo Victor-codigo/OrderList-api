@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupRemove;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
@@ -27,6 +26,7 @@ use Group\Domain\Port\Repository\GroupRepositoryInterface;
 use Group\Domain\Service\GroupRemove\Dto\GroupRemoveDto;
 use Group\Domain\Service\GroupRemove\GroupRemoveService;
 use Group\Domain\Service\UserHasGroupAdminGrants\UserHasGroupAdminGrantsService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -35,12 +35,12 @@ class GroupRemoveUseCaseTest extends TestCase
     private const string SYSTEM_KEY = 'systemKeForDev';
 
     private GroupRemoveUseCase $object;
-    private MockObject|GroupRemoveService $groupRemoveService;
-    private MockObject|UserHasGroupAdminGrantsService $userHasGroupAdminGrantsService;
-    private MockObject|GroupRepositoryInterface $groupRepository;
-    private MockObject|ValidationInterface $validator;
-    private MockObject|ModuleCommunicationInterface $moduleCommunication;
-    private MockObject|UserShared $userSession;
+    private MockObject&GroupRemoveService $groupRemoveService;
+    private MockObject&UserHasGroupAdminGrantsService $userHasGroupAdminGrantsService;
+    private MockObject&GroupRepositoryInterface $groupRepository;
+    private MockObject&ValidationInterface $validator;
+    private MockObject&ModuleCommunicationInterface $moduleCommunication;
+    private MockObject&UserShared $userSession;
 
     #[\Override]
     protected function setUp(): void

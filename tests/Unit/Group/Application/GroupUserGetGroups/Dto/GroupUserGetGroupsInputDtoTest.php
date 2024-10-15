@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupUserGetGroups\Dto;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Validation\ValidationChain;
 use Common\Domain\Security\UserShared;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
@@ -13,13 +12,14 @@ use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\Group\GROUP_TYPE;
 use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupUserGetGroups\Dto\GroupUserGetGroupsInputDto;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class GroupUserGetGroupsInputDtoTest extends TestCase
 {
     private ValidationInterface $validator;
-    private MockObject|UserShared $userSession;
+    private MockObject&UserShared $userSession;
 
     #[\Override]
     protected function setUp(): void

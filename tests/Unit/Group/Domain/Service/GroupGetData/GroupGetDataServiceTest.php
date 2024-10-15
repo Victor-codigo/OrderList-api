@@ -22,7 +22,7 @@ class GroupGetDataServiceTest extends TestCase
     private const string PATH_GROUP_IMAGES_PUBLIC = '/assets/img/groups';
 
     private GroupGetDataService $object;
-    private MockObject|GroupRepositoryInterface $groupRepository;
+    private MockObject&GroupRepositoryInterface $groupRepository;
 
     #[\Override]
     protected function setUp(): void

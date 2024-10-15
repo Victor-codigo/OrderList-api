@@ -15,8 +15,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class TranslatorSymfonyAdapterTest extends TestCase
 {
     private TranslatorSymfonyAdapter $object;
-    private MockObject|TranslatorInterface $translator;
-    private MockObject|LocaleSwitcher $localeSwitcher;
+    private MockObject&TranslatorInterface $translator;
+    private MockObject&LocaleSwitcher $localeSwitcher;
 
     #[\Override]
     public function setUp(): void

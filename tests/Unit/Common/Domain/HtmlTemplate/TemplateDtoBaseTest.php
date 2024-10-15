@@ -18,9 +18,9 @@ use Symfony\Contracts\Translation\TranslatorInterface as SymfonyTranslatorInterf
 class TemplateDtoBaseTest extends TestCase
 {
     private TemplateDtoBase $object;
-    private MockObject|TranslatorInterface $translator;
-    private MockObject|SymfonyTranslatorInterface $symfonyTranslator;
-    private MockObject|LocaleSwitcher $symfonyLocaleSwitcher;
+    private TranslatorInterface $translator;
+    private MockObject&SymfonyTranslatorInterface $symfonyTranslator;
+    private MockObject&LocaleSwitcher $symfonyLocaleSwitcher;
 
     #[\Override]
     public function setUp(): void
@@ -36,7 +36,7 @@ class TemplateDtoBaseTest extends TestCase
     }
 
     #[Test]
-    public function translateThrowsInvalidArguemtexception(): void
+    public function translateThrowsInvalidArgumentException(): void
     {
         $templateId = TemplateId::create('id', []);
 

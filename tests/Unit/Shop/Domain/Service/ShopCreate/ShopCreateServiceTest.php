@@ -51,7 +51,7 @@ class ShopCreateServiceTest extends TestCase
         $this->object = new ShopCreateService($this->shopRepository, $this->fileUpload, $this->image, self::IMAGE_UPLOADED_PATH);
     }
 
-    private function createShopCreateDto(?string $description, ?string $address, MockObject|UploadedFileInterface|null $shopImageFile): ShopCreateDto
+    private function createShopCreateDto(?string $description, ?string $address, (MockObject&UploadedFileInterface)|null $shopImageFile): ShopCreateDto
     {
         return new ShopCreateDto(
             ValueObjectFactory::createIdentifier('276865ee-d120-46e9-a3f7-16f7c923a990'),

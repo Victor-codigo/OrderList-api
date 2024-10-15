@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Application\GroupCreate;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\FileUpload\UploadedFileInterface;
@@ -20,6 +19,7 @@ use Group\Application\GroupCreate\GroupCreateUseCase;
 use Group\Domain\Model\Group;
 use Group\Domain\Service\GroupCreate\Dto\GroupCreateDto;
 use Group\Domain\Service\GroupCreate\GroupCreateService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,10 +28,10 @@ class GroupCreateUseCaseTest extends TestCase
     private const string SYSTEM_KEY = 'systemKeyForDev';
 
     private GroupCreateUseCase $object;
-    private MockObject|GroupCreateService $groupCreateService;
-    private MockObject|ValidationInterface $validator;
-    private MockObject|ModuleCommunicationInterface $moduleCommunication;
-    private MockObject|Group $group;
+    private MockObject&GroupCreateService $groupCreateService;
+    private MockObject&ValidationInterface $validator;
+    private MockObject&ModuleCommunicationInterface $moduleCommunication;
+    private MockObject&Group $group;
 
     #[\Override]
     protected function setUp(): void

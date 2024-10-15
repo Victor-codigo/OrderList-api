@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Adapter\Security\Jwt\JwtListener;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Validation\User\USER_ROLES;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTEncodedEvent;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -14,18 +14,17 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
 use User\Adapter\Security\Jwt\Listener\JwtEncodedListener;
-use User\Domain\Model\User;
 
 class JwtEncodedListenerTest extends TestCase
 {
     private const string TOKEN = 'token string';
 
     private JwtEncodedListener $object;
-    private MockObject|JWTEncodedEvent $jwtEventEncoded;
-    private MockObject|User $user;
-    private MockObject|Security $security;
-    private MockObject|RequestStack $requestStack;
-    private MockObject|Request $request;
+    private MockObject&JWTEncodedEvent $jwtEventEncoded;
+    private MockObject&UserInterface $user;
+    private MockObject&Security $security;
+    private MockObject&RequestStack $requestStack;
+    private Request $request;
 
     #[\Override]
     protected function setUp(): void

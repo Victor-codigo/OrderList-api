@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Event\Exception;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Event\Exception\ExceptionEventSubscriber;
 use Common\Adapter\Http\Exception\HttpResponseException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,8 +26,8 @@ use Test\Unit\Common\Adapter\Event\Exception\Fixtures\DomainExceptionOutputForTe
 class ExceptionEventSubscriberTest extends TestCase
 {
     private ExceptionEventSubscriber $object;
-    private MockObject|KernelInterface $kernel;
-    private MockObject|Request $request;
+    private MockObject&KernelInterface $kernel;
+    private MockObject&Request $request;
     private ExceptionEvent $event;
 
     #[\Override]

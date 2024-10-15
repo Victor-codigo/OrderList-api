@@ -17,8 +17,8 @@ use User\Domain\Model\User;
 class UserSymfonyAdapterTest extends TestCase
 {
     private UserSymfonyAdapter $object;
-    private MockObject|User $user;
-    private MockObject|UserPasswordHasherInterface $passwordHAsher;
+    private MockObject&User $user;
+    private MockObject&UserPasswordHasherInterface $passwordHAsher;
 
     #[\Override]
     public function setup(): void
@@ -49,6 +49,7 @@ class UserSymfonyAdapterTest extends TestCase
     #[Test]
     public function setsTheUser(): void
     {
+        /** @var MockObject&User $userNew */
         $userNew = $this->createMock(User::class);
         $return = $this->object->setUser($userNew);
 

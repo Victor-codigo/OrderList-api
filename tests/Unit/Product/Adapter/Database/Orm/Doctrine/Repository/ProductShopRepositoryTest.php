@@ -33,7 +33,7 @@ class ProductShopRepositoryTest extends DataBaseTestCase
     private ProductShopRepository $object;
     private ProductRepositoryInterface $productRepository;
     private ShopRepositoryInterface $shopRepository;
-    private MockObject|ConnectionException $connectionException;
+    private MockObject&ConnectionException $connectionException;
 
     #[\Override]
     protected function setUp(): void
@@ -62,7 +62,7 @@ class ProductShopRepositoryTest extends DataBaseTestCase
     #[Test]
     public function itShouldFailSavingDataBaseError(): void
     {
-        /** @var MockObject|ObjectManager $objectManagerMock */
+        /** @var MockObject&ObjectManager $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock
             ->expects($this->once())

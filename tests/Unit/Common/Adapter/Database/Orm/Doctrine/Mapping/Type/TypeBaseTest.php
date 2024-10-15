@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\TypeBase;
 use Common\Domain\Exception\InvalidArgumentException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Fixtures\CustomType;
@@ -15,8 +15,8 @@ use Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Fixtures\CustomV
 
 class TypeBaseTest extends TestCase
 {
-    private MockObject|TypeBase $object;
-    private MockObject|AbstractPlatform $platform;
+    private MockObject&TypeBase $object;
+    private MockObject&AbstractPlatform $platform;
 
     #[\Override]
     public function setUp(): void

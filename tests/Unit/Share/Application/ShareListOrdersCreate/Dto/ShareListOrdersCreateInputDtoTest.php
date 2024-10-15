@@ -18,7 +18,7 @@ class ShareListOrdersCreateInputDtoTest extends TestCase
     private const string LIST_ORDERS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
 
     private ValidationInterface $validator;
-    private MockObject|UserShared $userSession;
+    private MockObject&UserShared $userSession;
 
     protected function setUp(): void
     {

@@ -23,7 +23,7 @@ class GetUsersProfilePublcDataServiceTest extends TestCase
     private const string APP_PROTOCOL_AND_DOMAIN = 'appProtocolAndDomain';
 
     private GetUsersProfilePublicDataService $object;
-    private MockObject|ProfileRepositoryInterface $profileRepository;
+    private MockObject&ProfileRepositoryInterface $profileRepository;
 
     #[\Override]
     protected function setUp(): void

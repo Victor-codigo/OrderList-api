@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Domain\Service\UserRemove;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\Image\EntityImageRemove\EntityImageRemoveService;
 use Common\Domain\Validation\User\USER_ROLES;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use User\Domain\Model\User;
@@ -26,8 +26,8 @@ class UserRemoveServiceTest extends TestCase
     private const string USER_IMAGE_NAME = 'IMAGE NAME';
 
     private UserRemoveService $object;
-    private MockObject|UserRepositoryInterface $userRepository;
-    private MockObject|EntityImageRemoveService $entityImageRemoveService;
+    private MockObject&UserRepositoryInterface $userRepository;
+    private MockObject&EntityImageRemoveService $entityImageRemoveService;
 
     #[\Override]
     protected function setUp(): void

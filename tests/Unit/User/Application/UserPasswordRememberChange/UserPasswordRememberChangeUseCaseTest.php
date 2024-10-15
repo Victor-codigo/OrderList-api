@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserPasswordRememberChange;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\JwtToken\JwtHS256Interface;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -12,6 +11,7 @@ use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Common\Domain\Validation\ValidationInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use User\Application\UserPasswordRememberChange\Dto\UserPasswordRememberChangeInputDto;
@@ -25,10 +25,10 @@ class UserPasswordRememberChangeUseCaseTest extends TestCase
     private const string SYSTEM_KEY = 'systemKeyForDev';
 
     private UserPasswordRememberChangeUseCase $object;
-    private MockObject|UserPasswordChangeService $userPasswordChangeService;
-    private MockObject|JwtHS256Interface $jwt;
-    private MockObject|ValidationInterface $validator;
-    private MockObject|ModuleCommunicationInterface $moduleCommunication;
+    private MockObject&UserPasswordChangeService $userPasswordChangeService;
+    private MockObject&JwtHS256Interface $jwt;
+    private MockObject&ValidationInterface $validator;
+    private MockObject&ModuleCommunicationInterface $moduleCommunication;
 
     #[\Override]
     protected function setUp(): void

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserRegisterEmailConfirmation;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Jwt\Exception\JwtException;
 use Common\Adapter\Jwt\Exception\JwtTokenExpiredException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
@@ -15,6 +14,7 @@ use Common\Domain\Ports\Event\EventDispatcherInterface;
 use Common\Domain\Validation\Common\VALIDATION_ERRORS;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use User\Application\UserRegisterEmailConfirmation\Dto\UserEmailConfirmationInputDto;
@@ -30,9 +30,9 @@ use User\Domain\Service\EmailConfirmationJwtTokenValidationService\EmailConfirma
 class UserRegisterEmailConfirmationUseCaseTest extends TestCase
 {
     private UserRegisterEmailConfirmationUseCase $object;
-    private MockObject|ValidationInterface $validator;
-    private MockObject|EmailConfirmationJwtTokenValidationService $emailConfirmationJwtTokenValidation;
-    private MockObject|EventDispatcherInterface $eventDispatcherService;
+    private MockObject&ValidationInterface $validator;
+    private MockObject&EmailConfirmationJwtTokenValidationService $emailConfirmationJwtTokenValidation;
+    private MockObject&EventDispatcherInterface $eventDispatcherService;
 
     #[\Override]
     protected function setUp(): void
@@ -55,13 +55,13 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
     {
         $token = 'token valid';
         $userId = ValueObjectFactory::createIdentifier('user id');
-        /** @var MockObject|UserEmailConfirmationInputDto $input */
+        /** @var MockObject&UserEmailConfirmationInputDto $input */
         $input = $this->getMockBuilder(UserEmailConfirmationInputDto::class)
             ->setConstructorArgs([$token])
             ->onlyMethods(['validate'])
             ->getMock();
 
-        /** @var MockObject|User $userExpected */
+        /** @var MockObject&User $userExpected */
         $userExpected = $this->createMock(User::class);
         $eventExpected = $this->createMock(EventDomainInterface::class);
 
@@ -106,7 +106,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
     public function itShouldFailInputValidationError(): void
     {
         $token = 'token valid';
-        /** @var MockObject|UserEmailConfirmationInputDto $input */
+        /** @var MockObject&UserEmailConfirmationInputDto $input */
         $input = $this->getMockBuilder(UserEmailConfirmationInputDto::class)
             ->setConstructorArgs([$token])
             ->onlyMethods(['validate'])
@@ -126,7 +126,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
     public function itShouldFailTokenExpired(): void
     {
         $token = 'token expired';
-        /** @var MockObject|UserEmailConfirmationInputDto $input */
+        /** @var MockObject&UserEmailConfirmationInputDto $input */
         $input = $this->getMockBuilder(UserEmailConfirmationInputDto::class)
             ->setConstructorArgs([$token])
             ->onlyMethods(['validate'])
@@ -156,7 +156,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
     public function itShouldFailErrorOnToken(): void
     {
         $token = 'token expired';
-        /** @var MockObject|UserEmailConfirmationInputDto $input */
+        /** @var MockObject&UserEmailConfirmationInputDto $input */
         $input = $this->getMockBuilder(UserEmailConfirmationInputDto::class)
             ->setConstructorArgs([$token])
             ->onlyMethods(['validate'])
@@ -186,7 +186,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
     public function itShouldFailUserNotFound(): void
     {
         $token = 'token expired';
-        /** @var MockObject|UserEmailConfirmationInputDto $input */
+        /** @var MockObject&UserEmailConfirmationInputDto $input */
         $input = $this->getMockBuilder(UserEmailConfirmationInputDto::class)
             ->setConstructorArgs([$token])
             ->onlyMethods(['validate'])
@@ -216,7 +216,7 @@ class UserRegisterEmailConfirmationUseCaseTest extends TestCase
     public function itShouldFailUserIsAlreadyActive(): void
     {
         $token = 'token expired';
-        /** @var MockObject|UserEmailConfirmationInputDto $input */
+        /** @var MockObject&UserEmailConfirmationInputDto $input */
         $input = $this->getMockBuilder(UserEmailConfirmationInputDto::class)
             ->setConstructorArgs([$token])
             ->onlyMethods(['validate'])

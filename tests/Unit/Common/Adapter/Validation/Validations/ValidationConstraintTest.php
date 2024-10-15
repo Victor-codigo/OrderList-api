@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints\Range;
 class ValidationConstraintTest extends TestCase
 {
     private ValidationConstraint $object;
-    private MockObject|Constraint $constraint;
+    private MockObject&Constraint $constraint;
 
     #[\Override]
     protected function setUp(): void

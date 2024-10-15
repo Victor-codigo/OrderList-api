@@ -30,7 +30,7 @@ class UserRepositoryTest extends DataBaseTestCase
     private const string USER_NOT_ACTIVE_ID = 'bd2cbad1-6ccf-48e3-bb92-bc9961bc011e';
 
     private UserRepository $userRepository;
-    private MockObject|ConnectionException $connectionException;
+    private MockObject&ConnectionException $connectionException;
 
     #[\Override]
     protected function setUp(): void
@@ -64,7 +64,7 @@ class UserRepositoryTest extends DataBaseTestCase
     {
         $this->expectException(DBConnectionException::class);
 
-        /** @var MockObject|ObjectManager $objectManagerMock */
+        /** @var MockObject&ObjectManager $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock
             ->expects($this->once())
@@ -90,7 +90,7 @@ class UserRepositoryTest extends DataBaseTestCase
     {
         $this->expectException(DBConnectionException::class);
 
-        /** @var MockObject|ObjectManager $objectManagerMock */
+        /** @var MockObject&ObjectManager $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock
             ->expects($this->once())

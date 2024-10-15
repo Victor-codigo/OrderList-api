@@ -18,7 +18,7 @@ class OrderCreateInputDtoTest extends TestCase
     private const string GROUP_ID_NEW = '971c0fc0-50b4-42ad-b5b4-a4ad1f11c380';
     private const string LIST_ORDERS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
 
-    private MockObject|UserShared $userSession;
+    private MockObject&UserShared $userSession;
     private ValidationInterface $validator;
 
     #[\Override]
@@ -35,7 +35,7 @@ class OrderCreateInputDtoTest extends TestCase
      *  product_id: string,
      *  shop_id: string,
      *  description: string,
-     *  amount: int
+     *  amount: float
      * }>
      */
     private function getOrdersData(): array

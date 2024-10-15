@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\Group\Domain\Service\GroupModify;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\FileSystem\DomainFileNotDeletedException;
@@ -19,6 +18,7 @@ use Group\Domain\Service\GroupModify\BuiltInFunctionsReturn;
 use Group\Domain\Service\GroupModify\Dto\GroupModifyDto;
 use Group\Domain\Service\GroupModify\Exception\GroupModifyPermissionsException;
 use Group\Domain\Service\GroupModify\GroupModifyService;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -31,9 +31,9 @@ class GroupModifyServiceTest extends TestCase
     private const string FILE_NAME_FILE_UPLOADED_MODIFIED = 'imageModified.png';
 
     private GroupModifyService $object;
-    private MockObject|GroupRepositoryInterface $groupRepository;
-    private MockObject|FileUploadInterface $fileUpload;
-    private MockObject|UploadedFileInterface $imageUploaded;
+    private MockObject&GroupRepositoryInterface $groupRepository;
+    private MockObject&FileUploadInterface $fileUpload;
+    private MockObject&UploadedFileInterface $imageUploaded;
 
     #[\Override]
     protected function setUp(): void

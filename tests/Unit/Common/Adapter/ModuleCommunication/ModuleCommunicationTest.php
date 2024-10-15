@@ -37,12 +37,12 @@ class ModuleCommunicationTest extends TestCase
     private const string JWT_TOKEN = 'asdgasdfbadsfhaetrhadfhbadfhbaerth';
 
     private ModuleCommunication $object;
-    private MockObject|HttpClientInterface $httpClient;
-    private MockObject|HttpClientResponseInterface $httpClientResponse;
-    private MockObject|DIInterface $DI;
-    private MockObject|TokenExtractorInterface $jwtTokenExtractor;
-    private MockObject|RequestStack $requestStack;
-    private MockObject|Request $request;
+    private MockObject&HttpClientInterface $httpClient;
+    private MockObject&HttpClientResponseInterface $httpClientResponse;
+    private MockObject&DIInterface $DI;
+    private MockObject&TokenExtractorInterface $jwtTokenExtractor;
+    private MockObject&RequestStack $requestStack;
+    private MockObject&Request $request;
     private string $appEnv;
     private string $responseContentExpected;
     private int $getContentNumCalls;
@@ -446,7 +446,7 @@ class ModuleCommunicationTest extends TestCase
     #[Test]
     public function itShouldFailResponseError400(): void
     {
-        /** @var MockObject|HttpExceptionInterface $httpExceptionInterface */
+        /** @var MockObject&HttpExceptionInterface $httpExceptionInterface */
         $httpExceptionInterface = $this->createMock(HttpExceptionInterface::class);
 
         $content = [
@@ -475,7 +475,7 @@ class ModuleCommunicationTest extends TestCase
     #[Test]
     public function itShouldFailResponseError500(): void
     {
-        /** @var MockObject|HttpExceptionInterface $httpExceptionInterface */
+        /** @var MockObject&HttpExceptionInterface $httpExceptionInterface */
         $httpExceptionInterface = $this->createMock(HttpExceptionInterface::class);
 
         $content = [

@@ -16,7 +16,7 @@ use Test\Unit\Common\Adapter\Mailer\Fixtures\TransportException;
 class MailerSymfonyAdapterTest extends TestCase
 {
     private MailerSymfonyAdapter $object;
-    private MockObject|MailerInterface $mailer;
+    private MockObject&MailerInterface $mailer;
 
     #[\Override]
     public function setUp(): void

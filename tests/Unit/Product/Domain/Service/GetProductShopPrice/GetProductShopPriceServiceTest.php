@@ -42,7 +42,7 @@ class GetProductShopPriceServiceTest extends TestCase
      */
     private function getProductsPrice(): array
     {
-        /** @var MockObject|Product $product */
+        /** @var MockObject&Product $product */
         $product = $this
             ->getMockBuilder(Product::class)
             ->setConstructorArgs([
@@ -55,7 +55,7 @@ class GetProductShopPriceServiceTest extends TestCase
             ->onlyMethods([])
             ->getMock();
 
-        /** @var MockObject|Shop $shop */
+        /** @var MockObject&Shop $shop */
         $shop = $this
             ->getMockBuilder(Shop::class)
             ->setConstructorArgs([

@@ -13,14 +13,14 @@ use Common\Domain\Validation\ValidationInterface;
 use Group\Application\GroupGetUsers\Dto\GroupGetUsersInputDto;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub\Stub;
 use PHPUnit\Framework\TestCase;
 
 class GroupGetUsersInputDtoTest extends TestCase
 {
     private const string GROUP_ID = 'fdb242b4-bac8-4463-88d0-0941bb0beee0';
 
-    private MockObject|ValidationInterface $validator;
+    private ValidationInterface $validator;
 
     #[\Override]
     protected function setUp(): void
@@ -35,6 +35,7 @@ class GroupGetUsersInputDtoTest extends TestCase
      */
     public static function inputDataProvider(): iterable
     {
+        /** @var Stub&UserShared $userSession */
         $userSession = self::createStub(UserShared::class);
 
         yield [

@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Test\Unit\Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Date;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Adapter\Database\Orm\Doctrine\Mapping\Type\Date\DateNowToFutureType;
 use Common\Domain\Model\ValueObject\Date\DateNowToFuture;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class DateNowToFutureTypeTest extends TestCase
 {
-    private MockObject|AbstractPlatform $platform;
+    private MockObject&AbstractPlatform $platform;
     private DateNowToFutureType $object;
 
     #[\Override]

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test\Unit\User\Application\UserEmailChange;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\ModuleCommunication\ModuleCommunicationConfigDto;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
@@ -12,6 +11,7 @@ use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
 use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Common\Domain\Validation\ValidationInterface;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use User\Application\UserEmailChange\Dto\UserEmailChangeInputDto;
@@ -25,9 +25,9 @@ class UserEmailChangeUseCaseTest extends TestCase
     private const string SYSTEM_KEY = 'systemKeyForDev';
 
     private UserEmailChangeUseCase $object;
-    private MockObject|ValidationInterface $validator;
-    private MockObject|UserEmailChangeService $userEmailChangeService;
-    private MockObject|ModuleCommunicationInterface $moduleCommunication;
+    private MockObject&ValidationInterface $validator;
+    private MockObject&UserEmailChangeService $userEmailChangeService;
+    private MockObject&ModuleCommunicationInterface $moduleCommunication;
 
     #[\Override]
     protected function setUp(): void

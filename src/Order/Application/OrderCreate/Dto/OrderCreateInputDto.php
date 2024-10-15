@@ -26,7 +26,7 @@ class OrderCreateInputDto implements ServiceInputDtoInterface
      * @param array<int, array{
      *  product_id: string,
      *  shop_id: string,
-     *  description: string,
+     *  description: string|null,
      *  amount: float
      * }>|null $ordersData
      */

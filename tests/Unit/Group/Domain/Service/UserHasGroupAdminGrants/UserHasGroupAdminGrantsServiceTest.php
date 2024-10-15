@@ -22,7 +22,7 @@ class UserHasGroupAdminGrantsServiceTest extends TestCase
     private const string GROUP_USER_ADMIN_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
     private UserHasGroupAdminGrantsService $object;
-    private MockObject|UserGroupRepositoryInterface $userGroupRepository;
+    private MockObject&UserGroupRepositoryInterface $userGroupRepository;
 
     #[\Override]
     protected function setUp(): void
@@ -48,6 +48,7 @@ class UserHasGroupAdminGrantsServiceTest extends TestCase
      */
     private function getGroupUsersAdmins(): array
     {
+        /** @var MockObject&Group $group */
         $group = $this->createMock(Group::class);
 
         return [
