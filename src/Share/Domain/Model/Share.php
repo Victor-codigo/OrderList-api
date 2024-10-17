@@ -13,6 +13,7 @@ class Share
 {
     private Identifier $id;
     private Identifier $listOrdersId;
+    private Identifier $groupId;
     private Identifier $userId;
     private \DateTime $expire;
 
@@ -29,6 +30,11 @@ class Share
         return $this->listOrdersId;
     }
 
+    public function getGroupId(): Identifier
+    {
+        return $this->groupId;
+    }
+
     public function getUserId(): Identifier
     {
         return $this->userId;
@@ -39,21 +45,23 @@ class Share
         return $this->expire;
     }
 
-    public function __construct(Identifier $id, ListOrders $listOrders, User $user, \DateTime $expire)
+    public function __construct(Identifier $id, ListOrders $listOrders, Identifier $groupId, User $user, \DateTime $expire)
     {
         $this->id = $id;
         $this->listOrdersId = $listOrders->getId();
+        $this->groupId = $groupId;
         $this->userId = $user->getId();
         $this->expire = $expire;
         $this->listOrders = $listOrders;
         $this->user = $user;
     }
 
-    public static function fromPrimitives(string $id, ListOrders $listOrders, User $user, \DateTime $expire): self
+    public static function fromPrimitives(string $id, ListOrders $listOrders, Identifier $groupId, User $user, \DateTime $expire): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),
             $listOrders,
+            $groupId,
             $user,
             $expire
         );

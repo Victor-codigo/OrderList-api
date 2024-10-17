@@ -13,6 +13,11 @@
               type="IdentifierType"
               column-definition="CHAR(36) NOT NULL"/>
 
+       <field name="groupId"
+              columm="group_id"
+              type="IdentifierType"
+              column-definition="CHAR(36) NOT NULL"/>
+
        <field name="userId"
               columm="user_id"
               type="IdentifierType"
