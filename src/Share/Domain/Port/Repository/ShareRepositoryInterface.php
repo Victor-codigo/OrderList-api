@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Share\Domain\Port\Repository;
 
+use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Ports\Repository\RepositoryInterface;
 use Share\Domain\Model\Share;
 
@@ -21,4 +22,11 @@ interface ShareRepositoryInterface extends RepositoryInterface
      * @throws DBConnectionException
      */
     public function remove(array $share): void;
+
+    /**
+     * @param Identifier[] $sharedId
+     *
+     * @return PaginatorInterface<int, Share>
+     */
+    public function findSharedRecursesByIdOrFail(array $sharedId): PaginatorInterface;
 }

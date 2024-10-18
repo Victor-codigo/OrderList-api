@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\Share\Adapter\Database\Orm\Doctrine\Repository;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -28,6 +29,8 @@ class ShareRepositoryTest extends DataBaseTestCase
 
     private const string SHARE_ID_NEW = '79bf5849-c849-4ce3-bb42-121590462445';
     private const string SHARE_ID_EXIST = '72b37f9c-ff55-4581-a131-4270e73012a2';
+    private const string SHARE_ID_EXIST_2 = '8aaa96f5-cc54-45cb-bf43-f9b8fe256696';
+    private const string SHARE_ID_EXIST_3 = '5552b4a6-8326-462a-a42b-f60b33640aef';
     private const string LIST_ORDERS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
     private const string USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
     private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
@@ -157,5 +160,41 @@ class ShareRepositoryTest extends DataBaseTestCase
 
         $this->mockObjectManager($this->object, $objectManagerMock);
         $this->object->remove([$share]);
+    }
+
+    #[Test]
+    public function itShouldFindRecurseById(): void
+    {
+        $resourcesId = [
+            ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST),
+            ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST_2),
+            ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST_3),
+        ];
+        $return = $this->object->findSharedRecursesByIdOrFail($resourcesId);
+        $resourcesIdReturned = array_map(
+            fn (Share $share): Identifier => $share->getId(),
+            iterator_to_array($return)
+        );
+
+        $this->assertCount(3, $return);
+        $this->assertEqualsCanonicalizing($resourcesId, $resourcesIdReturned);
+    }
+
+    #[Test]
+    public function itShouldFailFindingRecurseByIdsEmpty(): void
+    {
+        $resourcesId = [];
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findSharedRecursesByIdOrFail($resourcesId);
+    }
+
+    #[Test]
+    public function itShouldFailFindingRecurseByIdNotFound(): void
+    {
+        $resourcesId = [
+            ValueObjectFactory::createIdentifier('not found id'),
+        ];
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findSharedRecursesByIdOrFail($resourcesId);
     }
 }
