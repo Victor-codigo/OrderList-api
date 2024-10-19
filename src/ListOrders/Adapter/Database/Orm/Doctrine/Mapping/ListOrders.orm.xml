@@ -64,10 +64,5 @@
                     target-entity="Order\Domain\Model\Order"
                     mapped-by="listOrders" />
 
-       <!-- User - Share -->
-       <one-to-many field="shares"
-                    target-entity="Share\Domain\Model\Share"
-                    mapped-by="listOrders" />
-
-    </entity>
+       </entity>
 </doctrine-mapping>

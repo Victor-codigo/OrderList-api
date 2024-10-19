@@ -74,12 +74,13 @@ class ShareRepositoryTest extends DataBaseTestCase
         );
     }
 
-    private function createShare(ListOrders $listOrders, User $user, ?Identifier $id): Share
+    private function createShare(ListOrders $listOrders, Identifier $userId, ?Identifier $id): Share
     {
         return new Share(
             $id ?? ValueObjectFactory::createIdentifier(self::SHARE_ID_NEW),
-            $listOrders,
-            $user,
+            $userId,
+            $listOrders->getId(),
+            $listOrders->getGroupId(),
             new \DateTime()
         );
     }
@@ -88,8 +89,8 @@ class ShareRepositoryTest extends DataBaseTestCase
     public function itShouldSaveShared(): void
     {
         $listOrdersDatabase = $this->listOrdersRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID)]);
-        $userDatabase = $this->userRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::USER_ID)]);
-        $share = $this->createShare($listOrdersDatabase, $userDatabase, null);
+        $userId = ValueObjectFactory::createIdentifier(self::USER_ID);
+        $share = $this->createShare($listOrdersDatabase, $userId, null);
 
         $this->object->save($share);
 
@@ -103,8 +104,8 @@ class ShareRepositoryTest extends DataBaseTestCase
     public function itShouldFailSaveSharedAlreadyExists(): void
     {
         $listOrdersDatabase = $this->listOrdersRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID)]);
-        $userDatabase = $this->userRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::USER_ID)]);
-        $share = $this->createShare($listOrdersDatabase, $userDatabase, ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST));
+        $userId = ValueObjectFactory::createIdentifier(self::USER_ID);
+        $share = $this->createShare($listOrdersDatabase, $userId, ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST));
 
         $this->expectException(DBUniqueConstraintException::class);
         $this->object->save($share);
@@ -114,8 +115,8 @@ class ShareRepositoryTest extends DataBaseTestCase
     public function itShouldFailSavingShareInDataBaseError(): void
     {
         $listOrdersDatabase = $this->listOrdersRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID)]);
-        $userDatabase = $this->userRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::USER_ID)]);
-        $share = $this->createShare($listOrdersDatabase, $userDatabase, ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST));
+        $userId = ValueObjectFactory::createIdentifier(self::USER_ID);
+        $share = $this->createShare($listOrdersDatabase, $userId, ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST));
 
         $this->expectException(DBConnectionException::class);
 
@@ -148,8 +149,8 @@ class ShareRepositoryTest extends DataBaseTestCase
         $this->expectException(DBConnectionException::class);
 
         $listOrdersDatabase = $this->listOrdersRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID)]);
-        $userDatabase = $this->userRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::USER_ID)]);
-        $share = $this->createShare($listOrdersDatabase, $userDatabase, ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST));
+        $userId = ValueObjectFactory::createIdentifier(self::USER_ID);
+        $share = $this->createShare($listOrdersDatabase, $userId, ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST));
 
         /** @var MockObject|ObjectManager $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManager::class);

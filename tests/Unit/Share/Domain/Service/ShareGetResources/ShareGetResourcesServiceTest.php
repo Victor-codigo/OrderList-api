@@ -16,7 +16,6 @@ use Share\Domain\Model\Share;
 use Share\Domain\Port\Repository\ShareRepositoryInterface;
 use Share\Domain\Service\ShareGetResources\Dto\ShareGetResourcesDto;
 use Share\Domain\Service\ShareGetResources\ShareGetResourcesService;
-use User\Domain\Model\User;
 
 class ShareGetResourcesServiceTest extends TestCase
 {
@@ -25,6 +24,9 @@ class ShareGetResourcesServiceTest extends TestCase
         '8aaa96f5-cc54-45cb-bf43-f9b8fe256696',
         '5552b4a6-8326-462a-a42b-f60b33640aef',
     ];
+    private const string USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3';
+    private const string LIST_ORDERS_ID = 'ccea1681-1e76-4b3b-bac8-dffce304c97d';
+    private const string GROUP_ID = '5ae14a5f-2e36-4521-b1c1-2b4a8f38b05e';
 
     private ShareGetResourcesService $object;
     private MockObject&ShareRepositoryInterface $shareRepository;
@@ -57,9 +59,6 @@ class ShareGetResourcesServiceTest extends TestCase
      */
     private function getShareResources(): array
     {
-        /** @var MockObject&User $user */
-        $user = $this->createMock(User::class);
-
         /** @var MockObject&ListOrders $listOrders1 */
         $listOrders1 = $this->createMock(ListOrders::class);
         /** @var MockObject&ListOrders $listOrders2 */
@@ -70,20 +69,23 @@ class ShareGetResourcesServiceTest extends TestCase
         return [
             Share::fromPrimitives(
                 self::SHARE_IDS[0],
-                $listOrders1,
-                $user,
+                self::USER_ID,
+                self::LIST_ORDERS_ID,
+                self::GROUP_ID,
                 new \DateTime('2024-10-15 12:00:00')
             ),
             Share::fromPrimitives(
                 self::SHARE_IDS[1],
-                $listOrders2,
-                $user,
+                self::USER_ID,
+                self::LIST_ORDERS_ID,
+                self::GROUP_ID,
                 new \DateTime('2024-10-16 12:00:00')
             ),
             Share::fromPrimitives(
                 self::SHARE_IDS[2],
-                $listOrders3,
-                $user,
+                self::USER_ID,
+                self::LIST_ORDERS_ID,
+                self::GROUP_ID,
                 new \DateTime('2024-10-17 12:00:00')
             ),
         ];

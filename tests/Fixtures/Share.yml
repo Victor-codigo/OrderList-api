@@ -15,20 +15,23 @@ Share\Domain\Model\Share:
   entity-share:
     __construct:
       id: "@share_id"
-      listOrders: "@entity-listOrder"
-      user: "@entity-user_active"
+      userId: "@entity-user_active->getId"
+      listOrdersId: "@entity-listOrder->getId"
+      groupId: "@entity-listOrder->getGroupId"
       expire: <(new DateTime('2024-10-1 12:00'))>
 
   entity-share_2:
     __construct:
       id: "@share_id_2"
-      listOrders: "@entity-listOrder_2"
-      user: "@entity-user_active"
+      userId: "@entity-user_active->getId"
+      listOrdersId: "@entity-listOrder_2->getId"
+      groupId: "@entity-listOrder_2->getGroupId"
       expire: <(new DateTime('2024-10-2 12:00'))>
 
   entity-share_3:
     __construct:
       id: "@share_id_3"
-      listOrders: "@entity-listOrder_3"
-      user: "@entity-user_active"
+      userId: "@entity-user_active->getId"
+      listOrdersId: "@entity-listOrder_3->getId"
+      groupId: "@entity-listOrder_3->getGroupId"
       expire: <(new DateTime('2024-10-3 12:00'))>

@@ -42,7 +42,6 @@ class ShareListOrdersCreateService
      */
     private function createShare(Identifier $listOrderId, Identifier $userId, int $sharedExpirationTime): Share
     {
-        $user = $this->userRepository->findUserByIdOrFail($userId);
         $listOrders = $this->getListOrders($listOrderId);
 
         $shareId = ValueObjectFactory::createIdentifier($this->shareRepository->generateId());
@@ -50,8 +49,9 @@ class ShareListOrdersCreateService
 
         return new Share(
             $shareId,
-            $listOrders,
-            $user,
+            $userId,
+            $listOrders->getId(),
+            $listOrders->getGroupId(),
             $expire
         );
     }
