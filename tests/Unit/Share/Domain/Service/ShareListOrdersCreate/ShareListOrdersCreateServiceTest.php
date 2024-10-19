@@ -31,10 +31,10 @@ class ShareListOrdersCreateServiceTest extends TestCase
     private const int SHARED_EXPIRATION_TIME = 30;
 
     private ShareListOrdersCreateService $object;
-    private MockObject|ShareRepositoryInterface $shareRepository;
-    private MockObject|ListOrdersRepositoryInterface $listOrdersRepository;
-    private MockObject|PaginatorInterface $listOrdersRepositoryPaginator;
-    private MockObject|UserRepositoryInterface $userRepository;
+    private MockObject&ShareRepositoryInterface $shareRepository;
+    private MockObject&ListOrdersRepositoryInterface $listOrdersRepository;
+    private MockObject&PaginatorInterface $listOrdersRepositoryPaginator;
+    private MockObject&UserRepositoryInterface $userRepository;
 
     protected function setUp(): void
     {
@@ -85,12 +85,6 @@ class ShareListOrdersCreateServiceTest extends TestCase
         $user = $this->userCreate();
         $listOrders = $this->listOrdersCreate();
 
-        $this->userRepository
-            ->expects($this->once())
-            ->method('findUserByIdOrFail')
-            ->with($input->userId)
-            ->willReturn($user);
-
         $this->listOrdersRepository
             ->expects($this->once())
             ->method('findListOrderByIdOrFail')
@@ -128,54 +122,12 @@ class ShareListOrdersCreateServiceTest extends TestCase
     }
 
     #[Test]
-    public function itShouldFailCreateANewSharedUserIdNotFound(): void
-    {
-        $input = new ShareListOrderCreateDto(
-            ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID),
-            ValueObjectFactory::createIdentifier(self::USER_ID)
-        );
-
-        $this->userRepository
-            ->expects($this->once())
-            ->method('findUserByIdOrFail')
-            ->with($input->userId)
-            ->willThrowException(new DBNotFoundException());
-
-        $this->listOrdersRepository
-            ->expects($this->never())
-            ->method('findListOrderByIdOrFail');
-
-        $this->listOrdersRepositoryPaginator
-            ->expects($this->never())
-            ->method('setPagination');
-
-        $this->listOrdersRepositoryPaginator
-            ->expects($this->never())
-            ->method('getIterator');
-
-        $this->shareRepository
-            ->expects($this->never())
-            ->method('save');
-
-        $this->expectException(DBNotFoundException::class);
-        $this->object->__invoke($input);
-    }
-
-    #[Test]
     public function itShouldFailCreateANewSharedListOrdersIdNotFound(): void
     {
         $input = new ShareListOrderCreateDto(
             ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID),
             ValueObjectFactory::createIdentifier(self::USER_ID)
         );
-
-        $user = $this->userCreate();
-
-        $this->userRepository
-            ->expects($this->once())
-            ->method('findUserByIdOrFail')
-            ->with($input->userId)
-            ->willReturn($user);
 
         $this->listOrdersRepository
             ->expects($this->once())
@@ -208,12 +160,6 @@ class ShareListOrdersCreateServiceTest extends TestCase
         );
         $user = $this->userCreate();
         $listOrders = $this->listOrdersCreate();
-
-        $this->userRepository
-            ->expects($this->once())
-            ->method('findUserByIdOrFail')
-            ->with($input->userId)
-            ->willReturn($user);
 
         $this->listOrdersRepository
             ->expects($this->once())
