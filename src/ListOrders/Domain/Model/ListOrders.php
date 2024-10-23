@@ -12,7 +12,6 @@ use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Order\Domain\Model\Order;
-use Share\Domain\Model\Share;
 
 class ListOrders
 {
@@ -28,10 +27,6 @@ class ListOrders
      * @var Collection<int, Order>
      */
     private Collection $orders;
-    /**
-     * @var Collection<int, Share>
-     */
-    private Collection $shares;
 
     public function getId(): Identifier
     {
@@ -132,7 +127,6 @@ class ListOrders
         $this->createdOn = new \DateTime();
 
         $this->orders = new ArrayCollection();
-        $this->shares = new ArrayCollection();
     }
 
     public static function fromPrimitives(string $id, string $groupId, string $userId, string $name, ?string $description, ?\DateTime $dateToBuy): self

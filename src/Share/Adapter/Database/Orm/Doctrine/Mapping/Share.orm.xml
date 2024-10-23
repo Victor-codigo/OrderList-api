@@ -13,6 +13,11 @@
               type="IdentifierType"
               column-definition="CHAR(36) NOT NULL"/>
 
+       <field name="groupId"
+              columm="group_id"
+              type="IdentifierType"
+              column-definition="CHAR(36) NOT NULL"/>
+
        <field name="userId"
               columm="user_id"
               type="IdentifierType"
@@ -39,28 +44,6 @@
                                  columns="id"/>
 
        </unique-constraints>
-
-       <!-- Share - Users -->
-       <many-to-one field="user"
-                    target-entity="User\Domain\Model\User"
-                    inversed-by="shares">
-
-              <join-column name="user_id"
-                           referenced-column-name="id"
-                           nullable="false"
-                           on-delete="CASCADE" />
-       </many-to-one>
-
-       <!-- Share - ListOrders -->
-       <many-to-one field="listOrders"
-                    target-entity="ListOrders\Domain\Model\ListOrders"
-                    inversed-by="shares">
-
-              <join-column name="list_orders_id"
-                           referenced-column-name="id"
-                           nullable="false"
-                           on-delete="CASCADE" />
-       </many-to-one>
 
     </entity>
 </doctrine-mapping>

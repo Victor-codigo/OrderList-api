@@ -1,0 +1,24 @@
+{
+    "$schema": "vendor/infection/infection/resources/schema.json",
+    "source": {
+        "directories": [
+            "src/Share/Application/ShareListOrdersGetData/Dto"
+        ],
+        "excludes": [
+            // "{.*/Adapter/.*}",
+            "{.*Exception.php}",
+            "{.*Interface.php}",
+        ]
+    },
+    "timeout": 10,
+    "logs": {
+        "text": "var/log/infection/infection.log",
+        "html": "var/log/infection/infection.html",
+        "summary": "var/log/infection/summary.log",
+        "debug": "var/log/infection/infection-debug.log",
+        "perMutator": "var/log/infection/infection-permutator.log"
+    },
+    "mutators": {
+        "@default": true
+    }
+}

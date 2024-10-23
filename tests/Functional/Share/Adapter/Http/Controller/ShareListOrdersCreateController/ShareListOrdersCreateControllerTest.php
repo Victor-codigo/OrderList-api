@@ -137,8 +137,7 @@ class ShareListOrdersCreateControllerTest extends WebClientTestCase
         );
 
         $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
 
-        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $responseContent->code);
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 }

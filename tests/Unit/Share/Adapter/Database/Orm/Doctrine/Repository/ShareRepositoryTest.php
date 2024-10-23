@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Test\Unit\Share\Adapter\Database\Orm\Doctrine\Repository;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
@@ -13,13 +14,12 @@ use Doctrine\Persistence\ObjectManager;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use ListOrders\Adapter\Database\Orm\Doctrine\Repository\ListOrdersRepository;
 use ListOrders\Domain\Model\ListOrders;
+use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use Share\Adapter\Database\Orm\Doctrine\Repository\ShareRepository;
 use Share\Domain\Model\Share;
 use Test\Unit\DataBaseTestCase;
-use User\Adapter\Database\Orm\Doctrine\Repository\UserRepository;
-use User\Domain\Model\User;
 
 class ShareRepositoryTest extends DataBaseTestCase
 {
@@ -27,12 +27,13 @@ class ShareRepositoryTest extends DataBaseTestCase
 
     private const string SHARE_ID_NEW = '79bf5849-c849-4ce3-bb42-121590462445';
     private const string SHARE_ID_EXIST = '72b37f9c-ff55-4581-a131-4270e73012a2';
+    private const string SHARE_ID_EXIST_2 = '8aaa96f5-cc54-45cb-bf43-f9b8fe256696';
+    private const string SHARE_ID_EXIST_3 = '5552b4a6-8326-462a-a42b-f60b33640aef';
     private const string LIST_ORDERS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
     private const string USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
     private ShareRepository $object;
     private ListOrdersRepository $listOrdersRepository;
-    private UserRepository $userRepository;
     private MockObject&ConnectionException $connectionException;
 
     protected function setUp(): void
@@ -41,16 +42,16 @@ class ShareRepositoryTest extends DataBaseTestCase
 
         $this->object = $this->entityManager->getRepository(Share::class);
         $this->listOrdersRepository = $this->entityManager->getRepository(ListOrders::class);
-        $this->userRepository = $this->entityManager->getRepository(User::class);
         $this->connectionException = $this->createMock(ConnectionException::class);
     }
 
-    private function createShare(ListOrders $listOrders, User $user, ?Identifier $id): Share
+    private function createShare(ListOrders $listOrders, Identifier $userId, ?Identifier $id): Share
     {
         return new Share(
             $id ?? ValueObjectFactory::createIdentifier(self::SHARE_ID_NEW),
-            $listOrders,
-            $user,
+            $userId,
+            $listOrders->getId(),
+            $listOrders->getGroupId(),
             new \DateTime()
         );
     }
@@ -59,8 +60,8 @@ class ShareRepositoryTest extends DataBaseTestCase
     public function itShouldSaveShared(): void
     {
         $listOrdersDatabase = $this->listOrdersRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID)]);
-        $userDatabase = $this->userRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::USER_ID)]);
-        $share = $this->createShare($listOrdersDatabase, $userDatabase, null);
+        $userId = ValueObjectFactory::createIdentifier(self::USER_ID);
+        $share = $this->createShare($listOrdersDatabase, $userId, null);
 
         $this->object->save($share);
 
@@ -74,8 +75,8 @@ class ShareRepositoryTest extends DataBaseTestCase
     public function itShouldFailSaveSharedAlreadyExists(): void
     {
         $listOrdersDatabase = $this->listOrdersRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID)]);
-        $userDatabase = $this->userRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::USER_ID)]);
-        $share = $this->createShare($listOrdersDatabase, $userDatabase, ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST));
+        $userId = ValueObjectFactory::createIdentifier(self::USER_ID);
+        $share = $this->createShare($listOrdersDatabase, $userId, ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST));
 
         $this->expectException(DBUniqueConstraintException::class);
         $this->object->save($share);
@@ -85,8 +86,8 @@ class ShareRepositoryTest extends DataBaseTestCase
     public function itShouldFailSavingShareInDataBaseError(): void
     {
         $listOrdersDatabase = $this->listOrdersRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID)]);
-        $userDatabase = $this->userRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::USER_ID)]);
-        $share = $this->createShare($listOrdersDatabase, $userDatabase, ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST));
+        $userId = ValueObjectFactory::createIdentifier(self::USER_ID);
+        $share = $this->createShare($listOrdersDatabase, $userId, ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST));
 
         $this->expectException(DBConnectionException::class);
 
@@ -119,8 +120,8 @@ class ShareRepositoryTest extends DataBaseTestCase
         $this->expectException(DBConnectionException::class);
 
         $listOrdersDatabase = $this->listOrdersRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::LIST_ORDERS_ID)]);
-        $userDatabase = $this->userRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier(self::USER_ID)]);
-        $share = $this->createShare($listOrdersDatabase, $userDatabase, ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST));
+        $userId = ValueObjectFactory::createIdentifier(self::USER_ID);
+        $share = $this->createShare($listOrdersDatabase, $userId, ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST));
 
         /** @var MockObject&ObjectManager $objectManagerMock */
         $objectManagerMock = $this->createMock(ObjectManager::class);
@@ -131,5 +132,76 @@ class ShareRepositoryTest extends DataBaseTestCase
 
         $this->mockObjectManager($this->object, $objectManagerMock);
         $this->object->remove([$share]);
+    }
+
+    #[Test]
+    public function itShouldFindRecurseById(): void
+    {
+        $RecoursesId = [
+            ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST),
+            ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST_2),
+            ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST_3),
+        ];
+        $return = $this->object->findSharedRecursesByIdOrFail($RecoursesId);
+        $RecoursesIdReturned = array_map(
+            fn (Share $share): Identifier => $share->getId(),
+            iterator_to_array($return)
+        );
+
+        $this->assertCount(3, $return);
+        $this->assertEqualsCanonicalizing($RecoursesId, $RecoursesIdReturned);
+    }
+
+    #[Test]
+    public function itShouldFailFindingRecurseByIdsEmpty(): void
+    {
+        $RecoursesId = [];
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findSharedRecursesByIdOrFail($RecoursesId);
+    }
+
+    #[Test]
+    public function itShouldFailFindingRecurseByIdNotFound(): void
+    {
+        $RecoursesId = [
+            ValueObjectFactory::createIdentifier('not found id'),
+        ];
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findSharedRecursesByIdOrFail($RecoursesId);
+    }
+
+    #[Test]
+    public function itShouldFindRecoursesExpired(): void
+    {
+        $RecoursesIdExpected = [
+            ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST),
+            ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST_2),
+            ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST_3),
+        ];
+
+        $return = $this->object->findSharedRecursesExpiredOrFail();
+
+        $recoursesFoundId = array_map(
+            fn (Share $share): Identifier => $share->getId(),
+            iterator_to_array($return)
+        );
+        $this->assertEqualsCanonicalizing($RecoursesIdExpected, $recoursesFoundId);
+    }
+
+    #[Test]
+    #[Depends('itShouldRemoveSomeShared')]
+    public function itShouldFAilFindingRecoursesExpiredNotFound(): void
+    {
+        $RecoursesId = [
+            ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST),
+            ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST_2),
+            ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST_3),
+        ];
+
+        $recoursesFound = $this->object->findBy(['id' => $RecoursesId]);
+        $this->object->remove(iterator_to_array($recoursesFound));
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findSharedRecursesExpiredOrFail();
     }
 }

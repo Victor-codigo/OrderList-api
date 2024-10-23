@@ -39,11 +39,6 @@
             </cascade>
         </one-to-one>
 
-        <!-- User - Share -->
-        <one-to-many field="shares"
-                     target-entity="Share\Domain\Model\Share"
-                     mapped-by="user" />
-
         <unique-constraints>
             <unique-constraint name="u_users_id"
                                columns="id"/>
