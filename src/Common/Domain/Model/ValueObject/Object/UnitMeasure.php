@@ -42,4 +42,12 @@ class UnitMeasure extends ObjectValueObject
 
         return $unitFromString;
     }
+
+    /**
+     * @return UNIT_MEASURE_TYPE|null
+     */
+    public function getValue(): ?object
+    {
+        return parent::getValue();
+    }
 }

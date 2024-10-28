@@ -81,6 +81,13 @@ class Product implements EntityImageModifyInterface
         return $this;
     }
 
+    public function setCreatedOn(\DateTime $createdOn): self
+    {
+        $this->createdOn = $createdOn;
+
+        return $this;
+    }
+
     public function getCreatedOn(): \DateTime
     {
         return $this->createdOn;

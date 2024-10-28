@@ -31,7 +31,9 @@ class ShareListOrdersGetDataInputDtoTest extends TestCase
     {
         $object = new ShareListOrdersGetDataInputDto(
             $this->userSession,
-            '80dcd431-a5f4-4f1b-a49c-59cc9507b915'
+            '80dcd431-a5f4-4f1b-a49c-59cc9507b915',
+            1,
+            10
         );
 
         $return = $object->validate($this->validation);
@@ -44,7 +46,9 @@ class ShareListOrdersGetDataInputDtoTest extends TestCase
     {
         $object = new ShareListOrdersGetDataInputDto(
             $this->userSession,
-            null
+            null,
+            1,
+            10
         );
 
         $return = $object->validate($this->validation);
@@ -57,11 +61,73 @@ class ShareListOrdersGetDataInputDtoTest extends TestCase
     {
         $object = new ShareListOrdersGetDataInputDto(
             $this->userSession,
-            'wrong list orders id'
+            'wrong list orders id',
+            1,
+            10
         );
 
         $return = $object->validate($this->validation);
 
         $this->assertEquals(['shared_list_orders_id' => [VALIDATION_ERRORS::UUID_INVALID_CHARACTERS]], $return);
+    }
+
+    #[Test]
+    public function itShouldFailPageIsNull(): void
+    {
+        $object = new ShareListOrdersGetDataInputDto(
+            $this->userSession,
+            '80dcd431-a5f4-4f1b-a49c-59cc9507b915',
+            null,
+            10
+        );
+
+        $return = $object->validate($this->validation);
+
+        $this->assertEquals(['page' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
+    }
+
+    #[Test]
+    public function itShouldFailPageIsWrong(): void
+    {
+        $object = new ShareListOrdersGetDataInputDto(
+            $this->userSession,
+            '80dcd431-a5f4-4f1b-a49c-59cc9507b915',
+            -1,
+            10
+        );
+
+        $return = $object->validate($this->validation);
+
+        $this->assertEquals(['page' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
+    }
+
+    #[Test]
+    public function itShouldFailPageItemsIsNull(): void
+    {
+        $object = new ShareListOrdersGetDataInputDto(
+            $this->userSession,
+            '80dcd431-a5f4-4f1b-a49c-59cc9507b915',
+            1,
+            null
+        );
+
+        $return = $object->validate($this->validation);
+
+        $this->assertEquals(['page_items' => [VALIDATION_ERRORS::NOT_BLANK, VALIDATION_ERRORS::NOT_NULL]], $return);
+    }
+
+    #[Test]
+    public function itShouldFailPageItemsIsWrong(): void
+    {
+        $object = new ShareListOrdersGetDataInputDto(
+            $this->userSession,
+            '80dcd431-a5f4-4f1b-a49c-59cc9507b915',
+            1,
+            -1
+        );
+
+        $return = $object->validate($this->validation);
+
+        $this->assertEquals(['page_items' => [VALIDATION_ERRORS::GREATER_THAN]], $return);
     }
 }

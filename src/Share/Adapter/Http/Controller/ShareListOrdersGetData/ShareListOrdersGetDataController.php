@@ -28,7 +28,24 @@ use Symfony\Component\HttpFoundation\Response;
             description: 'Shared list orders id',
             example: '5483539d-52f7-4aa9-a91c-1aae11c3d17f',
             schema: new OA\Schema(type: 'string')
-        )],
+        ),
+        new OA\Parameter(
+            name: 'page',
+            in: 'query',
+            required: true,
+            description: 'Page number of the list of orders',
+            example: 1,
+            schema: new OA\Schema(type: 'int')
+        ),
+        new OA\Parameter(
+            name: 'page_items',
+            in: 'query',
+            required: true,
+            description: 'Number or items per page of the list of orders',
+            example: 1,
+            schema: new OA\Schema(type: 'int')
+        ),
+    ],
     responses: [
         new OA\Response(
             response: Response::HTTP_CREATED,
@@ -41,13 +58,54 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'message', type: 'string', example: 'List orders shared data'),
                         new OA\Property(property: 'data', type: 'object',
                             properties: [
-                                new OA\Property(property: 'id', type: 'string'),
-                                new OA\Property(property: 'user_id', type: 'string'),
-                                new OA\Property(property: 'group_id', type: 'string'),
-                                new OA\Property(property: 'name', type: 'string'),
-                                new OA\Property(property: 'description', type: 'string'),
-                                new OA\Property(property: 'date_to_buy', type: 'string'),
-                                new OA\Property(property: 'created_on', type: 'string'),
+                                new OA\Property(property: 'list_orders', type: 'object',
+                                    properties: [
+                                        new OA\Property(property: 'id', type: 'string'),
+                                        new OA\Property(property: 'user_id', type: 'string'),
+                                        new OA\Property(property: 'group_id', type: 'string'),
+                                        new OA\Property(property: 'name', type: 'string'),
+                                        new OA\Property(property: 'description', type: 'string'),
+                                        new OA\Property(property: 'date_to_buy', type: 'string'),
+                                        new OA\Property(property: 'created_on', type: 'string'),
+                                    ]
+                                ),
+                                new OA\Property(property: 'orders', type: 'array', items: new OA\Items(
+                                    properties: [
+                                        new OA\Property(property: 'id', type: 'string'),
+                                        new OA\Property(property: 'group_id', type: 'string'),
+                                        new OA\Property(property: 'list_orders_id', type: 'string'),
+                                        new OA\Property(property: 'user_id', type: 'string'),
+                                        new OA\Property(property: 'description', type: 'string'),
+                                        new OA\Property(property: 'amount', type: 'float'),
+                                        new OA\Property(property: 'bought', type: 'bool'),
+                                        new OA\Property(property: 'created_on', type: 'float'),
+                                        new OA\Property(property: 'product', type: 'object',
+                                            properties: [
+                                                new OA\Property(property: 'id', type: 'string'),
+                                                new OA\Property(property: 'name', type: 'string'),
+                                                new OA\Property(property: 'description', type: 'string'),
+                                                new OA\Property(property: 'image', type: 'string'),
+                                                new OA\Property(property: 'created_on', type: 'string'),
+                                            ]
+                                        ),
+                                        new OA\Property(property: 'shop', type: 'object',
+                                            properties: [
+                                                new OA\Property(property: 'id', type: 'string'),
+                                                new OA\Property(property: 'name', type: 'string'),
+                                                new OA\Property(property: 'address', type: 'string'),
+                                                new OA\Property(property: 'description', type: 'string'),
+                                                new OA\Property(property: 'image', type: 'string'),
+                                                new OA\Property(property: 'created_on', type: 'string'),
+                                            ]
+                                        ),
+                                        new OA\Property(property: 'product_shop', type: 'object',
+                                            properties: [
+                                                new OA\Property(property: 'price', type: 'float'),
+                                                new OA\Property(property: 'unit', type: 'string'),
+                                            ]
+                                        ),
+                                    ]
+                                )),
                             ]),
                         new OA\Property(property: 'errors', type: 'array', items: new OA\Items()),
                     ]
@@ -82,20 +140,22 @@ class ShareListOrdersGetDataController extends AbstractController
     public function __invoke(ShareListOrdersGetDataRequestDto $request): JsonResponse
     {
         $sharedListOrdersGetData = $this->sharedListOrdersGetDataUseCase->__invoke(
-            $this->createListOrdersSharedGetDataInputDto($request->sharedListOrdersId)
+            $this->createListOrdersSharedGetDataInputDto($request->sharedListOrdersId, $request->page, $request->pageItems)
         );
 
         return $this->createResponse($sharedListOrdersGetData);
     }
 
-    private function createListOrdersSharedGetDataInputDto(?string $sharedListOrdersId): ShareListOrdersGetDataInputDto
+    private function createListOrdersSharedGetDataInputDto(?string $sharedListOrdersId, ?int $page, ?int $pageItems): ShareListOrdersGetDataInputDto
     {
         /** @var UserSharedSymfonyAdapter $userAdapterSymfony */
         $userAdapterSymfony = $this->security->getUser();
 
         return new ShareListOrdersGetDataInputDto(
             $userAdapterSymfony->getUser(),
-            $sharedListOrdersId
+            $sharedListOrdersId,
+            $page,
+            $pageItems
         );
     }
 
