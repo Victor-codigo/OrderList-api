@@ -12,11 +12,15 @@ readonly class ShareListOrdersGetDataRequestDto implements RequestDtoInterface
     public ?string $sharedListOrdersId;
     public ?int $page;
     public ?int $pageItems;
+    public ?string $filterText;
+    public ?string $filterValue;
 
     public function __construct(Request $request)
     {
         $this->sharedListOrdersId = $request->query->get('shared_list_orders_id');
         $this->page = $request->query->getInt('page');
         $this->pageItems = $request->query->getInt('page_items');
+        $this->filterText = $request->query->get('filter_text');
+        $this->filterValue = $request->query->get('filter_value');
     }
 }

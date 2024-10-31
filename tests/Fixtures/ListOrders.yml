@@ -20,6 +20,10 @@ Common\Domain\Model\ValueObject\String\Identifier:
     __construct:
       value: "0c87f10f-0a0d-4fcc-adae-5cfe93d28c63"
 
+  listOrders_id_empty:
+    __construct:
+      value: "56d8c2c1-d915-463a-b15a-57c52cb76d6d"
+
 Common\Domain\Model\ValueObject\String\NameWithSpaces:
   listOrder_name:
     __construct:
@@ -40,6 +44,10 @@ Common\Domain\Model\ValueObject\String\NameWithSpaces:
   listOrder_name_5:
     __construct:
       value: "List order name 5"
+
+  listOrder_name_empty:
+    __construct:
+      value: "List order name empty"
 
 Common\Domain\Model\ValueObject\String\Description:
   listOrder_description:
@@ -126,5 +134,14 @@ ListOrders\Domain\Model\ListOrders:
       userId: "@entity-user_active->getId"
       groupId: "@entity-group_type_group->getId"
       name: "@listOrder_name_5"
+      description: "@listOrder_description_5"
+      dateToBuy: "@listOrder_dateToBuy_5"
+
+  entity-listOrder_empty:
+    __construct:
+      id: "@listOrders_id_empty"
+      userId: "@entity-user_active->getId"
+      groupId: "@entity-group_type_group->getId"
+      name: "@listOrder_name_empty"
       description: "@listOrder_description_5"
       dateToBuy: "@listOrder_dateToBuy_5"

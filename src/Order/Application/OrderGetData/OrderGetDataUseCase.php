@@ -100,6 +100,7 @@ class OrderGetDataUseCase extends ServiceBase
      *  shop: array{}|array{
      *      id: string|null,
      *      name: string|null,
+     *      address: string|null,
      *      description: string|null,
      *      created_on: string
      *  },

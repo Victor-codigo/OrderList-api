@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Share\Adapter\Http\Controller\ShareListOrdersGetData;
 
-use Common\Adapter\Security\UserSharedSymfonyAdapter;
 use Common\Domain\Application\ApplicationOutputInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Response\ResponseDto;
@@ -13,7 +12,6 @@ use Share\Adapter\Http\Controller\ShareListOrdersGetData\Dto\ShareListOrdersGetD
 use Share\Application\ShareListOrdersGetData\Dto\ShareListOrdersGetDataInputDto;
 use Share\Application\ShareListOrdersGetData\ShareListOrdersGetDataUseCase;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -45,6 +43,22 @@ use Symfony\Component\HttpFoundation\Response;
             example: 1,
             schema: new OA\Schema(type: 'int')
         ),
+        new OA\Parameter(
+            name: 'filter_text',
+            in: 'query',
+            required: false,
+            description: 'Test filter to use: start_with, end_with, contains, equals',
+            example: 'start_with',
+            schema: new OA\Schema(type: 'string')
+        ),
+        new OA\Parameter(
+            name: 'filter_value',
+            in: 'query',
+            required: false,
+            description: 'Word to filter by',
+            example: 'potato',
+            schema: new OA\Schema(type: 'string')
+        ),
     ],
     responses: [
         new OA\Response(
@@ -58,6 +72,8 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'message', type: 'string', example: 'List orders shared data'),
                         new OA\Property(property: 'data', type: 'object',
                             properties: [
+                                new OA\Property(property: 'page', type: 'int', description: 'Page number', example: 1),
+                                new OA\Property(property: 'pages_total', type: 'int', description: 'Number of pages', example: 10),
                                 new OA\Property(property: 'list_orders', type: 'object',
                                     properties: [
                                         new OA\Property(property: 'id', type: 'string'),
@@ -122,7 +138,7 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'status', type: 'string', example: 'error'),
                         new OA\Property(property: 'message', type: 'string', example: 'Some error message'),
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items()),
-                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<shared_list_orders_id|list_orders_not_found, string|array>')),
+                        new OA\Property(property: 'errors', type: 'array', items: new OA\Items(default: '<shared_list_orders_id|list_orders_not_found|page|page_items|text_filter_type|text_filter_value, string|array>')),
                     ]
                 )
             )
@@ -133,29 +149,26 @@ class ShareListOrdersGetDataController extends AbstractController
 {
     public function __construct(
         private ShareListOrdersGetDataUseCase $sharedListOrdersGetDataUseCase,
-        private Security $security,
     ) {
     }
 
     public function __invoke(ShareListOrdersGetDataRequestDto $request): JsonResponse
     {
         $sharedListOrdersGetData = $this->sharedListOrdersGetDataUseCase->__invoke(
-            $this->createListOrdersSharedGetDataInputDto($request->sharedListOrdersId, $request->page, $request->pageItems)
+            $this->createListOrdersSharedGetDataInputDto($request->sharedListOrdersId, $request->page, $request->pageItems, $request->filterText, $request->filterValue)
         );
 
         return $this->createResponse($sharedListOrdersGetData);
     }
 
-    private function createListOrdersSharedGetDataInputDto(?string $sharedListOrdersId, ?int $page, ?int $pageItems): ShareListOrdersGetDataInputDto
+    private function createListOrdersSharedGetDataInputDto(?string $sharedListOrdersId, ?int $page, ?int $pageItems, ?string $filterText, ?string $filterValue): ShareListOrdersGetDataInputDto
     {
-        /** @var UserSharedSymfonyAdapter $userAdapterSymfony */
-        $userAdapterSymfony = $this->security->getUser();
-
         return new ShareListOrdersGetDataInputDto(
-            $userAdapterSymfony->getUser(),
             $sharedListOrdersId,
             $page,
-            $pageItems
+            $pageItems,
+            $filterText,
+            $filterValue
         );
     }
 

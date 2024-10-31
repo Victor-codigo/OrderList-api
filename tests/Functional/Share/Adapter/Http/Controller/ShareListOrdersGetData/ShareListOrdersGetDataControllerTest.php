@@ -7,7 +7,9 @@ namespace Test\Functional\Share\Adapter\Http\Controller\ShareListOrdersGetData;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Response\RESPONSE_STATUS;
+use Common\Domain\Validation\Filter\FILTER_STRING_COMPARISON;
 use Common\Domain\Validation\UnitMeasure\UNIT_MEASURE_TYPE;
+use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use ListOrders\Domain\Model\ListOrders;
 use Order\Domain\Model\Order;
 use PHPUnit\Framework\Attributes\Test;
@@ -19,14 +21,14 @@ use Test\Functional\WebClientTestCase;
 
 class ShareListOrdersGetDataControllerTest extends WebClientTestCase
 {
+    use ReloadDatabaseTrait;
+
     private const string METHOD = 'GET';
     private const string ENDPOINT = '/api/v1/share/list-orders';
     private const string SHARE_ID = '72b37f9c-ff55-4581-a131-4270e73012a2';
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
+    private const string SHARE_ID_EMPTY = 'b70761dd-d32a-4434-aadb-25e694f50a22';
+    private const string LIST_ORDERS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
+    private const string LIST_ORDERS_EMPTY_ID = '56d8c2c1-d915-463a-b15a-57c52cb76d6d';
 
     /**
      * @param array{
@@ -62,7 +64,7 @@ class ShareListOrdersGetDataControllerTest extends WebClientTestCase
      *          image: string|null,
      *          created_on: string
      *      },
-     *      product_shop: null|object{
+     *      productShop: null|object{
      *          price: float|null,
      *          unit: string|null
      *      }
@@ -101,7 +103,7 @@ class ShareListOrdersGetDataControllerTest extends WebClientTestCase
      *          image: string|null,
      *          created_on: string
      *      },
-     *      product_shop: array{}|array{
+     *      productShop: array{}|array{
      *          price: float|null,
      *          unit: UNIT_MEASURE_TYPE|null
      *      }
@@ -145,7 +147,7 @@ class ShareListOrdersGetDataControllerTest extends WebClientTestCase
             $this->assertEquals($productExpected['created_on'], $product->created_on);
 
             $this->assertOrderShopIsOk($ordersExpected[$key]['shop'], $order->shop);
-            $this->assertOrderProductShopIsOk($ordersExpected[$key]['product_shop'], $order->product_shop);
+            $this->assertOrderProductShopIsOk($ordersExpected[$key]['productShop'], $order->productShop);
         }
     }
 
@@ -214,6 +216,8 @@ class ShareListOrdersGetDataControllerTest extends WebClientTestCase
     }
 
     /**
+     * @param string[] $ordersId
+     *
      * @return array{
      *  list_orders: array{
      *      id: string|null,
@@ -247,24 +251,36 @@ class ShareListOrdersGetDataControllerTest extends WebClientTestCase
      *          image: string|null,
      *          created_on: string
      *      },
-     *      product_shop: array{}|array{
+     *      productShop: array{}|array{
      *          price: float|null,
      *          unit: UNIT_MEASURE_TYPE|null
      *      }
      *  }>
      * }
      */
-    private function getListOrdersDataExpected(): array
+    private function getListOrdersDataExpected(string $listOrdersId, array $ordersId): array
     {
         $entityManager = $this->getEntityManager();
         /** @var ListOrders[] $listOrders */
         $listOrders = $entityManager->getRepository(ListOrders::class)->findBy([
-            'id' => ValueObjectFactory::createIdentifier('ba6bed75-4c6e-4ac3-8787-5bded95dac8d'),
+            'id' => ValueObjectFactory::createIdentifier($listOrdersId),
         ]);
+        $ordersFilers = [
+            'listOrders' => ValueObjectFactory::createIdentifier($listOrdersId),
+        ];
+        $ordersFilers = [
+            'listOrders' => ValueObjectFactory::createIdentifier($listOrdersId),
+        ];
+
+        if (!empty($ordersId)) {
+            $ordersFilers['id'] = array_map(
+                fn (string $orderId): Identifier => ValueObjectFactory::createIdentifier($orderId),
+                $ordersId
+            );
+        }
+
         /** @var Order[] $orders */
-        $orders = $entityManager->getRepository(Order::class)->findBy([
-            'listOrders' => ValueObjectFactory::createIdentifier('ba6bed75-4c6e-4ac3-8787-5bded95dac8d')]
-        );
+        $orders = $entityManager->getRepository(Order::class)->findBy($ordersFilers);
         $productsId = array_map(
             fn (Order $order): Identifier => $order->getProductId(),
             $orders
@@ -308,7 +324,7 @@ class ShareListOrdersGetDataControllerTest extends WebClientTestCase
             'user_id' => $listOrders->getUserId()->getValue(),
             'name' => $listOrders->getName()->getValue(),
             'description' => $listOrders->getDescription()->getValue(),
-            'date_to_buy' => $listOrders->getDateToBuy()->getValue()->format('Y-m-d H:i:s'),
+            'date_to_buy' => $listOrders->getDateToBuy()->getValue()?->format('Y-m-d H:i:s'),
         ];
     }
 
@@ -342,7 +358,7 @@ class ShareListOrdersGetDataControllerTest extends WebClientTestCase
      *          image: string|null,
      *          created_on: string
      *      },
-     *      product_shop: array{}|array{
+     *      productShop: array{}|array{
      *          price: float|null,
      *          unit: UNIT_MEASURE_TYPE|null
      *      }
@@ -406,7 +422,7 @@ class ShareListOrdersGetDataControllerTest extends WebClientTestCase
                     'created_on' => $orderProducts->getCreatedOn()->format('Y-m-d H:i:s'),
                 ],
                 'shop' => $shopData,
-                'product_shop' => $productShopData,
+                'productShop' => $productShopData,
             ];
         }
 
@@ -414,14 +430,178 @@ class ShareListOrdersGetDataControllerTest extends WebClientTestCase
     }
 
     #[Test]
-    public function itShouldGetListOrdersData(): void
+    public function itShouldGetListOrdersData22(): void
     {
         $listOrdersSharedId = self::SHARE_ID;
         $page = 1;
         $pageItems = 10;
 
+        $client = $this->getNewClientNoAuthenticated();
+        $listOrdersDataExpected = $this->getListOrdersDataExpected(self::LIST_ORDERS_ID, []);
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?shared_list_orders_id={$listOrdersSharedId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['list_orders', 'orders'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('List orders shared data', $responseContent->message);
+
+        $this->assertListOrdersDataIsOk((array) $responseContent->data, $listOrdersDataExpected);
+    }
+
+    #[Test]
+    public function itShouldGetListOrdersDataFilterTextStartsWith(): void
+    {
+        $listOrdersSharedId = self::SHARE_ID;
+        $page = 1;
+        $pageItems = 10;
+        $filterText = FILTER_STRING_COMPARISON::STARTS_WITH->value;
+        $filterValue = 'Juan Car';
+        $ordersIdExpectedToReturn = ['5cfe52e5-db78-41b3-9acd-c3c84924cb9b'];
+
         $client = $this->getNewClientAuthenticatedUser();
-        $listOrdersDataExpected = $this->getListOrdersDataExpected();
+        $listOrdersDataExpected = $this->getListOrdersDataExpected(self::LIST_ORDERS_ID, $ordersIdExpectedToReturn);
+
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?shared_list_orders_id={$listOrdersSharedId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['list_orders', 'orders'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('List orders shared data', $responseContent->message);
+
+        $this->assertListOrdersDataIsOk((array) $responseContent->data, $listOrdersDataExpected);
+    }
+
+    #[Test]
+    public function itShouldGetListOrdersDataFilterTextEndWith(): void
+    {
+        $listOrdersSharedId = self::SHARE_ID;
+        $page = 1;
+        $pageItems = 10;
+        $filterText = FILTER_STRING_COMPARISON::ENDS_WITH->value;
+        $filterValue = 'Carlos';
+        $ordersIdExpectedToReturn = ['5cfe52e5-db78-41b3-9acd-c3c84924cb9b'];
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $listOrdersDataExpected = $this->getListOrdersDataExpected(self::LIST_ORDERS_ID, $ordersIdExpectedToReturn);
+
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?shared_list_orders_id={$listOrdersSharedId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['list_orders', 'orders'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('List orders shared data', $responseContent->message);
+
+        $this->assertListOrdersDataIsOk((array) $responseContent->data, $listOrdersDataExpected);
+    }
+
+    #[Test]
+    public function itShouldGetListOrdersDataFilterTextEquals(): void
+    {
+        $listOrdersSharedId = self::SHARE_ID;
+        $page = 1;
+        $pageItems = 10;
+        $filterText = FILTER_STRING_COMPARISON::EQUALS->value;
+        $filterValue = 'Juan Carlos';
+        $ordersIdExpectedToReturn = ['5cfe52e5-db78-41b3-9acd-c3c84924cb9b'];
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $listOrdersDataExpected = $this->getListOrdersDataExpected(self::LIST_ORDERS_ID, $ordersIdExpectedToReturn);
+
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?shared_list_orders_id={$listOrdersSharedId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['list_orders', 'orders'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('List orders shared data', $responseContent->message);
+
+        $this->assertListOrdersDataIsOk((array) $responseContent->data, $listOrdersDataExpected);
+    }
+
+    #[Test]
+    public function itShouldGetListOrdersDataFilterTextContains(): void
+    {
+        $listOrdersSharedId = self::SHARE_ID;
+        $page = 1;
+        $pageItems = 10;
+        $filterText = FILTER_STRING_COMPARISON::CONTAINS->value;
+        $filterValue = 'an Car';
+        $ordersIdExpectedToReturn = ['5cfe52e5-db78-41b3-9acd-c3c84924cb9b'];
+
+        $client = $this->getNewClientAuthenticatedUser();
+        $listOrdersDataExpected = $this->getListOrdersDataExpected(self::LIST_ORDERS_ID, $ordersIdExpectedToReturn);
+
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?shared_list_orders_id={$listOrdersSharedId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['list_orders', 'orders'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('List orders shared data', $responseContent->message);
+
+        $this->assertListOrdersDataIsOk((array) $responseContent->data, $listOrdersDataExpected);
+    }
+
+    #[Test]
+    public function itShouldGetListOrdersDataHasNotOrders(): void
+    {
+        $listOrdersSharedId = self::SHARE_ID_EMPTY;
+        $page = 1;
+        $pageItems = 10;
+
+        $client = $this->getNewClientNoAuthenticated();
+        $listOrdersDataExpected = $this->getListOrdersDataExpected(self::LIST_ORDERS_EMPTY_ID, []);
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -448,7 +628,7 @@ class ShareListOrdersGetDataControllerTest extends WebClientTestCase
         $page = 1;
         $pageItems = 10;
 
-        $client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientNoAuthenticated();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -474,7 +654,7 @@ class ShareListOrdersGetDataControllerTest extends WebClientTestCase
         $page = 1;
         $pageItems = 10;
 
-        $client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientNoAuthenticated();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -499,7 +679,7 @@ class ShareListOrdersGetDataControllerTest extends WebClientTestCase
         $page = 1;
         $pageItems = 10;
 
-        $client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientNoAuthenticated();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -525,7 +705,7 @@ class ShareListOrdersGetDataControllerTest extends WebClientTestCase
         $listOrdersSharedId = self::SHARE_ID;
         $pageItems = 10;
 
-        $client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientNoAuthenticated();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -551,7 +731,7 @@ class ShareListOrdersGetDataControllerTest extends WebClientTestCase
         $page = -1;
         $pageItems = 10;
 
-        $client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientNoAuthenticated();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -577,7 +757,7 @@ class ShareListOrdersGetDataControllerTest extends WebClientTestCase
         $listOrdersSharedId = self::SHARE_ID;
         $page = 1;
 
-        $client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientNoAuthenticated();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -603,7 +783,7 @@ class ShareListOrdersGetDataControllerTest extends WebClientTestCase
         $page = 1;
         $pageItems = -1;
 
-        $client = $this->getNewClientAuthenticatedUser();
+        $client = $this->getNewClientNoAuthenticated();
         $client->request(
             method: self::METHOD,
             uri: self::ENDPOINT
@@ -621,5 +801,36 @@ class ShareListOrdersGetDataControllerTest extends WebClientTestCase
         $this->assertSame('Error', $responseContent->message);
 
         $this->assertEquals(['greater_than'], $responseContent->errors->page_items);
+    }
+
+    #[Test]
+    public function itShouldFailGettingListOrdersDataFilterTextIsWrong(): void
+    {
+        $listOrdersSharedId = self::SHARE_ID;
+        $page = 1;
+        $pageItems = 10;
+        $filterText = 'Wrong';
+        $filterValue = 'value';
+
+        $client = $this->getNewClientNoAuthenticated();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT
+                ."?shared_list_orders_id={$listOrdersSharedId}"
+                ."&page={$page}"
+                ."&page_items={$pageItems}"
+                ."&filter_text={$filterText}"
+                ."&filter_value={$filterValue}",
+            content: json_encode([])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['text_filter_type'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Error', $responseContent->message);
+
+        $this->assertEquals(['not_blank', 'not_null'], $responseContent->errors->text_filter_type);
     }
 }

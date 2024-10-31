@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Share\Application\ShareListOrdersGetData\Dto;
 
 use Common\Domain\Application\ApplicationOutputInterface;
+use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use ListOrders\Domain\Model\ListOrders;
 use Order\Domain\Model\Order;
 use Product\Domain\Model\ProductShop;
@@ -20,6 +21,8 @@ readonly class ShareListOrdersGetDataOutputDto implements ApplicationOutputInter
     public function __construct(
         public ListOrders $listOrders,
         public array $orders,
+        public PaginatorPage $page,
+        public int $pagesTotal,
     ) {
     }
 
@@ -57,7 +60,7 @@ readonly class ShareListOrdersGetDataOutputDto implements ApplicationOutputInter
      *          image: string|null,
      *          created_on: string
      *      },
-     *      product_shop: array{}|array{
+     *      productShop: array{}|array{
      *          price: float|null,
      *          unit: string|null
      *      }
@@ -109,18 +112,20 @@ readonly class ShareListOrdersGetDataOutputDto implements ApplicationOutputInter
                     'created_on' => $order->getProduct()->getCreatedOn()->format('Y-m-d H:i:s'),
                 ],
                 'shop' => $shopData,
-                'product_shop' => $productShopData,
+                'productShop' => $productShopData,
             ];
         }
 
         return [
+            'page' => $this->page->getValue(),
+            'pages_total' => $this->pagesTotal,
             'list_orders' => [
                 'id' => $this->listOrders->getId()->getValue(),
                 'group_id' => $this->listOrders->getGroupId()->getValue(),
                 'user_id' => $this->listOrders->getUserId()->getValue(),
                 'name' => $this->listOrders->getName()->getValue(),
                 'description' => $this->listOrders->getDescription()->getValue(),
-                'date_to_buy' => $this->listOrders->getDateToBuy()->getValue()->format('Y-m-d H:i:s'),
+                'date_to_buy' => $this->listOrders->getDateToBuy()->getValue()?->format('Y-m-d H:i:s'),
                 'created_on' => $this->listOrders->getCreatedOn()->format('Y-m-d H:i:s'),
             ],
             'orders' => $ordersData,

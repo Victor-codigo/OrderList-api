@@ -6,12 +6,14 @@ namespace Share\Application\ShareListOrdersGetData;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Exception\DomainInternalErrorException;
+use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPage;
 use Common\Domain\Model\ValueObject\Integer\PaginatorPageItems;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
+use Common\Domain\Validation\Filter\FILTER_SECTION;
 use Common\Domain\Validation\ValidationInterface;
 use ListOrders\Domain\Model\ListOrders;
 use ListOrders\Domain\Service\ListOrdersGetData\Dto\ListOrdersGetDataDto;
@@ -50,9 +52,9 @@ class ShareListOrdersGetDataUseCase extends ServiceBase
         try {
             $sharedListOrders = $this->getSharedListOrders($input->listOrdersId);
             $listOrders = $this->getListOrders($sharedListOrders, $input->page, $input->pageItems);
-            $orders = $this->getOrders($listOrders, $input->page, $input->pageItems);
+            $orders = $this->getOrders($listOrders, $input->page, $input->pageItems, $input->filterText);
 
-            return $this->createShareListOrdersGeDataOutputDto($listOrders, $orders);
+            return $this->createShareListOrdersGeDataOutputDto($listOrders, $orders['orders'], $input->page, $orders['pagesTotal']);
         } catch (DBNotFoundException $e) {
             throw ShareCreateListOrdersNotFoundException::fromMessage('List orders not found');
         } catch (\Exception) {
@@ -107,31 +109,39 @@ class ShareListOrdersGetDataUseCase extends ServiceBase
             $listOrdersData[0]['user_id'],
             $listOrdersData[0]['name'],
             $listOrdersData[0]['description'],
-            (new \DateTime())->createFromFormat('Y-m-d H:i:s', $listOrdersData[0]['date_to_buy']),
+            null === $listOrdersData[0]['date_to_buy']
+                ? null
+                : (new \DateTime())->createFromFormat('Y-m-d H:i:s', $listOrdersData[0]['date_to_buy']),
         );
 
         return $listOrders;
     }
 
     /**
-     * @return array<int, array{
-     *  order: Order,
-     *  productShop: ProductShop|null,
-     * }>
-     *
-     * @throws DBNotFoundException
+     * @return array{
+     *  pagesTotal: int,
+     *  orders: array<int, array{
+     *      order: Order,
+     *      productShop: ProductShop|null,
+     *  }>
+     * }
      */
-    private function getOrders(ListOrders $listOrders, PaginatorPage $page, PaginatorPageItems $pageItems): array
+    private function getOrders(ListOrders $listOrders, PaginatorPage $page, PaginatorPageItems $pageItems, ?Filter $filterText): array
     {
-        $ordersData = $this->orderGetDataService->__invoke(
-            $this->createOrderGetDataDto($listOrders, $page, $pageItems)
-        );
-
-        if (empty($ordersData)) {
-            throw new DBNotFoundException();
+        try {
+            $ordersData = $this->orderGetDataService->__invoke(
+                $this->createOrderGetDataDto($listOrders, $page, $pageItems, $filterText)
+            );
+            $pagesTotal = $this->orderGetDataService->getPagesTotal();
+        } catch (DBNotFoundException $e) {
+            $ordersData = [];
+            $pagesTotal = 0;
         }
 
-        $orders = [];
+        $orders = [
+            'pagesTotal' => $pagesTotal,
+            'orders' => [],
+        ];
         foreach ($ordersData as $orderData) {
             $product = Product::fromPrimitives(
                 $orderData['product']['id'],
@@ -178,7 +188,7 @@ class ShareListOrdersGetDataUseCase extends ServiceBase
             );
             $order->setCreatedOn((new \DateTime())->createFromFormat('Y-m-d H:i:s', $orderData['created_on']));
 
-            $orders[] = [
+            $orders['orders'][] = [
                 'order' => $order,
                 'productShop' => $productShop,
             ];
@@ -205,8 +215,14 @@ class ShareListOrdersGetDataUseCase extends ServiceBase
         );
     }
 
-    private function createOrderGetDataDto(ListOrders $listOrders, PaginatorPage $page, PaginatorPageItems $pageItems): OrderGetDataDto
+    private function createOrderGetDataDto(ListOrders $listOrders, PaginatorPage $page, PaginatorPageItems $pageItems, ?Filter $filterText): OrderGetDataDto
     {
+        $filterSection = ValueObjectFactory::createFilter(
+            'filter_section',
+            ValueObjectFactory::createFilterSection(FILTER_SECTION::ORDER),
+            ValueObjectFactory::createNameWithSpaces('')
+        );
+
         return new OrderGetDataDto(
             $listOrders->getGroupId(),
             ValueObjectFactory::createIdentifierNullable($listOrders->getId()->getValue()),
@@ -214,8 +230,8 @@ class ShareListOrdersGetDataUseCase extends ServiceBase
             $page,
             $pageItems,
             true,
-            null,
-            null,
+            $filterSection,
+            $filterText,
         );
     }
 
@@ -225,8 +241,8 @@ class ShareListOrdersGetDataUseCase extends ServiceBase
      *  productShop: ProductShop,
      * }> $orders
      */
-    private function createShareListOrdersGeDataOutputDto(ListOrders $listOrders, array $orders): ShareListOrdersGetDataOutputDto
+    private function createShareListOrdersGeDataOutputDto(ListOrders $listOrders, array $orders, PaginatorPage $page, int $pagesTotal): ShareListOrdersGetDataOutputDto
     {
-        return new ShareListOrdersGetDataOutputDto($listOrders, $orders);
+        return new ShareListOrdersGetDataOutputDto($listOrders, $orders, $page, $pagesTotal);
     }
 }

@@ -11,6 +11,10 @@ Common\Domain\Model\ValueObject\String\Identifier:
     __construct:
       value: "5552b4a6-8326-462a-a42b-f60b33640aef"
 
+  share_id_empty:
+    __construct:
+      value: "b70761dd-d32a-4434-aadb-25e694f50a22"
+
 Share\Domain\Model\Share:
   entity-share:
     __construct:
@@ -35,3 +39,11 @@ Share\Domain\Model\Share:
       listOrdersId: "@entity-listOrder_3->getId"
       groupId: "@entity-listOrder_3->getGroupId"
       expire: <(new DateTime('2024-10-3 12:00'))>
+
+  entity-share_empty:
+    __construct:
+      id: "@share_id_empty"
+      userId: "@entity-user_active->getId"
+      listOrdersId: "@entity-listOrder_empty->getId"
+      groupId: "@entity-listOrder_empty->getGroupId"
+      expire: <(new DateTime('2024-10-4 12:00'))>
