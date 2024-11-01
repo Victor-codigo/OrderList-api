@@ -29,6 +29,7 @@ class ShareRepositoryTest extends DataBaseTestCase
     private const string SHARE_ID_EXIST = '72b37f9c-ff55-4581-a131-4270e73012a2';
     private const string SHARE_ID_EXIST_2 = '8aaa96f5-cc54-45cb-bf43-f9b8fe256696';
     private const string SHARE_ID_EXIST_3 = '5552b4a6-8326-462a-a42b-f60b33640aef';
+    private const string SHARE_ID_EXIST_4 = 'b70761dd-d32a-4434-aadb-25e694f50a22';
     private const string LIST_ORDERS_ID = 'ba6bed75-4c6e-4ac3-8787-5bded95dac8d';
     private const string USER_ID = '2606508b-4516-45d6-93a6-c7cb416b7f3f';
 
@@ -177,6 +178,7 @@ class ShareRepositoryTest extends DataBaseTestCase
             ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST),
             ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST_2),
             ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST_3),
+            ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST_4),
         ];
 
         $return = $this->object->findSharedRecursesExpiredOrFail();
@@ -196,6 +198,7 @@ class ShareRepositoryTest extends DataBaseTestCase
             ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST),
             ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST_2),
             ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST_3),
+            ValueObjectFactory::createIdentifier(self::SHARE_ID_EXIST_4),
         ];
 
         $recoursesFound = $this->object->findBy(['id' => $RecoursesId]);

@@ -436,7 +436,7 @@ class ShareListOrdersGetDataControllerTest extends WebClientTestCase
         $page = 1;
         $pageItems = 10;
 
-        $client = $this->getNewClientNoAuthenticated();
+        $client = $this->getNewClientAuthenticatedUser();
         $listOrdersDataExpected = $this->getListOrdersDataExpected(self::LIST_ORDERS_ID, []);
         $client->request(
             method: self::METHOD,
@@ -736,7 +736,7 @@ class ShareListOrdersGetDataControllerTest extends WebClientTestCase
             method: self::METHOD,
             uri: self::ENDPOINT
                 ."?shared_list_orders_id={$listOrdersSharedId}"
-                .'&page={$page}'
+                ."&page={$page}"
                 ."&page_items={$pageItems}",
             content: json_encode([])
         );
