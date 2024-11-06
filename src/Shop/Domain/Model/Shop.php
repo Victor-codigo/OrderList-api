@@ -101,6 +101,13 @@ class Shop implements EntityImageModifyInterface
         return $this->createdOn;
     }
 
+    public function setCreatedOn(\DateTime $createdOn): self
+    {
+        $this->createdOn = $createdOn;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, ProductShop>
      */

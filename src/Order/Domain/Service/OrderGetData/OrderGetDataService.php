@@ -53,7 +53,9 @@ class OrderGetDataService
      *  shop: array{}|array{
      *      id: string|null,
      *      name: string|null,
+     *      address: string|null,
      *      description: string|null,
+     *      image: string|null,
      *      created_on: string
      * },
      *  productShop: array{}|array{
@@ -100,7 +102,9 @@ class OrderGetDataService
      *  shop: array{}|array{
      *      id: string|null,
      *      name: string|null,
+     *      address: string|null,
      *      description: string|null,
+     *      image: string|null,
      *      created_on: string
      * },
      *  productShop: array{}|array{
@@ -246,7 +250,9 @@ class OrderGetDataService
      *  shop: array{}|array{
      *      id: string|null,
      *      name: string|null,
+     *      address: string|null,
      *      description: string|null,
+     *      image: string|null,
      *      created_on: string
      * },
      *  productShop: array{}|array{
@@ -283,7 +289,9 @@ class OrderGetDataService
      * @return array{}|array{
      *  id: string,
      *  name: string,
+     *  address: string|null,
      *  description: string,
+     *  image: string|null,
      *  created_on: string
      * }
      */

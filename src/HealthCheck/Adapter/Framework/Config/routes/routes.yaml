@@ -1,0 +1,9 @@
+# -------------------------------------------------------------
+# HEALTH CHECK
+# -------------------------------------------------------------
+health_check:
+  path: /api/v{api_version}/health-check
+  methods: GET
+  controller: HealthCheck\Adapter\Http\HealthCheck\HealthCheckController
+  requirements:
+    api_version: '\d+[.\d]?'

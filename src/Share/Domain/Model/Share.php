@@ -6,18 +6,14 @@ namespace Share\Domain\Model;
 
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use ListOrders\Domain\Model\ListOrders;
-use User\Domain\Model\User;
 
 class Share
 {
     private Identifier $id;
     private Identifier $listOrdersId;
+    private Identifier $groupId;
     private Identifier $userId;
     private \DateTime $expire;
-
-    private User $user;
-    private ListOrders $listOrders;
 
     public function getId(): Identifier
     {
@@ -27,6 +23,11 @@ class Share
     public function getListOrdersId(): Identifier
     {
         return $this->listOrdersId;
+    }
+
+    public function getGroupId(): Identifier
+    {
+        return $this->groupId;
     }
 
     public function getUserId(): Identifier
@@ -39,22 +40,22 @@ class Share
         return $this->expire;
     }
 
-    public function __construct(Identifier $id, ListOrders $listOrders, User $user, \DateTime $expire)
+    public function __construct(Identifier $id, Identifier $userId, Identifier $listOrdersId, Identifier $groupId, \DateTime $expire)
     {
         $this->id = $id;
-        $this->listOrdersId = $listOrders->getId();
-        $this->userId = $user->getId();
+        $this->listOrdersId = $listOrdersId;
+        $this->groupId = $groupId;
+        $this->userId = $userId;
         $this->expire = $expire;
-        $this->listOrders = $listOrders;
-        $this->user = $user;
     }
 
-    public static function fromPrimitives(string $id, ListOrders $listOrders, User $user, \DateTime $expire): self
+    public static function fromPrimitives(string $id, string $userId, string $listOrdersId, string $groupId, \DateTime $expire): self
     {
         return new self(
             ValueObjectFactory::createIdentifier($id),
-            $listOrders,
-            $user,
+            ValueObjectFactory::createIdentifier($userId),
+            ValueObjectFactory::createIdentifier($listOrdersId),
+            ValueObjectFactory::createIdentifier($groupId),
             $expire
         );
     }

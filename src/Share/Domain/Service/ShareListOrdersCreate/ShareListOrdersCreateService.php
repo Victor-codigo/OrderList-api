@@ -12,14 +12,12 @@ use ListOrders\Domain\Ports\ListOrdersRepositoryInterface;
 use Share\Domain\Model\Share;
 use Share\Domain\Port\Repository\ShareRepositoryInterface;
 use Share\Domain\Service\ShareListOrdersCreate\Dto\ShareListOrderCreateDto;
-use User\Domain\Port\Repository\UserRepositoryInterface;
 
 class ShareListOrdersCreateService
 {
     public function __construct(
         private ShareRepositoryInterface $shareRepository,
         private ListOrdersRepositoryInterface $listOrdersRepository,
-        private UserRepositoryInterface $userRepository,
         private int $sharedExpirationTime,
     ) {
     }
@@ -42,7 +40,6 @@ class ShareListOrdersCreateService
      */
     private function createShare(Identifier $listOrderId, Identifier $userId, int $sharedExpirationTime): Share
     {
-        $user = $this->userRepository->findUserByIdOrFail($userId);
         $listOrders = $this->getListOrders($listOrderId);
 
         $shareId = ValueObjectFactory::createIdentifier($this->shareRepository->generateId());
@@ -50,8 +47,9 @@ class ShareListOrdersCreateService
 
         return new Share(
             $shareId,
-            $listOrders,
-            $user,
+            $userId,
+            $listOrders->getId(),
+            $listOrders->getGroupId(),
             $expire
         );
     }
@@ -63,14 +61,8 @@ class ShareListOrdersCreateService
     {
         $listOrdersPaginator = $this->listOrdersRepository->findListOrderByIdOrFail([$listOrdersId]);
         $listOrdersPaginator->setPagination(1, 1);
+        $listOrders = iterator_to_array($listOrdersPaginator);
 
-        $listOrdersReturn = null;
-        foreach ($listOrdersPaginator->getIterator() as $listOrders) {
-            $listOrdersReturn = $listOrders;
-
-            break;
-        }
-
-        return $listOrdersReturn;
+        return $listOrders[0];
     }
 }

@@ -29,6 +29,7 @@ class OrderGetDataOutputDto implements ApplicationOutputInterface
      *  shop: array{}|array{
      *      id: string|null,
      *      name: string|null,
+     *      address: string|null,
      *      description: string|null,
      *      created_on: string
      *  },
@@ -67,6 +68,7 @@ class OrderGetDataOutputDto implements ApplicationOutputInterface
      *  shop: array{}|array{
      *      id: string|null,
      *      name: string|null,
+     *      address: string|null,
      *      description: string|null,
      *      created_on: string
      *  },

@@ -7,3 +7,13 @@ share_create_list_orders:
   controller: Share\Adapter\Http\Controller\ShareListOrdersCreate\ShareListOrdersCreateController
   requirements:
     api_version: '\d+[.\d]?'
+
+# -------------------------------------------------------------
+# SHARE GET A LIST OF ORDERS DATA
+# -------------------------------------------------------------
+share_list_orders_get_data:
+  path: /api/v{api_version}/share/list-orders
+  methods: GET
+  controller: Share\Adapter\Http\Controller\ShareListOrdersGetData\ShareListOrdersGetDataController
+  requirements:
+    api_version: '\d+[.\d]?'

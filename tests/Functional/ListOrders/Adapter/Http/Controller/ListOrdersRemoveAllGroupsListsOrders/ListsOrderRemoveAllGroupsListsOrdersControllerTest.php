@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Functional\ListOrders\Adapter\Http\Controller\ListOrdersRemoveAllGroupsListsOrders;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
@@ -28,6 +28,7 @@ class ListsOrderRemoveAllGroupsListsOrdersControllerTest extends WebClientTestCa
     ];
     private const array LIST_ORDERS_ID_GROUP_2 = [
         '0c87f10f-0a0d-4fcc-adae-5cfe93d28c63',
+        '56d8c2c1-d915-463a-b15a-57c52cb76d6d',
     ];
 
     #[Test]

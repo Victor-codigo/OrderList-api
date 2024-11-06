@@ -6,7 +6,9 @@ namespace Share\Adapter\Database\Orm\Doctrine\Repository;
 
 use Common\Adapter\Database\Orm\Doctrine\Repository\RepositoryBase;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBConnectionException;
+use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
+use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Exception\EntityIdentityCollisionException;
@@ -61,5 +63,44 @@ class ShareRepository extends RepositoryBase implements ShareRepositoryInterface
         } catch (\Exception $e) {
             throw DBConnectionException::fromConnection($e->getCode());
         }
+    }
+
+    /**
+     * @param Identifier[] $sharedId
+     *
+     * @return PaginatorInterface<int, Share>
+     *
+     * @throws DBNotFoundException
+     */
+    public function findSharedRecursesByIdOrFail(array $sharedId): PaginatorInterface
+    {
+        $shareEntity = Share::class;
+        $dql = <<<DQL
+            SELECT share
+            FROM {$shareEntity} share
+            WHERE share.id IN (:sharedId)
+        DQL;
+
+        return $this->dqlPaginationOrFail($dql, [
+            'sharedId' => $sharedId,
+        ]);
+    }
+
+    /**
+     * @return PaginatorInterface<int, Share>
+     *
+     * @throws DBNotFoundException
+     */
+    public function findSharedRecursesExpiredOrFail(): PaginatorInterface
+    {
+        $shareEntity = Share::class;
+        $dateNow = (new \DateTime())->format('Y-m-d H:i:00');
+        $dql = <<<DQL
+            SELECT share
+            FROM {$shareEntity} share
+            WHERE share.expire < '{$dateNow}'
+        DQL;
+
+        return $this->dqlPaginationOrFail($dql);
     }
 }

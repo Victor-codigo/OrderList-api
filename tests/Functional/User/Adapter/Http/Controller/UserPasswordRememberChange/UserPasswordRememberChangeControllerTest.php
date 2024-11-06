@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test\Functional\User\Adapter\Http\Controller\UserPasswordRememberChange;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Response\RESPONSE_STATUS;
-use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
+use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 use User\Adapter\Security\User\UserSymfonyAdapter;
@@ -15,7 +15,7 @@ use User\Domain\Model\User;
 
 class UserPasswordRememberChangeControllerTest extends WebClientTestCase
 {
-    use RefreshDatabaseTrait;
+    use ReloadDatabaseTrait;
 
     private const string ENDPOINT = '/api/v1/users/password-remember';
     private const string METHOD = 'PATCH';
