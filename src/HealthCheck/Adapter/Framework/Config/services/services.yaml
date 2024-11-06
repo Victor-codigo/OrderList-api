@@ -1,0 +1,10 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+    bind:
+
+  # Adapter
+  HealthCheck\Adapter\:
+    resource: "../../../../../HealthCheck/Adapter/"

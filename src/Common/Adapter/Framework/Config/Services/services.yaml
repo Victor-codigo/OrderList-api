@@ -23,6 +23,9 @@ imports:
     - {
           resource: "../../../../../Share/Adapter/Framework/Config/services/services.yaml",
       }
+    - {
+          resource: "../../../../../HealthCheck/Adapter/Framework/Config/services/services.yaml",
+      }
 parameters:
     common.environment.app_env: "%env(string:APP_ENV)%"
     common.app_name: "%env(string:APP_NAME)%"

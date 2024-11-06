@@ -22,6 +22,9 @@ ListOrders:
 Share:
   resource: "../../../../../Share/Adapter/Framework/Config/routes/routes.yaml"
 
+HealthCheck:
+  resource: "../../../../../HealthCheck/Adapter/Framework/Config/routes/routes.yaml"
+
 when@dev:
   nelmioApiDoc:
     resource: "nelmio_api_doc.yaml"

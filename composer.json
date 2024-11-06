@@ -69,6 +69,7 @@
     "autoload": {
         "psr-4": {
             "Test\\": "tests/",
+            "HealthCheck\\": "src/HealthCheck/",
             "Group\\": "src/Group/",
             "Order\\": "src/Order/",
             "ListOrders\\": "src/ListOrders/",

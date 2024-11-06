@@ -48,6 +48,9 @@ security:
         # Share list of orders
         - { path: ^/api/v1/share/list-orders$, methods: "GET", roles: PUBLIC_ACCESS }
 
+        # Health check
+        - { path: ^/api/v1/health-check$, roles: PUBLIC_ACCESS }
+
         # Api documentation
         - { path: ^/api/doc$, roles: PUBLIC_ACCESS }
 
