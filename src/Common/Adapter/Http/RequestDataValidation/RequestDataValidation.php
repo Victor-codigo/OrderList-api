@@ -43,7 +43,7 @@ trait RequestDataValidation
      * @param mixed                       $default value to be set, to those values that are not float
      * @param string[]|int[]|float[]|null $values  $values
      *
-     * @return string[]|int[]|float[]|null
+     * @return mixed[]
      */
     private function arrayFilterFloat(?array $values, int $valuesMax, mixed $default = null): ?array
     {
@@ -54,7 +54,7 @@ trait RequestDataValidation
         $valuesValid = $this->validateArrayOverflow($values, $valuesMax);
 
         return array_map(
-            fn ($value): string|int|float => filter_var($value, FILTER_VALIDATE_FLOAT)
+            fn ($value): mixed => false !== filter_var($value, FILTER_VALIDATE_FLOAT)
                 ? (float) $value
                 : $default,
             $valuesValid ?? []
