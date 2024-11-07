@@ -23,7 +23,7 @@ class ShareRemoveExpiredRecoursesCommandTest extends KernelTestCase
 {
     use ReloadDatabaseTrait;
 
-    private const string COMMAND = 'app:share:remove';
+    private const string COMMAND = 'app:share:remove-expired';
     private const string SHARE_ID_EXIST = '72b37f9c-ff55-4581-a131-4270e73012a2';
     private const string SHARE_ID_EXIST_2 = '8aaa96f5-cc54-45cb-bf43-f9b8fe256696';
     private const string SHARE_ID_EXIST_3 = '5552b4a6-8326-462a-a42b-f60b33640aef';

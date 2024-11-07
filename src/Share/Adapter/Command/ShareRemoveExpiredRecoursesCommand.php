@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
-    'app:share:remove',
+    'app:share:remove-expired',
     'Remove a share Recurse',
 )]
 class ShareRemoveExpiredRecoursesCommand extends Command
