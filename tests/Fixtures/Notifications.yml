@@ -27,6 +27,10 @@ Common\Domain\Model\ValueObject\String\Identifier:
     __construct:
       value: "d75a3fb1-42aa-46c0-be4c-1147f0808d60"
 
+  notification_share_list_orders_created:
+    __construct:
+      value: "a3b8f693-4da0-4ccf-a759-2a7031afc9da"
+
 Common\Domain\Model\ValueObject\Object\NotificationType:
   notification_type_user_registered:
     __construct:
@@ -36,6 +40,10 @@ Common\Domain\Model\ValueObject\Object\NotificationType:
     __construct:
       value: <(Common\Domain\Validation\Notification\NOTIFICATION_TYPE::GROUP_USER_ADDED)>
 
+  notification_type_share_list_orders_created:
+    __construct:
+      value: <(Common\Domain\Validation\Notification\NOTIFICATION_TYPE::SHARE_LIST_ORDERS_CREATED)>
+
 Common\Domain\Model\ValueObject\Array\NotificationData:
   notification_data_user_registered:
     __construct:
@@ -44,6 +52,10 @@ Common\Domain\Model\ValueObject\Array\NotificationData:
   notification_data_group_user_added:
     __construct:
       value: <getNotificationGroupUserAddData()>
+
+  notification_data_share_list_orders_created:
+    __construct:
+      value: <getNotificationShareLisOrdersCreated()>
 
 Notification\Domain\Model\Notification:
   entity-notification_random-{1..10}:
@@ -87,3 +99,10 @@ Notification\Domain\Model\Notification:
       userId: "@entity-user_active->getId()"
       type: "@notification_type_user_registered"
       data: "@notification_data_user_registered"
+
+  entity-notification_share_list_orders_created:
+    __construct:
+      id: "@notification_share_list_orders_created"
+      userId: "@entity-user_active->getId()"
+      type: "@notification_type_share_list_orders_created"
+      data: "@notification_data_share_list_orders_created"

@@ -29,6 +29,7 @@ class NotificationGetDataControllerTest extends WebClientTestCase
             Notification::fromPrimitives('d75a3fb1-42aa-46c0-be4c-1147f0808d60', '2606508b-4516-45d6-93a6-c7cb416b7f3f', NOTIFICATION_TYPE::USER_REGISTERED, []),
             Notification::fromPrimitives('f7621fbd-0c8e-4a8a-8059-9e87b8ea4fe1', '2606508b-4516-45d6-93a6-c7cb416b7f3f', NOTIFICATION_TYPE::GROUP_USER_ADDED, []),
             Notification::fromPrimitives('f79ddff5-486b-4b5f-af64-b99fe9154fc1', '2606508b-4516-45d6-93a6-c7cb416b7f3f', NOTIFICATION_TYPE::GROUP_USER_ADDED, []),
+            Notification::fromPrimitives('a3b8f693-4da0-4ccf-a759-2a7031afc9da', '2606508b-4516-45d6-93a6-c7cb416b7f3f', NOTIFICATION_TYPE::SHARE_LIST_ORDERS_CREATED, []),
         ];
     }
 
@@ -63,14 +64,17 @@ class NotificationGetDataControllerTest extends WebClientTestCase
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(
             method: self::METHOD,
-            uri: self::ENDPOINT."?page={$page}&page_items={$pageItems}&lang={$lang}",
+            uri: self::ENDPOINT
+                ."?page={$page}"
+                ."&page_items={$pageItems}"
+                ."&lang={$lang}",
             content: json_encode([])
         );
 
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, [0, 1, 2, 3], [], Response::HTTP_OK);
+        $this->assertResponseStructureIsOk($response, [0, 1, 2, 3, 4], [], Response::HTTP_OK);
         $this->assertSame(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('Notifications data', $responseContent->message);
         $this->assertCount(count($notificationsDataExpected), $responseContent->data);
@@ -111,7 +115,7 @@ class NotificationGetDataControllerTest extends WebClientTestCase
     public function itShouldGetTheDataOfTheUserNotificationsPaginationPageTwoPageItemsTwo(): void
     {
         $page = 2;
-        $pageItems = 2;
+        $pageItems = 3;
         $lang = 'es';
         $notificationsDataExpected = $this->getNotificationsDatabaseData();
         $notificationsDataExpected = [$notificationsDataExpected[2], $notificationsDataExpected[3]];

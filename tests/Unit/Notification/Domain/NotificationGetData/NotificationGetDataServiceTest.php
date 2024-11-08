@@ -74,15 +74,23 @@ class NotificationGetDataServiceTest extends TestCase
             'domain_name' => 'DOMAIN NAME',
         ];
 
+        $notificationShareListOrdersCreated = [
+            'list_orders_name' => 'USER NAME',
+            'list_orders_id' => 'DOMAIN NAME',
+        ];
+
         return new \ArrayIterator([
             Notification::fromPrimitives(self::NOTIFICATION_ID_1, 'user id 1', NOTIFICATION_TYPE::GROUP_CREATED, $notificationGroupCreated),
             Notification::fromPrimitives(self::NOTIFICATION_ID_2, 'user id 2', NOTIFICATION_TYPE::GROUP_REMOVED, $notificationGroupRemoved),
             Notification::fromPrimitives(self::NOTIFICATION_ID_3, 'user id 3', NOTIFICATION_TYPE::GROUP_USER_ADDED, $notificationGroupUserAdded),
             Notification::fromPrimitives(self::NOTIFICATION_ID_4, 'user id 4', NOTIFICATION_TYPE::GROUP_USER_REMOVED, $notificationGroupUserRemoved),
+
             Notification::fromPrimitives(self::NOTIFICATION_ID_5, 'user id 5', NOTIFICATION_TYPE::USER_EMAIL_CHANGED, []),
             Notification::fromPrimitives(self::NOTIFICATION_ID_6, 'user id 6', NOTIFICATION_TYPE::USER_PASSWORD_CHANGED, []),
             Notification::fromPrimitives(self::NOTIFICATION_ID_7, 'user id 7', NOTIFICATION_TYPE::USER_PASSWORD_REMEMBER, []),
             Notification::fromPrimitives(self::NOTIFICATION_ID_8, 'user id 8', NOTIFICATION_TYPE::USER_REGISTERED, $notificationUserRegistered),
+
+            Notification::fromPrimitives(self::NOTIFICATION_ID_8, 'user id 9', NOTIFICATION_TYPE::SHARE_LIST_ORDERS_CREATED, $notificationShareListOrdersCreated),
         ]);
     }
 
@@ -141,6 +149,7 @@ class NotificationGetDataServiceTest extends TestCase
                     NOTIFICATION_TYPE::USER_PASSWORD_CHANGED => $this->assertEquals('notification.user.password_changed', $placeholder),
                     NOTIFICATION_TYPE::USER_PASSWORD_REMEMBER => $this->assertEquals('notification.user.password_remembered', $placeholder),
                     NOTIFICATION_TYPE::USER_REGISTERED => $this->assertEquals('notification.user.registered', $placeholder),
+                    NOTIFICATION_TYPE::SHARE_LIST_ORDERS_CREATED => $this->assertEquals('notification.share.list_orders_created', $placeholder),
                     default => throw new \LogicException('Not supporting this value'),
                 };
 

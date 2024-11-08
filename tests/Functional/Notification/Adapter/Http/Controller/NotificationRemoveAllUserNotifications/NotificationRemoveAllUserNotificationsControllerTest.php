@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Functional\Notification\Adapter\Http\Controller\NotificationRemoveAllUserNotifications;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
 
@@ -22,6 +22,7 @@ class NotificationRemoveAllUserNotificationsControllerTest extends WebClientTest
         'd75a3fb1-42aa-46c0-be4c-1147f0808d60',
         'f7621fbd-0c8e-4a8a-8059-9e87b8ea4fe1',
         'f79ddff5-486b-4b5f-af64-b99fe9154fc1',
+        'a3b8f693-4da0-4ccf-a759-2a7031afc9da',
     ];
 
     #[\Override]

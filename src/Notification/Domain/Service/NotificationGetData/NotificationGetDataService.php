@@ -89,6 +89,8 @@ class NotificationGetDataService
             NOTIFICATION_TYPE::USER_PASSWORD_CHANGED => 'notification.user.password_changed',
             NOTIFICATION_TYPE::USER_PASSWORD_REMEMBER => 'notification.user.password_remembered',
             NOTIFICATION_TYPE::USER_REGISTERED => 'notification.user.registered',
+
+            NOTIFICATION_TYPE::SHARE_LIST_ORDERS_CREATED => 'notification.share.list_orders_created',
             default => throw LogicException::fromMessage('Notification type not found'),
         };
 
