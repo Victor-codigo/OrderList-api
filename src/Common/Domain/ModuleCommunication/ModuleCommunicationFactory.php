@@ -727,6 +727,21 @@ class ModuleCommunicationFactory
         return self::notificationCreate($content, $tokenSession);
     }
 
+    public static function notificationShareListOrdersCreated(Identifier $userId, Identifier $listOrdersId, NameWithSpaces $listOrdersName, string $systemKey): ModuleCommunicationConfigDto
+    {
+        $content = [
+            'users_id' => [$userId->getValue()],
+            'type' => NOTIFICATION_TYPE::SHARE_LIST_ORDERS_CREATED->value,
+            'notification_data' => [
+                'list_orders_name' => $listOrdersName->getValue(),
+                'list_orders_id' => $listOrdersId->getValue(),
+            ],
+            'system_key' => $systemKey,
+        ];
+
+        return self::notificationCreate($content, null);
+    }
+
     /**
      * @param array<int|string, mixed> $content
      */

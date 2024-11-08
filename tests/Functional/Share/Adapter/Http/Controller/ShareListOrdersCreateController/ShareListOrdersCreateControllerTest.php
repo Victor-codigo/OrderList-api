@@ -6,7 +6,10 @@ namespace Test\Functional\Share\Adapter\Http\Controller\ShareListOrdersCreateCon
 
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use Common\Domain\Response\RESPONSE_STATUS;
+use Common\Domain\Validation\Notification\NOTIFICATION_TYPE;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use Notification\Adapter\Database\Orm\Doctrine\Repository\NotificationRepository;
+use Notification\Domain\Model\Notification;
 use PHPUnit\Framework\Attributes\Test;
 use Share\Adapter\Database\Orm\Doctrine\Repository\ShareRepository;
 use Share\Domain\Model\Share;
@@ -33,6 +36,15 @@ class ShareListOrdersCreateControllerTest extends WebClientTestCase
             ->getRepository(Share::class);
     }
 
+    private function getNotificationsRepository(): NotificationRepository
+    {
+        return $this
+            ->getContainer()
+            ->get('doctrine')
+            ->getManager()
+            ->getRepository(Notification::class);
+    }
+
     #[Test]
     public function itShouldCreateNewListOrdersShare(): void
     {
@@ -53,11 +65,19 @@ class ShareListOrdersCreateControllerTest extends WebClientTestCase
         $this->assertSame('List orders shared', $responseContent->message);
 
         $shareRepository = $this->getShareRepository();
+        $notificationRepository = $this->getNotificationsRepository();
 
         /** @var Share $sharedExpected */
         $sharedExpected = $shareRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier($responseContent->data->list_orders_id)]);
         $this->assertEquals(self::LIST_ORDERS_ID, $sharedExpected->getListOrdersId());
         $this->assertEquals(self::USER_ID, $sharedExpected->getUserId());
+
+        /** @var Notification $notificationsExpected */
+        $notificationsExpected = $notificationRepository->findOneBy([
+            'userId' => ValueObjectFactory::createIdentifier(self::USER_ID),
+            'type' => ValueObjectFactory::createNotificationType(NOTIFICATION_TYPE::SHARE_LIST_ORDERS_CREATED),
+        ]);
+        $this->assertInstanceOf(Notification::class, $notificationsExpected);
     }
 
     #[Test]

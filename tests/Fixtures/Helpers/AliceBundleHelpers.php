@@ -29,4 +29,15 @@ class AliceBundleHelpers extends Base
             'user_who_adds_you_name' => 'USER WHO ADDS YOU NAME',
         ];
     }
+
+    /**
+     * @return array<string, string>
+     */
+    public static function getNotificationShareLisOrdersCreated(): array
+    {
+        return [
+            'list_orders_id' => 'LIST ORDERS ID',
+            'list_orders_name' => 'LIST ORDERS NAME',
+        ];
+    }
 }
