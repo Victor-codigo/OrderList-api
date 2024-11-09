@@ -727,14 +727,14 @@ class ModuleCommunicationFactory
         return self::notificationCreate($content, $tokenSession);
     }
 
-    public static function notificationShareListOrdersCreated(Identifier $userId, Identifier $listOrdersId, NameWithSpaces $listOrdersName, string $systemKey): ModuleCommunicationConfigDto
+    public static function notificationShareListOrdersCreated(Identifier $userId, Identifier $sharedRecourseId, NameWithSpaces $listOrdersName, string $systemKey): ModuleCommunicationConfigDto
     {
         $content = [
             'users_id' => [$userId->getValue()],
             'type' => NOTIFICATION_TYPE::SHARE_LIST_ORDERS_CREATED->value,
             'notification_data' => [
+                'shared_recourse_id' => $sharedRecourseId->getValue(),
                 'list_orders_name' => $listOrdersName->getValue(),
-                'list_orders_id' => $listOrdersId->getValue(),
             ],
             'system_key' => $systemKey,
         ];

@@ -55,7 +55,7 @@ class ShareListOrdersCreateUseCase extends ServiceBase
 
             $this->createNotificationListOrdersCreated(
                 $input->userSession->getId(),
-                $input->listOrdersId,
+                $sharedList->getId(),
                 $listOrders->getName(),
                 $this->systemKey
             );
@@ -85,12 +85,12 @@ class ShareListOrdersCreateUseCase extends ServiceBase
      * @throws Error400Exception
      * @throws ModuleCommunicationException
      */
-    private function createNotificationListOrdersCreated(Identifier $userId, Identifier $listOrdersId, NameWithSpaces $listOrdersName, string $systemKey): void
+    private function createNotificationListOrdersCreated(Identifier $userId, Identifier $sharedRecourseId, NameWithSpaces $listOrdersName, string $systemKey): void
     {
         $responseData = $this->moduleCommunication->__invoke(
             ModuleCommunicationFactory::notificationShareListOrdersCreated(
                 $userId,
-                $listOrdersId,
+                $sharedRecourseId,
                 $listOrdersName,
                 $systemKey
             )
