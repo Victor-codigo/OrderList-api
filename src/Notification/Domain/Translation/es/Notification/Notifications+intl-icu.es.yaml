@@ -1,13 +1,18 @@
 notification:
   user:
-    registered: Bienvenido {user_name}. Ya eres un nuevo miembro de {domain_name}!
+    registered: Bienvenido <strong>{user_name}</strong>. Ya eres un nuevo miembro de <strong>{domain_name}</strong>!
     email_changed: Has cambiado tú email
     password_changed: Has cambiado tú password
     password_remembered: Tú contraseña ha sido restablecida
 
   group:
-    user_added: Has sido añadido al grupo {group_name} por {user_who_adds_you_name}.
-    user_removed: Has sido eliminado del grupo {group_name}
-    created: Has creado el grupo {group_name}
-    removed: Has eliminado el grupo {group_name}
-    set_as_admin: Has sido ascendido a administratod del grupo {group_name}
+    user_added: Has sido añadido al grupo <strong>{group_name}</strong> por {user_who_adds_you_name}.
+    user_removed: Has sido eliminado del grupo <strong>{group_name}</strong>
+    created: Has creado el grupo <strong>{group_name}</strong>
+    removed: Has eliminado el grupo <strong>{group_name}</strong>
+    set_as_admin: Has sido ascendido a <strong>administrator</strong> del grupo <strong>{group_name}</strong>
+
+share:
+  list_orders_created:
+    "Has compartido la lista de la compra <strong>{list_orders_name}</strong> con la url:
+    <br><strong>{shared_list_orders_url}</strong>"

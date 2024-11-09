@@ -1,13 +1,18 @@
 notification:
   user:
-    registered: Welcome {user_name}. You are a new member of {domain_name} already!
+    registered: Welcome <strong>{user_name}</strong>. You are a new member of <strong>{domain_name}</strong> already!
     email_changed: You have changed your email
     password_changed: You have changed your password
     password_remembered: Your password has been restored
 
   group:
-    user_added: You have been added to the group {group_name} by {user_who_adds_you_name}.
-    user_removed: You have been removed from the group {group_name}
-    created: You have created the group {group_name}
-    removed: You have removed the group {group_name}
-    set_as_admin: You have been upgraded to Admin of the group {group_name}
+    user_added: You have been added to the group <strong>{group_name}</strong> by {user_who_adds_you_name}.
+    user_removed: You have been removed from the group <strong>{group_name}</strong>
+    created: You have created the group <strong>{group_name}</strong>
+    removed: You have removed the group <strong>{group_name}</strong>
+    set_as_admin: You have been upgraded to Admin of the group <strong>{group_name}</strong>
+
+  share:
+    list_orders_created:
+      "You have shared shopping list <strong>{list_orders_name}</strong> with the url:
+      <br><strong>{shared_list_orders_url}</strong>"

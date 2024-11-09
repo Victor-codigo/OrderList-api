@@ -28,8 +28,10 @@ class NotificationGetDataService
     /**
      * @return array<int, array{
      *  id: string|null,
+     *  type: string|null,
      *  user_id: string|null,
      *  message: string|null,
+     *  data: array<string, string|int|float>,
      *  viewed: bool,
      *  created_on: string,
      * }>
@@ -50,8 +52,10 @@ class NotificationGetDataService
      *
      * @return array<int, array{
      *  id: string|null,
+     *  type: string|null,
      *  user_id: string|null,
      *  message: string|null,
+     *  data: array<string, string|int|float>,
      *  viewed: bool,
      *  created_on: string,
      * }>
@@ -63,8 +67,10 @@ class NotificationGetDataService
         foreach ($notifications as $notification) {
             $notificationsData[] = [
                 'id' => $notification->getId()->getValue(),
+                'type' => $notification->getType()->getValue()->value,
                 'user_id' => $notification->getUserId()->getValue(),
                 'message' => $this->translateNotification($lang, $notification->getType(), $notification->getData()),
+                'data' => $notification->getData()->getValue(),
                 'viewed' => $notification->getViewed(),
                 'created_on' => $notification->getCreatedOn()->format('Y-m-d H:i:s'),
             ];

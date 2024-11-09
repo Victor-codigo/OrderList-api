@@ -57,8 +57,10 @@ class NotificationGetDataUseCase extends ServiceBase
     /**
      * @param array<int, array{
      *  id: string|null,
+     *  type: string|null,
      *  user_id: string|null,
      *  message: string|null,
+     *  data: array<string, string|int|float>,
      *  viewed: bool,
      *  created_on: string
      * }> $notificationsData

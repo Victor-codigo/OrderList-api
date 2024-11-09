@@ -39,16 +39,20 @@ class NotificationGetDataControllerTest extends WebClientTestCase
     private function assertNotificationIsCorrect(object $notificationData, array $notificationsDataExpected): void
     {
         $notificationsExpectedIds = array_map(fn (Notification $notification): ?string => $notification->getId()->getValue(), $notificationsDataExpected);
+        $notificationsExpectedTypes = array_map(fn (Notification $notification): ?string => $notification->getType()->getValue()->value, $notificationsDataExpected);
         $notificationsExpectedUsersIds = array_map(fn (Notification $notification): ?string => $notification->getUserId()->getValue(), $notificationsDataExpected);
         $notificationsExpectedViewed = array_map(fn (Notification $notification): bool => $notification->getViewed(), $notificationsDataExpected);
 
         $this->assertTrue(property_exists($notificationData, 'id'));
+        $this->assertTrue(property_exists($notificationData, 'type'));
         $this->assertTrue(property_exists($notificationData, 'user_id'));
         $this->assertTrue(property_exists($notificationData, 'message'));
+        $this->assertTrue(property_exists($notificationData, 'data'));
         $this->assertTrue(property_exists($notificationData, 'viewed'));
         $this->assertTrue(property_exists($notificationData, 'created_on'));
 
         $this->assertContainsEquals($notificationData->id, $notificationsExpectedIds);
+        $this->assertContainsEquals($notificationData->type, $notificationsExpectedTypes);
         $this->assertContainsEquals($notificationData->user_id, $notificationsExpectedUsersIds);
         $this->assertContainsEquals($notificationData->viewed, $notificationsExpectedViewed);
     }

@@ -58,8 +58,10 @@ use Symfony\Component\HttpFoundation\Response;
                         new OA\Property(property: 'data', type: 'array', items: new OA\Items(
                             properties: [
                                 new OA\Property(property: 'id', type: 'string', example: '1fcab788-0def-4e56-b441-935361678da9'),
+                                new OA\Property(property: 'type', type: 'string', description: 'Notification type'),
                                 new OA\Property(property: 'user_id', type: 'string', example: '2606508b-4516-45d6-93a6-c7cb416b7f3f'),
                                 new OA\Property(property: 'message', type: 'string', example: 'This is an example of notification'),
+                                new OA\Property(property: 'data', type: 'array', example: 'Some extra data of the notification', items: new OA\Items()),
                                 new OA\Property(property: 'viewed', type: 'bool'),
                                 new OA\Property(property: 'created_on', type: 'string', example: '2023-2-14 14:05:10'),
                             ])),
