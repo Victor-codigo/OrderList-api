@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Share\Application\ShareListOrdersCreate;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
-use Common\Domain\Exception\DomainExceptionOutput;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\ModuleCommunication\ModuleCommunicationFactory;
 use Common\Domain\Ports\ModuleCommunication\ModuleCommunicationInterface;
 use Common\Domain\Response\RESPONSE_STATUS;
-use Common\Domain\Response\RESPONSE_STATUS_HTTP;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Validation\Exception\ValueObjectValidationException;
 use Common\Domain\Validation\ValidationInterface;
@@ -97,7 +95,7 @@ class ShareListOrdersCreateUseCase extends ServiceBase
                 $systemKey
             )
         );
-        throw new DomainExceptionOutput('este es el error: '.$responseData->getMessage(), $responseData->getErrors(), RESPONSE_STATUS::ERROR, RESPONSE_STATUS_HTTP::BAD_REQUEST);
+        throw DomainInternalErrorException::fromMessage('este es el error: '.$responseData->getMessage().'. - '.json_encode($responseData->getErrors()));
         if (RESPONSE_STATUS::OK !== $responseData->getStatus()) {
             throw ShareCreateListOrdersNotificationException::fromMessage('An error was ocurred when trying to send the notification: shared list orders created');
         }
