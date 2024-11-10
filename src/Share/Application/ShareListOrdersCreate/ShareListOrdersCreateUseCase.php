@@ -53,12 +53,12 @@ class ShareListOrdersCreateUseCase extends ServiceBase
 
             $listOrders = $this->getListOrdersData($input->listOrdersId);
 
-            $this->createNotificationListOrdersCreated(
-                $input->userSession->getId(),
-                $sharedList->getId(),
-                $listOrders->getName(),
-                $this->systemKey
-            );
+            // $this->createNotificationListOrdersCreated(
+            //     $input->userSession->getId(),
+            //     $sharedList->getId(),
+            //     $listOrders->getName(),
+            //     $this->systemKey
+            // );
 
             return $this->createShareListOrdersCreateOutputDto($sharedList->getId());
         } catch (DBNotFoundException) {
