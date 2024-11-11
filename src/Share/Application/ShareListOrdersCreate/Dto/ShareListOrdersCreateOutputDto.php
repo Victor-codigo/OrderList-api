@@ -10,18 +10,18 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 readonly class ShareListOrdersCreateOutputDto implements ApplicationOutputInterface
 {
     public function __construct(
-        public Identifier $sharedListId,
+        public Identifier $sharedRecourseId,
     ) {
     }
 
     /**
-     * @return array{ list_orders_id: string }
+     * @return array{ shared_recourse_id: string }
      */
     #[\Override]
     public function toArray(): array
     {
         return [
-            'list_orders_id' => $this->sharedListId->getValue(),
+            'shared_recourse_id' => $this->sharedRecourseId->getValue(),
         ];
     }
 }

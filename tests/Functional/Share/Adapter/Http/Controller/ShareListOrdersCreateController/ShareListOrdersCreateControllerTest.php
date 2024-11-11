@@ -60,7 +60,7 @@ class ShareListOrdersCreateControllerTest extends WebClientTestCase
         $response = $client->getResponse();
         $responseContent = json_decode($response->getContent());
 
-        $this->assertResponseStructureIsOk($response, ['list_orders_id'], [], Response::HTTP_CREATED);
+        $this->assertResponseStructureIsOk($response, ['shared_recourse_id'], [], Response::HTTP_CREATED);
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('List orders shared', $responseContent->message);
 
@@ -68,7 +68,7 @@ class ShareListOrdersCreateControllerTest extends WebClientTestCase
         $notificationRepository = $this->getNotificationsRepository();
 
         /** @var Share $sharedExpected */
-        $sharedExpected = $shareRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier($responseContent->data->list_orders_id)]);
+        $sharedExpected = $shareRepository->findOneBy(['id' => ValueObjectFactory::createIdentifier($responseContent->data->shared_recourse_id)]);
         $this->assertEquals(self::LIST_ORDERS_ID, $sharedExpected->getListOrdersId());
         $this->assertEquals(self::USER_ID, $sharedExpected->getUserId());
 

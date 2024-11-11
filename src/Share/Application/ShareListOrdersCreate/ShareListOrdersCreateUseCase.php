@@ -47,7 +47,7 @@ class ShareListOrdersCreateUseCase extends ServiceBase
         $this->validation($input);
 
         try {
-            $sharedList = $this->shareListOrdersCreateService->__invoke(
+            $sharedRecourseId = $this->shareListOrdersCreateService->__invoke(
                 $this->createShareListOrdersCreateDto($input)
             );
 
@@ -55,12 +55,12 @@ class ShareListOrdersCreateUseCase extends ServiceBase
 
             $this->createNotificationListOrdersCreated(
                 $input->userSession->getId(),
-                $sharedList->getId(),
+                $sharedRecourseId->getId(),
                 $listOrders->getName(),
                 $this->systemKey
             );
 
-            return $this->createShareListOrdersCreateOutputDto($sharedList->getId());
+            return $this->createShareListOrdersCreateOutputDto($sharedRecourseId->getId());
         } catch (DBNotFoundException) {
             throw ShareCreateListOrdersNotFoundException::fromMessage('List orders not found');
         } catch (\Exception) {
@@ -95,7 +95,7 @@ class ShareListOrdersCreateUseCase extends ServiceBase
                 $systemKey
             )
         );
-        throw DomainInternalErrorException::fromMessage('este es el error: '.$responseData->getMessage().'. - '.json_encode($responseData->getErrors()));
+
         if (RESPONSE_STATUS::OK !== $responseData->getStatus()) {
             throw ShareCreateListOrdersNotificationException::fromMessage('An error was ocurred when trying to send the notification: shared list orders created');
         }
@@ -117,8 +117,8 @@ class ShareListOrdersCreateUseCase extends ServiceBase
         return new ShareListOrderCreateDto($input->listOrdersId, $input->userSession->getId());
     }
 
-    private function createShareListOrdersCreateOutputDto(Identifier $sharedListId): ShareListOrdersCreateOutputDto
+    private function createShareListOrdersCreateOutputDto(Identifier $sharedRecourseId): ShareListOrdersCreateOutputDto
     {
-        return new ShareListOrdersCreateOutputDto($sharedListId);
+        return new ShareListOrdersCreateOutputDto($sharedRecourseId);
     }
 }
