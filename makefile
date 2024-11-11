@@ -86,6 +86,7 @@ setup-deploy: ## Sets the application up for production deploy
 	rm phpunit.xml.dist
 	rm README.md
 	rm rector.php
+	rm infection.json5
 	rm -rf tools
 	rm -rf tests
 	rm -rf .docker
