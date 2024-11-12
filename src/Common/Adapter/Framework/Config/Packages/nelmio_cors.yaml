@@ -1,3 +1,5 @@
+# Enable this package if you have api and client in different domains
+
 nelmio_cors:
     defaults:
         allow_credentials: false
