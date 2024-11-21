@@ -24,6 +24,8 @@ class GroupUserAddControllerTest extends WebClientTestCase
         '1552b279-5f78-4585-ae1b-31be2faabba8',
         'b11c9be1-b619-4ef5-be1b-a1cd9ef265b7',
     ];
+    private const string USER_GUEST_ID = 'a1c35f1d-b4e3-4d3a-9719-a9509806ba47';
+    private const string USER_GUEST_NAME = 'Guest';
 
     private const array USERS_DELETED_OR_NOT_ACTIVE = [
         '68e94495-16f0-4acd-adbe-f2b9575e6544', // deleted
@@ -181,6 +183,76 @@ class GroupUserAddControllerTest extends WebClientTestCase
     }
 
     #[Test]
+    public function itShouldAddAllUsersToTheGroupOneOfThemIsGuestUser(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'users' => [...self::USER_TO_ADD_IDS, self::USER_GUEST_ID],
+                'identifier_type' => 'identifier',
+                'admin' => false,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('Users added to the group', $responseContent->message);
+        $this->assertEquals(self::USER_TO_ADD_IDS, (array) $responseContent->data->id);
+    }
+
+    #[Test]
+    public function itShouldNotAddUserTheGroupUserIsGuest(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'users' => [self::USER_GUEST_ID],
+                'identifier_type' => 'identifier',
+                'admin' => false,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['users_validation'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Wrong users', $responseContent->message);
+    }
+
+    #[Test]
+    public function itShouldNotAddUserTheGroupUserIsGuestByName(): void
+    {
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => self::GROUP_ID,
+                'users' => [self::USER_GUEST_NAME],
+                'identifier_type' => 'name',
+                'admin' => false,
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['users_validation'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('Wrong users', $responseContent->message);
+    }
+
+    #[Test]
     public function itShouldFailGroupIdIsNull(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
@@ -229,7 +301,7 @@ class GroupUserAddControllerTest extends WebClientTestCase
     }
 
     #[Test]
-    public function itShouldFailGroupIdIsNotExists(): void
+    public function itShouldFailGroupIdNotExists(): void
     {
         $client = $this->getNewClientAuthenticatedUser();
         $client->request(

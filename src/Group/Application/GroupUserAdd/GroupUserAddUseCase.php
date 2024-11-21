@@ -46,6 +46,7 @@ class GroupUserAddUseCase extends ServiceBase
         private GroupUserAddService $groupUserAddService,
         private ModuleCommunicationInterface $moduleCommunication,
         private string $systemKey,
+        private string $userGuestId,
     ) {
     }
 
@@ -60,9 +61,10 @@ class GroupUserAddUseCase extends ServiceBase
         try {
             $this->validation($input);
             $usersId = $this->getUsers($input->users);
-            $this->validateUsersToAdd($usersId);
+            $usersIdWithoutGuestUser = $this->removeGuestUser($usersId, $this->userGuestId);
+            $this->validateUsersToAdd($usersIdWithoutGuestUser);
             $usersAdded = $this->groupUserAddService->__invoke(
-                $this->createGroupUserAddDto($input->groupId, $usersId, $input->rol)
+                $this->createGroupUserAddDto($input->groupId, $usersIdWithoutGuestUser, $input->rol)
             );
 
             $group = $this->groupRepository->findGroupsByIdOrFail([$input->groupId])[0];
@@ -178,6 +180,27 @@ class GroupUserAddUseCase extends ServiceBase
     }
 
     /**
+     * @param Identifier[] $usersId
+     *
+     * @return Identifier[]
+     *
+     * @throws GroupUserAddPermissionException
+     */
+    private function removeGuestUser(array $usersId, string $userGuestId): array
+    {
+        $usersIdWithoutGuestUser = array_filter(
+            $usersId,
+            fn (Identifier $userId): bool => $userId->getValue() !== $userGuestId
+        );
+
+        if (empty($usersIdWithoutGuestUser)) {
+            throw GroupUserAddUsersValidationException::fromMessage('Wrong users');
+        }
+
+        return $usersIdWithoutGuestUser;
+    }
+
+    /**
      * @param UserGroup[] $usersGroupToNotify
      */
     private function createNotificationGroupUserAdded(array $usersGroupToNotify, Group $group, UserShared $userSession, string $systemKey): void
@@ -192,7 +215,7 @@ class GroupUserAddUseCase extends ServiceBase
         $response = $this->moduleCommunication->__invoke($notificationData);
 
         if (!empty($response->getErrors())) {
-            throw GroupUserAddNotificationException::fromMessage('An error was ocurred when trying to send the notification: user added to the group');
+            throw GroupUserAddNotificationException::fromMessage('An error has been occurred when trying to send the notification: user added to the group');
         }
     }
 
