@@ -52,10 +52,6 @@
        <unique-constraints>
               <unique-constraint name="u_list_order_id"
                                  columns="id"/>
-
-              <unique-constraint name="u_list_order_name"
-                                 columns="name"/>
-
         </unique-constraints>
 
 
