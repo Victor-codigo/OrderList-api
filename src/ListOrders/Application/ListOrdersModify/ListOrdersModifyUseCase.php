@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace ListOrders\Application\ListOrdersModify;
 
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException;
-use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Service\ServiceBase;
 use Common\Domain\Service\ValidateGroupAndUser\Exception\ValidateGroupAndUserException;
@@ -19,6 +18,7 @@ use ListOrders\Application\ListOrdersModify\Exception\ListOrdersModifyNotFoundEx
 use ListOrders\Application\ListOrdersModify\Exception\ListOrdersModifyValidateGroupAndUserException;
 use ListOrders\Domain\Model\ListOrders;
 use ListOrders\Domain\Service\ListOrdersModify\Dto\ListOrdersModifyDto;
+use ListOrders\Domain\Service\ListOrdersModify\Exception\ListOrdersModifyNameAlreadyExistsInGroupException;
 use ListOrders\Domain\Service\ListOrdersModify\ListOrdersModifyService;
 
 class ListOrdersModifyUseCase extends ServiceBase
@@ -26,7 +26,7 @@ class ListOrdersModifyUseCase extends ServiceBase
     public function __construct(
         private ListOrdersModifyService $ListOrdersModifyService,
         private ValidationInterface $validator,
-        private ValidateGroupAndUserService $validateGroupAndUserService
+        private ValidateGroupAndUserService $validateGroupAndUserService,
     ) {
     }
 
@@ -49,7 +49,7 @@ class ListOrdersModifyUseCase extends ServiceBase
             return $this->createListOrdersModifyOutputDto($listOrdersModified);
         } catch (DBNotFoundException) {
             throw ListOrdersModifyNotFoundException::fromMessage('List of orders not found');
-        } catch (DBUniqueConstraintException) {
+        } catch (ListOrdersModifyNameAlreadyExistsInGroupException) {
             throw ListOrdersModifyNameAlreadyExistsException::fromMessage('The name is already registered');
         } catch (ValidateGroupAndUserException) {
             throw ListOrdersModifyValidateGroupAndUserException::fromMessage('You not belong to the group');

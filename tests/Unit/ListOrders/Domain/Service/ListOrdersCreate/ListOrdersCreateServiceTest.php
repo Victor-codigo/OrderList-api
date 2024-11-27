@@ -9,12 +9,11 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\ValueObjectFactory;
-use Common\Domain\Ports\Paginator\PaginatorInterface;
 use ListOrders\Domain\Model\ListOrders;
 use ListOrders\Domain\Ports\ListOrdersRepositoryInterface;
 use ListOrders\Domain\Service\ListOrdersCreate\Dto\ListOrdersCreateDto;
-use ListOrders\Domain\Service\ListOrdersCreate\Exception\ListOrdersCreateNameAlreadyExistsInGroupException;
 use ListOrders\Domain\Service\ListOrdersCreate\ListOrdersCreateService;
+use ListOrders\Domain\Service\ListOrdersModify\Exception\ListOrdersModifyNameAlreadyExistsInGroupException;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -26,10 +25,6 @@ class ListOrdersCreateServiceTest extends TestCase
 
     private ListOrdersCreateService $object;
     private MockObject&ListOrdersRepositoryInterface $listOrdersRepository;
-    /**
-     * @var MockObject&PaginatorInterface<int, ListOrders>
-     */
-    private MockObject&PaginatorInterface $paginator;
 
     #[\Override]
     protected function setUp(): void
@@ -37,7 +32,6 @@ class ListOrdersCreateServiceTest extends TestCase
         parent::setUp();
 
         $this->listOrdersRepository = $this->createMock(ListOrdersRepositoryInterface::class);
-        $this->paginator = $this->createMock(PaginatorInterface::class);
         $this->object = new ListOrdersCreateService($this->listOrdersRepository);
     }
 
@@ -51,39 +45,6 @@ class ListOrdersCreateServiceTest extends TestCase
             'listOrders description',
             new \DateTime()
         );
-    }
-
-    /**
-     * @return ListOrders[]
-     */
-    private function getGroupListOrders(): array
-    {
-        return [
-            ListOrders::fromPrimitives(
-                '51a3d66a-389f-4313-a82e-08b1ef176c13',
-                self::GROUP_ID,
-                self::USER_ID,
-                'listOrders name 1',
-                'listOrders description 1',
-                new \DateTime()
-            ),
-            ListOrders::fromPrimitives(
-                'd4df2cf4-db22-4de2-a86c-d3547254d45b',
-                self::GROUP_ID,
-                self::USER_ID,
-                'listOrders name 2',
-                'listOrders description 2',
-                new \DateTime()
-            ),
-            ListOrders::fromPrimitives(
-                'ba675342-3144-49c1-bca5-0ac7732b9c06',
-                self::GROUP_ID,
-                self::USER_ID,
-                'listOrders name 3',
-                'listOrders description 3',
-                new \DateTime()
-            ),
-        ];
     }
 
     /**
@@ -116,13 +77,9 @@ class ListOrdersCreateServiceTest extends TestCase
 
         $this->listOrdersRepository
             ->expects($this->once())
-            ->method('findGroupsListsOrdersOrFail')
-            ->with([$input->groupId])
+            ->method('findListOrdersByNameOrFail')
+            ->with($input->name, $input->groupId)
             ->willThrowException(new DBNotFoundException());
-
-        $this->paginator
-            ->expects($this->never())
-            ->method('getIterator');
 
         $this->listOrdersRepository
             ->expects($this->once())
@@ -145,7 +102,6 @@ class ListOrdersCreateServiceTest extends TestCase
         $listOrders->setName(
             ValueObjectFactory::createNameWithSpaces('listOrders name 2')
         );
-        $groupListOrders = $this->getGroupListOrders();
         $input = new ListOrdersCreateDto(
             $listOrders->getGroupId(),
             $listOrders->getUserId(),
@@ -156,20 +112,15 @@ class ListOrdersCreateServiceTest extends TestCase
 
         $this->listOrdersRepository
             ->expects($this->once())
-            ->method('findGroupsListsOrdersOrFail')
-            ->with([$input->groupId])
-            ->willReturn($this->paginator);
-
-        $this->paginator
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator($groupListOrders));
+            ->method('findListOrdersByNameOrFail')
+            ->with($input->name, $input->groupId)
+            ->willReturn($listOrders);
 
         $this->listOrdersRepository
             ->expects($this->never())
             ->method('save');
 
-        $this->expectException(ListOrdersCreateNameAlreadyExistsInGroupException::class);
+        $this->expectException(ListOrdersModifyNameAlreadyExistsInGroupException::class);
         $this->object->__invoke($input);
     }
 
@@ -177,7 +128,6 @@ class ListOrdersCreateServiceTest extends TestCase
     public function itShouldFailCreatingAListOrdersDatabaseErrorUniqueConstraint(): void
     {
         $listOrders = $this->getListOrders();
-        $groupListOrders = $this->getGroupListOrders();
         $input = new ListOrdersCreateDto(
             $listOrders->getGroupId(),
             $listOrders->getUserId(),
@@ -188,14 +138,9 @@ class ListOrdersCreateServiceTest extends TestCase
 
         $this->listOrdersRepository
             ->expects($this->once())
-            ->method('findGroupsListsOrdersOrFail')
-            ->with([$input->groupId])
-            ->willReturn($this->paginator);
-
-        $this->paginator
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator($groupListOrders));
+            ->method('findListOrdersByNameOrFail')
+            ->with($input->name, $input->groupId)
+            ->willThrowException(new DBNotFoundException());
 
         $this->listOrdersRepository
             ->expects($this->once())
@@ -217,7 +162,6 @@ class ListOrdersCreateServiceTest extends TestCase
     public function itShouldFailCreatingAListOrdersDatabaseError(): void
     {
         $listOrders = $this->getListOrders();
-        $groupListOrders = $this->getGroupListOrders();
         $input = new ListOrdersCreateDto(
             $listOrders->getGroupId(),
             $listOrders->getUserId(),
@@ -228,14 +172,9 @@ class ListOrdersCreateServiceTest extends TestCase
 
         $this->listOrdersRepository
             ->expects($this->once())
-            ->method('findGroupsListsOrdersOrFail')
-            ->with([$input->groupId])
-            ->willReturn($this->paginator);
-
-        $this->paginator
-            ->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator($groupListOrders));
+            ->method('findListOrdersByNameOrFail')
+            ->with($input->name, $input->groupId)
+            ->willThrowException(new DBNotFoundException());
 
         $this->listOrdersRepository
             ->expects($this->once())

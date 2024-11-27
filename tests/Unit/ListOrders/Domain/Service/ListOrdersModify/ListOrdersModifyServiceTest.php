@@ -11,6 +11,7 @@ use Common\Domain\Ports\Paginator\PaginatorInterface;
 use ListOrders\Domain\Model\ListOrders;
 use ListOrders\Domain\Ports\ListOrdersRepositoryInterface;
 use ListOrders\Domain\Service\ListOrdersModify\Dto\ListOrdersModifyDto;
+use ListOrders\Domain\Service\ListOrdersModify\Exception\ListOrdersModifyNameAlreadyExistsInGroupException;
 use ListOrders\Domain\Service\ListOrdersModify\ListOrdersModifyService;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -21,7 +22,7 @@ class ListOrdersModifyServiceTest extends TestCase
     private const string GROUP_ID = '4b513296-14ac-4fb1-a574-05bc9b1dbe3f';
 
     private ListOrdersModifyService $object;
-    private MockObject&ListOrdersRepositoryInterface $listOrdersToRepository;
+    private MockObject&ListOrdersRepositoryInterface $listOrdersRepository;
     /**
      * @var MockObject&PaginatorInterface<int, ListOrders>
      */
@@ -32,9 +33,9 @@ class ListOrdersModifyServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->listOrdersToRepository = $this->createMock(ListOrdersRepositoryInterface::class);
+        $this->listOrdersRepository = $this->createMock(ListOrdersRepositoryInterface::class);
         $this->paginator = $this->createMock(PaginatorInterface::class);
-        $this->object = new ListOrdersModifyService($this->listOrdersToRepository);
+        $this->object = new ListOrdersModifyService($this->listOrdersRepository);
     }
 
     private function getListOrders(): ListOrders
@@ -45,6 +46,18 @@ class ListOrdersModifyServiceTest extends TestCase
             '2606508b-4516-45d6-93a6-c7cb416b7f3f',
             'list orders name',
             'list orders description',
+            new \DateTime()
+        );
+    }
+
+    private function getListOrders2(): ListOrders
+    {
+        return ListOrders::fromPrimitives(
+            '64a2b2df-165b-4e29-b34a-c9732ee6ccde',
+            self::GROUP_ID,
+            '2606508b-4516-45d6-93a6-c7cb416b7f3f',
+            'list orders name 2',
+            'list orders description 2',
             new \DateTime()
         );
     }
@@ -86,13 +99,19 @@ class ListOrdersModifyServiceTest extends TestCase
             $input->dateToBuy
         );
 
-        $this->listOrdersToRepository
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrdersByNameOrFail')
+            ->with($input->name, $input->groupId)
+            ->willReturn($listOrder);
+
+        $this->listOrdersRepository
             ->expects($this->once())
             ->method('findListOrderByIdOrFail')
             ->with([$input->listOrdersId], $input->groupId)
             ->willReturn($this->paginator);
 
-        $this->listOrdersToRepository
+        $this->listOrdersRepository
             ->expects($this->once())
             ->method('save')
             ->with($this->callback(function (array $listsOrdersActual) use ($listOrderExpected): true {
@@ -112,6 +131,94 @@ class ListOrdersModifyServiceTest extends TestCase
     }
 
     #[Test]
+    public function itShouldModifyTheListOrderNameIsInAnotherGroup(): void
+    {
+        $listOrder = $this->getListOrders();
+        $input = new ListOrdersModifyDto(
+            ValueObjectFactory::createIdentifier('8a24edd8-b8e0-4609-b1e6-a67c6c122d61'),
+            ValueObjectFactory::createIdentifier('8a24edd8-b8e0-4609-b1e6-a67c6c122d61'),
+            ValueObjectFactory::createIdentifier($listOrder->getId()->getValue()),
+            ValueObjectFactory::createNameWithSpaces('List order name 1'),
+            ValueObjectFactory::createDescription('list orders description modified'),
+            ValueObjectFactory::createDateNowToFuture(new \DateTime())
+        );
+        $listOrderExpected = new ListOrders(
+            $listOrder->getId(),
+            $listOrder->getGroupId(),
+            $input->userId,
+            $input->name,
+            $input->description,
+            $input->dateToBuy
+        );
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrdersByNameOrFail')
+            ->with($input->name, $input->groupId)
+            ->willThrowException(new DBNotFoundException());
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrderByIdOrFail')
+            ->with([$input->listOrdersId], $input->groupId)
+            ->willReturn($this->paginator);
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('save')
+            ->with($this->callback(function (array $listsOrdersActual) use ($listOrderExpected): true {
+                $this->assertListOrdersIsOk([$listOrderExpected], $listsOrdersActual);
+
+                return true;
+            }));
+
+        $this->paginator
+            ->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$listOrder]));
+
+        $return = $this->object->__invoke($input);
+
+        $this->assertListOrdersIsOk([$listOrderExpected], [$return]);
+    }
+
+    #[Test]
+    public function itShouldFailModifyingTheListOrderNameIsAlreadyInTheInTheGroup(): void
+    {
+        $listOrder = $this->getListOrders();
+        $listOrder2 = $this->getListOrders2();
+        $input = new ListOrdersModifyDto(
+            ValueObjectFactory::createIdentifier('8a24edd8-b8e0-4609-b1e6-a67c6c122d61'),
+            ValueObjectFactory::createIdentifier('8a24edd8-b8e0-4609-b1e6-a67c6c122d61'),
+            ValueObjectFactory::createIdentifier($listOrder->getId()->getValue()),
+            ValueObjectFactory::createNameWithSpaces('List order name 1'),
+            ValueObjectFactory::createDescription('list orders description modified'),
+            ValueObjectFactory::createDateNowToFuture(new \DateTime())
+        );
+
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrdersByNameOrFail')
+            ->with($input->name, $input->groupId)
+            ->willReturn($listOrder2);
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('findListOrderByIdOrFail');
+
+        $this->listOrdersRepository
+            ->expects($this->never())
+            ->method('save');
+
+        $this->paginator
+            ->expects($this->never())
+            ->method('getIterator');
+
+        $this->expectException(ListOrdersModifyNameAlreadyExistsInGroupException::class);
+        $this->object->__invoke($input);
+    }
+
+    #[Test]
     public function itShouldFailModifyingTheListOrderListOrderNotFound(): void
     {
         $listOrder = $this->getListOrders();
@@ -124,13 +231,19 @@ class ListOrdersModifyServiceTest extends TestCase
             ValueObjectFactory::createDateNowToFuture(new \DateTime())
         );
 
-        $this->listOrdersToRepository
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrdersByNameOrFail')
+            ->with($input->name, $input->groupId)
+            ->willThrowException(new DBNotFoundException());
+
+        $this->listOrdersRepository
             ->expects($this->once())
             ->method('findListOrderByIdOrFail')
             ->with([$input->listOrdersId], $input->groupId)
             ->willThrowException(new DBNotFoundException());
 
-        $this->listOrdersToRepository
+        $this->listOrdersRepository
             ->expects($this->never())
             ->method('save');
 
@@ -155,13 +268,19 @@ class ListOrdersModifyServiceTest extends TestCase
             ValueObjectFactory::createDateNowToFuture(new \DateTime())
         );
 
-        $this->listOrdersToRepository
+        $this->listOrdersRepository
+            ->expects($this->once())
+            ->method('findListOrdersByNameOrFail')
+            ->with($input->name, $input->groupId)
+            ->willThrowException(new DBNotFoundException());
+
+        $this->listOrdersRepository
             ->expects($this->once())
             ->method('findListOrderByIdOrFail')
             ->with([$input->listOrdersId], $input->groupId)
             ->willReturn($this->paginator);
 
-        $this->listOrdersToRepository
+        $this->listOrdersRepository
             ->expects($this->once())
             ->method('save')
             ->willThrowException(new DBConnectionException());

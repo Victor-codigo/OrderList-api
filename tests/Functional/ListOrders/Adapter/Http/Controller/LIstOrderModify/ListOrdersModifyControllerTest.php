@@ -37,6 +37,26 @@ class ListOrdersModifyControllerTest extends WebClientTestCase
         ];
     }
 
+    /**
+     * @return array{
+     *  list_orders_id: string,
+     *  group_id: string,
+     *  name: string,
+     *  description: string,
+     *  date_to_buy: string
+     * }
+     */
+    private function getListOrdersExists(): array
+    {
+        return [
+            'list_orders_id' => 'd446eab9-5199-48d0-91f5-0407a86bcb4f',
+            'group_id' => '4b513296-14ac-4fb1-a574-05bc9b1dbe3f',
+            'name' => 'List order name 2',
+            'description' => 'List order description 2',
+            'date_to_buy' => '2023-05-28 10:20:15',
+        ];
+    }
+
     #[Test]
     public function itShouldModifyListOrders(): void
     {
@@ -49,6 +69,32 @@ class ListOrdersModifyControllerTest extends WebClientTestCase
                 'list_orders_id' => $ordersData['list_orders_id'],
                 'group_id' => $ordersData['group_id'],
                 'name' => $ordersData['name'],
+                'description' => $ordersData['description'],
+                'date_to_buy' => $ordersData['date_to_buy'],
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('List orders modified', $responseContent->message);
+        $this->assertIsString($responseContent->data->id);
+    }
+
+    #[Test]
+    public function itShouldModifyListOrderSameName(): void
+    {
+        $ordersData = $this->getListOrders();
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'list_orders_id' => $ordersData['list_orders_id'],
+                'group_id' => $ordersData['group_id'],
+                'name' => 'List order name 1',
                 'description' => $ordersData['description'],
                 'date_to_buy' => $ordersData['date_to_buy'],
             ])
@@ -113,6 +159,59 @@ class ListOrdersModifyControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('List orders modified', $responseContent->message);
         $this->assertIsString($responseContent->data->id);
+    }
+
+    #[Test]
+    public function itShouldModifyListOrdersNameIsInUseInGroupInOtherGroup(): void
+    {
+        $ordersData = $this->getListOrders();
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'list_orders_id' => $ordersData['list_orders_id'],
+                'group_id' => $ordersData['group_id'],
+                'name' => 'List order name 5',
+                'description' => null,
+                'date_to_buy' => 'wrong date',
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_OK);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('List orders modified', $responseContent->message);
+        $this->assertIsString($responseContent->data->id);
+    }
+
+    #[Test]
+    public function itShouldFailModifyingListOrdersNameIsInUseInGroup(): void
+    {
+        $listOrdersData = $this->getListOrders();
+        $listOrdersExistsData = $this->getListOrdersExists();
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'list_orders_id' => $listOrdersData['list_orders_id'],
+                'group_id' => $listOrdersData['group_id'],
+                'name' => $listOrdersExistsData['name'],
+                'description' => null,
+                'date_to_buy' => 'wrong date',
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['list_orders_name_exists'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('The name is already registered', $responseContent->message);
+        $this->assertEquals('The name is already registered', $responseContent->errors->list_orders_name_exists);
     }
 
     #[Test]
