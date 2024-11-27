@@ -291,6 +291,38 @@ class ListOrdersRepositoryTest extends DataBaseTestCase
     }
 
     #[Test]
+    public function itShouldFindListOrdersByName(): void
+    {
+        $listOrdersName = ValueObjectFactory::createNameWithSpaces('List order name 1');
+        $listOrdersExpected = $this->object->findOneBy(['name' => $listOrdersName]);
+        $return = $this->object->findListOrdersByNameOrFail($listOrdersName, null);
+
+        $this->assertEquals($listOrdersExpected, $return);
+    }
+
+    #[Test]
+    public function itShouldFindListOrdersByNameNotFound(): void
+    {
+        $listOrdersName = ValueObjectFactory::createNameWithSpaces('List order name 1');
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID_2);
+        $listOrdersExpected = $this->object->findOneBy(['name' => $listOrdersName]);
+
+        $this->expectException(DBNotFoundException::class);
+        $this->object->findListOrdersByNameOrFail($listOrdersName, $groupId);
+    }
+
+    #[Test]
+    public function itShouldFindListOrdersByNameAndGroup(): void
+    {
+        $listOrdersName = ValueObjectFactory::createNameWithSpaces('List order name 1');
+        $groupId = ValueObjectFactory::createIdentifier(self::GROUP_ID);
+        $listOrdersExpected = $this->object->findOneBy(['name' => $listOrdersName]);
+        $return = $this->object->findListOrdersByNameOrFail($listOrdersName, $groupId);
+
+        $this->assertEquals($listOrdersExpected, $return);
+    }
+
+    #[Test]
     public function itShouldFindListOrdersOfAGroup(): void
     {
         $return = $this->object->findListOrdersGroup(

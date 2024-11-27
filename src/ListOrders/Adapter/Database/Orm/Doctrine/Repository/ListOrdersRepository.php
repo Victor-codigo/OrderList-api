@@ -10,9 +10,11 @@ use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBNotFoundException
 use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Exception\EntityIdentityCollisionException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use ListOrders\Domain\Model\ListOrders;
 use ListOrders\Domain\Ports\ListOrdersRepositoryInterface;
@@ -98,20 +100,20 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
     }
 
     /**
-     * @param Identifier[] $ListsOrdersId
+     * @param Identifier[] $listsOrdersId
      *
      * @return PaginatorInterface<int, ListOrders>
      *
      * @throws DBNotFoundException
      */
-    public function findListOrderByIdOrFail(array $ListsOrdersId, ?Identifier $groupId = null): PaginatorInterface
+    public function findListOrderByIdOrFail(array $listsOrdersId, ?Identifier $groupId = null): PaginatorInterface
     {
         $query = $this->entityManager
             ->createQueryBuilder()
             ->select('listOrders')
             ->from(ListOrders::class, 'listOrders')
             ->where('listOrders.id IN (:listOrdersId)')
-            ->setParameter('listOrdersId', $ListsOrdersId);
+            ->setParameter('listOrdersId', $listsOrdersId);
 
         if (null !== $groupId) {
             $query
@@ -120,6 +122,37 @@ class ListOrdersRepository extends RepositoryBase implements ListOrdersRepositor
         }
 
         return $this->queryPaginationOrFail($query);
+    }
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findListOrdersByNameOrFail(NameWithSpaces $listOrdersName, ?Identifier $groupId): ListOrders
+    {
+        $query = $this->entityManager
+            ->createQueryBuilder()
+            ->select('listOrders')
+            ->from(ListOrders::class, 'listOrders')
+            ->where('listOrders.name = :listOrdersName')
+            ->setParameter('listOrdersName', $listOrdersName)
+            ->setMaxResults(1);
+
+        if (null !== $groupId) {
+            $query
+                ->andWhere('listOrders.groupId = :groupId')
+                ->setParameter('groupId', $groupId);
+        }
+
+        try {
+            /**
+             * @var ListOrders $result
+             */
+            $result = $query->getQuery()->getSingleResult();
+
+            return $result;
+        } catch (NoResultException) {
+            throw DBNotFoundException::fromMessage('Not found');
+        }
     }
 
     /**

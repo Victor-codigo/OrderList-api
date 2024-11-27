@@ -6,6 +6,7 @@ namespace ListOrders\Domain\Ports;
 
 use Common\Domain\Model\ValueObject\Group\Filter;
 use Common\Domain\Model\ValueObject\String\Identifier;
+use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Ports\Paginator\PaginatorInterface;
 use Common\Domain\Ports\Repository\RepositoryInterface;
 use ListOrders\Domain\Model\ListOrders;
@@ -34,13 +35,18 @@ interface ListOrdersRepositoryInterface extends RepositoryInterface
     public function remove(array $orders): void;
 
     /**
-     * @param Identifier[] $ListsOrdersId
+     * @param Identifier[] $listsOrdersId
      *
      * @return PaginatorInterface<int, ListOrders>
      *
      * @throws DBNotFoundException
      */
-    public function findListOrderByIdOrFail(array $ListsOrdersId, ?Identifier $groupId = null): PaginatorInterface;
+    public function findListOrderByIdOrFail(array $listsOrdersId, ?Identifier $groupId = null): PaginatorInterface;
+
+    /**
+     * @throws DBNotFoundException
+     */
+    public function findListOrdersByNameOrFail(NameWithSpaces $listOrdersName, ?Identifier $groupId): ListOrders;
 
     /**
      * @return PaginatorInterface<int, ListOrders>

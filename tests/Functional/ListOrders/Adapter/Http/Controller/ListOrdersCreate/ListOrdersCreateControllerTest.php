@@ -61,7 +61,7 @@ class ListOrdersCreateControllerTest extends WebClientTestCase
     }
 
     #[Test]
-    public function itShouldCreateListOrdersDescriptionANdDateToBuyAreNull(): void
+    public function itShouldCreateListOrdersDescriptionAndDateToBuyAreNull(): void
     {
         $ordersData = $this->getListOrders();
         $client = $this->getNewClientAuthenticatedUser();
@@ -108,6 +108,56 @@ class ListOrdersCreateControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
         $this->assertSame('List order created', $responseContent->message);
         $this->assertIsString($responseContent->data->id);
+    }
+
+    #[Test]
+    public function itShouldCreateListOrdersNameAlreadyExistsButInOtherGroups(): void
+    {
+        $ordersData = $this->getListOrders();
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => $ordersData['group_id'],
+                'name' => 'list order name 5',
+                'description' => $ordersData['description'],
+                'date_to_buy' => $ordersData['date_to_buy'],
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, ['id'], [], Response::HTTP_CREATED);
+        $this->assertEquals(RESPONSE_STATUS::OK->value, $responseContent->status);
+        $this->assertSame('List order created', $responseContent->message);
+        $this->assertIsString($responseContent->data->id);
+    }
+
+    #[Test]
+    public function itShouldFailCreatingListOrdersNameIsAlreadyInUseInTheGroup(): void
+    {
+        $ordersData = $this->getListOrders();
+        $client = $this->getNewClientAuthenticatedUser();
+        $client->request(
+            method: self::METHOD,
+            uri: self::ENDPOINT,
+            content: json_encode([
+                'group_id' => $ordersData['group_id'],
+                'name' => 'List order name 2',
+                'description' => $ordersData['description'],
+                'date_to_buy' => $ordersData['date_to_buy'],
+            ])
+        );
+
+        $response = $client->getResponse();
+        $responseContent = json_decode($response->getContent());
+
+        $this->assertResponseStructureIsOk($response, [], ['name_exists'], Response::HTTP_BAD_REQUEST);
+        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
+        $this->assertSame('The name already exists', $responseContent->message);
+        $this->assertEquals('The name already exists', $responseContent->errors->name_exists);
     }
 
     #[Test]
@@ -208,31 +258,6 @@ class ListOrdersCreateControllerTest extends WebClientTestCase
         $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
         $this->assertSame('Error', $responseContent->message);
         $this->assertEquals(['alphanumeric_with_whitespace'], $responseContent->errors->name);
-    }
-
-    #[Test]
-    public function itShouldFailCreatingListOrdersNameAlreadyExists(): void
-    {
-        $ordersData = $this->getListOrders();
-        $client = $this->getNewClientAuthenticatedUser();
-        $client->request(
-            method: self::METHOD,
-            uri: self::ENDPOINT,
-            content: json_encode([
-                'group_id' => $ordersData['group_id'],
-                'name' => 'list order name 1',
-                'description' => $ordersData['description'],
-                'date_to_buy' => $ordersData['date_to_buy'],
-            ])
-        );
-
-        $response = $client->getResponse();
-        $responseContent = json_decode($response->getContent());
-
-        $this->assertResponseStructureIsOk($response, [], ['name_exists'], Response::HTTP_BAD_REQUEST);
-        $this->assertEquals(RESPONSE_STATUS::ERROR->value, $responseContent->status);
-        $this->assertSame('The name already exists', $responseContent->message);
-        $this->assertEquals('The name already exists', $responseContent->errors->name_exists);
     }
 
     #[Test]

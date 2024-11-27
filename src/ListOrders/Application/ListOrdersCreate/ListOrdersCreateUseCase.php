@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ListOrders\Application\ListOrdersCreate;
 
-use Common\Domain\Database\Orm\Doctrine\Repository\Exception\DBUniqueConstraintException;
 use Common\Domain\Exception\DomainInternalErrorException;
 use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Service\ServiceBase;
@@ -17,6 +16,7 @@ use ListOrders\Application\ListOrdersCreate\Dto\ListOrdersCreateOutputDto;
 use ListOrders\Application\ListOrdersCreate\Exception\ListOrdersCreateNameAlreadyExistsException;
 use ListOrders\Application\ListOrdersCreate\Exception\ListOrdersCreateValidateGroupAndUserException;
 use ListOrders\Domain\Service\ListOrdersCreate\Dto\ListOrdersCreateDto;
+use ListOrders\Domain\Service\ListOrdersCreate\Exception\ListOrdersCreateNameAlreadyExistsInGroupException;
 use ListOrders\Domain\Service\ListOrdersCreate\ListOrdersCreateService;
 
 class ListOrdersCreateUseCase extends ServiceBase
@@ -24,7 +24,7 @@ class ListOrdersCreateUseCase extends ServiceBase
     public function __construct(
         private ListOrdersCreateService $listOrdersCreateService,
         private ValidationInterface $validator,
-        private ValidateGroupAndUserService $validateGroupAndUserService
+        private ValidateGroupAndUserService $validateGroupAndUserService,
     ) {
     }
 
@@ -47,7 +47,7 @@ class ListOrdersCreateUseCase extends ServiceBase
             return $this->createListOrdersCreateOutputDto($listOrdersCreated->getId());
         } catch (ValidateGroupAndUserException) {
             throw ListOrdersCreateValidateGroupAndUserException::fromMessage('You not belong to the group');
-        } catch (DBUniqueConstraintException) {
+        } catch (ListOrdersCreateNameAlreadyExistsInGroupException) {
             throw ListOrdersCreateNameAlreadyExistsException::fromMessage('The name already exists');
         } catch (\Exception) {
             throw DomainInternalErrorException::fromMessage('An error has been occurred');
