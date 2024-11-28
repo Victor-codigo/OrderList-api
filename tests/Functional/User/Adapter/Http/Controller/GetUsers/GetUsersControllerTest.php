@@ -6,7 +6,7 @@ namespace Test\Functional\User\Adapter\Http\Controller\GetUsers;
 
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\User\USER_ROLES;
-use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
+use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
@@ -14,7 +14,7 @@ use User\Domain\Model\User;
 
 class GetUsersControllerTest extends WebClientTestCase
 {
-    use RefreshDatabaseTrait;
+    use ReloadDatabaseTrait;
 
     private const string ENDPOINT = '/api/v1/users';
     private const string METHOD = 'GET';

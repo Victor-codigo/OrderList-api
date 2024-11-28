@@ -10,7 +10,7 @@ use Common\Domain\Model\ValueObject\String\Identifier;
 use Common\Domain\Model\ValueObject\String\NameWithSpaces;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Common\Domain\Validation\User\USER_ROLES;
-use Hautelook\AliceBundle\PhpUnit\RefreshDatabaseTrait;
+use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
@@ -19,7 +19,7 @@ use User\Domain\Model\User;
 
 class UserRegisterControllerTest extends WebClientTestCase
 {
-    use RefreshDatabaseTrait;
+    use ReloadDatabaseTrait;
 
     private const string ENDPOINT = '/api/v1/users';
     private const string METHOD = 'POST';

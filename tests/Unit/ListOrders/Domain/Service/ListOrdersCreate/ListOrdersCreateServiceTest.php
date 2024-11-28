@@ -12,8 +12,8 @@ use Common\Domain\Model\ValueObject\ValueObjectFactory;
 use ListOrders\Domain\Model\ListOrders;
 use ListOrders\Domain\Ports\ListOrdersRepositoryInterface;
 use ListOrders\Domain\Service\ListOrdersCreate\Dto\ListOrdersCreateDto;
+use ListOrders\Domain\Service\ListOrdersCreate\Exception\ListOrdersCreateNameAlreadyExistsInGroupException;
 use ListOrders\Domain\Service\ListOrdersCreate\ListOrdersCreateService;
-use ListOrders\Domain\Service\ListOrdersModify\Exception\ListOrdersModifyNameAlreadyExistsInGroupException;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -120,7 +120,7 @@ class ListOrdersCreateServiceTest extends TestCase
             ->expects($this->never())
             ->method('save');
 
-        $this->expectException(ListOrdersModifyNameAlreadyExistsInGroupException::class);
+        $this->expectException(ListOrdersCreateNameAlreadyExistsInGroupException::class);
         $this->object->__invoke($input);
     }
 

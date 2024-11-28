@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Test\Functional\Product\Adapter\Http\Controller\ProductModify;
 
-use PHPUnit\Framework\Attributes\Test;
 use Common\Domain\Response\RESPONSE_STATUS;
 use Hautelook\AliceBundle\PhpUnit\ReloadDatabaseTrait;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
 use Test\Functional\WebClientTestCase;
