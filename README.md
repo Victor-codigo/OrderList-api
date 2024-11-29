@@ -2,7 +2,7 @@
 OrderList api is an API REST to manage your shopping lists.
 <br>It supports following features:
 - **User:** create an account, and manage your own shopping lists.
-- **Groups:** You can create, modify, delete your own groups, add users to your groups or join others groups. 
+- **Groups:** You can create, modify, delete your own groups, add users to your groups or join others groups.
 	- **Users:** Add and remove users from your groups.
 	- **Grants:** There are two types of users, administrators and users.
 	- **Share:** If you want to share your shopping lists with others, friends, parents, etc., add them to your groups. All members of the group, can add, remove, edit, and manage shops list, products and shops.
@@ -12,10 +12,10 @@ OrderList api is an API REST to manage your shopping lists.
 
 # Prerequisites
 - Docker.
-- Or if you prefer to create your own configuration: 
-	- HTTP server, 
-	- PHP 8.3, 
-	- MySQL 8.0.37 
+- Or if you prefer to create your own configuration:
+	- HTTP server,
+	- PHP 8.3,
+	- MySQL 8.0.37
 	- SMTP server
 
 # Stack
@@ -46,8 +46,8 @@ There is a make file with the following commands:
 
 	1. `make up`               Rise up the containers
 	2. `make build-no-cache`   Builds containers without cache
-	3. `make build-cache`      Builds containers with cache  
-	4. `make down`             Set down containers  
+	3. `make build-cache`      Builds containers with cache
+	4. `make down`             Set down containers
 	5. `make start`            Starts containers
 	6. `make stop`             Stops containers
 	7. `make restart`          Restart containers
@@ -58,7 +58,7 @@ There is a make file with the following commands:
 	12. `make bash`             Execute bash in php container
 	13. `make root`             Execute bash in php container as root
 
-Build and start containers 
+Build and start containers
 ```
  make up
 ```
@@ -76,8 +76,8 @@ make bash
 ````
 4. There is a make file with following commands:
 	- `make setup-dev`               Sets the application up for development
- 	- `make setup-deploy` Sets the application for deploiment. (You have to change this section according with your configuration)
-	
+ 	- `make setup-deploy` Sets the application for development. (You have to change this section according to your configuration)
+
 <br>Execute the following command to build API for development:
 ````
 make setup-dev
@@ -88,12 +88,12 @@ make setup-dev
 - http://127.0.0.1:8082 to API.
 - http://127.0.0.1 to proxy server
 - http://127.0.0.1:8082/api/doc API documentation
- 
-# Without Docker 
+
+# Without Docker
 1. Install:
-- HTTP server, 
-- PHP 8.3, 
-- MySQL 8.0.37 
+- HTTP server,
+- PHP 8.3,
+- MySQL 8.0.37
 - SMTP server
 
 2. Remove folder .docker
