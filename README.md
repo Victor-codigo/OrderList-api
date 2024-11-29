@@ -8,6 +8,7 @@ OrderList api is an API REST to manage your shopping lists.
 	- **Share:** If you want to share your shopping lists with others, friends, parents, etc., add them to your groups. All members of the group, can add, remove, edit, and manage shops list, products and shops.
 - **Products:** Add products you buy, and then, match with shops and shopping lists or share them in your groups.
 - **Shops:** Add shops where you buy those products. Match products with shops, and set its prices.
+- **Share:** Share your shopping list in social media
 
 # Prerequisites
 - Docker.
@@ -20,8 +21,10 @@ OrderList api is an API REST to manage your shopping lists.
 # Stack
 - [Docker](https://www.docker.com/)
 - [PHP 8.3](https://www.php.net/)
-- [PHPUnit 9.6](https://phpunit.de/index.html)
 - [Symfony 6.4](https://symfony.com/)
+- [PHPUnit 9.6](https://phpunit.de/index.html)
+- [PHPStan](https://phpstan.org)
+- [Rector](https://getrector.com)
 - [Twig 3](https://twig.symfony.com/)
 - [Composer](https://getcomposer.org/)
 - [MySQL](https://www.mysql.com/)
@@ -73,15 +76,11 @@ make bash
 ````
 4. There is a make file with following commands:
 	- `make setup-dev`               Sets the application up for development
-	- `make setup-prod`  Sets the application up for production
+ 	- `make setup-deploy` Sets the application for deploiment. (You have to change this section according with your configuration)
 	
 <br>Execute the following command to build API for development:
 ````
 make setup-dev
-````
-<br>Or build API for production:
-````
-make setup-prod
 ````
 5. Follow make instructions.
 6. Congratulations! You have installed the API correctly
