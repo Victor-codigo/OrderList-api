@@ -29,6 +29,7 @@ OrderList api is an API REST to manage your shopping lists.
 - [Composer](https://getcomposer.org/)
 - [MySQL](https://www.mysql.com/)
 - SQL
+- [GitHub Actions](https://github.com/features/actions)
 
 # Tools
 - [MySQLWorkbench](https://www.mysql.com/products/workbench/)
