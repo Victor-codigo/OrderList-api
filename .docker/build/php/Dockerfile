@@ -38,7 +38,11 @@ RUN apt-get install -y --no-install-recommends git
 RUN apt-get install -y --no-install-recommends zlib1g-dev
 
 # Install LIBXML
-RUN apt-get install -y --no-install-recommends libxml2-dev \
+RUN apt-get install -y --no-install-recommends libxml2-dev
+
+# Install INTL
+RUN apt-get install -y libicu-dev \
+    && docker-php-ext-configure intl \
     && docker-php-ext-install intl
 
 # Install ZIP

@@ -30,7 +30,7 @@
         "symfony/framework-bundle": "~v6.4.9",
         "symfony/http-client": "~v6.4.9",
         "symfony/intl": "~v6.4.8",
-        "symfony/mailer": "v6.4.9",
+        "symfony/mailer": "~v6.4.9",
         "symfony/mailgun-mailer": "~v6.4.9",
         "symfony/messenger": "~v6.4.9",
         "symfony/mime": "~v6.4.9",
